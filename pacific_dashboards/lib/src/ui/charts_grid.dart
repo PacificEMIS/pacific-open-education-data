@@ -50,7 +50,7 @@ class ChartsGridState extends State<ChartsGrid> {
     return GridView.builder(
       itemCount: snapshot.data.charts.length,
       gridDelegate:
-          new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
       itemBuilder: (BuildContext context, int index) {
         return GridTile(
           child: InkResponse(

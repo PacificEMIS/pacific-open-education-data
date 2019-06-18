@@ -1,4 +1,4 @@
-class TeachersModel {
+class TeacherModel {
   final String schNo;
   final int surveyYear;
   final String ageGroup;
@@ -10,14 +10,14 @@ class TeachersModel {
   final String iSCEDSubClass;
   final int numTeachersM;
   final int numTeachersF;
-  final  int certifiedM;
+  final int certifiedM;
   final int certifiedF;
   final int qualifiedM;
   final int qualifiedF;
   final int certQualM;
   final int certQualF;
 
-  TeachersModel({
+  TeacherModel({
     this.schNo,
     this.surveyYear,
     this.ageGroup,
@@ -37,8 +37,8 @@ class TeachersModel {
     this.certQualF,
   });
 
-  factory TeachersModel.fromJson(Map<String, dynamic> parsedJson) {
-    return TeachersModel(
+  factory TeacherModel.fromJson(Map<String, dynamic> parsedJson) {
+    return TeacherModel(
       schNo: parsedJson['SchNo'],
       surveyYear: parsedJson['SurveyYear'],
       ageGroup: parsedJson['AgeGroup'],

@@ -17,7 +17,7 @@ class ChartFactory {
     }
 
     return Container(
-      child: Text('wtf'),
+      child: Text('unknown chart'),
     );
   }
 
