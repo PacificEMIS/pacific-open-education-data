@@ -1,39 +1,28 @@
 import 'package:flutter/material.dart';
 
-import '../models/chart_model.dart';
+import '../models/teacher_model.dart';
+
 import 'bar_chart_view.dart';
-import 'round_chart_view.dart';
+import 'pie_chart_view.dart';
 
 class ChartFactory {
-  static Widget getChartViewByData(ChartModel chartData) {
-    if (chartData.chartType == 'Bar') {
-      return BarChartView(
-        data: chartData,
-      );
-    } else if (chartData.chartType == 'Circle') {
-      return RoundChartView(
-        data: chartData,
-      );
-    }
+  static Widget getBarChartViewByData(
+      Map<dynamic, List<TeacherModel>> chartData) {
+    var map = new Map<String, int>();
+    chartData.forEach((k, v) {
+      map[k] = v.length;
+    });
 
-    return Container(
-      child: Text('unknown chart'),
-    );
+    return BarChartView(data: map);
   }
 
-  static Widget getChartDetailByData(ChartModel chartData) {
-    if (chartData.chartType == 'Bar') {
-      return BarChartView(
-        data: chartData,
-      );
-    } else if (chartData.chartType == 'Circle') {
-      return RoundChartView(
-        data: chartData,
-      );
-    }
+  static Widget getPieChartViewByData(
+      Map<dynamic, List<TeacherModel>> chartData) {
+    var map = new Map<String, int>();
+    chartData.forEach((k, v) {
+      map[k] = v.length;
+    });
 
-    return Container(
-      child: Text('wtf'),
-    );
+    return PieChartView(data: map);
   }
 }

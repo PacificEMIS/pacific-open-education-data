@@ -14,24 +14,18 @@ class TeachersModel {
 
   Map<dynamic, List<TeacherModel>> getEnrollmentByState() {
     var statesGroup = groupBy(_teachers, (obj) => obj.districtCode);
-    print(statesGroup.containsKey("CHK"));
-    print(statesGroup.containsKey("PNI"));
 
     return statesGroup;
   }
 
   Map<dynamic, List<TeacherModel>> getEnrollmentByAuthority() {
     var statesGroup = groupBy(_teachers, (obj) => obj.authorityCode);
-    print(statesGroup.containsKey("PDE"));
-    print(statesGroup.containsKey("CDE"));
 
     return statesGroup;
   }
 
   Map<dynamic, List<TeacherModel>> getEnrollmentByGovt() {
     var statesGroup = groupBy(_teachers, (obj) => obj.authorityGovt);
-    print(statesGroup.containsKey("G"));
-    print(statesGroup.containsKey("N"));
 
     return statesGroup;
   }
