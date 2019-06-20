@@ -9,7 +9,7 @@ class BarChartView extends StatefulWidget {
   BarChartView({Key key, this.title, this.data}) : super(key: key);
 
   @override
-  BarChartViewState createState() => new BarChartViewState();
+  BarChartViewState createState() => BarChartViewState();
 }
 
 class TeachersByStateData {
@@ -24,11 +24,11 @@ class BarChartViewState extends State<BarChartView> {
   Widget build(BuildContext context) {
     List<TeachersByStateData> data = [];
     widget.data.forEach((k, v) {
-      data.add(new TeachersByStateData(k, v));
+      data.add(TeachersByStateData(k, v));
     });
 
     var series = [
-      new charts.Series(
+      charts.Series(
         domainFn: (TeachersByStateData teachersData, _) => teachersData.domain,
         measureFn: (TeachersByStateData teachersData, _) =>
             teachersData.measure,
@@ -39,21 +39,21 @@ class BarChartViewState extends State<BarChartView> {
       ),
     ];
 
-    return new charts.BarChart(
+    return charts.BarChart(
       series,
       animate: true,
-      primaryMeasureAxis: new charts.NumericAxisSpec(
-          renderSpec: new charts.GridlineRendererSpec(
-              labelStyle: new charts.TextStyleSpec(
+      primaryMeasureAxis: charts.NumericAxisSpec(
+          renderSpec: charts.GridlineRendererSpec(
+              labelStyle: charts.TextStyleSpec(
                   fontSize: 8, color: charts.MaterialPalette.white),
-              lineStyle: new charts.LineStyleSpec(
+              lineStyle: charts.LineStyleSpec(
                   color: charts.MaterialPalette.blue.shadeDefault))),
-      domainAxis: new charts.OrdinalAxisSpec(
-        renderSpec: new charts.SmallTickRendererSpec(
-            labelStyle: new charts.TextStyleSpec(
+      domainAxis: charts.OrdinalAxisSpec(
+        renderSpec: charts.SmallTickRendererSpec(
+            labelStyle: charts.TextStyleSpec(
                 fontSize: 12,
                 color: charts.MaterialPalette.deepOrange.shadeDefault),
-            lineStyle: new charts.LineStyleSpec(
+            lineStyle: charts.LineStyleSpec(
                 color: charts.MaterialPalette.green.shadeDefault)),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../models/teachers_model.dart';
 import '../blocs/teachers_bloc.dart';
 import 'chart_factory.dart';
@@ -43,17 +45,22 @@ class ChartsGridState extends State<ChartsGrid> {
   }
 
   Widget buildGrid(AsyncSnapshot<TeachersModel> snapshot) {
-    return GridView.builder(
-      itemCount: snapshot.data.teachers.length,
-      gridDelegate:
-          new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
-      itemBuilder: (BuildContext context, int index) {
-        return GridTile(
-          child: InkResponse(
-            enableFeedback: true,
-            child: generateChart(snapshot.data, index),
-            onTap: () => {print('tap')},
-          ),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return GridView.builder(
+          padding: EdgeInsets.all(38.0),
+          itemCount: 10,
+          gridDelegate:
+          new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: getTilesAmountInRowByScreenSize(orientation)),
+          itemBuilder: (BuildContext context, int index) {
+            return GridTile(
+              child: InkResponse(
+                enableFeedback: true,
+                child: generateChart(snapshot.data, index),
+                onTap: () => { print('tap') },
+              ),
+            );
+          },
         );
       },
     );
@@ -67,6 +74,24 @@ class ChartsGridState extends State<ChartsGrid> {
     } else {
       return ChartFactory.getPieChartViewByData(
           data.getEnrollmentByAuthority());
+    }
+  }
+
+  int getTilesAmountInRowByScreenSize(Orientation orientation) {
+    var isLandscape = orientation == Orientation.landscape;
+    var screenWidth = ScreenUtil.getInstance().width;
+    if (isLandscape) {
+      if ( screenWidth > 1920 ) {
+        return 3;
+      }
+
+      return 2;
+    } else {
+      if ( screenWidth > 1080 ) {
+        return 2;
+      }
+
+      return 1;
     }
   }
 }

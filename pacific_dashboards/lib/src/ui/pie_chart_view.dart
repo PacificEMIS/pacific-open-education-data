@@ -9,7 +9,7 @@ class PieChartView extends StatefulWidget {
   PieChartView({Key key, this.data, this.animate}) : super(key: key);
 
   @override
-  PieChartViewState createState() => new PieChartViewState();
+  PieChartViewState createState() => PieChartViewState();
 }
 
 class PieChartViewState extends State<PieChartView> {
@@ -17,7 +17,7 @@ class PieChartViewState extends State<PieChartView> {
   Widget build(BuildContext context) {
     List<TeachersData> data = [];
     widget.data.forEach((k, v) {
-      data.add(new TeachersData(k, v));
+      data.add(TeachersData(k, v));
     });
 
     var series = [
@@ -33,9 +33,9 @@ class PieChartViewState extends State<PieChartView> {
     return new charts.PieChart(
       series,
       animate: true,
-      defaultRenderer: new charts.ArcRendererConfig(
+      defaultRenderer: charts.ArcRendererConfig(
           arcWidth: 60,
-          arcRendererDecorators: [new charts.ArcLabelDecorator()]),
+          arcRendererDecorators: [charts.ArcLabelDecorator()]),
     );
   }
 }

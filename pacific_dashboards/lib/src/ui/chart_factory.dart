@@ -8,7 +8,7 @@ import 'pie_chart_view.dart';
 class ChartFactory {
   static Widget getBarChartViewByData(
       Map<dynamic, List<TeacherModel>> chartData) {
-    var map = new Map<String, int>();
+    var map = Map<String, int>();
     chartData.forEach((k, v) {
       map[k] = v.length;
     });
@@ -18,7 +18,7 @@ class ChartFactory {
 
   static Widget getPieChartViewByData(
       Map<dynamic, List<TeacherModel>> chartData) {
-    var map = new Map<String, int>();
+    var map = Map<String, int>();
     chartData.forEach((k, v) {
       map[k] = v.length;
     });

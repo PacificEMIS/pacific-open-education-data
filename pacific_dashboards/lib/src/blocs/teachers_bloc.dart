@@ -11,7 +11,7 @@ class TeachersBloc {
 
   fetchAllTeachers() async {
     var model = await _repository.fetchAllTeachers();
-    _teachersFetcher.sink.add(model);
+    _teachersFetcher.add(model);
   }
 
   dispose() {
