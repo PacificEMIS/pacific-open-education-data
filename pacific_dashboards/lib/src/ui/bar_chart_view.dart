@@ -13,10 +13,10 @@ class BarChartView extends StatefulWidget {
 }
 
 class TeachersByStateData {
-  final String state;
-  final int teachersAmount;
+  final String domain;
+  final int measure;
 
-  TeachersByStateData(this.state, this.teachersAmount);
+  TeachersByStateData(this.domain, this.measure);
 }
 
 class BarChartViewState extends State<BarChartView> {
@@ -29,9 +29,9 @@ class BarChartViewState extends State<BarChartView> {
 
     var series = [
       new charts.Series(
-        domainFn: (TeachersByStateData teachersData, _) => teachersData.state,
+        domainFn: (TeachersByStateData teachersData, _) => teachersData.domain,
         measureFn: (TeachersByStateData teachersData, _) =>
-            teachersData.teachersAmount,
+            teachersData.measure,
         colorFn: (TeachersByStateData teachersData, _) =>
             charts.MaterialPalette.white,
         id: "name",
