@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../models/teachers_model.dart';
 import '../blocs/teachers_bloc.dart';
+
 import 'chart_factory.dart';
 
 class ChartsGrid extends StatefulWidget {
@@ -50,14 +49,14 @@ class ChartsGridState extends State<ChartsGrid> {
         return GridView.builder(
           padding: EdgeInsets.all(38.0),
           itemCount: 10,
-          gridDelegate:
-          new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: getTilesAmountInRowByScreenSize(orientation)),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: getTilesAmountInRowByScreenSize(orientation)),
           itemBuilder: (BuildContext context, int index) {
             return GridTile(
               child: InkResponse(
                 enableFeedback: true,
                 child: generateChart(snapshot.data, index),
-                onTap: () => { print('tap') },
+                onTap: () => {print('tap')},
               ),
             );
           },
@@ -67,27 +66,32 @@ class ChartsGridState extends State<ChartsGrid> {
   }
 
   Widget generateChart(TeachersModel data, int index) {
-    if (index == 0) {
-      return ChartFactory.getBarChartViewByData(data.getEnrollmentByState());
-    } else if (index == 1) {
-      return ChartFactory.getPieChartViewByData(data.getEnrollmentByGovt());
-    } else {
-      return ChartFactory.getPieChartViewByData(
-          data.getEnrollmentByAuthority());
+    switch (index) {
+      case 0:
+        return ChartFactory.getBarChartViewByData(data.getEnrollmentByState());
+        break;
+      case 1:
+        return ChartFactory.getPieChartViewByData(data.getEnrollmentByGovt());
+        break;
+      case 2:
+        return Text('Chart Name');
+      default:
+        return ChartFactory.getPieChartViewByData(
+            data.getEnrollmentByAuthority());
     }
   }
 
   int getTilesAmountInRowByScreenSize(Orientation orientation) {
     var isLandscape = orientation == Orientation.landscape;
-    var screenWidth = ScreenUtil.getInstance().width;
+    var screenWidth = MediaQuery.of(context).size.width;
     if (isLandscape) {
-      if ( screenWidth > 1920 ) {
+      if (screenWidth > 1920) {
         return 3;
       }
 
       return 2;
     } else {
-      if ( screenWidth > 1080 ) {
+      if (screenWidth > 1080) {
         return 2;
       }
 
