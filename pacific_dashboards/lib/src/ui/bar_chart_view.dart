@@ -12,27 +12,27 @@ class BarChartView extends StatefulWidget {
   BarChartViewState createState() => BarChartViewState();
 }
 
-class TeachersByStateData {
+class BarChartData {
   final String domain;
   final int measure;
 
-  TeachersByStateData(this.domain, this.measure);
+  BarChartData(this.domain, this.measure);
 }
 
 class BarChartViewState extends State<BarChartView> {
   @override
   Widget build(BuildContext context) {
-    List<TeachersByStateData> data = [];
+    List<BarChartData> data = [];
     widget.data.forEach((k, v) {
-      data.add(TeachersByStateData(k, v));
+      data.add(BarChartData(k, v));
     });
 
     var series = [
       charts.Series(
-        domainFn: (TeachersByStateData teachersData, _) => teachersData.domain,
-        measureFn: (TeachersByStateData teachersData, _) =>
+        domainFn: (BarChartData teachersData, _) => teachersData.domain,
+        measureFn: (BarChartData teachersData, _) =>
             teachersData.measure,
-        colorFn: (TeachersByStateData teachersData, _) =>
+        colorFn: (BarChartData teachersData, _) =>
             charts.MaterialPalette.white,
         id: "name",
         data: data,

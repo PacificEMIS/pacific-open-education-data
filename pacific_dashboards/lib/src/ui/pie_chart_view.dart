@@ -15,18 +15,18 @@ class PieChartView extends StatefulWidget {
 class PieChartViewState extends State<PieChartView> {
   @override
   Widget build(BuildContext context) {
-    List<TeachersData> data = [];
+    List<PieChartData> data = [];
     widget.data.forEach((k, v) {
-      data.add(TeachersData(k, v));
+      data.add(PieChartData(k, v));
     });
 
     var series = [
       new charts.Series(
         id: "name",
-        domainFn: (TeachersData teachersData, _) => teachersData.name,
-        measureFn: (TeachersData teachersData, _) => teachersData.value,
+        domainFn: (PieChartData teachersData, _) => teachersData.domain,
+        measureFn: (PieChartData teachersData, _) => teachersData.measure,
         data: data,
-        labelAccessorFn: (TeachersData row, _) => '${row.name}',
+        labelAccessorFn: (PieChartData row, _) => '${row.domain}',
       ),
     ];
 
@@ -40,9 +40,9 @@ class PieChartViewState extends State<PieChartView> {
   }
 }
 
-class TeachersData {
-  final String name;
-  final int value;
+class PieChartData {
+  final String domain;
+  final int measure;
 
-  TeachersData(this.name, this.value);
+  PieChartData(this.domain, this.measure);
 }

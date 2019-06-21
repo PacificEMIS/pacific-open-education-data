@@ -56,7 +56,7 @@ class ChartsGridState extends State<ChartsGrid> {
               child: InkResponse(
                 enableFeedback: true,
                 child: generateChart(snapshot.data, index),
-                onTap: () => {print('tap')},
+                onTap: () => print('tap'),
               ),
             );
           },
@@ -68,16 +68,16 @@ class ChartsGridState extends State<ChartsGrid> {
   Widget generateChart(TeachersModel data, int index) {
     switch (index) {
       case 0:
-        return ChartFactory.getBarChartViewByData(data.getEnrollmentByState());
+        return ChartFactory.getBarChartViewByData(data.getSortedByState());
         break;
       case 1:
-        return ChartFactory.getPieChartViewByData(data.getEnrollmentByGovt());
+        return ChartFactory.getPieChartViewByData(data.getSortedByGovt());
         break;
       case 2:
-        return Text('Chart Name');
+        return  Text('Chart Name');
       default:
         return ChartFactory.getPieChartViewByData(
-            data.getEnrollmentByAuthority());
+            data.getSortedByAuthority());
     }
   }
 
