@@ -21,7 +21,7 @@ class SchoolModel {
     this.enrolF,
   });
 
-  factory SchoolModel.fromJson(Map<String, dynamic> parsedJson) {
+  factory SchoolModel.fromJson(Map parsedJson) {
     return SchoolModel(
       classLevel: parsedJson['ClassLevel'],
       districtCode: parsedJson['DistrictCode'],

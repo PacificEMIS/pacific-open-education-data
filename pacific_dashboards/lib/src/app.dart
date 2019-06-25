@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'ui/charts_grid.dart';
+import 'ui/injector_widget.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
+
+  final List<String> tabsList = ['Teachers', 'Schools', 'Pupils'];
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +23,18 @@ class App extends StatelessWidget {
           body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Charts'),
-        ),
-        body: ChartsGrid(),
-      ),
+      initialRoute: "/",
+      routes: {
+        // other routes...
+        "/": (context) => Scaffold(
+              appBar: AppBar(
+                title: Center(child: Text('Charts')),
+              ),
+              body: ChartsGrid(
+                  bloc: InjectorWidget.of(context)
+                      .getForceTeachersBloc(forceCreate: true)),
+            ),
+      },
     );
   }
 }

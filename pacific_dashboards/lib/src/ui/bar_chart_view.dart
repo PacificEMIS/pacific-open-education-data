@@ -30,10 +30,8 @@ class BarChartViewState extends State<BarChartView> {
     var series = [
       charts.Series(
         domainFn: (BarChartData teachersData, _) => teachersData.domain,
-        measureFn: (BarChartData teachersData, _) =>
-            teachersData.measure,
-        colorFn: (BarChartData teachersData, _) =>
-            charts.MaterialPalette.white,
+        measureFn: (BarChartData teachersData, _) => teachersData.measure,
+        colorFn: (BarChartData teachersData, _) => charts.MaterialPalette.white,
         id: "name",
         data: data,
       ),

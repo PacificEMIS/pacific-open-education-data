@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../models/teachers_model.dart';
-import '../blocs/teachers_bloc.dart';
 
 import 'chart_factory.dart';
 
 class ChartsGrid extends StatefulWidget {
+  final bloc;
+
+  ChartsGrid({
+    Key key,
+    this.bloc,
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return ChartsGridState();
@@ -16,19 +22,19 @@ class ChartsGridState extends State<ChartsGrid> {
   @override
   void initState() {
     super.initState();
-    bloc.fetchAllTeachers();
+    widget.bloc.fetchData();
   }
 
   @override
   void dispose() {
-    bloc.dispose();
+    widget.bloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bloc.allTeachers,
+      stream: widget.bloc.data,
       builder: (context, AsyncSnapshot<TeachersModel> snapshot) {
         if (snapshot.hasData) {
           return buildGrid(snapshot);
@@ -73,25 +79,23 @@ class ChartsGridState extends State<ChartsGrid> {
       case 1:
         return ChartFactory.getPieChartViewByData(data.getSortedByGovt());
         break;
-      case 2:
-        return  Text('Chart Name');
       default:
-        return ChartFactory.getPieChartViewByData(
-            data.getSortedByAuthority());
+        return ChartFactory.getPieChartViewByData(data.getSortedByAuthority());
     }
   }
 
   int getTilesAmountInRowByScreenSize(Orientation orientation) {
     var isLandscape = orientation == Orientation.landscape;
     var screenWidth = MediaQuery.of(context).size.width;
+    print(screenWidth);
     if (isLandscape) {
-      if (screenWidth > 1920) {
+      if (screenWidth > 700) {
         return 3;
       }
 
       return 2;
     } else {
-      if (screenWidth > 1080) {
+      if (screenWidth > 600) {
         return 2;
       }
 

@@ -37,7 +37,7 @@ class TeacherModel {
     this.certQualF,
   });
 
-  factory TeacherModel.fromJson(Map<String, dynamic> parsedJson) {
+  factory TeacherModel.fromJson(Map parsedJson) {
     return TeacherModel(
       schNo: parsedJson['SchNo'],
       surveyYear: parsedJson['SurveyYear'],

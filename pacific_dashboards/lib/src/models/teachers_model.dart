@@ -7,7 +7,7 @@ class TeachersModel {
 
   List<TeacherModel> get teachers => _teachers;
 
-  TeachersModel.fromJson(List<dynamic> parsedJson) {
+  TeachersModel.fromJson(List parsedJson) {
     _teachers = List<TeacherModel>();
     _teachers = parsedJson.map((i) => TeacherModel.fromJson(i)).toList();
   }
