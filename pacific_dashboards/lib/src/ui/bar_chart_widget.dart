@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class BarChartView extends StatefulWidget {
+class BarChartWidget extends StatefulWidget {
   final data;
   final title;
 
-  BarChartView({Key key, this.title, this.data}) : super(key: key);
+  BarChartWidget({Key key, this.title, this.data}) : super(key: key);
 
   @override
-  BarChartViewState createState() => BarChartViewState();
+  BarChartWidgetState createState() => BarChartWidgetState();
 }
 
 class BarChartData {
@@ -19,7 +19,7 @@ class BarChartData {
   BarChartData(this.domain, this.measure);
 }
 
-class BarChartViewState extends State<BarChartView> {
+class BarChartWidgetState extends State<BarChartWidget> {
   @override
   Widget build(BuildContext context) {
     List<BarChartData> data = [];

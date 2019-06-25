@@ -4,21 +4,21 @@ import '../models/teachers_model.dart';
 
 import 'chart_factory.dart';
 
-class ChartsGrid extends StatefulWidget {
+class ChartsGridWidget extends StatefulWidget {
   final bloc;
 
-  ChartsGrid({
+  ChartsGridWidget({
     Key key,
     this.bloc,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return ChartsGridState();
+    return ChartsGridWidgetState();
   }
 }
 
-class ChartsGridState extends State<ChartsGrid> {
+class ChartsGridWidgetState extends State<ChartsGridWidget> {
   @override
   void initState() {
     super.initState();

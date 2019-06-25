@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'ui/charts_grid.dart';
+import 'ui/charts_grid_widget.dart';
 import 'ui/injector_widget.dart';
+import 'ui/teachers_page.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
@@ -25,15 +26,9 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        // other routes...
-        "/": (context) => Scaffold(
-              appBar: AppBar(
-                title: Center(child: Text('Charts')),
-              ),
-              body: ChartsGrid(
-                  bloc: InjectorWidget.of(context)
-                      .getForceTeachersBloc(forceCreate: true)),
-            ),
+        "/": (context) => TeachersPage(
+            bloc: InjectorWidget.of(context)
+                .getForceTeachersBloc(forceCreate: true)),
       },
     );
   }

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class PieChartView extends StatefulWidget {
+class PieChartWidget extends StatefulWidget {
   final bool animate;
   final data;
 
-  PieChartView({Key key, this.data, this.animate}) : super(key: key);
+  PieChartWidget({Key key, this.data, this.animate}) : super(key: key);
 
   @override
-  PieChartViewState createState() => PieChartViewState();
+  PieChartWidgetState createState() => PieChartWidgetState();
 }
 
-class PieChartViewState extends State<PieChartView> {
+class PieChartWidgetState extends State<PieChartWidget> {
   @override
   Widget build(BuildContext context) {
     List<PieChartData> data = [];
