@@ -3,9 +3,8 @@ import 'dart:async';
 import '../models/teachers_model.dart';
 import 'charts_api_provider.dart';
 
-class Repository {
-  final chartsApiProvider = ChartsApiProvider();
+abstract class Repository {
+  ChartsApiProvider get chartsApiProvider;
 
-  Future<TeachersModel> fetchAllTeachers() =>
-      chartsApiProvider.fetchTeachersList();
+  Future<TeachersModel> fetchAllTeachers();
 }

@@ -1,20 +1,13 @@
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
-import '../resources/repository.dart';
 
 abstract class BaseBloc<T> {
   @protected
-  final repository = Repository();
+  final repository;
 
-  @protected
-  final fetcher = PublishSubject<T>();
-
-  Observable<T> get data => fetcher.stream;
+  BaseBloc( {this.repository} );
 
   fetchData();
 
-  dispose() {
-    fetcher.close();
-  }
+  dispose();
 }

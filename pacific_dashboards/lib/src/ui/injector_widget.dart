@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../resources/repository_impl.dart';
+import '../resources/repository.dart';
 import '../blocs/teachers_bloc.dart';
 
 class InjectorWidget extends InheritedWidget {
   TeachersBloc _teachersBloc;
-
-  TeachersBloc getTeachersBloc() => _teachersBloc;
+  Repository _repository;
 
   InjectorWidget({
     Key key,
@@ -22,12 +23,13 @@ class InjectorWidget extends InheritedWidget {
   bool updateShouldNotify(InjectorWidget old) => false;
 
   init() async {
-    _teachersBloc = TeachersBloc();
+    _repository = RepositoryImpl();
+    _teachersBloc = TeachersBloc(repository: _repository);
   }
 
-  TeachersBloc getForceTeachersBloc({bool forceCreate = false}) {
+  TeachersBloc getTeachersBloc({bool forceCreate = false}) {
     if (_teachersBloc == null || forceCreate) {
-      _teachersBloc = TeachersBloc();
+      _teachersBloc = TeachersBloc(repository: _repository);
     }
 
     return _teachersBloc;

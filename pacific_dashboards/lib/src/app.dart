@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'ui/charts_grid_widget.dart';
 import 'ui/injector_widget.dart';
 import 'ui/teachers_page.dart';
 
@@ -28,7 +27,7 @@ class App extends StatelessWidget {
       routes: {
         "/": (context) => TeachersPage(
             bloc: InjectorWidget.of(context)
-                .getForceTeachersBloc(forceCreate: true)),
+                .getTeachersBloc(forceCreate: true)),
       },
     );
   }
