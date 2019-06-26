@@ -6,8 +6,6 @@ import 'ui/teachers_page.dart';
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
 
-  final List<String> tabsList = ['Teachers', 'Schools', 'Pupils'];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

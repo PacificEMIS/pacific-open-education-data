@@ -10,6 +10,7 @@ class RepositoryImpl implements Repository {
   @override
   ChartsApiProvider get chartsApiProvider => _chartsApiProvider;
 
+  @override
   Future<TeachersModel> fetchAllTeachers() =>
       chartsApiProvider.fetchTeachersList();
 }
