@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'ui/charts_grid.dart';
+import 'ui/injector_widget.dart';
+import 'ui/teachers_page.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
@@ -20,12 +21,12 @@ class App extends StatelessWidget {
           body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Charts'),
-        ),
-        body: ChartsGrid(),
-      ),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => TeachersPage(
+            bloc: InjectorWidget.of(context)
+                .getTeachersBloc(forceCreate: true)),
+      },
     );
   }
 }

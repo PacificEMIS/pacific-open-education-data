@@ -7,26 +7,26 @@ class TeachersModel {
 
   List<TeacherModel> get teachers => _teachers;
 
-  TeachersModel.fromJson(List<dynamic> parsedJson) {
-    _teachers = new List<TeacherModel>();
+  TeachersModel.fromJson(List parsedJson) {
+    _teachers = List<TeacherModel>();
     _teachers = parsedJson.map((i) => TeacherModel.fromJson(i)).toList();
   }
 
-  Map<dynamic, List<TeacherModel>> getEnrollmentByState() {
+  Map<dynamic, List<TeacherModel>> getSortedByState() {
     var statesGroup = groupBy(_teachers, (obj) => obj.districtCode);
 
     return statesGroup;
   }
 
-  Map<dynamic, List<TeacherModel>> getEnrollmentByAuthority() {
-    var statesGroup = groupBy(_teachers, (obj) => obj.authorityCode);
+  Map<dynamic, List<TeacherModel>> getSortedByAuthority() {
+    var authorityGroup = groupBy(_teachers, (obj) => obj.authorityCode);
 
-    return statesGroup;
+    return authorityGroup;
   }
 
-  Map<dynamic, List<TeacherModel>> getEnrollmentByGovt() {
-    var statesGroup = groupBy(_teachers, (obj) => obj.authorityGovt);
+  Map<dynamic, List<TeacherModel>> getSortedByGovt() {
+    var govtGroup = groupBy(_teachers, (obj) => obj.authorityGovt);
 
-    return statesGroup;
+    return govtGroup;
   }
 }
