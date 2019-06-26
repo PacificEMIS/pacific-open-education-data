@@ -22,8 +22,11 @@
                  there is no splash screen (such as the default splash screen
                  defined in @style/LaunchTheme). -->
             <meta-data
-                 android:name="io.fabric.ApiKey"
-                 android:value="756ac67f491414c118880f7a5853ff25b6e22886" />
+                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
+                android:value="true" />
+            <meta-data
+                android:name="firebase_analytics_collection_enabled"
+                android:value="true"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
