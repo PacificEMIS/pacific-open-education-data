@@ -19,15 +19,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
+  firebase_core: ^0.2.5
+  firebase_crashlytics:  ^0.0.4+8
+    # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   rxdart: ^0.22.0
   charts_flutter: ^0.6.0
   http: ^0.12.0+1
-  path_provider: ^1.1.0
-  shared_preferences: ^0.5.3
+  flutter_crashlytics: ^1.0.0
 
 dev_dependencies:
   flutter_test:
