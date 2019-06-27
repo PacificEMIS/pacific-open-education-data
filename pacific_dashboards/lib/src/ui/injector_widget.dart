@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../resources/server_backend_provider.dart';
 import '../resources/repository_impl.dart';
 import '../resources/repository.dart';
 import '../blocs/teachers_bloc.dart';
@@ -23,7 +24,7 @@ class InjectorWidget extends InheritedWidget {
   bool updateShouldNotify(InjectorWidget old) => false;
 
   init() async {
-    _repository = RepositoryImpl();
+    _repository = RepositoryImpl(ServerBackendProvider());
     _teachersBloc = TeachersBloc(repository: _repository);
   }
 

@@ -1,16 +1,18 @@
 import 'dart:async';
 
 import '../models/teachers_model.dart';
-import 'charts_api_provider.dart';
+
+import 'backend_provider.dart';
 import 'repository.dart';
 
 class RepositoryImpl implements Repository {
-  final _chartsApiProvider = ChartsApiProvider();
+  BackendProvider _backendProvider;
 
-  @override
-  ChartsApiProvider get chartsApiProvider => _chartsApiProvider;
+  RepositoryImpl(BackendProvider backendProvider) {
+    this._backendProvider = backendProvider;
+  }
 
   @override
   Future<TeachersModel> fetchAllTeachers() =>
-      chartsApiProvider.fetchTeachersList();
+      _backendProvider.fetchTeachersList();
 }
