@@ -8,9 +8,6 @@ class RepositoryImpl implements Repository {
   final _chartsApiProvider = ChartsApiProvider();
 
   @override
-  ChartsApiProvider get chartsApiProvider => _chartsApiProvider;
-
-  @override
   Future<TeachersModel> fetchAllTeachers() =>
-      chartsApiProvider.fetchTeachersList();
+      _chartsApiProvider.fetchTeachersList();
 }
