@@ -11,13 +11,13 @@ import 'backend_provider.dart';
 
 class ServerBackendProvider implements BackendProvider {
   static const String BASE_URL = "https://fedemis.doe.fm";
-  static const String TEACHERS_API_KEY = "teachercount";
-  static const String SCHOOLS_API_KEY = "examsdistrictresults";
+  static const String TEACHERS_API_KEY = "warehouse/teachercount";
+  static const String SCHOOLS_API_KEY = "warehouse/examsdistrictresults";
 
   Client client = Client();
 
-  Future<String> request(String path) async {
-    final webResponse = await client.get("$BASE_URL/api/warehouse/$path");
+  Future<String> _request(String path) async {
+    final webResponse = await client.get("$BASE_URL/api/$path");
     print(webResponse.body.toString());
 
     if (webResponse.statusCode == 200) {
@@ -27,14 +27,16 @@ class ServerBackendProvider implements BackendProvider {
     }
   }
 
+  @override
   Future<TeachersModel> fetchTeachersList() async {
-    final responseData = await request(TEACHERS_API_KEY);
+    final responseData = await _request(TEACHERS_API_KEY);
 
     return TeachersModel.fromJson(json.decode(responseData));
   }
 
+  @override
   Future<SchoolsModel> fetchSchoolsList() async {
-    final responseData = await request(SCHOOLS_API_KEY);
+    final responseData = await _request(SCHOOLS_API_KEY);
 
     return SchoolsModel.fromJson(json.decode(responseData));
   }

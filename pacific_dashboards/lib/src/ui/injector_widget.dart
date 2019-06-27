@@ -24,7 +24,7 @@ class InjectorWidget extends InheritedWidget {
   bool updateShouldNotify(InjectorWidget old) => false;
 
   init() async {
-    _repository = RepositoryImpl(backendProvider: ServerBackendProvider());
+    _repository = RepositoryImpl(ServerBackendProvider());
     _teachersBloc = TeachersBloc(repository: _repository);
   }
 

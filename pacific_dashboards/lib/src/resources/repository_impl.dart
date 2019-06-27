@@ -6,11 +6,13 @@ import 'backend_provider.dart';
 import 'repository.dart';
 
 class RepositoryImpl implements Repository {
-  final BackendProvider backendProvider;
+  BackendProvider _backendProvider;
 
-  RepositoryImpl( {this.backendProvider} );
+  RepositoryImpl(BackendProvider backendProvider) {
+    this._backendProvider = backendProvider;
+  }
 
   @override
   Future<TeachersModel> fetchAllTeachers() =>
-      backendProvider.fetchTeachersList();
+      _backendProvider.fetchTeachersList();
 }
