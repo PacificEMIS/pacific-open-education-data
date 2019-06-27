@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'ui/home_ui/home_page.dart';
 import 'ui/injector_widget.dart';
-import 'package:pacific_dashboards/src/ui/teaches_ui/teachers_page.dart';
+import 'ui/teaches_ui/teachers_page.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
@@ -25,11 +25,11 @@ class App extends StatelessWidget {
       initialRoute: "/teachers",
       routes: {
         "/": (context) => HomePage(
-            bloc: InjectorWidget.of(context)
-                .getTeachersBloc(forceCreate: true)),
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
         "/teachers": (context) => TeachersPage(
-            bloc: InjectorWidget.of(context)
-                .getTeachersBloc(forceCreate: true)),
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
         "/schools": (context) => Text("Schools"),
       },
     );

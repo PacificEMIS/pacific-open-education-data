@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:http/http.dart' show Client;
 
-import 'package:pacific_dashboards/src/models/schools_model.dart';
-import 'package:pacific_dashboards/src/utils/Exceptions/data_not_loaded_exception.dart';
+import '../models/schools_model.dart';
+import '../utils/Exceptions/data_not_loaded_exception.dart';
 import '../models/teachers_model.dart';
+
 import 'backend_provider.dart';
 
 class ServerBackendProvider implements BackendProvider {
@@ -15,27 +16,26 @@ class ServerBackendProvider implements BackendProvider {
 
   Client client = Client();
 
-  Future<TeachersModel> fetchTeachersList() async {
-    final webResponse =
-    await client.get("$BASE_URL/api/warehouse/$TEACHERS_API_KEY");
+  Future<String> request(String path) async {
+    final webResponse = await client.get("$BASE_URL/api/warehouse/$path");
     print(webResponse.body.toString());
 
     if (webResponse.statusCode == 200) {
-      return TeachersModel.fromJson(json.decode(webResponse.body));
+      return webResponse.body;
     } else {
-      throw DataNotLoadedException(TEACHERS_API_KEY);
+      throw DataNotLoadedException(path);
     }
   }
 
-  Future<SchoolsModel> fetchSchoolsList() async {
-    final webResponse =
-    await client.get("$BASE_URL/api/warehouse/$SCHOOLS_API_KEY");
-    print(webResponse.body.toString());
+  Future<TeachersModel> fetchTeachersList() async {
+    final responseData = await request(TEACHERS_API_KEY);
 
-    if (webResponse.statusCode == 200) {
-      return SchoolsModel.fromJson(json.decode(webResponse.body));
-    } else {
-      throw DataNotLoadedException(SCHOOLS_API_KEY);
-    }
+    return TeachersModel.fromJson(json.decode(responseData));
+  }
+
+  Future<SchoolsModel> fetchSchoolsList() async {
+    final responseData = await request(SCHOOLS_API_KEY);
+
+    return SchoolsModel.fromJson(json.decode(responseData));
   }
 }

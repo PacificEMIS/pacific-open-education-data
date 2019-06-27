@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/src/resources/server_backend_provider.dart';
 
+import '../resources/server_backend_provider.dart';
 import '../resources/repository_impl.dart';
 import '../resources/repository.dart';
 import '../blocs/teachers_bloc.dart';
