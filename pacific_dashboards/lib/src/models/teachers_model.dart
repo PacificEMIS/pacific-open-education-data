@@ -12,6 +12,10 @@ class TeachersModel {
     _teachers = parsedJson.map((i) => TeacherModel.fromJson(i)).toList();
   }
 
+  List toJson() {
+    return _teachers.map((i) => (i).ToJson()).toList();
+  }
+
   Map<dynamic, List<TeacherModel>> getSortedByState() {
     var statesGroup = groupBy(_teachers, (obj) => obj.districtCode);
 

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../resources/server_backend_provider.dart';
 import '../resources/repository_impl.dart';
 import '../resources/repository.dart';
 import '../blocs/teachers_bloc.dart';
+import '../resources/FileProviderImpl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InjectorWidget extends InheritedWidget {
   TeachersBloc _teachersBloc;
   Repository _repository;
+  SharedPreferences _sharedPreferences;
+
 
   InjectorWidget({
     Key key,
@@ -23,7 +28,8 @@ class InjectorWidget extends InheritedWidget {
   bool updateShouldNotify(InjectorWidget old) => false;
 
   init() async {
-    _repository = RepositoryImpl();
+    _sharedPreferences = await SharedPreferences.getInstance();
+    _repository = RepositoryImpl(ServerBackendProvider(), FileProviderImpl(_sharedPreferences));
     _teachersBloc = TeachersBloc(repository: _repository);
   }
 

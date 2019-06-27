@@ -31,7 +31,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
       charts.Series(
         domainFn: (BarChartData teachersData, _) => teachersData.domain,
         measureFn: (BarChartData teachersData, _) => teachersData.measure,
-        colorFn: (BarChartData teachersData, _) => charts.MaterialPalette.white,
+        colorFn: (BarChartData teachersData, _) => charts.MaterialPalette.blue.shadeDefault,
         id: "name",
         data: data,
       ),
@@ -45,14 +45,14 @@ class BarChartWidgetState extends State<BarChartWidget> {
               labelStyle: charts.TextStyleSpec(
                   fontSize: 8, color: charts.MaterialPalette.white),
               lineStyle: charts.LineStyleSpec(
-                  color: charts.MaterialPalette.blue.shadeDefault))),
+                  color: charts.MaterialPalette.gray.shadeDefault))),
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
             labelStyle: charts.TextStyleSpec(
                 fontSize: 12,
-                color: charts.MaterialPalette.deepOrange.shadeDefault),
+                color: charts.MaterialPalette.gray.shadeDefault),
             lineStyle: charts.LineStyleSpec(
-                color: charts.MaterialPalette.green.shadeDefault)),
+                color: charts.MaterialPalette.gray.shadeDefault)),
       ),
     );
   }

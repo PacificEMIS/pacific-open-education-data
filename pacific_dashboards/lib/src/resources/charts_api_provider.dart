@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' show Client;
 
 import '../models/teachers_model.dart';
-import 'data_save_file.dart';
+import 'FileProviderImpl.dart';
 
 class ChartsApiProvider {
   Client client = Client();
@@ -12,6 +12,6 @@ class ChartsApiProvider {
   final _dataApiKey = 'teachercount';
 
   Future<TeachersModel> fetchTeachersList() async {
-      return TeachersModel.fromJson(json.decode(await DataSaveFile.loadFileData(_dataApiKey)));
+      //return TeachersModel.fromJson(json.decode(await .loadFileData(_dataApiKey)));
   }
 }

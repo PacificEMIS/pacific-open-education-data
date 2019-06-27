@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'ui/home_ui/home_page.dart';
 import 'ui/injector_widget.dart';
-import 'ui/teachers_page.dart';
+import 'ui/teaches_ui/teachers_page.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
@@ -11,8 +12,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: _appName,
       theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.deepPurple[800],
+        brightness: Brightness.light,
+        primaryColor: Colors.white,
         accentColor: Colors.deepOrangeAccent[100],
         fontFamily: 'Montserrat',
         textTheme: TextTheme(
@@ -21,11 +22,15 @@ class App extends StatelessWidget {
           body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
       ),
-      initialRoute: "/",
+      initialRoute: "/teachers",
       routes: {
-        "/": (context) => TeachersPage(
-            bloc: InjectorWidget.of(context)
-                .getTeachersBloc(forceCreate: true)),
+        "/": (context) => HomePage(
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+        "/teachers": (context) => TeachersPage(
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+        "/schools": (context) => Text("Schools"),
       },
     );
   }
