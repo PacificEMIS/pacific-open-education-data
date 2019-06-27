@@ -34,8 +34,8 @@ class PieChartWidgetState extends State<PieChartWidget> {
       series,
       animate: true,
       defaultRenderer: charts.ArcRendererConfig(
-          arcWidth: 60,
-          arcRendererDecorators: [charts.ArcLabelDecorator()]),
+          arcWidth: 100,
+          arcRendererDecorators: [charts.ArcLabelDecorator(showLeaderLines: false)]),
     );
   }
 }
