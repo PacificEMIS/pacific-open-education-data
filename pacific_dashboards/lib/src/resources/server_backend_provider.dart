@@ -3,39 +3,39 @@ import 'dart:convert';
 
 import 'package:http/http.dart' show Client;
 
-import 'package:pacific_dashboards/src/config/constants.dart';
 import 'package:pacific_dashboards/src/models/schools_model.dart';
 import 'package:pacific_dashboards/src/utils/Exceptions/data_not_loaded_exception.dart';
 import '../models/teachers_model.dart';
+import 'backend_provider.dart';
 
-class ChartsApiProvider {
+class ServerBackendProvider implements BackendProvider {
+  static const String BASE_URL = "https://fedemis.doe.fm";
+  static const String TEACHERS_API_KEY = "teachercount";
+  static const String SCHOOLS_API_KEY = "examsdistrictresults";
+
   Client client = Client();
-
-  final _teachersApiKey = TeachersApiKey;
-  final _baseUrl = BaseUrl;
-  final _schoolsApiKey = SchoolsApiKey;
 
   Future<TeachersModel> fetchTeachersList() async {
     final webResponse =
-        await client.get("$_baseUrl/api/warehouse/$_teachersApiKey");
+    await client.get("$BASE_URL/api/warehouse/$TEACHERS_API_KEY");
     print(webResponse.body.toString());
 
     if (webResponse.statusCode == 200) {
       return TeachersModel.fromJson(json.decode(webResponse.body));
     } else {
-      throw DataNotLoadedException(_teachersApiKey);
+      throw DataNotLoadedException(TEACHERS_API_KEY);
     }
   }
 
   Future<SchoolsModel> fetchSchoolsList() async {
     final webResponse =
-    await client.get("$_baseUrl/api/warehouse/$_schoolsApiKey");
+    await client.get("$BASE_URL/api/warehouse/$SCHOOLS_API_KEY");
     print(webResponse.body.toString());
 
     if (webResponse.statusCode == 200) {
       return SchoolsModel.fromJson(json.decode(webResponse.body));
     } else {
-      throw DataNotLoadedException(_schoolsApiKey);
+      throw DataNotLoadedException(SCHOOLS_API_KEY);
     }
   }
 }

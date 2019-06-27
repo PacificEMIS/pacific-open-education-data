@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/resources/server_backend_provider.dart';
 
 import '../resources/repository_impl.dart';
 import '../resources/repository.dart';
@@ -23,7 +24,7 @@ class InjectorWidget extends InheritedWidget {
   bool updateShouldNotify(InjectorWidget old) => false;
 
   init() async {
-    _repository = RepositoryImpl();
+    _repository = RepositoryImpl(backendProvider: ServerBackendProvider());
     _teachersBloc = TeachersBloc(repository: _repository);
   }
 
