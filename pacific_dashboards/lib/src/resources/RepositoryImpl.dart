@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import '../models/teachers_model.dart';
-
 import 'Provider.dart';
 import 'repository.dart';
 import '../resources/FileProvider.dart';
@@ -16,17 +14,15 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<TeachersModel> fetchAllTeachers() async{
-    //return TeachersModel.fromJson(json.decode(await .loadFileData(_dataApiKey)));
+  Future<TeachersModel> fetchAllTeachers() async {
     try {
       print('fetchAllTeachers');
-      final result = await _backendProvider.fetchTeachersList();
-      _fileProvider.saveTeachersList(result);
+      final result = await _backendProvider.fetchTeachersModel();
+      _fileProvider.saveTeachersModel(result);
       return result;
     } catch (e) {
       print('fetchAllTeachers load file');
-      return await _fileProvider.fetchTeachersList();
+      return _fileProvider.fetchTeachersModel();
     }
-
   }
 }

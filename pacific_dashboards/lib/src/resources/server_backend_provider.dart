@@ -29,14 +29,14 @@ class ServerBackendProvider implements Provider {
   }
 
   @override
-  Future<TeachersModel> fetchTeachersList() async {
+  Future<TeachersModel> fetchTeachersModel() async {
     final responseData = await _request(TEACHERS_API_KEY);
     print('fetchTeachersList');
     return TeachersModel.fromJson(json.decode(responseData.toString()));
   }
 
   @override
-  Future<SchoolsModel> fetchSchoolsList() async {
+  Future<SchoolsModel> fetchSchoolsModel() async {
     final responseData = await _request(SCHOOLS_API_KEY);
     print('fetchSchoolsList');
     return SchoolsModel.fromJson(json.decode(responseData.toString()));
