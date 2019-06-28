@@ -4,7 +4,6 @@ import 'package:http/http.dart' show Client;
 import '../models/SchoolsModel.dart';
 import '../utils/Exceptions/DataNotLoadedException.dart';
 import '../models/TeachersModel.dart';
-
 import 'Provider.dart';
 
 class ServerBackendProvider implements Provider {
@@ -17,7 +16,6 @@ class ServerBackendProvider implements Provider {
   Future<String> _request(String path) async {
     final webResponse = await client.get("$BASE_URL/api/$path").timeout(const Duration(minutes: 1));
     print(webResponse.body.toString());
-    print('ServerBackendProvider');
 
     if (webResponse.statusCode == 200) {
       return webResponse.body;
@@ -29,14 +27,14 @@ class ServerBackendProvider implements Provider {
   @override
   Future<TeachersModel> fetchTeachersModel() async {
     final responseData = await _request(TEACHERS_API_KEY);
-    print('fetchTeachersList');
+
     return TeachersModel.fromJson(json.decode(responseData.toString()));
   }
 
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
     final responseData = await _request(SCHOOLS_API_KEY);
-    print('fetchSchoolsList');
+
     return SchoolsModel.fromJson(json.decode(responseData.toString()));
   }
 }

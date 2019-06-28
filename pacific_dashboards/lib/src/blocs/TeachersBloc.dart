@@ -10,7 +10,7 @@ class TeachersBloc extends BaseBloc<TeachersModel> {
 
   Observable<TeachersModel> get data => fetcher.stream;
 
-  TeachersBloc( { repository }) : super(repository: repository);
+  TeachersBloc( { repository } ) : super(repository: repository);
 
   fetchData() async {
     var model = await repository.fetchAllTeachers();

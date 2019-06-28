@@ -33,6 +33,7 @@ class FileProviderImpl extends FileProvider {
       print(contents);
       return contents;
     } catch (e) {
+      print("${e.toString}");
       return "";
     }
   }

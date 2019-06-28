@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../resources/repository.dart';
+import '../resources/Repository.dart';
 
 abstract class BaseBloc<T> {
   @protected

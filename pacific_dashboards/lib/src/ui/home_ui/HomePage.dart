@@ -9,10 +9,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Charts')),
+        title: Center(
+          child: Text('Charts'),
+        ),
       ),
       body: Text(
-        "bloc: bloc"
+        "Home",
       ),
     );
   }
