@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../models/teachers_model.dart';
+import '../models/TeachersModel.dart';
 import 'Provider.dart';
 import 'repository.dart';
 import '../resources/FileProvider.dart';

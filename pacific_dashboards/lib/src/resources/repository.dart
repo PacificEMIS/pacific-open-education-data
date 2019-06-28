@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import '../models/teachers_model.dart';
+import '../models/TeachersModel.dart';
 
 abstract class Repository {
   Future<TeachersModel> fetchAllTeachers();

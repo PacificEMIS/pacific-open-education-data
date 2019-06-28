@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../resources/server_backend_provider.dart';
+import '../resources/ServerBackendProvider.dart';
 import '../resources/RepositoryImpl.dart';
 import '../resources/repository.dart';
-import '../blocs/teachers_bloc.dart';
+import '../blocs/TeachersBloc.dart';
 import '../resources/FileProviderImpl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class InjectorWidget extends InheritedWidget {

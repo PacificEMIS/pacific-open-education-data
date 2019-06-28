@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../models/teachers_model.dart';
-
-import 'chart_factory.dart';
+import '../models/TeachersModel.dart';
+import 'ChartFactory.dart';
 
 class ChartsGridWidget extends StatefulWidget {
   final bloc;

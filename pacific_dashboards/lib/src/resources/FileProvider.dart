@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'Provider.dart';
-import '../models/schools_model.dart';
-import '../models/teachers_model.dart';
+import '../models/SchoolsModel.dart';
+import '../models/TeachersModel.dart';
 
 abstract class FileProvider extends Provider {
   Future<bool> saveTeachersModel(TeachersModel model);

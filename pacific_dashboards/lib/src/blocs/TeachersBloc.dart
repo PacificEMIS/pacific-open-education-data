@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
 
-import '../models/teachers_model.dart';
+import '../models/TeachersModel.dart';
 
-import 'base_bloc.dart';
+import 'BaseBloc.dart';
 
 class TeachersBloc extends BaseBloc<TeachersModel> {
 
