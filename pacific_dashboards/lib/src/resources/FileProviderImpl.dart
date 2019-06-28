@@ -48,6 +48,31 @@ class FileProviderImpl extends FileProvider {
     return _sharedPreferences.setString(key + 'time', todayDate.toString());
   }
 
+  Future<bool> _timePassed(String key) async {
+    try {
+      final timeStr = _sharedPreferences.getString(key + 'time') ??
+          new DateTime(0).toString();
+      DateTime oldDate = DateTime.parse(timeStr);
+      final todayDate = DateTime.now();
+      final timePass = todayDate.difference(oldDate);
+      if (timePass.inHours > 12 || timePass.inMinutes < -5) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return true;
+    }
+  }
+
+  @override
+  Future<String> loadFileData(String key) async {
+    if (!await _timePassed(key)) {
+      String result = await _readFile(key);
+      return result;
+    }
+  }
+
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
     return SchoolsModel.fromJson(json.decode(await _readFile(_KEY_SCHOOLS)));
@@ -59,8 +84,32 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
+  Future<SchoolsModel> fetchLastSchoolsModel() async {
+    try {
+      if (!await _timePassed(_KEY_SCHOOLS)) {
+        return SchoolsModel.fromJson(json.decode(await _readFile(_KEY_SCHOOLS)));
+      }
+      return null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<TeachersModel> fetchLastTeachersModel() async {
+    try {
+      if (!await _timePassed(_KEY_TEACHERS)) {
+        return TeachersModel.fromJson(json.decode(await _readFile(_KEY_TEACHERS)));
+      }
+      return null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  @override
   Future<bool> saveSchoolsModel(SchoolsModel model) async {
-    await _writeFile(_KEY_SCHOOLS, "");
+    await _writeFile(_KEY_SCHOOLS, json.encode(model.toJson()));
     return true;
   }
 

@@ -17,8 +17,11 @@ class RepositoryImpl implements Repository {
   Future<TeachersModel> fetchAllTeachers() async {
     try {
       print('fetchAllTeachers');
-      final result = await _backendProvider.fetchTeachersModel();
-      _fileProvider.saveTeachersModel(result);
+      TeachersModel result = await _fileProvider.fetchLastTeachersModel();
+      if (result == null) {
+        result = await _backendProvider.fetchTeachersModel();
+        await _fileProvider.saveTeachersModel(result);
+      }
       return result;
     } catch (e) {
       print('fetchAllTeachers load file');

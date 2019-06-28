@@ -14,6 +14,7 @@ class TeachersBloc extends BaseBloc<TeachersModel> {
 
   fetchData() async {
     var model = await repository.fetchAllTeachers();
+    print('fetchData');
     fetcher.add(model);
   }
 

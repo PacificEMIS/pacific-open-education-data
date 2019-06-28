@@ -11,6 +11,10 @@ class SchoolsModel {
     _schools = parsedJson.map((i) => SchoolModel.fromJson(i)).toList();
   }
 
+  List toJson() {
+    return _schools.map((i) => (i).ToJson()).toList();
+  }
+
   Map<dynamic, List<SchoolModel>> getEnrollmentByState() {
     var statesGroup = groupBy(_schools, (obj) => obj.districtCode);
 
