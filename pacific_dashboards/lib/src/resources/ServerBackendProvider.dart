@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:http/http.dart' show Client;
-
-import '../models/schools_model.dart';
-import '../utils/Exceptions/data_not_loaded_exception.dart';
-import '../models/teachers_model.dart';
+import '../models/SchoolsModel.dart';
+import '../utils/Exceptions/DataNotLoadedException.dart';
+import '../models/TeachersModel.dart';
 
 import 'Provider.dart';
 

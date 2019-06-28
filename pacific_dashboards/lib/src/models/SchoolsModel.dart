@@ -1,6 +1,5 @@
 import "package:collection/collection.dart";
-
-import 'school_model.dart';
+import 'SchoolModel.dart';
 
 class SchoolsModel {
   List<SchoolModel> _schools;

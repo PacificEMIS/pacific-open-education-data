@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../charts_grid_widget.dart';
+import '../ChartsGridWidget.dart';
 
 class TeachersPage extends StatelessWidget {
   final bloc;

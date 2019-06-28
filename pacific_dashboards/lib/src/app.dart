@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'ui/home_ui/home_page.dart';
-import 'ui/injector_widget.dart';
-import 'ui/teaches_ui/teachers_page.dart';
+import 'ui/home_ui/HomePage.dart';
+import 'ui/InjectorWidget.dart';
+import 'ui/teaches_ui/TeachersPage.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';

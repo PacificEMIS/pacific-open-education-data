@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../resources/FileProvider.dart';
-import '../models/schools_model.dart';
-import '../models/teachers_model.dart';
+import '../models/SchoolsModel.dart';
+import '../models/TeachersModel.dart';
 
 class FileProviderImpl extends FileProvider {
   static const _KEY_SCHOOLS = "schools";

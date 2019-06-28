@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import '../models/TeacherModel.dart';
 
-import '../models/teacher_model.dart';
-
-import 'bar_chart_widget.dart';
-import 'pie_chart_widget.dart';
+import 'BarChartWidget.dart';
+import 'PieChartWidget.dart';
 
 class ChartFactory {
   static Widget getBarChartViewByData(
