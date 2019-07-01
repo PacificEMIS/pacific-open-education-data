@@ -30,7 +30,6 @@ class FileProviderImpl extends FileProvider {
     try {
       final file = await _createFile(key);
       String contents = await file.readAsString();
-      print(contents);
       return contents;
     } catch (e) {
       return "";
@@ -48,18 +47,14 @@ class FileProviderImpl extends FileProvider {
     return _sharedPreferences.setString(key + 'time', todayDate.toString());
   }
 
-  Future<bool> _timePassed(String key) async {
+  Future<bool> _isTimePassed(String key) async {
     try {
       final timeStr = _sharedPreferences.getString(key + 'time') ??
           new DateTime(0).toString();
       DateTime oldDate = DateTime.parse(timeStr);
       final todayDate = DateTime.now();
       final timePass = todayDate.difference(oldDate);
-      if (timePass.inHours > 12 || timePass.inMinutes < -5) {
-        return true;
-      } else {
-        return false;
-      }
+      return timePass.inHours > 12 || timePass.inMinutes < -5;
     } catch (e) {
       return true;
     }
@@ -67,7 +62,7 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<String> loadFileData(String key) async {
-    if (!await _timePassed(key)) {
+    if (!await _isTimePassed(key)) {
       String result = await _readFile(key);
       return result;
     }
@@ -84,10 +79,10 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
-  Future<SchoolsModel> fetchLastSchoolsModel() async {
+  Future<SchoolsModel> fetchValidSchoolsModel() async {
     try {
-      if (!await _timePassed(_KEY_SCHOOLS)) {
-        return SchoolsModel.fromJson(json.decode(await _readFile(_KEY_SCHOOLS)));
+      if (!await _isTimePassed(_KEY_SCHOOLS)) {
+        return fetchSchoolsModel();
       }
       return null;
     } catch(e) {
@@ -96,10 +91,10 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
-  Future<TeachersModel> fetchLastTeachersModel() async {
+  Future<TeachersModel> fetchValidTeachersModel() async {
     try {
-      if (!await _timePassed(_KEY_TEACHERS)) {
-        return TeachersModel.fromJson(json.decode(await _readFile(_KEY_TEACHERS)));
+      if (!await _isTimePassed(_KEY_TEACHERS)) {
+        return fetchTeachersModel();
       }
       return null;
     } catch(e) {

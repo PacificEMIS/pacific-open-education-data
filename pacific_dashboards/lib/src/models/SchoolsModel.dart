@@ -12,7 +12,7 @@ class SchoolsModel {
   }
 
   List toJson() {
-    return _schools.map((i) => (i).ToJson()).toList();
+    return _schools.map((i) => (i).toJson()).toList();
   }
 
   Map<dynamic, List<SchoolModel>> getEnrollmentByState() {

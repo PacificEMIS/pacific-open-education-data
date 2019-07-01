@@ -35,7 +35,7 @@ class SchoolModel {
     );
   }
 
-  Map<String, dynamic> ToJson() =>
+  Map<String, dynamic> toJson() =>
       {
         'ClassLevel': classLevel,
         'DistrictCode': districtCode,

@@ -8,7 +8,7 @@ abstract class FileProvider extends Provider {
 
   Future<bool> saveSchoolsModel(SchoolsModel model);
 
-  Future<SchoolsModel> fetchLastSchoolsModel();
+  Future<SchoolsModel> fetchValidSchoolsModel();
 
-  Future<TeachersModel> fetchLastTeachersModel();
+  Future<TeachersModel> fetchValidTeachersModel();
 }

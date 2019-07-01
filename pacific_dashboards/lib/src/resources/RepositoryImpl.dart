@@ -16,15 +16,13 @@ class RepositoryImpl implements Repository {
   @override
   Future<TeachersModel> fetchAllTeachers() async {
     try {
-      print('fetchAllTeachers');
-      TeachersModel result = await _fileProvider.fetchLastTeachersModel();
+      TeachersModel result = await _fileProvider.fetchValidTeachersModel();
       if (result == null) {
         result = await _backendProvider.fetchTeachersModel();
         await _fileProvider.saveTeachersModel(result);
       }
       return result;
     } catch (e) {
-      print('fetchAllTeachers load file');
       return await _fileProvider.fetchTeachersModel();
     }
   }
