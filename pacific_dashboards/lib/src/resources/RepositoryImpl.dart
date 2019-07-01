@@ -17,10 +17,10 @@ class RepositoryImpl implements Repository {
   Future<TeachersModel> fetchAllTeachers() async {
     try {
       final result = await _backendProvider.fetchTeachersModel();
-      _fileProvider.saveTeachersModel(result);
+      await _fileProvider.saveTeachersModel(result);
       return result;
     } catch (e) {
-      return _fileProvider.fetchTeachersModel();
+      return await _fileProvider.fetchTeachersModel();
     }
   }
 }

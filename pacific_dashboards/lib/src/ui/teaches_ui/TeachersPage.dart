@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/models/TeachersModel.dart';
 import '../../blocs/TeachersBloc.dart';
-import '../../utils/HexColorConverter.dart';
+import '../../utils/HexColor.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartsGridWidget.dart';
@@ -37,13 +37,16 @@ class TeachersPageState extends State<TeachersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text("Teachers"),
+        title: Text("Teachers"),
       ),
       body: StreamBuilder(
         stream: widget.bloc.data,
         builder: (context, AsyncSnapshot<TeachersModel> snapshot) {
           if (snapshot.hasData) {
-            return _buildGrid(snapshot);
+            return Padding(
+              padding: EdgeInsets.all(16.0),
+              child: _buildList(snapshot),
+            );
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
@@ -56,21 +59,15 @@ class TeachersPageState extends State<TeachersPage> {
     );
   }
 
-  Widget _buildGrid(AsyncSnapshot<TeachersModel> snapshot) {
+  Widget _buildList(AsyncSnapshot<TeachersModel> snapshot) {
     return OrientationBuilder(
       builder: (context, orientation) {
-        return GridView.builder(
-          padding: EdgeInsets.all(38.0),
-          itemCount: 1,
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: _getTilesAmountInRowByScreenSize(orientation)),
+        return ListView.builder(
+          itemCount: 5,
+          //listDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: _getTilesAmountInRowByScreenSize(orientation)),
           itemBuilder: (BuildContext context, int index) {
-            return GridTile(
-              child: InkResponse(
-                enableFeedback: true,
-                child: _generateGridTile(snapshot.data, index),
-                onTap: () => print('tap'),
-              ),
+            return ListTile(
+              subtitle: _generateGridTile(snapshot.data, index),
             );
           },
         );
@@ -101,9 +98,7 @@ class TeachersPageState extends State<TeachersPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-          title: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
@@ -125,9 +120,27 @@ class TeachersPageState extends State<TeachersPage> {
                 ),
               ],
             ),
-          ),
-          body: ChartFactory.getBarChartViewByData(data.getSortedByState()),
-        );
+            body: Column(
+              children: <Widget>[
+                ChartFactory.getBarChartViewByData(data.getSortedByState()),
+                Table(
+                  border: TableBorder.all(),
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  children: [
+                    TableRow(children: [
+                      Text(
+                        'State',
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        'Teachers',
+                        textAlign: TextAlign.end,
+                      ),
+                    ]),
+                  ],
+                ),
+              ],
+            ));
         break;
       case 1:
         return ChartFactory.getPieChartViewByData(data.getSortedByGovt());
@@ -136,6 +149,8 @@ class TeachersPageState extends State<TeachersPage> {
         return ChartFactory.getPieChartViewByData(data.getSortedByAuthority());
     }
   }
+
+  Widget _generateTable() {}
 //
 //      BaseTileWidget(
 //        title: Padding(

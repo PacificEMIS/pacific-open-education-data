@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import '../utils/HexColor.dart';
 
 class BarChartWidget extends StatefulWidget {
   final data;
@@ -30,7 +31,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
       charts.Series(
         domainFn: (BarChartData teachersData, _) => teachersData.domain,
         measureFn: (BarChartData teachersData, _) => teachersData.measure,
-        colorFn: (BarChartData teachersData, _) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (BarChartData teachersData, _) => _getChartsColor(HexColor.fromStringHash(teachersData.domain)),
         id: "name",
         data: data,
       ),
@@ -54,5 +55,9 @@ class BarChartWidgetState extends State<BarChartWidget> {
                 color: charts.MaterialPalette.gray.shadeDefault)),
       ),
     );
+  }
+
+  charts.Color _getChartsColor(Color color) {
+    return charts.Color(r: color.red, g: color.green, b: color.blue, a: color.alpha);
   }
 }

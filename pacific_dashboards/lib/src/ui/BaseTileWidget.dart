@@ -10,6 +10,7 @@ class BaseTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
       children: <Widget>[
         title,
         body,

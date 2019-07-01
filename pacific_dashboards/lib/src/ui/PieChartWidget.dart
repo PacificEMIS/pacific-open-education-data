@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import '../utils/HexColor.dart';
 
 class PieChartWidget extends StatefulWidget {
   final bool animate;
@@ -24,6 +25,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
         id: "name",
         domainFn: (PieChartData teachersData, _) => teachersData.domain,
         measureFn: (PieChartData teachersData, _) => teachersData.measure,
+        colorFn: (PieChartData teachersData, _) => _getChartsColor(HexColor.fromStringHash(teachersData.domain)),
         data: data,
         labelAccessorFn: (PieChartData row, _) => '${row.domain}',
       ),
@@ -33,9 +35,12 @@ class PieChartWidgetState extends State<PieChartWidget> {
       series,
       animate: true,
       defaultRenderer: charts.ArcRendererConfig(
-          arcWidth: 100,
-          arcRendererDecorators: [charts.ArcLabelDecorator(showLeaderLines: false)]),
+          arcWidth: 100, strokeWidthPx: 0.0, arcRendererDecorators: [charts.ArcLabelDecorator(showLeaderLines: false)]),
     );
+  }
+
+  charts.Color _getChartsColor(Color color) {
+    return charts.Color(r: color.red, g: color.green, b: color.blue, a: color.alpha);
   }
 }
 
