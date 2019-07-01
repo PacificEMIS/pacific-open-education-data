@@ -25,7 +25,7 @@ class RepositoryImpl implements Repository {
       return result;
     } catch (e) {
       print('fetchAllTeachers load file');
-      return _fileProvider.fetchTeachersModel();
+      return await _fileProvider.fetchTeachersModel();
     }
   }
 }
