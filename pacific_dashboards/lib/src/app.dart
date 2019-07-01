@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
 
 import 'ui/home_ui/HomePage.dart';
 import 'ui/InjectorWidget.dart';
@@ -22,11 +23,29 @@ class App extends StatelessWidget {
           body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
       ),
-      initialRoute: "/teachers",
+      initialRoute: "/",
       routes: {
-        "/": (context) => HomePage(bloc: InjectorWidget.of(context).getTeachersBloc()),
-        "/teachers": (context) => TeachersPage(bloc: InjectorWidget.of(context).getTeachersBloc()),
+        "/": (context) => HomePage(
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc()),
+        "/home": (context) => HomePage(
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc()),
+        "/teachers": (context) => TeachersPage(
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc()),
         "/schools": (context) => Text("Schools"),
+       
+        "/Budgets": (context) => Text("Budgets"),
+        "/Exams": (context) => Text("Exams"),
+        "/Indicators": (context) => Text("Indicators"),
+        "/School Accreditations": (context) => Text("School Accreditations"),
+        "/Schools": (context)=> SchoolsPage(
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc()),
+        "/Teachers": (context) => TeachersPage(
+            bloc:
+                InjectorWidget.of(context).getTeachersBloc()),
       },
     );
   }
