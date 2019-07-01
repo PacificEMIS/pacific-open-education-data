@@ -34,4 +34,17 @@ class SchoolModel {
       enrolF: parsedJson['EnrolF'] ?? 0,
     );
   }
+
+  Map<String, dynamic> toJson() =>
+      {
+        'ClassLevel': classLevel,
+        'DistrictCode': districtCode,
+        'AuthorityCode': authorityCode,
+        'AuthorityGovt' : authorityGovt,
+        'SchoolTypeCode' : schoolTypeCode,
+        'SurveyYear' : surveyYear,
+        'Age' : age,
+        'EnrolM' : enrolM,
+        'EnrolF' : enrolF,
+      };
 }

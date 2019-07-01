@@ -30,7 +30,6 @@ class FileProviderImpl extends FileProvider {
     try {
       final file = await _createFile(key);
       String contents = await file.readAsString();
-      print(contents);
       return contents;
     } catch (e) {
       return "";
@@ -48,6 +47,27 @@ class FileProviderImpl extends FileProvider {
     return _sharedPreferences.setString(key + 'time', todayDate.toString());
   }
 
+  Future<bool> _isTimePassed(String key) async {
+    try {
+      final timeStr = _sharedPreferences.getString(key + 'time') ??
+          new DateTime(0).toString();
+      DateTime oldDate = DateTime.parse(timeStr);
+      final todayDate = DateTime.now();
+      final timePass = todayDate.difference(oldDate);
+      return timePass.inHours > 12 || timePass.inMinutes < -5;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  @override
+  Future<String> loadFileData(String key) async {
+    if (!await _isTimePassed(key)) {
+      String result = await _readFile(key);
+      return result;
+    }
+  }
+
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
     return SchoolsModel.fromJson(json.decode(await _readFile(_KEY_SCHOOLS)));
@@ -59,8 +79,32 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
+  Future<SchoolsModel> fetchValidSchoolsModel() async {
+    try {
+      if (!await _isTimePassed(_KEY_SCHOOLS)) {
+        return fetchSchoolsModel();
+      }
+      return null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<TeachersModel> fetchValidTeachersModel() async {
+    try {
+      if (!await _isTimePassed(_KEY_TEACHERS)) {
+        return fetchTeachersModel();
+      }
+      return null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  @override
   Future<bool> saveSchoolsModel(SchoolsModel model) async {
-    await _writeFile(_KEY_SCHOOLS, "");
+    await _writeFile(_KEY_SCHOOLS, json.encode(model.toJson()));
     return true;
   }
 
