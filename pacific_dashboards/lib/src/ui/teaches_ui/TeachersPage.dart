@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/src/models/TeachersModel.dart';
+import '../../models/TeacherModel.dart';
+import '../../models/TeachersModel.dart';
 import '../../blocs/TeachersBloc.dart';
 import '../../utils/HexColor.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
+import '../ChartInfoTable.dart';
 import '../ChartsGridWidget.dart';
 
 class TeachersPage extends StatefulWidget {
@@ -102,7 +104,7 @@ class TeachersPageState extends State<TeachersPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Teachers by Authority",
+                  "Teachers by State",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -123,30 +125,71 @@ class TeachersPageState extends State<TeachersPage> {
             body: Column(
               children: <Widget>[
                 ChartFactory.getBarChartViewByData(data.getSortedByState()),
-                Table(
-                  border: TableBorder.all(),
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    TableRow(children: [
-                      Text(
-                        'State',
-                        textAlign: TextAlign.start,
-                      ),
-                      Text(
-                        'Teachers',
-                        textAlign: TextAlign.end,
-                      ),
-                    ]),
-                  ],
-                ),
+                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", "Teachers"),
               ],
             ));
         break;
       case 1:
-        return ChartFactory.getPieChartViewByData(data.getSortedByGovt());
+        return BaseTileWidget(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "Schools Enrollment Govt/Non-govt",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    fontFamily: "Noto Sans",
+                    letterSpacing: 0.25,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                InkResponse(
+                  child: Icon(
+                    Icons.tune,
+                    color: HexColor("#132826"),
+                  ),
+                  onTap: () => {},
+                ),
+              ],
+            ),
+            body: Column(
+              children: <Widget>[
+                ChartFactory.getPieChartViewByData(data.getSortedByGovt()),
+                ChartInfoTable<TeacherModel>(data.getSortedByGovt(), "Public/Private", "Teachers"),
+              ],
+            ));
         break;
       default:
-        return ChartFactory.getPieChartViewByData(data.getSortedByAuthority());
+        return BaseTileWidget(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "Teachers by Authority",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    fontFamily: "Noto Sans",
+                    letterSpacing: 0.25,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                InkResponse(
+                  child: Icon(
+                    Icons.tune,
+                    color: HexColor("#132826"),
+                  ),
+                  onTap: () => {},
+                ),
+              ],
+            ),
+            body: Column(
+              children: <Widget>[
+                ChartFactory.getPieChartViewByData(data.getSortedByAuthority()),
+                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(), "Authority", "Teachers"),
+              ],
+            ));
     }
   }
 
