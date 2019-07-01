@@ -27,13 +27,13 @@ class App extends StatelessWidget {
       routes: {
         "/": (context) => HomePage(
             bloc:
-                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+                InjectorWidget.of(context).getTeachersBloc()),
         "/home": (context) => HomePage(
             bloc:
-                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+                InjectorWidget.of(context).getTeachersBloc()),
         "/teachers": (context) => TeachersPage(
             bloc:
-                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+                InjectorWidget.of(context).getTeachersBloc()),
         "/schools": (context) => Text("Schools"),
        
         "/Budgets": (context) => Text("Budgets"),
@@ -42,10 +42,10 @@ class App extends StatelessWidget {
         "/School Accreditations": (context) => Text("School Accreditations"),
         "/Schools": (context)=> SchoolsPage(
             bloc:
-                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+                InjectorWidget.of(context).getTeachersBloc()),
         "/Teachers": (context) => TeachersPage(
             bloc:
-                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+                InjectorWidget.of(context).getTeachersBloc()),
       },
     );
   }
