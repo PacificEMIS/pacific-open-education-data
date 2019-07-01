@@ -30,7 +30,7 @@ dependencies:
   flutter_crashlytics: ^1.0.0
   path_provider: ^1.1.0
   shared_preferences: ^0.5.3
-
+  flutter_svg: ^0.13.0+2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -51,12 +51,12 @@ flutter:
   assets:
     - images/logos/mainlogo.png
     - images/logos/marshalllogo.png
-    - images/icons/Budgets.png
-    - images/icons/Exams.png
-    - images/icons/Indicators.png
-    - images/icons/School Accreditations.png
-    - images/icons/Schools.png
-    - images/icons/Teachers.png
+    - images/icons/Budgets.svg
+    - images/icons/Exams.svg
+    - images/icons/Indicators.svg
+    - images/icons/School Accreditations.svg
+    - images/icons/Schools.svg
+    - images/icons/Teachers.svg
   #  - images/a_dot_ham.jpeg
 # assets\images\logo\mainlogo.png
   # An image asset can refer to one or more resolution-specific "variants", see

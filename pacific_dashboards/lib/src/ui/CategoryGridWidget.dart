@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoryGridWidget extends StatelessWidget {
   final List<String> _kCategoryData = <String>[
@@ -31,10 +32,9 @@ class CategoryGridWidget extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Image.asset(
-                            "images/icons/$data.png",
-                            width: 64,
-                            height: 64,
+                          SvgPicture.asset(
+                            "images/icons/$data.svg",
+                            width: 64, height: 64
                           ),
                           new Container(
                             margin: const EdgeInsets.only(left: 5.0),

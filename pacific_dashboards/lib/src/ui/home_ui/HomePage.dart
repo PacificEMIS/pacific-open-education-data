@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import "../CategoryGridWidget.dart";
 
 class HomePage extends StatelessWidget {
   final bloc;
 
   HomePage({this.bloc});
-
-  _choiceCountry(BuildContext context) {
-    return FlatButton(
-      color: Colors.white,
-      textColor: Color.fromRGBO(26, 129, 204, 0.8),
-      disabledColor: Colors.grey,
-      disabledTextColor: Colors.black,
-      padding: EdgeInsets.all(8.0),
-      splashColor: Colors.lightBlue,
-      onPressed: () {
-        _showDialog(context);
-      },
-      child: Text(
-        "Change country",
-        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +19,7 @@ class HomePage extends StatelessWidget {
           Container(
             height: 80,
             alignment: Alignment.centerRight,
-            child: _choiceCountry(context),
+            child: _buildChooseCountry(context),
           ),
           Container(
               height: 160,
@@ -67,6 +50,24 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  _buildChooseCountry(BuildContext context) {
+    return FlatButton(
+      color: Colors.white,
+      textColor: Color.fromRGBO(26, 129, 204, 0.8),
+      disabledColor: Colors.grey,
+      disabledTextColor: Colors.black,
+      padding: EdgeInsets.all(8.0),
+      splashColor: Colors.lightBlue,
+      onPressed: () {
+        _showDialog(context);
+      },
+      child: Text(
+        "Change country",
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
+      ),
+    );
+  }
+  
   void _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -101,8 +102,7 @@ class HomePage extends StatelessWidget {
                           Expanded(
                               child: Image.asset(
                             "images/logos/mainlogo.png",
-                            width: 40,
-                            height: 40,
+                            width: 40, height: 40
                           )),
                           Expanded(
                             child: Text("Federated States\n of Micronesia",
@@ -123,8 +123,7 @@ class HomePage extends StatelessWidget {
                         Expanded(
                           child: Image.asset(
                             "images/logos/marshalllogo.png",
-                            width: 40,
-                            height: 40,
+                           width: 40, height: 40,
                           ),
                         ),
                         Expanded(
