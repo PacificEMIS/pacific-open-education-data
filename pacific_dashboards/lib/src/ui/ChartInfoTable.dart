@@ -6,6 +6,7 @@ class ChartInfoTable<T> extends StatefulWidget {
   static const String _kTableBorderColor = "#DBE0E4";
   static const String _kTableTextColor = "#132826";
   static const String _kTitleTextColor = "#63696D";
+  static const String _kIconArrowColor = "#33373D";
 
   final Map<dynamic, List<T>> _data;
   final String _titleName;
@@ -14,6 +15,7 @@ class ChartInfoTable<T> extends StatefulWidget {
   Color _borderColor = HexColor(_kTableBorderColor);
   Color _textColor = HexColor(_kTableTextColor);
   Color _titleTextColor = HexColor(_kTitleTextColor);
+  Color _iconArrowColor = HexColor(_kIconArrowColor);
 
   bool _domainSortedByIncreasing = true;
   bool _measureSortedByIncreasing = true;
@@ -51,7 +53,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 InkResponse(
                   child: Icon(
                     (widget._domainSortedByIncreasing ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
-                    color: HexColor("#33373D"),
+                    color: widget._iconArrowColor,
                   ),
                   onTap: () {
                     setState(() {
@@ -80,7 +82,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 InkResponse(
                   child: Icon(
                     (widget._measureSortedByIncreasing ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
-                    color: HexColor("#33373D"),
+                    color: widget._iconArrowColor,
                   ),
                   onTap: () {
                     setState(() {
