@@ -3,17 +3,17 @@ import '../utils/HexColor.dart';
 import 'enums/SortType.dart';
 
 class ChartInfoTable<T> extends StatefulWidget {
-  static const String TABLE_BORDER_COLOR = "#DBE0E4";
-  static const String TABLE_TEXT_COLOR = "#132826";
-  static const String TITLE_TEXT_COLOR = "#63696D";
+  static const String _kTableBorderColor = "#DBE0E4";
+  static const String _kTableTextColor = "#132826";
+  static const String _kTitleTextColor = "#63696D";
 
   final Map<dynamic, List<T>> _data;
   final String _titleName;
   final String _titleValue;
 
-  Color _borderColor = HexColor(TABLE_BORDER_COLOR);
-  Color _textColor = HexColor(TABLE_TEXT_COLOR);
-  Color _titleTextColor = HexColor(TITLE_TEXT_COLOR);
+  Color _borderColor = HexColor(_kTableBorderColor);
+  Color _textColor = HexColor(_kTableTextColor);
+  Color _titleTextColor = HexColor(_kTitleTextColor);
 
   bool _domainSortedByIncreasing = true;
   bool _measureSortedByIncreasing = true;
