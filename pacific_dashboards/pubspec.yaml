@@ -30,7 +30,7 @@ dependencies:
   flutter_crashlytics: ^1.0.0
   path_provider: ^1.1.0
   shared_preferences: ^0.5.3
-
+  flutter_svg: ^0.12.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -48,11 +48,18 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
   assets:
-    - assets/images/tune_24px_outlined.svg
+    - images/logos/mainlogo.png
+    - images/logos/marshalllogo.png
+    - images/icons/Budgets.svg
+    - images/icons/Exams.svg
+    - images/icons/Indicators.svg
+    - images/icons/School Accreditations.svg
+    - images/icons/Schools.svg
+    - images/icons/Teachers.svg
+  #  - images/a_dot_ham.jpeg
+    - images/icons/tune_24px_outlined.svg
+  # assets\images\logo\mainlogo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -64,6 +71,17 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+    # fonts:
+    # - family: NotoSans
+    #   fonts:
+    #     - asset: fonts/NotoSans-Regular.ttf
+    #     - asset: fonts/NotoSans-Bold.ttf
+    #       style: bold
+    #     - asset: fonts/NotoSans-BoldItalic.ttf
+    #       style: bolditalic
+    #     - asset: fonts/NotoSans-Italic.ttf
+    #       style: italic
+  #
   # fonts:
   #   - family: Schyler
   #     fonts:

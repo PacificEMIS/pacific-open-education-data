@@ -4,6 +4,7 @@ import 'package:http/http.dart' show Client;
 import '../models/SchoolsModel.dart';
 import '../utils/Exceptions/DataNotLoadedException.dart';
 import '../models/TeachersModel.dart';
+
 import 'Provider.dart';
 
 class ServerBackendProvider implements Provider {
@@ -27,14 +28,12 @@ class ServerBackendProvider implements Provider {
   @override
   Future<TeachersModel> fetchTeachersModel() async {
     final responseData = await _request(TEACHERS_API_KEY);
-
     return TeachersModel.fromJson(json.decode(responseData.toString()));
   }
 
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
     final responseData = await _request(SCHOOLS_API_KEY);
-
     return SchoolsModel.fromJson(json.decode(responseData.toString()));
   }
 }

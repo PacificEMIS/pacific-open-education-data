@@ -12,7 +12,7 @@ class TeachersModel {
   }
 
   List toJson() {
-    return _teachers.map((i) => (i).ToJson()).toList();
+    return _teachers.map((i) => (i).toJson()).toList();
   }
 
   Map<dynamic, List<TeacherModel>> getSortedByState() {

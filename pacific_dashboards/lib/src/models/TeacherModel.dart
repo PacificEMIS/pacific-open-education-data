@@ -59,7 +59,7 @@ class TeacherModel {
     );
   }
 
-  Map<String, dynamic> ToJson() =>
+  Map<String, dynamic> toJson() =>
   {
     'SchNo': schNo,
     'SurveyYear': surveyYear,
