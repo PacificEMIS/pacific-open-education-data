@@ -27,15 +27,16 @@ class PieChartWidgetState extends State<PieChartWidget> {
         measureFn: (PieChartData teachersData, _) => teachersData.measure,
         colorFn: (PieChartData teachersData, _) => _getChartsColor(HexColor.fromStringHash(teachersData.domain)),
         data: data,
-        labelAccessorFn: (PieChartData row, _) => '${row.domain}',
       ),
     ];
 
     return new charts.PieChart(
       series,
-      animate: true,
+      animate: false,
       defaultRenderer: charts.ArcRendererConfig(
-          arcWidth: 100, strokeWidthPx: 0.0, arcRendererDecorators: [charts.ArcLabelDecorator(showLeaderLines: false)]),
+        arcWidth: 100,
+        strokeWidthPx: 0.0,
+      ),
     );
   }
 

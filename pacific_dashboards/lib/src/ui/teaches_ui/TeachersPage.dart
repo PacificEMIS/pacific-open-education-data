@@ -38,7 +38,13 @@ class TeachersPageState extends State<TeachersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Teachers"),
+        title: Text(
+          "Teachers",
+          style: TextStyle(
+            fontSize: 18.0,
+            fontFamily: "Noto Sans",
+          ),
+        ),
       ),
       body: StreamBuilder(
         stream: widget.bloc.data,
@@ -65,7 +71,6 @@ class TeachersPageState extends State<TeachersPage> {
       builder: (context, orientation) {
         return ListView.builder(
           itemCount: 3,
-          //listDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: _getTilesAmountInRowByScreenSize(orientation)),
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
@@ -77,25 +82,6 @@ class TeachersPageState extends State<TeachersPage> {
     );
   }
 
-  int _getTilesAmountInRowByScreenSize(Orientation orientation) {
-    var isLandscape = orientation == Orientation.landscape;
-    var screenWidth = MediaQuery.of(context).size.width;
-    print(screenWidth);
-    if (isLandscape) {
-      if (screenWidth > 700) {
-        return 3;
-      }
-
-      return 2;
-    } else {
-      if (screenWidth > 600) {
-        return 2;
-      }
-
-      return 1;
-    }
-  }
-
   Widget _generateGridTile(TeachersModel data, int index) {
     switch (index) {
       case 0:
@@ -104,7 +90,7 @@ class TeachersPageState extends State<TeachersPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Teachers by State",
+                  "Teachers by Authority",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -125,10 +111,11 @@ class TeachersPageState extends State<TeachersPage> {
             ),
             body: Column(
               children: <Widget>[
-                ChartFactory.getBarChartViewByData(data.getSortedByState()),
-                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", "Teachers"),
+                ChartFactory.getPieChartViewByData(data.getSortedByAuthority()),
+                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(), "Authority", "Teachers"),
               ],
             ));
+
         break;
       case 1:
         return BaseTileWidget(
@@ -161,7 +148,7 @@ class TeachersPageState extends State<TeachersPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Teachers by Authority",
+                  "Teachers by State",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -182,49 +169,10 @@ class TeachersPageState extends State<TeachersPage> {
             ),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(data.getSortedByAuthority()),
-                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(), "Authority", "Teachers"),
+                ChartFactory.getBarChartViewByData(data.getSortedByState()),
+                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", "Teachers"),
               ],
             ));
     }
   }
-
-  Widget _generateTable() {}
-//
-//      BaseTileWidget(
-//        title: Padding(
-//          padding: const EdgeInsets.all(16.0),
-//          child: Row(
-//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//            children: <Widget>[
-//              Text(
-//                "Teachers by Authority",
-//                style: TextStyle(
-//                  fontWeight: FontWeight.bold,
-//                  fontSize: 16.0,
-//                  fontFamily: "Noto Sans",
-//                  letterSpacing: 0.25,
-//                  fontStyle: FontStyle.normal,
-//                ),
-//              ),
-//              InkResponse(
-//                child: Icon(
-//                  Icons.tune,
-//                  color: HexColor("#132826"),
-//                ),
-//                onTap: () => {},
-//              ),
-//            ],
-//          ),
-//        ),
-//        body: Text("Label"),
-////        body: ListView(
-////          children: <Widget>[],
-////        ),
-//      ),
-////      ChartsGridWidget(
-////        bloc: bloc,
-////      ),
-//    );
-//  }
 }

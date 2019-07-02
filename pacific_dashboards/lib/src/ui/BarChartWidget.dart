@@ -39,20 +39,22 @@ class BarChartWidgetState extends State<BarChartWidget> {
 
     return charts.BarChart(
       series,
-      animate: true,
+      animate: false,
       primaryMeasureAxis: charts.NumericAxisSpec(
-          renderSpec: charts.GridlineRendererSpec(
-              labelStyle: charts.TextStyleSpec(
-                  fontSize: 8, color: charts.MaterialPalette.white),
-              lineStyle: charts.LineStyleSpec(
-                  color: charts.MaterialPalette.gray.shadeDefault))),
+        renderSpec: charts.GridlineRendererSpec(
+          labelStyle: charts.TextStyleSpec(fontSize: 10, color: _getChartsColor(HexColor("#63696D"))),
+          lineStyle: charts.LineStyleSpec(
+            color: _getChartsColor(HexColor("#C4CBCE")),
+          ),
+        ),
+      ),
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
-            labelStyle: charts.TextStyleSpec(
-                fontSize: 12,
-                color: charts.MaterialPalette.gray.shadeDefault),
-            lineStyle: charts.LineStyleSpec(
-                color: charts.MaterialPalette.gray.shadeDefault)),
+          labelStyle: charts.TextStyleSpec(fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
+          lineStyle: charts.LineStyleSpec(
+            color: _getChartsColor(HexColor("#C4CBCE")),
+          ),
+        ),
       ),
     );
   }
