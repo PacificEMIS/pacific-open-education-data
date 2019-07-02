@@ -6,7 +6,6 @@ import '../../utils/HexColor.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartInfoTable.dart';
-import '../ChartsGridWidget.dart';
 
 class TeachersPage extends StatefulWidget {
   final TeachersBloc bloc;
@@ -65,10 +64,11 @@ class TeachersPageState extends State<TeachersPage> {
     return OrientationBuilder(
       builder: (context, orientation) {
         return ListView.builder(
-          itemCount: 5,
+          itemCount: 3,
           //listDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: _getTilesAmountInRowByScreenSize(orientation)),
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
               subtitle: _generateGridTile(snapshot.data, index),
             );
           },
@@ -111,6 +111,7 @@ class TeachersPageState extends State<TeachersPage> {
                     fontFamily: "Noto Sans",
                     letterSpacing: 0.25,
                     fontStyle: FontStyle.normal,
+                    color: HexColor("#132826"),
                   ),
                 ),
                 InkResponse(
@@ -135,21 +136,15 @@ class TeachersPageState extends State<TeachersPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Schools Enrollment Govt/Non-govt",
+                  "Schools Enrollment Govt / Non-govt",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                     fontFamily: "Noto Sans",
                     letterSpacing: 0.25,
                     fontStyle: FontStyle.normal,
-                  ),
-                ),
-                InkResponse(
-                  child: Icon(
-                    Icons.tune,
                     color: HexColor("#132826"),
                   ),
-                  onTap: () => {},
                 ),
               ],
             ),
@@ -173,6 +168,7 @@ class TeachersPageState extends State<TeachersPage> {
                     fontFamily: "Noto Sans",
                     letterSpacing: 0.25,
                     fontStyle: FontStyle.normal,
+                    color: HexColor("#132826"),
                   ),
                 ),
                 InkResponse(
