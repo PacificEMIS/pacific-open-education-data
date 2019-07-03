@@ -167,7 +167,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         }
 
         for (int i = 0; i < sortedKeys.length; ++i) {
-          rowsList.add(_generateTableRow(sortedKeys[i], dataMap[sortedKeys[i]], i, i == sortedKeys.length - 1));
+          rowsList.add(_generateTableRow(sortedKeys[i], dataMap[sortedKeys[i]], i));
         }
         break;
       case SortType.Measure:
@@ -179,13 +179,13 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
 
         for (int i = 0; i < sortedValues.length; ++i) {
           var key = dataMap.keys.firstWhere((k) => dataMap[k] == sortedValues[i], orElse: () => null);
-          rowsList.add(_generateTableRow(key, dataMap[key], i, i == sortedValues.length - 1));
+          rowsList.add(_generateTableRow(key, dataMap[key], i));
         }
         break;
       default:
         int i = 0;
         dataMap.forEach((domain, measure) {
-          rowsList.add(_generateTableRow(domain, measure, i, i == dataMap.length - 1));
+          rowsList.add(_generateTableRow(domain, measure, i));
           i++;
         });
     }
@@ -193,7 +193,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     return rowsList;
   }
 
-  TableRow _generateTableRow(String domain, int measure, int index, bool isLast) {
+  TableRow _generateTableRow(String domain, int measure, int index) {
     return TableRow(
       decoration: BoxDecoration(
         color: index % 2 == 0 ? widget._evenRowColor : widget._oddRowColor,
