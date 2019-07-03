@@ -7,6 +7,7 @@ import '../../utils/HexColor.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartInfoTable.dart';
+import '../InfoTable.dart';
 
 class TeachersPage extends StatefulWidget {
   final TeachersBloc bloc;
@@ -71,7 +72,7 @@ class TeachersPageState extends State<TeachersPage> {
     return OrientationBuilder(
       builder: (context, orientation) {
         return ListView.builder(
-          itemCount: 3,
+          itemCount: 4,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
@@ -124,7 +125,7 @@ class TeachersPageState extends State<TeachersPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Schools Enrollment Govt / Non-govt",
+                  "Schools Enrollment Govt / \nNon-govt",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -143,7 +144,7 @@ class TeachersPageState extends State<TeachersPage> {
               ],
             ));
         break;
-      default:
+      case 2:
         return BaseTileWidget(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,6 +175,39 @@ class TeachersPageState extends State<TeachersPage> {
                 ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", "Teachers"),
               ],
             ));
+        break;
+      default:
+        var sortedBySchoolTypeData = data.getSortedBySchoolType();
+        return BaseTileWidget(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "Teachers by School type, State\n and Gender",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    fontFamily: "Noto Sans",
+                    letterSpacing: 0.25,
+                    fontStyle: FontStyle.normal,
+                    color: HexColor(kTitleTextColor),
+                  ),
+                ),
+                InkResponse(
+                  child: Icon(
+                    Icons.tune,
+                    color: HexColor(kTitleTextColor),
+                  ),
+                  onTap: () => {},
+                ),
+              ],
+            ),
+            body: Column(
+              children: <Widget>[
+                InfoTable<TeacherModel>(sortedBySchoolTypeData),
+              ],
+            ));
+        break;
     }
   }
 }

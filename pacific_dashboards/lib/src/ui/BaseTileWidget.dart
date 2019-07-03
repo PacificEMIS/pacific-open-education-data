@@ -13,7 +13,10 @@ class BaseTileWidget extends StatelessWidget {
       physics: ClampingScrollPhysics(),
       children: <Widget>[
         title,
-        body,
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+          child: body,
+        ),
       ],
     );
   }

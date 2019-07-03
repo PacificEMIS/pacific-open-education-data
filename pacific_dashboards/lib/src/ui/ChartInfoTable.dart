@@ -72,6 +72,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 Text(
                   widget._titleName,
                   style: TextStyle(
+                    fontSize: 14.0,
                     color: widget._titleTextColor,
                   ),
                 ),
@@ -101,6 +102,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 Text(
                   widget._titleValue,
                   style: TextStyle(
+                    fontSize: 14.0,
                     color: widget._titleTextColor,
                   ),
                 ),
@@ -161,9 +163,9 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     switch (widget._sortType) {
       case SortType.Domain:
         if (widget._domainSortedByIncreasing) {
-          sortedKeys.sort((a, b) => b.compareTo(a));
-        } else {
           sortedKeys.sort((a, b) => a.compareTo(b));
+        } else {
+          sortedKeys.sort((a, b) => b.compareTo(a));
         }
 
         for (int i = 0; i < sortedKeys.length; ++i) {
@@ -172,9 +174,9 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         break;
       case SortType.Measure:
         if (widget._measureSortedByIncreasing) {
-          sortedValues.sort((a, b) => b.compareTo(a));
-        } else {
           sortedValues.sort((a, b) => a.compareTo(b));
+        } else {
+          sortedValues.sort((a, b) => b.compareTo(a));
         }
 
         for (int i = 0; i < sortedValues.length; ++i) {
@@ -218,6 +220,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 Text(
                   domain,
                   style: TextStyle(
+                    fontSize: 14.0,
                     color: widget._textColor,
                   ),
                 ),
@@ -234,6 +237,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 Text(
                   measure.toString(),
                   style: TextStyle(
+                    fontSize: 14.0,
                     color: widget._textColor,
                   ),
                 ),
