@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:pacific_dashboards/src/config/Constants.dart';
 import '../utils/HexColor.dart';
 
 class BarChartWidget extends StatefulWidget {
@@ -42,9 +43,9 @@ class BarChartWidgetState extends State<BarChartWidget> {
       animate: false,
       primaryMeasureAxis: charts.NumericAxisSpec(
         renderSpec: charts.GridlineRendererSpec(
-          labelStyle: charts.TextStyleSpec(fontSize: 10, color: _getChartsColor(HexColor("#63696D"))),
+          labelStyle: charts.TextStyleSpec(fontSize: 10, color: _getChartsColor(HexColor(kChartLabelColor))),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(HexColor("#C4CBCE")),
+            color: _getChartsColor(HexColor(kChartLineColor)),
           ),
         ),
       ),
@@ -52,7 +53,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
         renderSpec: charts.SmallTickRendererSpec(
           labelStyle: charts.TextStyleSpec(fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(HexColor("#C4CBCE")),
+            color: _getChartsColor(HexColor(kChartLineColor)),
           ),
         ),
       ),

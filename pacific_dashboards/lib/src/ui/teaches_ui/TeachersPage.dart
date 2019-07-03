@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../config/Constants.dart';
 import '../../models/TeacherModel.dart';
 import '../../models/TeachersModel.dart';
 import '../../blocs/TeachersBloc.dart';
@@ -97,13 +98,13 @@ class TeachersPageState extends State<TeachersPage> {
                     fontFamily: "Noto Sans",
                     letterSpacing: 0.25,
                     fontStyle: FontStyle.normal,
-                    color: HexColor("#132826"),
+                    color: HexColor(kTitleTextColor),
                   ),
                 ),
                 InkResponse(
                   child: Icon(
                     Icons.tune,
-                    color: HexColor("#132826"),
+                    color: HexColor(kTitleTextColor),
                   ),
                   onTap: () => {},
                 ),
@@ -130,7 +131,7 @@ class TeachersPageState extends State<TeachersPage> {
                     fontFamily: "Noto Sans",
                     letterSpacing: 0.25,
                     fontStyle: FontStyle.normal,
-                    color: HexColor("#132826"),
+                    color: HexColor(kTitleTextColor),
                   ),
                 ),
               ],
@@ -155,13 +156,13 @@ class TeachersPageState extends State<TeachersPage> {
                     fontFamily: "Noto Sans",
                     letterSpacing: 0.25,
                     fontStyle: FontStyle.normal,
-                    color: HexColor("#132826"),
+                    color: HexColor(kTitleTextColor),
                   ),
                 ),
                 InkResponse(
                   child: Icon(
                     Icons.tune,
-                    color: HexColor("#132826"),
+                    color: HexColor(kTitleTextColor),
                   ),
                   onTap: () => {},
                 ),

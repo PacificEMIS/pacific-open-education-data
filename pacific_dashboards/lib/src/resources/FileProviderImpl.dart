@@ -32,7 +32,6 @@ class FileProviderImpl extends FileProvider {
       String contents = await file.readAsString();
       return contents;
     } catch (e) {
-      print("${e.toString}");
       return "";
     }
   }
