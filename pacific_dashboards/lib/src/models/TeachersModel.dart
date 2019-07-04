@@ -32,4 +32,16 @@ class TeachersModel {
 
     return govtGroup;
   }
+
+  Map<dynamic, List<TeacherModel>> getSortedBySchoolType() {
+    var schoolTypeGroup = groupBy(_teachers, (obj) => obj.schoolTypeCode);
+
+    return schoolTypeGroup;
+  }
+
+  List<dynamic> getDistrictCodeKeysList() {
+    var statesGroup = getSortedByState();
+
+    return statesGroup.keys.toList();
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:pacific_dashboards/src/config/Constants.dart';
+import '../utils/HexColor.dart';
 
 class BarChartWidget extends StatefulWidget {
   final data;
@@ -30,7 +32,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
       charts.Series(
         domainFn: (BarChartData teachersData, _) => teachersData.domain,
         measureFn: (BarChartData teachersData, _) => teachersData.measure,
-        colorFn: (BarChartData teachersData, _) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (BarChartData teachersData, _) => _getChartsColor(HexColor.fromStringHash(teachersData.domain)),
         id: "name",
         data: data,
       ),
@@ -38,21 +40,27 @@ class BarChartWidgetState extends State<BarChartWidget> {
 
     return charts.BarChart(
       series,
-      animate: true,
+      animate: false,
       primaryMeasureAxis: charts.NumericAxisSpec(
-          renderSpec: charts.GridlineRendererSpec(
-              labelStyle: charts.TextStyleSpec(
-                  fontSize: 8, color: charts.MaterialPalette.white),
-              lineStyle: charts.LineStyleSpec(
-                  color: charts.MaterialPalette.gray.shadeDefault))),
+        renderSpec: charts.GridlineRendererSpec(
+          labelStyle: charts.TextStyleSpec(fontSize: 10, color: _getChartsColor(AppColors.kNevada)),
+          lineStyle: charts.LineStyleSpec(
+            color: _getChartsColor(AppColors.kLoblolly),
+          ),
+        ),
+      ),
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
-            labelStyle: charts.TextStyleSpec(
-                fontSize: 12,
-                color: charts.MaterialPalette.gray.shadeDefault),
-            lineStyle: charts.LineStyleSpec(
-                color: charts.MaterialPalette.gray.shadeDefault)),
+          labelStyle: charts.TextStyleSpec(fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
+          lineStyle: charts.LineStyleSpec(
+            color: _getChartsColor(AppColors.kLoblolly),
+          ),
+        ),
       ),
     );
+  }
+
+  charts.Color _getChartsColor(Color color) {
+    return charts.Color(r: color.red, g: color.green, b: color.blue, a: color.alpha);
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import '../models/TeachersModel.dart';
 import 'Provider.dart';
-import 'repository.dart';
+import 'Repository.dart';
 import '../resources/FileProvider.dart';
 
 class RepositoryImpl implements Repository {
