@@ -8,9 +8,15 @@ import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartInfoTable.dart';
 import '../InfoTable.dart';
+import '../TitleWidget.dart';
 
 class TeachersPage extends StatefulWidget {
   final TeachersBloc bloc;
+
+  final Widget _dividerWidget =  Divider(
+    height: 16.0,
+    color: Colors.white,
+  );
 
   TeachersPage({
     Key key,
@@ -88,32 +94,11 @@ class TeachersPageState extends State<TeachersPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "Teachers by Authority",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    fontFamily: "Noto Sans",
-                    letterSpacing: 0.25,
-                    fontStyle: FontStyle.normal,
-                    color: HexColor(kTitleTextColor),
-                  ),
-                ),
-                InkResponse(
-                  child: Icon(
-                    Icons.tune,
-                    color: HexColor(kTitleTextColor),
-                  ),
-                  onTap: () => {},
-                ),
-              ],
-            ),
+            title: TitleWidget.withFilter("Teachers by Authority", HexColor(kTitleTextColor)),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(data.getSortedByAuthority()),
+                widget._dividerWidget,
                 ChartInfoTable<TeacherModel>(data.getSortedByAuthority(), "Authority", "Teachers"),
               ],
             ));
@@ -121,91 +106,39 @@ class TeachersPageState extends State<TeachersPage> {
         break;
       case 1:
         return BaseTileWidget(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "Schools Enrollment Govt / \nNon-govt",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    fontFamily: "Noto Sans",
-                    letterSpacing: 0.25,
-                    fontStyle: FontStyle.normal,
-                    color: HexColor(kTitleTextColor),
-                  ),
-                ),
-              ],
-            ),
+            title: TitleWidget("Schools Enrollment Govt / \nNon-govt", HexColor(kTitleTextColor)),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(data.getSortedByGovt()),
+                widget._dividerWidget,
                 ChartInfoTable<TeacherModel>(data.getSortedByGovt(), "Public/Private", "Teachers"),
               ],
             ));
         break;
       case 2:
         return BaseTileWidget(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "Teachers by State",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    fontFamily: "Noto Sans",
-                    letterSpacing: 0.25,
-                    fontStyle: FontStyle.normal,
-                    color: HexColor(kTitleTextColor),
-                  ),
-                ),
-                InkResponse(
-                  child: Icon(
-                    Icons.tune,
-                    color: HexColor(kTitleTextColor),
-                  ),
-                  onTap: () => {},
-                ),
-              ],
-            ),
+            title: TitleWidget.withFilter("Teachers by State", HexColor(kTitleTextColor)),
             body: Column(
               children: <Widget>[
                 ChartFactory.getBarChartViewByData(data.getSortedByState()),
+                widget._dividerWidget,
                 ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", "Teachers"),
               ],
             ));
         break;
       default:
-        var sortedBySchoolTypeData = data.getSortedBySchoolType();
+        var statesKeys = data.getDistrictCodeKeysList();
+        List<Widget> widgets = List<Widget>();
+        widgets.add(InfoTable<TeacherModel>(data.getSortedBySchoolType(), "Total"));
+        for (var i = 0; i < statesKeys.length; ++i) {
+          widgets.add(widget._dividerWidget);
+          widgets.add(InfoTable<TeacherModel>.subTable(data.getSortedBySchoolType(), statesKeys[i]));
+        }
+
         return BaseTileWidget(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "Teachers by School type, State\n and Gender",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    fontFamily: "Noto Sans",
-                    letterSpacing: 0.25,
-                    fontStyle: FontStyle.normal,
-                    color: HexColor(kTitleTextColor),
-                  ),
-                ),
-                InkResponse(
-                  child: Icon(
-                    Icons.tune,
-                    color: HexColor(kTitleTextColor),
-                  ),
-                  onTap: () => {},
-                ),
-              ],
-            ),
+            title: TitleWidget.withFilter("Teachers by School type, State and \nGender", HexColor(kTitleTextColor)),
             body: Column(
-              children: <Widget>[
-                InfoTable<TeacherModel>(sortedBySchoolTypeData),
-              ],
+              children: widgets,
             ));
         break;
     }

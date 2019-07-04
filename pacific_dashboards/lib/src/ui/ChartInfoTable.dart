@@ -196,6 +196,16 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
   }
 
   TableRow _generateTableRow(String domain, int measure, int index) {
+    // crutch for correcting the names of the govt/non-govt chart table domains
+    var generatedDomain = "";
+    if (domain == "G") {
+      generatedDomain = "Gonverenment";
+    } else if (domain == "N") {
+      generatedDomain = "Non-Gonverenment";
+    } else {
+      generatedDomain = domain;
+    }
+
     return TableRow(
       decoration: BoxDecoration(
         color: index % 2 == 0 ? widget._evenRowColor : widget._oddRowColor,
@@ -218,7 +228,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                   ),
                 ),
                 Text(
-                  domain,
+                  generatedDomain,
                   style: TextStyle(
                     fontSize: 14.0,
                     color: widget._textColor,

@@ -25,6 +25,9 @@ class InfoTable<T> extends StatefulWidget {
 
   final Map<dynamic, List<T>> _data;
 
+  final String _keyName;
+  bool _isSubTable;
+
   Color _borderColor = HexColor(_kTableBorderColor);
   Color _textColor = HexColor(_kTableTextColor);
   Color _subTitleTextColor = HexColor(_kSubTitleTextColor);
@@ -32,10 +35,16 @@ class InfoTable<T> extends StatefulWidget {
   Color _oddRowColor = HexColor(_kTableOddRowColor);
   Color _titleTextColor = HexColor(_kTitleTextColor);
 
-  InfoTable(this._data);
+  InfoTable(this._data, this._keyName) {
+    this._isSubTable = false;
+  }
+
+  InfoTable.subTable(this._data, this._keyName) {
+    this._isSubTable = true;
+  }
 
   @override
-  _InfoTableState createState() => _InfoTableState<T>();
+  State<InfoTable<T>> createState() => _InfoTableState<T>();
 }
 
 class _InfoTableState<T> extends State<InfoTable<T>> {
@@ -76,7 +85,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
             child: Row(
               children: <Widget>[
                 Text(
-                  "Total",
+                  widget._keyName,
                   style: TextStyle(
                     fontSize: 14.0,
                     color: widget._titleTextColor,
@@ -158,7 +167,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
             child: Row(
               children: <Widget>[
                 Text(
-                  "Age",
+                  "School \nType",
                   style: TextStyle(
                     fontSize: 12.0,
                     color: widget._subTitleTextColor,
@@ -256,8 +265,10 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
       for (var j = 0; j < v.length; ++j)
       {
         dynamic model = v;
-        maleCount += model[j].numTeachersM;
-        femaleCount += model[j].numTeachersF;
+        if ((!widget._isSubTable) || ((widget._isSubTable) && (widget._keyName == model[j].districtCode))) {
+          maleCount += model[j].numTeachersM;
+          femaleCount += model[j].numTeachersF;
+        }
       }
 
       totalMaleCount += maleCount;

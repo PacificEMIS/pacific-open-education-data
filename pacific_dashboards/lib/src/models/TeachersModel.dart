@@ -38,4 +38,10 @@ class TeachersModel {
 
     return schoolTypeGroup;
   }
+
+  List<dynamic> getDistrictCodeKeysList() {
+    var statesGroup = getSortedByState();
+
+    return statesGroup.keys.toList();
+  }
 }
