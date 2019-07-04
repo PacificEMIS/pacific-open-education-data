@@ -11,10 +11,12 @@ class ChartFactory {
       map[k] = v.length;
     });
 
-    return Container(
-      height: 250.0,
-      child: BarChartWidget(data: map),
-    );
+    return (map.length == 0)
+        ? Container()
+        : Container(
+            height: 250.0,
+            child: BarChartWidget(data: map),
+          );
   }
 
   static Widget getPieChartViewByData(Map<dynamic, List<TeacherModel>> chartData) {
@@ -23,9 +25,11 @@ class ChartFactory {
       map[k] = v.length;
     });
 
-    return Container(
-      height: 300.0,
-      child: PieChartWidget(data: map),
-    );
+    return (map.length == 0)
+        ? Container()
+        : Container(
+            height: 300.0,
+            child: PieChartWidget(data: map),
+          );
   }
 }

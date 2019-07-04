@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/HexColor.dart';
+import 'package:pacific_dashboards/src/config/Constants.dart';
 
 class _Data {
   static const String _kZeroSymbol = "-";
@@ -15,12 +15,6 @@ class _Data {
 }
 
 class InfoTable<T> extends StatefulWidget {
-  static const String _kTableBorderColor = "#DBE0E4";
-  static const String _kTableTextColor = "#132826";
-  static const String _kSubTitleTextColor = "#63696D";
-  static const String _kTitleTextColor = "#005C9D";
-  static const String _kTableEvenRowColor = "#FFFFFF";
-  static const String _kTableOddRowColor = "#F5F6F8";
   static const double _kBorderWidth = 1.0;
 
   final Map<dynamic, List<T>> _data;
@@ -28,12 +22,12 @@ class InfoTable<T> extends StatefulWidget {
   final String _keyName;
   bool _isSubTable;
 
-  Color _borderColor = HexColor(_kTableBorderColor);
-  Color _textColor = HexColor(_kTableTextColor);
-  Color _subTitleTextColor = HexColor(_kSubTitleTextColor);
-  Color _evenRowColor = HexColor(_kTableEvenRowColor);
-  Color _oddRowColor = HexColor(_kTableOddRowColor);
-  Color _titleTextColor = HexColor(_kTitleTextColor);
+  Color _borderColor = AppColors.kGeyser;
+  Color _textColor = AppColors.kTimberGreen;
+  Color _subTitleTextColor = AppColors.kNevada;
+  Color _evenRowColor = AppColors.kWhite;
+  Color _oddRowColor = AppColors.kAthensGray;
+  Color _titleTextColor = AppColors.kEndeavour;
 
   InfoTable(this._data, this._keyName) {
     this._isSubTable = false;

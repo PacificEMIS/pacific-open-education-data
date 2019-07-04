@@ -43,9 +43,9 @@ class BarChartWidgetState extends State<BarChartWidget> {
       animate: false,
       primaryMeasureAxis: charts.NumericAxisSpec(
         renderSpec: charts.GridlineRendererSpec(
-          labelStyle: charts.TextStyleSpec(fontSize: 10, color: _getChartsColor(HexColor(kChartLabelColor))),
+          labelStyle: charts.TextStyleSpec(fontSize: 10, color: _getChartsColor(AppColors.kNevada)),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(HexColor(kChartLineColor)),
+            color: _getChartsColor(AppColors.kLoblolly),
           ),
         ),
       ),
@@ -53,7 +53,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
         renderSpec: charts.SmallTickRendererSpec(
           labelStyle: charts.TextStyleSpec(fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(HexColor(kChartLineColor)),
+            color: _getChartsColor(AppColors.kLoblolly),
           ),
         ),
       ),

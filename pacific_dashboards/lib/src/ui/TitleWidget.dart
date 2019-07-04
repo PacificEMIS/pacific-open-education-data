@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import '../utils/HexColor.dart';
+import '../config/Constants.dart';
 
 class TitleWidget extends StatelessWidget {
-  static const String _kFilterIconColor = "#33373D";
-
   final String _titleName;
   final Color _textColor;
-  final Color _filterIconColor = HexColor(_kFilterIconColor);
+  final Color _filterIconColor = AppColors.kTuna;
 
   bool _hasFiler = false;
+  Future<Object> _func;
 
   TitleWidget(this._titleName, this._textColor);
 
-  TitleWidget.withFilter(this._titleName, this._textColor) {
+  TitleWidget.withFilter(this._titleName, this._textColor /*, Future<Object> func*/) {
+    //_func = func;
     _hasFiler = true;
   }
 

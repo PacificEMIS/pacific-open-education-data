@@ -3,17 +3,20 @@ import '../../config/Constants.dart';
 import '../../models/TeacherModel.dart';
 import '../../models/TeachersModel.dart';
 import '../../blocs/TeachersBloc.dart';
-import '../../utils/HexColor.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartInfoTable.dart';
 import '../InfoTable.dart';
+import '../PlatformAppBar.dart';
 import '../TitleWidget.dart';
 
 class TeachersPage extends StatefulWidget {
+  static const String _kPageName = "Teachers";
+  static const String _measureName = "Teachers";
+
   final TeachersBloc bloc;
 
-  final Widget _dividerWidget =  Divider(
+  final Widget _dividerWidget = Divider(
     height: 16.0,
     color: Colors.white,
   );
@@ -45,10 +48,13 @@ class TeachersPageState extends State<TeachersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: PlatformAppBar(
+        iconTheme: new IconThemeData(color: AppColors.kWhite),
+        backgroundColor: AppColors.kDenim,
         title: Text(
-          "Teachers",
+          TeachersPage._kPageName,
           style: TextStyle(
+            color: AppColors.kWhite,
             fontSize: 18.0,
             fontFamily: "Noto Sans",
           ),
@@ -94,35 +100,35 @@ class TeachersPageState extends State<TeachersPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Teachers by Authority", HexColor(kTitleTextColor)),
+            title: TitleWidget.withFilter("Teachers by Authority", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(data.getSortedByAuthority()),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(), "Authority", "Teachers"),
+                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(), "Authority", TeachersPage._measureName),
               ],
             ));
 
         break;
       case 1:
         return BaseTileWidget(
-            title: TitleWidget("Schools Enrollment Govt / \nNon-govt", HexColor(kTitleTextColor)),
+            title: TitleWidget("Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(data.getSortedByGovt()),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByGovt(), "Public/Private", "Teachers"),
+                ChartInfoTable<TeacherModel>(data.getSortedByGovt(), "Public/Private", TeachersPage._measureName),
               ],
             ));
         break;
       case 2:
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Teachers by State", HexColor(kTitleTextColor)),
+            title: TitleWidget.withFilter("Teachers by State", AppColors.kRacingGreen /*, Navigator.push(context,)*/),
             body: Column(
               children: <Widget>[
                 ChartFactory.getBarChartViewByData(data.getSortedByState()),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", "Teachers"),
+                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", TeachersPage._measureName),
               ],
             ));
         break;
@@ -130,13 +136,14 @@ class TeachersPageState extends State<TeachersPage> {
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
         widgets.add(InfoTable<TeacherModel>(data.getSortedBySchoolType(), "Total"));
+
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
           widgets.add(InfoTable<TeacherModel>.subTable(data.getSortedBySchoolType(), statesKeys[i]));
         }
 
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Teachers by School type, State and \nGender", HexColor(kTitleTextColor)),
+            title: TitleWidget.withFilter("Teachers by School type, State and \nGender", AppColors.kRacingGreen),
             body: Column(
               children: widgets,
             ));

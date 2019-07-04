@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HexColor extends Color {
+  final String hexColor;
 
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+  HexColor(this.hexColor) : super(_getColorFromHex(hexColor));
 
   factory HexColor.fromStringHash(String str) {
     return HexColor(_getColorFromStringHash(str));
@@ -19,10 +20,7 @@ class HexColor extends Color {
 
   static String _getColorFromStringHash(String str) {
     var seed = 75;
-
-    var c = (str.hashCode * seed & 0x00FFFFFF)
-        .toRadixString(16)
-        .toUpperCase();
+    var c = (str.hashCode * seed & 0x00FFFFFF).toRadixString(16).toUpperCase();
 
     return "#" + "00000".substring(0, 6 - c.length) + c;
   }

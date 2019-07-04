@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
+import '../config/Constants.dart';
 import '../utils/HexColor.dart';
 import 'enums/SortType.dart';
 
 class ChartInfoTable<T> extends StatefulWidget {
-  static const String _kTableBorderColor = "#DBE0E4";
-  static const String _kTableTextColor = "#132826";
-  static const String _kTitleTextColor = "#63696D";
-  static const String _kTableEvenRowColor = "#FFFFFF";
-  static const String _kTableOddRowColor = "#F5F6F8";
   static const double _kBorderWidth = 1.0;
-  static const String _kIconArrowColor = "#33373D";
 
   final Map<dynamic, List<T>> _data;
   final String _titleName;
   final String _titleValue;
 
-  Color _borderColor = HexColor(_kTableBorderColor);
-  Color _textColor = HexColor(_kTableTextColor);
-  Color _titleTextColor = HexColor(_kTitleTextColor);
-  Color _evenRowColor = HexColor(_kTableEvenRowColor);
-  Color _oddRowColor = HexColor(_kTableOddRowColor);
-  Color _iconArrowColor = HexColor(_kIconArrowColor);
+  Color _borderColor = AppColors.kGeyser;
+  Color _textColor = AppColors.kTimberGreen;
+  Color _titleTextColor = AppColors.kNevada;
+  Color _evenRowColor = AppColors.kWhite;
+  Color _oddRowColor = AppColors.kAthensGray;
+  Color _iconArrowColor = AppColors.kTuna;
 
   bool _domainSortedByIncreasing = true;
   bool _measureSortedByIncreasing = true;
