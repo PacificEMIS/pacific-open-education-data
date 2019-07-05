@@ -6,6 +6,7 @@ class _Data {
 
   final int _maleAmount;
   final int _femaleAmount;
+  final List<String> _columnsKeys = List<String>();
 
   String get maleAmount => _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
   String get femaleAmount => _femaleAmount != 0 ? _femaleAmount.toString() : _kZeroSymbol;
@@ -20,6 +21,7 @@ class InfoTable<T> extends StatefulWidget {
   final Map<dynamic, List<T>> _data;
 
   final String _keyName;
+  final String _firstColumnName;
   bool _isSubTable;
 
   Color _borderColor = AppColors.kGeyser;
@@ -29,11 +31,11 @@ class InfoTable<T> extends StatefulWidget {
   Color _oddRowColor = AppColors.kAthensGray;
   Color _titleTextColor = AppColors.kEndeavour;
 
-  InfoTable(this._data, this._keyName) {
+  InfoTable(this._data, this._keyName, this._firstColumnName) {
     this._isSubTable = false;
   }
 
-  InfoTable.subTable(this._data, this._keyName) {
+  InfoTable.subTable(this._data, this._keyName, this._firstColumnName) {
     this._isSubTable = true;
   }
 
@@ -162,7 +164,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
             child: Row(
               children: <Widget>[
                 Text(
-                  "School \nType",
+                  widget._firstColumnName,
                   style: TextStyle(
                     fontSize: 12.0,
                     color: widget._subTitleTextColor,

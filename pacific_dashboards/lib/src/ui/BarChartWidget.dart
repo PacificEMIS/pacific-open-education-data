@@ -30,9 +30,9 @@ class BarChartWidgetState extends State<BarChartWidget> {
 
     var series = [
       charts.Series(
-        domainFn: (BarChartData teachersData, _) => teachersData.domain,
-        measureFn: (BarChartData teachersData, _) => teachersData.measure,
-        colorFn: (BarChartData teachersData, _) => _getChartsColor(HexColor.fromStringHash(teachersData.domain)),
+        domainFn: (BarChartData chartData, _) => chartData.domain,
+        measureFn: (BarChartData chartData, _) => chartData.measure,
+        colorFn: (BarChartData chartData, _) => _getChartsColor(HexColor.fromStringHash(chartData.domain)),
         id: "name",
         data: data,
       ),
