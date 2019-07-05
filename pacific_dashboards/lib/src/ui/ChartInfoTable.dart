@@ -31,6 +31,10 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
   @override
   Widget build(BuildContext context) {
     return Table(
+      columnWidths: {
+        0: FlexColumnWidth(1.5),
+        1: FlexColumnWidth(1),
+      },
       border: _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth),
       children: _generateTableBody(widget._data, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
     );

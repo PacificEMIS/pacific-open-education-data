@@ -3,9 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import "../CategoryGridWidget.dart";
 
 class HomePage extends StatelessWidget {
-  final bloc;
-
-  HomePage({this.bloc});
+  HomePage();
 
   @override
   Widget build(BuildContext context) {

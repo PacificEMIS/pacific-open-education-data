@@ -15,8 +15,7 @@ class InjectorWidget extends InheritedWidget {
   InjectorWidget({
     Key key,
     @required Widget child,
-  })
-      : assert(child != null),
+  })  : assert(child != null),
         super(key: key, child: child);
 
   static InjectorWidget of(BuildContext context) {
