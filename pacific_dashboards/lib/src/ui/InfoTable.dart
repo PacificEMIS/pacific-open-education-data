@@ -46,7 +46,8 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
   Widget build(BuildContext context) {
     return Table(
       border: _getTableBorder(widget._borderColor, InfoTable._kBorderWidth),
-      children: _generateTableBody(widget._data, _generateTableTitle(widget._borderColor, InfoTable._kBorderWidth), _generateSubTableTitle(widget._borderColor, InfoTable._kBorderWidth)),
+      children: _generateTableBody(widget._data, _generateTableTitle(widget._borderColor, InfoTable._kBorderWidth),
+          _generateSubTableTitle(widget._borderColor, InfoTable._kBorderWidth)),
     );
   }
 
@@ -256,8 +257,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
     data.forEach((k, v) {
       var maleCount = 0;
       var femaleCount = 0;
-      for (var j = 0; j < v.length; ++j)
-      {
+      for (var j = 0; j < v.length; ++j) {
         dynamic model = v;
         if ((!widget._isSubTable) || ((widget._isSubTable) && (widget._keyName == model[j].districtCode))) {
           maleCount += model[j].numTeachersM;

@@ -26,21 +26,12 @@ class App extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => HomePage(),
-        "/teachers": (context) => TeachersPage(
-            bloc:
-                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
-        "/schools": (context) => Text("Schools"),
-       
         "/Budgets": (context) => Text("Budgets"),
         "/Exams": (context) => Text("Exams"),
         "/Indicators": (context) => Text("Indicators"),
         "/School Accreditations": (context) => Text("School Accreditations"),
-        "/Schools": (context)=> SchoolsPage(
-            bloc:
-                InjectorWidget.of(context).getTeachersBloc()),
-        "/Teachers": (context) => TeachersPage(
-            bloc:
-                InjectorWidget.of(context).getTeachersBloc()),
+        "/Schools": (context) => Text("Schools"),
+        "/Teachers": (context) => TeachersPage(bloc: InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
       },
     );
   }
