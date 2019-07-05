@@ -25,7 +25,7 @@ class TeachersPage extends StatefulWidget {
     Key key,
     this.bloc,
   }) : super(key: key) {
-    print("fetching");
+    debugPrint("fetching");
     bloc.fetchData();
   }
 
@@ -38,7 +38,7 @@ class TeachersPage extends StatefulWidget {
 class TeachersPageState extends State<TeachersPage> {
   @override
   void dispose() {
-    print("disposing");
+    debugPrint("disposing");
     widget.bloc.dispose();
     super.dispose();
   }
