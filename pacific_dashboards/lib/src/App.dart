@@ -25,15 +25,10 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => HomePage(
-            bloc:
-                InjectorWidget.of(context).getTeachersBloc()),
-        "/home": (context) => HomePage(
-            bloc:
-                InjectorWidget.of(context).getTeachersBloc()),
+        "/": (context) => HomePage(),
         "/teachers": (context) => TeachersPage(
             bloc:
-                InjectorWidget.of(context).getTeachersBloc()),
+                InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
         "/schools": (context) => Text("Schools"),
        
         "/Budgets": (context) => Text("Budgets"),
