@@ -133,11 +133,11 @@ class TeachersPageState extends State<TeachersPage> {
       default:
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
-        widgets.add(InfoTable<TeacherModel>(data.getSortedBySchoolType(), "Total"));
+        widgets.add(InfoTable<TeacherModel>(data.getSortedBySchoolType(), "Total", "School \nType"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable<TeacherModel>.subTable(data.getSortedBySchoolType(), statesKeys[i]));
+          widgets.add(InfoTable<TeacherModel>.subTable(data.getSortedBySchoolType(), statesKeys[i], "School \nType"));
         }
 
         return BaseTileWidget(
