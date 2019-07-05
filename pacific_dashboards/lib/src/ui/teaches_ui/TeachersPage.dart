@@ -24,10 +24,7 @@ class TeachersPage extends StatefulWidget {
   TeachersPage({
     Key key,
     this.bloc,
-  }) : super(key: key) {
-    print("fetching");
-    bloc.fetchData();
-  }
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -36,6 +33,12 @@ class TeachersPage extends StatefulWidget {
 }
 
 class TeachersPageState extends State<TeachersPage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.bloc.fetchData();
+  }
+
   @override
   void dispose() {
     print("disposing");
@@ -98,50 +101,61 @@ class TeachersPageState extends State<TeachersPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Teachers by Authority", AppColors.kRacingGreen),
+            title: TitleWidget.withFilter("Teachers by Authority",
+                AppColors.kRacingGreen, data.authorityFilter),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(data.getSortedByAuthority()),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(), "Authority", TeachersPage._measureName),
+                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(),
+                    "Authority", TeachersPage._measureName),
               ],
             ));
 
         break;
       case 1:
         return BaseTileWidget(
-            title: TitleWidget("Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
+            title: TitleWidget(
+                "Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(data.getSortedByGovt()),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByGovt(), "Public/Private", TeachersPage._measureName),
+                ChartInfoTable<TeacherModel>(data.getSortedByGovt(),
+                    "Public/Private", TeachersPage._measureName),
               ],
             ));
         break;
       case 2:
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Teachers by State", AppColors.kRacingGreen /*, Navigator.push(context,)*/),
+            title: TitleWidget.withFilter(
+                "Teachers by State", AppColors.kRacingGreen, data.stateFilter),
             body: Column(
               children: <Widget>[
                 ChartFactory.getBarChartViewByData(data.getSortedByState()),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State", TeachersPage._measureName),
+                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State",
+                    TeachersPage._measureName),
               ],
             ));
         break;
       default:
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
-        widgets.add(InfoTable<TeacherModel>(data.getSortedBySchoolType(), "Total"));
+        widgets.add(
+            InfoTable<TeacherModel>(data.getSortedBySchoolType(), "Total"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable<TeacherModel>.subTable(data.getSortedBySchoolType(), statesKeys[i]));
+          widgets.add(InfoTable<TeacherModel>.subTable(
+              data.getSortedBySchoolType(), statesKeys[i]));
         }
 
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Teachers by School type, State and \nGender", AppColors.kRacingGreen),
+            title: TitleWidget.withFilter(
+                "Teachers by School type, State and \nGender",
+                AppColors.kRacingGreen,
+                data.schoolTypeFilter),
             body: Column(
               children: widgets,
             ));
