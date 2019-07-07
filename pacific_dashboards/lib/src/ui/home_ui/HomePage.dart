@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import "../CategoryGridWidget.dart";
+import 'package:pacific_dashboards/src/utils/Globals.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage();
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => new _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    var currentCountry = Globals().currentCountry;
+    print("Current country $currentCountry");
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       body: new Container(
@@ -22,14 +27,14 @@ class HomePage extends StatelessWidget {
           Container(
               height: 160,
               width: 160,
-              child: Image.asset("images/logos/mainlogo.png")),
+              child: Image.asset("images/logos/$currentCountry.png")),
           Container(
             height: 96,
             width: 266,
             alignment: Alignment.center,
             child: Center(
                 child: Text(
-              'FEDERATED STATES\nof Micronesia',
+              currentCountry,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
@@ -65,7 +70,7 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  
+
   void _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -93,15 +98,20 @@ class HomePage extends StatelessWidget {
                     child: InkWell(
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
-                        print('Card tapped.');
+                          setState(() {
+                        currentCountry = "Federated States of Micronesia";
+                        Globals().setCurrentCountry(
+                            "Federated States of Micronesia");
+                        Navigator.of(context).pop();
+                          });
                       },
                       child: Row(
                         children: <Widget>[
                           Expanded(
                               child: Image.asset(
-                            "images/logos/mainlogo.png",
-                            width: 40, height: 40
-                          )),
+                                  "images/logos/Federated States of Micronesia.png",
+                                  width: 40,
+                                  height: 40)),
                           Expanded(
                             child: Text("Federated States\n of Micronesia",
                                 style: TextStyle(fontFamily: "NotoSans")),
@@ -114,14 +124,19 @@ class HomePage extends StatelessWidget {
                       child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
-                      print('Card tapped.');
+                      setState(() {
+                        currentCountry = "Marshall Islands";
+                        Globals().setCurrentCountry("Marshall Islands");
+                        Navigator.of(context).pop();
+                      });
                     },
                     child: Row(
                       children: <Widget>[
                         Expanded(
                           child: Image.asset(
-                            "images/logos/marshalllogo.png",
-                           width: 40, height: 40,
+                            "images/logos/Marshall Islands.png",
+                            width: 40,
+                            height: 40,
                           ),
                         ),
                         Expanded(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
+import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 
 import 'ui/home_ui/HomePage.dart';
 import 'ui/InjectorWidget.dart';
@@ -25,7 +26,8 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => HomePage(),
+        "/": (context) => SplashPage(),
+        "/Home": (context) => HomePage(),
         "/Budgets": (context) => Text("Budgets"),
         "/Exams": (context) => Text("Exams"),
         "/Indicators": (context) => Text("Indicators"),
