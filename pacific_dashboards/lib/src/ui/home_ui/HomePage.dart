@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import "../CategoryGridWidget.dart";
 import 'package:pacific_dashboards/src/utils/Globals.dart';
 
@@ -8,9 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String currentCountry = SplashPage().currentCountry;
   @override
   Widget build(BuildContext context) {
-    var currentCountry = Globals().currentCountry;
     print("Current country $currentCountry");
     return Scaffold(
       resizeToAvoidBottomPadding: true,
@@ -98,12 +100,9 @@ class _HomePageState extends State<HomePage> {
                     child: InkWell(
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
-                          setState(() {
-                        currentCountry = "Federated States of Micronesia";
-                        Globals().setCurrentCountry(
-                            "Federated States of Micronesia");
-                        Navigator.of(context).pop();
-                          });
+                        setState(() {
+                         _setCurrentCountry ("Federated States of Micronesia", context);
+                        });
                       },
                       child: Row(
                         children: <Widget>[
@@ -125,9 +124,7 @@ class _HomePageState extends State<HomePage> {
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       setState(() {
-                        currentCountry = "Marshall Islands";
-                        Globals().setCurrentCountry("Marshall Islands");
-                        Navigator.of(context).pop();
+                        _setCurrentCountry ("Marshall Islands", context);
                       });
                     },
                     child: Row(
@@ -154,4 +151,34 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
+  _setCurrentCountry(String country, BuildContext context) async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+    await _sharedPreferences.setString("country", country);
+    setState(() {
+      print("Country $country");
+      currentCountry = country;
+    });
+     Navigator.of(context).pop();
+  }
+
+  init() async {
+    print("HOME PAGE");
+
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+   currentCountry = _sharedPreferences
+        .getString("country" ?? "Federated States of Micronesia");
+     }
 }
+
+  // void _setCurrentCountry(String country, BuildContext context) async {
+  //   currentCountry = country;
+  //   SharedPreferences _sharedPreferences =
+  //       await SharedPreferences.getInstance();
+  //   await _sharedPreferences.setString("country", country);
+  //    currentCountry = country;
+  //   Navigator.of(context).pop();
+  // }
+// }5
