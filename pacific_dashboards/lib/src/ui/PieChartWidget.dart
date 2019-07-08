@@ -23,9 +23,9 @@ class PieChartWidgetState extends State<PieChartWidget> {
     var series = [
       new charts.Series(
         id: "name",
-        domainFn: (PieChartData teachersData, _) => teachersData.domain,
-        measureFn: (PieChartData teachersData, _) => teachersData.measure,
-        colorFn: (PieChartData teachersData, _) => _getChartsColor(HexColor.fromStringHash(teachersData.domain)),
+        domainFn: (PieChartData chartData, _) => chartData.domain,
+        measureFn: (PieChartData chartData, _) => chartData.measure,
+        colorFn: (PieChartData chartData, _) => _getChartsColor(HexColor.fromStringHash(chartData.domain)),
         data: data,
       ),
     ];
