@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../config/Constants.dart';
 import '../resources/Filter.dart';
 import './FilterWidget.dart';
+import '../blocs/FilterBloc.dart';
 
 class TitleWidget extends StatelessWidget {
   final String _titleName;
@@ -42,7 +43,7 @@ class TitleWidget extends StatelessWidget {
         onTap: () => {
           Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => FilterWidget(data : _filter)),
+          MaterialPageRoute(builder: (context) => FilterWidget(bloc : FilterBloc(filter: _filter), )),
         )},
       ));
     }

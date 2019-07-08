@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../resources/Filter.dart';
+import '../blocs/FilterBloc.dart';
+import '../config/Constants.dart';
 
 class FilterWidget extends StatefulWidget {
-  final Filter data;
-  Map<String, bool> _tempFilter;
+  final FilterBloc bloc;
 
-  FilterWidget({Key key, @required this.data}) : super(key: key);
+  FilterWidget({Key key, @required this.bloc}) : super(key: key);
 
   @override
   FilterWidgetState createState() => new FilterWidgetState();
@@ -15,23 +16,30 @@ class FilterWidgetState extends State<FilterWidget> {
   @override
   void initState() {
     super.initState();
-    widget._tempFilter = new Map<String, bool>();
-    widget._tempFilter.addAll(widget.data.getFilter());
+    widget.bloc.fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.kWhite,
       appBar: new AppBar(
           iconTheme: IconThemeData(
-            color: Colors.white,
+            color: AppColors.kWhite,
           ),
-          title: new Text('Filter', style: TextStyle(color: Colors.white)),
-          backgroundColor: Color(0xFF1A73E8)),
-      body: new ListView(
-        children: generateFilterList(),
-      ),
+          title: new Text('Filter', style: TextStyle(color: AppColors.kWhite)),
+          backgroundColor: AppColors.kBlue),
+      body: StreamBuilder(
+          stream: widget.bloc.data,
+          builder: (context, AsyncSnapshot<Filter> snapshot) {
+            if (snapshot.hasData) {
+              return new ListView(
+                children: generateFilterList(snapshot),
+              );
+            } else {
+              return Text('');
+            }
+          }),
       floatingActionButton: new Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: new SizedBox(
@@ -42,10 +50,10 @@ class FilterWidgetState extends State<FilterWidget> {
               borderRadius: new BorderRadius.circular(8.0),
             ),
             child: Text('APPLY',
-                style: TextStyle(color: Colors.white, fontSize: 20)),
-            color: Color(0xFF1A73E8),
+                style: TextStyle(color: AppColors.kWhite, fontSize: 20)),
+            color: AppColors.kBlue,
             onPressed: () {
-              widget.data.setFilter(widget._tempFilter);
+              widget.bloc.applyChanges();
               Navigator.pop(context);
             },
           ),
@@ -55,23 +63,21 @@ class FilterWidgetState extends State<FilterWidget> {
     );
   }
 
-  List<Widget> generateFilterList() {
+  List<Widget> generateFilterList(AsyncSnapshot<Filter> snapshot) {
     List<Widget> filterList =
-        List<Widget>.from(widget._tempFilter.keys.map((String key) {
+        List<Widget>.from(snapshot.data.filterTemp.keys.map((String key) {
       return new Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Card(
             elevation: 4,
             child: CheckboxListTile(
               title: new Text(key),
-              value: widget._tempFilter[key],
+              value: snapshot.data.filterTemp[key],
               onChanged: (bool value) {
-                setState(() {
-                  widget._tempFilter[key] = value;
-                });
+                widget.bloc.changeOne(key, value);
               },
               controlAffinity: ListTileControlAffinity.leading,
-              activeColor: Colors.blue[700],
+              activeColor: AppColors.kBlue,
             ),
             borderOnForeground: false,
           ));
@@ -80,7 +86,7 @@ class FilterWidgetState extends State<FilterWidget> {
     filterList.insert(
         0,
         Divider(
-          color: Colors.grey,
+          color: AppColors.kGeyser,
           height: 1,
         ));
 
@@ -90,15 +96,12 @@ class FilterWidgetState extends State<FilterWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: new CheckboxListTile(
           title: new Text('Select all'),
-          value: !widget._tempFilter.containsValue(false),
+          value: !snapshot.data.filterTemp.containsValue(false),
           onChanged: (bool value) {
-            setState(() {
-              widget._tempFilter
-                  .forEach((k, v) => widget._tempFilter[k] = value);
-            });
+            widget.bloc.changeAll(value);
           },
           controlAffinity: ListTileControlAffinity.leading,
-          activeColor: Colors.blue[700],
+          activeColor: AppColors.kBlue,
         ),
       ),
     );
@@ -106,7 +109,7 @@ class FilterWidgetState extends State<FilterWidget> {
     filterList.insert(
         0,
         new ListTile(
-          title: Text(widget.data.filterName,
+          title: Text(snapshot.data.filterName,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ));
 
