@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "../CategoryGridWidget.dart";
-import 'package:pacific_dashboards/src/utils/Globals.dart';
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => new _HomePageState();
@@ -101,7 +99,8 @@ class _HomePageState extends State<HomePage> {
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
                         setState(() {
-                         _setCurrentCountry ("Federated States of Micronesia", context);
+                          _setCurrentCountry(
+                              "Federated States of Micronesia", context);
                         });
                       },
                       child: Row(
@@ -124,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       setState(() {
-                        _setCurrentCountry ("Marshall Islands", context);
+                        _setCurrentCountry("Marshall Islands", context);
                       });
                     },
                     child: Row(
@@ -160,7 +159,7 @@ class _HomePageState extends State<HomePage> {
       print("Country $country");
       currentCountry = country;
     });
-     Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   init() async {
@@ -168,17 +167,7 @@ class _HomePageState extends State<HomePage> {
 
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
-   currentCountry = _sharedPreferences
+    currentCountry = _sharedPreferences
         .getString("country" ?? "Federated States of Micronesia");
-     }
+  }
 }
-
-  // void _setCurrentCountry(String country, BuildContext context) async {
-  //   currentCountry = country;
-  //   SharedPreferences _sharedPreferences =
-  //       await SharedPreferences.getInstance();
-  //   await _sharedPreferences.setString("country", country);
-  //    currentCountry = country;
-  //   Navigator.of(context).pop();
-  // }
-// }5
