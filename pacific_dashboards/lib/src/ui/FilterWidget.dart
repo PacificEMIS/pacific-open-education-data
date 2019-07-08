@@ -3,16 +3,16 @@ import '../resources/Filter.dart';
 import '../blocs/FilterBloc.dart';
 import '../config/Constants.dart';
 
-class FilterWidget extends StatefulWidget {
+class FilterPage extends StatefulWidget {
   final FilterBloc bloc;
 
-  FilterWidget({Key key, @required this.bloc}) : super(key: key);
+  FilterPage({Key key, @required this.bloc}) : super(key: key);
 
   @override
-  FilterWidgetState createState() => new FilterWidgetState();
+  FilterPageState createState() => new FilterPageState();
 }
 
-class FilterWidgetState extends State<FilterWidget> {
+class FilterPageState extends State<FilterPage> {
   @override
   void initState() {
     super.initState();

@@ -43,7 +43,7 @@ class TitleWidget extends StatelessWidget {
         onTap: () => {
           Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => FilterWidget(bloc : FilterBloc(filter: _filter), )),
+          MaterialPageRoute(builder: (context) => FilterPage(bloc : FilterBloc(filter: _filter), )),
         )},
       ));
     }
