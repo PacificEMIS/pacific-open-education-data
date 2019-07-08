@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "../CategoryGridWidget.dart";
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  String currentCountry = SplashPage().currentCountry;
+  final String _kMarshallIslands = "Marshall Islands";
+  final String _kFederatedStateOfMicronesia = "Federated States of Micronesia";
+  String _currentCountry = SplashPage().currentCountry;
+  SharedPreferences _sharedPreferences;
+
   @override
   Widget build(BuildContext context) {
-    print("Current country $currentCountry");
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       body: new Container(
         decoration: BoxDecoration(color: Colors.white),
-        // margin: const EdgeInsets.fromLTRB(47, 134, 47, 210),
-
         child: new ListView(children: <Widget>[
           Container(
             height: 80,
@@ -27,14 +29,14 @@ class _HomePageState extends State<HomePage> {
           Container(
               height: 160,
               width: 160,
-              child: Image.asset("images/logos/$currentCountry.png")),
+              child: Image.asset("images/logos/$_currentCountry.png")),
           Container(
             height: 96,
             width: 266,
             alignment: Alignment.center,
             child: Center(
                 child: Text(
-              currentCountry,
+              _currentCountry,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
@@ -100,18 +102,18 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         setState(() {
                           _setCurrentCountry(
-                              "Federated States of Micronesia", context);
+                              "$_kFederatedStateOfMicronesia", context);
                         });
                       },
                       child: Row(
                         children: <Widget>[
                           Expanded(
                               child: Image.asset(
-                                  "images/logos/Federated States of Micronesia.png",
+                                  "images/logos/$_kFederatedStateOfMicronesia.png",
                                   width: 40,
                                   height: 40)),
                           Expanded(
-                            child: Text("Federated States\n of Micronesia",
+                            child: Text("$_kFederatedStateOfMicronesia",
                                 style: TextStyle(fontFamily: "NotoSans")),
                           ),
                         ],
@@ -123,20 +125,20 @@ class _HomePageState extends State<HomePage> {
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       setState(() {
-                        _setCurrentCountry("Marshall Islands", context);
+                        _setCurrentCountry("$_kMarshallIslands", context);
                       });
                     },
                     child: Row(
                       children: <Widget>[
                         Expanded(
                           child: Image.asset(
-                            "images/logos/Marshall Islands.png",
+                            "images/logos/$_kMarshallIslands.png",
                             width: 40,
                             height: 40,
                           ),
                         ),
                         Expanded(
-                          child: Text("Marshall Islands",
+                          child: Text(_kMarshallIslands,
                               style: TextStyle(fontFamily: "NotoSans")),
                         ),
                       ],
@@ -156,18 +158,15 @@ class _HomePageState extends State<HomePage> {
         await SharedPreferences.getInstance();
     await _sharedPreferences.setString("country", country);
     setState(() {
-      print("Country $country");
-      currentCountry = country;
+      _currentCountry = country;
     });
     Navigator.of(context).pop();
   }
 
   init() async {
-    print("HOME PAGE");
-
-    SharedPreferences _sharedPreferences =
+    _sharedPreferences =
         await SharedPreferences.getInstance();
-    currentCountry = _sharedPreferences
-        .getString("country" ?? "Federated States of Micronesia");
+    _currentCountry =
+        _sharedPreferences.getString("country" ?? _kFederatedStateOfMicronesia);
   }
 }

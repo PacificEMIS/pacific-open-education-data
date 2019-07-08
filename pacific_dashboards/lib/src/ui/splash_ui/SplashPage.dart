@@ -13,12 +13,14 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  String _kDefaultCountry = "Federated States of Micronesia";
+  
   startTime() async {
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
     setState(() {
       _currentCountry = _sharedPreferences
-          .getString("country" ?? "Federated States of Micronesia");
+          .getString("country" ?? _kDefaultCountry);
     });
 
     Globals().currentCountry = _currentCountry;
@@ -33,7 +35,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void initState() {
     super.initState();
-    startTime(); // continue your work in the `fetchSavedItemNo` function
+    startTime(); 
   }
 
   @override

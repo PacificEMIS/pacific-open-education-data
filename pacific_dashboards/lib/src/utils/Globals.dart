@@ -4,14 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Globals extends InheritedWidget {
   String currentCountry = "Marshall Islands";
+  SharedPreferences sharedPreferences;
 
   static Globals of(BuildContext context) =>
       context.inheritFromWidgetOfExactType(Globals);
 
-  Future<String> getCurrentCountry() async {
-    SharedPreferences _sharedPreferences =
+  Future<String> getCurrentCountry() async { sharedPreferences =
         await SharedPreferences.getInstance();
-    currentCountry = _sharedPreferences
+    currentCountry = sharedPreferences
         .getString("country" ?? "Federated States of Micronesia");
         print("CURRENT COUNTRY$currentCountry");
     return currentCountry;
@@ -19,9 +19,9 @@ class Globals extends InheritedWidget {
 
   setCurrentCountry(String country) async {
     currentCountry = country;
-    SharedPreferences _sharedPreferences =
+    sharedPreferences =
         await SharedPreferences.getInstance();
-    await _sharedPreferences.setString("country", country);
+    await sharedPreferences.setString("country", country);
   }
 
   @override
