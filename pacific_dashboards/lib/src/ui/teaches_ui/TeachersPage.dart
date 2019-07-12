@@ -105,9 +105,9 @@ class TeachersPageState extends State<TeachersPage> {
                 AppColors.kRacingGreen, data.authorityFilter),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(data.getSortedByAuthority()),
+                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByAuthority())),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByAuthority(),
+                ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByAuthority()),
                     "Authority", TeachersPage._measureName),
               ],
             ));
@@ -119,9 +119,9 @@ class TeachersPageState extends State<TeachersPage> {
                 "Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(data.getSortedByGovt()),
+                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByGovt())),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByGovt(),
+                ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByGovt()),
                     "Public/Private", TeachersPage._measureName),
               ],
             ));
@@ -132,9 +132,9 @@ class TeachersPageState extends State<TeachersPage> {
                 "Teachers by State", AppColors.kRacingGreen, data.stateFilter),
             body: Column(
               children: <Widget>[
-                ChartFactory.getBarChartViewByData(data.getSortedByState()),
+                ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedByState())),
                 widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(data.getSortedByState(), "State",
+                ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByState()), "State",
                     TeachersPage._measureName),
               ],
             ));
@@ -163,4 +163,16 @@ class TeachersPageState extends State<TeachersPage> {
         break;
     }
   }
+
+  static Map<dynamic, int> _getCountFromList(Map<dynamic, List<TeacherModel>> listMap) {
+    Map<dynamic, int> countMap = new Map<dynamic, int>();
+    int sum = 0;
+    listMap.forEach((k, v) =>{
+      sum = 0,
+      listMap[k].forEach((teacher){sum += teacher.numTeachersM + teacher.numTeachersF;}),
+      countMap[k] = sum
+    });
+    return countMap;
+  }
+
 }

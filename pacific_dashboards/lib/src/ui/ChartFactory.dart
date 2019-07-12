@@ -1,35 +1,26 @@
 import 'package:flutter/material.dart';
 import '../models/TeacherModel.dart';
+import '../models/SchoolModel.dart';
 
 import 'BarChartWidget.dart';
 import 'PieChartWidget.dart';
 
 class ChartFactory {
-  static Widget getBarChartViewByData(Map<dynamic, List<TeacherModel>> chartData) {
-    var map = Map<String, int>();
-    chartData.forEach((k, v) {
-      map[k] = v.length;
-    });
-
-    return (map.length == 0)
+  static Widget getBarChartViewByData(Map<dynamic, int> chartData) {
+    return (chartData.length == 0)
         ? Container()
         : Container(
             height: 250.0,
-            child: BarChartWidget(data: map),
+            child: BarChartWidget(data: chartData),
           );
   }
 
-  static Widget getPieChartViewByData(Map<dynamic, List<TeacherModel>> chartData) {
-    var map = Map<String, int>();
-    chartData.forEach((k, v) {
-      map[k] = v.length;
-    });
-
-    return (map.length == 0)
+  static Widget getPieChartViewByData(Map<dynamic, int> chartData) {
+    return (chartData.length == 0)
         ? Container()
         : Container(
             height: 300.0,
-            child: PieChartWidget(data: map),
+            child: PieChartWidget(data: chartData),
           );
   }
 }
