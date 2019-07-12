@@ -7,20 +7,21 @@ String _currentCountry = "Marshall Islands";
 
 class SplashPage extends StatefulWidget {
   String get currentCountry => _currentCountry;
+  final SharedPreferences sharedPreferences;
 
   @override
   _SplashPageState createState() => _SplashPageState();
+
+  SplashPage({Key key, this.sharedPreferences,}): super(key: key);
 }
 
 class _SplashPageState extends State<SplashPage> {
   String _kDefaultCountry = "Federated States of Micronesia";
   
   startTime() async {
-    SharedPreferences _sharedPreferences =
-        await SharedPreferences.getInstance();
     setState(() {
-      _currentCountry = _sharedPreferences
-          .getString("country" ?? _kDefaultCountry);
+      _currentCountry = widget.sharedPreferences
+          .getString("country") ?? _kDefaultCountry;
     });
 
     Globals().currentCountry = _currentCountry;

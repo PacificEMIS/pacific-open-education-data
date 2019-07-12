@@ -4,15 +4,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import "../CategoryGridWidget.dart";
 
 class HomePage extends StatefulWidget {
+  final SharedPreferences sharedPreferences;
+
   @override
   _HomePageState createState() => new _HomePageState();
+
+  HomePage({Key key, this.sharedPreferences,}): super(key: key);
 }
 
 class _HomePageState extends State<HomePage> {
   final String _kMarshallIslands = "Marshall Islands";
   final String _kFederatedStateOfMicronesia = "Federated States of Micronesia";
-  String _currentCountry = SplashPage().currentCountry;
-  SharedPreferences _sharedPreferences;
+  String _currentCountry;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentCountry = SplashPage(sharedPreferences: widget.sharedPreferences).currentCountry;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +163,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _setCurrentCountry(String country, BuildContext context) async {
-    SharedPreferences _sharedPreferences =
-        await SharedPreferences.getInstance();
-    await _sharedPreferences.setString("country", country);
+    await widget.sharedPreferences.setString("country", country);
     setState(() {
       _currentCountry = country;
     });
@@ -164,9 +171,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   init() async {
-    _sharedPreferences =
-        await SharedPreferences.getInstance();
-    _currentCountry =
-        _sharedPreferences.getString("country" ?? _kFederatedStateOfMicronesia);
+
   }
 }

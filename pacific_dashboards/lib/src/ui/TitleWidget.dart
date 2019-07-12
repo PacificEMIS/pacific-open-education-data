@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../config/Constants.dart';
+import '../resources/Filter.dart';
+import './FilterWidget.dart';
+import '../blocs/FilterBloc.dart';
 
 class TitleWidget extends StatelessWidget {
   final String _titleName;
@@ -7,12 +10,12 @@ class TitleWidget extends StatelessWidget {
   final Color _filterIconColor = AppColors.kTuna;
 
   bool _hasFiler = false;
-  Future<Object> _func;
+  Filter _filter;
 
   TitleWidget(this._titleName, this._textColor);
 
-  TitleWidget.withFilter(this._titleName, this._textColor /*, Future<Object> func*/) {
-    //_func = func;
+  TitleWidget.withFilter(this._titleName, this._textColor , Filter filter) {
+    _filter = filter;
     _hasFiler = true;
   }
 
@@ -37,7 +40,11 @@ class TitleWidget extends StatelessWidget {
           Icons.tune,
           color: _filterIconColor,
         ),
-        onTap: () => {},
+        onTap: () => {
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FilterPage(bloc : FilterBloc(filter: _filter), )),
+        )},
       ));
     }
 

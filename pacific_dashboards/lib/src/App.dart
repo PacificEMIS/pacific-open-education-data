@@ -26,13 +26,13 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => SplashPage(),
-        "/Home": (context) => HomePage(),
+        "/": (context) => SplashPage(sharedPreferences: InjectorWidget.of(context).getSharedPreferences()),
+        "/Home": (context) => HomePage(sharedPreferences: InjectorWidget.of(context).getSharedPreferences()),
         "/Budgets": (context) => Text("Budgets"),
         "/Exams": (context) => Text("Exams"),
         "/Indicators": (context) => Text("Indicators"),
         "/School Accreditations": (context) => Text("School Accreditations"),
-        "/Schools": (context) => Text("Schools"),
+        "/Schools": (context) => SchoolsPage(bloc: InjectorWidget.of(context).getSchoolsBloc(forceCreate: true)),
         "/Teachers": (context) => TeachersPage(bloc: InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
       },
     );

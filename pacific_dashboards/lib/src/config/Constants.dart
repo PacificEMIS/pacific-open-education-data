@@ -12,4 +12,5 @@ class AppColors {
   static Color kEndeavour = HexColor("#005C9D");
   static Color kAthensGray = HexColor("#F5F6F8");
   static Color kTuna = HexColor("#33373D");
+  static Color kBlue = HexColor("#1A73E8");
 }
