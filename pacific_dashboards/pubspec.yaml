@@ -19,22 +19,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^0.2.5
-  firebase_crashlytics:  ^0.0.4+8
-    # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   rxdart: ^0.22.0
   charts_flutter: ^0.6.0
   http: ^0.12.0+1
-  flutter_crashlytics: ^1.0.0
   path_provider: ^1.1.0
   shared_preferences: ^0.5.3
   flutter_svg: ^0.12.4
+  appcenter: ^0.2.1
+  appcenter_analytics: ^0.2.1
+  appcenter_crashes: ^0.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -57,7 +54,6 @@ flutter:
     - images/icons/School Accreditations.svg
     - images/icons/Schools.svg
     - images/icons/Teachers.svg
-  #  - images/a_dot_ham.jpeg
     - images/icons/Tune.svg
   # assets\images\logo\mainlogo.png
   # An image asset can refer to one or more resolution-specific "variants", see
