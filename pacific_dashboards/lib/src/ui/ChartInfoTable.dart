@@ -6,7 +6,7 @@ import 'enums/SortType.dart';
 class ChartInfoTable<T> extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final Map<dynamic, List<T>> _data;
+  final Map<dynamic, int> _data;
   final String _titleName;
   final String _titleValue;
 
@@ -32,7 +32,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
   Widget build(BuildContext context) {
     return Table(
       columnWidths: {
-        0: FlexColumnWidth(1.5),
+        0: FlexColumnWidth(1),
         1: FlexColumnWidth(1),
       },
       border: _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth),
@@ -147,14 +147,10 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     );
   }
 
-  List<TableRow> _generateTableBody(Map<dynamic, List<T>> data, TableRow title) {
+  List<TableRow> _generateTableBody(Map<dynamic, int> dataMap, TableRow title) {
     var rowsList = List<TableRow>();
-    var dataMap = Map<String, int>();
-    data.forEach((k, v) {
-      dataMap[k] = v.length;
-    });
 
-    List<String> sortedKeys = dataMap.keys.toList();
+    List<dynamic> sortedKeys = dataMap.keys.toList();
     List<int> sortedValues = dataMap.values.toList();
 
     rowsList.add(title);

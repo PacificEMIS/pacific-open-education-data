@@ -10,7 +10,7 @@ import 'Provider.dart';
 class ServerBackendProvider implements Provider {
   static const String BASE_URL = "https://fedemis.doe.fm";
   static const String TEACHERS_API_KEY = "warehouse/teachercount";
-  static const String SCHOOLS_API_KEY = "warehouse/examsdistrictresults";
+  static const String SCHOOLS_API_KEY = "warehouse/tableenrol";
 
   Client client = Client();
 

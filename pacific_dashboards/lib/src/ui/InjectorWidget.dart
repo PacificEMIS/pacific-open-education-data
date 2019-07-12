@@ -4,11 +4,13 @@ import '../resources/ServerBackendProvider.dart';
 import '../resources/RepositoryImpl.dart';
 import '../resources/Repository.dart';
 import '../blocs/TeachersBloc.dart';
+import '../blocs/SchoolsBloc.dart';
 import '../resources/FileProviderImpl.dart';
 
 // ignore: must_be_immutable
 class InjectorWidget extends InheritedWidget {
   TeachersBloc _teachersBloc;
+  SchoolsBloc _schoolsBloc;
   Repository _repository;
   SharedPreferences _sharedPreferences;
 
@@ -33,6 +35,7 @@ class InjectorWidget extends InheritedWidget {
     _sharedPreferences = await SharedPreferences.getInstance();
     _repository = RepositoryImpl(ServerBackendProvider(), FileProviderImpl(_sharedPreferences));
     _teachersBloc = TeachersBloc(repository: _repository);
+    _schoolsBloc = SchoolsBloc(repository: _repository);
   }
 
   TeachersBloc getTeachersBloc({bool forceCreate = false}) {
@@ -41,5 +44,13 @@ class InjectorWidget extends InheritedWidget {
     }
 
     return _teachersBloc;
+  }
+
+  SchoolsBloc getSchoolsBloc({bool forceCreate = false}) {
+    if (_schoolsBloc == null || forceCreate) {
+      _schoolsBloc = SchoolsBloc(repository: _repository);
+    }
+
+    return _schoolsBloc;
   }
 }

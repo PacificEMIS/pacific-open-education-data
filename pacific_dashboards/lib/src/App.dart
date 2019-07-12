@@ -30,7 +30,7 @@ class App extends StatelessWidget {
         "/Exams": (context) => Text("Exams"),
         "/Indicators": (context) => Text("Indicators"),
         "/School Accreditations": (context) => Text("School Accreditations"),
-        "/Schools": (context) => Text("Schools"),
+        "/Schools": (context) => SchoolsPage(bloc: InjectorWidget.of(context).getSchoolsBloc(forceCreate: true)),
         "/Teachers": (context) => TeachersPage(bloc: InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
       },
     );
