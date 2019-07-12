@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import "../CategoryGridWidget.dart";
 
-class HomePage extends StatelessWidget {
-  HomePage();
+class HomePage extends StatefulWidget {
+  final SharedPreferences sharedPreferences;
+
+  @override
+  _HomePageState createState() => new _HomePageState();
+
+  HomePage({Key key, this.sharedPreferences,}): super(key: key);
+}
+
+class _HomePageState extends State<HomePage> {
+  final String _kMarshallIslands = "Marshall Islands";
+  final String _kFederatedStateOfMicronesia = "Federated States of Micronesia";
+  String _currentCountry;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentCountry = SplashPage(sharedPreferences: widget.sharedPreferences).currentCountry;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +29,6 @@ class HomePage extends StatelessWidget {
       resizeToAvoidBottomPadding: true,
       body: new Container(
         decoration: BoxDecoration(color: Colors.white),
-        // margin: const EdgeInsets.fromLTRB(47, 134, 47, 210),
-
         child: new ListView(children: <Widget>[
           Container(
             height: 80,
@@ -22,14 +38,14 @@ class HomePage extends StatelessWidget {
           Container(
               height: 160,
               width: 160,
-              child: Image.asset("images/logos/mainlogo.png")),
+              child: Image.asset("images/logos/$_currentCountry.png")),
           Container(
             height: 96,
             width: 266,
             alignment: Alignment.center,
             child: Center(
                 child: Text(
-              'FEDERATED STATES\nof Micronesia',
+              _currentCountry,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
@@ -65,7 +81,7 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  
+
   void _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -93,17 +109,20 @@ class HomePage extends StatelessWidget {
                     child: InkWell(
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
-                        print('Card tapped.');
+                        setState(() {
+                          _setCurrentCountry(
+                              "$_kFederatedStateOfMicronesia", context);
+                        });
                       },
                       child: Row(
                         children: <Widget>[
                           Expanded(
                               child: Image.asset(
-                            "images/logos/mainlogo.png",
-                            width: 40, height: 40
-                          )),
+                                  "images/logos/$_kFederatedStateOfMicronesia.png",
+                                  width: 40,
+                                  height: 40)),
                           Expanded(
-                            child: Text("Federated States\n of Micronesia",
+                            child: Text("$_kFederatedStateOfMicronesia",
                                 style: TextStyle(fontFamily: "NotoSans")),
                           ),
                         ],
@@ -114,18 +133,21 @@ class HomePage extends StatelessWidget {
                       child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
-                      print('Card tapped.');
+                      setState(() {
+                        _setCurrentCountry("$_kMarshallIslands", context);
+                      });
                     },
                     child: Row(
                       children: <Widget>[
                         Expanded(
                           child: Image.asset(
-                            "images/logos/marshalllogo.png",
-                           width: 40, height: 40,
+                            "images/logos/$_kMarshallIslands.png",
+                            width: 40,
+                            height: 40,
                           ),
                         ),
                         Expanded(
-                          child: Text("Marshall Islands",
+                          child: Text(_kMarshallIslands,
                               style: TextStyle(fontFamily: "NotoSans")),
                         ),
                       ],
@@ -138,5 +160,17 @@ class HomePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  _setCurrentCountry(String country, BuildContext context) async {
+    await widget.sharedPreferences.setString("country", country);
+    setState(() {
+      _currentCountry = country;
+    });
+    Navigator.of(context).pop();
+  }
+
+  init() async {
+
   }
 }
