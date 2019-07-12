@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pacific_dashboards/src/utils/Globals.dart';
+import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
 
 String _currentCountry = "Marshall Islands";
 
@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
           .getString("country") ?? _kDefaultCountry;
     });
 
-    Globals().currentCountry = _currentCountry;
+    GlobalSettings().currentCountry = _currentCountry;
     var _duration = Duration(seconds: 3);
 
     return Timer(_duration, navigationPage);

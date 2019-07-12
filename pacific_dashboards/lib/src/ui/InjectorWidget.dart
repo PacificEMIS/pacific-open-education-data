@@ -6,6 +6,7 @@ import '../resources/Repository.dart';
 import '../blocs/TeachersBloc.dart';
 import '../blocs/SchoolsBloc.dart';
 import '../resources/FileProviderImpl.dart';
+import '../utils/GlobalSettings.dart';
 
 // ignore: must_be_immutable
 class InjectorWidget extends InheritedWidget {
@@ -13,6 +14,7 @@ class InjectorWidget extends InheritedWidget {
   SchoolsBloc _schoolsBloc;
   Repository _repository;
   SharedPreferences _sharedPreferences;
+  GlobalSettings _globalSettings;
 
   InjectorWidget({
     Key key,
@@ -36,6 +38,7 @@ class InjectorWidget extends InheritedWidget {
     _repository = RepositoryImpl(ServerBackendProvider(), FileProviderImpl(_sharedPreferences));
     _teachersBloc = TeachersBloc(repository: _repository);
     _schoolsBloc = SchoolsBloc(repository: _repository);
+    _globalSettings = GlobalSettings(sharedPreferences: _sharedPreferences);
   }
 
   TeachersBloc getTeachersBloc({bool forceCreate = false}) {
