@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
             )),
           ),
           Container(
-              height: 500,
+              height: 670,
               width: 328,
               alignment: Alignment.center,
               child: CategoryGridWidget())

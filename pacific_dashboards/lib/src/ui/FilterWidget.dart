@@ -9,7 +9,7 @@ class FilterPage extends StatefulWidget {
   FilterPage({Key key, @required this.bloc}) : super(key: key);
 
   @override
-  FilterPageState createState() => new FilterPageState();
+  FilterPageState createState() => FilterPageState();
 }
 
 class FilterPageState extends State<FilterPage> {
@@ -21,36 +21,36 @@ class FilterPageState extends State<FilterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: AppColors.kWhite,
-      appBar: new AppBar(
+      appBar: AppBar(
           iconTheme: IconThemeData(
             color: AppColors.kWhite,
           ),
-          title: new Text('Filter', style: TextStyle(color: AppColors.kWhite)),
+          title: Text('Filter', style: TextStyle(color: AppColors.kWhite)),
           backgroundColor: AppColors.kBlue),
       body: StreamBuilder(
-          stream: widget.bloc.data,
-          builder: (context, AsyncSnapshot<Filter> snapshot) {
-            if (snapshot.hasData) {
-              return new ListView(
-                children: generateFilterList(snapshot),
-              );
-            } else {
-              return Text('');
-            }
-          }),
-      floatingActionButton: new Container(
+        stream: widget.bloc.data,
+        builder: (context, AsyncSnapshot<Filter> snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+              children: _generateFilterList(snapshot),
+            );
+          } else {
+            return Text('');
+          }
+        },
+      ),
+      floatingActionButton: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: new SizedBox(
+        child: SizedBox(
           width: double.infinity,
           height: 56,
-          child: new FlatButton(
-            shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(8.0),
+          child: FlatButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
             ),
-            child: Text('APPLY',
-                style: TextStyle(color: AppColors.kWhite, fontSize: 20)),
+            child: Text('APPLY', style: TextStyle(color: AppColors.kWhite, fontSize: 20)),
             color: AppColors.kBlue,
             onPressed: () {
               widget.bloc.applyChanges();
@@ -63,21 +63,23 @@ class FilterPageState extends State<FilterPage> {
     );
   }
 
-  List<Widget> generateFilterList(AsyncSnapshot<Filter> snapshot) {
-    List<Widget> filterList =
-        List<Widget>.from(snapshot.data.filterTemp.keys.map((String key) {
-      return new Padding(
+  List<Widget> _generateFilterList(AsyncSnapshot<Filter> snapshot) {
+    List<Widget> filterList = List<Widget>.from(snapshot.data.filterTemp.keys.map((String key) {
+      return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Card(
             elevation: 4,
-            child: CheckboxListTile(
-              title: new Text(key),
-              value: snapshot.data.filterTemp[key],
-              onChanged: (bool value) {
-                widget.bloc.changeOne(key, value);
+            child: RadioListTile<String>(
+              title: Text(key),
+              value: key,
+              onChanged: (String value) {
+                setState(() {
+                  widget.bloc.changeSelectedById(value);
+                });
               },
               controlAffinity: ListTileControlAffinity.leading,
               activeColor: AppColors.kBlue,
+              groupValue: widget.bloc.getSelectedKey(),
             ),
             borderOnForeground: false,
           ));
@@ -92,26 +94,33 @@ class FilterPageState extends State<FilterPage> {
 
     filterList.insert(
       0,
-      new Padding(
+      Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: new CheckboxListTile(
-          title: new Text('Select all'),
-          value: !snapshot.data.filterTemp.containsValue(false),
-          onChanged: (bool value) {
-            widget.bloc.changeAll(value);
-          },
-          controlAffinity: ListTileControlAffinity.leading,
-          activeColor: AppColors.kBlue,
+        child: Card(
+          elevation: 4,
+          child: RadioListTile<String>(
+            title: Text('Select all'),
+            value: 'Select all',
+            onChanged: (String value) {
+              setState(() {
+                widget.bloc.changeAll(value);
+              });
+            },
+            controlAffinity: ListTileControlAffinity.leading,
+            activeColor: AppColors.kBlue,
+            groupValue: widget.bloc.getSelectedKey(),
+          ),
+          borderOnForeground: false,
         ),
       ),
     );
 
     filterList.insert(
-        0,
-        new ListTile(
-          title: Text(snapshot.data.filterName,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        ));
+      0,
+      ListTile(
+        title: Text(snapshot.data.filterName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      ),
+    );
 
     return filterList;
   }

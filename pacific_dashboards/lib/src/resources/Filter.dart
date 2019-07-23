@@ -2,6 +2,7 @@ class Filter {
 
   Map<String, bool> _filter = Map<String, bool>();
   String filterName;
+  String selectedKey = "Select All";
   Map<String, bool> filterTemp = Map<String, bool>();
 
   Filter(Set filterOptions, String name) {
@@ -23,6 +24,6 @@ class Filter {
   }
 
   bool isEnabledInFilter(String key) {
-    return !(_filter.containsKey(key) && _filter[key] == false);
+    return !(_filter.containsKey(key) && !_filter[key]);
   }
 }
