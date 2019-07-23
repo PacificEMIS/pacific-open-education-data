@@ -52,6 +52,19 @@ class SchoolsPageState extends State<SchoolsPage> {
       appBar: PlatformAppBar(
         iconTheme: new IconThemeData(color: AppColors.kWhite),
         backgroundColor: AppColors.kDenim,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.tune,
+            ),
+            onPressed: () => {
+//              Navigator.push(
+//              context,
+//              MaterialPageRoute(builder: (context) => FilterPage(bloc : FilterBloc(filter: _filter), )),
+//            )
+            },
+          ),
+        ],
         title: Text(
           SchoolsPage._kPageName,
           style: TextStyle(

@@ -7,12 +7,14 @@ class PlatformAppBar extends PlatformWidget<CupertinoNavigationBar, AppBar> {
   final Widget title;
   final IconThemeData iconTheme;
   final Color backgroundColor;
+  final List<Widget> actions;
 
   PlatformAppBar({
     this.leading,
     this.title,
     this.iconTheme,
     this.backgroundColor,
+    this.actions,
   });
 
   @override
@@ -22,6 +24,7 @@ class PlatformAppBar extends PlatformWidget<CupertinoNavigationBar, AppBar> {
       title: title,
       iconTheme: iconTheme,
       backgroundColor: backgroundColor,
+      actions: actions,
     );
   }
 
