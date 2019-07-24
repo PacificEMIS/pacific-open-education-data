@@ -14,22 +14,21 @@ class SchoolModel {
   final int enrol;
   String ageGroup;
 
-  SchoolModel({
-    this.surveyYear,
-    this.classLevel,
-    this.districtCode,
-    this.authorityCode,
-    this.authorityGovt,
-    this.schoolTypeCode,
-    this.age,
-    this.enrolM,
-    this.enrolF,
-    this.numTeachersM,
-    this.numTeachersF,
-    this.genderCode,
-    this.enrol,
-    this.ageGroup
-  });
+  SchoolModel(
+      {this.surveyYear,
+      this.classLevel,
+      this.districtCode,
+      this.authorityCode,
+      this.authorityGovt,
+      this.schoolTypeCode,
+      this.age,
+      this.enrolM,
+      this.enrolF,
+      this.numTeachersM,
+      this.numTeachersF,
+      this.genderCode,
+      this.enrol,
+      this.ageGroup});
 
   factory SchoolModel.fromJson(Map parsedJson) {
     return SchoolModel(
@@ -50,20 +49,19 @@ class SchoolModel {
     );
   }
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'ClassLevel': classLevel,
         'DistrictCode': districtCode,
         'AuthorityCode': authorityCode,
-        'AuthorityGovt' : authorityGovt,
-        'SchoolTypeCode' : schoolTypeCode,
-        'SurveyYear' : surveyYear,
-        'Age' : age,
-        'EnrolM' : enrolM,
-        'EnrolF' : enrolF,
-        'NumTeachersM' : numTeachersM,
-        'NumTeachersF' : numTeachersF,
-        'GenderCode' : genderCode,
-        'Enrol' : enrol,
+        'AuthorityGovt': authorityGovt,
+        'SchoolTypeCode': schoolTypeCode,
+        'SurveyYear': surveyYear,
+        'Age': age,
+        'EnrolM': enrolM,
+        'EnrolF': enrolF,
+        'NumTeachersM': numTeachersM,
+        'NumTeachersF': numTeachersF,
+        'GenderCode': genderCode,
+        'Enrol': enrol,
       };
 }

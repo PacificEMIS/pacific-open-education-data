@@ -44,13 +44,12 @@ class FilterPageState extends State<FilterPage> {
       floatingActionButton: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SizedBox(
-          width: double.infinity,
           height: 56,
           child: FlatButton(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
-            child: Text('APPLY', style: TextStyle(color: AppColors.kWhite, fontSize: 20)),
+            child: Icon(Icons.done, color: AppColors.kWhite),
             color: AppColors.kBlue,
             onPressed: () {
               widget.bloc.applyChanges();
@@ -95,7 +94,7 @@ class FilterPageState extends State<FilterPage> {
     filterList.insert(
       0,
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Card(
           elevation: 4,
           child: RadioListTile<String>(

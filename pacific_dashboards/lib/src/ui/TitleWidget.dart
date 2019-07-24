@@ -14,7 +14,7 @@ class TitleWidget extends StatelessWidget {
 
   TitleWidget(this._titleName, this._textColor);
 
-  TitleWidget.withFilter(this._titleName, this._textColor , Filter filter) {
+  TitleWidget.withFilter(this._titleName, this._textColor, Filter filter) {
     _filter = filter;
     _hasFiler = true;
   }
@@ -40,11 +40,19 @@ class TitleWidget extends StatelessWidget {
           Icons.tune,
           color: _filterIconColor,
         ),
-        onTap: () => {
+        onTap: () {
           Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => FilterPage(bloc : FilterBloc(filter: _filter), )),
-        )},
+            context,
+            MaterialPageRoute(
+              builder: (context) => FilterPage(
+                    bloc: FilterBloc(
+                      filter: _filter,
+                      defaultSelectedKey: 'Select All',
+                    ),
+                  ),
+            ),
+          );
+        },
       ));
     }
 

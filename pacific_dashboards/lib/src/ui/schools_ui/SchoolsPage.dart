@@ -6,15 +6,19 @@ import '../../blocs/SchoolsBloc.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartInfoTable.dart';
+import '../FilterWidget.dart';
 import '../InfoTable.dart';
 import '../PlatformAppBar.dart';
 import '../TitleWidget.dart';
+import '../../blocs/FilterBloc.dart';
 
 class SchoolsPage extends StatefulWidget {
   static const String _kPageName = "Schools";
   static const String _measureName = "Schools Enrollment";
 
   final SchoolsBloc bloc;
+
+  final Color _filterIconColor = AppColors.kWhite;
 
   final Widget _dividerWidget = Divider(
     height: 16.0,
@@ -56,6 +60,7 @@ class SchoolsPageState extends State<SchoolsPage> {
           IconButton(
             icon: Icon(
               Icons.tune,
+              color: widget._filterIconColor,
             ),
             onPressed: () => {
 //              Navigator.push(
@@ -118,9 +123,9 @@ class SchoolsPageState extends State<SchoolsPage> {
                 "Schools Enrollment by State", AppColors.kRacingGreen, data.stateFilter),
             body: Column(
               children: <Widget>[
-                ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedByState())),
+                ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedWithFiltersByState())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByState()), "State",
+                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedWithFiltersByState()), "State",
                     SchoolsPage._measureName),
               ],
             ));
@@ -131,9 +136,9 @@ class SchoolsPageState extends State<SchoolsPage> {
                 AppColors.kRacingGreen, data.authorityFilter),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByAuthority())),
+                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedWithFiltersByAuthority())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByAuthority()),
+                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedWithFiltersByAuthority()),
                     "Authority", SchoolsPage._measureName),
               ],
             ));
@@ -145,9 +150,9 @@ class SchoolsPageState extends State<SchoolsPage> {
                 "Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByGovt())),
+                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedWithFiltersByGovt())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByGovt()),
+                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedWithFiltersByGovt()),
                     "Public/Private", SchoolsPage._measureName),
               ],
             ));
@@ -179,12 +184,12 @@ class SchoolsPageState extends State<SchoolsPage> {
         List<Widget> widgets = List<Widget>();
 
         widgets.add(InfoTable<SchoolModel>(
-            data.getSortedBySchoolType(), "Total", "School \nType"));
+            data.getSortedWithFilteringBySchoolType(), "Total", "School \nType"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
           widgets.add(InfoTable<SchoolModel>.subTable(
-              data.getSortedBySchoolType(), statesKeys[i], "School \nType"));
+              data.getSortedWithFilteringBySchoolType(), statesKeys[i], "School \nType"));
         }
 
         return BaseTileWidget(

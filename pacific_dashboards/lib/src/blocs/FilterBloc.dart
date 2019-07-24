@@ -1,8 +1,5 @@
 import 'package:rxdart/rxdart.dart';
-import '../models/TeachersModel.dart';
 import '../resources/Filter.dart';
-
-import 'BaseBloc.dart';
 
 class FilterBloc {
   final Filter filter;
