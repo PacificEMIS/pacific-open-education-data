@@ -100,10 +100,10 @@ class FilterPageState extends State<FilterPage> {
           elevation: 4,
           child: RadioListTile<String>(
             title: Text('Select all'),
-            value: 'Select all',
+            value: widget.bloc.defaultSelectedKey,
             onChanged: (String value) {
               setState(() {
-                widget.bloc.changeAll(value);
+                widget.bloc.setDefaultFilter();
               });
             },
             controlAffinity: ListTileControlAffinity.leading,
