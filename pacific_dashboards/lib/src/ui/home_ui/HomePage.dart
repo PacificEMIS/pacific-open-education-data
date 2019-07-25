@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
 import "../CategoryGridWidget.dart";
 
 class HomePage extends StatefulWidget {
-  final SharedPreferences sharedPreferences;
+  final GlobalSettings globalSettings;
 
   @override
   _HomePageState createState() => new _HomePageState();
 
-  HomePage({Key key, this.sharedPreferences,}): super(key: key);
+  HomePage({
+    Key key,
+    this.globalSettings,
+  }) : super(key: key);
 }
 
 class _HomePageState extends State<HomePage> {
   final String _kMarshallIslands = "Marshall Islands";
   final String _kFederatedStateOfMicronesia = "Federated States of Micronesia";
   String _currentCountry;
+  Dialog _countrySelectorDialog;
 
   @override
   void initState() {
     super.initState();
-    _currentCountry = SplashPage(sharedPreferences: widget.sharedPreferences).currentCountry;
+    _currentCountry = widget.globalSettings.currentCountry;
   }
 
   @override
@@ -82,8 +85,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showDialog(BuildContext context) {
-    showDialog(
+  void _showDialog(BuildContext context) async {
+    _countrySelectorDialog = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return Container(
@@ -94,7 +97,7 @@ class _HomePageState extends State<HomePage> {
             height: 244,
             child: AlertDialog(
               title: Text(
-                "Choice country",
+                "Choose country",
                 style: TextStyle(
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w700,
@@ -108,12 +111,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: InkWell(
                       splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        setState(() {
-                          _setCurrentCountry(
-                              "$_kFederatedStateOfMicronesia", context);
-                        });
-                      },
+                      onTap: _onCountryChangeTap(_kFederatedStateOfMicronesia),
                       child: Row(
                         children: <Widget>[
                           Expanded(
@@ -132,11 +130,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                       child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      setState(() {
-                        _setCurrentCountry("$_kMarshallIslands", context);
-                      });
-                    },
+                    onTap: _onCountryChangeTap(_kMarshallIslands),
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -162,15 +156,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _setCurrentCountry(String country, BuildContext context) async {
-    await widget.sharedPreferences.setString("country", country);
+  _onCountryChangeTap(String country) {
+    if (_countrySelectorDialog == null) {
+      return;
+    }
+
+    Navigator.of(context).pop();
+    _countrySelectorDialog = null;
+    
+    widget.globalSettings.currentCountry = country;
+
     setState(() {
       _currentCountry = country;
     });
-    Navigator.of(context).pop();
-  }
-
-  init() async {
-
   }
 }

@@ -11,6 +11,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final injector = InjectorWidget.of(context);
     return MaterialApp(
       title: _appName,
       theme: ThemeData(
@@ -26,14 +27,18 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => SplashPage(sharedPreferences: InjectorWidget.of(context).getSharedPreferences()),
-        "/Home": (context) => HomePage(sharedPreferences: InjectorWidget.of(context).getSharedPreferences()),
+        "/": (context) =>
+            SplashPage(globalSettings: injector.getGlobalSettings()),
+        "/Home": (context) =>
+            HomePage(globalSettings: injector.getGlobalSettings()),
         "/Budgets": (context) => Text("Budgets"),
         "/Exams": (context) => Text("Exams"),
         "/Indicators": (context) => Text("Indicators"),
         "/School Accreditations": (context) => Text("School Accreditations"),
-        "/Schools": (context) => SchoolsPage(bloc: InjectorWidget.of(context).getSchoolsBloc(forceCreate: true)),
-        "/Teachers": (context) => TeachersPage(bloc: InjectorWidget.of(context).getTeachersBloc(forceCreate: true)),
+        "/Schools": (context) =>
+            SchoolsPage(bloc: injector.getSchoolsBloc(forceCreate: true)),
+        "/Teachers": (context) =>
+            TeachersPage(bloc: injector.getTeachersBloc(forceCreate: true)),
       },
     );
   }
