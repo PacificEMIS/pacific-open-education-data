@@ -162,7 +162,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     Navigator.of(context).pop();
-
+    _countrySelectorDialog = null;
+    
     widget.globalSettings.currentCountry = country;
 
     setState(() {
