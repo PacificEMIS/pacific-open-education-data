@@ -20,12 +20,12 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.2
-  rxdart: ^0.22.0
+  rxdart: ^0.22.1
   charts_flutter: ^0.6.0
-  http: ^0.12.0+1
-  path_provider: ^1.1.0
-  shared_preferences: ^0.5.3
-  flutter_svg: ^0.12.4
+  http: ^0.12.0+2
+  path_provider: ^1.2.0
+  shared_preferences: ^0.5.3+4
+  flutter_svg: ^0.13.1
   appcenter: ^0.2.1
   appcenter_analytics: ^0.2.1
   appcenter_crashes: ^0.2.1

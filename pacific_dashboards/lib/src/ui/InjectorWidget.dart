@@ -38,7 +38,7 @@ class InjectorWidget extends InheritedWidget {
     _repository = RepositoryImpl(ServerBackendProvider(), FileProviderImpl(_sharedPreferences));
     _teachersBloc = TeachersBloc(repository: _repository);
     _schoolsBloc = SchoolsBloc(repository: _repository);
-    _globalSettings = GlobalSettings(sharedPreferences: _sharedPreferences);
+    _globalSettings = GlobalSettings(_sharedPreferences);
   }
 
   TeachersBloc getTeachersBloc({bool forceCreate = false}) {
@@ -57,7 +57,7 @@ class InjectorWidget extends InheritedWidget {
     return _schoolsBloc;
   }
 
-  SharedPreferences getSharedPreferences() {
-    return _sharedPreferences;
-  }
+  SharedPreferences getSharedPreferences() => _sharedPreferences;
+
+  GlobalSettings getGlobalSettings() => _globalSettings;
 }

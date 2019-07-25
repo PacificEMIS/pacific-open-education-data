@@ -1,27 +1,18 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GlobalSettings {
-  String currentCountry = "Marshall Islands";
-  final SharedPreferences sharedPreferences;
+  static const String _kCountryKey = "country";
+  static const String _kDefaultCountry = "Federated States of Micronesia";
+  final SharedPreferences _sharedPreferences;
 
-  GlobalSettings({ this.sharedPreferences });
+  GlobalSettings(this._sharedPreferences);
 
-  Future<String> getCurrentCountry() async {
-    currentCountry = sharedPreferences
-        .getString("country" ?? "Federated States of Micronesia");
-        print("CURRENT COUNTRY$currentCountry");
-    return currentCountry;
+  String get currentCountry {
+    return _sharedPreferences
+        .getString(_kCountryKey) ?? _kDefaultCountry;
   }
 
-  setCurrentCountry(String country) async {
-    currentCountry = country;
-    await sharedPreferences.setString("country", country);
-  }
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) {
-    return null;
+  set currentCountry(String country) {
+    _sharedPreferences.setString(_kCountryKey, country);
   }
 }
