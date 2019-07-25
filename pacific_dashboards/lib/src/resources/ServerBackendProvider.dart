@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' show Client;
 import '../models/SchoolsModel.dart';
 import '../utils/Exceptions/DataNotLoadedException.dart';
@@ -16,7 +17,7 @@ class ServerBackendProvider implements Provider {
 
   Future<String> _request(String path) async {
     final webResponse = await client.get("$BASE_URL/api/$path").timeout(const Duration(minutes: 1));
-    print(webResponse.body.toString());
+    debugPrint(webResponse.body.toString());
 
     if (webResponse.statusCode == 200) {
       return webResponse.body;

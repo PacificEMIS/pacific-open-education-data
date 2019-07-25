@@ -6,13 +6,12 @@ class SchoolModel {
   final String authorityGovt;
   final String schoolTypeCode;
   final int age;
-  final int enrolM;
-  final int enrolF;
-  int numTeachersM;
-  int numTeachersF;
   final String genderCode;
   final int enrol;
   String ageGroup;
+
+  int get enrolF => genderCode == 'F' ? enrol : 0;
+  int get enrolM => genderCode == 'M' ? enrol : 0;
 
   SchoolModel(
       {this.surveyYear,
@@ -22,10 +21,6 @@ class SchoolModel {
       this.authorityGovt,
       this.schoolTypeCode,
       this.age,
-      this.enrolM,
-      this.enrolF,
-      this.numTeachersM,
-      this.numTeachersF,
       this.genderCode,
       this.enrol,
       this.ageGroup});
@@ -39,10 +34,6 @@ class SchoolModel {
       schoolTypeCode: parsedJson['SchoolTypeCode'] ?? "",
       surveyYear: parsedJson['SurveyYear'] ?? 0,
       age: parsedJson['Age'] ?? 0,
-      enrolM: parsedJson['EnrolM'] ?? 0,
-      enrolF: parsedJson['EnrolF'] ?? 0,
-      numTeachersM: parsedJson['NumTeachersM'] ?? 0,
-      numTeachersF: parsedJson['NumTeachersF'] ?? 0,
       genderCode: parsedJson['GenderCode'] ?? "",
       enrol: parsedJson['Enrol'] ?? 0,
       ageGroup: "",
@@ -57,10 +48,6 @@ class SchoolModel {
         'SchoolTypeCode': schoolTypeCode,
         'SurveyYear': surveyYear,
         'Age': age,
-        'EnrolM': enrolM,
-        'EnrolF': enrolF,
-        'NumTeachersM': numTeachersM,
-        'NumTeachersF': numTeachersF,
         'GenderCode': genderCode,
         'Enrol': enrol,
       };

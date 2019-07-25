@@ -62,7 +62,7 @@ class SchoolsPageState extends State<SchoolsPage> {
               Icons.tune,
               color: widget._filterIconColor,
             ),
-            onPressed: () => {
+            onPressed: () {
 //              Navigator.push(
 //              context,
 //              MaterialPageRoute(builder: (context) => FilterPage(bloc : FilterBloc(filter: _filter), )),
@@ -119,40 +119,38 @@ class SchoolsPageState extends State<SchoolsPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-            title: TitleWidget.withFilter(
-                "Schools Enrollment by State", AppColors.kRacingGreen, data.stateFilter),
+//            title: TitleWidget.withFilter("Schools Enrollment by State", AppColors.kRacingGreen, data.stateFilter),
+            title: TitleWidget("Schools Enrollment by State", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedWithFiltersByState())),
+                ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedByState())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedWithFiltersByState()), "State",
-                    SchoolsPage._measureName),
+                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByState()),
+                    _getCountFromList(data.getSortedWithFiltersByState()), "State", SchoolsPage._measureName),
               ],
             ));
         break;
       case 1:
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Schools Enrollment by Authority",
-                AppColors.kRacingGreen, data.authorityFilter),
+//            title: TitleWidget.withFilter("Schools Enrollment by Authority", AppColors.kRacingGreen, data.authorityFilter),
+            title: TitleWidget("Schools Enrollment by Authority", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedWithFiltersByAuthority())),
+                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByAuthority())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedWithFiltersByAuthority()),
-                    "Authority", SchoolsPage._measureName),
+                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByAuthority()),
+                    _getCountFromList(data.getSortedWithFiltersByAuthority()), "Authority", SchoolsPage._measureName),
               ],
             ));
-
         break;
       case 2:
         return BaseTileWidget(
-            title: TitleWidget(
-                "Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
+            title: TitleWidget("Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedWithFiltersByGovt())),
+                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByGovt())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedWithFiltersByGovt()),
+                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByGovt()), _getCountFromList(data.getSortedWithFiltersByGovt()),
                     "Public/Private", SchoolsPage._measureName),
               ],
             ));
@@ -161,20 +159,17 @@ class SchoolsPageState extends State<SchoolsPage> {
         var statesKeys = ['Early Childhood', 'Primary', 'Secondary', 'Post Secondary'];
         List<Widget> widgets = List<Widget>();
 
-        widgets.add(InfoTable<SchoolModel>(
-            data.getSortedByAge(0), "Total", "Age"));
+        widgets.add(InfoTable<SchoolModel>(data.getSortedByAge(0), "Total", "Age"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable<SchoolModel>(
-              data.getSortedByAge(i + 1), statesKeys[i], "Age"));
+          widgets.add(InfoTable<SchoolModel>(data.getSortedByAge(i + 1), statesKeys[i], "Age"));
         }
 
         return BaseTileWidget(
-            title: TitleWidget.withFilter(
-                "Schools Enrollment by Age, Education Level \nand Gender",
-                AppColors.kRacingGreen,
-                data.ageFilter),
+            title:
+//                TitleWidget.withFilter("Schools Enrollment by Age, Education Level \nand Gender", AppColors.kRacingGreen, data.ageFilter),
+                TitleWidget("Schools Enrollment by Age, Education Level \nand Gender", AppColors.kRacingGreen),
             body: Column(
               children: widgets,
             ));
@@ -183,20 +178,17 @@ class SchoolsPageState extends State<SchoolsPage> {
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
 
-        widgets.add(InfoTable<SchoolModel>(
-            data.getSortedWithFilteringBySchoolType(), "Total", "School \nType"));
+        widgets.add(InfoTable<SchoolModel>(data.getSortedWithFilteringBySchoolType(), "Total", "School \nType"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable<SchoolModel>.subTable(
-              data.getSortedWithFilteringBySchoolType(), statesKeys[i], "School \nType"));
+          widgets.add(InfoTable<SchoolModel>.subTable(data.getSortedWithFilteringBySchoolType(), statesKeys[i], "School \nType"));
         }
 
         return BaseTileWidget(
-            title: TitleWidget.withFilter(
-                "Schools Enrollment by School type, State and \nGender",
-                AppColors.kRacingGreen,
-                data.schoolTypeFilter),
+            title: TitleWidget(
+//                "Schools Enrollment by School type, State and \nGender", AppColors.kRacingGreen, data.schoolTypeFilter),
+                "Schools Enrollment by School type, State and \nGender", AppColors.kRacingGreen),
             body: Column(
               children: widgets,
             ));
@@ -207,11 +199,17 @@ class SchoolsPageState extends State<SchoolsPage> {
   static Map<dynamic, int> _getCountFromList(Map<dynamic, List<SchoolModel>> listMap) {
     Map<dynamic, int> countMap = new Map<dynamic, int>();
     int sum = 0;
-    listMap.forEach((k, v) =>{
-      sum = 0,
-      listMap[k].forEach((teacher){sum += teacher.numTeachersM + teacher.numTeachersF;}),
-      countMap[k] = sum
+
+    listMap.forEach((k, v) {
+      sum = 0;
+
+      listMap[k].forEach((school) {
+        sum += school.enrolF + school.enrolM;
+      });
+
+      countMap[k] = sum;
     });
+
     return countMap;
   }
 }

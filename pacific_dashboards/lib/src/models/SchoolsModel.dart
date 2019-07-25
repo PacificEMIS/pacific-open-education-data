@@ -24,8 +24,6 @@ class SchoolsModel {
 
     int ageGroup = 0;
     _schools.forEach((school) {
-      if (school.genderCode == 'M') school.numTeachersM = school.enrol;
-      if (school.genderCode == 'F') school.numTeachersF = school.enrol;
       ageGroup = (school.age / 5).ceil();
       school.ageGroup = ((ageGroup * 5) - 4).toString() + '-' + (ageGroup * 5).toString();
     });

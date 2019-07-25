@@ -7,6 +7,7 @@ class ChartInfoTable<T> extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
   final Map<dynamic, int> _data;
+  final Map<dynamic, int> _filteredData;
   final String _titleName;
   final String _titleValue;
 
@@ -21,7 +22,7 @@ class ChartInfoTable<T> extends StatefulWidget {
   bool _measureSortedByIncreasing = true;
   SortType _sortType = SortType.NotSorted;
 
-  ChartInfoTable(this._data, this._titleName, this._titleValue);
+  ChartInfoTable(this._data, this._filteredData, this._titleName, this._titleValue);
 
   @override
   _ChartInfoTableState createState() => _ChartInfoTableState<T>();
@@ -36,7 +37,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         1: FlexColumnWidth(1),
       },
       border: _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth),
-      children: _generateTableBody(widget._data, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
+      children:
+          _generateTableBody(widget._data, widget._filteredData, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
     );
   }
 
@@ -147,7 +149,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     );
   }
 
-  List<TableRow> _generateTableBody(Map<dynamic, int> dataMap, TableRow title) {
+  List<TableRow> _generateTableBody(Map<dynamic, int> dataMap, Map<dynamic, int> filteredDataMap, TableRow title) {
     var rowsList = List<TableRow>();
 
     List<dynamic> sortedKeys = dataMap.keys.toList();
