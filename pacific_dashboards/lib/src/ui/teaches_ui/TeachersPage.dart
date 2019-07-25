@@ -105,10 +105,10 @@ class TeachersPageState extends State<TeachersPage> {
           title: TitleWidget("Teachers by Authority", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByAuthority())),
+              ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByAuthority())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByAuthority()), _getCountFromList(data.getSortedByAuthority()),
-                  "Authority", TeachersPage._measureName),
+              ChartInfoTable<TeacherModel>(data.getSortedByAuthority().keys.toList(), _generateMapOfSum(data.getSortedByAuthority()),
+                  "Authority", TeachersPage._measureName, data.authorityFilter.selectedKey),
             ],
           ),
         );
@@ -118,10 +118,10 @@ class TeachersPageState extends State<TeachersPage> {
           title: TitleWidget("Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByGovt())),
+              ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByGovt())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByGovt()), _getCountFromList(data.getSortedByGovt()),
-                  "Public/Private", TeachersPage._measureName),
+              ChartInfoTable<TeacherModel>(data.getSortedByGovt().keys.toList(), _generateMapOfSum(data.getSortedByGovt()),
+                  "Public/Private", TeachersPage._measureName, data.stateFilter.selectedKey),
             ],
           ),
         );
@@ -132,10 +132,10 @@ class TeachersPageState extends State<TeachersPage> {
           title: TitleWidget("Teachers by State", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedByState())),
+              ChartFactory.getBarChartViewByData(_generateMapOfSum(data.getSortedByState())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByState()), _getCountFromList(data.getSortedByState()), "State",
-                  TeachersPage._measureName),
+              ChartInfoTable<TeacherModel>(data.getSortedByState().keys.toList(), _generateMapOfSum(data.getSortedByState()), "State",
+                  TeachersPage._measureName, data.stateFilter.selectedKey),
             ],
           ),
         );
@@ -162,20 +162,20 @@ class TeachersPageState extends State<TeachersPage> {
     }
   }
 
-  static Map<dynamic, int> _getCountFromList(Map<dynamic, List<TeacherModel>> listMap) {
-    Map<dynamic, int> countMap = new Map<dynamic, int>();
+  static Map<dynamic, int> _generateMapOfSum(Map<dynamic, List<TeacherModel>> listMap) {
+    Map<dynamic, int> mapOfSum = new Map<dynamic, int>();
     int sum = 0;
 
     listMap.forEach((k, v) {
       sum = 0;
 
-      listMap[k].forEach((teacher) {
-        sum += teacher.numTeachersM + teacher.numTeachersF;
+      listMap[k].forEach((school) {
+        sum += school.numTeachersM + school.numTeachersF;
       });
 
-      countMap[k] = sum;
+      mapOfSum[k] = sum;
     });
 
-    return countMap;
+    return mapOfSum;
   }
 }

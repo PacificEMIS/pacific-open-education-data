@@ -6,6 +6,7 @@ import '../../blocs/SchoolsBloc.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartInfoTable.dart';
+import '../FilterPage.dart';
 import '../FilterWidget.dart';
 import '../InfoTable.dart';
 import '../PlatformAppBar.dart';
@@ -24,6 +25,10 @@ class SchoolsPage extends StatefulWidget {
     height: 16.0,
     color: Colors.white,
   );
+
+  SchoolsModel d = null;
+
+  Function barF;
 
   SchoolsPage({
     Key key,
@@ -63,10 +68,7 @@ class SchoolsPageState extends State<SchoolsPage> {
               color: widget._filterIconColor,
             ),
             onPressed: () {
-//              Navigator.push(
-//              context,
-//              MaterialPageRoute(builder: (context) => FilterPage(bloc : FilterBloc(filter: _filter), )),
-//            )
+              _createFilterPageRoute(context);
             },
           ),
         ],
@@ -99,7 +101,38 @@ class SchoolsPageState extends State<SchoolsPage> {
     );
   }
 
+  void _createFilterPageRoute(BuildContext context) {
+    if (widget.d != null) {
+      var maxYear = () {
+        var m = "0";
+        widget.d.yearFilter.getFilter().forEach((k, v) {
+          if (int.parse(k) > int.parse(m)) {
+            m = k;
+          }
+        });
+
+        return m;
+      };
+
+      List<FilterBloc> filterBlocsList = List<FilterBloc>();
+      filterBlocsList.add(FilterBloc(filter: widget.d.yearFilter, defaultSelectedKey: maxYear()));
+      filterBlocsList.add(FilterBloc(filter: widget.d.stateFilter, defaultSelectedKey: 'Display All States'));
+      filterBlocsList.add(FilterBloc(filter: widget.d.authorityFilter, defaultSelectedKey: 'Display All Authority'));
+      filterBlocsList.add(FilterBloc(filter: widget.d.govtFilter, defaultSelectedKey: 'Display all Govermant filters'));
+
+      debugPrint('route created');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return FilterPage(blocs: filterBlocsList);
+        }),
+      );
+    }
+  }
+
   Widget _buildList(AsyncSnapshot<SchoolsModel> snapshot) {
+    widget.d = snapshot.data;
+
     return OrientationBuilder(
       builder: (context, orientation) {
         return ListView.builder(
@@ -119,27 +152,29 @@ class SchoolsPageState extends State<SchoolsPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-//            title: TitleWidget.withFilter("Schools Enrollment by State", AppColors.kRacingGreen, data.stateFilter),
             title: TitleWidget("Schools Enrollment by State", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedByState())),
+                ChartFactory.getBarChartViewByData(_generateMapOfSum(data.getSortedByState())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByState()),
-                    _getCountFromList(data.getSortedWithFiltersByState()), "State", SchoolsPage._measureName),
+                ChartInfoTable<SchoolModel>(data.getSortedByState().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByState()),
+                    "State", SchoolsPage._measureName, data.stateFilter.selectedKey),
               ],
             ));
         break;
       case 1:
         return BaseTileWidget(
-//            title: TitleWidget.withFilter("Schools Enrollment by Authority", AppColors.kRacingGreen, data.authorityFilter),
             title: TitleWidget("Schools Enrollment by Authority", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByAuthority())),
+                ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByAuthority())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByAuthority()),
-                    _getCountFromList(data.getSortedWithFiltersByAuthority()), "Authority", SchoolsPage._measureName),
+                ChartInfoTable<SchoolModel>(
+                    data.getSortedByAuthority().keys.toList(),
+                    _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
+                    "Authority",
+                    SchoolsPage._measureName,
+                    data.authorityFilter.selectedKey),
               ],
             ));
         break;
@@ -148,10 +183,10 @@ class SchoolsPageState extends State<SchoolsPage> {
             title: TitleWidget("Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByGovt())),
+                ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByGovt())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolModel>(_getCountFromList(data.getSortedByGovt()), _getCountFromList(data.getSortedWithFiltersByGovt()),
-                    "Public/Private", SchoolsPage._measureName),
+                ChartInfoTable<SchoolModel>(data.getSortedByGovt().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByGovt()),
+                    "Public/Private", SchoolsPage._measureName, data.govtFilter.selectedKey),
               ],
             ));
         break;
@@ -168,7 +203,6 @@ class SchoolsPageState extends State<SchoolsPage> {
 
         return BaseTileWidget(
             title:
-//                TitleWidget.withFilter("Schools Enrollment by Age, Education Level \nand Gender", AppColors.kRacingGreen, data.ageFilter),
                 TitleWidget("Schools Enrollment by Age, Education Level \nand Gender", AppColors.kRacingGreen),
             body: Column(
               children: widgets,
@@ -187,8 +221,8 @@ class SchoolsPageState extends State<SchoolsPage> {
 
         return BaseTileWidget(
             title: TitleWidget(
-//                "Schools Enrollment by School type, State and \nGender", AppColors.kRacingGreen, data.schoolTypeFilter),
-                "Schools Enrollment by School type, State and \nGender", AppColors.kRacingGreen),
+                "Schools Enrollment by School type, State and \nGender",
+                AppColors.kRacingGreen),
             body: Column(
               children: widgets,
             ));
@@ -196,7 +230,7 @@ class SchoolsPageState extends State<SchoolsPage> {
     }
   }
 
-  static Map<dynamic, int> _getCountFromList(Map<dynamic, List<SchoolModel>> listMap) {
+  static Map<dynamic, int> _generateMapOfSum(Map<dynamic, List<SchoolModel>> listMap) {
     Map<dynamic, int> countMap = new Map<dynamic, int>();
     int sum = 0;
 

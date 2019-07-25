@@ -3,16 +3,16 @@ import '../resources/Filter.dart';
 import '../blocs/FilterBloc.dart';
 import '../config/Constants.dart';
 
-class FilterPage extends StatefulWidget {
+class FilterWidget extends StatefulWidget {
   final FilterBloc bloc;
 
-  FilterPage({Key key, @required this.bloc}) : super(key: key);
+  FilterWidget({Key key, @required this.bloc}) : super(key: key);
 
   @override
-  FilterPageState createState() => FilterPageState();
+  FilterWidgetState createState() => FilterWidgetState();
 }
 
-class FilterPageState extends State<FilterPage> {
+class FilterWidgetState extends State<FilterWidget> {
   @override
   void initState() {
     super.initState();
@@ -21,45 +21,18 @@ class FilterPageState extends State<FilterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.kWhite,
-      appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: AppColors.kWhite,
-          ),
-          title: Text('Filter', style: TextStyle(color: AppColors.kWhite)),
-          backgroundColor: AppColors.kBlue),
-      body: StreamBuilder(
+    return StreamBuilder(
         stream: widget.bloc.data,
         builder: (context, AsyncSnapshot<Filter> snapshot) {
           if (snapshot.hasData) {
-            return ListView(
+            return Column(
               children: _generateFilterList(snapshot),
             );
           } else {
             return Text('');
           }
         },
-      ),
-      floatingActionButton: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SizedBox(
-          height: 56,
-          child: FlatButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Icon(Icons.done, color: AppColors.kWhite),
-            color: AppColors.kBlue,
-            onPressed: () {
-              widget.bloc.applyChanges();
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+      );
   }
 
   List<Widget> _generateFilterList(AsyncSnapshot<Filter> snapshot) {
@@ -84,35 +57,37 @@ class FilterPageState extends State<FilterPage> {
           ));
     }).toList());
 
-    filterList.insert(
-        0,
-        Divider(
-          color: AppColors.kGeyser,
-          height: 1,
-        ));
+    if (!widget.bloc.filter.getFilter().containsKey(widget.bloc.defaultSelectedKey)) {
+      filterList.insert(
+          0,
+          Divider(
+            color: AppColors.kGeyser,
+            height: 1,
+          ));
 
-    filterList.insert(
-      0,
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Card(
-          elevation: 4,
-          child: RadioListTile<String>(
-            title: Text('Select all'),
-            value: widget.bloc.defaultSelectedKey,
-            onChanged: (String value) {
-              setState(() {
-                widget.bloc.setDefaultFilter();
-              });
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: AppColors.kBlue,
-            groupValue: widget.bloc.getSelectedKey(),
+      filterList.insert(
+        0,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Card(
+            elevation: 4,
+            child: RadioListTile<String>(
+              title: Text(widget.bloc.defaultSelectedKey),
+              value: widget.bloc.defaultSelectedKey,
+              onChanged: (String value) {
+                setState(() {
+                  widget.bloc.setDefaultFilter();
+                });
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+              activeColor: AppColors.kBlue,
+              groupValue: widget.bloc.getSelectedKey(),
+            ),
+            borderOnForeground: false,
           ),
-          borderOnForeground: false,
         ),
-      ),
-    );
+      );
+    }
 
     filterList.insert(
       0,

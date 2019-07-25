@@ -6,23 +6,24 @@ import 'enums/SortType.dart';
 class ChartInfoTable<T> extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
+  final List<dynamic> _keys;
   final Map<dynamic, int> _data;
-  final Map<dynamic, int> _filteredData;
   final String _titleName;
   final String _titleValue;
+  final String _selectedRow;
 
-  Color _borderColor = AppColors.kGeyser;
-  Color _textColor = AppColors.kTimberGreen;
-  Color _titleTextColor = AppColors.kNevada;
-  Color _evenRowColor = AppColors.kWhite;
-  Color _oddRowColor = AppColors.kAthensGray;
-  Color _iconArrowColor = AppColors.kTuna;
+  final Color _borderColor = AppColors.kGeyser;
+  final Color _textColor = AppColors.kTimberGreen;
+  final Color _titleTextColor = AppColors.kNevada;
+  final Color _evenRowColor = AppColors.kWhite;
+  final Color _oddRowColor = AppColors.kAthensGray;
+  final Color _iconArrowColor = AppColors.kTuna;
 
   bool _domainSortedByIncreasing = true;
   bool _measureSortedByIncreasing = true;
   SortType _sortType = SortType.NotSorted;
 
-  ChartInfoTable(this._data, this._filteredData, this._titleName, this._titleValue);
+  ChartInfoTable(this._keys, this._data, this._titleName, this._titleValue, this._selectedRow);
 
   @override
   _ChartInfoTableState createState() => _ChartInfoTableState<T>();
@@ -37,8 +38,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         1: FlexColumnWidth(1),
       },
       border: _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth),
-      children:
-          _generateTableBody(widget._data, widget._filteredData, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
+      children: _generateTableBody(widget._keys, widget._data, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
     );
   }
 
@@ -149,10 +149,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     );
   }
 
-  List<TableRow> _generateTableBody(Map<dynamic, int> dataMap, Map<dynamic, int> filteredDataMap, TableRow title) {
+  List<TableRow> _generateTableBody(List<dynamic> keys, Map<dynamic, int> dataMap, TableRow title) {
     var rowsList = List<TableRow>();
-
-    List<dynamic> sortedKeys = dataMap.keys.toList();
     List<int> sortedValues = dataMap.values.toList();
 
     rowsList.add(title);
@@ -160,13 +158,25 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     switch (widget._sortType) {
       case SortType.Domain:
         if (widget._domainSortedByIncreasing) {
-          sortedKeys.sort((a, b) => a.compareTo(b));
+          keys.sort((a, b) => a.compareTo(b));
         } else {
-          sortedKeys.sort((a, b) => b.compareTo(a));
+          keys.sort((a, b) => b.compareTo(a));
         }
 
-        for (int i = 0; i < sortedKeys.length; ++i) {
-          rowsList.add(_generateTableRow(sortedKeys[i], dataMap[sortedKeys[i]], i));
+        for (int i = 0; i < keys.length; ++i) {
+          if (dataMap.containsKey(keys[i])) {
+            if (keys[i] == widget._selectedRow) {
+              rowsList.add(_generateHighlightedTableRow(keys[i], dataMap[keys[i]], i));
+            } else {
+              rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i));
+            }
+          } else {
+            if (keys[i] == widget._selectedRow) {
+              rowsList.add(_generateHighlightedTableRow(keys[i], 0, i));
+            } else {
+              rowsList.add(_generateTableRow(keys[i], 0, i));
+            }
+          }
         }
         break;
       case SortType.Measure:
@@ -176,20 +186,116 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
           sortedValues.sort((a, b) => b.compareTo(a));
         }
 
+        var globalIndex = 0;
+
         for (int i = 0; i < sortedValues.length; ++i) {
           var key = dataMap.keys.firstWhere((k) => dataMap[k] == sortedValues[i], orElse: () => null);
-          rowsList.add(_generateTableRow(key, dataMap[key], i));
+
+          if (key == widget._selectedRow) {
+            rowsList.add(_generateHighlightedTableRow(key, dataMap[key], globalIndex));
+          } else {
+              rowsList.add(_generateTableRow(key, dataMap[key], globalIndex));
+          }
+
+          globalIndex++;
         }
+
+        for (var i = 0; i < keys.length; ++i) {
+          if (!dataMap.containsKey(keys[i])) {
+            if (keys[i] == widget._selectedRow) {
+              rowsList.add(_generateHighlightedTableRow(keys[i], 0, globalIndex));
+            } else {
+              rowsList.add(_generateTableRow(keys[i], 0, globalIndex));
+            }
+
+            globalIndex++;
+          }
+        }
+
         break;
       default:
-        int i = 0;
-        dataMap.forEach((domain, measure) {
-          rowsList.add(_generateTableRow(domain, measure, i));
-          i++;
-        });
+        for (int i = 0; i < keys.length; ++i) {
+          if (dataMap.containsKey(keys[i])) {
+            if (keys[i] == widget._selectedRow) {
+              rowsList.add(_generateHighlightedTableRow(keys[i], dataMap[keys[i]], i));
+            } else {
+              rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i));
+            }
+          } else {
+            if (keys[i] == widget._selectedRow) {
+              rowsList.add(_generateHighlightedTableRow(keys[i], 0, i));
+            } else {
+              rowsList.add(_generateTableRow(keys[i], 0, i));
+            }
+          }
+        }
     }
 
     return rowsList;
+  }
+
+  TableRow _generateHighlightedTableRow(String domain, int measure, int index) {
+    // crutch for correcting the names of the govt/non-govt chart table domains
+    var generatedDomain = "";
+    if (domain == "G") {
+      generatedDomain = "Gonverenment";
+    } else if (domain == "N") {
+      generatedDomain = "Non-Gonverenment";
+    } else {
+      generatedDomain = domain;
+    }
+
+    return TableRow(
+      decoration: BoxDecoration(
+        color: Colors.blueGrey[200],
+      ),
+      children: [
+        TableCell(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(1.0)),
+                      color: HexColor.fromStringHash(domain),
+                    ),
+                    height: 8.0,
+                    width: 8.0,
+                  ),
+                ),
+                Text(
+                  generatedDomain,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: widget._textColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        TableCell(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  measure.toString(),
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: widget._textColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   TableRow _generateTableRow(String domain, int measure, int index) {

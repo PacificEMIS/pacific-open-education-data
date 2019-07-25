@@ -2,7 +2,7 @@ class Filter {
 
   Map<String, bool> _filter = Map<String, bool>();
   String filterName;
-  String selectedKey = "Select All";
+  String selectedKey;
   Map<String, bool> filterTemp = Map<String, bool>();
 
   Filter(Set filterOptions, String name) {

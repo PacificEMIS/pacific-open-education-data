@@ -21,13 +21,6 @@ class SchoolsModel {
   SchoolsModel.fromJson(List parsedJson) {
     _schools = List<SchoolModel>();
     _schools = parsedJson.map((i) => SchoolModel.fromJson(i)).toList();
-
-    int ageGroup = 0;
-    _schools.forEach((school) {
-      ageGroup = (school.age / 5).ceil();
-      school.ageGroup = ((ageGroup * 5) - 4).toString() + '-' + (ageGroup * 5).toString();
-    });
-
     _createFilters();
   }
 
@@ -36,14 +29,13 @@ class SchoolsModel {
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFiltersByState() {
-    var filteredList = null;
-
-    filteredList = _schools.where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()));
-    filteredList = filteredList.where((i) => authorityFilter.isEnabledInFilter(i.authorityCode));
-    filteredList = filteredList.where((i) => govtFilter.isEnabledInFilter(i.authorityGovt));
-    filteredList = filteredList.where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
-    filteredList = filteredList.where((i) => ageFilter.isEnabledInFilter(i.ageGroup));
-    filteredList = filteredList.where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
+    var filteredList = _schools
+        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
+        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
+        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
+        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode))
+        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
+        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
     return groupBy(filteredList, (obj) => obj.districtCode);
   }
@@ -53,14 +45,13 @@ class SchoolsModel {
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFiltersByAuthority() {
-    var filteredList = null;
-
-    filteredList = _schools.where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()));
-    filteredList = filteredList.where((i) => stateFilter.isEnabledInFilter(i.districtCode));
-    filteredList = filteredList.where((i) => govtFilter.isEnabledInFilter(i.authorityGovt));
-    filteredList = filteredList.where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
-    filteredList = filteredList.where((i) => ageFilter.isEnabledInFilter(i.ageGroup));
-    filteredList = filteredList.where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
+    var filteredList = _schools
+        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
+        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
+        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
+        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode))
+        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
+        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
     return groupBy(filteredList, (obj) => obj.authorityCode);
   }
@@ -70,14 +61,13 @@ class SchoolsModel {
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFiltersByGovt() {
-    var filteredList = null;
-
-    filteredList = _schools.where((i) => stateFilter.isEnabledInFilter(i.districtCode));
-    filteredList = filteredList.where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()));
-    filteredList = filteredList.where((i) => authorityFilter.isEnabledInFilter(i.authorityCode));
-    filteredList = filteredList.where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
-    filteredList = filteredList.where((i) => ageFilter.isEnabledInFilter(i.ageGroup));
-    filteredList = filteredList.where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
+    var filteredList = _schools
+        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
+        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
+        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
+        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode))
+        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
+        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
     return groupBy(filteredList, (obj) => obj.authorityGovt);
   }
@@ -93,14 +83,13 @@ class SchoolsModel {
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFilteringBySchoolType() {
-    var filteredList = null;
-
-    filteredList = _schools.where((i) => stateFilter.isEnabledInFilter(i.districtCode));
-    filteredList = filteredList.where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()));
-    filteredList = filteredList.where((i) => authorityFilter.isEnabledInFilter(i.authorityCode));
-    filteredList = filteredList.where((i) => ageFilter.isEnabledInFilter(i.ageGroup));
-    filteredList = filteredList.where((i) => govtFilter.isEnabledInFilter(i.authorityGovt));
-    filteredList = filteredList.where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
+    var filteredList = _schools
+        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
+        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
+        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
+        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
+        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
+        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
     return groupBy(filteredList, (obj) => obj.schoolTypeCode);
   }
@@ -110,14 +99,13 @@ class SchoolsModel {
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFilteringBySchoolLevel() {
-    var filteredList = null;
-
-    filteredList = _schools.where((i) => stateFilter.isEnabledInFilter(i.districtCode));
-    filteredList = filteredList.where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()));
-    filteredList = filteredList.where((i) => authorityFilter.isEnabledInFilter(i.authorityCode));
-    filteredList = filteredList.where((i) => ageFilter.isEnabledInFilter(i.ageGroup));
-    filteredList = filteredList.where((i) => govtFilter.isEnabledInFilter(i.authorityGovt));
-    filteredList = filteredList.where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
+    var filteredList = _schools
+        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
+        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
+        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
+        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
+        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
+        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
 
     return groupBy(filteredList, (obj) => obj.classLevel);
   }
@@ -156,17 +144,16 @@ class SchoolsModel {
     List<SchoolModel> _schoolsValidAge = _schools.where((i) => i.age > 0).toList();
     _filters = {
       'authority':
-          Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityCode).toSet(), 'Schools Enrollment by Authotity'),
-      'state': Filter(List<String>.generate(_schools.length, (i) => _schools[i].districtCode).toSet(), 'Schools Enrollment by State'),
+          Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityCode).toSet(), 'Authotity filter'),
+      'state': Filter(List<String>.generate(_schools.length, (i) => _schools[i].districtCode).toSet(), 'State filter'),
       'schoolType': Filter(List<String>.generate(_schools.length, (i) => _schools[i].schoolTypeCode).toSet(),
           'Schools Enrollment by School type, State and Gender'),
       'age':
           Filter(List<String>.generate(_schoolsValidAge.length, (i) => _schoolsValidAge[i].ageGroup).toSet(), 'Schools Enrollment by Age'),
-      'govt': Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityGovt).toSet(), 'Schools Enrollment Govt/ Non-govt'),
+      'govt': Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityGovt).toSet(), 'Goverment filter'),
       'year':
-          Filter(List<String>.generate(_schools.length, (i) => _schools[i].surveyYear.toString()).toSet(), 'Schools Enrollment by Year'),
-      'schoolLevel':
-      Filter(List<String>.generate(_schools.length, (i) => _schools[i].classLevel).toSet(), 'Schools Enrollment by Level'),
+          Filter(List<String>.generate(_schools.length, (i) => _schools[i].surveyYear.toString()).toSet(), 'Years filter'),
+      'schoolLevel': Filter(List<String>.generate(_schools.length, (i) => _schools[i].classLevel).toSet(), 'Schools Levels filter'),
     };
   }
 }

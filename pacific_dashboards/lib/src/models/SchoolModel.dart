@@ -8,22 +8,22 @@ class SchoolModel {
   final int age;
   final String genderCode;
   final int enrol;
-  String ageGroup;
 
   int get enrolF => genderCode == 'F' ? enrol : 0;
   int get enrolM => genderCode == 'M' ? enrol : 0;
+  String get ageGroup => _getAgeGroup(age);
 
-  SchoolModel(
-      {this.surveyYear,
-      this.classLevel,
-      this.districtCode,
-      this.authorityCode,
-      this.authorityGovt,
-      this.schoolTypeCode,
-      this.age,
-      this.genderCode,
-      this.enrol,
-      this.ageGroup});
+  SchoolModel({
+    this.surveyYear,
+    this.classLevel,
+    this.districtCode,
+    this.authorityCode,
+    this.authorityGovt,
+    this.schoolTypeCode,
+    this.age,
+    this.genderCode,
+    this.enrol,
+  });
 
   factory SchoolModel.fromJson(Map parsedJson) {
     return SchoolModel(
@@ -36,7 +36,6 @@ class SchoolModel {
       age: parsedJson['Age'] ?? 0,
       genderCode: parsedJson['GenderCode'] ?? "",
       enrol: parsedJson['Enrol'] ?? 0,
-      ageGroup: "",
     );
   }
 
@@ -51,4 +50,9 @@ class SchoolModel {
         'GenderCode': genderCode,
         'Enrol': enrol,
       };
+
+  String _getAgeGroup(int age) {
+    int ageCoeff = age ~/ 5 + 1;
+    return '${((ageCoeff * 5) - 4)}-${(ageCoeff * 5)}';
+  }
 }
