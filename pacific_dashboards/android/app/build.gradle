@@ -48,7 +48,7 @@ android {
     signingConfigs {
         release {
             storePassword "79u6CpiUSWVv"
-            storeFile file("PacificDashboards.keystore")
+            storeFile file("../PacificDashboards.keystore")
             keyAlias "MACKEYALIAS"
             keyPassword "aL7hELtUmY43"
         }
