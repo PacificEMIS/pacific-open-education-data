@@ -17,11 +17,11 @@ class FilterWidgetState extends State<FilterWidget> {
   void initState() {
     super.initState();
     widget.bloc.fetchData();
+    widget.bloc.initialize();
   }
 
   @override
   Widget build(BuildContext context) {
-    widget.bloc.initialize();
     return StreamBuilder(
       stream: widget.bloc.data,
       builder: (context, AsyncSnapshot<Filter> snapshot) {

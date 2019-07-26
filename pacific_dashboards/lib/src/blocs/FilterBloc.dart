@@ -20,7 +20,7 @@ class FilterBloc {
     }
   }
 
-  String get selectedKey => _tempSelectedKey != "" ? _tempSelectedKey : filter.selectedKey;
+  String get selectedKey => _tempSelectedKey.isNotEmpty ? _tempSelectedKey : filter.selectedKey;
 
   fetchData() {
     filter.generateNewTempFilter();
@@ -40,11 +40,7 @@ class FilterBloc {
     _tempSelectedKey = defaultSelectedKey;
     var isCustom = filter.containsKey(_tempSelectedKey);
       filter.filterTemp.forEach((k, v) {
-        if (isCustom) {
-          filter.filterTemp[k] = (k == defaultSelectedKey);
-        } else {
-          filter.filterTemp[k] = true;
-        }
+        filter.filterTemp[k] = !isCustom || (k == defaultSelectedKey);
       });
 
     fetcher.add(filter);

@@ -210,29 +210,6 @@ class _InfoTableState extends State<InfoTable> {
 
   List<TableRow> _generateTableBody(Map<dynamic, InfoTableData> data, TableRow subTitle) {
     var rowsList = List<TableRow>();
-//    var dataMap = Map<dynamic, InfoTableData>();
-//
-//    var totalMaleCount = 0;
-//    var totalFemaleCount = 0;
-//    data.forEach((k, v) {
-//      var maleCount = 0;
-//      var femaleCount = 0;
-//      for (var j = 0; j < v.length; ++j) {
-//        dynamic model = v;
-//        if ((!widget._isSubTable) || ((widget._isSubTable) && (widget._keyName == model[j].districtCode)) || widget._keyName == null) {
-//          maleCount += model[j].numTeachersM;
-//          femaleCount += model[j].numTeachersF;
-//        }
-//      }
-//
-//      totalMaleCount += maleCount;
-//      totalFemaleCount += femaleCount;
-//
-//      dataMap[k] = InfoTableData(maleCount, femaleCount);
-//    });
-//
-//    dataMap["Total"] = InfoTableData(totalMaleCount, totalFemaleCount);
-
     rowsList.add(subTitle);
 
     int i = 0;
