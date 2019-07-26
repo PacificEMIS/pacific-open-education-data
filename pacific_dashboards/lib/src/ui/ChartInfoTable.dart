@@ -6,22 +6,25 @@ import 'enums/SortType.dart';
 class ChartInfoTable<T> extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
+  final List<dynamic> _keys;
   final Map<dynamic, int> _data;
   final String _titleName;
   final String _titleValue;
+  final String _selectedRow;
 
-  Color _borderColor = AppColors.kGeyser;
-  Color _textColor = AppColors.kTimberGreen;
-  Color _titleTextColor = AppColors.kNevada;
-  Color _evenRowColor = AppColors.kWhite;
-  Color _oddRowColor = AppColors.kAthensGray;
-  Color _iconArrowColor = AppColors.kTuna;
+  final Color _borderColor = AppColors.kGeyser;
+  final Color _textColor = AppColors.kTimberGreen;
+  final Color _titleTextColor = AppColors.kNevada;
+  final Color _evenRowColor = AppColors.kWhite;
+  final Color _oddRowColor = AppColors.kAthensGray;
+  final Color _iconArrowColor = AppColors.kTuna;
+  final Color _highlightedRowColor = AppColors.kRoyalBlue.withOpacity(0.2);
 
   bool _domainSortedByIncreasing = true;
   bool _measureSortedByIncreasing = true;
   SortType _sortType = SortType.NotSorted;
 
-  ChartInfoTable(this._data, this._titleName, this._titleValue);
+  ChartInfoTable(this._keys, this._data, this._titleName, this._titleValue, this._selectedRow);
 
   @override
   _ChartInfoTableState createState() => _ChartInfoTableState<T>();
@@ -36,7 +39,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         1: FlexColumnWidth(1),
       },
       border: _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth),
-      children: _generateTableBody(widget._data, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
+      children: _generateTableBody(widget._keys, widget._data, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
     );
   }
 
@@ -147,10 +150,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     );
   }
 
-  List<TableRow> _generateTableBody(Map<dynamic, int> dataMap, TableRow title) {
+  List<TableRow> _generateTableBody(List<dynamic> keys, Map<dynamic, int> dataMap, TableRow title) {
     var rowsList = List<TableRow>();
-
-    List<dynamic> sortedKeys = dataMap.keys.toList();
     List<int> sortedValues = dataMap.values.toList();
 
     rowsList.add(title);
@@ -158,13 +159,18 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     switch (widget._sortType) {
       case SortType.Domain:
         if (widget._domainSortedByIncreasing) {
-          sortedKeys.sort((a, b) => a.compareTo(b));
+          keys.sort((a, b) => a.compareTo(b));
         } else {
-          sortedKeys.sort((a, b) => b.compareTo(a));
+          keys.sort((a, b) => b.compareTo(a));
         }
 
-        for (int i = 0; i < sortedKeys.length; ++i) {
-          rowsList.add(_generateTableRow(sortedKeys[i], dataMap[sortedKeys[i]], i));
+        for (int i = 0; i < keys.length; ++i) {
+          var isHighlighted = keys[i] == widget._selectedRow;
+          if (dataMap.containsKey(keys[i])) {
+            rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i, isHighlighted));
+          } else {
+            rowsList.add(_generateTableRow(keys[i], 0, i, isHighlighted));
+          }
         }
         break;
       case SortType.Measure:
@@ -174,36 +180,83 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
           sortedValues.sort((a, b) => b.compareTo(a));
         }
 
-        for (int i = 0; i < sortedValues.length; ++i) {
-          var key = dataMap.keys.firstWhere((k) => dataMap[k] == sortedValues[i], orElse: () => null);
-          rowsList.add(_generateTableRow(key, dataMap[key], i));
+        var globalIndex = 0;
+
+        if (widget._measureSortedByIncreasing) {
+          for (var i = 0; i < keys.length; ++i) {
+            if (!dataMap.containsKey(keys[i])) {
+              rowsList.add(_generateTableRow(keys[i], 0, globalIndex, keys[i] == widget._selectedRow));
+              globalIndex++;
+            }
+          }
+
+          for (int i = 0; i < sortedValues.length; ++i) {
+            var key = dataMap.keys.firstWhere((k) => dataMap[k] == sortedValues[i], orElse: () => null);
+            rowsList.add(_generateTableRow(key, dataMap[key], globalIndex, key == widget._selectedRow));
+
+            globalIndex++;
+          }
+        } else {
+          for (int i = 0; i < sortedValues.length; ++i) {
+            var key = dataMap.keys.firstWhere((k) => dataMap[k] == sortedValues[i], orElse: () => null);
+            rowsList.add(_generateTableRow(key, dataMap[key], globalIndex, key == widget._selectedRow));
+
+            globalIndex++;
+          }
+
+          for (var i = 0; i < keys.length; ++i) {
+            if (!dataMap.containsKey(keys[i])) {
+              rowsList.add(_generateTableRow(keys[i], 0, globalIndex, keys[i] == widget._selectedRow));
+
+              globalIndex++;
+            }
+          }
         }
         break;
       default:
-        int i = 0;
-        dataMap.forEach((domain, measure) {
-          rowsList.add(_generateTableRow(domain, measure, i));
-          i++;
-        });
+        for (int i = 0; i < keys.length; ++i) {
+          var isHighlighted = keys[i] == widget._selectedRow;
+          if (dataMap.containsKey(keys[i])) {
+            rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i, isHighlighted));
+          } else {
+            rowsList.add(_generateTableRow(keys[i], 0, i, isHighlighted));
+          }
+        }
     }
 
     return rowsList;
   }
 
-  TableRow _generateTableRow(String domain, int measure, int index) {
-    // crutch for correcting the names of the govt/non-govt chart table domains
-    var generatedDomain = "";
+  String _getGeneratedDomain(String domain) {
     if (domain == "G") {
-      generatedDomain = "Gonverenment";
+      return "Gonverenment";
     } else if (domain == "N") {
-      generatedDomain = "Non-Gonverenment";
-    } else {
-      generatedDomain = domain;
+      return "Non-Gonverenment";
     }
+
+    return domain;
+  }
+
+  TableRow _generateTableRow(String domain, int measure, int index, bool hasHighlighting) {
+    // crutch for correcting the names of the govt/non-govt chart table domains
+    var generatedDomain = _getGeneratedDomain(domain);
+
+    var rowTextStyle = hasHighlighting
+        ? TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14.0,
+            color: widget._textColor,
+          )
+        : TextStyle(
+            fontSize: 14.0,
+            color: widget._textColor,
+          );
 
     return TableRow(
       decoration: BoxDecoration(
-        color: index % 2 == 0 ? widget._evenRowColor : widget._oddRowColor,
+        color: hasHighlighting
+            ? widget._highlightedRowColor
+            : ((index % 2 == 0) ? widget._evenRowColor : widget._oddRowColor),
       ),
       children: [
         TableCell(
@@ -224,10 +277,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 ),
                 Text(
                   generatedDomain,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: widget._textColor,
-                  ),
+                  style: rowTextStyle,
                 ),
               ],
             ),
@@ -241,10 +291,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
               children: <Widget>[
                 Text(
                   measure.toString(),
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: widget._textColor,
-                  ),
+                  style: rowTextStyle,
                 ),
               ],
             ),

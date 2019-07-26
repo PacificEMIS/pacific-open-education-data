@@ -22,16 +22,14 @@ class TeachersModel {
   }
 
   Map<dynamic, List<TeacherModel>> getSortedByState() {
-    var filteredList =
-        _teachers.where((i) => stateFilter.isEnabledInFilter(i.districtCode));
+    var filteredList = _teachers.where((i) => stateFilter.isEnabledInFilter(i.districtCode));
     var statesGroup = groupBy(filteredList, (obj) => obj.districtCode);
     return statesGroup;
   }
 
   Map<dynamic, List<TeacherModel>> getSortedByAuthority() {
-    var filteredList = _teachers
-        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode));
-    var authorityGroup = groupBy(filteredList, (obj) => obj.authorityCode);
+    var filteredList = _teachers.where((i) => authorityFilter.isEnabledInFilter(i.authorityCode));
+    var authorityGroup=  groupBy(filteredList, (obj) => obj.authorityCode);
     return authorityGroup;
   }
 
@@ -42,8 +40,7 @@ class TeachersModel {
   }
 
   Map<dynamic, List<TeacherModel>> getSortedBySchoolType() {
-    var filteredList = _teachers
-        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
+    var filteredList = _teachers.where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
     var schoolTypeGroup = groupBy(filteredList, (obj) => obj.schoolTypeCode);
     return schoolTypeGroup;
   }
@@ -55,17 +52,11 @@ class TeachersModel {
   }
 
   void _createFilters() {
-    authorityFilter = new Filter(
-        List<String>.generate(
-            _teachers.length, (i) => _teachers[i].authorityCode).toSet(),
-        'Schools Enrollment by Authotity');
-    stateFilter = new Filter(
-        List<String>.generate(
-            _teachers.length, (i) => _teachers[i].districtCode).toSet(),
-        'Schools Enrollment by State');
+    authorityFilter =
+        new Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].authorityCode).toSet(), 'Schools Enrollment by Authotity');
+    stateFilter =
+        new Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].districtCode).toSet(), 'Schools Enrollment by State');
     schoolTypeFilter = new Filter(
-        List<String>.generate(
-            _teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(),
-        'Teachers by School type, State and Gender');
+        List<String>.generate(_teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(), 'Teachers by School type, State and Gender');
   }
 }

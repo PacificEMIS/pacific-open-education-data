@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/config/Constants.dart';
 
-class _Data {
+class InfoTableData {
   static const String _kZeroSymbol = "-";
 
   final int _maleAmount;
   final int _femaleAmount;
-  final List<String> _columnsKeys = List<String>();
 
-  String get maleAmount =>
-      _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
-  String get femaleAmount =>
-      _femaleAmount != 0 ? _femaleAmount.toString() : _kZeroSymbol;
-  String get total => (_maleAmount + _femaleAmount) != 0
-      ? (_maleAmount + _femaleAmount).toString()
-      : _kZeroSymbol;
+  String get maleAmount => _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
+  String get femaleAmount => _femaleAmount != 0 ? _femaleAmount.toString() : _kZeroSymbol;
+  String get total => (_maleAmount + _femaleAmount) != 0 ? (_maleAmount + _femaleAmount).toString() : _kZeroSymbol;
 
-  _Data(this._maleAmount, this._femaleAmount);
+  InfoTableData(this._maleAmount, this._femaleAmount);
 }
 
-class InfoTable<T> extends StatefulWidget {
+class InfoTable extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final Map<dynamic, List<T>> _data;
+  final Map<dynamic, InfoTableData> _data;
 
   final String _keyName;
   final String _firstColumnName;
-  bool _isSubTable;
 
   Color _borderColor = AppColors.kGeyser;
   Color _textColor = AppColors.kTimberGreen;
@@ -35,19 +29,13 @@ class InfoTable<T> extends StatefulWidget {
   Color _oddRowColor = AppColors.kAthensGray;
   Color _titleTextColor = AppColors.kEndeavour;
 
-  InfoTable(this._data, this._keyName, this._firstColumnName) {
-    this._isSubTable = false;
-  }
-
-  InfoTable.subTable(this._data, this._keyName, this._firstColumnName) {
-    this._isSubTable = true;
-  }
+  InfoTable(this._data, this._keyName, this._firstColumnName);
 
   @override
-  State<InfoTable<T>> createState() => _InfoTableState<T>();
+  State<InfoTable> createState() => _InfoTableState();
 }
 
-class _InfoTableState<T> extends State<InfoTable<T>> {
+class _InfoTableState extends State<InfoTable> {
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
@@ -57,10 +45,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
       ),
       Table(
         border: _getTableBorder(widget._borderColor, InfoTable._kBorderWidth),
-        children: _generateTableBody(
-            widget._data,
-            _generateSubTableTitle(
-                widget._borderColor, InfoTable._kBorderWidth)),
+        children: _generateTableBody(widget._data, _generateSubTableTitle(widget._borderColor, InfoTable._kBorderWidth)),
       ),
     ]);
   }
@@ -90,8 +75,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -134,8 +118,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -151,8 +134,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -169,8 +151,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -187,8 +168,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -228,39 +208,12 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
     );
   }
 
-  List<TableRow> _generateTableBody(
-      Map<dynamic, List<T>> data, TableRow subTitle) {
+  List<TableRow> _generateTableBody(Map<dynamic, InfoTableData> data, TableRow subTitle) {
     var rowsList = List<TableRow>();
-    var dataMap = Map<dynamic, _Data>();
-
-    var totalMaleCount = 0;
-    var totalFemaleCount = 0;
-    data.forEach((k, v) {
-      var maleCount = 0;
-      var femaleCount = 0;
-      for (var j = 0; j < v.length; ++j) {
-        dynamic model = v;
-        if ((!widget._isSubTable) ||
-            ((widget._isSubTable) &&
-                (widget._keyName == model[j].districtCode)) ||
-            widget._keyName == null) {
-          maleCount += model[j].numTeachersM;
-          femaleCount += model[j].numTeachersF;
-        }
-      }
-
-      totalMaleCount += maleCount;
-      totalFemaleCount += femaleCount;
-
-      dataMap[k] = _Data(maleCount, femaleCount);
-    });
-
-    dataMap["Total"] = _Data(totalMaleCount, totalFemaleCount);
-
     rowsList.add(subTitle);
 
     int i = 0;
-    dataMap.forEach((domain, measure) {
+    data.forEach((domain, measure) {
       rowsList.add(_generateTableRow(domain, measure, i));
       i++;
     });
@@ -268,7 +221,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
     return rowsList;
   }
 
-  TableRow _generateTableRow(String domain, _Data measure, int index) {
+  TableRow _generateTableRow(String domain, InfoTableData measure, int index) {
     return TableRow(
       decoration: BoxDecoration(
         color: index % 2 == 0 ? widget._evenRowColor : widget._oddRowColor,
@@ -276,8 +229,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -293,8 +245,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -311,8 +262,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -329,8 +279,7 @@ class _InfoTableState<T> extends State<InfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[

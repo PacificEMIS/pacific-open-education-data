@@ -59,24 +59,23 @@ class TeacherModel {
     );
   }
 
-  Map<String, dynamic> toJson() =>
-  {
-    'SchNo': schNo,
-    'SurveyYear': surveyYear,
-    'AgeGroup': ageGroup,
-    'DistrictCode' : districtCode,
-    'AuthorityCode' : authorityCode,
-    'AuthorityGovt' : authorityGovt,
-    'SchoolTypeCode' : schoolTypeCode,
-    'Sector' : sector,
-    'ISCEDSubClass' : iSCEDSubClass,
-    'NumTeachersM' : numTeachersM,
-    'NumTeachersF' : numTeachersF,
-    'CertifiedM' : certifiedM,
-    'CertifiedF' : certifiedF,
-    'QualifiedM' : qualifiedM,
-    'QualifiedF' : qualifiedF,
-    'CertQualM' : certQualM,
-    'CertQualF' : certQualF,
-  };
+  Map<String, dynamic> toJson() => {
+        'SchNo': schNo,
+        'SurveyYear': surveyYear,
+        'AgeGroup': ageGroup,
+        'DistrictCode': districtCode,
+        'AuthorityCode': authorityCode,
+        'AuthorityGovt': authorityGovt,
+        'SchoolTypeCode': schoolTypeCode,
+        'Sector': sector,
+        'ISCEDSubClass': iSCEDSubClass,
+        'NumTeachersM': numTeachersM,
+        'NumTeachersF': numTeachersF,
+        'CertifiedM': certifiedM,
+        'CertifiedF': certifiedF,
+        'QualifiedM': qualifiedM,
+        'QualifiedF': qualifiedF,
+        'CertQualM': certQualM,
+        'CertQualF': certQualF,
+      };
 }

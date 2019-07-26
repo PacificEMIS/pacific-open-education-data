@@ -101,78 +101,105 @@ class TeachersPageState extends State<TeachersPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-            title: TitleWidget.withFilter("Teachers by Authority",
-                AppColors.kRacingGreen, data.authorityFilter),
-            body: Column(
-              children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByAuthority())),
-                widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByAuthority()),
-                    "Authority", TeachersPage._measureName),
-              ],
-            ));
-
+          title: TitleWidget("Teachers by Authority", AppColors.kRacingGreen),
+          body: Column(
+            children: <Widget>[
+              ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByAuthority())),
+              widget._dividerWidget,
+              ChartInfoTable<TeacherModel>(data.getSortedByAuthority().keys.toList(), _generateMapOfSum(data.getSortedByAuthority()),
+                  "Authority", TeachersPage._measureName, data.authorityFilter.selectedKey),
+            ],
+          ),
+        );
         break;
       case 1:
         return BaseTileWidget(
-            title: TitleWidget(
-                "Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
-            body: Column(
-              children: <Widget>[
-                ChartFactory.getPieChartViewByData(_getCountFromList(data.getSortedByGovt())),
-                widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByGovt()),
-                    "Public/Private", TeachersPage._measureName),
-              ],
-            ));
+          title: TitleWidget("Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
+          body: Column(
+            children: <Widget>[
+              ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByGovt())),
+              widget._dividerWidget,
+              ChartInfoTable<TeacherModel>(data.getSortedByGovt().keys.toList(), _generateMapOfSum(data.getSortedByGovt()),
+                  "Public/Private", TeachersPage._measureName, data.stateFilter.selectedKey),
+            ],
+          ),
+        );
         break;
       case 2:
         return BaseTileWidget(
-            title: TitleWidget.withFilter(
-                "Teachers by State", AppColors.kRacingGreen, data.stateFilter),
-            body: Column(
-              children: <Widget>[
-                ChartFactory.getBarChartViewByData(_getCountFromList(data.getSortedByState())),
-                widget._dividerWidget,
-                ChartInfoTable<TeacherModel>(_getCountFromList(data.getSortedByState()), "State",
-                    TeachersPage._measureName),
-              ],
-            ));
+          title: TitleWidget("Teachers by State", AppColors.kRacingGreen),
+          body: Column(
+            children: <Widget>[
+              ChartFactory.getBarChartViewByData(_generateMapOfSum(data.getSortedByState())),
+              widget._dividerWidget,
+              ChartInfoTable<TeacherModel>(data.getSortedByState().keys.toList(), _generateMapOfSum(data.getSortedByState()), "State",
+                  TeachersPage._measureName, data.stateFilter.selectedKey),
+            ],
+          ),
+        );
         break;
       default:
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
 
-        widgets.add(InfoTable<TeacherModel>(
-            data.getSortedBySchoolType(), "Total", "School \nType"));
+        widgets.add(InfoTable(_generateInfoTableData(data.getSortedBySchoolType(), "Total", false), "Total", "School \nType"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable<TeacherModel>.subTable(
-              data.getSortedBySchoolType(), statesKeys[i], "School \nType"));
+          widgets.add(InfoTable(_generateInfoTableData(data.getSortedBySchoolType(), statesKeys[i], true), statesKeys[i], "School \nType"));
         }
 
         return BaseTileWidget(
-            title: TitleWidget.withFilter(
-                "Teachers by School type, State and \nGender",
-                AppColors.kRacingGreen,
-                data.schoolTypeFilter),
-            body: Column(
-              children: widgets,
-            ));
+          title: TitleWidget("Teachers by School type, State and \nGender", AppColors.kRacingGreen),
+          body: Column(
+            children: widgets,
+          ),
+        );
         break;
     }
   }
 
-  static Map<dynamic, int> _getCountFromList(Map<dynamic, List<TeacherModel>> listMap) {
-    Map<dynamic, int> countMap = new Map<dynamic, int>();
+  static Map<dynamic, int> _generateMapOfSum(Map<dynamic, List<TeacherModel>> listMap) {
+    Map<dynamic, int> mapOfSum = new Map<dynamic, int>();
     int sum = 0;
-    listMap.forEach((k, v) =>{
-      sum = 0,
-      listMap[k].forEach((teacher){sum += teacher.numTeachersM + teacher.numTeachersF;}),
-      countMap[k] = sum
+
+    listMap.forEach((k, v) {
+      sum = 0;
+
+      listMap[k].forEach((school) {
+        sum += school.numTeachersM + school.numTeachersF;
+      });
+
+      mapOfSum[k] = sum;
     });
-    return countMap;
+
+    return mapOfSum;
   }
 
+  Map<dynamic, InfoTableData> _generateInfoTableData(Map<dynamic, List<TeacherModel>> rawMapData, String keyName, bool isSubTitle) {
+    var convertedData = Map<dynamic, InfoTableData>();
+    var totalMaleCount = 0;
+    var totalFemaleCount = 0;
+
+    rawMapData.forEach((k, v) {
+      var maleCount = 0;
+      var femaleCount = 0;
+
+      for (var j = 0; j < v.length; ++j) {
+        var model = v;
+        if (!isSubTitle || (isSubTitle && (keyName == model[j].districtCode)) || keyName == null) {
+          maleCount += model[j].numTeachersM;
+          femaleCount += model[j].numTeachersF;
+        }
+      }
+
+      totalMaleCount += maleCount;
+      totalFemaleCount += femaleCount;
+      convertedData[k] = InfoTableData(maleCount, femaleCount);
+    });
+
+    convertedData["Total"] = InfoTableData(totalMaleCount, totalFemaleCount);
+
+    return convertedData;
+  }
 }

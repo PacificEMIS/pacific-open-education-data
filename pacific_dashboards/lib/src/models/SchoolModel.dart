@@ -6,13 +6,12 @@ class SchoolModel {
   final String authorityGovt;
   final String schoolTypeCode;
   final int age;
-  final int enrolM;
-  final int enrolF;
-  int numTeachersM;
-  int numTeachersF;
   final String genderCode;
   final int enrol;
-  String ageGroup;
+
+  int get enrolFemale => genderCode == 'F' ? enrol : 0;
+  int get enrolMale => genderCode == 'M' ? enrol : 0;
+  String get ageGroup => _getAgeGroup(age);
 
   SchoolModel({
     this.surveyYear,
@@ -22,13 +21,8 @@ class SchoolModel {
     this.authorityGovt,
     this.schoolTypeCode,
     this.age,
-    this.enrolM,
-    this.enrolF,
-    this.numTeachersM,
-    this.numTeachersF,
     this.genderCode,
     this.enrol,
-    this.ageGroup
   });
 
   factory SchoolModel.fromJson(Map parsedJson) {
@@ -40,30 +34,25 @@ class SchoolModel {
       schoolTypeCode: parsedJson['SchoolTypeCode'] ?? "",
       surveyYear: parsedJson['SurveyYear'] ?? 0,
       age: parsedJson['Age'] ?? 0,
-      enrolM: parsedJson['EnrolM'] ?? 0,
-      enrolF: parsedJson['EnrolF'] ?? 0,
-      numTeachersM: parsedJson['NumTeachersM'] ?? 0,
-      numTeachersF: parsedJson['NumTeachersF'] ?? 0,
       genderCode: parsedJson['GenderCode'] ?? "",
       enrol: parsedJson['Enrol'] ?? 0,
-      ageGroup: "",
     );
   }
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'ClassLevel': classLevel,
         'DistrictCode': districtCode,
         'AuthorityCode': authorityCode,
-        'AuthorityGovt' : authorityGovt,
-        'SchoolTypeCode' : schoolTypeCode,
-        'SurveyYear' : surveyYear,
-        'Age' : age,
-        'EnrolM' : enrolM,
-        'EnrolF' : enrolF,
-        'NumTeachersM' : numTeachersM,
-        'NumTeachersF' : numTeachersF,
-        'GenderCode' : genderCode,
-        'Enrol' : enrol,
+        'AuthorityGovt': authorityGovt,
+        'SchoolTypeCode': schoolTypeCode,
+        'SurveyYear': surveyYear,
+        'Age': age,
+        'GenderCode': genderCode,
+        'Enrol': enrol,
       };
+
+  String _getAgeGroup(int age) {
+    int ageCoeff = age ~/ 5 + 1;
+    return '${((ageCoeff * 5) - 4)}-${(ageCoeff * 5)}';
+  }
 }
