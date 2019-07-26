@@ -26,9 +26,7 @@ class SchoolsPage extends StatefulWidget {
     color: Colors.white,
   );
 
-  SchoolsModel d = null;
-
-  Function barF;
+  SchoolsModel _dataLink = null;
 
   SchoolsPage({
     Key key,
@@ -102,23 +100,23 @@ class SchoolsPageState extends State<SchoolsPage> {
   }
 
   void _createFilterPageRoute(BuildContext context) {
-    if (widget.d != null) {
+    if (widget._dataLink != null) {
       var maxYear = () {
-        var m = "0";
-        widget.d.yearFilter.getFilter().forEach((k, v) {
-          if (int.parse(k) > int.parse(m)) {
-            m = k;
+        var max = "0";
+        widget._dataLink.yearFilter.getFilter().forEach((k, v) {
+          if (int.parse(k) > int.parse(max)) {
+            max = k;
           }
         });
 
-        return m;
+        return max;
       };
 
       List<FilterBloc> filterBlocsList = List<FilterBloc>();
-      filterBlocsList.add(FilterBloc(filter: widget.d.yearFilter, defaultSelectedKey: maxYear()));
-      filterBlocsList.add(FilterBloc(filter: widget.d.stateFilter, defaultSelectedKey: 'Display All States'));
-      filterBlocsList.add(FilterBloc(filter: widget.d.authorityFilter, defaultSelectedKey: 'Display All Authority'));
-      filterBlocsList.add(FilterBloc(filter: widget.d.govtFilter, defaultSelectedKey: 'Display all Govermant filters'));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.yearFilter, defaultSelectedKey: maxYear()));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.stateFilter, defaultSelectedKey: 'Display All States'));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.authorityFilter, defaultSelectedKey: 'Display All Authority'));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.govtFilter, defaultSelectedKey: 'Display all Govermant filters'));
 
       debugPrint('route created');
       Navigator.push(
@@ -131,7 +129,7 @@ class SchoolsPageState extends State<SchoolsPage> {
   }
 
   Widget _buildList(AsyncSnapshot<SchoolsModel> snapshot) {
-    widget.d = snapshot.data;
+    widget._dataLink = snapshot.data;
 
     return OrientationBuilder(
       builder: (context, orientation) {
