@@ -116,6 +116,7 @@ class SchoolsPageState extends State<SchoolsPage> {
       filterBlocsList.add(FilterBloc(filter: widget._dataLink.stateFilter, defaultSelectedKey: 'Display All States'));
       filterBlocsList.add(FilterBloc(filter: widget._dataLink.authorityFilter, defaultSelectedKey: 'Display All Authority'));
       filterBlocsList.add(FilterBloc(filter: widget._dataLink.govtFilter, defaultSelectedKey: 'Display all Govermant filters'));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.schoolLevelFilter, defaultSelectedKey: 'Display all Level filters'));
 
       debugPrint('FilterPage route created');
       Navigator.push(

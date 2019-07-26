@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../blocs/FilterBloc.dart';
 import '../../config/Constants.dart';
 import '../../models/TeacherModel.dart';
 import '../../models/TeachersModel.dart';
@@ -6,6 +7,7 @@ import '../../blocs/TeachersBloc.dart';
 import '../BaseTileWidget.dart';
 import '../ChartFactory.dart';
 import '../ChartInfoTable.dart';
+import '../FilterPage.dart';
 import '../InfoTable.dart';
 import '../PlatformAppBar.dart';
 import '../TitleWidget.dart';
@@ -16,10 +18,14 @@ class TeachersPage extends StatefulWidget {
 
   final TeachersBloc bloc;
 
+  final Color _filterIconColor = AppColors.kWhite;
+
   final Widget _dividerWidget = Divider(
     height: 16.0,
     color: Colors.white,
   );
+
+  TeachersModel _dataLink = null;
 
   TeachersPage({
     Key key,
@@ -52,6 +58,17 @@ class TeachersPageState extends State<TeachersPage> {
       appBar: PlatformAppBar(
         iconTheme: new IconThemeData(color: AppColors.kWhite),
         backgroundColor: AppColors.kDenim,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.tune,
+              color: widget._filterIconColor,
+            ),
+            onPressed: () {
+              _createFilterPageRoute(context);
+            },
+          ),
+        ],
         title: Text(
           TeachersPage._kPageName,
           style: TextStyle(
@@ -81,7 +98,39 @@ class TeachersPageState extends State<TeachersPage> {
     );
   }
 
+  void _createFilterPageRoute(BuildContext context) {
+    if (widget._dataLink != null) {
+      var maxYear = () {
+        var max = "0";
+        widget._dataLink.yearFilter.getFilter().forEach((k, v) {
+          if (int.parse(k) > int.parse(max)) {
+            max = k;
+          }
+        });
+
+        return max;
+      };
+
+      List<FilterBloc> filterBlocsList = List<FilterBloc>();
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.yearFilter, defaultSelectedKey: maxYear()));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.stateFilter, defaultSelectedKey: 'Display All States'));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.authorityFilter, defaultSelectedKey: 'Display All Authority'));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.govtFilter, defaultSelectedKey: 'Display all Govermant filters'));
+      filterBlocsList.add(FilterBloc(filter: widget._dataLink.schoolLevelFilter, defaultSelectedKey: 'Display all Level filters'));
+
+      debugPrint('FilterPage route created');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return FilterPage(blocs: filterBlocsList);
+        }),
+      );
+    }
+  }
+
   Widget _buildList(AsyncSnapshot<TeachersModel> snapshot) {
+    widget._dataLink = snapshot.data;
+
     return OrientationBuilder(
       builder: (context, orientation) {
         return ListView.builder(
@@ -106,7 +155,7 @@ class TeachersPageState extends State<TeachersPage> {
             children: <Widget>[
               ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByAuthority())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(data.getSortedByAuthority().keys.toList(), _generateMapOfSum(data.getSortedByAuthority()),
+              ChartInfoTable<TeacherModel>(data.getSortedByAuthority().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
                   "Authority", TeachersPage._measureName, data.authorityFilter.selectedKey),
             ],
           ),
@@ -119,7 +168,7 @@ class TeachersPageState extends State<TeachersPage> {
             children: <Widget>[
               ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByGovt())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(data.getSortedByGovt().keys.toList(), _generateMapOfSum(data.getSortedByGovt()),
+              ChartInfoTable<TeacherModel>(data.getSortedByGovt().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByGovt()),
                   "Public/Private", TeachersPage._measureName, data.stateFilter.selectedKey),
             ],
           ),
@@ -132,7 +181,7 @@ class TeachersPageState extends State<TeachersPage> {
             children: <Widget>[
               ChartFactory.getBarChartViewByData(_generateMapOfSum(data.getSortedByState())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(data.getSortedByState().keys.toList(), _generateMapOfSum(data.getSortedByState()), "State",
+              ChartInfoTable<TeacherModel>(data.getSortedByState().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByState()), "State",
                   TeachersPage._measureName, data.stateFilter.selectedKey),
             ],
           ),
@@ -142,11 +191,11 @@ class TeachersPageState extends State<TeachersPage> {
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
 
-        widgets.add(InfoTable(_generateInfoTableData(data.getSortedBySchoolType(), "Total", false), "Total", "School \nType"));
+        widgets.add(InfoTable(_generateInfoTableData(data.getSortedWithFilteringBySchoolType(), "Total", false), "Total", "School \nType"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable(_generateInfoTableData(data.getSortedBySchoolType(), statesKeys[i], true), statesKeys[i], "School \nType"));
+          widgets.add(InfoTable(_generateInfoTableData(data.getSortedWithFilteringBySchoolType(), statesKeys[i], true), statesKeys[i], "School \nType"));
         }
 
         return BaseTileWidget(
