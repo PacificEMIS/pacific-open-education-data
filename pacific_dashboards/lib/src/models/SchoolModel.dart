@@ -9,8 +9,8 @@ class SchoolModel {
   final String genderCode;
   final int enrol;
 
-  int get enrolF => genderCode == 'F' ? enrol : 0;
-  int get enrolM => genderCode == 'M' ? enrol : 0;
+  int get enrolFemale => genderCode == 'F' ? enrol : 0;
+  int get enrolMale => genderCode == 'M' ? enrol : 0;
   String get ageGroup => _getAgeGroup(age);
 
   SchoolModel({

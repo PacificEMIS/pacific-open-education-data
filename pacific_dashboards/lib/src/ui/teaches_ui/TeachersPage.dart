@@ -101,7 +101,6 @@ class TeachersPageState extends State<TeachersPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-//            title: TitleWidget.withFilter("Teachers by Authority", AppColors.kRacingGreen, data.authorityFilter),
           title: TitleWidget("Teachers by Authority", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
@@ -128,7 +127,6 @@ class TeachersPageState extends State<TeachersPage> {
         break;
       case 2:
         return BaseTileWidget(
-//            title: TitleWidget.withFilter("Teachers by State", AppColors.kRacingGreen, data.stateFilter),
           title: TitleWidget("Teachers by State", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
@@ -144,15 +142,14 @@ class TeachersPageState extends State<TeachersPage> {
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
 
-        widgets.add(InfoTable<TeacherModel>(data.getSortedBySchoolType(), "Total", "School \nType"));
+        widgets.add(InfoTable(_generateInfoTableData(data.getSortedBySchoolType(), "Total", false), "Total", "School \nType"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable<TeacherModel>.subTable(data.getSortedBySchoolType(), statesKeys[i], "School \nType"));
+          widgets.add(InfoTable(_generateInfoTableData(data.getSortedBySchoolType(), statesKeys[i], true), statesKeys[i], "School \nType"));
         }
 
         return BaseTileWidget(
-//            title: TitleWidget.withFilter("Teachers by School type, State and \nGender", AppColors.kRacingGreen, data.schoolTypeFilter),
           title: TitleWidget("Teachers by School type, State and \nGender", AppColors.kRacingGreen),
           body: Column(
             children: widgets,
@@ -177,5 +174,32 @@ class TeachersPageState extends State<TeachersPage> {
     });
 
     return mapOfSum;
+  }
+
+  Map<dynamic, InfoTableData> _generateInfoTableData(Map<dynamic, List<TeacherModel>> rawMapData, String keyName, bool isSubTitle) {
+    var convertedData = Map<dynamic, InfoTableData>();
+    var totalMaleCount = 0;
+    var totalFemaleCount = 0;
+
+    rawMapData.forEach((k, v) {
+      var maleCount = 0;
+      var femaleCount = 0;
+
+      for (var j = 0; j < v.length; ++j) {
+        var model = v;
+        if (!isSubTitle || (isSubTitle && (keyName == model[j].districtCode)) || keyName == null) {
+          maleCount += model[j].numTeachersM;
+          femaleCount += model[j].numTeachersF;
+        }
+      }
+
+      totalMaleCount += maleCount;
+      totalFemaleCount += femaleCount;
+      convertedData[k] = InfoTableData(maleCount, femaleCount);
+    });
+
+    convertedData["Total"] = InfoTableData(totalMaleCount, totalFemaleCount);
+
+    return convertedData;
   }
 }

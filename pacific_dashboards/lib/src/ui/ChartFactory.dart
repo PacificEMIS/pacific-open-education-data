@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/TeacherModel.dart';
-import '../models/SchoolModel.dart';
 
 import 'BarChartWidget.dart';
 import 'PieChartWidget.dart';
