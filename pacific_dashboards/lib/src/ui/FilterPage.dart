@@ -28,7 +28,7 @@ class FilterPageState extends State<FilterPage> {
             color: AppColors.kWhite,
           ),
           title: Text('Filter', style: TextStyle(color: AppColors.kWhite)),
-          backgroundColor: AppColors.kBlue),
+          backgroundColor: AppColors.kRoyalBlue),
       body: ListView.builder(
       itemCount: widget.blocs.length,
       itemBuilder: (BuildContext context, int index) {
@@ -47,7 +47,7 @@ class FilterPageState extends State<FilterPage> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Icon(Icons.done, color: AppColors.kWhite),
-            color: AppColors.kBlue,
+            color: AppColors.kRoyalBlue,
             onPressed: () {
               _applyChanges();
               Navigator.pop(context);

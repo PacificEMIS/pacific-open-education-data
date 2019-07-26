@@ -51,7 +51,7 @@ class FilterWidgetState extends State<FilterWidget> {
               });
             },
             controlAffinity: ListTileControlAffinity.leading,
-            activeColor: AppColors.kBlue,
+            activeColor: AppColors.kRoyalBlue,
             groupValue: widget.bloc.selectedKey,
           ),
           borderOnForeground: false,
@@ -83,7 +83,7 @@ class FilterWidgetState extends State<FilterWidget> {
                 });
               },
               controlAffinity: ListTileControlAffinity.leading,
-              activeColor: AppColors.kBlue,
+              activeColor: AppColors.kRoyalBlue,
               groupValue: widget.bloc.selectedKey,
             ),
             borderOnForeground: false,
