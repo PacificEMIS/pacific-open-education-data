@@ -44,7 +44,7 @@ class FilterPageState extends State<FilterPage> {
           width: 56,
           child: FlatButton(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(22.0),
             ),
             child: Icon(Icons.done, color: AppColors.kWhite),
             color: AppColors.kRoyalBlue,
