@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../resources/Filter.dart';
 import '../blocs/FilterBloc.dart';
 import '../config/Constants.dart';
 import 'FilterWidget.dart';
@@ -42,9 +41,10 @@ class FilterPageState extends State<FilterPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SizedBox(
           height: 56,
+          width: 56,
           child: FlatButton(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
             child: Icon(Icons.done, color: AppColors.kWhite),
             color: AppColors.kRoyalBlue,
@@ -55,7 +55,7 @@ class FilterPageState extends State<FilterPage> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
