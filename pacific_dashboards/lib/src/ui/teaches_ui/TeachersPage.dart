@@ -55,6 +55,7 @@ class TeachersPageState extends State<TeachersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: true,
       appBar: PlatformAppBar(
         iconTheme: new IconThemeData(color: AppColors.kWhite),
         backgroundColor: AppColors.kDenim,
@@ -112,11 +113,20 @@ class TeachersPageState extends State<TeachersPage> {
       };
 
       List<FilterBloc> filterBlocsList = List<FilterBloc>();
-      filterBlocsList.add(FilterBloc(filter: widget._dataLink.yearFilter, defaultSelectedKey: maxYear()));
-      filterBlocsList.add(FilterBloc(filter: widget._dataLink.stateFilter, defaultSelectedKey: 'Display All States'));
-      filterBlocsList.add(FilterBloc(filter: widget._dataLink.authorityFilter, defaultSelectedKey: 'Display All Authority'));
-      filterBlocsList.add(FilterBloc(filter: widget._dataLink.govtFilter, defaultSelectedKey: 'Display all Govermant filters'));
-      filterBlocsList.add(FilterBloc(filter: widget._dataLink.schoolLevelFilter, defaultSelectedKey: 'Display all Level filters'));
+      filterBlocsList.add(FilterBloc(
+          filter: widget._dataLink.yearFilter, defaultSelectedKey: maxYear()));
+      filterBlocsList.add(FilterBloc(
+          filter: widget._dataLink.stateFilter,
+          defaultSelectedKey: 'Display All States'));
+      filterBlocsList.add(FilterBloc(
+          filter: widget._dataLink.authorityFilter,
+          defaultSelectedKey: 'Display All Authority'));
+      filterBlocsList.add(FilterBloc(
+          filter: widget._dataLink.govtFilter,
+          defaultSelectedKey: 'Display all Govermant filters'));
+      filterBlocsList.add(FilterBloc(
+          filter: widget._dataLink.schoolLevelFilter,
+          defaultSelectedKey: 'Display all Level filters'));
 
       debugPrint('FilterPage route created');
       Navigator.push(
@@ -153,23 +163,34 @@ class TeachersPageState extends State<TeachersPage> {
           title: TitleWidget("Teachers by Authority", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByAuthority())),
+              ChartFactory.getPieChartViewByData(
+                  _generateMapOfSum(data.getSortedByAuthority())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(data.getSortedByAuthority().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
-                  "Authority", TeachersPage._measureName, data.authorityFilter.selectedKey),
+              ChartInfoTable<TeacherModel>(
+                  data.getSortedByAuthority().keys.toList(),
+                  _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
+                  "Authority",
+                  TeachersPage._measureName,
+                  data.authorityFilter.selectedKey),
             ],
           ),
         );
         break;
       case 1:
         return BaseTileWidget(
-          title: TitleWidget("Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
+          title: TitleWidget(
+              "Schools Enrollment Govt / \nNon-govt", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getPieChartViewByData(_generateMapOfSum(data.getSortedByGovt())),
+              ChartFactory.getPieChartViewByData(
+                  _generateMapOfSum(data.getSortedByGovt())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(data.getSortedByGovt().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByGovt()),
-                  "Public/Private", TeachersPage._measureName, data.stateFilter.selectedKey),
+              ChartInfoTable<TeacherModel>(
+                  data.getSortedByGovt().keys.toList(),
+                  _generateMapOfSum(data.getSortedWithFiltersByGovt()),
+                  "Public/Private",
+                  TeachersPage._measureName,
+                  data.stateFilter.selectedKey),
             ],
           ),
         );
@@ -179,10 +200,15 @@ class TeachersPageState extends State<TeachersPage> {
           title: TitleWidget("Teachers by State", AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getBarChartViewByData(_generateMapOfSum(data.getSortedByState())),
+              ChartFactory.getBarChartViewByData(
+                  _generateMapOfSum(data.getSortedByState())),
               widget._dividerWidget,
-              ChartInfoTable<TeacherModel>(data.getSortedByState().keys.toList(), _generateMapOfSum(data.getSortedWithFiltersByState()), "State",
-                  TeachersPage._measureName, data.stateFilter.selectedKey),
+              ChartInfoTable<TeacherModel>(
+                  data.getSortedByState().keys.toList(),
+                  _generateMapOfSum(data.getSortedWithFiltersByState()),
+                  "State",
+                  TeachersPage._measureName,
+                  data.stateFilter.selectedKey),
             ],
           ),
         );
@@ -191,15 +217,24 @@ class TeachersPageState extends State<TeachersPage> {
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
 
-        widgets.add(InfoTable(_generateInfoTableData(data.getSortedWithFilteringBySchoolType(), "Total", false), "Total", "School \nType"));
+        widgets.add(InfoTable(
+            _generateInfoTableData(
+                data.getSortedWithFilteringBySchoolType(), "Total", false),
+            "Total",
+            "School \nType"));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
-          widgets.add(InfoTable(_generateInfoTableData(data.getSortedWithFilteringBySchoolType(), statesKeys[i], true), statesKeys[i], "School \nType"));
+          widgets.add(InfoTable(
+              _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
+                  statesKeys[i], true),
+              statesKeys[i],
+              "School \nType"));
         }
 
         return BaseTileWidget(
-          title: TitleWidget("Teachers by School type, State and \nGender", AppColors.kRacingGreen),
+          title: TitleWidget("Teachers by School type, \nState and Gender",
+              AppColors.kRacingGreen),
           body: Column(
             children: widgets,
           ),
@@ -208,7 +243,8 @@ class TeachersPageState extends State<TeachersPage> {
     }
   }
 
-  static Map<dynamic, int> _generateMapOfSum(Map<dynamic, List<TeacherModel>> listMap) {
+  static Map<dynamic, int> _generateMapOfSum(
+      Map<dynamic, List<TeacherModel>> listMap) {
     Map<dynamic, int> mapOfSum = new Map<dynamic, int>();
     int sum = 0;
 
@@ -225,7 +261,10 @@ class TeachersPageState extends State<TeachersPage> {
     return mapOfSum;
   }
 
-  Map<dynamic, InfoTableData> _generateInfoTableData(Map<dynamic, List<TeacherModel>> rawMapData, String keyName, bool isSubTitle) {
+  Map<dynamic, InfoTableData> _generateInfoTableData(
+      Map<dynamic, List<TeacherModel>> rawMapData,
+      String keyName,
+      bool isSubTitle) {
     var convertedData = Map<dynamic, InfoTableData>();
     var totalMaleCount = 0;
     var totalFemaleCount = 0;
@@ -236,7 +275,9 @@ class TeachersPageState extends State<TeachersPage> {
 
       for (var j = 0; j < v.length; ++j) {
         var model = v;
-        if (!isSubTitle || (isSubTitle && (keyName == model[j].districtCode)) || keyName == null) {
+        if (!isSubTitle ||
+            (isSubTitle && (keyName == model[j].districtCode)) ||
+            keyName == null) {
           maleCount += model[j].numTeachersM;
           femaleCount += model[j].numTeachersF;
         }
