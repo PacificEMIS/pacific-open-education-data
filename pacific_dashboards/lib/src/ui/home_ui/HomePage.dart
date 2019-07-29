@@ -30,9 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
-      body: new Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: new ListView(children: <Widget>[
+      body: new ListView(children: <Widget>[
           Container(
             height: 80,
             alignment: Alignment.centerRight,
@@ -58,12 +56,12 @@ class _HomePageState extends State<HomePage> {
             )),
           ),
           Container(
-              height: 670,
-              width: 328,
               alignment: Alignment.center,
-              child: CategoryGridWidget())
-        ]),
-      ),
+              child: CategoryGridWidget()
+              )
+        ] 
+        ),
+        
     );
   }
 
