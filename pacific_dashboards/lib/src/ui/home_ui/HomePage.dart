@@ -111,7 +111,11 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: InkWell(
                       splashColor: Colors.blue.withAlpha(30),
-                      onTap: _onCountryChangeTap(_kFederatedStateOfMicronesia),
+                      onTap: () {
+                        setState(() {
+                          _onCountryChangeTap(_kFederatedStateOfMicronesia);
+                        });
+                      },
                       child: Row(
                         children: <Widget>[
                           Expanded(
@@ -130,7 +134,11 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                       child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
-                    onTap: _onCountryChangeTap(_kMarshallIslands),
+                    onTap: () {
+                      setState(() {
+                        _onCountryChangeTap(_kMarshallIslands);
+                      });
+                    },
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -157,10 +165,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _onCountryChangeTap(String country) {
-    if (_countrySelectorDialog == null) {
-      return;
-    }
-
     Navigator.of(context).pop();
     _countrySelectorDialog = null;
     
