@@ -42,7 +42,7 @@ class InjectorWidget extends InheritedWidget {
   }
 
   TeachersBloc getTeachersBloc({bool forceCreate = false}) {
-    if (_teachersBloc == null || forceCreate) {
+    if (_teachersBloc == null || _teachersBloc.fetcher.isClosed || forceCreate) {
       _teachersBloc = TeachersBloc(repository: _repository);
     }
 
@@ -50,7 +50,7 @@ class InjectorWidget extends InheritedWidget {
   }
 
   SchoolsBloc getSchoolsBloc({bool forceCreate = false}) {
-    if (_schoolsBloc == null || forceCreate) {
+    if (_schoolsBloc == null || _schoolsBloc.fetcher.isClosed || forceCreate) {
       _schoolsBloc = SchoolsBloc(repository: _repository);
     }
 

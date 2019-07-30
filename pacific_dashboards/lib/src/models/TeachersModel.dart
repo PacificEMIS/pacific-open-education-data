@@ -118,5 +118,6 @@ class TeachersModel {
       Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].surveyYear.toString()).toSet(), 'Years filter'),
       'schoolLevel': Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].iSCEDSubClass).toSet(), 'Schools Levels filter'),
     };
+    yearFilter.selectMax();
   }
 }

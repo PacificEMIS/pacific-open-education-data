@@ -30,4 +30,22 @@ class Filter {
   bool isEnabledInFilter(String key) {
     return !(_filter.containsKey(key) && !_filter[key]);
   }
+
+  String getMax() {
+    var max = "0";
+    _filter.forEach((k, v) {
+      if (int.parse(k) > int.parse(max)) {
+        max = k;
+      }
+    });
+    return max;
+  }
+
+  void selectMax() {
+    var max = getMax();
+    _filter[max] = false;
+    _filter.forEach((k, v) {
+      _filter[k] = k == max;
+    });
+  }
 }
