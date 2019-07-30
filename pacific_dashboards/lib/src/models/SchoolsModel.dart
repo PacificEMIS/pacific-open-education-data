@@ -147,7 +147,7 @@ class SchoolsModel {
           Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityCode).toSet(), 'Authotity filter'),
       'state': Filter(List<String>.generate(_schools.length, (i) => _schools[i].districtCode).toSet(), 'State filter'),
       'schoolType': Filter(List<String>.generate(_schools.length, (i) => _schools[i].schoolTypeCode).toSet(),
-          'Schools Enrollment by School type, State and Gender'),
+          'Schools Enrollment by School type, \nState and Gender'),
       'age':
           Filter(List<String>.generate(_schoolsValidAge.length, (i) => _schoolsValidAge[i].ageGroup).toSet(), 'Schools Enrollment by Age'),
       'govt': Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityGovt).toSet(), 'Goverment filter'),

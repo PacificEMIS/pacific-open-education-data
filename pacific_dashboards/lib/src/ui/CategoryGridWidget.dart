@@ -18,6 +18,7 @@ class CategoryGridWidget extends StatelessWidget {
       crossAxisCount: 2,
       padding: EdgeInsets.all(16.0),
       childAspectRatio: 8.0 / 9.0,
+      shrinkWrap: true,
       children: _kCategoryData
           .map(
             (data) => Card(

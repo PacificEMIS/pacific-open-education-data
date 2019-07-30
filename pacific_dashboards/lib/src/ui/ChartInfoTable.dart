@@ -97,7 +97,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 3.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -261,7 +261,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 11.0),
             child: Row(
               children: <Widget>[
                 Padding(
