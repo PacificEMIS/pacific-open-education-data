@@ -101,20 +101,11 @@ class SchoolsPageState extends State<SchoolsPage> {
 
   void _createFilterPageRoute(BuildContext context) {
     if (widget._dataLink != null) {
-      var maxYear = () {
-        var max = "0";
-        widget._dataLink.yearFilter.getFilter().forEach((k, v) {
-          if (int.parse(k) > int.parse(max)) {
-            max = k;
-          }
-        });
-
-        return max;
-      };
-
       List<FilterBloc> filterBlocsList = List<FilterBloc>();
+
       filterBlocsList.add(FilterBloc(
-          filter: widget._dataLink.yearFilter, defaultSelectedKey: maxYear()));
+          filter: widget._dataLink.yearFilter,
+          defaultSelectedKey: widget._dataLink.yearFilter.getMax()));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.stateFilter,
           defaultSelectedKey: 'Display All States'));

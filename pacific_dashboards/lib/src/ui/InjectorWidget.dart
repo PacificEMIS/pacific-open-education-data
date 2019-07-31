@@ -36,21 +36,19 @@ class InjectorWidget extends InheritedWidget {
 
     _sharedPreferences = await SharedPreferences.getInstance();
     _repository = RepositoryImpl(ServerBackendProvider(), FileProviderImpl(_sharedPreferences));
-    _teachersBloc = TeachersBloc(repository: _repository);
-    _schoolsBloc = SchoolsBloc(repository: _repository);
     _globalSettings = GlobalSettings(_sharedPreferences);
   }
 
-  TeachersBloc getTeachersBloc({bool forceCreate = false}) {
-    if (_teachersBloc == null || forceCreate) {
+  TeachersBloc getTeachersBloc() {
+    if (_teachersBloc == null || _teachersBloc.fetcher.isClosed) {
       _teachersBloc = TeachersBloc(repository: _repository);
     }
 
     return _teachersBloc;
   }
 
-  SchoolsBloc getSchoolsBloc({bool forceCreate = false}) {
-    if (_schoolsBloc == null || forceCreate) {
+  SchoolsBloc getSchoolsBloc() {
+    if (_schoolsBloc == null || _schoolsBloc.fetcher.isClosed) {
       _schoolsBloc = SchoolsBloc(repository: _repository);
     }
 

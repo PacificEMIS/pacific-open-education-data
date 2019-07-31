@@ -155,5 +155,6 @@ class SchoolsModel {
           Filter(List<String>.generate(_schools.length, (i) => _schools[i].surveyYear.toString()).toSet(), 'Years filter'),
       'schoolLevel': Filter(List<String>.generate(_schools.length, (i) => _schools[i].classLevel).toSet(), 'Schools Levels filter'),
     };
+    yearFilter.selectMax();
   }
 }
