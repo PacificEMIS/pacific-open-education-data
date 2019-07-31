@@ -32,13 +32,13 @@ class Filter {
   }
 
   String getMax() {
-    var max = "0";
+    var max = 0;
     _filter.forEach((k, v) {
-      if (int.parse(k) > int.parse(max)) {
-        max = k;
+      if (int.parse(k) > max) {
+        max = int.parse(k);
       }
     });
-    return max;
+    return max.toString();
   }
 
   void selectMax() {
