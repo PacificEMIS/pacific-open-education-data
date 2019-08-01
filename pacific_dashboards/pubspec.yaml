@@ -29,7 +29,7 @@ dependencies:
   appcenter: ^0.2.1
   appcenter_analytics: ^0.2.1
   appcenter_crashes: ^0.2.1
-
+  flutter_launcher_icons: "^0.7.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -49,6 +49,7 @@ flutter:
   assets:
     - images/logos/Federated States of Micronesia.png
     - images/logos/Marshall Islands.png
+    - images/splash/Splash.png
     - images/icons/Budgets.svg
     - images/icons/Exams.svg
     - images/icons/Indicators.svg
@@ -58,6 +59,14 @@ flutter:
 
   #  - images/a_dot_ham.jpeg
     - images/icons/Tune.svg
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "images/logos/logo.png"
+  image_path_android: "images/logos/logo.png"
+  # adaptive_icon_background:  "images/logos/logo.png"
+  # adaptive_icon_foreground:  "images/logos/logo.png"
   # assets\images\logo\mainlogo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -70,7 +79,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-    # fonts:
+  # fonts:
     # - family: NotoSans
     #   fonts:
     #     - asset: fonts/NotoSans-Regular.ttf
@@ -80,7 +89,16 @@ flutter:
     #       style: bolditalic
     #     - asset: fonts/NotoSans-Italic.ttf
     #       style: italic
-  #
+    # - family: Schyler
+    #   fonts:
+    #     - asset: fonts/Schyler-Regular.ttf
+    #     - asset: fonts/Schyler-Italic.ttf
+    #       style: italic
+    # - family: Trajan Pro
+    #   fonts:
+    #     - asset: fonts/TrajanPro.ttf
+    #     - asset: fonts/TrajanPro_Bold.ttf
+    #       weight: 700
   # fonts:
   #   - family: Schyler
   #     fonts:
