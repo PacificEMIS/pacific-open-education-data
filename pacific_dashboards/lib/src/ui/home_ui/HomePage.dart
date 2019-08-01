@@ -30,7 +30,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
-      body: new ListView(children: <Widget>[
+      body: new Container(
+        color: Color.fromRGBO(26, 115, 232, 1),
+        child:new ListView(children: <Widget>[
           Container(
             height: 80,
             alignment: Alignment.centerRight,
@@ -52,7 +54,8 @@ class _HomePageState extends State<HomePage> {
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w700,
                   fontSize: 24,
-                  fontFamily: "NotoSans"),
+                  fontFamily: "NotoSans",
+                  color: Colors.white)
             )),
           ),
           Container(
@@ -61,14 +64,14 @@ class _HomePageState extends State<HomePage> {
               )
         ] 
         ),
-        
+      ),
     );
   }
 
   _buildChooseCountry(BuildContext context) {
     return FlatButton(
-      color: Colors.white,
-      textColor: Color.fromRGBO(26, 129, 204, 0.8),
+      color: Color.fromRGBO(26, 115, 232, 1),
+      textColor: Colors.white,
       disabledColor: Colors.grey,
       disabledTextColor: Colors.black,
       padding: EdgeInsets.all(8.0),
@@ -123,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 40)),
                           Expanded(
                             child: Text("$_kFederatedStateOfMicronesia",
-                                style: TextStyle(fontFamily: "NotoSans")),
+                                style: TextStyle(fontFamily: "NotoSans", color: Colors.white)),
                           ),
                         ],
                       ),
