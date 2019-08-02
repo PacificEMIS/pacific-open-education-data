@@ -115,7 +115,7 @@ class TeachersModel {
           'Teachers by School type, State and Gender'),
       'govt': Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].authorityGovt).toSet(), 'Goverment filter'),
       'year':
-      Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].surveyYear.toString()).toSet(), 'Years filter'),
+      Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].surveyYear.toString()).reversed.toSet(), 'Years filter'),
       'schoolLevel': Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].iSCEDSubClass).toSet(), 'Schools Levels filter'),
     };
     yearFilter.selectMax();
