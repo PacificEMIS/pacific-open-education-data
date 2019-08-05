@@ -108,6 +108,7 @@ class _HomePageState extends State<HomePage> {
               content: Container(
                 height: 200,
                 width: 280,
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 0.0, right: 80.0),
                 child: Column(children: <Widget>[
                   Expanded(
                     child: InkWell(
