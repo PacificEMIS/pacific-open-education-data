@@ -19,7 +19,7 @@ class CategoryGridWidget extends StatelessWidget {
       crossAxisSpacing: 24,
       mainAxisSpacing: 24,
       padding: EdgeInsets.all(16.0),
-      childAspectRatio: 8.0 / 9.0,
+      childAspectRatio: 1.0,
       shrinkWrap: true,
       children: _kCategoryData
           .map(
@@ -46,7 +46,8 @@ class CategoryGridWidget extends StatelessWidget {
                               margin: const EdgeInsets.only(left: 5.0),
                               child: Text(
                                 data,
-                                style: TextStyle(fontFamily: "NotoSans"),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontFamily: "NotoSans", fontSize: 14),
                               ),
                             ),
                           ],
