@@ -23,6 +23,9 @@ class FilterPageState extends State<FilterPage> {
     return Scaffold(
       backgroundColor: AppColors.kWhite,
       appBar: AppBar(
+          leading: IconButton(icon:Icon(Icons.close),
+          onPressed:() => Navigator.pop(context, false),
+        ),
           iconTheme: IconThemeData(
             color: AppColors.kWhite,
           ),
