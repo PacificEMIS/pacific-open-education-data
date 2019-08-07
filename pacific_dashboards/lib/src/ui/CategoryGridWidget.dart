@@ -24,47 +24,58 @@ class CategoryGridWidget extends StatelessWidget {
       children: _kCategoryData
           .map(
             (data) => new Container(
-                  margin: const EdgeInsets.only(left: 5.0),
-                  child: Card(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    ),
-                    child: InkWell(
-                      
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/$data');
-                      },
-                      child: ClipRect(
-                        clipBehavior: Clip.hardEdge,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            SvgPicture.asset("images/icons/$data.svg",
-                                width: 64, height: 64),
-                            new Container(
-                              margin: const EdgeInsets.only(left: 5.0),
-                              child: Text(
-                                data,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontFamily: "NotoSans", fontSize: 14, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
+              margin: const EdgeInsets.only(left: 5.0),
+              child: Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                ),
+                child: InkWell(
+                  splashColor: Colors.blue.withAlpha(30),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/$data');
+                  },
+                  child: ClipRect(
+                    clipBehavior: Clip.hardEdge,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Expanded(
+                          flex:5,
+                          child: Container(
+                            margin: const EdgeInsets.all(20.0),
+                            child: SvgPicture.asset("images/icons/$data.svg",
+                                fit: BoxFit.fitHeight),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          flex:2,
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 5.0, right: 5.0),
+                          child: Text(
+                            data,
+                            textAlign: TextAlign.center,
+                            softWrap: true,
+                            style:
+                                TextStyle(fontFamily: "NotoSans", fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        ),
+                      ],
                     ),
-                  ),
-                  decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      new BoxShadow(
-                        color: Color.fromRGBO(8, 36, 73, 0.4),
-                        blurRadius: 16.0,
-                        offset: new Offset(0.0, 16.0),
-                      ),
-                    ],
                   ),
                 ),
+              ),
+              decoration: BoxDecoration(
+                boxShadow: <BoxShadow>[
+                  new BoxShadow(
+                    color: Color.fromRGBO(8, 36, 73, 0.4),
+                    blurRadius: 16.0,
+                    offset: new Offset(0.0, 16.0),
+                  ),
+                ],
+              ),
+            ),
           )
           .toList(),
     );
