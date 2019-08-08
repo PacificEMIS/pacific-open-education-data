@@ -58,7 +58,7 @@ class CategoryGridWidget extends StatelessWidget {
                             softWrap: true,
                             style:
                                 TextStyle(fontFamily: "NotoSans", fontSize: 14, fontWeight: FontWeight.bold, 
-                                Color.fromRGBO(99, 105, 109, 1.0)),
+                                color: Color.fromRGBO(99, 105, 109, 1.0)),
                           ),
                         ),
                         ),
