@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.black, 
+    systemNavigationBarColor: Colors.white, 
     statusBarColor: Colors.white10, 
   ));
   var appSecret = Platform.isAndroid
