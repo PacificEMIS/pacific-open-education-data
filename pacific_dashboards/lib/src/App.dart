@@ -34,10 +34,10 @@ class App extends StatelessWidget {
             SplashPage(globalSettings: injector.getGlobalSettings()),
         "/Home": (context) =>
             HomePage(globalSettings: injector.getGlobalSettings()),
-        "/Budgets": (context) => Text("Budgets"),
+        "/Budgets": (context) => AlertWindowBack(),
         "/Exams": (context) => ExamsPage(bloc: injector.getExamsBloc()),
-        "/Indicators": (context) => Text("Indicators"),
-        "/School Accreditations": (context) => Text("School Accreditations"),
+        "/Indicators": (context) => AlertWindowBack(),
+        "/School Accreditations": (context) => AlertWindowBack(),
         "/Schools": (context) =>
             SchoolsPage(bloc: injector.getSchoolsBloc()),
         "/Teachers": (context) =>
@@ -46,3 +46,19 @@ class App extends StatelessWidget {
     );
   }
 }
+
+class AlertWindowBack extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+        ),
+        body: Center(
+          child: AlertDialog(
+            title: Text("Construction"),
+            content: Text("This section is under construction"),
+          ),
+        ),
+      );
+    }
+  }
