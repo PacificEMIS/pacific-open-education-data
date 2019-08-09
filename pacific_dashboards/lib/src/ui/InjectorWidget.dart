@@ -5,6 +5,7 @@ import '../resources/RepositoryImpl.dart';
 import '../resources/Repository.dart';
 import '../blocs/TeachersBloc.dart';
 import '../blocs/SchoolsBloc.dart';
+import '../blocs/ExamsBloc.dart';
 import '../resources/FileProviderImpl.dart';
 import '../utils/GlobalSettings.dart';
 
@@ -12,6 +13,7 @@ import '../utils/GlobalSettings.dart';
 class InjectorWidget extends InheritedWidget {
   TeachersBloc _teachersBloc;
   SchoolsBloc _schoolsBloc;
+  ExamsBloc _examsBloc;
   Repository _repository;
   SharedPreferences _sharedPreferences;
   GlobalSettings _globalSettings;
@@ -53,6 +55,14 @@ class InjectorWidget extends InheritedWidget {
     }
 
     return _schoolsBloc;
+  }
+
+  ExamsBloc getExamsBloc() {
+    if (_examsBloc == null || _examsBloc.fetcher.isClosed) {
+      _examsBloc = ExamsBloc(repository: _repository);
+    }
+
+    return _examsBloc;
   }
 
   SharedPreferences getSharedPreferences() => _sharedPreferences;

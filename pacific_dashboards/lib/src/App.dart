@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
 import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 
+import 'models/ExamsModel.dart';
+import 'ui/exams_ui/ExamsPage.dart';
 import 'ui/home_ui/HomePage.dart';
 import 'ui/InjectorWidget.dart';
 import 'ui/teaches_ui/TeachersPage.dart';
+import 'ui/StackedHorizontalBarChart.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
@@ -32,7 +35,7 @@ class App extends StatelessWidget {
         "/Home": (context) =>
             HomePage(globalSettings: injector.getGlobalSettings()),
         "/Budgets": (context) => Text("Budgets"),
-        "/Exams": (context) => Text("Exams"),
+        "/Exams": (context) => ExamsPage(bloc: injector.getExamsBloc()),
         "/Indicators": (context) => Text("Indicators"),
         "/School Accreditations": (context) => Text("School Accreditations"),
         "/Schools": (context) =>
