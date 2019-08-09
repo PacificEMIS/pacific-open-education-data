@@ -16,8 +16,7 @@ flutter channel stable
 flutter doctor
 
 echo "Installed flutter to `pwd`/flutter"
-
-flutter build apk --target-platform android-arm64 --release
+flutter build apk --release --target-platform=android-arm
 
 #copy the APK where AppCenter will find it
 mkdir -p android/app/build/outputs/apk/; mv build/app/outputs/apk/release/app-release.apk $_

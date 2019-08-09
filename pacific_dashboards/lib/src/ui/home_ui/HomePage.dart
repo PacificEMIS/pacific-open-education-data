@@ -17,6 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final String _kMarshallIslands = "Marshall Islands";
   final String _kFederatedStateOfMicronesia = "Federated States of Micronesia";
+  final String _kFederatedStateOfMicronesiaWithSplitter =
+      "Federated States \nof Micronesia";
   String _currentCountry;
   Dialog _countrySelectorDialog;
 
@@ -30,7 +32,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
-      body: new ListView(children: <Widget>[
+      body: new Container(
+        color: Color.fromRGBO(26, 115, 232, 1),
+        child: new ListView(children: <Widget>[
           Container(
             height: 80,
             alignment: Alignment.centerRight,
@@ -46,29 +50,27 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.center,
             child: Center(
                 child: Text(
-              _currentCountry,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 24,
-                  fontFamily: "NotoSans"),
-            )),
+                    (_currentCountry == "Federated States of Micronesia"
+                        ? "Federated States \nof Micronesia"
+                        : "Marshall Islands"),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24,
+                        fontFamily: "NotoSans",
+                        color: Colors.white))),
           ),
-          Container(
-              alignment: Alignment.center,
-              child: CategoryGridWidget()
-              )
-        ] 
-        ),
-        
+          Container(alignment: Alignment.center, child: CategoryGridWidget())
+        ]),
+      ),
     );
   }
 
   _buildChooseCountry(BuildContext context) {
     return FlatButton(
-      color: Colors.white,
-      textColor: Color.fromRGBO(26, 129, 204, 0.8),
+      color: Color.fromRGBO(26, 115, 232, 1),
+      textColor: Colors.white,
       disabledColor: Colors.grey,
       disabledTextColor: Colors.black,
       padding: EdgeInsets.all(8.0),
@@ -78,7 +80,10 @@ class _HomePageState extends State<HomePage> {
       },
       child: Text(
         "Change country",
-        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
+        style: TextStyle(
+            fontSize: 16.0,
+            fontStyle: FontStyle.normal,
+            fontFamily: "NotoSans-Regular"),
       ),
     );
   }
@@ -88,73 +93,80 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          width: 280,
           height: 244,
-          child: Container(
-            width: 280,
-            height: 244,
-            child: AlertDialog(
-              title: Text(
-                "Choose country",
-                style: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    fontFamily: "NotoSans"),
-              ),
-              content: Container(
-                height: 200,
-                width: 400,
-                child: Column(children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        setState(() {
-                          _onCountryChangeTap(_kFederatedStateOfMicronesia);
-                        });
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Image.asset(
-                                  "images/logos/$_kFederatedStateOfMicronesia.png",
-                                  width: 40,
-                                  height: 40)),
-                          Expanded(
-                            child: Text("$_kFederatedStateOfMicronesia",
-                                style: TextStyle(fontFamily: "NotoSans")),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: InkWell(
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            contentPadding: EdgeInsets.only(top: 10.0, right: 0),
+            title: Text(
+              "Choice country",
+              style: TextStyle(
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24,
+                  fontFamily: "NotoSans"),
+            ),
+            content: Container(
+              height: 200,
+              width: 280,
+              padding: const EdgeInsets.only(
+                  top: 10.0, bottom: 10.0, left: 0.0, right: 0.0),
+              child: Column(children: <Widget>[
+                Expanded(
+                  child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       setState(() {
-                        _onCountryChangeTap(_kMarshallIslands);
+                        _onCountryChangeTap(_kFederatedStateOfMicronesia);
                       });
                     },
                     child: Row(
                       children: <Widget>[
-                        Expanded(
-                          child: Image.asset(
-                            "images/logos/$_kMarshallIslands.png",
-                            width: 40,
-                            height: 40,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(_kMarshallIslands,
+                        Container(
+                            padding: const EdgeInsets.only(left: 30.0),
+                            child: Image.asset(
+                              "images/logos/$_kFederatedStateOfMicronesia.png",
+                              width: 40,
+                              height: 40,
+                            )),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text(
+                              "$_kFederatedStateOfMicronesiaWithSplitter",
                               style: TextStyle(fontFamily: "NotoSans")),
                         ),
                       ],
                     ),
-                  ))
-                ]),
-              ),
+                  ),
+                ),
+                Expanded(
+                    child: InkWell(
+                  splashColor: Colors.blue.withAlpha(30),
+                  onTap: () {
+                    setState(() {
+                      _onCountryChangeTap(_kMarshallIslands);
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 30.0),
+                        child: Image.asset(
+                          "images/logos/$_kMarshallIslands.png",
+                          width: 40,
+                          height: 40,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: Text(_kMarshallIslands,
+                            maxLines: 1,
+                            style: TextStyle(fontFamily: "NotoSans")),
+                      ),
+                    ],
+                  ),
+                ))
+              ]),
             ),
           ),
         );
@@ -165,7 +177,7 @@ class _HomePageState extends State<HomePage> {
   _onCountryChangeTap(String country) {
     Navigator.of(context).pop();
     _countrySelectorDialog = null;
-    
+
     widget.globalSettings.currentCountry = country;
 
     setState(() {

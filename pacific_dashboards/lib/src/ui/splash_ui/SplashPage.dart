@@ -31,10 +31,12 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Image.asset(
-            "images/logos/${widget.globalSettings.currentCountry}.png"),
+        body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage("images/splash/Splash.png"), fit: BoxFit.cover),
       ),
-    );
+    
+    ));
   }
 }

@@ -152,7 +152,7 @@ class SchoolsModel {
           Filter(List<String>.generate(_schoolsValidAge.length, (i) => _schoolsValidAge[i].ageGroup).toSet(), 'Schools Enrollment by Age'),
       'govt': Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityGovt).toSet(), 'Goverment filter'),
       'year':
-          Filter(List<String>.generate(_schools.length, (i) => _schools[i].surveyYear.toString()).toSet(), 'Years filter'),
+          Filter(List<String>.generate(_schools.length, (i) => _schools[i].surveyYear.toString()).reversed.toSet(), 'Years filter'),
       'schoolLevel': Filter(List<String>.generate(_schools.length, (i) => _schools[i].classLevel).toSet(), 'Schools Levels filter'),
     };
     yearFilter.selectMax();

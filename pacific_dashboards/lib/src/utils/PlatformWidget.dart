@@ -11,7 +11,7 @@ abstract class PlatformWidget<I extends Widget, A extends Widget> extends Statel
     if (Platform.isAndroid) {
       return createAndroidWidget(context);
     } else if (Platform.isIOS) {
-      return createIosWidget(context);
+      return createAndroidWidget(context);
     }
     // platform not supported returns an empty widget
     return Container();
