@@ -13,5 +13,6 @@ class AppColors {
   static Color kAthensGray = HexColor("#F5F6F8");
   static Color kTuna = HexColor("#33373D");
   static Color kRoyalBlue = HexColor("#1A73E8");
+  static Color kExamsTableTextGray = HexColor("#63696D");
   static Color kAppBarBackground = HexColor("#1A73E8");
 }

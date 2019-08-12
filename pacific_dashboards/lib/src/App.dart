@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
 import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 
+import 'models/ExamsModel.dart';
+import 'ui/exams_ui/ExamsPage.dart';
 import 'ui/home_ui/HomePage.dart';
 import 'ui/InjectorWidget.dart';
 import 'ui/teaches_ui/TeachersPage.dart';
+import 'ui/StackedHorizontalBarChart.dart';
 
 class App extends StatelessWidget {
   final _appName = 'Custom Charts';
@@ -32,10 +35,11 @@ class App extends StatelessWidget {
         "/Home": (context) =>
             HomePage(globalSettings: injector.getGlobalSettings()),
         "/Budgets": (context) => AlertWindowBack(),
-        "/Exams": (context) => AlertWindowBack(),
+        "/Exams": (context) => ExamsPage(bloc: injector.getExamsBloc()),
         "/Indicators": (context) => AlertWindowBack(),
         "/School Accreditations": (context) => AlertWindowBack(),
-        "/Schools": (context) => SchoolsPage(bloc: injector.getSchoolsBloc()),
+        "/Schools": (context) =>
+            SchoolsPage(bloc: injector.getSchoolsBloc()),
         "/Teachers": (context) =>
             TeachersPage(bloc: injector.getTeachersBloc()),
       },
@@ -44,17 +48,17 @@ class App extends StatelessWidget {
 }
 
 class AlertWindowBack extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-      ),
-      body: Center(
-        child: AlertDialog(
-          title: Text("Construction"),
-          content: Text("This section is under construction"),
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
         ),
-      ),
-    );
+        body: Center(
+          child: AlertDialog(
+            title: Text("Construction"),
+            content: Text("This section is under construction"),
+          ),
+        ),
+      );
+    }
   }
-}

@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../models/ExamsModel.dart';
 import '../models/TeachersModel.dart';
 import '../models/SchoolsModel.dart';
 import 'Provider.dart';
@@ -39,6 +40,20 @@ class RepositoryImpl implements Repository {
       return result;
     } catch (e) {
       return await _fileProvider.fetchSchoolsModel();
+    }
+  }
+
+  @override
+  Future<ExamsModel> fetchAllExams() async {
+    try {
+      ExamsModel result = await _fileProvider.fetchValidExamsModel();
+      if (result == null) {
+        result = await _backendProvider.fetchExamsModel();
+        await _fileProvider.saveExamsModel(result);
+      }
+      return result;
+    } catch (e) {
+      return await _fileProvider.fetchExamsModel();
     }
   }
 }
