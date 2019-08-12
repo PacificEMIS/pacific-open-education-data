@@ -152,7 +152,7 @@ class ExamsPageState extends State<ExamsPage> {
   List<Widget> _generateSecondTiles(Map<String, ExamModel> data) {
     List<Widget> widgetList = new List<Widget>();
     data.forEach((k, v) {
-      if (k != "") {
+      if (k != ExamsDataNavigator.kNoTitleKey) {
         widgetList.add(new Container(
             padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
             child: new Text(

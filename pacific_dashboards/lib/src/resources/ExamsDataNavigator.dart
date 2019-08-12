@@ -5,6 +5,7 @@ import '../models/ExamModel.dart';
 import '../models/ExamsModel.dart';
 
 class ExamsDataNavigator {
+  static const String kNoTitleKey = "";
   int _selectedExamPageId = 0;
   int _selectedExamViewId = 0;
   int _selectedExamStandardId = 0;
@@ -138,15 +139,15 @@ class ExamsDataNavigator {
     Map<String, Map<String, ExamModel>> results =
         new Map<String, Map<String, ExamModel>>();
     groupedData.forEach((k, v) {
-      var sublist = new Map<String, ExamModel>();
+      var groupedByBenchmarkData = new Map<String, ExamModel>();
       for (var item in v) {
-        if (sublist.containsKey("")) {
-          sublist[""] = ExamModel.sum(sublist[""], item);
+        if (groupedByBenchmarkData.containsKey(kNoTitleKey)) {
+          groupedByBenchmarkData[kNoTitleKey] = ExamModel.sum(groupedByBenchmarkData[kNoTitleKey], item);
         } else {
-          sublist[""] = item;
+          groupedByBenchmarkData[kNoTitleKey] = item;
         }
       }
-      results[k] = sublist;
+      results[k] = groupedByBenchmarkData;
     });
     return results;
   }
@@ -156,16 +157,16 @@ class ExamsDataNavigator {
     Map<String, Map<String, ExamModel>> results =
         new Map<String, Map<String, ExamModel>>();
     groupedData.forEach((k, v) {
-      var sublist = new Map<String, ExamModel>();
+      var groupedByYearData = new Map<String, ExamModel>();
       for (var item in v) {
-        if (sublist.containsKey(item.examYear)) {
-          sublist[item.examYear.toString()] =
-              ExamModel.sum(sublist[item.examYear.toString()], item);
+        if (groupedByYearData.containsKey(item.examYear)) {
+          groupedByYearData[item.examYear.toString()] =
+              ExamModel.sum(groupedByYearData[item.examYear.toString()], item);
         } else {
-          sublist[item.examYear.toString()] = item;
+          groupedByYearData[item.examYear.toString()] = item;
         }
       }
-      results[k] = sublist;
+      results[k] = groupedByYearData;
     });
     return results;
   }
@@ -175,16 +176,16 @@ class ExamsDataNavigator {
     Map<String, Map<String, ExamModel>> results =
         new Map<String, Map<String, ExamModel>>();
     groupedData.forEach((k, v) {
-      var sublist = new Map<String, ExamModel>();
+      var groupedByStateData = new Map<String, ExamModel>();
       for (var item in v) {
-        if (sublist.containsKey(item.districtCode)) {
-          sublist[item.districtCode.toString()] =
-              ExamModel.sum(sublist[item.districtCode.toString()], item);
+        if (groupedByStateData.containsKey(item.districtCode)) {
+          groupedByStateData[item.districtCode.toString()] =
+              ExamModel.sum(groupedByStateData[item.districtCode.toString()], item);
         } else {
-          sublist[item.districtCode.toString()] = item;
+          groupedByStateData[item.districtCode.toString()] = item;
         }
       }
-      results[k] = sublist;
+      results[k] = groupedByStateData;
     });
     return results;
   }
