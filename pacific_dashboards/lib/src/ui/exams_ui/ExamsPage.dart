@@ -54,17 +54,6 @@ class ExamsPageState extends State<ExamsPage> {
         appBar: PlatformAppBar(
           iconTheme: new IconThemeData(color: AppColors.kWhite),
           backgroundColor: AppColors.kDenim,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.tune,
-                color: widget._filterIconColor,
-              ),
-              onPressed: () {
-                _createFilterPageRoute(context);
-              },
-            ),
-          ],
           title: Text(
             ExamsPage._kPageName,
             style: TextStyle(
@@ -75,12 +64,6 @@ class ExamsPageState extends State<ExamsPage> {
           ),
         ),
         body: _buildBody());
-  }
-
-  void _createFilterPageRoute(BuildContext context) {
-    setState(() {
-      widget._dataLink.examsDataNavigator.nextExamPage();
-    });
   }
 
   Widget _buildBody() {
