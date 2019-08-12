@@ -58,7 +58,7 @@ class SchoolsPageState extends State<SchoolsPage> {
       resizeToAvoidBottomPadding: true,
       appBar: PlatformAppBar(
         iconTheme: new IconThemeData(color: AppColors.kWhite),
-        backgroundColor: AppColors.kDenim,
+        backgroundColor: AppColors.kAppBarBackground,
         actions: <Widget>[
           IconButton(
             icon: Icon(

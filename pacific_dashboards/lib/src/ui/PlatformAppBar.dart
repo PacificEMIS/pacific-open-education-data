@@ -24,6 +24,7 @@ class PlatformAppBar extends PlatformWidget<CupertinoNavigationBar, AppBar> {
       title: title,
       iconTheme: iconTheme,
       backgroundColor: backgroundColor,
+      brightness: Brightness.dark,
       actions: actions,
     );
   }
