@@ -6,6 +6,7 @@ import '../models/ExamsModel.dart';
 import '../models/SchoolsModel.dart';
 import '../utils/Exceptions/DataNotLoadedException.dart';
 import '../models/TeachersModel.dart';
+import '../models/LookupsModel.dart';
 
 import 'Provider.dart';
 
@@ -14,6 +15,7 @@ class ServerBackendProvider implements Provider {
   static const String TEACHERS_API_KEY = "warehouse/teachercount";
   static const String SCHOOLS_API_KEY = "warehouse/tableenrol";
   static const String EXAMS_API_KEY = "warehouse/examsdistrictresults";
+  static const String LOOKUPS_API_KEY = "lookups/collection/core";
 
   Client client = Client();
 
@@ -44,5 +46,11 @@ class ServerBackendProvider implements Provider {
   Future<ExamsModel> fetchExamsModel() async {
     final responseData = await _request(EXAMS_API_KEY);
     return ExamsModel.fromJson(json.decode(responseData.toString()));
+  }
+
+  @override
+  Future<LookupsModel> fetchLookupsModel() async {
+    final responseData = await _request(LOOKUPS_API_KEY);
+    return LookupsModel.fromJson(jsonDecode(responseData.toString()));
   }
 }

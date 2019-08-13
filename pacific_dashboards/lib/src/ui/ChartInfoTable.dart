@@ -24,7 +24,8 @@ class ChartInfoTable<T> extends StatefulWidget {
   bool _measureSortedByIncreasing = true;
   SortType _sortType = SortType.NotSorted;
 
-  ChartInfoTable(this._keys, this._data, this._titleName, this._titleValue, this._selectedRow);
+  ChartInfoTable(this._keys, this._data, this._titleName, this._titleValue,
+      this._selectedRow);
 
   @override
   _ChartInfoTableState createState() => _ChartInfoTableState<T>();
@@ -33,17 +34,29 @@ class ChartInfoTable<T> extends StatefulWidget {
 class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
   @override
   Widget build(BuildContext context) {
-    return Table(
-      columnWidths: {
-        0: FlexColumnWidth(1),
-        1: FlexColumnWidth(1),
-      },
-      border: _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth),
-      children: _generateTableBody(widget._keys, widget._data, _generateTableTitle(widget._borderColor, ChartInfoTable._kBorderWidth)),
-    );
+    return Column(children: <Widget>[
+      Table(
+        border:
+            _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth, true),
+        children: [
+            _generateTableTitle(
+                widget._borderColor, ChartInfoTable._kBorderWidth, true)],
+      ),
+      Table(
+        columnWidths: {
+          0: FlexColumnWidth(1.7),
+          1: FlexColumnWidth(1),
+        },
+        border:
+            _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth, false),
+        children: _generateTableBody(
+            widget._keys,
+            widget._data),
+      )
+    ]);
   }
 
-  TableRow _generateTableTitle(Color borderColor, double borderWidth) {
+  TableRow _generateTableTitle(Color borderColor, double borderWidth, bool top) {
     return TableRow(
       decoration: BoxDecoration(
         border: Border(
@@ -68,7 +81,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -80,13 +94,16 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 ),
                 InkResponse(
                   child: Icon(
-                    (widget._domainSortedByIncreasing ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
+                    (widget._domainSortedByIncreasing
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_up),
                     color: widget._iconArrowColor,
                   ),
                   onTap: () {
                     setState(() {
                       widget._sortType = SortType.Domain;
-                      widget._domainSortedByIncreasing = !widget._domainSortedByIncreasing;
+                      widget._domainSortedByIncreasing =
+                          !widget._domainSortedByIncreasing;
                     });
                   },
                   highlightShape: BoxShape.rectangle,
@@ -97,7 +114,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 6.0, right: 1.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 6.0, right: 1.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -110,13 +128,16 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 ),
                 InkResponse(
                   child: Icon(
-                    (widget._measureSortedByIncreasing ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up),
+                    (widget._measureSortedByIncreasing
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_up),
                     color: widget._iconArrowColor,
                   ),
                   onTap: () {
                     setState(() {
                       widget._sortType = SortType.Measure;
-                      widget._measureSortedByIncreasing = !widget._measureSortedByIncreasing;
+                      widget._measureSortedByIncreasing =
+                          !widget._measureSortedByIncreasing;
                     });
                   },
                   highlightShape: BoxShape.rectangle,
@@ -129,7 +150,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     );
   }
 
-  TableBorder _getTableBorder(Color borderColor, double borderWidth) {
+  TableBorder _getTableBorder(Color borderColor, double borderWidth, bool top) {
     return TableBorder(
       top: BorderSide(
         width: borderWidth,
@@ -144,17 +165,16 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         color: borderColor,
       ),
       bottom: BorderSide(
-        width: borderWidth,
+        width: top ? 0 : borderWidth,
         color: borderColor,
       ),
     );
   }
 
-  List<TableRow> _generateTableBody(List<dynamic> keys, Map<dynamic, int> dataMap, TableRow title) {
+  List<TableRow> _generateTableBody(
+      List<dynamic> keys, Map<dynamic, int> dataMap) {
     var rowsList = List<TableRow>();
     List<int> sortedValues = dataMap.values.toList();
-
-    rowsList.add(title);
 
     switch (widget._sortType) {
       case SortType.Domain:
@@ -167,7 +187,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         for (int i = 0; i < keys.length; ++i) {
           var isHighlighted = keys[i] == widget._selectedRow;
           if (dataMap.containsKey(keys[i])) {
-            rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i, isHighlighted));
+            rowsList.add(
+                _generateTableRow(keys[i], dataMap[keys[i]], i, isHighlighted));
           } else {
             rowsList.add(_generateTableRow(keys[i], 0, i, isHighlighted));
           }
@@ -185,28 +206,36 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         if (widget._measureSortedByIncreasing) {
           for (var i = 0; i < keys.length; ++i) {
             if (!dataMap.containsKey(keys[i])) {
-              rowsList.add(_generateTableRow(keys[i], 0, globalIndex, keys[i] == widget._selectedRow));
+              rowsList.add(_generateTableRow(
+                  keys[i], 0, globalIndex, keys[i] == widget._selectedRow));
               globalIndex++;
             }
           }
 
           for (int i = 0; i < sortedValues.length; ++i) {
-            var key = dataMap.keys.firstWhere((k) => dataMap[k] == sortedValues[i], orElse: () => null);
-            rowsList.add(_generateTableRow(key, dataMap[key], globalIndex, key == widget._selectedRow));
+            var key = dataMap.keys.firstWhere(
+                (k) => dataMap[k] == sortedValues[i],
+                orElse: () => null);
+            rowsList.add(_generateTableRow(
+                key, dataMap[key], globalIndex, key == widget._selectedRow));
 
             globalIndex++;
           }
         } else {
           for (int i = 0; i < sortedValues.length; ++i) {
-            var key = dataMap.keys.firstWhere((k) => dataMap[k] == sortedValues[i], orElse: () => null);
-            rowsList.add(_generateTableRow(key, dataMap[key], globalIndex, key == widget._selectedRow));
+            var key = dataMap.keys.firstWhere(
+                (k) => dataMap[k] == sortedValues[i],
+                orElse: () => null);
+            rowsList.add(_generateTableRow(
+                key, dataMap[key], globalIndex, key == widget._selectedRow));
 
             globalIndex++;
           }
 
           for (var i = 0; i < keys.length; ++i) {
             if (!dataMap.containsKey(keys[i])) {
-              rowsList.add(_generateTableRow(keys[i], 0, globalIndex, keys[i] == widget._selectedRow));
+              rowsList.add(_generateTableRow(
+                  keys[i], 0, globalIndex, keys[i] == widget._selectedRow));
 
               globalIndex++;
             }
@@ -217,7 +246,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         for (int i = 0; i < keys.length; ++i) {
           var isHighlighted = keys[i] == widget._selectedRow;
           if (dataMap.containsKey(keys[i])) {
-            rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i, isHighlighted));
+            rowsList.add(
+                _generateTableRow(keys[i], dataMap[keys[i]], i, isHighlighted));
           } else {
             rowsList.add(_generateTableRow(keys[i], 0, i, isHighlighted));
           }
@@ -227,20 +257,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     return rowsList;
   }
 
-  String _getGeneratedDomain(String domain) {
-    if (domain == "G") {
-      return "Gonverenment";
-    } else if (domain == "N") {
-      return "Non-Gonverenment";
-    }
-
-    return domain;
-  }
-
-  TableRow _generateTableRow(String domain, int measure, int index, bool hasHighlighting) {
-    // crutch for correcting the names of the govt/non-govt chart table domains
-    var generatedDomain = _getGeneratedDomain(domain);
-
+  TableRow _generateTableRow(
+      String domain, int measure, int index, bool hasHighlighting) {
     var rowTextStyle = hasHighlighting
         ? TextStyle(
             fontWeight: FontWeight.bold,
@@ -261,7 +279,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 8.0, right: 7.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 8.0, right: 7.0),
             child: Row(
               children: <Widget>[
                 Padding(
@@ -276,7 +295,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                   ),
                 ),
                 Text(
-                  generatedDomain,
+                  domain,
                   style: rowTextStyle,
                 ),
               ],
@@ -285,7 +304,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
