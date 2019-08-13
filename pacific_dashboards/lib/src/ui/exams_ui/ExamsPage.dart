@@ -3,22 +3,13 @@ import '../../config/Constants.dart';
 import '../../models/ExamModel.dart';
 import '../../models/ExamsModel.dart';
 import '../../blocs/ExamsBloc.dart';
-import '../BaseTileWidget.dart';
-import '../ChartFactory.dart';
-import '../ChartInfoTable.dart';
-import '../FilterPage.dart';
-import '../InfoTable.dart';
 import '../PlatformAppBar.dart';
 import '../../resources/ExamsDataNavigator.dart';
 import '../StackedHorizontalBarChart.dart';
-import '../TitleWidget.dart';
-import '../../blocs/FilterBloc.dart';
 
 class ExamsPage extends StatefulWidget {
   static const String _kPageName = "Exams";
   final ExamsBloc bloc;
-  final Color _filterIconColor = AppColors.kWhite;
-  ExamsModel _dataLink = null;
   bool _bottomMenuExpanded = false;
 
   ExamsPage({
@@ -93,7 +84,6 @@ class ExamsPageState extends State<ExamsPage> {
   }
 
   Widget _buildList(AsyncSnapshot<ExamsModel> snapshot) {
-    widget._dataLink = snapshot.data;
     var listItems = snapshot.data.examsDataNavigator.getExamResults();
     return OrientationBuilder(
       builder: (context, orientation) {
