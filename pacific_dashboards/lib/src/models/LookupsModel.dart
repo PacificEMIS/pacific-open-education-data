@@ -7,6 +7,9 @@ class LookupsModel {
   static const String LOOKUPS_KEY_AUTHORITY = "authorities";
   static const String LOOKUPS_KEY_NO_KEY = "";
 
+  static const String LOOKUPS_KEY = "C";
+  static const String LOOKUPS_VALUE = "N";
+
   Map<String, dynamic> _lookupsMap;
 
   LookupsModel.fromJson(Map parsedJson) {
@@ -32,8 +35,8 @@ class LookupsModel {
       }
       List dList = _lookupsMap[type];
       for(var val in dList) {
-        if (val["C"] == key) {
-          return val["N"];
+        if (val[LOOKUPS_KEY] == key) {
+          return val[LOOKUPS_VALUE];
         }
       };
       return key;
