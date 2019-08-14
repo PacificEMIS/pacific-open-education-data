@@ -33,8 +33,8 @@ class LookupsModel {
       if (!_lookupsMap.containsKey(type)){
         return key;
       }
-      List dList = _lookupsMap[type];
-      for(var val in dList) {
+      List dataList = _lookupsMap[type];
+      for(var val in dataList) {
         if (val[LOOKUPS_KEY] == key) {
           return val[LOOKUPS_VALUE];
         }
