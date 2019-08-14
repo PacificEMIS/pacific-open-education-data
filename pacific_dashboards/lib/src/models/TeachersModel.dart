@@ -1,8 +1,10 @@
 import "package:collection/collection.dart";
+import 'LookupsModel.dart';
+import 'ModelWithLookups.dart';
 import 'TeacherModel.dart';
 import '../resources/Filter.dart';
 
-class TeachersModel {
+class TeachersModel extends ModelWithLookups {
   Map<String, Filter> _filters;
   List<TeacherModel> _teachers;
 
@@ -33,11 +35,13 @@ class TeachersModel {
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.iSCEDSubClass))
         .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
 
-    return groupBy(filteredList, (obj) => obj.districtCode);
+    return groupBy(
+        filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Map<dynamic, List<TeacherModel>> getSortedByState() {
-    return groupBy(_teachers, (obj) => obj.districtCode);
+    return groupBy(
+        _teachers, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Map<dynamic, List<TeacherModel>> getSortedWithFiltersByAuthority() {
@@ -48,11 +52,13 @@ class TeachersModel {
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.iSCEDSubClass))
         .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
 
-    return groupBy(filteredList, (obj) => obj.authorityCode);
+    return groupBy(filteredList,
+        (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
   Map<dynamic, List<TeacherModel>> getSortedByAuthority() {
-    return groupBy(_teachers, (obj) => obj.authorityCode);
+    return groupBy(
+        _teachers, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
   Map<dynamic, List<TeacherModel>> getSortedWithFiltersByGovt() {
@@ -63,11 +69,13 @@ class TeachersModel {
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.iSCEDSubClass))
         .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
 
-    return groupBy(filteredList, (obj) => obj.authorityGovt);
+    return groupBy(
+        filteredList, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   Map<dynamic, List<TeacherModel>> getSortedByGovt() {
-    return groupBy(_teachers, (obj) => obj.authorityGovt);
+    return groupBy(
+        _teachers, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   Map<dynamic, List<TeacherModel>> getSortedWithFilteringBySchoolType() {
@@ -108,15 +116,44 @@ class TeachersModel {
 
   void _createFilters() {
     _filters = {
-      'authority':
-      Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].authorityCode).toSet(), 'Authotity filter'),
-      'state': Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].districtCode).toSet(), 'State filter'),
-      'schoolType': Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(),
-          'Teachers by School type, State and Gender'),
-      'govt': Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].authorityGovt).toSet(), 'Goverment filter'),
-      'year':
-      Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].surveyYear.toString()).reversed.toSet(), 'Years filter'),
-      'schoolLevel': Filter(List<String>.generate(_teachers.length, (i) => _teachers[i].iSCEDSubClass).toSet(), 'Schools Levels filter'),
+      'authority': Filter(
+          List<String>.generate(
+              _teachers.length, (i) => _teachers[i].authorityCode).toSet(),
+          'Authotity filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_AUTHORITY),
+      'state': Filter(
+          List<String>.generate(
+              _teachers.length, (i) => _teachers[i].districtCode).toSet(),
+          'State filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_STATE),
+      'schoolType': Filter(
+          List<String>.generate(
+              _teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(),
+          'Teachers by School type, State and Gender',
+          this,
+          LookupsModel.LOOKUPS_KEY_NO_KEY),
+      'govt': Filter(
+          List<String>.generate(
+              _teachers.length, (i) => _teachers[i].authorityGovt).toSet(),
+          'Goverment filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_GOVT),
+      'year': Filter(
+          List<String>.generate(
+                  _teachers.length, (i) => _teachers[i].surveyYear.toString())
+              .reversed
+              .toSet(),
+          'Years filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_NO_KEY),
+      'schoolLevel': Filter(
+          List<String>.generate(
+              _teachers.length, (i) => _teachers[i].iSCEDSubClass).toSet(),
+          'Schools Levels filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_NO_KEY),
     };
     yearFilter.selectMax();
   }

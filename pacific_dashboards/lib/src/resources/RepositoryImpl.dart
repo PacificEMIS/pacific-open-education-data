@@ -2,6 +2,7 @@ import 'dart:async';
 import '../models/ExamsModel.dart';
 import '../models/TeachersModel.dart';
 import '../models/SchoolsModel.dart';
+import '../models/LookupsModel.dart';
 import 'Provider.dart';
 import 'Repository.dart';
 import '../resources/FileProvider.dart';
@@ -17,43 +18,63 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<TeachersModel> fetchAllTeachers() async {
+    TeachersModel result;
     try {
-      TeachersModel result = await _fileProvider.fetchValidTeachersModel();
+      result = await _fileProvider.fetchValidTeachersModel();
       if (result == null) {
         result = await _backendProvider.fetchTeachersModel();
         await _fileProvider.saveTeachersModel(result);
       }
-      return result;
     } catch (e) {
-      return await _fileProvider.fetchTeachersModel();
+      result = await _fileProvider.fetchTeachersModel();
     }
+    result.lookupsModel = await fetchAllLookups();
+    return result;
   }
 
   @override
   Future<SchoolsModel> fetchAllSchools() async {
+    SchoolsModel result;
     try {
-      SchoolsModel result = await _fileProvider.fetchValidSchoolsModel();
+      result = await _fileProvider.fetchValidSchoolsModel();
       if (result == null) {
         result = await _backendProvider.fetchSchoolsModel();
         await _fileProvider.saveSchoolsModel(result);
       }
-      return result;
     } catch (e) {
-      return await _fileProvider.fetchSchoolsModel();
+      result = await _fileProvider.fetchSchoolsModel();
     }
+    result.lookupsModel = await fetchAllLookups();
+    return result;
   }
 
   @override
   Future<ExamsModel> fetchAllExams() async {
+    ExamsModel result;
     try {
-      ExamsModel result = await _fileProvider.fetchValidExamsModel();
+      result = await _fileProvider.fetchValidExamsModel();
       if (result == null) {
         result = await _backendProvider.fetchExamsModel();
         await _fileProvider.saveExamsModel(result);
       }
+    } catch (e) {
+      result = await _fileProvider.fetchExamsModel();
+    }
+    result.lookupsModel = await fetchAllLookups();
+    return result;
+  }
+
+  @override
+  Future<LookupsModel> fetchAllLookups() async {
+    try {
+      LookupsModel result = await _fileProvider.fetchValidLookupsModel();
+      if (result == null) {
+        result = await _backendProvider.fetchLookupsModel();
+        await _fileProvider.saveLookupsModel(result);
+      }
       return result;
     } catch (e) {
-      return await _fileProvider.fetchExamsModel();
+      return await _fileProvider.fetchLookupsModel();
     }
   }
 }

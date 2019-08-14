@@ -249,7 +249,7 @@ class SchoolsPageState extends State<SchoolsPage> {
           widgets.add(InfoTable(
               _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
                   statesKeys[i], true),
-              statesKeys[i],
+              data.lookupsModel.getFullState(statesKeys[i]),
               "School \nType"));
         }
 

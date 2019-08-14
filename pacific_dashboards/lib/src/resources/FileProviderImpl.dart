@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import '../models/LookupsModel.dart';
 import '../models/ExamsModel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,7 @@ class FileProviderImpl extends FileProvider {
   static const _KEY_SCHOOLS = "schools";
   static const _KEY_TEACHERS = "teachers";
   static const _KEY_EXAMS = "exams";
+  static const _KEY_LOOKUPS = "lookups";
 
   SharedPreferences _sharedPreferences;
 
@@ -86,6 +88,11 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
+  Future<LookupsModel> fetchLookupsModel() async {
+    return LookupsModel.fromJson(jsonDecode(await _readFile(_KEY_LOOKUPS)));
+  }
+
+  @override
   Future<SchoolsModel> fetchValidSchoolsModel() async {
     try {
       if (!await _isTimePassed(_KEY_SCHOOLS)) {
@@ -122,6 +129,18 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
+  Future<LookupsModel> fetchValidLookupsModel() async {
+    try {
+      if (!await _isTimePassed(_KEY_LOOKUPS)) {
+        return fetchLookupsModel();
+      }
+      return null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  @override
   Future<bool> saveSchoolsModel(SchoolsModel model) async {
     await _writeFile(_KEY_SCHOOLS, json.encode(model.toJson()));
     return true;
@@ -136,6 +155,12 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<bool> saveExamsModel(ExamsModel model) async {
     await _writeFile(_KEY_EXAMS, json.encode(model.toJson()));
+    return true;
+  }
+
+  @override
+  Future<bool> saveLookupsModel(LookupsModel model) async {
+    await _writeFile(_KEY_LOOKUPS, jsonEncode(model.toJson()));
     return true;
   }
 }

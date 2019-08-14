@@ -1,10 +1,11 @@
 import 'dart:core';
-
 import "package:collection/collection.dart";
+import 'LookupsModel.dart';
+import 'ModelWithLookups.dart';
 import 'SchoolModel.dart';
 import '../resources/Filter.dart';
 
-class SchoolsModel {
+class SchoolsModel extends ModelWithLookups {
   Map<String, Filter> _filters;
   List<SchoolModel> _schools;
 
@@ -37,11 +38,11 @@ class SchoolsModel {
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
-    return groupBy(filteredList, (obj) => obj.districtCode);
+    return groupBy(filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedByState() {
-    return groupBy(_schools, (obj) => obj.districtCode);
+    return groupBy(_schools, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFiltersByAuthority() {
@@ -53,11 +54,11 @@ class SchoolsModel {
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
-    return groupBy(filteredList, (obj) => obj.authorityCode);
+    return groupBy(filteredList, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedByAuthority() {
-    return groupBy(_schools, (obj) => obj.authorityCode);
+    return groupBy(_schools, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFiltersByGovt() {
@@ -69,11 +70,11 @@ class SchoolsModel {
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
-    return groupBy(filteredList, (obj) => obj.authorityGovt);
+    return groupBy(filteredList, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedByGovt() {
-    return groupBy(_schools, (obj) => obj.authorityGovt);
+    return groupBy(_schools, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   List<dynamic> getDistrictCodeKeysList() {
@@ -115,7 +116,8 @@ class SchoolsModel {
   }
 
   Map<dynamic, List<SchoolModel>> getSortedByAge(int type) {
-    var filteredList = _schools.where((i) => ageFilter.isEnabledInFilter(i.ageGroup) && i.age > 0);
+    var filteredList = _schools
+        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup) && i.age > 0);
 
     switch (type) {
       case 0:
@@ -124,14 +126,37 @@ class SchoolsModel {
         filteredList = filteredList.where((i) => ["GK"].contains(i.classLevel));
         break;
       case 2:
-        filteredList = filteredList.where((i) => ["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"].contains(i.classLevel));
+        filteredList = filteredList.where((i) => [
+              "G1",
+              "G2",
+              "G3",
+              "G4",
+              "G5",
+              "G6",
+              "G7",
+              "G8"
+            ].contains(i.classLevel));
         break;
       case 3:
-        filteredList = filteredList.where((i) => ["G9", "G10", "G11", "G12"].contains(i.classLevel));
+        filteredList = filteredList
+            .where((i) => ["G9", "G10", "G11", "G12"].contains(i.classLevel));
         break;
       case 4:
-        filteredList = filteredList
-            .where((i) => !["GK", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9", "G10", "G11", "G12"].contains(i.classLevel));
+        filteredList = filteredList.where((i) => ![
+              "GK",
+              "G1",
+              "G2",
+              "G3",
+              "G4",
+              "G5",
+              "G6",
+              "G7",
+              "G8",
+              "G9",
+              "G10",
+              "G11",
+              "G12"
+            ].contains(i.classLevel));
         break;
       default:
         break;
@@ -141,19 +166,54 @@ class SchoolsModel {
   }
 
   void _createFilters() {
-    List<SchoolModel> _schoolsValidAge = _schools.where((i) => i.age > 0).toList();
+    List<SchoolModel> _schoolsValidAge =
+        _schools.where((i) => i.age > 0).toList();
     _filters = {
-      'authority':
-          Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityCode).toSet(), 'Authotity filter'),
-      'state': Filter(List<String>.generate(_schools.length, (i) => _schools[i].districtCode).toSet(), 'State filter'),
-      'schoolType': Filter(List<String>.generate(_schools.length, (i) => _schools[i].schoolTypeCode).toSet(),
-          'Schools Enrollment by School type, \nState and Gender'),
-      'age':
-          Filter(List<String>.generate(_schoolsValidAge.length, (i) => _schoolsValidAge[i].ageGroup).toSet(), 'Schools Enrollment by Age'),
-      'govt': Filter(List<String>.generate(_schools.length, (i) => _schools[i].authorityGovt).toSet(), 'Goverment filter'),
-      'year':
-          Filter(List<String>.generate(_schools.length, (i) => _schools[i].surveyYear.toString()).reversed.toSet(), 'Years filter'),
-      'schoolLevel': Filter(List<String>.generate(_schools.length, (i) => _schools[i].classLevel).toSet(), 'Schools Levels filter'),
+      'authority': Filter(
+          List<String>.generate(
+              _schools.length, (i) => _schools[i].authorityCode).toSet(),
+          'Authotity filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_AUTHORITY),
+      'state': Filter(
+          List<String>.generate(
+              _schools.length, (i) => _schools[i].districtCode).toSet(),
+          'State filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_STATE),
+      'schoolType': Filter(
+          List<String>.generate(
+              _schools.length, (i) => _schools[i].schoolTypeCode).toSet(),
+          'Schools Enrollment by School type, \nState and Gender',
+          this,
+          LookupsModel.LOOKUPS_KEY_GOVT),
+      'age': Filter(
+          List<String>.generate(
+                  _schoolsValidAge.length, (i) => _schoolsValidAge[i].ageGroup)
+              .toSet(),
+          'Schools Enrollment by Age',
+          this,
+          LookupsModel.LOOKUPS_KEY_NO_KEY),
+      'govt': Filter(
+          List<String>.generate(
+              _schools.length, (i) => _schools[i].authorityGovt).toSet(),
+          'Goverment filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_NO_KEY),
+      'year': Filter(
+          List<String>.generate(
+                  _schools.length, (i) => _schools[i].surveyYear.toString())
+              .reversed
+              .toSet(),
+          'Years filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_NO_KEY),
+      'schoolLevel': Filter(
+          List<String>.generate(_schools.length, (i) => _schools[i].classLevel)
+              .toSet(),
+          'Schools Levels filter',
+          this,
+          LookupsModel.LOOKUPS_KEY_NO_KEY),
     };
     yearFilter.selectMax();
   }

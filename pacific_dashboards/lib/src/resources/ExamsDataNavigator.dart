@@ -1,5 +1,6 @@
 import 'dart:core';
 import "package:collection/collection.dart";
+import '../models/LookupsModel.dart';
 import '../resources/Filter.dart';
 import '../models/ExamModel.dart';
 import '../models/ExamsModel.dart';
@@ -17,12 +18,13 @@ class ExamsDataNavigator {
     "By Standards and State"
   ];
   List<String> _examStandards;
-
   List<ExamModel> _exams;
+  ExamsModel _examsModel;
 
-  ExamsDataNavigator(List<ExamModel> exams) {
+  ExamsDataNavigator(List<ExamModel> exams, ExamsModel examsModel) {
     _exams = exams;
     _examPages = _getExamPageNames();
+    _examsModel = examsModel;
     _changeExamPage();
   }
 
@@ -142,7 +144,8 @@ class ExamsDataNavigator {
       var groupedByBenchmarkData = new Map<String, ExamModel>();
       for (var item in v) {
         if (groupedByBenchmarkData.containsKey(kNoTitleKey)) {
-          groupedByBenchmarkData[kNoTitleKey] = ExamModel.sum(groupedByBenchmarkData[kNoTitleKey], item);
+          groupedByBenchmarkData[kNoTitleKey] =
+              ExamModel.sum(groupedByBenchmarkData[kNoTitleKey], item);
         } else {
           groupedByBenchmarkData[kNoTitleKey] = item;
         }
@@ -178,11 +181,13 @@ class ExamsDataNavigator {
     groupedData.forEach((k, v) {
       var groupedByStateData = new Map<String, ExamModel>();
       for (var item in v) {
-        if (groupedByStateData.containsKey(item.districtCode)) {
-          groupedByStateData[item.districtCode.toString()] =
-              ExamModel.sum(groupedByStateData[item.districtCode.toString()], item);
+        var fullName =
+            _examsModel.lookupsModel.getFullState(item.districtCode.toString());
+        if (groupedByStateData.containsKey(fullName)) {
+          groupedByStateData[fullName] =
+              ExamModel.sum(groupedByStateData[fullName], item);
         } else {
-          groupedByStateData[item.districtCode.toString()] = item;
+          groupedByStateData[fullName] = item;
         }
       }
       results[k] = groupedByStateData;
