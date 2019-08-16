@@ -43,17 +43,17 @@ class AppLocalizations {
   static String get filterByStandart => Intl.message("Filter by standart", name: "filterByStandart");
   // Schools
   static String get schoolsEnrollment => Intl.message("Schools Enrollment", name: "schoolsEnrollment");
-  static String get dislplayAllStates => Intl.message("Display All States", name: "displayAllStates");
-  static String get displayAllAutority => Intl.message("Display All Authority", name: "schoolsEnrollment");
-  static String get displayAllGovermant => Intl.message("Display all Govermant filters", name: "schoolsEnrollment");
-  static String get displayAllLevelFilters => Intl.message("Display all Level filters", name: "schoolsEnrollment");
+  static String get dislplayAllStates => Intl.message("Display All States", name: "dislplayAllStates");
+  static String get displayAllAutority => Intl.message("Display All Authority", name: "displayAllAutority");
+  static String get displayAllGovermant => Intl.message("Display all Govermant filters", name: "displayAllGovermant");
+  static String get displayAllLevelFilters => Intl.message("Display all Level filters", name: "displayAllLevelFilters");
   static String get schoolsEnrollmentByState => Intl.message("Schools Enrollment by State", name: "schoolsEnrollmentByState");
   static String get schoolsEnrollmentByAutority => Intl.message("Schools Enrollment by Authority", name: "schoolsEnrollmentByAutority");
-  static String get schoolsEnrollmentGovtNonGovt => Intl.message("Schools Enrollment Govt / \nNon-govt", name: "schoolsEnrollmentGovt");
+  static String get schoolsEnrollmentGovtNonGovt => Intl.message("Schools Enrollment Govt / \nNon-govt", name: "schoolsEnrollmentGovtNonGovt");
   static String get publicPrivate => Intl.message("Public/Private", name: "publicPrivate");
   static String get state => Intl.message("State", name: "state");
   static String get autority => Intl.message("Autority", name: "autority");
-  static String get earlyChildhood => Intl.message('Early Childhood', name: "earlychildhood");
+  static String get earlyChildhood => Intl.message('Early Childhood', name: "earlyChildhood");
   static String get primary => Intl.message("Primary", name: "primary");
   static String get secondary => Intl.message("Secondary", name: "secondary");
   static String get postsecondary => Intl.message("Post Secondary", name: "postsecondary");
