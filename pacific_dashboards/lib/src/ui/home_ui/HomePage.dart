@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
+import 'package:pacific_dashboards/src/utils/Localizations.dart';
 import "../CategoryGridWidget.dart";
 
 class HomePage extends StatefulWidget {
   final GlobalSettings globalSettings;
-
   @override
   _HomePageState createState() => new _HomePageState();
 
@@ -15,13 +15,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String _kMarshallIslands = "Marshall Islands";
-  final String _kFederatedStateOfMicronesia = "Federated States of Micronesia";
-  final String _kFederatedStateOfMicronesiaWithSplitter =
-      "Federated States \nof Micronesia";
   String _currentCountry;
   Dialog _countrySelectorDialog;
 
+  final String _kMarshallIslands = AppLocalizations.marshallIslands;
+  final String _kFederatedStateOfMicronesia =
+      AppLocalizations.federatedStateOfMicronesia;
+  final String _kFederatedStateOfMicronesiaWithSplitter =
+      AppLocalizations.federatedStateOfMicronesiaSplitted;
+  
   @override
   void initState() {
     super.initState();
@@ -50,9 +52,9 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.center,
             child: Center(
                 child: Text(
-                    (_currentCountry == "Federated States of Micronesia"
-                        ? "Federated States \nof Micronesia"
-                        : "Marshall Islands"),
+                    (_currentCountry == _kFederatedStateOfMicronesia
+                        ? _kFederatedStateOfMicronesiaWithSplitter
+                        : _kMarshallIslands),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontStyle: FontStyle.normal,
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
         _showDialog(context);
       },
       child: Text(
-        "Change country",
+        AppLocalizations.changeCountry,
         style: TextStyle(
             fontSize: 16.0,
             fontStyle: FontStyle.normal,
@@ -99,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.all(Radius.circular(8.0))),
             contentPadding: EdgeInsets.only(top: 10.0, right: 0),
             title: Text(
-              "Choice country",
+              AppLocalizations.choiceCountry,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w700,
@@ -117,6 +119,7 @@ class _HomePageState extends State<HomePage> {
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       setState(() {
+                        String _kFederatedStateOfMicronesia;
                         _onCountryChangeTap(_kFederatedStateOfMicronesia);
                       });
                     },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/utils/Localizations.dart';
 import '../../config/Constants.dart';
 import '../../models/ExamModel.dart';
 import '../../models/ExamsModel.dart';
@@ -150,18 +151,18 @@ class ExamsPageState extends State<ExamsPage> {
     rows += _bottomMenuRow(
         snapshot.data.examsDataNavigator.prevExamPage,
         snapshot.data.examsDataNavigator.nextExamPage,
-        "Exam",
+        AppLocalizations.exam,
         snapshot.data.examsDataNavigator.getExamPageName());
     if (widget._bottomMenuExpanded) {
       rows += _bottomMenuRow(
           snapshot.data.examsDataNavigator.prevExamView,
           snapshot.data.examsDataNavigator.nextExamView,
-          "View",
+          AppLocalizations.view,
           snapshot.data.examsDataNavigator.getExamViewName());
       rows += _bottomMenuRow(
           snapshot.data.examsDataNavigator.prevExamStandard,
           snapshot.data.examsDataNavigator.nextExamStandard,
-          "Filter by standart",
+          AppLocalizations.filterByStandart,
           snapshot.data.examsDataNavigator.getStandardName());
     }
     return [

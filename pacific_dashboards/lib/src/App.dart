@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
 import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'models/ExamsModel.dart';
 import 'ui/exams_ui/ExamsPage.dart';
@@ -8,15 +9,21 @@ import 'ui/home_ui/HomePage.dart';
 import 'ui/InjectorWidget.dart';
 import 'ui/teaches_ui/TeachersPage.dart';
 import 'ui/StackedHorizontalBarChart.dart';
+import 'utils/Localizations.dart';
 
 class App extends StatelessWidget {
-  final _appName = 'Custom Charts';
-
   @override
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
     return MaterialApp(
-      title: _appName,
+      localizationsDelegates: [
+        AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [const Locale('en'), const Locale('ru')],
+      onGenerateTitle: (BuildContext context) =>
+          AppLocalizations.appName,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
@@ -38,8 +45,7 @@ class App extends StatelessWidget {
         "/Exams": (context) => ExamsPage(bloc: injector.getExamsBloc()),
         "/Indicators": (context) => AlertWindowBack(),
         "/School Accreditations": (context) => AlertWindowBack(),
-        "/Schools": (context) =>
-            SchoolsPage(bloc: injector.getSchoolsBloc()),
+        "/Schools": (context) => SchoolsPage(bloc: injector.getSchoolsBloc()),
         "/Teachers": (context) =>
             TeachersPage(bloc: injector.getTeachersBloc()),
       },
@@ -48,17 +54,16 @@ class App extends StatelessWidget {
 }
 
 class AlertWindowBack extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: AlertDialog(
+          title: Text(AppLocalizations.construction),
+          content: Text(AppLocalizations.constructionDescription),
         ),
-        body: Center(
-          child: AlertDialog(
-            title: Text("Construction"),
-            content: Text("This section is under construction"),
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
+}
