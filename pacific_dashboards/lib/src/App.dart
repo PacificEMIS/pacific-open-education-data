@@ -16,12 +16,13 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
     return MaterialApp(
+      locale: Locale('de'),
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      supportedLocales: [const Locale('en'), const Locale('ru')],
+      supportedLocales: [const Locale('en', 'EN'),const Locale('de', 'DE')],
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.appName,
       theme: ThemeData(
@@ -52,7 +53,6 @@ class App extends StatelessWidget {
     );
   }
 }
-
 class AlertWindowBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

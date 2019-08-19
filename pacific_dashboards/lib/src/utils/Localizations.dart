@@ -2,7 +2,7 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
-import "package:pacific_dashboards/l10n/messages_all.dart";
+import 'package:pacific_dashboards/l10n/messages_all.dart';
 
 class AppLocalizations {
   static Future<AppLocalizations> load(Locale locale) {
@@ -19,6 +19,7 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
+// Update arb flutter pub pub run intl_translation:extract_to_arb --output-dir=lib/l10n lib/src/utils/localizations.dart
   // App
   static String get appName => Intl.message("Custom Charts", name: "appName");
   static String get construction => Intl.message("Construction", name: "construction");
@@ -36,7 +37,6 @@ class AppLocalizations {
   static String get schoolaccreditations => Intl.message("School Accreditations", name: "schoolaccreditations");
   static String get indicators => Intl.message("Indicators", name: "indicators");
   static String get budgets => Intl.message("Budgets", name: "budgets");
-
   // Exams
   static String get exam => Intl.message("Exam", name: "exam");
   static String get view => Intl.message("View", name: "view");
@@ -74,7 +74,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(Locale locale) {
-    return ["en", "ru"].contains(locale.languageCode);
+    return ["en", "de"].contains(locale.languageCode);
   }
 
   @override
