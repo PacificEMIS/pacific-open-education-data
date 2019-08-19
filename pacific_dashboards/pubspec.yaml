@@ -19,6 +19,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl:
+  intl_translation: ^0.17.1
+  flutter_cupertino_localizations: ^1.0.1
   cupertino_icons: ^0.1.2
   rxdart: ^0.22.1
   charts_flutter: ^0.6.0
@@ -29,7 +34,7 @@ dependencies:
   appcenter: ^0.2.1
   appcenter_analytics: ^0.2.1
   appcenter_crashes: ^0.2.1
-  flutter_launcher_icons: "^0.7.0"
+  flutter_launcher_icons: ^0.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -47,21 +52,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/logos/Federated States of Micronesia.png
-    - images/logos/Marshall Islands.png
-    - images/splash/Splash.png
-    - images/icons/Budgets.svg
-    - images/icons/Exams.svg
-    - images/icons/Indicators.svg
-    - images/icons/School Accreditations.svg
-    - images/icons/Schools.svg
-    - images/icons/Teachers.svg
-    - fonts/NotoSans-Regular.ttf
+  - images/logos/Federated States of Micronesia.png
+  - images/logos/Marshall Islands.png
+  - images/splash/Splash.png
+  - images/icons/Budgets.svg
+  - images/icons/Exams.svg
+  - images/icons/Indicators.svg
+  - images/icons/School Accreditations.svg
+  - images/icons/Schools.svg
+  - images/icons/Teachers.svg
+  - fonts/NotoSans-Regular.ttf
 
   #  - images/a_dot_ham.jpeg
-    - images/icons/Tune.svg
+  - images/icons/Tune.svg
 
-    
+
 flutter_icons:
   ios: true
   android: true
@@ -81,14 +86,14 @@ flutter_icons:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   fonts:
-   - family: NotoSans
-     fonts:
-       - asset: assets/fonts/NotoSans-Regular.ttf
-    # - family: Trajan Pro
-    #   fonts:
-    #     - asset: fonts/TrajanPro.ttf
-    #     - asset: fonts/TrajanPro_Bold.ttf
-    #       weight: 700
+  - family: NotoSans
+    fonts:
+    - asset: assets/fonts/NotoSans-Regular.ttf
+  # - family: Trajan Pro
+  #   fonts:
+  #     - asset: fonts/TrajanPro.ttf
+  #     - asset: fonts/TrajanPro_Bold.ttf
+  #       weight: 700
   # fonts:
   #   - family: Schyler
   #     fonts:

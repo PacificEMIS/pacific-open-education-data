@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class CategoryGridWidget extends StatelessWidget {
   final List<String> _kCategoryData = <String>[
-    "Schools",
-    "Teachers",
-    "Exams",
-    "School Accreditations",
-    "Indicators",
-    "Budgets"
+    AppLocalizations.schools,
+    AppLocalizations.teachers,
+    AppLocalizations.exams,
+    AppLocalizations.schoolaccreditations,
+    AppLocalizations.indicators,
+    AppLocalizations.budgets
   ];
 
   @override
