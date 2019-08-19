@@ -27,6 +27,7 @@ class StackedHorizontalBarChart extends StatelessWidget {
         color: Colors.white,
         alignment: Alignment.center,
         child: Stack(children: [
+          IgnorePointer(child: 
           charts.BarChart(
             seriesList,
             animate: animate,
@@ -50,6 +51,7 @@ class StackedHorizontalBarChart extends StatelessWidget {
                 stackHorizontalSeparator: 0,
                 groupingType: charts.BarGroupingType.stacked,
                 strokeWidthPx: 1),
+          ),
           ),
           Center(
               widthFactor: 320,
