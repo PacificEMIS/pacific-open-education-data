@@ -27,31 +27,32 @@ class StackedHorizontalBarChart extends StatelessWidget {
         color: Colors.white,
         alignment: Alignment.center,
         child: Stack(children: [
-          IgnorePointer(child: 
-          charts.BarChart(
-            seriesList,
-            animate: animate,
-            barGroupingType: charts.BarGroupingType.stacked,
-            vertical: false,
-            layoutConfig: new charts.LayoutConfig(
-                leftMarginSpec: new charts.MarginSpec.fixedPixel(20),
-                topMarginSpec: new charts.MarginSpec.fixedPixel(2),
-                rightMarginSpec: new charts.MarginSpec.fixedPixel(20),
-                bottomMarginSpec: new charts.MarginSpec.fixedPixel(4)),
-            primaryMeasureAxis: new charts.NumericAxisSpec(
-                showAxisLine: false,
-                renderSpec: new charts.NoneRenderSpec(),
-                tickProviderSpec: new charts.BasicNumericTickProviderSpec(
-                    dataIsInWholeNumbers: true, desiredTickCount: 11),
-                viewport: new charts.NumericExtents(-100.0, 100.0)),
-            domainAxis: new charts.OrdinalAxisSpec(
-                showAxisLine: false,
-                renderSpec: new charts.SmallTickRendererSpec(tickLengthPx: 0)),
-            defaultRenderer: new charts.BarRendererConfig(
-                stackHorizontalSeparator: 0,
-                groupingType: charts.BarGroupingType.stacked,
-                strokeWidthPx: 1),
-          ),
+          IgnorePointer(
+            child: charts.BarChart(
+              seriesList,
+              animate: animate,
+              barGroupingType: charts.BarGroupingType.stacked,
+              vertical: false,
+              layoutConfig: new charts.LayoutConfig(
+                  leftMarginSpec: new charts.MarginSpec.fixedPixel(20),
+                  topMarginSpec: new charts.MarginSpec.fixedPixel(2),
+                  rightMarginSpec: new charts.MarginSpec.fixedPixel(20),
+                  bottomMarginSpec: new charts.MarginSpec.fixedPixel(4)),
+              primaryMeasureAxis: new charts.NumericAxisSpec(
+                  showAxisLine: false,
+                  renderSpec: new charts.NoneRenderSpec(),
+                  tickProviderSpec: new charts.BasicNumericTickProviderSpec(
+                      dataIsInWholeNumbers: true, desiredTickCount: 11),
+                  viewport: new charts.NumericExtents(-100.0, 100.0)),
+              domainAxis: new charts.OrdinalAxisSpec(
+                  showAxisLine: false,
+                  renderSpec:
+                      new charts.SmallTickRendererSpec(tickLengthPx: 0)),
+              defaultRenderer: new charts.BarRendererConfig(
+                  stackHorizontalSeparator: 0,
+                  groupingType: charts.BarGroupingType.stacked,
+                  strokeWidthPx: 1),
+            ),
           ),
           Center(
               widthFactor: 320,
@@ -69,18 +70,19 @@ class StackedHorizontalBarChart extends StatelessWidget {
       if (text != "0") {
         titlesList.add(
           Container(
-            width: 20,
+            width: 25,
             child: new Text(
               text != "0" ? text : "",
               style: new TextStyle(
                   fontSize: 12.0, color: AppColors.kExamsTableTextGray),
               textAlign: TextAlign.center,
+              maxLines: 1,
             ),
           ),
         );
       } else {
         titlesList.add(Container(
-            width: 20,
+            width: 25,
             child: Center(
                 child: Container(
               color: AppColors.kExamsTableTextGray,
