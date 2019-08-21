@@ -32,12 +32,26 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: new BoxDecoration(color: Colors.red),
-        child:
-            Image.asset("images/splash/splash.png", fit: BoxFit.fitHeight),
-      ),
-      backgroundColor: AppColors.kAppBarBackground,
-    );
+        body: Stack(children: <Widget>[
+          Container(
+            decoration: new BoxDecoration(color: Colors.red),
+            child:
+                Image.asset("images/splash/splash.png", fit: BoxFit.fitHeight),
+          ),
+          Center(
+            child: Text(
+              "\nPACIFIC OPEN\n EDUCATION DATA",
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontFamily: "NotoSans",
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ]),
+        backgroundColor: AppColors.kAppBarBackground);
   }
 }
