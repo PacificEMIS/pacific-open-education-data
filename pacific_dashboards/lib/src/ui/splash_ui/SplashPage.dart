@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/config/Constants.dart';
 import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
 
 class SplashPage extends StatefulWidget {
@@ -31,12 +32,12 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage("images/splash/Splash.png"), fit: BoxFit.cover),
+      body: Container(
+        decoration: new BoxDecoration(color: Colors.red),
+        child:
+            Image.asset("images/splash/splash.png", fit: BoxFit.fitHeight),
       ),
-    
-    ));
+      backgroundColor: AppColors.kAppBarBackground,
+    );
   }
 }
