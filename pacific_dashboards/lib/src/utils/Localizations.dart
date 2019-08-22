@@ -67,7 +67,9 @@ class AppLocalizations {
   static String get displayAllLevel => Intl.message('Display all level filters', name: "displayAllLevel");
   static String get teachersByAutority => Intl.message("Teachers by Authority", name: "teachersByAutority");
   static String get teachersByState => Intl.message("Teachers by State", name: "teachersByState");
+    static String get splash => Intl.message("\nPACIFIC OPEN\n EDUCATION DATA", name: "splash");
 }
+
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();

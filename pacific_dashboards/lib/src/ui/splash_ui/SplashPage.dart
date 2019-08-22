@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/config/Constants.dart';
 import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
+import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class SplashPage extends StatefulWidget {
   final GlobalSettings globalSettings;
@@ -17,7 +18,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   startTimer() async {
-    Timer(Duration(seconds: 5), _navigateToHome);
+    Timer(Duration(seconds: 1), _navigateToHome);
   }
 
   void _navigateToHome() {
@@ -32,26 +33,33 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: <Widget>[
-          Container(
-            decoration: new BoxDecoration(color: Colors.red),
-            child:
-                Image.asset("images/splash/splash.png", fit: BoxFit.fitHeight),
-          ),
-          Center(
-            child: Text(
-              "\nPACIFIC OPEN\n EDUCATION DATA",
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: TextStyle(
-                fontFamily: "NotoSans",
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        body: Center(
+          child: Stack(children: <Widget>[
+            Container(
+              decoration: new BoxDecoration(color: AppColors.kAppBarBackground),
+              child: Image.asset(
+                "images/splash/splash.png",
+                fit: BoxFit.cover,
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
               ),
             ),
-          )
-        ]),
+            Center(
+              child: Text(
+                AppLocalizations.splash,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                style: TextStyle(
+                  fontFamily: "NotoSans",
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ]),
+        ),
         backgroundColor: AppColors.kAppBarBackground);
   }
 }
