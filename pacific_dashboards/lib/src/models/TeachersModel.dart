@@ -1,4 +1,5 @@
 import "package:collection/collection.dart";
+import '../utils/Localizations.dart';
 import 'LookupsModel.dart';
 import 'ModelWithLookups.dart';
 import 'TeacherModel.dart';
@@ -119,13 +120,13 @@ class TeachersModel extends ModelWithLookups {
       'authority': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].authorityCode).toSet(),
-          'Authotity filter',
+          AppLocalizations.filterAuthority,
           this,
           LookupsModel.LOOKUPS_KEY_AUTHORITY),
       'state': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].districtCode).toSet(),
-          'State filter',
+          AppLocalizations.filterState,
           this,
           LookupsModel.LOOKUPS_KEY_STATE),
       'schoolType': Filter(
@@ -137,7 +138,7 @@ class TeachersModel extends ModelWithLookups {
       'govt': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].authorityGovt).toSet(),
-          'Goverment filter',
+          AppLocalizations.filterGovernment,
           this,
           LookupsModel.LOOKUPS_KEY_GOVT),
       'year': Filter(
@@ -145,13 +146,13 @@ class TeachersModel extends ModelWithLookups {
                   _teachers.length, (i) => _teachers[i].surveyYear.toString())
               .reversed
               .toSet(),
-          'Years filter',
+          AppLocalizations.filterYear,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
       'schoolLevel': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].iSCEDSubClass).toSet(),
-          'Schools Levels filter',
+          AppLocalizations.filterClassLevel,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
     };
