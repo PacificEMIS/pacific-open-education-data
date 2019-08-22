@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.all(Radius.circular(8.0))),
             contentPadding: EdgeInsets.only(top: 10.0, right: 0),
             title: Text(
-              AppLocalizations.choiceCountry,
+              AppLocalizations.changeCountry,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w700,

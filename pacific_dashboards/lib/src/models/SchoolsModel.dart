@@ -1,5 +1,6 @@
 import 'dart:core';
 import "package:collection/collection.dart";
+import '../utils/Localizations.dart';
 import 'LookupsModel.dart';
 import 'ModelWithLookups.dart';
 import 'SchoolModel.dart';
@@ -172,13 +173,13 @@ class SchoolsModel extends ModelWithLookups {
       'authority': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].authorityCode).toSet(),
-          'Authotity filter',
+          AppLocalizations.filterAuthority,
           this,
           LookupsModel.LOOKUPS_KEY_AUTHORITY),
       'state': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].districtCode).toSet(),
-          'State filter',
+          AppLocalizations.filterState,
           this,
           LookupsModel.LOOKUPS_KEY_STATE),
       'schoolType': Filter(
@@ -197,7 +198,7 @@ class SchoolsModel extends ModelWithLookups {
       'govt': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].authorityGovt).toSet(),
-          'Goverment filter',
+          AppLocalizations.filterGovernment,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
       'year': Filter(
@@ -205,13 +206,13 @@ class SchoolsModel extends ModelWithLookups {
                   _schools.length, (i) => _schools[i].surveyYear.toString())
               .reversed
               .toSet(),
-          'Years filter',
+          AppLocalizations.filterYear,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
       'schoolLevel': Filter(
           List<String>.generate(_schools.length, (i) => _schools[i].classLevel)
               .toSet(),
-          'Schools Levels filter',
+          AppLocalizations.filterClassLevel,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
     };

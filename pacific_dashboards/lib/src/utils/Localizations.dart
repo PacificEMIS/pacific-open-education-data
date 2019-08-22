@@ -29,7 +29,6 @@ class AppLocalizations {
   static String get federatedStateOfMicronesia => Intl.message("Federated States of Micronesia",name: "federatedStateOfMicronesia");
   static String get federatedStateOfMicronesiaSplitted => Intl.message("Federated States \nof Micronesia",  name: "federatedStateOfMicronesiaSplitted");
   static String get changeCountry => Intl.message("Change country", name: "changeCountry");
-  static String get choiceCountry => Intl.message("Choice country", name: "choiceCountry");
 
   static String get schools => Intl.message("Schools", name: "schools");
   static String get teachers => Intl.message("Teachers", name: "teachers");
@@ -52,7 +51,7 @@ class AppLocalizations {
   static String get schoolsEnrollmentGovtNonGovt => Intl.message("Schools Enrollment Govt / \nNon-govt", name: "schoolsEnrollmentGovtNonGovt");
   static String get publicPrivate => Intl.message("Public/Private", name: "publicPrivate");
   static String get state => Intl.message("State", name: "state");
-  static String get autority => Intl.message("Autority", name: "autority");
+  static String get autority => Intl.message("Authority", name: "autority");
   static String get earlyChildhood => Intl.message('Early Childhood', name: "earlyChildhood");
   static String get primary => Intl.message("Primary", name: "primary");
   static String get secondary => Intl.message("Secondary", name: "secondary");
@@ -62,8 +61,14 @@ class AppLocalizations {
   static String get schoolsEnrollmentByAgeEducationLevel => Intl.message("Schools Enrollment by Age, Education \nLevel and Gender", name: "schoolsEnrollmentByAgeEducationLevel");
   static String get schoolsEnrollmentBySchoolTypeStateAndGender => Intl.message("Schools Enrollment by School type, \nState and Gender", name: "schoolsEnrollmentBySchoolTypeStateAndGender");
   static String get schoolType => Intl.message("School \nType", name: "schoolType");
+  //Filter
+  static String get filterYear => Intl.message("Filter by year", name: "filterByYear");
+  static String get filterState => Intl.message("Filter by state", name: "filterByState");
+  static String get filterAuthority => Intl.message("Filter by authority", name: "filterByAuthority");
+  static String get filterGovernment => Intl.message("Filter by government", name: "filterByGovernment");
+  static String get filterClassLevel => Intl.message("Filter by class level", name: "filterByClassLevel");
   //Teachers
-  static String get displayAllGovermantFilters => Intl.message('Display all Govermant filters', name: "displayAllGovermantFilters");
+  static String get displayAllGovernmentFilters => Intl.message('Display all Government filters', name: "displayAllGovernmentFilters");
   static String get displayAllLevel => Intl.message('Display all level filters', name: "displayAllLevel");
   static String get teachersByAutority => Intl.message("Teachers by Authority", name: "teachersByAutority");
   static String get teachersByState => Intl.message("Teachers by State", name: "teachersByState");

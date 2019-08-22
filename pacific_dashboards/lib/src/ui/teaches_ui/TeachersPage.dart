@@ -115,7 +115,7 @@ class TeachersPageState extends State<TeachersPage> {
           defaultSelectedKey: AppLocalizations.displayAllAutority));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.govtFilter,
-          defaultSelectedKey: AppLocalizations.displayAllGovermantFilters));
+          defaultSelectedKey: AppLocalizations.displayAllGovernmentFilters));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.schoolLevelFilter,
           defaultSelectedKey: AppLocalizations.displayAllLevel));
