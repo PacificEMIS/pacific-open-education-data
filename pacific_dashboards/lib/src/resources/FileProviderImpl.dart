@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
 import '../models/LookupsModel.dart';
 import '../models/ExamsModel.dart';
 import 'package:path_provider/path_provider.dart';
@@ -40,10 +42,15 @@ class FileProviderImpl extends FileProvider {
     }
   }
 
-  Future<File> _writeFile(String key, String str) async {
-    final file = await _createFile(key);
-    _saveTime(key);
-    return file.writeAsString(str);
+  Future<File> _writeFile(String key, dynamic model) async {
+    try {
+      final file = await _createFile(key);
+      _saveTime(key);
+      return file.writeAsString(jsonEncode(model.toJson()));
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
+      return null;
+    }
   }
 
   Future<bool> _saveTime(String key) async {
@@ -99,7 +106,8 @@ class FileProviderImpl extends FileProvider {
         return fetchSchoolsModel();
       }
       return null;
-    } catch(e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -111,7 +119,8 @@ class FileProviderImpl extends FileProvider {
         return fetchTeachersModel();
       }
       return null;
-    } catch(e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -123,7 +132,8 @@ class FileProviderImpl extends FileProvider {
         return fetchExamsModel();
       }
       return null;
-    } catch(e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -135,32 +145,29 @@ class FileProviderImpl extends FileProvider {
         return fetchLookupsModel();
       }
       return null;
-    } catch(e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
 
   @override
   Future<bool> saveSchoolsModel(SchoolsModel model) async {
-    await _writeFile(_KEY_SCHOOLS, json.encode(model.toJson()));
-    return true;
+    return await _writeFile(_KEY_SCHOOLS, model) != null;
   }
 
   @override
   Future<bool> saveTeachersModel(TeachersModel model) async {
-    await _writeFile(_KEY_TEACHERS, json.encode(model.toJson()));
-    return true;
+    return await _writeFile(_KEY_TEACHERS, model) != null;
   }
 
   @override
   Future<bool> saveExamsModel(ExamsModel model) async {
-    await _writeFile(_KEY_EXAMS, json.encode(model.toJson()));
-    return true;
+    return await _writeFile(_KEY_EXAMS, model) != null;
   }
 
   @override
   Future<bool> saveLookupsModel(LookupsModel model) async {
-    await _writeFile(_KEY_LOOKUPS, jsonEncode(model.toJson()));
-    return true;
+    return await _writeFile(_KEY_LOOKUPS, model) != null;
   }
 }

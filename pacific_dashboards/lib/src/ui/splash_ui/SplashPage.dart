@@ -38,7 +38,7 @@ class _SplashPageState extends State<SplashPage> {
             Container(
               decoration: new BoxDecoration(color: AppColors.kAppBarBackground),
               child: Image.asset(
-                "images/splash/splash.png",
+                "images/splash/Splash.png",
                 fit: BoxFit.cover,
                 height: double.infinity,
                 width: double.infinity,

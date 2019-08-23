@@ -54,7 +54,7 @@ flutter:
   assets:
   - images/logos/Federated States of Micronesia.png
   - images/logos/Marshall Islands.png
-  - images/splash/splash.png
+  - images/splash/Splash.png
   - images/icons/Budgets.svg
   - images/icons/Exams.svg
   - images/icons/Indicators.svg
