@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
 import '../models/LookupsModel.dart';
 import '../models/ExamsModel.dart';
 import 'package:path_provider/path_provider.dart';
@@ -45,7 +47,8 @@ class FileProviderImpl extends FileProvider {
       final file = await _createFile(key);
       _saveTime(key);
       return file.writeAsString(jsonEncode(model.toJson()));
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -103,7 +106,8 @@ class FileProviderImpl extends FileProvider {
         return fetchSchoolsModel();
       }
       return null;
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -115,7 +119,8 @@ class FileProviderImpl extends FileProvider {
         return fetchTeachersModel();
       }
       return null;
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -127,7 +132,8 @@ class FileProviderImpl extends FileProvider {
         return fetchExamsModel();
       }
       return null;
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -139,7 +145,8 @@ class FileProviderImpl extends FileProvider {
         return fetchLookupsModel();
       }
       return null;
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
