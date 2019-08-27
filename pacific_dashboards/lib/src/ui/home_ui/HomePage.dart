@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       setState(() {
-                        String _kFederatedStateOfMicronesia;
                         _onCountryChangeTap(_kFederatedStateOfMicronesia);
                       });
                     },
