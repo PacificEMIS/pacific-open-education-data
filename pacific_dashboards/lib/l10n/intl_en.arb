@@ -1,0 +1,238 @@
+{
+  "@@last_modified": "2019-09-02T12:15:11.550277",
+  "appName": "Custom Charts",
+  "@appName": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "construction": "Construction",
+  "@construction": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "constructionDescription": "This section is under construction",
+  "@constructionDescription": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "marshallIslands": "Marshall Islands",
+  "@marshallIslands": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "federatedStateOfMicronesia": "Federated States of Micronesia",
+  "@federatedStateOfMicronesia": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "federatedStateOfMicronesiaSplitted": "Federated States \nof Micronesia",
+  "@federatedStateOfMicronesiaSplitted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "changeCountry": "Change country",
+  "@changeCountry": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schools": "Schools",
+  "@schools": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "teachers": "Teachers",
+  "@teachers": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exams": "Exams",
+  "@exams": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolAccreditations": "School Accreditations",
+  "@schoolAccreditations": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "indicators": "Indicators",
+  "@indicators": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "budgets": "Budgets",
+  "@budgets": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exam": "Exam",
+  "@exam": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "view": "View",
+  "@view": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByStandart": "Filter by standart",
+  "@filterByStandart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolsEnrollment": "Schools Enrollment",
+  "@schoolsEnrollment": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "displayAllStates": "Display All States",
+  "@displayAllStates": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "displayAllAuthority": "Display All Authority",
+  "@displayAllAuthority": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "displayAllGovernment": "Display all Govermant filters",
+  "@displayAllGovernment": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "displayAllLevelFilters": "Display all Level filters",
+  "@displayAllLevelFilters": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolsEnrollmentByState": "Schools Enrollment by State",
+  "@schoolsEnrollmentByState": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolsEnrollmentByAuthority": "Schools Enrollment by Authority",
+  "@schoolsEnrollmentByAuthority": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolsEnrollmentGovtNonGovt": "Schools Enrollment Govt / \nNon-govt",
+  "@schoolsEnrollmentGovtNonGovt": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPrivate": "Public/Private",
+  "@publicPrivate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "state": "State",
+  "@state": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "authority": "Authority",
+  "@authority": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "earlyChildhood": "Early Childhood",
+  "@earlyChildhood": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "primary": "Primary",
+  "@primary": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "secondary": "Secondary",
+  "@secondary": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "postSecondary": "Post Secondary",
+  "@postSecondary": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "total": "Total",
+  "@total": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "age": "Age",
+  "@age": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolsEnrollmentByAgeEducationLevel": "Schools Enrollment by Age, Education \nLevel and Gender",
+  "@schoolsEnrollmentByAgeEducationLevel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolsEnrollmentBySchoolTypeStateAndGender": "Schools Enrollment by School type, \nState and Gender",
+  "@schoolsEnrollmentBySchoolTypeStateAndGender": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "schoolType": "School \nType",
+  "@schoolType": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByYear": "Filter by year",
+  "@filterByYear": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByState": "Filter by state",
+  "@filterByState": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterBySchoolType": "Teachers by School type, State and Gender",
+  "@filterBySchoolType": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByAuthority": "Filter by authority",
+  "@filterByAuthority": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByGovernment": "Filter by government",
+  "@filterByGovernment": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByClassLevel": "Filter by class level",
+  "@filterByClassLevel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "displayAllGovernmentFilters": "Display all Government filters",
+  "@displayAllGovernmentFilters": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "displayAllLevel": "Display all level filters",
+  "@displayAllLevel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "teachersByAuthority": "Teachers by Authority",
+  "@teachersByAuthority": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "teachersByState": "Teachers by State",
+  "@teachersByState": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "splash": "\nPACIFIC OPEN\n EDUCATION DATA",
+  "@splash": {
+    "type": "text",
+    "placeholders": {}
+  }
+}
