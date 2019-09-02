@@ -1,8 +1,7 @@
-/// Bar chart example
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/src/config/Constants.dart';
-import '../models/ExamModel.dart';
+import 'package:pacific_dashboards/src/models/ExamModel.dart';
 
 class StackedHorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;

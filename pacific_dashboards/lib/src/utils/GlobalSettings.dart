@@ -8,8 +8,7 @@ class GlobalSettings {
   GlobalSettings(this._sharedPreferences);
 
   String get currentCountry {
-    return _sharedPreferences
-        .getString(_kCountryKey) ?? _kDefaultCountry;
+    return _sharedPreferences.getString(_kCountryKey) ?? _kDefaultCountry;
   }
 
   set currentCountry(String country) {

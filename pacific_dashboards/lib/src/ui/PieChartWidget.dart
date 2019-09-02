@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import '../utils/HexColor.dart';
+import 'package:pacific_dashboards/src/utils/HexColor.dart';
 
 class PieChartWidget extends StatefulWidget {
   final bool animate;
@@ -25,7 +25,8 @@ class PieChartWidgetState extends State<PieChartWidget> {
         id: "name",
         domainFn: (PieChartData chartData, _) => chartData.domain,
         measureFn: (PieChartData chartData, _) => chartData.measure,
-        colorFn: (PieChartData chartData, _) => _getChartsColor(HexColor.fromStringHash(chartData.domain)),
+        colorFn: (PieChartData chartData, _) =>
+            _getChartsColor(HexColor.fromStringHash(chartData.domain)),
         data: data,
       ),
     ];
@@ -41,7 +42,8 @@ class PieChartWidgetState extends State<PieChartWidget> {
   }
 
   charts.Color _getChartsColor(Color color) {
-    return charts.Color(r: color.red, g: color.green, b: color.blue, a: color.alpha);
+    return charts.Color(
+        r: color.red, g: color.green, b: color.blue, a: color.alpha);
   }
 }
 

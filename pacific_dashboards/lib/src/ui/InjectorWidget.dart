@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/blocs/ExamsBloc.dart';
+import 'package:pacific_dashboards/src/blocs/SchoolsBloc.dart';
+import 'package:pacific_dashboards/src/blocs/TeachersBloc.dart';
+import 'package:pacific_dashboards/src/resources/FileProviderImpl.dart';
+import 'package:pacific_dashboards/src/resources/Repository.dart';
+import 'package:pacific_dashboards/src/resources/RepositoryImpl.dart';
+import 'package:pacific_dashboards/src/resources/ServerBackendProvider.dart';
+import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../resources/ServerBackendProvider.dart';
-import '../resources/RepositoryImpl.dart';
-import '../resources/Repository.dart';
-import '../blocs/TeachersBloc.dart';
-import '../blocs/SchoolsBloc.dart';
-import '../blocs/ExamsBloc.dart';
-import '../resources/FileProviderImpl.dart';
-import '../utils/GlobalSettings.dart';
 
 // ignore: must_be_immutable
 class InjectorWidget extends InheritedWidget {

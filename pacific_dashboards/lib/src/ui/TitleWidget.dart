@@ -8,7 +8,7 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var widgets = new List<Widget>();
+    var widgets = List<Widget>();
     widgets.add(
       Text(
         _titleName,

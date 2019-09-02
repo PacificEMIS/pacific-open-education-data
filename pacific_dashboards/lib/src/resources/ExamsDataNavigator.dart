@@ -1,9 +1,7 @@
 import 'dart:core';
-import "package:collection/collection.dart";
-import '../models/LookupsModel.dart';
-import '../resources/Filter.dart';
-import '../models/ExamModel.dart';
-import '../models/ExamsModel.dart';
+import 'package:collection/collection.dart';
+import 'package:pacific_dashboards/src/models/ExamModel.dart';
+import 'package:pacific_dashboards/src/models/ExamsModel.dart';
 
 class ExamsDataNavigator {
   static const String kNoTitleKey = "";

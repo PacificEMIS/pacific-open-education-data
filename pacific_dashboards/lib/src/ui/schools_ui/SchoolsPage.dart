@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/blocs/FilterBloc.dart';
+import 'package:pacific_dashboards/src/blocs/SchoolsBloc.dart';
+import 'package:pacific_dashboards/src/config/Constants.dart';
+import 'package:pacific_dashboards/src/models/SchoolModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
+import 'package:pacific_dashboards/src/ui/BaseTileWidget.dart';
+import 'package:pacific_dashboards/src/ui/ChartFactory.dart';
+import 'package:pacific_dashboards/src/ui/ChartInfoTable.dart';
+import 'package:pacific_dashboards/src/ui/FilterPage.dart';
+import 'package:pacific_dashboards/src/ui/InfoTable.dart';
+import 'package:pacific_dashboards/src/ui/PlatformAppBar.dart';
+import 'package:pacific_dashboards/src/ui/TitleWidget.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
-import '../../config/Constants.dart';
-import '../../models/SchoolModel.dart';
-import '../../models/SchoolsModel.dart';
-import '../../blocs/SchoolsBloc.dart';
-import '../BaseTileWidget.dart';
-import '../ChartFactory.dart';
-import '../ChartInfoTable.dart';
-import '../FilterPage.dart';
-import '../InfoTable.dart';
-import '../PlatformAppBar.dart';
-import '../TitleWidget.dart';
-import '../../blocs/FilterBloc.dart';
 
 class SchoolsPage extends StatefulWidget {
   static String _kPageName = AppLocalizations.schools;
@@ -26,8 +26,6 @@ class SchoolsPage extends StatefulWidget {
     color: Colors.white,
   );
 
-  SchoolsModel _dataLink = null;
-
   SchoolsPage({
     Key key,
     this.bloc,
@@ -40,6 +38,8 @@ class SchoolsPage extends StatefulWidget {
 }
 
 class SchoolsPageState extends State<SchoolsPage> {
+  SchoolsModel _dataLink;
+
   @override
   void initState() {
     super.initState();
@@ -101,23 +101,23 @@ class SchoolsPageState extends State<SchoolsPage> {
   }
 
   void _createFilterPageRoute(BuildContext context) {
-    if (widget._dataLink != null) {
+    if (_dataLink != null) {
       List<FilterBloc> filterBlocsList = List<FilterBloc>();
 
       filterBlocsList.add(FilterBloc(
-          filter: widget._dataLink.yearFilter,
-          defaultSelectedKey: widget._dataLink.yearFilter.getMax()));
+          filter: _dataLink.yearFilter,
+          defaultSelectedKey: _dataLink.yearFilter.getMax()));
       filterBlocsList.add(FilterBloc(
-          filter: widget._dataLink.stateFilter,
+          filter: _dataLink.stateFilter,
           defaultSelectedKey: AppLocalizations.displayAllStates));
       filterBlocsList.add(FilterBloc(
-          filter: widget._dataLink.authorityFilter,
+          filter: _dataLink.authorityFilter,
           defaultSelectedKey: AppLocalizations.displayAllAuthority));
       filterBlocsList.add(FilterBloc(
-          filter: widget._dataLink.govtFilter,
+          filter: _dataLink.govtFilter,
           defaultSelectedKey: AppLocalizations.displayAllGovernment));
       filterBlocsList.add(FilterBloc(
-          filter: widget._dataLink.schoolLevelFilter,
+          filter: _dataLink.schoolLevelFilter,
           defaultSelectedKey: AppLocalizations.displayAllLevelFilters));
 
       debugPrint('FilterPage route created');
@@ -131,7 +131,7 @@ class SchoolsPageState extends State<SchoolsPage> {
   }
 
   Widget _buildList(AsyncSnapshot<SchoolsModel> snapshot) {
-    widget._dataLink = snapshot.data;
+    _dataLink = snapshot.data;
 
     return OrientationBuilder(
       builder: (context, orientation) {
@@ -152,8 +152,8 @@ class SchoolsPageState extends State<SchoolsPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-            title: TitleWidget(
-                AppLocalizations.schoolsEnrollmentByState, AppColors.kRacingGreen),
+            title: TitleWidget(AppLocalizations.schoolsEnrollmentByState,
+                AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
                 ChartFactory.getBarChartViewByData(
@@ -170,8 +170,8 @@ class SchoolsPageState extends State<SchoolsPage> {
         break;
       case 1:
         return BaseTileWidget(
-            title: TitleWidget(
-                AppLocalizations.schoolsEnrollmentByAuthority, AppColors.kRacingGreen),
+            title: TitleWidget(AppLocalizations.schoolsEnrollmentByAuthority,
+                AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(
@@ -188,8 +188,8 @@ class SchoolsPageState extends State<SchoolsPage> {
         break;
       case 2:
         return BaseTileWidget(
-            title: TitleWidget(
-                AppLocalizations.schoolsEnrollmentGovtNonGovt, AppColors.kRacingGreen),
+            title: TitleWidget(AppLocalizations.schoolsEnrollmentGovtNonGovt,
+                AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(
@@ -214,7 +214,8 @@ class SchoolsPageState extends State<SchoolsPage> {
         List<Widget> widgets = List<Widget>();
 
         widgets.add(InfoTable(
-            _generateInfoTableData(data.getSortedByAge(0), AppLocalizations.total, false),
+            _generateInfoTableData(
+                data.getSortedByAge(0), AppLocalizations.total, false),
             AppLocalizations.total,
             AppLocalizations.age));
 
@@ -240,8 +241,8 @@ class SchoolsPageState extends State<SchoolsPage> {
         List<Widget> widgets = List<Widget>();
 
         widgets.add(InfoTable(
-            _generateInfoTableData(
-                data.getSortedWithFilteringBySchoolType(), AppLocalizations.total, false),
+            _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
+                AppLocalizations.total, false),
             AppLocalizations.total,
             AppLocalizations.schoolType));
 
@@ -309,7 +310,8 @@ class SchoolsPageState extends State<SchoolsPage> {
       convertedData[k] = InfoTableData(maleCount, femaleCount);
     });
 
-    convertedData[AppLocalizations.total] = InfoTableData(totalMaleCount, totalFemaleCount);
+    convertedData[AppLocalizations.total] =
+        InfoTableData(totalMaleCount, totalFemaleCount);
 
     return convertedData;
   }

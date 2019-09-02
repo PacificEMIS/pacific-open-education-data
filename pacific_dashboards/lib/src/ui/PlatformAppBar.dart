@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../utils/PlatformWidget.dart';
+import 'package:pacific_dashboards/src/utils/PlatformWidget.dart';
 
 class PlatformAppBar extends PlatformWidget<CupertinoNavigationBar, AppBar> {
   final Widget leading;
   final Widget title;
   final IconThemeData iconTheme;
   final Color backgroundColor;
-  List<Widget> actions;
+  final List<Widget> actions;
 
   PlatformAppBar({
     this.leading,

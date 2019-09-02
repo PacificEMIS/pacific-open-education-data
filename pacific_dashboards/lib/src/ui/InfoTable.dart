@@ -7,9 +7,15 @@ class InfoTableData {
   final int _maleAmount;
   final int _femaleAmount;
 
-  String get maleAmount => _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
-  String get femaleAmount => _femaleAmount != 0 ? _femaleAmount.toString() : _kZeroSymbol;
-  String get total => (_maleAmount + _femaleAmount) != 0 ? (_maleAmount + _femaleAmount).toString() : _kZeroSymbol;
+  String get maleAmount =>
+      _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
+
+  String get femaleAmount =>
+      _femaleAmount != 0 ? _femaleAmount.toString() : _kZeroSymbol;
+
+  String get total => (_maleAmount + _femaleAmount) != 0
+      ? (_maleAmount + _femaleAmount).toString()
+      : _kZeroSymbol;
 
   InfoTableData(this._maleAmount, this._femaleAmount);
 }
@@ -22,12 +28,12 @@ class InfoTable extends StatefulWidget {
   final String _keyName;
   final String _firstColumnName;
 
-  Color _borderColor = AppColors.kGeyser;
-  Color _textColor = AppColors.kTimberGreen;
-  Color _subTitleTextColor = AppColors.kNevada;
-  Color _evenRowColor = AppColors.kWhite;
-  Color _oddRowColor = AppColors.kAthensGray;
-  Color _titleTextColor = AppColors.kEndeavour;
+  final Color _borderColor = AppColors.kGeyser;
+  final Color _textColor = AppColors.kTimberGreen;
+  final Color _subTitleTextColor = AppColors.kNevada;
+  final Color _evenRowColor = AppColors.kWhite;
+  final Color _oddRowColor = AppColors.kAthensGray;
+  final Color _titleTextColor = AppColors.kEndeavour;
 
   InfoTable(this._data, this._keyName, this._firstColumnName);
 
@@ -41,11 +47,16 @@ class _InfoTableState extends State<InfoTable> {
     return Column(children: <Widget>[
       Table(
         border: _getTableBorder(widget._borderColor, InfoTable._kBorderWidth),
-        children: [_generateTableTitle(widget._borderColor, InfoTable._kBorderWidth)],
+        children: [
+          _generateTableTitle(widget._borderColor, InfoTable._kBorderWidth)
+        ],
       ),
       Table(
         border: _getTableBorder(widget._borderColor, InfoTable._kBorderWidth),
-        children: _generateTableBody(widget._data, _generateSubTableTitle(widget._borderColor, InfoTable._kBorderWidth)),
+        children: _generateTableBody(
+            widget._data,
+            _generateSubTableTitle(
+                widget._borderColor, InfoTable._kBorderWidth)),
       ),
     ]);
   }
@@ -75,7 +86,8 @@ class _InfoTableState extends State<InfoTable> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -118,7 +130,8 @@ class _InfoTableState extends State<InfoTable> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -134,7 +147,8 @@ class _InfoTableState extends State<InfoTable> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -151,7 +165,8 @@ class _InfoTableState extends State<InfoTable> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -168,7 +183,8 @@ class _InfoTableState extends State<InfoTable> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -208,7 +224,8 @@ class _InfoTableState extends State<InfoTable> {
     );
   }
 
-  List<TableRow> _generateTableBody(Map<dynamic, InfoTableData> data, TableRow subTitle) {
+  List<TableRow> _generateTableBody(
+      Map<dynamic, InfoTableData> data, TableRow subTitle) {
     var rowsList = List<TableRow>();
     rowsList.add(subTitle);
 
@@ -229,7 +246,8 @@ class _InfoTableState extends State<InfoTable> {
       children: [
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -245,7 +263,8 @@ class _InfoTableState extends State<InfoTable> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -262,7 +281,8 @@ class _InfoTableState extends State<InfoTable> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -279,7 +299,8 @@ class _InfoTableState extends State<InfoTable> {
         ),
         TableCell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[

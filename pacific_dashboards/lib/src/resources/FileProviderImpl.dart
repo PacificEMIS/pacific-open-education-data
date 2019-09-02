@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-
-import '../models/LookupsModel.dart';
-import '../models/ExamsModel.dart';
+import 'package:pacific_dashboards/src/models/ExamsModel.dart';
+import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
+import 'package:pacific_dashboards/src/models/TeachersModel.dart';
+import 'package:pacific_dashboards/src/resources/FileProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../resources/FileProvider.dart';
-import '../models/SchoolsModel.dart';
-import '../models/TeachersModel.dart';
 
 class FileProviderImpl extends FileProvider {
   static const _KEY_SCHOOLS = "schools";

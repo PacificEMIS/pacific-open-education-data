@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../config/Constants.dart';
-import '../utils/HexColor.dart';
-import 'enums/SortType.dart';
+import 'package:pacific_dashboards/src/config/Constants.dart';
+import 'package:pacific_dashboards/src/ui/enums/SortType.dart';
+import 'package:pacific_dashboards/src/utils/HexColor.dart';
 
 class ChartInfoTable<T> extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
@@ -20,10 +20,6 @@ class ChartInfoTable<T> extends StatefulWidget {
   final Color _iconArrowColor = AppColors.kTuna;
   final Color _highlightedRowColor = AppColors.kRoyalBlue.withOpacity(0.2);
 
-  bool _domainSortedByIncreasing = true;
-  bool _measureSortedByIncreasing = true;
-  SortType _sortType = SortType.NotSorted;
-
   ChartInfoTable(this._keys, this._data, this._titleName, this._titleValue,
       this._selectedRow);
 
@@ -32,31 +28,35 @@ class ChartInfoTable<T> extends StatefulWidget {
 }
 
 class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
+  bool _domainSortedByIncreasing = true;
+  bool _measureSortedByIncreasing = true;
+  SortType _sortType = SortType.NotSorted;
+
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Table(
-        border:
-            _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth, true),
+        border: _getTableBorder(
+            widget._borderColor, ChartInfoTable._kBorderWidth, true),
         children: [
-            _generateTableTitle(
-                widget._borderColor, ChartInfoTable._kBorderWidth, true)],
+          _generateTableTitle(
+              widget._borderColor, ChartInfoTable._kBorderWidth, true)
+        ],
       ),
       Table(
         columnWidths: {
           0: FlexColumnWidth(1.7),
           1: FlexColumnWidth(1),
         },
-        border:
-            _getTableBorder(widget._borderColor, ChartInfoTable._kBorderWidth, false),
-        children: _generateTableBody(
-            widget._keys,
-            widget._data),
+        border: _getTableBorder(
+            widget._borderColor, ChartInfoTable._kBorderWidth, false),
+        children: _generateTableBody(widget._keys, widget._data),
       )
     ]);
   }
 
-  TableRow _generateTableTitle(Color borderColor, double borderWidth, bool top) {
+  TableRow _generateTableTitle(
+      Color borderColor, double borderWidth, bool top) {
     return TableRow(
       decoration: BoxDecoration(
         border: Border(
@@ -94,16 +94,15 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 ),
                 InkResponse(
                   child: Icon(
-                    (widget._domainSortedByIncreasing
+                    (_domainSortedByIncreasing
                         ? Icons.keyboard_arrow_down
                         : Icons.keyboard_arrow_up),
                     color: widget._iconArrowColor,
                   ),
                   onTap: () {
                     setState(() {
-                      widget._sortType = SortType.Domain;
-                      widget._domainSortedByIncreasing =
-                          !widget._domainSortedByIncreasing;
+                      _sortType = SortType.Domain;
+                      _domainSortedByIncreasing = !_domainSortedByIncreasing;
                     });
                   },
                   highlightShape: BoxShape.rectangle,
@@ -128,16 +127,15 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                 ),
                 InkResponse(
                   child: Icon(
-                    (widget._measureSortedByIncreasing
+                    (_measureSortedByIncreasing
                         ? Icons.keyboard_arrow_down
                         : Icons.keyboard_arrow_up),
                     color: widget._iconArrowColor,
                   ),
                   onTap: () {
                     setState(() {
-                      widget._sortType = SortType.Measure;
-                      widget._measureSortedByIncreasing =
-                          !widget._measureSortedByIncreasing;
+                      _sortType = SortType.Measure;
+                      _measureSortedByIncreasing = !_measureSortedByIncreasing;
                     });
                   },
                   highlightShape: BoxShape.rectangle,
@@ -176,9 +174,9 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
     var rowsList = List<TableRow>();
     List<int> sortedValues = dataMap.values.toList();
 
-    switch (widget._sortType) {
+    switch (_sortType) {
       case SortType.Domain:
-        if (widget._domainSortedByIncreasing) {
+        if (_domainSortedByIncreasing) {
           keys.sort((a, b) => a.compareTo(b));
         } else {
           keys.sort((a, b) => b.compareTo(a));
@@ -195,7 +193,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
         }
         break;
       case SortType.Measure:
-        if (widget._measureSortedByIncreasing) {
+        if (_measureSortedByIncreasing) {
           sortedValues.sort((a, b) => a.compareTo(b));
         } else {
           sortedValues.sort((a, b) => b.compareTo(a));
@@ -203,7 +201,7 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
 
         var globalIndex = 0;
 
-        if (widget._measureSortedByIncreasing) {
+        if (_measureSortedByIncreasing) {
           for (var i = 0; i < keys.length; ++i) {
             if (!dataMap.containsKey(keys[i])) {
               rowsList.add(_generateTableRow(

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/ui/CategoryGridWidget.dart';
 import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
-import "../CategoryGridWidget.dart";
 
 class HomePage extends StatefulWidget {
   final GlobalSettings globalSettings;
+
   @override
   _HomePageState createState() => new _HomePageState();
 
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
       AppLocalizations.federatedStateOfMicronesia;
   final String _kFederatedStateOfMicronesiaWithSplitter =
       AppLocalizations.federatedStateOfMicronesiaSplitted;
-  
+
   @override
   void initState() {
     super.initState();

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'BarChartWidget.dart';
-import 'PieChartWidget.dart';
+import 'package:pacific_dashboards/src/ui/BarChartWidget.dart';
+import 'package:pacific_dashboards/src/ui/PieChartWidget.dart';
 
 class ChartFactory {
   static Widget getBarChartViewByData(Map<dynamic, int> chartData) {
