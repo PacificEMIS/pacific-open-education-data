@@ -26,7 +26,7 @@ class TeachersPage extends StatefulWidget {
     color: Colors.white,
   );
 
-  TeachersModel _dataLink = null;
+  TeachersModel _dataLink;
 
   TeachersPage({
     Key key,
@@ -109,10 +109,10 @@ class TeachersPageState extends State<TeachersPage> {
           defaultSelectedKey: widget._dataLink.yearFilter.getMax()));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.stateFilter,
-          defaultSelectedKey: AppLocalizations.dislplayAllStates));
+          defaultSelectedKey: AppLocalizations.displayAllStates));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.authorityFilter,
-          defaultSelectedKey: AppLocalizations.displayAllAutority));
+          defaultSelectedKey: AppLocalizations.displayAllAuthority));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.govtFilter,
           defaultSelectedKey: AppLocalizations.displayAllGovernmentFilters));
@@ -152,7 +152,7 @@ class TeachersPageState extends State<TeachersPage> {
     switch (index) {
       case 0:
         return BaseTileWidget(
-          title: TitleWidget(AppLocalizations.teachersByAutority, AppColors.kRacingGreen),
+          title: TitleWidget(AppLocalizations.teachersByAuthority, AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
               ChartFactory.getPieChartViewByData(
@@ -161,7 +161,7 @@ class TeachersPageState extends State<TeachersPage> {
               ChartInfoTable<TeacherModel>(
                   data.getSortedByAuthority().keys.toList(),
                   _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
-                  AppLocalizations.autority,
+                  AppLocalizations.authority,
                   TeachersPage._measureName,
                   data.authorityFilter.selectedKey),
             ],

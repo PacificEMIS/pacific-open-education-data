@@ -1,23 +1,20 @@
+import 'package:pacific_dashboards/src/blocs/BaseBloc.dart';
+import 'package:pacific_dashboards/src/models/ExamsModel.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../models/ExamsModel.dart';
-
-import 'BaseBloc.dart';
-
 class ExamsBloc extends BaseBloc<ExamsModel> {
+  final _fetcher = PublishSubject<ExamsModel>();
 
-  final fetcher = PublishSubject<ExamsModel>();
+  Observable<ExamsModel> get data => _fetcher.stream;
 
-  Observable<ExamsModel> get data => fetcher.stream;
-
-  ExamsBloc( { repository } ) : super(repository: repository);
+  ExamsBloc({repository}) : super(repository: repository);
 
   fetchData() async {
     var model = await repository.fetchAllExams();
-    fetcher.add(model);
+    _fetcher.add(model);
   }
 
   dispose() {
-    fetcher.close();
+    _fetcher.close();
   }
 }

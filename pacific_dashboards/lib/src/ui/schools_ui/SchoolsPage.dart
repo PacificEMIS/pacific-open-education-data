@@ -109,13 +109,13 @@ class SchoolsPageState extends State<SchoolsPage> {
           defaultSelectedKey: widget._dataLink.yearFilter.getMax()));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.stateFilter,
-          defaultSelectedKey: AppLocalizations.dislplayAllStates));
+          defaultSelectedKey: AppLocalizations.displayAllStates));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.authorityFilter,
-          defaultSelectedKey: AppLocalizations.displayAllAutority));
+          defaultSelectedKey: AppLocalizations.displayAllAuthority));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.govtFilter,
-          defaultSelectedKey: AppLocalizations.displayAllGovermant));
+          defaultSelectedKey: AppLocalizations.displayAllGovernment));
       filterBlocsList.add(FilterBloc(
           filter: widget._dataLink.schoolLevelFilter,
           defaultSelectedKey: AppLocalizations.displayAllLevelFilters));
@@ -171,7 +171,7 @@ class SchoolsPageState extends State<SchoolsPage> {
       case 1:
         return BaseTileWidget(
             title: TitleWidget(
-                AppLocalizations.schoolsEnrollmentByAutority, AppColors.kRacingGreen),
+                AppLocalizations.schoolsEnrollmentByAuthority, AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
                 ChartFactory.getPieChartViewByData(
@@ -180,7 +180,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                 ChartInfoTable<SchoolModel>(
                     data.getSortedByAuthority().keys.toList(),
                     _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
-                    AppLocalizations.autority,
+                    AppLocalizations.authority,
                     SchoolsPage._measureName,
                     data.authorityFilter.selectedKey),
               ],
@@ -209,7 +209,7 @@ class SchoolsPageState extends State<SchoolsPage> {
           AppLocalizations.earlyChildhood,
           AppLocalizations.primary,
           AppLocalizations.secondary,
-          AppLocalizations.postsecondary
+          AppLocalizations.postSecondary
         ];
         List<Widget> widgets = List<Widget>();
 

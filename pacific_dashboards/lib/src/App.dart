@@ -16,15 +16,14 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
     return MaterialApp(
-      locale: Locale('de'),
+      locale: Locale('en'),
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      supportedLocales: [const Locale('en', 'EN'),const Locale('de', 'DE')],
-      onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.appName,
+      supportedLocales: [const Locale('en', 'EN'), const Locale('de', 'DE')],
+      onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
@@ -38,21 +37,19 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) =>
-            SplashPage(globalSettings: injector.getGlobalSettings()),
-        "/Home": (context) =>
-            HomePage(globalSettings: injector.getGlobalSettings()),
+        "/": (context) => SplashPage(globalSettings: injector.globalSettings),
+        "/Home": (context) => HomePage(globalSettings: injector.globalSettings),
         "/Budgets": (context) => AlertWindowBack(),
-        "/Exams": (context) => ExamsPage(bloc: injector.getExamsBloc()),
+        "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
         "/Indicators": (context) => AlertWindowBack(),
         "/School Accreditations": (context) => AlertWindowBack(),
-        "/Schools": (context) => SchoolsPage(bloc: injector.getSchoolsBloc()),
-        "/Teachers": (context) =>
-            TeachersPage(bloc: injector.getTeachersBloc()),
+        "/Schools": (context) => SchoolsPage(bloc: injector.schoolsBloc),
+        "/Teachers": (context) => TeachersPage(bloc: injector.teachersBloc),
       },
     );
   }
 }
+
 class AlertWindowBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

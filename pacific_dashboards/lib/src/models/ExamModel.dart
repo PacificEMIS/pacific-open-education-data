@@ -70,20 +70,20 @@ class ExamModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'Exam': exam,
-    'ExamYear': examYear,
-    'DistrictCode': districtCode,
-    'ExamStandard': examStandard,
-    'ExamBenchmark': examBenchmark,
-    'CandidatesM': candidatesM,
-    'CandidatesF': candidatesF,
-    '1M': resultsM[0],
-    'ApproachingCompetenceM': resultsM[1],
-    'MinimallyCompetentM': resultsM[2],
-    'CompetentM': resultsM[3],
-    'WellBelowCompetentF': resultsF[0],
-    'ApproachingCompetenceF': resultsF[1],
-    'MinimallyCompetentF': resultsF[2],
-    'CompetentF': resultsF[3],
-  };
+        'Exam': exam,
+        'ExamYear': examYear,
+        'DistrictCode': districtCode,
+        'ExamStandard': examStandard,
+        'ExamBenchmark': examBenchmark,
+        'CandidatesM': candidatesM,
+        'CandidatesF': candidatesF,
+        '1M': resultsM[0],
+        'ApproachingCompetenceM': resultsM[1],
+        'MinimallyCompetentM': resultsM[2],
+        'CompetentM': resultsM[3],
+        'WellBelowCompetentF': resultsF[0],
+        'ApproachingCompetenceF': resultsF[1],
+        'MinimallyCompetentF': resultsF[2],
+        'CompetentF': resultsF[3],
+      };
 }
