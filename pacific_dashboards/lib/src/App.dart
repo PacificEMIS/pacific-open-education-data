@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/ui/InjectorWidget.dart';
+import 'package:pacific_dashboards/src/ui/exams_ui/ExamsPage.dart';
+import 'package:pacific_dashboards/src/ui/home_ui/HomePage.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
 import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'models/ExamsModel.dart';
-import 'ui/exams_ui/ExamsPage.dart';
-import 'ui/home_ui/HomePage.dart';
-import 'ui/InjectorWidget.dart';
-import 'ui/teaches_ui/TeachersPage.dart';
-import 'ui/StackedHorizontalBarChart.dart';
-import 'utils/Localizations.dart';
+import 'package:pacific_dashboards/src/ui/teaches_ui/TeachersPage.dart';
+import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
     return MaterialApp(
-      locale: Locale('en'),
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,

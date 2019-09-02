@@ -26,7 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "authority" : MessageLookupByLibrary.simpleMessage("Authority"),
     "budgets" : MessageLookupByLibrary.simpleMessage("Budgets"),
     "changeCountry" : MessageLookupByLibrary.simpleMessage("Change country"),
-    "construction" : MessageLookupByLibrary.simpleMessage("Construction"),
+    "construction" : MessageLookupByLibrary.simpleMessage("Conssssssstruction"),
     "constructionDescription" : MessageLookupByLibrary.simpleMessage("This section is under construction"),
     "displayAllAuthority" : MessageLookupByLibrary.simpleMessage("Display All Authority"),
     "displayAllGovernment" : MessageLookupByLibrary.simpleMessage("Display all Govermant filters"),
