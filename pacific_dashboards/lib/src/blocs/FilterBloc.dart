@@ -1,5 +1,5 @@
+import 'package:pacific_dashboards/src/resources/Filter.dart';
 import 'package:rxdart/rxdart.dart';
-import '../resources/Filter.dart';
 
 class FilterBloc {
   final Filter filter;
@@ -10,7 +10,7 @@ class FilterBloc {
 
   Observable<Filter> get data => fetcher.stream;
 
-  FilterBloc( { this.filter, this.defaultSelectedKey } );
+  FilterBloc({this.filter, this.defaultSelectedKey});
 
   initialize() {
     if (filter.selectedKey == "") {
@@ -20,7 +20,8 @@ class FilterBloc {
     }
   }
 
-  String get selectedKey => _tempSelectedKey.isNotEmpty ? _tempSelectedKey : filter.selectedKey;
+  String get selectedKey =>
+      _tempSelectedKey.isNotEmpty ? _tempSelectedKey : filter.selectedKey;
 
   fetchData() {
     filter.generateNewTempFilter();
@@ -30,7 +31,7 @@ class FilterBloc {
   changeSelectedById(String id) {
     _tempSelectedKey = id;
     filter.filterTemp.forEach((k, v) {
-       filter.filterTemp[k] = (k == id);
+      filter.filterTemp[k] = (k == id);
     });
 
     fetcher.add(filter);
@@ -39,9 +40,9 @@ class FilterBloc {
   setDefaultFilter() {
     _tempSelectedKey = defaultSelectedKey;
     var isCustom = filter.containsKey(_tempSelectedKey);
-      filter.filterTemp.forEach((k, v) {
-        filter.filterTemp[k] = !isCustom || (k == defaultSelectedKey);
-      });
+    filter.filterTemp.forEach((k, v) {
+      filter.filterTemp[k] = !isCustom || (k == defaultSelectedKey);
+    });
 
     fetcher.add(filter);
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/src/config/Constants.dart';
-import '../utils/HexColor.dart';
+import 'package:pacific_dashboards/src/utils/HexColor.dart';
 
 class BarChartWidget extends StatefulWidget {
   final data;
@@ -32,7 +32,8 @@ class BarChartWidgetState extends State<BarChartWidget> {
       charts.Series(
         domainFn: (BarChartData chartData, _) => chartData.domain,
         measureFn: (BarChartData chartData, _) => chartData.measure,
-        colorFn: (BarChartData chartData, _) => _getChartsColor(HexColor.fromStringHash(chartData.domain)),
+        colorFn: (BarChartData chartData, _) =>
+            _getChartsColor(HexColor.fromStringHash(chartData.domain)),
         id: "name",
         data: data,
       ),
@@ -43,7 +44,8 @@ class BarChartWidgetState extends State<BarChartWidget> {
       animate: false,
       primaryMeasureAxis: charts.NumericAxisSpec(
         renderSpec: charts.GridlineRendererSpec(
-          labelStyle: charts.TextStyleSpec(fontSize: 10, color: _getChartsColor(AppColors.kNevada)),
+          labelStyle: charts.TextStyleSpec(
+              fontSize: 10, color: _getChartsColor(AppColors.kNevada)),
           lineStyle: charts.LineStyleSpec(
             color: _getChartsColor(AppColors.kLoblolly),
           ),
@@ -51,7 +53,8 @@ class BarChartWidgetState extends State<BarChartWidget> {
       ),
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
-          labelStyle: charts.TextStyleSpec(fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
+          labelStyle: charts.TextStyleSpec(
+              fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
           lineStyle: charts.LineStyleSpec(
             color: _getChartsColor(AppColors.kLoblolly),
           ),
@@ -61,6 +64,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
   }
 
   charts.Color _getChartsColor(Color color) {
-    return charts.Color(r: color.red, g: color.green, b: color.blue, a: color.alpha);
+    return charts.Color(
+        r: color.red, g: color.green, b: color.blue, a: color.alpha);
   }
 }

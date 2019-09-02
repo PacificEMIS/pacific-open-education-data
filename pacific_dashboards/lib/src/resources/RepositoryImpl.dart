@@ -1,11 +1,10 @@
-import 'dart:async';
-import '../models/ExamsModel.dart';
-import '../models/TeachersModel.dart';
-import '../models/SchoolsModel.dart';
-import '../models/LookupsModel.dart';
-import 'Provider.dart';
-import 'Repository.dart';
-import '../resources/FileProvider.dart';
+import 'package:pacific_dashboards/src/models/ExamsModel.dart';
+import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
+import 'package:pacific_dashboards/src/models/TeachersModel.dart';
+import 'package:pacific_dashboards/src/resources/FileProvider.dart';
+import 'package:pacific_dashboards/src/resources/Provider.dart';
+import 'package:pacific_dashboards/src/resources/Repository.dart';
 
 class RepositoryImpl implements Repository {
   Provider _backendProvider;

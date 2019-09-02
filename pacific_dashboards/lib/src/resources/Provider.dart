@@ -1,8 +1,7 @@
-import 'dart:async';
-import '../models/LookupsModel.dart';
-import '../models/ExamsModel.dart';
-import '../models/SchoolsModel.dart';
-import '../models/TeachersModel.dart';
+import 'package:pacific_dashboards/src/models/ExamsModel.dart';
+import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
+import 'package:pacific_dashboards/src/models/TeachersModel.dart';
 
 abstract class Provider {
   Future<TeachersModel> fetchTeachersModel();

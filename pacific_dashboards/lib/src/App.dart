@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/ui/InjectorWidget.dart';
+import 'package:pacific_dashboards/src/ui/exams_ui/ExamsPage.dart';
+import 'package:pacific_dashboards/src/ui/home_ui/HomePage.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
 import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'models/ExamsModel.dart';
-import 'ui/exams_ui/ExamsPage.dart';
-import 'ui/home_ui/HomePage.dart';
-import 'ui/InjectorWidget.dart';
-import 'ui/teaches_ui/TeachersPage.dart';
-import 'ui/StackedHorizontalBarChart.dart';
-import 'utils/Localizations.dart';
+import 'package:pacific_dashboards/src/ui/teaches_ui/TeachersPage.dart';
+import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
     return MaterialApp(
-      locale: Locale('de'),
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      supportedLocales: [const Locale('en', 'EN'),const Locale('de', 'DE')],
-      onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.appName,
+      supportedLocales: [const Locale('en', 'EN'), const Locale('de', 'DE')],
+      onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
@@ -38,21 +33,19 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) =>
-            SplashPage(globalSettings: injector.getGlobalSettings()),
-        "/Home": (context) =>
-            HomePage(globalSettings: injector.getGlobalSettings()),
+        "/": (context) => SplashPage(globalSettings: injector.globalSettings),
+        "/Home": (context) => HomePage(globalSettings: injector.globalSettings),
         "/Budgets": (context) => AlertWindowBack(),
-        "/Exams": (context) => ExamsPage(bloc: injector.getExamsBloc()),
+        "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
         "/Indicators": (context) => AlertWindowBack(),
         "/School Accreditations": (context) => AlertWindowBack(),
-        "/Schools": (context) => SchoolsPage(bloc: injector.getSchoolsBloc()),
-        "/Teachers": (context) =>
-            TeachersPage(bloc: injector.getTeachersBloc()),
+        "/Schools": (context) => SchoolsPage(bloc: injector.schoolsBloc),
+        "/Teachers": (context) => TeachersPage(bloc: injector.teachersBloc),
       },
     );
   }
 }
+
 class AlertWindowBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

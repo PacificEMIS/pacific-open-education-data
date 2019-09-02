@@ -7,7 +7,7 @@ class CategoryGridWidget extends StatelessWidget {
     AppLocalizations.schools,
     AppLocalizations.teachers,
     AppLocalizations.exams,
-    AppLocalizations.schoolaccreditations,
+    AppLocalizations.schoolAccreditations,
     AppLocalizations.indicators,
     AppLocalizations.budgets
   ];
@@ -42,7 +42,7 @@ class CategoryGridWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Expanded(
-                          flex:5,
+                          flex: 5,
                           child: Container(
                             margin: const EdgeInsets.all(20.0),
                             child: SvgPicture.asset("images/icons/$data.svg",
@@ -50,18 +50,21 @@ class CategoryGridWidget extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          flex:2,
+                          flex: 2,
                           child: Container(
-                            margin: const EdgeInsets.only(left: 5.0, right: 5.0),
-                          child: Text(
-                            data,
-                            textAlign: TextAlign.center,
-                            softWrap: true,
-                            style:
-                                TextStyle(fontFamily: "NotoSans", fontSize: 14, fontWeight: FontWeight.bold, 
-                                color: Color.fromRGBO(99, 105, 109, 1.0)),
+                            margin:
+                                const EdgeInsets.only(left: 5.0, right: 5.0),
+                            child: Text(
+                              data,
+                              textAlign: TextAlign.center,
+                              softWrap: true,
+                              style: TextStyle(
+                                  fontFamily: "NotoSans",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(99, 105, 109, 1.0)),
+                            ),
                           ),
-                        ),
                         ),
                       ],
                     ),

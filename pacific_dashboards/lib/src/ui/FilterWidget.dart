@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../resources/Filter.dart';
-import '../blocs/FilterBloc.dart';
-import '../config/Constants.dart';
+import 'package:pacific_dashboards/src/blocs/FilterBloc.dart';
+import 'package:pacific_dashboards/src/config/Constants.dart';
+import 'package:pacific_dashboards/src/resources/Filter.dart';
 
 class FilterWidget extends StatefulWidget {
   final FilterBloc bloc;
@@ -24,7 +24,7 @@ class FilterWidgetState extends State<FilterWidget> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: widget.bloc.data,
-      builder: (context, AsyncSnapshot<Filter> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<Filter> snapshot) {
         if (snapshot.hasData) {
           return Column(
             children: _generateFilterList(snapshot),
@@ -37,13 +37,15 @@ class FilterWidgetState extends State<FilterWidget> {
   }
 
   List<Widget> _generateFilterList(AsyncSnapshot<Filter> snapshot) {
-    List<Widget> filterList = List<Widget>.from(snapshot.data.filterTemp.keys.map((String key) {
+    List<Widget> filterList =
+        List<Widget>.from(snapshot.data.filterTemp.keys.map((String key) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Card(
           elevation: 4,
           child: RadioListTile<String>(
-            title: Text(widget.bloc.filter.lookupsModel.lookupsModel.getFullName(key, widget.bloc.filter.lookupsNameKey)),
+            title: Text(widget.bloc.filter.lookupsModel.lookupsModel
+                .getFullName(key, widget.bloc.filter.lookupsNameKey)),
             value: key,
             onChanged: (String value) {
               setState(() {
@@ -59,7 +61,9 @@ class FilterWidgetState extends State<FilterWidget> {
       );
     }).toList());
 
-    if (!widget.bloc.filter.getFilter().containsKey(widget.bloc.defaultSelectedKey)) {
+    if (!widget.bloc.filter
+        .getFilter()
+        .containsKey(widget.bloc.defaultSelectedKey)) {
       filterList.insert(
         0,
         Divider(
@@ -95,7 +99,8 @@ class FilterWidgetState extends State<FilterWidget> {
     filterList.insert(
       0,
       ListTile(
-        title: Text(snapshot.data.filterName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        title: Text(snapshot.data.filterName,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       ),
     );
 

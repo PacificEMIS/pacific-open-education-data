@@ -1,8 +1,6 @@
-import '../models/ModelWithLookups.dart';
-
+import 'package:pacific_dashboards/src/models/ModelWithLookups.dart';
 
 class Filter {
-
   Map<String, bool> _filter = Map<String, bool>();
   String filterName;
   String selectedKey = "";
@@ -10,8 +8,9 @@ class Filter {
   ModelWithLookups lookupsModel;
   String lookupsNameKey;
 
-  Filter(Set filterOptions, String name, ModelWithLookups lookups, String lookupsName) {
-    _filter = new Map.fromIterable(filterOptions, key: (i) => i, value: (i) => true);
+  Filter(Set filterOptions, String name, ModelWithLookups lookups,
+      String lookupsName) {
+    _filter = Map.fromIterable(filterOptions, key: (i) => i, value: (i) => true);
     filterName = name;
     lookupsModel = lookups;
     lookupsNameKey = lookupsName;
@@ -26,7 +25,7 @@ class Filter {
   }
 
   void generateNewTempFilter() {
-    filterTemp = new Map<String, bool>();
+    filterTemp = Map<String, bool>();
     filterTemp.addAll(_filter);
   }
 

@@ -1,10 +1,9 @@
-import 'dart:core';
-import "package:collection/collection.dart";
-import '../utils/Localizations.dart';
-import 'LookupsModel.dart';
-import 'ModelWithLookups.dart';
-import 'SchoolModel.dart';
-import '../resources/Filter.dart';
+import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/ModelWithLookups.dart';
+import 'package:pacific_dashboards/src/models/SchoolModel.dart';
+import 'package:pacific_dashboards/src/resources/Filter.dart';
+import 'package:pacific_dashboards/src/utils/Localizations.dart';
+import 'package:collection/collection.dart';
 
 class SchoolsModel extends ModelWithLookups {
   Map<String, Filter> _filters;
@@ -13,11 +12,17 @@ class SchoolsModel extends ModelWithLookups {
   List<SchoolModel> get schools => _schools;
 
   Filter get yearFilter => _filters['year'];
+
   Filter get stateFilter => _filters['state'];
+
   Filter get authorityFilter => _filters['authority'];
+
   Filter get govtFilter => _filters['govt'];
+
   Filter get schoolTypeFilter => _filters['schoolType'];
+
   Filter get ageFilter => _filters['age'];
+
   Filter get schoolLevelFilter => _filters['schoolLevel'];
 
   SchoolsModel.fromJson(List parsedJson) {
@@ -39,11 +44,13 @@ class SchoolsModel extends ModelWithLookups {
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
-    return groupBy(filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
+    return groupBy(
+        filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedByState() {
-    return groupBy(_schools, (obj) => lookupsModel.getFullState(obj.districtCode));
+    return groupBy(
+        _schools, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFiltersByAuthority() {
@@ -55,11 +62,13 @@ class SchoolsModel extends ModelWithLookups {
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
-    return groupBy(filteredList, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
+    return groupBy(filteredList,
+        (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedByAuthority() {
-    return groupBy(_schools, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
+    return groupBy(
+        _schools, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedWithFiltersByGovt() {
@@ -71,11 +80,13 @@ class SchoolsModel extends ModelWithLookups {
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
         .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
 
-    return groupBy(filteredList, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+    return groupBy(
+        filteredList, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   Map<dynamic, List<SchoolModel>> getSortedByGovt() {
-    return groupBy(_schools, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+    return groupBy(
+        _schools, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   List<dynamic> getDistrictCodeKeysList() {
@@ -173,13 +184,13 @@ class SchoolsModel extends ModelWithLookups {
       'authority': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].authorityCode).toSet(),
-          AppLocalizations.filterAuthority,
+          AppLocalizations.filterByAuthority,
           this,
           LookupsModel.LOOKUPS_KEY_AUTHORITY),
       'state': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].districtCode).toSet(),
-          AppLocalizations.filterState,
+          AppLocalizations.filterByState,
           this,
           LookupsModel.LOOKUPS_KEY_STATE),
       'schoolType': Filter(
@@ -198,7 +209,7 @@ class SchoolsModel extends ModelWithLookups {
       'govt': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].authorityGovt).toSet(),
-          AppLocalizations.filterGovernment,
+          AppLocalizations.filterByGovernment,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
       'year': Filter(
@@ -206,13 +217,13 @@ class SchoolsModel extends ModelWithLookups {
                   _schools.length, (i) => _schools[i].surveyYear.toString())
               .reversed
               .toSet(),
-          AppLocalizations.filterYear,
+          AppLocalizations.filterByYear,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
       'schoolLevel': Filter(
           List<String>.generate(_schools.length, (i) => _schools[i].classLevel)
               .toSet(),
-          AppLocalizations.filterClassLevel,
+          AppLocalizations.filterByClassLevel,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
     };

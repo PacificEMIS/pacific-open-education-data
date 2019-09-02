@@ -1,6 +1,3 @@
-import 'dart:core';
-import "package:collection/collection.dart";
-
 class LookupsModel {
   static const String LOOKUPS_KEY_GOVT = "authorityGovt";
   static const String LOOKUPS_KEY_STATE = "districts";
@@ -30,15 +27,15 @@ class LookupsModel {
 
   String getFullName(String key, String type) {
     try {
-      if (!_lookupsMap.containsKey(type)){
+      if (!_lookupsMap.containsKey(type)) {
         return key;
       }
       List dataList = _lookupsMap[type];
-      for(var val in dataList) {
+      for (var val in dataList) {
         if (val[LOOKUPS_KEY] == key) {
           return val[LOOKUPS_VALUE];
         }
-      };
+      }
       return key;
     } catch (e) {
       return key;

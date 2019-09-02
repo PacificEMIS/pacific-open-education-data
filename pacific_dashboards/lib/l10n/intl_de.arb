@@ -1,11 +1,11 @@
 {
-  "@@last_modified": "2019-08-19T05:58:50.147609",
-  "appName": "Cust changesCountry",
+  "@@last_modified": "2019-09-02T12:15:11.550277",
+  "appName": "Custom Charts",
   "@appName": {
     "type": "text",
     "placeholders": {}
   },
-  "construction": "Constssruction",
+  "construction": "Conssssssstruction",
   "@construction": {
     "type": "text",
     "placeholders": {}
@@ -35,11 +35,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "choiceCountry": "Choice country",
-  "@choiceCountry": {
-    "type": "text",
-    "placeholders": {}
-  },
   "schools": "Schools",
   "@schools": {
     "type": "text",
@@ -55,8 +50,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "schoolaccreditations": "School Accreditations",
-  "@schoolaccreditations": {
+  "schoolAccreditations": "School Accreditations",
+  "@schoolAccreditations": {
     "type": "text",
     "placeholders": {}
   },
@@ -90,18 +85,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "dislplayAllStates": "Display All States",
-  "@dislplayAllStates": {
+  "displayAllStates": "Display All States",
+  "@displayAllStates": {
     "type": "text",
     "placeholders": {}
   },
-  "displayAllAutority": "Display All Authority",
-  "@displayAllAutority": {
+  "displayAllAuthority": "Display All Authority",
+  "@displayAllAuthority": {
     "type": "text",
     "placeholders": {}
   },
-  "displayAllGovermant": "Display all Govermant filters",
-  "@displayAllGovermant": {
+  "displayAllGovernment": "Display all Govermant filters",
+  "@displayAllGovernment": {
     "type": "text",
     "placeholders": {}
   },
@@ -115,8 +110,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "schoolsEnrollmentByAutority": "Schools Enrollment by Authority",
-  "@schoolsEnrollmentByAutority": {
+  "schoolsEnrollmentByAuthority": "Schools Enrollment by Authority",
+  "@schoolsEnrollmentByAuthority": {
     "type": "text",
     "placeholders": {}
   },
@@ -135,8 +130,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "autority": "Autority",
-  "@autority": {
+  "authority": "Authority",
+  "@authority": {
     "type": "text",
     "placeholders": {}
   },
@@ -155,8 +150,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "postsecondary": "Post Secondary",
-  "@postsecondary": {
+  "postSecondary": "Post Secondary",
+  "@postSecondary": {
     "type": "text",
     "placeholders": {}
   },
@@ -185,8 +180,38 @@
     "type": "text",
     "placeholders": {}
   },
-  "displayAllGovermantFilters": "Display all Govermant filters",
-  "@displayAllGovermantFilters": {
+  "filterByYear": "Filter by year",
+  "@filterByYear": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByState": "Filter by state",
+  "@filterByState": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterBySchoolType": "Teachers by School type, State and Gender",
+  "@filterBySchoolType": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByAuthority": "Filter by authority",
+  "@filterByAuthority": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByGovernment": "Filter by government",
+  "@filterByGovernment": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "filterByClassLevel": "Filter by class level",
+  "@filterByClassLevel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "displayAllGovernmentFilters": "Display all Government filters",
+  "@displayAllGovernmentFilters": {
     "type": "text",
     "placeholders": {}
   },
@@ -195,13 +220,18 @@
     "type": "text",
     "placeholders": {}
   },
-  "teachersByAutority": "Teachers by Authority",
-  "@teachersByAutority": {
+  "teachersByAuthority": "Teachers by Authority",
+  "@teachersByAuthority": {
     "type": "text",
     "placeholders": {}
   },
   "teachersByState": "Teachers by State",
   "@teachersByState": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "splash": "\nPACIFIC OPEN\n EDUCATION DATA",
+  "@splash": {
     "type": "text",
     "placeholders": {}
   }

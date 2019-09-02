@@ -1,14 +1,13 @@
-import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' show Client;
-import '../models/ExamsModel.dart';
-import '../models/SchoolsModel.dart';
-import '../utils/Exceptions/DataNotLoadedException.dart';
-import '../models/TeachersModel.dart';
-import '../models/LookupsModel.dart';
-
-import 'Provider.dart';
+import 'package:pacific_dashboards/src/models/ExamsModel.dart';
+import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
+import 'package:pacific_dashboards/src/models/TeachersModel.dart';
+import 'package:pacific_dashboards/src/utils/Exceptions/DataNotLoadedException.dart';
+import 'package:pacific_dashboards/src/resources/Provider.dart';
 
 class ServerBackendProvider implements Provider {
   static const String BASE_URL = "https://fedemis.doe.fm";
@@ -17,10 +16,12 @@ class ServerBackendProvider implements Provider {
   static const String EXAMS_API_KEY = "warehouse/examsdistrictresults";
   static const String LOOKUPS_API_KEY = "lookups/collection/core";
 
-  Client client = Client();
+  Client _client = Client();
 
   Future<String> _request(String path) async {
-    final webResponse = await client.get("$BASE_URL/api/$path").timeout(const Duration(minutes: 1));
+    final webResponse = await _client
+        .get("$BASE_URL/api/$path")
+        .timeout(const Duration(minutes: 1));
     debugPrint(webResponse.body.toString());
 
     if (webResponse.statusCode == 200) {

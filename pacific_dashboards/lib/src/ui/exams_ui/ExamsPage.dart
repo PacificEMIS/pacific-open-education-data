@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/src/blocs/ExamsBloc.dart';
+import 'package:pacific_dashboards/src/config/Constants.dart';
+import 'package:pacific_dashboards/src/models/ExamModel.dart';
+import 'package:pacific_dashboards/src/models/ExamsModel.dart';
+import 'package:pacific_dashboards/src/resources/ExamsDataNavigator.dart';
+import 'package:pacific_dashboards/src/ui/PlatformAppBar.dart';
+import 'package:pacific_dashboards/src/ui/StackedHorizontalBarChart.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
-import '../../config/Constants.dart';
-import '../../models/ExamModel.dart';
-import '../../models/ExamsModel.dart';
-import '../../blocs/ExamsBloc.dart';
-import '../PlatformAppBar.dart';
-import '../../resources/ExamsDataNavigator.dart';
-import '../StackedHorizontalBarChart.dart';
 
 class ExamsPage extends StatefulWidget {
   static const String _kPageName = "Exams";
   final ExamsBloc bloc;
-  bool _bottomMenuExpanded = false;
 
   ExamsPage({
     Key key,
@@ -25,6 +24,8 @@ class ExamsPage extends StatefulWidget {
 }
 
 class ExamsPageState extends State<ExamsPage> {
+  bool _bottomMenuExpanded = false;
+
   @override
   void initState() {
     super.initState();
@@ -89,8 +90,8 @@ class ExamsPageState extends State<ExamsPage> {
     return OrientationBuilder(
       builder: (context, orientation) {
         return ListView.builder(
-          padding: EdgeInsets.fromLTRB(
-              0, 0, 0, widget._bottomMenuExpanded ? 230 : 120),
+          padding:
+              EdgeInsets.fromLTRB(0, 0, 0, _bottomMenuExpanded ? 230 : 120),
           itemCount: listItems.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -144,7 +145,7 @@ class ExamsPageState extends State<ExamsPage> {
   }
 
   List<Widget> showModalBottomMenu(AsyncSnapshot<ExamsModel> snapshot) {
-    double size = widget._bottomMenuExpanded ? 230 : 77;
+    double size = _bottomMenuExpanded ? 230 : 77;
     double buttonSize = 50;
 
     List<Widget> rows = new List<Widget>();
@@ -153,7 +154,7 @@ class ExamsPageState extends State<ExamsPage> {
         snapshot.data.examsDataNavigator.nextExamPage,
         AppLocalizations.exam,
         snapshot.data.examsDataNavigator.getExamPageName());
-    if (widget._bottomMenuExpanded) {
+    if (_bottomMenuExpanded) {
       rows += _bottomMenuRow(
           snapshot.data.examsDataNavigator.prevExamView,
           snapshot.data.examsDataNavigator.nextExamView,
@@ -229,14 +230,14 @@ class ExamsPageState extends State<ExamsPage> {
             width: buttonSize,
             height: buttonSize,
             child: new RawMaterialButton(
-                child: widget._bottomMenuExpanded ? openIcon : closedIcon,
+                child: _bottomMenuExpanded ? openIcon : closedIcon,
                 fillColor: Colors.white,
                 shape: new CircleBorder(),
                 elevation: 0.0,
                 highlightElevation: 0.0,
                 onPressed: () {
                   setState(() {
-                    widget._bottomMenuExpanded = !widget._bottomMenuExpanded;
+                    _bottomMenuExpanded = !_bottomMenuExpanded;
                   });
                 })));
   }
