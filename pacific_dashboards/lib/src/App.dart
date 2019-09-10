@@ -3,7 +3,6 @@ import 'package:pacific_dashboards/src/ui/InjectorWidget.dart';
 import 'package:pacific_dashboards/src/ui/exams_ui/ExamsPage.dart';
 import 'package:pacific_dashboards/src/ui/home_ui/HomePage.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
-import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pacific_dashboards/src/ui/teaches_ui/TeachersPage.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
