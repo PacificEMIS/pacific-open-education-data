@@ -37,7 +37,7 @@ class App extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => SplashPage(globalSettings: injector.globalSettings),
+        "/": (context) => HomePage(globalSettings: injector.globalSettings),
         "/Home": (context) => HomePage(globalSettings: injector.globalSettings),
         "/Budgets": (context) => AlertWindowBack(),
         "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
