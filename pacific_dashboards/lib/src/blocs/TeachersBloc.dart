@@ -14,7 +14,8 @@ class TeachersBloc extends BaseBloc<TeachersModel> {
     _fetcher.add(model);
   }
 
-  dispose() {
+  dispose() async {
+    await _fetcher.drain();
     _fetcher.close();
   }
 }

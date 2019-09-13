@@ -46,7 +46,7 @@ class ExamsPageState extends State<ExamsPage> {
         backgroundColor: AppColors.kWhite,
         appBar: PlatformAppBar(
           iconTheme: new IconThemeData(color: AppColors.kWhite),
-          backgroundColor: AppColors.kDenim,
+          backgroundColor: AppColors.kRoyalBlue,
           title: Text(
             ExamsPage._kPageName,
             style: TextStyle(
