@@ -14,7 +14,8 @@ class ExamsBloc extends BaseBloc<ExamsModel> {
     _fetcher.add(model);
   }
 
-  dispose() {
+  dispose() async {
+    await _fetcher.drain();
     _fetcher.close();
   }
 }

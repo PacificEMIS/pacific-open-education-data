@@ -3,12 +3,12 @@ import 'package:rxdart/rxdart.dart';
 
 class FilterBloc {
   final Filter filter;
-  final fetcher = BehaviorSubject<Filter>();
+  final _fetcher = BehaviorSubject<Filter>();
   final String defaultSelectedKey;
 
   String _tempSelectedKey = "";
 
-  Observable<Filter> get data => fetcher.stream;
+  Observable<Filter> get data => _fetcher.stream;
 
   FilterBloc({this.filter, this.defaultSelectedKey});
 
@@ -25,7 +25,7 @@ class FilterBloc {
 
   fetchData() {
     filter.generateNewTempFilter();
-    fetcher.add(filter);
+    _fetcher.add(filter);
   }
 
   changeSelectedById(String id) {
@@ -34,7 +34,7 @@ class FilterBloc {
       filter.filterTemp[k] = (k == id);
     });
 
-    fetcher.add(filter);
+    _fetcher.add(filter);
   }
 
   setDefaultFilter() {
@@ -44,7 +44,7 @@ class FilterBloc {
       filter.filterTemp[k] = !isCustom || (k == defaultSelectedKey);
     });
 
-    fetcher.add(filter);
+    _fetcher.add(filter);
   }
 
   applyChanges() {
@@ -52,7 +52,8 @@ class FilterBloc {
     filter.applyFilter();
   }
 
-  dispose() {
-    fetcher.close();
+  dispose() async {
+    await _fetcher.drain();
+    _fetcher.close();
   }
 }

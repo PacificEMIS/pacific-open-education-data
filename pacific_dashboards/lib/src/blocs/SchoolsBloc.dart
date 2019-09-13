@@ -3,18 +3,19 @@ import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SchoolsBloc extends BaseBloc<SchoolsModel> {
-  final fetcher = PublishSubject<SchoolsModel>();
+  final _fetcher = PublishSubject<SchoolsModel>();
 
-  Observable<SchoolsModel> get data => fetcher.stream;
+  Observable<SchoolsModel> get data => _fetcher.stream;
 
   SchoolsBloc({repository}) : super(repository: repository);
 
   fetchData() async {
     var model = await repository.fetchAllSchools();
-    fetcher.add(model);
+    _fetcher.add(model);
   }
 
-  dispose() {
-    fetcher.close();
+  dispose() async {
+    await _fetcher.drain();
+    _fetcher.close();
   }
 }
