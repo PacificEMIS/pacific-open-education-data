@@ -15,10 +15,12 @@ class FileProviderImpl extends FileProvider {
   static const _KEY_EXAMS = "exams";
   static const _KEY_LOOKUPS = "lookups";
 
+  String eTag;
   SharedPreferences _sharedPreferences;
 
-  FileProviderImpl(SharedPreferences sharedPreferences) {
+  FileProviderImpl(SharedPreferences sharedPreferences, String eTagValue) {
     _sharedPreferences = sharedPreferences;
+    eTag = eTagValue;
   }
 
   Future<String> get _localPath async {
@@ -44,7 +46,7 @@ class FileProviderImpl extends FileProvider {
   Future<File> _writeFile(String key, dynamic model) async {
     try {
       final file = await _createFile(key);
-      _saveTime(key);
+      _saveVersion(key);
       return file.writeAsString(jsonEncode(model.toJson()));
     } catch (e, stack) {
       debugPrint(e.toString() + stack.toString());
@@ -52,12 +54,27 @@ class FileProviderImpl extends FileProvider {
     }
   }
 
+  Future<bool> _saveVersion(String key) async {
+    return _sharedPreferences.setString(key + "version", eTag);
+  }
+
   Future<bool> _saveTime(String key) async {
     final todayDate = DateTime.now();
     return _sharedPreferences.setString(key + 'time', todayDate.toString());
   }
 
+  Future<bool> _isVersionPassed(String key, String etag) async {
+    try {
+      final version = _sharedPreferences.getString(key + "version") ??
+          "empty";
+      return version != etag;
+    } catch (e) {
+      return true;
+    }
+  }
+
   Future<bool> _isTimePassed(String key) async {
+    return true;
     try {
       final timeStr = _sharedPreferences.getString(key + 'time') ??
           new DateTime(0).toString();
@@ -72,7 +89,7 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<String> loadFileData(String key) async {
-    if (!await _isTimePassed(key)) {
+    if (!await _isVersionPassed(key, eTag)) {
       String result = await _readFile(key);
       return result;
     }
@@ -101,7 +118,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<SchoolsModel> fetchValidSchoolsModel() async {
     try {
-      if (!await _isTimePassed(_KEY_SCHOOLS)) {
+      if (!await _isVersionPassed(_KEY_SCHOOLS, eTag)) {
         return fetchSchoolsModel();
       }
       return null;
@@ -114,7 +131,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<TeachersModel> fetchValidTeachersModel() async {
     try {
-      if (!await _isTimePassed(_KEY_TEACHERS)) {
+      if (!await _isVersionPassed(_KEY_TEACHERS, eTag)) {
         return fetchTeachersModel();
       }
       return null;
@@ -127,7 +144,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<ExamsModel> fetchValidExamsModel() async {
     try {
-      if (!await _isTimePassed(_KEY_EXAMS)) {
+      if (!await _isVersionPassed(_KEY_EXAMS, eTag)) {
         return fetchExamsModel();
       }
       return null;
@@ -140,7 +157,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<LookupsModel> fetchValidLookupsModel() async {
     try {
-      if (!await _isTimePassed(_KEY_LOOKUPS)) {
+      if (!await _isVersionPassed(_KEY_LOOKUPS, eTag)) {
         return fetchLookupsModel();
       }
       return null;

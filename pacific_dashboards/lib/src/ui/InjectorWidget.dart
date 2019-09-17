@@ -38,9 +38,13 @@ class InjectorWidget extends InheritedWidget {
     }
 
     _sharedPreferences = await SharedPreferences.getInstance();
-    _repository = RepositoryImpl(
-        ServerBackendProvider(), FileProviderImpl(_sharedPreferences));
+    var currentDataVersion = await ServerBackendProvider().fetchCurrentVersion();
     _globalSettings = GlobalSettings(_sharedPreferences);
+    _globalSettings.currentDataVersion = currentDataVersion;
+
+    _repository = RepositoryImpl(
+        ServerBackendProvider(), FileProviderImpl(_sharedPreferences, currentDataVersion));
+        // fetch current version 
   }
 
   TeachersBloc get teachersBloc {
