@@ -171,7 +171,7 @@ class TeachersPageState extends State<TeachersPage> {
         break;
       case 1:
         return BaseTileWidget(
-          title: TitleWidget(AppLocalizations.schoolsEnrollmentGovtNonGovt,
+          title: TitleWidget(AppLocalizations.teachersEnrollmentGovtNonGovt,
               AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
@@ -228,7 +228,7 @@ class TeachersPageState extends State<TeachersPage> {
 
         return BaseTileWidget(
           title: TitleWidget(
-              AppLocalizations.schoolsEnrollmentBySchoolTypeStateAndGender,
+              AppLocalizations.teacherBySchoolTypeStateAndGender,
               AppColors.kRacingGreen),
           body: Column(
             children: widgets,

@@ -43,7 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterByClassLevel" : MessageLookupByLibrary.simpleMessage("Filter by class level"),
     "filterByGovernment" : MessageLookupByLibrary.simpleMessage("Filter by government"),
     "filterBySchoolType" : MessageLookupByLibrary.simpleMessage("Teachers by School type, State and Gender"),
-    "filterByStandart" : MessageLookupByLibrary.simpleMessage("Filter by standard"),
+    "filterByStandard" : MessageLookupByLibrary.simpleMessage("Filter by standard"),
     "filterByState" : MessageLookupByLibrary.simpleMessage("Filter by state"),
     "filterByYear" : MessageLookupByLibrary.simpleMessage("Filter by year"),
     "indicators" : MessageLookupByLibrary.simpleMessage("Indicators"),

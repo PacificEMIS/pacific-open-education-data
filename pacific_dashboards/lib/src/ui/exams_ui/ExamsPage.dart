@@ -163,7 +163,7 @@ class ExamsPageState extends State<ExamsPage> {
       rows += _bottomMenuRow(
           snapshot.data.examsDataNavigator.prevExamStandard,
           snapshot.data.examsDataNavigator.nextExamStandard,
-          AppLocalizations.filterByStandart,
+          AppLocalizations.filterByStandard,
           snapshot.data.examsDataNavigator.getStandardName());
     }
     return [

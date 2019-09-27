@@ -39,7 +39,7 @@ class AppLocalizations {
   // Exams
   static String get exam => Intl.message("Exam", name: "exam");
   static String get view => Intl.message("View", name: "view");
-  static String get filterByStandart => Intl.message("Filter by standard", name: "filterByStandart");
+  static String get filterByStandard => Intl.message("Filter by standard", name: "filterByStandard");
   // Schools
   static String get schoolsEnrollment => Intl.message("Schools Enrollment", name: "schoolsEnrollment");
   static String get displayAllStates => Intl.message("Display All States", name: "displayAllStates");
@@ -73,6 +73,9 @@ class AppLocalizations {
   static String get displayAllLevel => Intl.message('Display all level filters', name: "displayAllLevel");
   static String get teachersByAuthority => Intl.message("Teachers by Authority", name: "teachersByAuthority");
   static String get teachersByState => Intl.message("Teachers by State", name: "teachersByState");
+    static String get teacherBySchoolTypeStateAndGender => Intl.message("Teacher by School type, \nState and Gender", name: "teacherBySchoolTypeStateAndGender");
+   static String get teachersEnrollmentGovtNonGovt => Intl.message("Teachers Enrollment Govt / \nNon-govt", name: "teachersEnrollmentGovtNonGovt");
+ 
   static String get splash => Intl.message("\nPACIFIC OPEN\n EDUCATION DATA", name: "splash");
 }
 
