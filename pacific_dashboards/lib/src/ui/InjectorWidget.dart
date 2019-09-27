@@ -39,7 +39,7 @@ class InjectorWidget extends InheritedWidget {
 
     _sharedPreferences = await SharedPreferences.getInstance();
     _repository = RepositoryImpl(
-        ServerBackendProvider(), FileProviderImpl(_sharedPreferences));
+        ServerBackendProvider(_sharedPreferences), FileProviderImpl(_sharedPreferences));
     _globalSettings = GlobalSettings(_sharedPreferences);
   }
 

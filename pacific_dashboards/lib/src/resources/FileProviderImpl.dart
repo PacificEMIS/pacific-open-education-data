@@ -14,11 +14,21 @@ class FileProviderImpl extends FileProvider {
   static const _KEY_TEACHERS = "teachers";
   static const _KEY_EXAMS = "exams";
   static const _KEY_LOOKUPS = "lookups";
+  static String BASE_PATH = "FSOM";
+  static const String FEDERAL_STATES_OF_MICRONESIA = "FSOM";
+  static const String MARSHALL_ISLANDS_URL = "MI";
+
+  static const String _kCountryKey = "country";
+  static const String _kDefaultCountry = "Federated States of Micronesia";
 
   SharedPreferences _sharedPreferences;
 
   FileProviderImpl(SharedPreferences sharedPreferences) {
     _sharedPreferences = sharedPreferences;
+
+    BASE_PATH = _sharedPreferences.getString(_kCountryKey) == _kDefaultCountry
+        ? FEDERAL_STATES_OF_MICRONESIA
+        : MARSHALL_ISLANDS_URL;
   }
 
   Future<String> get _localPath async {
@@ -28,12 +38,12 @@ class FileProviderImpl extends FileProvider {
 
   Future<File> _createFile(String key) async {
     final path = await _localPath;
-    return File('$path/$key.txt');
+    return File('$path/$BASE_PATH$key.txt');
   }
 
   Future<String> _readFile(String key) async {
     try {
-      final file = await _createFile(key);
+      final file = await _createFile(BASE_PATH + key);
       String contents = await file.readAsString();
       return contents;
     } catch (e) {
@@ -43,8 +53,8 @@ class FileProviderImpl extends FileProvider {
 
   Future<File> _writeFile(String key, dynamic model) async {
     try {
-      final file = await _createFile(key);
-      _saveTime(key);
+      final file = await _createFile(BASE_PATH + key);
+      _saveTime(BASE_PATH + key);
       return file.writeAsString(jsonEncode(model.toJson()));
     } catch (e, stack) {
       debugPrint(e.toString() + stack.toString());
@@ -54,12 +64,12 @@ class FileProviderImpl extends FileProvider {
 
   Future<bool> _saveTime(String key) async {
     final todayDate = DateTime.now();
-    return _sharedPreferences.setString(key + 'time', todayDate.toString());
+    return _sharedPreferences.setString(BASE_PATH + key + 'time', todayDate.toString());
   }
 
   Future<bool> _isTimePassed(String key) async {
     try {
-      final timeStr = _sharedPreferences.getString(key + 'time') ??
+      final timeStr = _sharedPreferences.getString(BASE_PATH + key + 'time') ??
           new DateTime(0).toString();
       DateTime oldDate = DateTime.parse(timeStr);
       final todayDate = DateTime.now();
@@ -72,36 +82,36 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<String> loadFileData(String key) async {
-    if (!await _isTimePassed(key)) {
-      String result = await _readFile(key);
+    if (!await _isTimePassed(BASE_PATH + key)) {
+      String result = await _readFile(BASE_PATH + key);
       return result;
     }
   }
 
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
-    return SchoolsModel.fromJson(json.decode(await _readFile(_KEY_SCHOOLS)));
+    return SchoolsModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_SCHOOLS)));
   }
 
   @override
   Future<TeachersModel> fetchTeachersModel() async {
-    return TeachersModel.fromJson(json.decode(await _readFile(_KEY_TEACHERS)));
+    return TeachersModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_TEACHERS)));
   }
 
   @override
   Future<ExamsModel> fetchExamsModel() async {
-    return ExamsModel.fromJson(json.decode(await _readFile(_KEY_EXAMS)));
+    return ExamsModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_EXAMS)));
   }
 
   @override
   Future<LookupsModel> fetchLookupsModel() async {
-    return LookupsModel.fromJson(jsonDecode(await _readFile(_KEY_LOOKUPS)));
+    return LookupsModel.fromJson(jsonDecode(await _readFile(BASE_PATH + _KEY_LOOKUPS)));
   }
 
   @override
   Future<SchoolsModel> fetchValidSchoolsModel() async {
     try {
-      if (!await _isTimePassed(_KEY_SCHOOLS)) {
+      if (!await _isTimePassed(BASE_PATH + _KEY_SCHOOLS)) {
         return fetchSchoolsModel();
       }
       return null;
@@ -114,7 +124,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<TeachersModel> fetchValidTeachersModel() async {
     try {
-      if (!await _isTimePassed(_KEY_TEACHERS)) {
+      if (!await _isTimePassed(BASE_PATH + _KEY_TEACHERS)) {
         return fetchTeachersModel();
       }
       return null;
@@ -127,7 +137,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<ExamsModel> fetchValidExamsModel() async {
     try {
-      if (!await _isTimePassed(_KEY_EXAMS)) {
+      if (!await _isTimePassed(BASE_PATH + _KEY_EXAMS)) {
         return fetchExamsModel();
       }
       return null;
@@ -140,7 +150,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<LookupsModel> fetchValidLookupsModel() async {
     try {
-      if (!await _isTimePassed(_KEY_LOOKUPS)) {
+      if (!await _isTimePassed(BASE_PATH + _KEY_LOOKUPS)) {
         return fetchLookupsModel();
       }
       return null;
@@ -152,21 +162,21 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<bool> saveSchoolsModel(SchoolsModel model) async {
-    return await _writeFile(_KEY_SCHOOLS, model) != null;
+    return await _writeFile(BASE_PATH + _KEY_SCHOOLS, model) != null;
   }
 
   @override
   Future<bool> saveTeachersModel(TeachersModel model) async {
-    return await _writeFile(_KEY_TEACHERS, model) != null;
+    return await _writeFile(BASE_PATH + _KEY_TEACHERS, model) != null;
   }
 
   @override
   Future<bool> saveExamsModel(ExamsModel model) async {
-    return await _writeFile(_KEY_EXAMS, model) != null;
+    return await _writeFile(BASE_PATH + _KEY_EXAMS, model) != null;
   }
 
   @override
   Future<bool> saveLookupsModel(LookupsModel model) async {
-    return await _writeFile(_KEY_LOOKUPS, model) != null;
+    return await _writeFile(BASE_PATH + _KEY_LOOKUPS, model) != null;
   }
 }
