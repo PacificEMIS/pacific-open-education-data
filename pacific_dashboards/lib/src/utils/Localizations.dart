@@ -39,7 +39,7 @@ class AppLocalizations {
   // Exams
   static String get exam => Intl.message("Exam", name: "exam");
   static String get view => Intl.message("View", name: "view");
-  static String get filterByStandart => Intl.message("Filter by standart", name: "filterByStandart");
+  static String get filterByStandart => Intl.message("Filter by standard", name: "filterByStandart");
   // Schools
   static String get schoolsEnrollment => Intl.message("Schools Enrollment", name: "schoolsEnrollment");
   static String get displayAllStates => Intl.message("Display All States", name: "displayAllStates");
