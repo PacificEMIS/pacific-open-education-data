@@ -75,7 +75,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "filterByStandart": "Filter by standart",
+  "filterByStandart": "Filter by standard",
   "@filterByStandart": {
     "type": "text",
     "placeholders": {}
