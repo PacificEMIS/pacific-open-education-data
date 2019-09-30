@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/models/ExamsModel.dart';
 import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolAccreditationsModel.dart';
 import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
 import 'package:pacific_dashboards/src/models/TeachersModel.dart';
 import 'package:pacific_dashboards/src/resources/FileProvider.dart';
@@ -13,6 +14,7 @@ class FileProviderImpl extends FileProvider {
   static const _KEY_SCHOOLS = "schools";
   static const _KEY_TEACHERS = "teachers";
   static const _KEY_EXAMS = "exams";
+  static const _KEY_SCHOOL_ACCREDITATIONS = "accreditations";
   static const _KEY_LOOKUPS = "lookups";
   static String BASE_PATH = "FSOM";
   static const String FEDERAL_STATES_OF_MICRONESIA = "FSOM";
@@ -104,6 +106,11 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
+  Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModel() async {
+    return SchoolAccreditationsModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS)));
+  }
+
+  @override
   Future<LookupsModel> fetchLookupsModel() async {
     return LookupsModel.fromJson(jsonDecode(await _readFile(BASE_PATH + _KEY_LOOKUPS)));
   }
@@ -148,6 +155,19 @@ class FileProviderImpl extends FileProvider {
   }
 
   @override
+  Future<SchoolAccreditationsModel> fetchValidSchoolAccreditationsModel() async {
+    try {
+      if (!await _isTimePassed(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS)) {
+        return fetchSchoolAccreditationsModel();
+      }
+      return null;
+    } catch (e, stack) {
+      debugPrint(e.toString() + stack.toString());
+      return null;
+    }
+  }
+
+  @override
   Future<LookupsModel> fetchValidLookupsModel() async {
     try {
       if (!await _isTimePassed(BASE_PATH + _KEY_LOOKUPS)) {
@@ -173,6 +193,12 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<bool> saveExamsModel(ExamsModel model) async {
     return await _writeFile(BASE_PATH + _KEY_EXAMS, model) != null;
+  }
+
+
+  @override
+  Future<bool> saveSchoolAccreditaitonsModel(SchoolAccreditationsModel model) async {
+    return await _writeFile(BASE_PATH + _KEY_LOOKUPS, model) != null;
   }
 
   @override

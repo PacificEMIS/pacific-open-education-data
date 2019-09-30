@@ -1,5 +1,6 @@
 import 'package:pacific_dashboards/src/models/ExamsModel.dart';
 import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolAccreditationsModel.dart';
 import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
 import 'package:pacific_dashboards/src/models/TeachersModel.dart';
 import 'package:pacific_dashboards/src/resources/FileProvider.dart';
@@ -61,6 +62,21 @@ class RepositoryImpl implements Repository {
     }
     result.lookupsModel = await fetchAllLookups();
     return result;
+  }
+
+  @override 
+  Future<SchoolAccreditationsModel> fetchAllAccreditaitons() async {
+    SchoolAccreditationsModel result;
+      
+    try {
+      result = await _fileProvider.fetchValidSchoolAccreditationsModel();
+      if (result == null) {
+        result = await _backendProvider.fetchSchoolAccreditationsModel();
+        await _fileProvider.saveSchoolAccreditaitonsModel(result);
+      }
+    } catch (e) {
+      result = await _fileProvider.fetchSchoolAccreditationsModel();
+    }
   }
 
   @override
