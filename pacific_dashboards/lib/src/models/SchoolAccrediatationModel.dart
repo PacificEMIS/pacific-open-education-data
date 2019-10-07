@@ -1,89 +1,76 @@
 class SchoolAccreditationModel {
-  final String exam;
-  final int examYear;
+  final int surveyYear;
   final String districtCode;
-  final String examStandard;
-  final String examBenchmark;
-  final int candidatesM;
-  final int candidatesF;
-  final List<int> resultsM;
-  final List<int> resultsF;
+  final String district;
+  final String authorityCode;
+  final String authority;
+  final String authorityGovtCode;
+  final String authorityGovt;
+  final String schoolTypeCode;
+  final String schoolType;
+  final String inspectionResult;
+  final String standart;
+  final int numSum;
+  final int numThisYear;
+  final int level1;
+  final int level2;
+  final int level3;
+  final int level4;
 
   SchoolAccreditationModel({
-    this.exam,
-    this.examYear,
+    this.surveyYear,
     this.districtCode,
-    this.examStandard,
-    this.examBenchmark,
-    this.candidatesM,
-    this.candidatesF,
-    this.resultsM,
-    this.resultsF,
+    this.district,
+    this.authorityCode,
+    this.authority,
+    this.authorityGovtCode,
+    this.authorityGovt,
+    this.schoolTypeCode,
+    this.schoolType,
+    this.inspectionResult,
+    this.numSum,
+    this.numThisYear,
+    this.standart,
+    this.level1,
+    this.level2,
+    this.level3,
+    this.level4,
   });
 
   factory SchoolAccreditationModel.fromJson(Map parsedJson) {
     return SchoolAccreditationModel(
-      exam: parsedJson['Exam'] ?? "",
-      examYear: parsedJson['ExamYear'] ?? 0,
-      districtCode: parsedJson['DistrictCode'] ?? "",
-      examStandard: parsedJson['ExamStandard'] ?? "",
-      examBenchmark: parsedJson['ExamBenchmark'] ?? "",
-      candidatesM: parsedJson['CandidatesM'] ?? 0,
-      candidatesF: parsedJson['CandidatesF'] ?? 0,
-      resultsM: [
-        parsedJson['1M'] ?? 0,
-        parsedJson['ApproachingCompetenceM'] ?? 0,
-        parsedJson['MinimallyCompetentM'] ?? 0,
-        parsedJson['CompetentM'] ?? 0
-      ],
-      resultsF: [
-        parsedJson['WellBelowCompetentF'] ?? 0,
-        parsedJson['ApproachingCompetenceF'] ?? 0,
-        parsedJson['MinimallyCompetentF'] ?? 0,
-        parsedJson['CompetentF'] ?? 0
-      ],
-    );
-  }
-
-  factory SchoolAccreditationModel.sum(SchoolAccreditationModel one, SchoolAccreditationModel two) {
-    return SchoolAccreditationModel(
-      exam: one.exam,
-      examYear: one.examYear,
-      districtCode: one.districtCode,
-      examStandard: one.examStandard,
-      examBenchmark: one.examBenchmark,
-      candidatesM: one.candidatesM + two.candidatesM,
-      candidatesF: one.candidatesF + two.candidatesF,
-      resultsM: [
-        one.resultsM[0] + two.resultsM[0],
-        one.resultsM[1] + two.resultsM[1],
-        one.resultsM[2] + two.resultsM[2],
-        one.resultsM[3] + two.resultsM[3],
-      ],
-      resultsF: [
-        one.resultsF[0] + two.resultsF[0],
-        one.resultsF[1] + two.resultsF[1],
-        one.resultsF[2] + two.resultsF[2],
-        one.resultsF[3] + two.resultsF[3],
-      ],
-    );
+        surveyYear: parsedJson['SurveyYear'] ?? 0,
+        districtCode: parsedJson['DistrictCode'] ?? "",
+        district: parsedJson['District'] ?? "",
+        authorityCode: parsedJson['AuthorityCode'] ?? "",
+        authority: parsedJson['Authority'] ?? "",
+        authorityGovtCode: parsedJson['AuthorityGovtCode'] ?? "",
+        authorityGovt: parsedJson['AuthorityGovt'] ?? "",
+        schoolTypeCode: parsedJson['SchoolTypeCode'] ?? "",
+        schoolType: parsedJson['SchoolType'] ?? "",
+        inspectionResult: parsedJson['InspectionResult'] ?? "",
+        numSum: parsedJson['Num'] ?? 0,
+        numThisYear: parsedJson['NumThisYear'] ?? 0,
+        standart: parsedJson['Standard'] ?? "",
+        level1: parsedJson['Level1'] ?? 0,
+        level2: parsedJson['Level2'] ?? 0,
+        level3: parsedJson['Level3'] ?? 0,
+        level4: parsedJson['Level4'] ?? 0);
   }
 
   Map<String, dynamic> toJson() => {
-        'Exam': exam,
-        'ExamYear': examYear,
+        'SurveyYear': surveyYear,
         'DistrictCode': districtCode,
-        'ExamStandard': examStandard,
-        'ExamBenchmark': examBenchmark,
-        'CandidatesM': candidatesM,
-        'CandidatesF': candidatesF,
-        '1M': resultsM[0],
-        'ApproachingCompetenceM': resultsM[1],
-        'MinimallyCompetentM': resultsM[2],
-        'CompetentM': resultsM[3],
-        'WellBelowCompetentF': resultsF[0],
-        'ApproachingCompetenceF': resultsF[1],
-        'MinimallyCompetentF': resultsF[2],
-        'CompetentF': resultsF[3],
+        'District': district,
+        'AuthorityCode': authorityCode,
+        'Authority': authority,
+        'AuthorityGovtCode': authorityGovtCode,
+        'AuthorityGovt': authorityGovt,
+        'SchoolTypeCode': schoolTypeCode,
+        'SchoolType': schoolType,
+        'InspectionResult': inspectionResult,
+        'Num': numSum,
+        'NumThisYear': numThisYear,
+        'Standard': standart
       };
 }

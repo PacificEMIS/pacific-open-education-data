@@ -13,12 +13,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ServerBackendProvider implements Provider {
   static String BASE_URL = "https://fedemis.doe.fm";
-  static const String FEDERAL_STATES_OF_MICRONESIA_URL = "https://fedemis.doe.fm/";
-  static const String MARSHALL_ISLANDS_URL = "http://data.pss.edu.mh/miemis/";
+  static const String FEDERAL_STATES_OF_MICRONESIA_URL = "https://fedemis.doe.fm";
+  static const String MARSHALL_ISLANDS_URL = "http://data.pss.edu.mh/miemis";
   static const String TEACHERS_API_KEY = "warehouse/teachercount";
   static const String SCHOOLS_API_KEY = "warehouse/tableenrol";
   static const String EXAMS_API_KEY = "warehouse/examsdistrictresults";
-  static const String SCHOOL_ACCREDITATIONS_API_KEY = "/api/warehouse/accreditations";
+  static const String SCHOOL_ACCREDITATIONS_API_KEY = "warehouse/accreditations";
+  static const String SCHOOL_ACCREDITATIONS_BY_PERFOMANCE_API_KEY = "warehouse/accreditations/table?byStandard";
   static const String LOOKUPS_API_KEY = "lookups/collection/core";
 
   static const String _kCountryKey = "country";
@@ -33,7 +34,7 @@ class ServerBackendProvider implements Provider {
   Client _client = Client();
 
   Future<String> _request(String path) async {
-    BASE_URL = _sharedPreferences.getString(_kCountryKey) == _kDefaultCountry
+    BASE_URL = (_sharedPreferences.getString(_kCountryKey)  ?? _kDefaultCountry) == _kDefaultCountry
         ? FEDERAL_STATES_OF_MICRONESIA_URL
         : MARSHALL_ISLANDS_URL;
 
@@ -70,6 +71,13 @@ class ServerBackendProvider implements Provider {
   @override
   Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModel() async {
    final responseData = await _request(SCHOOL_ACCREDITATIONS_API_KEY);
+    return SchoolAccreditationsModel.fromJson(json.decode(responseData.toString()));
+  }
+
+
+  @override
+  Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModelByPerfomance() async {
+   final responseData = await _request(SCHOOL_ACCREDITATIONS_BY_PERFOMANCE_API_KEY);
     return SchoolAccreditationsModel.fromJson(json.decode(responseData.toString()));
   }
 

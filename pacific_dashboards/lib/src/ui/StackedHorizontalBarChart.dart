@@ -57,7 +57,8 @@ class StackedHorizontalBarChart extends StatelessWidget {
               widthFactor: 320,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: _generateTitles())),
+                  children: _generateTitles()
+                  )),
         ]));
   }
 

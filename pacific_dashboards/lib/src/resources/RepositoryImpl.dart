@@ -64,10 +64,9 @@ class RepositoryImpl implements Repository {
     return result;
   }
 
-  @override 
+  @override
   Future<SchoolAccreditationsModel> fetchAllAccreditaitons() async {
     SchoolAccreditationsModel result;
-      
     try {
       result = await _fileProvider.fetchValidSchoolAccreditationsModel();
       if (result == null) {
@@ -77,6 +76,8 @@ class RepositoryImpl implements Repository {
     } catch (e) {
       result = await _fileProvider.fetchSchoolAccreditationsModel();
     }
+    result.lookupsModel = await fetchAllLookups();
+    return result;
   }
 
   @override

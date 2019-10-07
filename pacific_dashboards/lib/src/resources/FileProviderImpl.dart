@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/models/ExamsModel.dart';
 import 'package:pacific_dashboards/src/models/LookupsModel.dart';
 import 'package:pacific_dashboards/src/models/SchoolAccreditationsModel.dart';
@@ -28,9 +27,11 @@ class FileProviderImpl extends FileProvider {
   FileProviderImpl(SharedPreferences sharedPreferences) {
     _sharedPreferences = sharedPreferences;
 
-    BASE_PATH = _sharedPreferences.getString(_kCountryKey) == _kDefaultCountry
-        ? FEDERAL_STATES_OF_MICRONESIA
-        : MARSHALL_ISLANDS_URL;
+    BASE_PATH =
+        (_sharedPreferences.getString(_kCountryKey) ?? _kDefaultCountry) ==
+                _kDefaultCountry
+            ? FEDERAL_STATES_OF_MICRONESIA
+            : MARSHALL_ISLANDS_URL;
   }
 
   Future<String> get _localPath async {
@@ -40,12 +41,12 @@ class FileProviderImpl extends FileProvider {
 
   Future<File> _createFile(String key) async {
     final path = await _localPath;
-    return File('$path/$BASE_PATH$key.txt');
+    return File('$path/$key.txt');
   }
 
   Future<String> _readFile(String key) async {
     try {
-      final file = await _createFile(BASE_PATH + key);
+      final file = await _createFile(key);
       String contents = await file.readAsString();
       return contents;
     } catch (e) {
@@ -55,27 +56,27 @@ class FileProviderImpl extends FileProvider {
 
   Future<File> _writeFile(String key, dynamic model) async {
     try {
-      final file = await _createFile(BASE_PATH + key);
-      _saveTime(BASE_PATH + key);
+      final file = await _createFile(key);
+      _saveTime(key);
       return file.writeAsString(jsonEncode(model.toJson()));
     } catch (e, stack) {
-      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
 
   Future<bool> _saveTime(String key) async {
     final todayDate = DateTime.now();
-    return _sharedPreferences.setString(BASE_PATH + key + 'time', todayDate.toString());
+    return _sharedPreferences.setString(key + 'time', todayDate.toString());
   }
 
   Future<bool> _isTimePassed(String key) async {
     try {
-      final timeStr = _sharedPreferences.getString(BASE_PATH + key + 'time') ??
+      final timeStr = _sharedPreferences.getString(key + 'time') ??
           new DateTime(0).toString();
       DateTime oldDate = DateTime.parse(timeStr);
       final todayDate = DateTime.now();
       final timePass = todayDate.difference(oldDate);
+
       return timePass.inHours > 12 || timePass.inMinutes < -5;
     } catch (e) {
       return true;
@@ -92,27 +93,33 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
-    return SchoolsModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_SCHOOLS)));
+    return SchoolsModel.fromJson(
+        json.decode(await _readFile(BASE_PATH + _KEY_SCHOOLS)));
   }
 
   @override
   Future<TeachersModel> fetchTeachersModel() async {
-    return TeachersModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_TEACHERS)));
+    return TeachersModel.fromJson(
+        json.decode(await _readFile(BASE_PATH + _KEY_TEACHERS)));
   }
 
   @override
   Future<ExamsModel> fetchExamsModel() async {
-    return ExamsModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_EXAMS)));
+    return ExamsModel.fromJson(
+        json.decode(await _readFile(BASE_PATH + _KEY_EXAMS)));
   }
 
   @override
   Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModel() async {
-    return SchoolAccreditationsModel.fromJson(json.decode(await _readFile(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS)));
+    List<dynamic> parsedJson =
+        json.decode(await _readFile(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS));
+    return SchoolAccreditationsModel.fromJson(parsedJson);
   }
 
   @override
   Future<LookupsModel> fetchLookupsModel() async {
-    return LookupsModel.fromJson(jsonDecode(await _readFile(BASE_PATH + _KEY_LOOKUPS)));
+    return LookupsModel.fromJson(
+        jsonDecode(await _readFile(BASE_PATH + _KEY_LOOKUPS)));
   }
 
   @override
@@ -123,7 +130,6 @@ class FileProviderImpl extends FileProvider {
       }
       return null;
     } catch (e, stack) {
-      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -136,7 +142,6 @@ class FileProviderImpl extends FileProvider {
       }
       return null;
     } catch (e, stack) {
-      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -149,20 +154,19 @@ class FileProviderImpl extends FileProvider {
       }
       return null;
     } catch (e, stack) {
-      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
 
   @override
-  Future<SchoolAccreditationsModel> fetchValidSchoolAccreditationsModel() async {
+  Future<SchoolAccreditationsModel>
+      fetchValidSchoolAccreditationsModel() async {
     try {
       if (!await _isTimePassed(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS)) {
         return fetchSchoolAccreditationsModel();
       }
       return null;
     } catch (e, stack) {
-      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -175,7 +179,6 @@ class FileProviderImpl extends FileProvider {
       }
       return null;
     } catch (e, stack) {
-      debugPrint(e.toString() + stack.toString());
       return null;
     }
   }
@@ -195,10 +198,13 @@ class FileProviderImpl extends FileProvider {
     return await _writeFile(BASE_PATH + _KEY_EXAMS, model) != null;
   }
 
-
   @override
-  Future<bool> saveSchoolAccreditaitonsModel(SchoolAccreditationsModel model) async {
-    return await _writeFile(BASE_PATH + _KEY_LOOKUPS, model) != null;
+  Future<bool> saveSchoolAccreditaitonsModel(
+      SchoolAccreditationsModel model) async {
+    print("BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS");
+    print(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS);
+    return await _writeFile(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS, model) !=
+        null;
   }
 
   @override
