@@ -3,7 +3,6 @@ import 'package:pacific_dashboards/src/config/Constants.dart';
 
 class AccreditationTableData {
   static const String _kZeroSymbol = "-";
-
   final int level1;
   final int level2;
   final int level3;
@@ -23,7 +22,8 @@ class AccreditationTableData {
       ? (level2 + level3 + level4).toString()
       : _kZeroSymbol;
 
-  AccreditationTableData(this.level1, this.level2, this.level3, this.level4);
+  AccreditationTableData(
+      this.level1, this.level2, this.level3, this.level4);
 }
 
 class AccreditationTable extends StatefulWidget {
@@ -342,13 +342,17 @@ class _AccreditationTableState extends State<AccreditationTable> {
                 top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
+                 Expanded( child:
                 Text(
                   domain,
+                  maxLines: 3,
+                  textAlign: TextAlign.left,
                   style: TextStyle(
-                    fontSize: 12.0,
+                    fontSize: 9.0,
                     color: widget._textColor,
                   ),
                 ),
+                 ),
               ],
             ),
           ),

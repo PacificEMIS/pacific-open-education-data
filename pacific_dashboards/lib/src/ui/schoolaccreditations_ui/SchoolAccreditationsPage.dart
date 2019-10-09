@@ -207,6 +207,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
               children: widgets,
             ));
         break;
+      default:
     }
   }
 
@@ -235,13 +236,14 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
 
     rawMapData.forEach((k, v) {
       var levels = [0, 0, 0, 0, 0, 0, 0, 0];
+      String fullName;
+
       for (var j = 0; j < v.length; ++j) {
         var model = v;
         var inspectionResult = model[j].inspectionResult;
-              var numThisYear = 0;
-      var numSum = 0;
-
-
+        var numThisYear = 0;
+        var numSum = 0;
+        // fullName =  _dataLink.lookupsModel.getFullStandart(model[j].standartFull) ?? "";
         if (model[j].surveyYear.toString() == currentYear) {
           if (isByStandard) {
             inspectionResult = model[j].result;
@@ -270,11 +272,11 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       }
 
       if (isCumulative)
-        convertedData[k] =
-            AccreditationTableData(levels[4], levels[5], levels[6], levels[7]);
+        convertedData[k] = AccreditationTableData(
+            levels[4], levels[5], levels[6], levels[7]);
       else
-        convertedData[k] =
-            AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
+        convertedData[k] = AccreditationTableData(
+            levels[0], levels[1], levels[2], levels[3]);
     });
 
     return convertedData;

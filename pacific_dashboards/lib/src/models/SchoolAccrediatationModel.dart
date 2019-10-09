@@ -11,6 +11,7 @@ class SchoolAccreditationModel {
   final String inspectionResult;
   final String result;
   final String standart;
+  final String standartFull;
   final int numSum;
   final int numThisYear;
   final int numInYear;
@@ -35,6 +36,7 @@ class SchoolAccreditationModel {
     this.numThisYear,
     this.numInYear,
     this.standart,
+    this.standartFull,
     this.level1,
     this.level2,
     this.level3,
@@ -58,6 +60,7 @@ class SchoolAccreditationModel {
         numThisYear: parsedJson['NumThisYear'] ?? 0,
         numInYear: parsedJson['NumInYear'] ?? 0,
         standart: parsedJson['Standard'] ?? "",
+        standartFull:  parsedJson['Standard'] ?? "",
         level1: parsedJson['Level1'] ?? 0,
         level2: parsedJson['Level2'] ?? 0,
         level3: parsedJson['Level3'] ?? 0,

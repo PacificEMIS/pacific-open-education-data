@@ -2,7 +2,7 @@ class LookupsModel {
   static const String LOOKUPS_KEY_GOVT = "authorityGovt";
   static const String LOOKUPS_KEY_STATE = "districts";
   static const String LOOKUPS_KEY_AUTHORITY = "authorities";
-  static const String LOOKUPS_KEY_STANDARD = "standard";
+  static const String LOOKUPS_KEY_STANDARD = "accreditationTerms";
   static const String LOOKUPS_KEY_NO_KEY = "";
 
   static const String LOOKUPS_KEY = "C";
