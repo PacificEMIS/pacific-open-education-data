@@ -18,7 +18,7 @@ class ServerBackendProvider implements Provider {
   static const String TEACHERS_API_KEY = "warehouse/teachercount";
   static const String SCHOOLS_API_KEY = "warehouse/tableenrol";
   static const String EXAMS_API_KEY = "warehouse/examsdistrictresults";
-  static const String SCHOOL_ACCREDITATIONS_API_KEY = "warehouse/accreditations";
+  static const String SCHOOL_ACCREDITATIONS_API_KEY = "warehouse/accreditations/table?byState";
   static const String SCHOOL_ACCREDITATIONS_BY_PERFOMANCE_API_KEY = "warehouse/accreditations/table?byStandard";
   static const String LOOKUPS_API_KEY = "lookups/collection/core";
 
@@ -69,16 +69,13 @@ class ServerBackendProvider implements Provider {
   }
 
   @override
-  Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModel() async {
-   final responseData = await _request(SCHOOL_ACCREDITATIONS_API_KEY);
-    return SchoolAccreditationsModel.fromJson(json.decode(responseData.toString()));
-  }
-
-
-  @override
-  Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModelByPerfomance() async {
-   final responseData = await _request(SCHOOL_ACCREDITATIONS_BY_PERFOMANCE_API_KEY);
-    return SchoolAccreditationsModel.fromJson(json.decode(responseData.toString()));
+  Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModel() async { 
+   var responseData = await _request(SCHOOL_ACCREDITATIONS_BY_PERFOMANCE_API_KEY);
+   final testData =  await _request(SCHOOL_ACCREDITATIONS_API_KEY);
+    var modelFirst = SchoolAccreditationsModel.fromJson(json.decode(responseData.toString()));
+    var modelSecond  = SchoolAccreditationsModel.fromJson(json.decode(testData.toString()));
+    modelFirst.accreditations = modelFirst.accreditations + modelSecond.accreditations;
+    return modelFirst;
   }
 
   @override

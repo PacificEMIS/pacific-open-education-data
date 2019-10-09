@@ -156,28 +156,28 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     if (selectedYear == "") selectedYear = data.yearFilter.getMax();
     switch (index) {
       case 0:
-        title:
-        TitleWidget(AppLocalizations.schoolsEnrollmentByAuthority,
-            AppColors.kRacingGreen);
-        body:
-        Column(
-          children: <Widget>[
-            ChartFactory.getPieChartViewByData(
-                _generateMapOfSum(data.getSortedByState())),
-            widget._dividerWidget,
-          ],
-        );
+        // title:
+        // TitleWidget(AppLocalizations.schoolsEnrollmentByAuthority,
+        //     AppColors.kRacingGreen);
+        // body:
+        // Column(
+        //   children: <Widget>[
+        //     ChartFactory.getPieChartViewByData(
+        //         _generateMapOfSum(data.getSortedByState())),
+        //     widget._dividerWidget,
+        //   ],
+        // );
         break;
       case 1:
         List<Widget> widgets = List<Widget>();
         widgets.add(AccreditationTable(
             _generateAccreditationTableData(
-                data.getSortedByState(), false, selectedYear),
+                data.getSortedByState(), false, false, selectedYear),
             "Evaluated in $selectedYear",
             AppLocalizations.state));
         widgets.add(AccreditationTable(
             _generateAccreditationTableData(
-                data.getSortedByState(), true, selectedYear),
+                data.getSortedByState(), true, false, selectedYear),
             "Cumulative up to $selectedYear",
             AppLocalizations.state));
         return BaseTileWidget(
@@ -191,12 +191,12 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
         List<Widget> widgets = List<Widget>();
         widgets.add(AccreditationTable(
             _generateAccreditationTableData(
-                data.getSortedByStandart(), false, selectedYear),
+                data.getSortedByStandart(), false, true, selectedYear),
             "Evaluated in $selectedYear",
             AppLocalizations.state));
         widgets.add(AccreditationTable(
             _generateAccreditationTableData(
-                data.getSortedByStandart(), true, selectedYear),
+                data.getSortedByStandart(), true, true, selectedYear),
             "Cumulative up to $selectedYear",
             AppLocalizations.state));
         return BaseTileWidget(
@@ -228,8 +228,8 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
 
   Map<dynamic, AccreditationTableData> _generateAccreditationTableData(
       Map<dynamic, List<SchoolAccreditationModel>> rawMapData,
-      // String keyName,
       bool isCumulative,
+      bool isByStandard,
       String currentYear) {
     var convertedData = Map<dynamic, AccreditationTableData>();
 
@@ -237,19 +237,33 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       var levels = [0, 0, 0, 0, 0, 0, 0, 0];
       for (var j = 0; j < v.length; ++j) {
         var model = v;
+        var inspectionResult = model[j].inspectionResult;
+              var numThisYear = 0;
+      var numSum = 0;
+
+
         if (model[j].surveyYear.toString() == currentYear) {
-          if (model[j].inspectionResult == "Level 1") {
-            levels[0] += model[j].numThisYear ?? 0;
-            levels[4] += model[j].numSum ?? 0;
-          } else if (model[j].inspectionResult == "Level 2") {
-            levels[1] += model[j].numThisYear ?? 0;
-            levels[5] += model[j].numSum ?? 0;
-          } else if (model[j].inspectionResult == "Level 3") {
-            levels[2] += model[j].numThisYear ?? 0;
-            levels[6] += model[j].numSum ?? 0;
-          } else if (model[j].inspectionResult == "Level 4") {
-            levels[3] += model[j].numThisYear ?? 0;
-            levels[7] += model[j].numSum ?? 0;
+          if (isByStandard) {
+            inspectionResult = model[j].result;
+            numThisYear += model[j].numInYear ?? 0;
+            numSum += model[j].numSum ?? 0;
+          } else {
+            inspectionResult = model[j].inspectionResult;
+            numThisYear += model[j].numThisYear ?? 0;
+            numSum += model[j].numSum ?? 0;
+          }
+          if (inspectionResult == "Level 1") {
+            levels[0] += numThisYear;
+            levels[4] += numSum;
+          } else if (inspectionResult == "Level 2") {
+            levels[1] += numThisYear;
+            levels[5] += numSum;
+          } else if (inspectionResult == "Level 3") {
+            levels[2] += numThisYear;
+            levels[6] += numSum;
+          } else if (inspectionResult == "Level 4") {
+            levels[3] += numThisYear;
+            levels[7] += numSum;
           }
         }
         // }

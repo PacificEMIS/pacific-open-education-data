@@ -11,6 +11,7 @@ class SchoolAccreditationsModel extends ModelWithLookups {
   List<SchoolAccreditationModel> _accreditations;
 
   List<SchoolAccreditationModel> get accreditations => _accreditations;
+  void  set accreditations(  List<SchoolAccreditationModel> model) => _accreditations = model;
 
   Filter get yearFilter => _filters['year'];
 
