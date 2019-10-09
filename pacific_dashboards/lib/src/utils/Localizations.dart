@@ -122,7 +122,7 @@ class AppLocalizations {
       Intl.message("Teacher by School type, \nState and Gender",
           name: "teacherBySchoolTypeStateAndGender");
   static String get teachersEnrollmentGovtNonGovt =>
-      Intl.message("Teachers Enrollment Govt / \nNon-govt",
+      Intl.message("Teachers by Govt / \nNon-govt",
           name: "teachersEnrollmentGovtNonGovt");
   //School accreditations
   static String get accreditationProgress =>
