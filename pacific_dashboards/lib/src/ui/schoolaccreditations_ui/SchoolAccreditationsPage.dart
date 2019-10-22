@@ -168,45 +168,45 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
           ],
         );
         break;
-      // case 1:
-      //   List<Widget> widgets = List<Widget>();
-      //   widgets.add(AccreditationTable(
-      //       _generateAccreditationTableData(
-      //           data.getSortedByState(), false, false, selectedYear),
-      //       "Evaluated in $selectedYear",
-      //       AppLocalizations.state));
-      //   widgets.add(AccreditationTable(
-      //       _generateAccreditationTableData(
-      //           data.getSortedByState(), true, false, selectedYear),
-      //       "Cumulative up to $selectedYear",
-      //       AppLocalizations.state));
-      //   return BaseTileWidget(
-      //       title: TitleWidget(AppLocalizations.accreditationStatusByState,
-      //           AppColors.kRacingGreen),
-      //       body: Column(
-      //         children: widgets,
-      //       ));
-      //   break;
-      // case 2:
-      //   List<Widget> widgets = List<Widget>();
-      //   widgets.add(AccreditationTable(
-      //       _generateAccreditationTableData(
-      //           data.getSortedByStandart(), false, true, selectedYear),
-      //       "Evaluated in $selectedYear",
-      //       AppLocalizations.state));
-      //   widgets.add(AccreditationTable(
-      //       _generateAccreditationTableData(
-      //           data.getSortedByStandart(), true, true, selectedYear),
-      //       "Cumulative up to $selectedYear",
-      //       AppLocalizations.state));
-      //   return BaseTileWidget(
-      //       title: TitleWidget(
-      //           AppLocalizations.accreditationPerfomancebyStandard,
-      //           AppColors.kRacingGreen),
-      //       body: Column(
-      //         children: widgets,
-      //       ));
-      //   break;
+      case 1:
+        List<Widget> widgets = List<Widget>();
+        widgets.add(AccreditationTable(
+            _generateAccreditationTableData(
+                data.getSortedByState(), false, false, selectedYear),
+            "Evaluated in $selectedYear",
+            AppLocalizations.state));
+        widgets.add(AccreditationTable(
+            _generateAccreditationTableData(
+                data.getSortedByState(), true, false, selectedYear),
+            "Cumulative up to $selectedYear",
+            AppLocalizations.state));
+        return BaseTileWidget(
+            title: TitleWidget(AppLocalizations.accreditationStatusByState,
+                AppColors.kRacingGreen),
+            body: Column(
+              children: widgets,
+            ));
+        break;
+      case 2:
+        List<Widget> widgets = List<Widget>();
+        widgets.add(AccreditationTable(
+            _generateAccreditationTableData(
+                data.getSortedByStandart(), false, true, selectedYear),
+            "Evaluated in $selectedYear",
+            AppLocalizations.state));
+        widgets.add(AccreditationTable(
+            _generateAccreditationTableData(
+                data.getSortedByStandart(), true, true, selectedYear),
+            "Cumulative up to $selectedYear",
+            AppLocalizations.state));
+        return BaseTileWidget(
+            title: TitleWidget(
+                AppLocalizations.accreditationPerfomancebyStandard,
+                AppColors.kRacingGreen),
+            body: Column(
+              children: widgets,
+            ));
+        break;
       default:
     }
   }
