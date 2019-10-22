@@ -15,4 +15,5 @@ class AppColors {
   static Color kRoyalBlue = HexColor("#1A73E8");
   static Color kExamsTableTextGray = HexColor("#63696D");
   static Color kAppBarBackground = HexColor("#1A73E8");
+  static List<String> kGridColors = ["#2e86de", "#54a0ff", "#1A73E8", "#02B9F3", "#94DC39", "#FFBA0A", "#FF951A",  "#F85454", "#C9EBFF", "#2e86de", "#54a0ff", "#1A73E8", "#02B9F3", "#94DC39", "#FFBA0A", "#FF951A",  "#F85454", "#C9EBFF", "#2e86de", "#54a0ff", "#1A73E8", "#02B9F3", "#94DC39", "#FFBA0A", "#FF951A",  "#F85454", "#C9EBFF", "#2e86de", "#54a0ff", "#1A73E8", "#02B9F3", "#94DC39", "#FFBA0A", "#FF951A",  "#F85454", "#C9EBFF", "#2e86de", "#54a0ff", "#1A73E8", "#02B9F3", "#94DC39", "#FFBA0A", "#FF951A",  "#F85454", "#C9EBFF", "#2e86de", "#54a0ff", "#1A73E8", "#02B9F3", "#94DC39", "#FFBA0A", "#FF951A",  "#F85454", "#C9EBFF"];
 }
