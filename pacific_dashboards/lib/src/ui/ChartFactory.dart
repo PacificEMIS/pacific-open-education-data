@@ -33,9 +33,7 @@ class ChartFactory {
     ];
 
     List<int> listTab = new List();
-    chartData.forEach((key, val) {
-      listTab.add(val);
-    });
+
 
     var series = new charts.Series<OrdinalSales, String>(
       id: 'Desktop',

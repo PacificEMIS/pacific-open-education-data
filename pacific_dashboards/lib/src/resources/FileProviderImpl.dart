@@ -23,6 +23,14 @@ class FileProviderImpl extends FileProvider {
   static const String _kDefaultCountry = "Federated States of Micronesia";
 
   SharedPreferences _sharedPreferences;
+  String get basePath {
+    var basePath =
+        (_sharedPreferences.getString(_kCountryKey) ?? _kDefaultCountry) ==
+                _kDefaultCountry
+            ? FEDERAL_STATES_OF_MICRONESIA
+            : MARSHALL_ISLANDS_URL;
+    return basePath;
+  }
 
   FileProviderImpl(SharedPreferences sharedPreferences) {
     _sharedPreferences = sharedPreferences;
@@ -85,8 +93,8 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<String> loadFileData(String key) async {
-    if (!await _isTimePassed(BASE_PATH + key)) {
-      String result = await _readFile(BASE_PATH + key);
+    if (!await _isTimePassed(basePath + key)) {
+      String result = await _readFile(basePath + key);
       return result;
     }
   }
@@ -94,38 +102,38 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
     return SchoolsModel.fromJson(
-        json.decode(await _readFile(BASE_PATH + _KEY_SCHOOLS)));
+        json.decode(await _readFile(basePath + _KEY_SCHOOLS)));
   }
 
   @override
   Future<TeachersModel> fetchTeachersModel() async {
     return TeachersModel.fromJson(
-        json.decode(await _readFile(BASE_PATH + _KEY_TEACHERS)));
+        json.decode(await _readFile(basePath + _KEY_TEACHERS)));
   }
 
   @override
   Future<ExamsModel> fetchExamsModel() async {
     return ExamsModel.fromJson(
-        json.decode(await _readFile(BASE_PATH + _KEY_EXAMS)));
+        json.decode(await _readFile(basePath + _KEY_EXAMS)));
   }
 
   @override
   Future<SchoolAccreditationsModel> fetchSchoolAccreditationsModel() async {
     List<dynamic> parsedJson =
-        json.decode(await _readFile(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS));
+        json.decode(await _readFile(basePath + _KEY_SCHOOL_ACCREDITATIONS));
     return SchoolAccreditationsModel.fromJson(parsedJson);
   }
 
   @override
   Future<LookupsModel> fetchLookupsModel() async {
     return LookupsModel.fromJson(
-        jsonDecode(await _readFile(BASE_PATH + _KEY_LOOKUPS)));
+        jsonDecode(await _readFile(basePath + _KEY_LOOKUPS)));
   }
 
   @override
   Future<SchoolsModel> fetchValidSchoolsModel() async {
     try {
-      if (!await _isTimePassed(BASE_PATH + _KEY_SCHOOLS)) {
+      if (!await _isTimePassed(basePath + _KEY_SCHOOLS)) {
         return fetchSchoolsModel();
       }
       return null;
@@ -137,7 +145,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<TeachersModel> fetchValidTeachersModel() async {
     try {
-      if (!await _isTimePassed(BASE_PATH + _KEY_TEACHERS)) {
+      if (!await _isTimePassed(basePath + _KEY_TEACHERS)) {
         return fetchTeachersModel();
       }
       return null;
@@ -149,7 +157,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<ExamsModel> fetchValidExamsModel() async {
     try {
-      if (!await _isTimePassed(BASE_PATH + _KEY_EXAMS)) {
+      if (!await _isTimePassed(basePath + _KEY_EXAMS)) {
         return fetchExamsModel();
       }
       return null;
@@ -162,7 +170,7 @@ class FileProviderImpl extends FileProvider {
   Future<SchoolAccreditationsModel>
       fetchValidSchoolAccreditationsModel() async {
     try {
-      if (!await _isTimePassed(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS)) {
+      if (!await _isTimePassed(basePath + _KEY_SCHOOL_ACCREDITATIONS)) {
         return fetchSchoolAccreditationsModel();
       }
       return null;
@@ -174,7 +182,7 @@ class FileProviderImpl extends FileProvider {
   @override
   Future<LookupsModel> fetchValidLookupsModel() async {
     try {
-      if (!await _isTimePassed(BASE_PATH + _KEY_LOOKUPS)) {
+      if (!await _isTimePassed(basePath + _KEY_LOOKUPS)) {
         return fetchLookupsModel();
       }
       return null;
@@ -185,30 +193,28 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<bool> saveSchoolsModel(SchoolsModel model) async {
-    return await _writeFile(BASE_PATH + _KEY_SCHOOLS, model) != null;
+    return await _writeFile(basePath + _KEY_SCHOOLS, model) != null;
   }
 
   @override
   Future<bool> saveTeachersModel(TeachersModel model) async {
-    return await _writeFile(BASE_PATH + _KEY_TEACHERS, model) != null;
+    return await _writeFile(basePath + _KEY_TEACHERS, model) != null;
   }
 
   @override
   Future<bool> saveExamsModel(ExamsModel model) async {
-    return await _writeFile(BASE_PATH + _KEY_EXAMS, model) != null;
+    return await _writeFile(basePath + _KEY_EXAMS, model) != null;
   }
 
   @override
   Future<bool> saveSchoolAccreditaitonsModel(
       SchoolAccreditationsModel model) async {
-    print("BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS");
-    print(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS);
-    return await _writeFile(BASE_PATH + _KEY_SCHOOL_ACCREDITATIONS, model) !=
+    return await _writeFile(basePath + _KEY_SCHOOL_ACCREDITATIONS, model) !=
         null;
   }
 
   @override
   Future<bool> saveLookupsModel(LookupsModel model) async {
-    return await _writeFile(BASE_PATH + _KEY_LOOKUPS, model) != null;
+    return await _writeFile(basePath + _KEY_LOOKUPS, model) != null;
   }
 }
