@@ -64,14 +64,11 @@ class ExamsPageState extends State<ExamsPage> {
       stream: widget.bloc.data,
       builder: (context, AsyncSnapshot<ExamsModel> snapshot) {
         if (snapshot.hasData) {
-          List<Widget> body = new List<Widget>();
-          body.add(new Padding(
-            padding: EdgeInsets.all(16.0),
-            child: _buildList(snapshot),
-          ));
-          body.addAll(showModalBottomMenu(snapshot));
           return Stack(
-            children: body,
+            children: [
+              _buildList(snapshot),
+              ..._buildBottomMenu(snapshot)
+            ],
             alignment: Alignment.bottomCenter,
           );
         } else if (snapshot.hasError) {
@@ -91,7 +88,7 @@ class ExamsPageState extends State<ExamsPage> {
       builder: (context, orientation) {
         return ListView.builder(
           padding:
-              EdgeInsets.fromLTRB(0, 0, 0, _bottomMenuExpanded ? 230 : 120),
+              EdgeInsets.fromLTRB(16, 16, 16, _bottomMenuExpanded ? 246 : 136),
           itemCount: listItems.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -144,8 +141,8 @@ class ExamsPageState extends State<ExamsPage> {
     return widgetList;
   }
 
-  List<Widget> showModalBottomMenu(AsyncSnapshot<ExamsModel> snapshot) {
-    double size = _bottomMenuExpanded ? 230 : 77;
+  List<Widget> _buildBottomMenu(AsyncSnapshot<ExamsModel> snapshot) {
+    double size = _bottomMenuExpanded ? 240 : 77;
     double buttonSize = 50;
 
     List<Widget> rows = new List<Widget>();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/src/blocs/FilterBloc.dart';
 import 'package:pacific_dashboards/src/blocs/SchoolAccreditationBloc.dart';
 import 'package:pacific_dashboards/src/config/Constants.dart';
@@ -12,12 +11,9 @@ import 'package:pacific_dashboards/src/ui/TitleWidget.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
 import '../AccreditationTable.dart';
 import '../ChartFactory.dart';
-import '../ChartInfoTable.dart';
-import '../StackedHorizontalBarChartAccreditations.dart';
 
 class SchoolAccreditationsPage extends StatefulWidget {
   static String _kPageName = AppLocalizations.schoolAccreditations;
-  static String _measureName = AppLocalizations.schoolAccreditations;
 
   final SchoolAccreditationBloc bloc;
 
@@ -86,10 +82,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
         stream: widget.bloc.data,
         builder: (context, AsyncSnapshot<SchoolAccreditationsModel> snapshot) {
           if (snapshot.hasData) {
-            return Padding(
-              padding: EdgeInsets.all(16.0),
-              child: _buildList(snapshot),
-            );
+            return _buildList(snapshot);
           } else if (snapshot.hasError) {
             debugPrint("ERROR");
             return Text(snapshot.error.toString());
@@ -141,6 +134,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       builder: (context, orientation) {
         return ListView.builder(
           itemCount: 5,
+          padding: EdgeInsets.all(16.0),
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
@@ -220,6 +214,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
             ));
         break;
       default:
+        return Container();
     }
   }
 

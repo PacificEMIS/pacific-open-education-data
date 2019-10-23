@@ -84,10 +84,7 @@ class SchoolsPageState extends State<SchoolsPage> {
         stream: widget.bloc.data,
         builder: (context, AsyncSnapshot<SchoolsModel> snapshot) {
           if (snapshot.hasData) {
-            return Padding(
-              padding: EdgeInsets.all(16.0),
-              child: _buildList(snapshot),
-            );
+            return _buildList(snapshot);
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
@@ -137,6 +134,7 @@ class SchoolsPageState extends State<SchoolsPage> {
       builder: (context, orientation) {
         return ListView.builder(
           itemCount: 5,
+          padding: EdgeInsets.all(16.0),
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
