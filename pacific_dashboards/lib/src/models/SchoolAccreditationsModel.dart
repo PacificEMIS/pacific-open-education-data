@@ -105,6 +105,11 @@ class SchoolAccreditationsModel extends ModelWithLookups {
     return groupBy(_accreditations, (obj) => obj.schoolType);
   }
 
+    Map<dynamic, List<SchoolAccreditationModel>> getSortedByYear() {
+    return groupBy(_accreditations, (obj) => obj.surveyYear.toString());
+  }
+
+
   Map<dynamic, List<SchoolAccreditationModel>>
       getSortedWithFilteringPerfomanceByStandard() {
     var filteredList = _accreditations

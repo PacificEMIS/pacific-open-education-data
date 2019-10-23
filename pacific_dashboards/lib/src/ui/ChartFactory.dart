@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/src/ui/BarChartWidget.dart';
 import 'package:pacific_dashboards/src/ui/PieChartWidget.dart';
 import 'package:pacific_dashboards/src/ui/StackedHorizontalBarChart.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'HorizontalBarChartWidget.dart';
 import 'StackedHorizontalBarChartAccreditations.dart';
 
 class ChartFactory {
@@ -29,7 +30,7 @@ class ChartFactory {
         ? Container()
         : Container(
             height: 300.0,
-            child: BarChartWidget(data: chartData),
+            child: HorizontalBarChartWidget(data: chartData),
           );
   }
 }

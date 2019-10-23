@@ -157,33 +157,39 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     if (selectedYear == "") selectedYear = data.yearFilter.getMax();
     switch (index) {
       case 0:
-         return BaseTileWidget(
-            title: TitleWidget(AppLocalizations.schoolsEnrollmentByState,
-                AppColors.kRacingGreen),
+        return BaseTileWidget(
+            title: TitleWidget(
+                AppLocalizations.accreditationProgress, AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getBarChartViewByData(
-                    _generateMapOfSum(data.getSortedByState())),
+                ChartFactory.getHorizontalBarChartViewByData(
+                    _generateMapOfSum(data.getSortedByYear())),
                 widget._dividerWidget,
-                ChartInfoTable<SchoolAccreditationsModel>(
-                    data.getSortedByState().keys.toList(),
-                    _generateMapOfSum(data.getSortedWithFiltersByState()),
-                    AppLocalizations.state,
-                    SchoolAccreditationsPage._measureName,
-                    data.stateFilter.selectedKey),
               ],
             ));
         break;
       case 1:
+        return BaseTileWidget(
+            title: TitleWidget(
+                AppLocalizations.districtStatus, AppColors.kRacingGreen),
+            body: Column(
+              children: <Widget>[
+                ChartFactory.getHorizontalBarChartViewByData(
+                    _generateMapOfSum(data.getSortedByState())),
+                widget._dividerWidget,
+              ],
+            ));
+        break;
+      case 2:
         List<Widget> widgets = List<Widget>();
         widgets.add(AccreditationTable(
             _generateAccreditationTableData(
-                data.getSortedByState(), false, false, selectedYear),
+                data.getSortedByStandart(), false, false, selectedYear),
             "Evaluated in $selectedYear",
             AppLocalizations.state));
         widgets.add(AccreditationTable(
             _generateAccreditationTableData(
-                data.getSortedByState(), true, false, selectedYear),
+                data.getSortedByStandart(), true, false, selectedYear),
             "Cumulative up to $selectedYear",
             AppLocalizations.state));
         return BaseTileWidget(
@@ -193,7 +199,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
               children: widgets,
             ));
         break;
-      case 2:
+      case 3:
         List<Widget> widgets = List<Widget>();
         widgets.add(AccreditationTable(
             _generateAccreditationTableData(
@@ -225,7 +231,10 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     listMap.forEach((k, v) {
       sum = 0;
 
-      listMap[k].forEach((school) {});
+      listMap[k].forEach((district) {
+        if (district.result != null && district.result != "Level 1")
+          sum += district.numThisYear;
+      });
 
       countMap[k] = sum;
     });
