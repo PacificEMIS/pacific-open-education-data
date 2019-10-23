@@ -12,6 +12,7 @@ import 'package:pacific_dashboards/src/ui/TitleWidget.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
 import '../AccreditationTable.dart';
 import '../ChartFactory.dart';
+import '../ChartInfoTable.dart';
 import '../StackedHorizontalBarChartAccreditations.dart';
 
 class SchoolAccreditationsPage extends StatefulWidget {
@@ -156,17 +157,22 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     if (selectedYear == "") selectedYear = data.yearFilter.getMax();
     switch (index) {
       case 0:
-        title:
-        TitleWidget(AppLocalizations.schoolsEnrollmentByAuthority,
-            AppColors.kRacingGreen);
-        body:
-        Column(
-          children: <Widget>[
-            ChartFactory.getHorizontalBarChartViewByData(
-                _generateMapOfSum(data.getSortedByState())),
-            widget._dividerWidget,
-          ],
-        );
+         return BaseTileWidget(
+            title: TitleWidget(AppLocalizations.schoolsEnrollmentByState,
+                AppColors.kRacingGreen),
+            body: Column(
+              children: <Widget>[
+                ChartFactory.getBarChartViewByData(
+                    _generateMapOfSum(data.getSortedByState())),
+                widget._dividerWidget,
+                ChartInfoTable<SchoolAccreditationsModel>(
+                    data.getSortedByState().keys.toList(),
+                    _generateMapOfSum(data.getSortedWithFiltersByState()),
+                    AppLocalizations.state,
+                    SchoolAccreditationsPage._measureName,
+                    data.stateFilter.selectedKey),
+              ],
+            ));
         break;
       case 1:
         List<Widget> widgets = List<Widget>();
@@ -272,71 +278,13 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       }
 
       if (isCumulative)
-        convertedData[k] = AccreditationTableData(
-            levels[4], levels[5], levels[6], levels[7]);
+        convertedData[k] =
+            AccreditationTableData(levels[4], levels[5], levels[6], levels[7]);
       else
-        convertedData[k] = AccreditationTableData(
-            levels[0], levels[1], levels[2], levels[3]);
+        convertedData[k] =
+            AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
     });
 
     return convertedData;
   }
-
-  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
-    final desktopSalesData = [
-      new OrdinalSales('2014', -205),
-      new OrdinalSales('2015', 25),
-      new OrdinalSales('2016', 100),
-      new OrdinalSales('2017', 75),
-    ];
-
-    final tableSalesData = [
-      new OrdinalSales('2014', 25),
-      new OrdinalSales('2015', 50),
-      new OrdinalSales('2016', 10),
-      new OrdinalSales('2017', 20),
-    ];
-
-    final mobileSalesData = [
-      new OrdinalSales('2014', 10),
-      new OrdinalSales('2015', 15),
-      new OrdinalSales('2016', 50),
-      new OrdinalSales('2017', 45),
-    ];
-
-    return [
-      new charts.Series<OrdinalSales, String>(
-        id: 'Desktop',
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: desktopSalesData,
-      ),
-      new charts.Series<OrdinalSales, String>(
-        id: 'Tablet',
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: tableSalesData,
-      ),
-      new charts.Series<OrdinalSales, String>(
-        id: 'Mobile',
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: mobileSalesData,
-      ),
-    ];
-  }
-}
-
-class OrdinalSales {
-  final String year;
-  final int sales;
-
-  OrdinalSales(this.year, this.sales);
-}
-
-class FullReport {
-  final String year;
-  final int total;
-
-  FullReport(this.year, this.total);
 }
