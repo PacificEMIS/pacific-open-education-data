@@ -47,7 +47,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
   }
 
   charts.Color _getChartsColor(int colorId) {
-    return charts.Color.fromHex(AppColors.kGridColors[colorId] ?? "#1A73E8");
+    return charts.Color.fromHex(code: AppColors.kGridColors[colorId] ?? "#1A73E8");
   }
 }
 

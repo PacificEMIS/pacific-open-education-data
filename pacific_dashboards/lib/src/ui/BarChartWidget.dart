@@ -68,7 +68,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
 
   charts.Color _getChartsColorFromHex(int colorId) {
     String color = AppColors.kGridColors[colorId] ?? "#1A73E8";
-    return charts.Color.fromHex(color);
+    return charts.Color.fromHex(code: color);
   }
 
   charts.Color _getChartsColor(Color color) {
