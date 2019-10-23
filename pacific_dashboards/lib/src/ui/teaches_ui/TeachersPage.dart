@@ -215,7 +215,7 @@ class TeachersPageState extends State<TeachersPage> {
             _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
                 AppLocalizations.total, false),
             AppLocalizations.total,
-            AppLocalizations.schoolType));
+            AppLocalizations.schoolLevels));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
@@ -223,7 +223,7 @@ class TeachersPageState extends State<TeachersPage> {
               _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
                   statesKeys[i], true),
               data.lookupsModel.getFullState(statesKeys[i]),
-              AppLocalizations.schoolType));
+              AppLocalizations.schoolLevels));
         }
 
         return BaseTileWidget(

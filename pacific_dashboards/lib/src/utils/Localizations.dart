@@ -90,17 +90,19 @@ class AppLocalizations {
       Intl.message("Schools Enrollment by Age, Education \nLevel and Gender",
           name: "schoolsEnrollmentByAgeEducationLevel");
   static String get schoolsEnrollmentBySchoolTypeStateAndGender =>
-      Intl.message("Schools Enrollment by School type, \nState and Gender",
+      Intl.message("Schools Enrollment by School Levels, \nState and Gender",
           name: "schoolsEnrollmentBySchoolTypeStateAndGender");
   static String get schoolType =>
-      Intl.message("School \nType", name: "schoolType");
+      Intl.message("School \nLevels", name: "schoolType");
+        static String get schoolLevels =>
+      Intl.message("School \nLevels", name: "schoolLevels");
   //Filter
   static String get filterByYear =>
       Intl.message("Filter by year", name: "filterByYear");
   static String get filterByState =>
       Intl.message("Filter by state", name: "filterByState");
   static String get filterBySchoolType =>
-      Intl.message("Teachers by School type, State and Gender",
+      Intl.message("Teachers by School Levels, State and Gender",
           name: "filterBySchoolType");
   static String get filterByAuthority =>
       Intl.message("Filter by authority", name: "filterByAuthority");
@@ -119,7 +121,7 @@ class AppLocalizations {
   static String get teachersByState =>
       Intl.message("Teachers by State", name: "teachersByState");
   static String get teacherBySchoolTypeStateAndGender =>
-      Intl.message("Teacher by School type, \nState and Gender",
+      Intl.message("Teacher by School Levels, \nState and Gender",
           name: "teacherBySchoolTypeStateAndGender");
   static String get teachersEnrollmentGovtNonGovt =>
       Intl.message("Teachers by Govt / \nNon-govt",
