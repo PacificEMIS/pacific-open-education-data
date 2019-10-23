@@ -151,17 +151,17 @@ class SchoolsPageState extends State<SchoolsPage> {
   Widget _generateGridTile(SchoolsModel data, int index) {
     switch (index) {
       case 0:
+        final chartData = _generateMapOfSum(data.getSortedWithFiltersByState());
         return BaseTileWidget(
             title: TitleWidget(AppLocalizations.schoolsEnrollmentByState,
                 AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getBarChartViewByData(
-                    _generateMapOfSum(data.getSortedByState())),
+                ChartFactory.getBarChartViewByData(chartData),
                 widget._dividerWidget,
                 ChartInfoTable<SchoolModel>(
                     data.getSortedByState().keys.toList(),
-                    _generateMapOfSum(data.getSortedWithFiltersByState()),
+                    chartData,
                     AppLocalizations.state,
                     SchoolsPage._measureName,
                     data.stateFilter.selectedKey),
@@ -169,17 +169,18 @@ class SchoolsPageState extends State<SchoolsPage> {
             ));
         break;
       case 1:
+        final chartData =
+            _generateMapOfSum(data.getSortedWithFiltersByAuthority());
         return BaseTileWidget(
             title: TitleWidget(AppLocalizations.schoolsEnrollmentByAuthority,
                 AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(
-                    _generateMapOfSum(data.getSortedByAuthority())),
+                ChartFactory.getPieChartViewByData(chartData),
                 widget._dividerWidget,
                 ChartInfoTable<SchoolModel>(
                     data.getSortedByAuthority().keys.toList(),
-                    _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
+                    chartData,
                     AppLocalizations.authority,
                     SchoolsPage._measureName,
                     data.authorityFilter.selectedKey),
@@ -187,17 +188,17 @@ class SchoolsPageState extends State<SchoolsPage> {
             ));
         break;
       case 2:
+        final chartData = _generateMapOfSum(data.getSortedWithFiltersByGovt());
         return BaseTileWidget(
             title: TitleWidget(AppLocalizations.schoolsEnrollmentGovtNonGovt,
                 AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getPieChartViewByData(
-                    _generateMapOfSum(data.getSortedByGovt())),
+                ChartFactory.getPieChartViewByData(chartData),
                 widget._dividerWidget,
                 ChartInfoTable<SchoolModel>(
                     data.getSortedByGovt().keys.toList(),
-                    _generateMapOfSum(data.getSortedWithFiltersByGovt()),
+                    chartData,
                     AppLocalizations.publicPrivate,
                     SchoolsPage._measureName,
                     data.govtFilter.selectedKey),
@@ -240,17 +241,19 @@ class SchoolsPageState extends State<SchoolsPage> {
         var statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
 
+        final filteredDataBySchoolType =
+            data.getSortedWithFilteringBySchoolType();
         widgets.add(InfoTable(
-            _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
-                AppLocalizations.total, false),
+            _generateInfoTableData(
+                filteredDataBySchoolType, AppLocalizations.total, false),
             AppLocalizations.total,
             AppLocalizations.schoolType));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
           widgets.add(InfoTable(
-              _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
-                  statesKeys[i], true),
+              _generateInfoTableData(
+                  filteredDataBySchoolType, statesKeys[i], true),
               data.lookupsModel.getFullState(statesKeys[i]),
               AppLocalizations.schoolType));
         }
