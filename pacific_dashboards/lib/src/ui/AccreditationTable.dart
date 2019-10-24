@@ -13,26 +13,20 @@ class AccreditationTableData {
   String get level3Amount => level3 != 0 ? level3.toString() : _kZeroSymbol;
   String get level4Amount => level4 != 0 ? level4.toString() : _kZeroSymbol;
 
-  String get total =>
-      (level1Amount + level2Amount + level3Amount + level4Amount) != 0
-          ? (level1 + level2 + level3 + level4).toString()
-          : _kZeroSymbol;
+  String get total => (level1 + level2 + level3 + level4).toString();
 
-  String get accreditated => (level2Amount + level3Amount + level4Amount) != 0
-      ? (level2 + level3 + level4).toString()
-      : _kZeroSymbol;
+  String get accreditated => (level2 + level3 + level4).toString();
 
-  AccreditationTableData(
-      this.level1, this.level2, this.level3, this.level4);
+  AccreditationTableData(this.level1, this.level2, this.level3, this.level4);
 }
 
 class AccreditationTable extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final Map<dynamic, AccreditationTableData> _data;
+  final Map<dynamic, AccreditationTableData> data;
 
-  final String _keyName;
-  final String _firstColumnName;
+  final String keyName;
+  final String firstColumnName;
 
   final Color _borderColor = AppColors.kGeyser;
   final Color _textColor = AppColors.kTimberGreen;
@@ -41,7 +35,12 @@ class AccreditationTable extends StatefulWidget {
   final Color _oddRowColor = AppColors.kAthensGray;
   final Color _titleTextColor = AppColors.kEndeavour;
 
-  AccreditationTable(this._data, this._keyName, this._firstColumnName);
+  AccreditationTable(
+      {Key key,
+      @required this.data,
+      @required this.keyName,
+      @required this.firstColumnName})
+      : super(key: key);
 
   @override
   State<AccreditationTable> createState() => _AccreditationTableState();
@@ -71,7 +70,7 @@ class _AccreditationTableState extends State<AccreditationTable> {
         border: _getTableBorder(
             widget._borderColor, AccreditationTable._kBorderWidth),
         children: _generateTableBody(
-            widget._data,
+            widget.data,
             _generateSubTableTitle(
                 widget._borderColor, AccreditationTable._kBorderWidth)),
       ),
@@ -108,7 +107,7 @@ class _AccreditationTableState extends State<AccreditationTable> {
             child: Row(
               children: <Widget>[
                 Text(
-                  widget._keyName,
+                  widget.keyName,
                   style: TextStyle(
                     fontSize: 14.0,
                     color: widget._titleTextColor,
@@ -152,7 +151,7 @@ class _AccreditationTableState extends State<AccreditationTable> {
             child: Row(
               children: <Widget>[
                 Text(
-                  widget._firstColumnName,
+                  widget.firstColumnName,
                   style: TextStyle(
                     fontSize: 12.0,
                     color: widget._subTitleTextColor,
@@ -342,17 +341,17 @@ class _AccreditationTableState extends State<AccreditationTable> {
                 top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
             child: Row(
               children: <Widget>[
-                 Expanded( child:
-                Text(
-                  domain,
-                  maxLines: 3,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 9.0,
-                    color: widget._textColor,
+                Expanded(
+                  child: Text(
+                    domain,
+                    maxLines: 3,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 9.0,
+                      color: widget._textColor,
+                    ),
                   ),
                 ),
-                 ),
               ],
             ),
           ),

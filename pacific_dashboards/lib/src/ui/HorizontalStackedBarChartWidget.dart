@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/src/config/Constants.dart';
-import 'package:pacific_dashboards/src/utils/HexColor.dart';
 
-class HorizontalBarChartWidget extends StatefulWidget {
+class HorizontalStackedBarChartWidget extends StatefulWidget {
   final data;
   final title;
 
-  HorizontalBarChartWidget({Key key, this.title, this.data}) : super(key: key);
+  HorizontalStackedBarChartWidget({Key key, this.title, this.data}) : super(key: key);
 
   @override
-  HorizontalBarChartWidgetState createState() =>
-      HorizontalBarChartWidgetState();
+  HorizontalStackedBarChartWidgetState createState() =>
+      HorizontalStackedBarChartWidgetState();
 }
 
 class HorizontalBarChartData {
@@ -22,7 +21,7 @@ class HorizontalBarChartData {
   HorizontalBarChartData(this.domain, this.measure, this.color);
 }
 
-class HorizontalBarChartWidgetState extends State<HorizontalBarChartWidget> {
+class HorizontalStackedBarChartWidgetState extends State<HorizontalStackedBarChartWidget> {
   @override
   Widget build(BuildContext context) {
     List<HorizontalBarChartData> data = [];

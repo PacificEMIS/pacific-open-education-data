@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/BarChartWidget.dart';
+import 'package:pacific_dashboards/src/ui/HorizontalStackedBarChartWidget.dart';
 import 'package:pacific_dashboards/src/ui/PieChartWidget.dart';
-import 'package:pacific_dashboards/src/ui/StackedHorizontalBarChart.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'HorizontalBarChartWidget.dart';
-import 'StackedHorizontalBarChartAccreditations.dart';
 
 class ChartFactory {
   static Widget getBarChartViewByData(Map<dynamic, int> chartData) {
@@ -25,12 +22,12 @@ class ChartFactory {
           );
   }
 
-  static Widget getHorizontalBarChartViewByData(Map<dynamic, int> chartData) {
+  static Widget getHorizontalStackedBarChartViewByData(Map<dynamic, int> chartData) {
     return (chartData.length == 0)
         ? Container()
         : Container(
             height: 300.0,
-            child: HorizontalBarChartWidget(data: chartData),
+            child: HorizontalStackedBarChartWidget(data: chartData),
           );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:pacific_dashboards/src/blocs/BaseBloc.dart';
-import 'package:pacific_dashboards/src/models/SchoolAccreditationsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolAccreditationsChunk.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SchoolAccreditationBloc extends BaseBloc<SchoolAccreditationsModel> {
-  final _fetcher = PublishSubject<SchoolAccreditationsModel>();
+class SchoolAccreditationBloc extends BaseBloc<SchoolAccreditationsChunk> {
+  final _fetcher = PublishSubject<SchoolAccreditationsChunk>();
 
-  Observable<SchoolAccreditationsModel> get data => _fetcher.stream;
+  Observable<SchoolAccreditationsChunk> get data => _fetcher.stream;
 
   SchoolAccreditationBloc({repository}) : super(repository: repository);
 

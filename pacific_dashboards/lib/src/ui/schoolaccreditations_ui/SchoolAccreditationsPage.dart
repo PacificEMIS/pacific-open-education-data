@@ -3,14 +3,15 @@ import 'package:pacific_dashboards/src/blocs/FilterBloc.dart';
 import 'package:pacific_dashboards/src/blocs/SchoolAccreditationBloc.dart';
 import 'package:pacific_dashboards/src/config/Constants.dart';
 import 'package:pacific_dashboards/src/models/SchoolAccrediatationModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolAccreditationsChunk.dart';
 import 'package:pacific_dashboards/src/models/SchoolAccreditationsModel.dart';
+import 'package:pacific_dashboards/src/ui/AccreditationTable.dart';
 import 'package:pacific_dashboards/src/ui/BaseTileWidget.dart';
+import 'package:pacific_dashboards/src/ui/ChartFactory.dart';
 import 'package:pacific_dashboards/src/ui/FilterPage.dart';
 import 'package:pacific_dashboards/src/ui/PlatformAppBar.dart';
 import 'package:pacific_dashboards/src/ui/TitleWidget.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
-import '../AccreditationTable.dart';
-import '../ChartFactory.dart';
 
 class SchoolAccreditationsPage extends StatefulWidget {
   static String _kPageName = AppLocalizations.schoolAccreditations;
@@ -80,18 +81,18 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       ),
       body: StreamBuilder(
         stream: widget.bloc.data,
-        builder: (context, AsyncSnapshot<SchoolAccreditationsModel> snapshot) {
+        builder: (context, AsyncSnapshot<SchoolAccreditationsChunk> snapshot) {
           if (snapshot.hasData) {
             return _buildList(snapshot);
           } else if (snapshot.hasError) {
             debugPrint("ERROR");
             return Text(snapshot.error.toString());
-          } else
+          } else {
             debugPrint("No data");
-
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
       ),
     );
@@ -127,8 +128,8 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     }
   }
 
-  Widget _buildList(AsyncSnapshot<SchoolAccreditationsModel> snapshot) {
-    _dataLink = snapshot.data;
+  Widget _buildList(AsyncSnapshot<SchoolAccreditationsChunk> snapshot) {
+    _dataLink = snapshot.data.statesChunk;
 
     return OrientationBuilder(
       builder: (context, orientation) {
@@ -146,9 +147,9 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     );
   }
 
-  Widget _generateGridTile(SchoolAccreditationsModel data, int index) {
-    var selectedYear = data.yearFilter.selectedKey;
-    if (selectedYear == "") selectedYear = data.yearFilter.getMax();
+  Widget _generateGridTile(SchoolAccreditationsChunk data, int index) {
+    var selectedYear = data.statesChunk.yearFilter.selectedKey;
+    if (selectedYear == "") selectedYear = data.statesChunk.yearFilter.getMax();
     switch (index) {
       case 0:
         return BaseTileWidget(
@@ -156,8 +157,8 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
                 AppLocalizations.accreditationProgress, AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getHorizontalBarChartViewByData(
-                    _generateMapOfSum(data.getSortedByYear())),
+                ChartFactory.getHorizontalStackedBarChartViewByData(
+                    _generateMapOfSum(data.standardsChunk.getSortedByYear())),
                 widget._dividerWidget,
               ],
             ));
@@ -168,51 +169,53 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
                 AppLocalizations.districtStatus, AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getHorizontalBarChartViewByData(
-                    _generateMapOfSum(data.getSortedByState())),
+                ChartFactory.getHorizontalStackedBarChartViewByData(
+                    _generateMapOfSum(data.statesChunk.getSortedByState())),
                 widget._dividerWidget,
               ],
             ));
         break;
       case 2:
-        List<Widget> widgets = List<Widget>();
-        widgets.add(AccreditationTable(
-            _generateAccreditationTableData(
-                data.getSortedByStandart(), false, false, selectedYear),
-            "Evaluated in $selectedYear",
-            AppLocalizations.state));
-        widgets.add(AccreditationTable(
-            _generateAccreditationTableData(
-                data.getSortedByStandart(), true, false, selectedYear),
-            "Cumulative up to $selectedYear",
-            AppLocalizations.state));
         return BaseTileWidget(
             title: TitleWidget(AppLocalizations.accreditationStatusByState,
                 AppColors.kRacingGreen),
             body: Column(
-              children: widgets,
+              children: [
+                AccreditationTable(
+                  keyName: "Evaluated in $selectedYear",
+                  firstColumnName: AppLocalizations.state,
+                  data: _generateAccreditationTableData(
+                      data.statesChunk.getSortedWithFiltersByState(), false, selectedYear),
+                ),
+                AccreditationTable(
+                  keyName: "Cumulative up to $selectedYear",
+                  firstColumnName: AppLocalizations.state,
+                  data: _generateAccreditationTableData(
+                      data.statesChunk.getSortedWithFiltersByState(), true, selectedYear),
+                ),
+              ],
             ));
-        break;
       case 3:
-        List<Widget> widgets = List<Widget>();
-        widgets.add(AccreditationTable(
-            _generateAccreditationTableData(
-                data.getSortedByStandart(), false, true, selectedYear),
-            "Evaluated in $selectedYear",
-            AppLocalizations.state));
-        widgets.add(AccreditationTable(
-            _generateAccreditationTableData(
-                data.getSortedByStandart(), true, true, selectedYear),
-            "Cumulative up to $selectedYear",
-            AppLocalizations.state));
         return BaseTileWidget(
             title: TitleWidget(
                 AppLocalizations.accreditationPerfomancebyStandard,
                 AppColors.kRacingGreen),
             body: Column(
-              children: widgets,
+              children: [
+                AccreditationTable(
+                  keyName: "Evaluated in $selectedYear",
+                  firstColumnName: AppLocalizations.standard,
+                  data: _generateAccreditationTableData(
+                      data.standardsChunk.getSortedByStandart(), false, selectedYear),
+                ),
+                AccreditationTable(
+                  keyName: "Cumulative up to $selectedYear",
+                  firstColumnName: AppLocalizations.standard,
+                  data: _generateAccreditationTableData(
+                      data.standardsChunk.getSortedByStandart(), true, selectedYear),
+                ),
+              ],
             ));
-        break;
       default:
         return Container();
     }
@@ -228,7 +231,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
 
       listMap[k].forEach((district) {
         if (district.result != null && district.result != "Level 1")
-          sum += district.numThisYear;
+          sum += district.numInYear;
       });
 
       countMap[k] = sum;
@@ -240,30 +243,22 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
   Map<dynamic, AccreditationTableData> _generateAccreditationTableData(
       Map<dynamic, List<SchoolAccreditationModel>> rawMapData,
       bool isCumulative,
-      bool isByStandard,
       String currentYear) {
     var convertedData = Map<dynamic, AccreditationTableData>();
 
     rawMapData.forEach((k, v) {
       var levels = [0, 0, 0, 0, 0, 0, 0, 0];
-      String fullName;
 
       for (var j = 0; j < v.length; ++j) {
         var model = v;
-        var inspectionResult = model[j].inspectionResult;
+        var inspectionResult = model[j].result;
         var numThisYear = 0;
         var numSum = 0;
-        // fullName =  _dataLink.lookupsModel.getFullStandart(model[j].standartFull) ?? "";
         if (model[j].surveyYear.toString() == currentYear) {
-          if (isByStandard) {
-            inspectionResult = model[j].result;
-            numThisYear += model[j].numInYear ?? 0;
-            numSum += model[j].numSum ?? 0;
-          } else {
-            inspectionResult = model[j].inspectionResult;
-            numThisYear += model[j].numThisYear ?? 0;
-            numSum += model[j].numSum ?? 0;
-          }
+          inspectionResult = model[j].result;
+          numThisYear += model[j].numInYear ?? 0;
+          numSum += model[j].numSum ?? 0;
+
           if (inspectionResult == "Level 1") {
             levels[0] += numThisYear;
             levels[4] += numSum;
@@ -278,7 +273,6 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
             levels[7] += numSum;
           }
         }
-        // }
       }
 
       if (isCumulative)

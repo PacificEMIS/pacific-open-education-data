@@ -17,7 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _currentCountry;
-  Dialog _countrySelectorDialog;
 
   final String _kMarshallIslands = AppLocalizations.marshallIslands;
   final String _kFederatedStateOfMicronesia =
@@ -92,7 +91,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showDialog(BuildContext context) async {
-    _countrySelectorDialog = await showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return Container(
@@ -179,7 +178,6 @@ class _HomePageState extends State<HomePage> {
 
   _onCountryChangeTap(String country) {
     Navigator.of(context).pop();
-    _countrySelectorDialog = null;
 
     widget.globalSettings.currentCountry = country;
 
