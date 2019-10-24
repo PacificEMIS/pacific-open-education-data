@@ -3,14 +3,14 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/src/config/Constants.dart';
 import 'package:pacific_dashboards/src/models/ExamModel.dart';
 
-class StackedHorizontalBarChart extends StatelessWidget {
+class ExamsStackedHorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
 
-  StackedHorizontalBarChart(this.seriesList, {this.animate});
+  ExamsStackedHorizontalBarChart(this.seriesList, {this.animate});
 
-  factory StackedHorizontalBarChart.fromModel(ExamModel examModel) {
-    return new StackedHorizontalBarChart(
+  factory ExamsStackedHorizontalBarChart.fromModel(ExamModel examModel) {
+    return new ExamsStackedHorizontalBarChart(
       _createData(examModel),
       animate: false,
     );

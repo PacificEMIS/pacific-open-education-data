@@ -5,7 +5,7 @@ import 'package:pacific_dashboards/src/models/ExamModel.dart';
 import 'package:pacific_dashboards/src/models/ExamsModel.dart';
 import 'package:pacific_dashboards/src/resources/ExamsDataNavigator.dart';
 import 'package:pacific_dashboards/src/ui/PlatformAppBar.dart';
-import 'package:pacific_dashboards/src/ui/StackedHorizontalBarChart.dart';
+import 'package:pacific_dashboards/src/ui/exams_ui/ExamsStackedHorizontalBarChart.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class ExamsPage extends StatefulWidget {
@@ -136,7 +136,7 @@ class ExamsPageState extends State<ExamsPage> {
               textAlign: TextAlign.left,
             )));
       }
-      widgetList.add(StackedHorizontalBarChart.fromModel(v));
+      widgetList.add(ExamsStackedHorizontalBarChart.fromModel(v));
     });
     return widgetList;
   }

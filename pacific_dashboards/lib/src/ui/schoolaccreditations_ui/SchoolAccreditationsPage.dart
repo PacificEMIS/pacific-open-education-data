@@ -157,8 +157,10 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
                 AppLocalizations.accreditationProgress, AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getHorizontalStackedBarChartViewByData(
-                    _generateMapOfSum(data.standardsChunk.getSortedByYear())),
+                ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _generateCumulativeMap(
+                        data: data.statesChunk.getSortedByYear()),
+                    colorFunc: _levelIndexToColor),
                 widget._dividerWidget,
               ],
             ));
@@ -169,8 +171,11 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
                 AppLocalizations.districtStatus, AppColors.kRacingGreen),
             body: Column(
               children: <Widget>[
-                ChartFactory.getHorizontalStackedBarChartViewByData(
-                    _generateMapOfSum(data.statesChunk.getSortedByState())),
+                ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _generateCumulativeMap(
+                        data: data.statesChunk.getSortedByState(),
+                        year: selectedYear),
+                    colorFunc: _levelIndexToColor),
                 widget._dividerWidget,
               ],
             ));
@@ -229,23 +234,43 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     }
   }
 
-  Map<dynamic, int> _generateMapOfSum(
-      Map<dynamic, List<SchoolAccreditationModel>> listMap) {
-    Map<dynamic, int> countMap = new Map<dynamic, int>();
-    int sum = 0;
+  Map<String, List<int>> _generateCumulativeMap(
+      {@required Map<dynamic, List<SchoolAccreditationModel>> data,
+      String year}) {
+    Map<String, List<int>> result = new Map<String, List<int>>();
 
-    listMap.forEach((k, v) {
-      sum = 0;
+    data.forEach((key, value) {
+      final levels = [0, 0, 0, 0];
 
-      listMap[k].forEach((district) {
-        if (district.result != null && district.result != "Level 1")
-          sum += district.numInYear;
+      value.forEach((accreditation) {
+        final sum = accreditation.numSum;
+
+        if (year != null && accreditation.surveyYear.toString() != year) {
+          return;
+        }
+
+        switch (accreditation.level) {
+          case AccreditationLevel.level1:
+            levels[0] -= sum;
+            break;
+          case AccreditationLevel.level2:
+            levels[1] += sum;
+            break;
+          case AccreditationLevel.level3:
+            levels[2] += sum;
+            break;
+          case AccreditationLevel.level4:
+            levels[3] += sum;
+            break;
+          case AccreditationLevel.undefined:
+            break;
+        }
       });
 
-      countMap[k] = sum;
+      result[key] = levels;
     });
 
-    return countMap;
+    return result;
   }
 
   Map<dynamic, AccreditationTableData> _generateAccreditationTableData(
@@ -263,26 +288,31 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       final rawValue = rawMapData[key];
       for (var j = 0; j < rawValue.length; ++j) {
         var model = rawValue;
-        var inspectionResult = model[j].result;
+        var level = model[j].level;
         var numThisYear = 0;
         var numSum = 0;
         if (model[j].surveyYear.toString() == currentYear) {
-          inspectionResult = model[j].result;
           numThisYear += model[j].numInYear ?? 0;
           numSum += model[j].numSum ?? 0;
-
-          if (inspectionResult == "Level 1") {
-            levels[0] += numThisYear;
-            levels[4] += numSum;
-          } else if (inspectionResult == "Level 2") {
-            levels[1] += numThisYear;
-            levels[5] += numSum;
-          } else if (inspectionResult == "Level 3") {
-            levels[2] += numThisYear;
-            levels[6] += numSum;
-          } else if (inspectionResult == "Level 4") {
-            levels[3] += numThisYear;
-            levels[7] += numSum;
+          switch (level) {
+            case AccreditationLevel.level1:
+              levels[0] += numThisYear;
+              levels[4] += numSum;
+              break;
+            case AccreditationLevel.level2:
+              levels[1] += numThisYear;
+              levels[5] += numSum;
+              break;
+            case AccreditationLevel.level3:
+              levels[2] += numThisYear;
+              levels[6] += numSum;
+              break;
+            case AccreditationLevel.level4:
+              levels[3] += numThisYear;
+              levels[7] += numSum;
+              break;
+            case AccreditationLevel.undefined:
+              break;
           }
         }
       }
@@ -296,5 +326,9 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     });
 
     return convertedData;
+  }
+
+  Color _levelIndexToColor(int index) {
+    return AppColors.kLevels[index];
   }
 }

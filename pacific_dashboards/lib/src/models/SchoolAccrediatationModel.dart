@@ -13,21 +13,20 @@ class SchoolAccreditationModel {
   final int numSum;
   final int numInYear;
 
-  SchoolAccreditationModel({
-    this.surveyYear,
-    this.districtCode,
-    this.district,
-    this.authorityCode,
-    this.authority,
-    this.authorityGovtCode,
-    this.authorityGovt,
-    this.schoolTypeCode,
-    this.schoolType,
-    this.result,
-    this.numSum,
-    this.numInYear,
-    this.standard
-  });
+  SchoolAccreditationModel(
+      {this.surveyYear,
+      this.districtCode,
+      this.district,
+      this.authorityCode,
+      this.authority,
+      this.authorityGovtCode,
+      this.authorityGovt,
+      this.schoolTypeCode,
+      this.schoolType,
+      this.result,
+      this.numSum,
+      this.numInYear,
+      this.standard});
 
   factory SchoolAccreditationModel.fromJson(Map parsedJson) {
     return SchoolAccreditationModel(
@@ -43,8 +42,7 @@ class SchoolAccreditationModel {
         result: parsedJson['Result'] ?? parsedJson['InspectionResult'] ?? "",
         numSum: parsedJson['Num'] ?? 0,
         numInYear: parsedJson['NumInYear'] ?? parsedJson['NumThisYear'] ?? 0,
-        standard: parsedJson['Standard'] ?? ""
-    );
+        standard: parsedJson['Standard'] ?? "");
   }
 
   Map<String, dynamic> toJson() => {
@@ -62,4 +60,21 @@ class SchoolAccreditationModel {
         'NumInYear': numInYear,
         'Standard': standard
       };
+
+  AccreditationLevel get level {
+    switch (result) {
+      case "Level 1":
+        return AccreditationLevel.level1;
+      case "Level 2":
+        return AccreditationLevel.level2;
+      case "Level 3":
+        return AccreditationLevel.level3;
+      case "Level 4":
+        return AccreditationLevel.level4;
+      default:
+        return AccreditationLevel.undefined;
+    }
+  }
 }
+
+enum AccreditationLevel { level1, level2, level3, level4, undefined }

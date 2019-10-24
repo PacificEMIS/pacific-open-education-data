@@ -71,4 +71,10 @@ class AppColors {
     "#182C61",
     "#1B9CFC"
   ];
+  static List<Color> kLevels = [
+    HexColor('#F85454'),
+    HexColor('#FFBA0A'),
+    HexColor('#94DC39'),
+    HexColor('#0DD35C'),
+  ];
 }
