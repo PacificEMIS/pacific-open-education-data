@@ -129,109 +129,94 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
   }
 
   Widget _buildList(AsyncSnapshot<SchoolAccreditationsChunk> snapshot) {
-    _dataLink = snapshot.data.statesChunk;
+    final data = snapshot.data;
+    _dataLink = data.statesChunk;
+    var selectedYear = data.statesChunk.yearFilter.selectedKey;
+    if (selectedYear == "") {
+      selectedYear = data.statesChunk.yearFilter.getMax();
+    }
 
     return OrientationBuilder(
       builder: (context, orientation) {
-        return ListView.builder(
-          itemCount: 5,
+        return ListView(
           padding: EdgeInsets.all(16.0),
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
-              subtitle: _generateGridTile(snapshot.data, index),
-            );
-          },
+          children: <Widget>[
+            BaseTileWidget(
+                title: TitleWidget(AppLocalizations.accreditationProgress,
+                    AppColors.kRacingGreen),
+                body: Column(
+                  children: <Widget>[
+                    ChartFactory.getStackedHorizontalBarChartViewByData(
+                        chartData: _generateCumulativeMap(
+                            data: data.statesChunk.getSortedByYear()),
+                        colorFunc: _levelIndexToColor),
+                    widget._dividerWidget,
+                  ],
+                )),
+            BaseTileWidget(
+                title: TitleWidget(
+                    AppLocalizations.districtStatus, AppColors.kRacingGreen),
+                body: Column(
+                  children: <Widget>[
+                    ChartFactory.getStackedHorizontalBarChartViewByData(
+                        chartData: _generateCumulativeMap(
+                            data: data.statesChunk.getSortedByState(),
+                            year: selectedYear),
+                        colorFunc: _levelIndexToColor),
+                    widget._dividerWidget,
+                  ],
+                )),
+            BaseTileWidget(
+                title: TitleWidget(AppLocalizations.accreditationStatusByState,
+                    AppColors.kRacingGreen),
+                body: Column(
+                  children: [
+                    AccreditationTable(
+                      keyName: "Evaluated in $selectedYear",
+                      firstColumnName: AppLocalizations.state,
+                      data: _generateAccreditationTableData(
+                          data.statesChunk.getSortedWithFiltersByState(),
+                          false,
+                          selectedYear),
+                    ),
+                    AccreditationTable(
+                      keyName: "Cumulative up to $selectedYear",
+                      firstColumnName: AppLocalizations.state,
+                      data: _generateAccreditationTableData(
+                          data.statesChunk.getSortedWithFiltersByState(),
+                          true,
+                          selectedYear),
+                    ),
+                  ],
+                )),
+            BaseTileWidget(
+                title: TitleWidget(
+                    AppLocalizations.accreditationPerfomancebyStandard,
+                    AppColors.kRacingGreen),
+                body: Column(
+                  children: [
+                    AccreditationTable(
+                      keyName: "Evaluated in $selectedYear",
+                      firstColumnName: AppLocalizations.standard,
+                      data: _generateAccreditationTableData(
+                          data.standardsChunk.getSortedByStandart(),
+                          false,
+                          selectedYear),
+                    ),
+                    AccreditationTable(
+                      keyName: "Cumulative up to $selectedYear",
+                      firstColumnName: AppLocalizations.standard,
+                      data: _generateAccreditationTableData(
+                          data.standardsChunk.getSortedByStandart(),
+                          true,
+                          selectedYear),
+                    ),
+                  ],
+                ))
+          ],
         );
       },
     );
-  }
-
-  Widget _generateGridTile(SchoolAccreditationsChunk data, int index) {
-    var selectedYear = data.statesChunk.yearFilter.selectedKey;
-    if (selectedYear == "") selectedYear = data.statesChunk.yearFilter.getMax();
-    switch (index) {
-      case 0:
-        return BaseTileWidget(
-            title: TitleWidget(
-                AppLocalizations.accreditationProgress, AppColors.kRacingGreen),
-            body: Column(
-              children: <Widget>[
-                ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _generateCumulativeMap(
-                        data: data.statesChunk.getSortedByYear()),
-                    colorFunc: _levelIndexToColor),
-                widget._dividerWidget,
-              ],
-            ));
-        break;
-      case 1:
-        return BaseTileWidget(
-            title: TitleWidget(
-                AppLocalizations.districtStatus, AppColors.kRacingGreen),
-            body: Column(
-              children: <Widget>[
-                ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _generateCumulativeMap(
-                        data: data.statesChunk.getSortedByState(),
-                        year: selectedYear),
-                    colorFunc: _levelIndexToColor),
-                widget._dividerWidget,
-              ],
-            ));
-        break;
-      case 2:
-        return BaseTileWidget(
-            title: TitleWidget(AppLocalizations.accreditationStatusByState,
-                AppColors.kRacingGreen),
-            body: Column(
-              children: [
-                AccreditationTable(
-                  keyName: "Evaluated in $selectedYear",
-                  firstColumnName: AppLocalizations.state,
-                  data: _generateAccreditationTableData(
-                      data.statesChunk.getSortedWithFiltersByState(),
-                      false,
-                      selectedYear),
-                ),
-                AccreditationTable(
-                  keyName: "Cumulative up to $selectedYear",
-                  firstColumnName: AppLocalizations.state,
-                  data: _generateAccreditationTableData(
-                      data.statesChunk.getSortedWithFiltersByState(),
-                      true,
-                      selectedYear),
-                ),
-              ],
-            ));
-      case 3:
-        return BaseTileWidget(
-            title: TitleWidget(
-                AppLocalizations.accreditationPerfomancebyStandard,
-                AppColors.kRacingGreen),
-            body: Column(
-              children: [
-                AccreditationTable(
-                  keyName: "Evaluated in $selectedYear",
-                  firstColumnName: AppLocalizations.standard,
-                  data: _generateAccreditationTableData(
-                      data.standardsChunk.getSortedByStandart(),
-                      false,
-                      selectedYear),
-                ),
-                AccreditationTable(
-                  keyName: "Cumulative up to $selectedYear",
-                  firstColumnName: AppLocalizations.standard,
-                  data: _generateAccreditationTableData(
-                      data.standardsChunk.getSortedByStandart(),
-                      true,
-                      selectedYear),
-                ),
-              ],
-            ));
-      default:
-        return Container();
-    }
   }
 
   Map<String, List<int>> _generateCumulativeMap(

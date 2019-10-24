@@ -36,7 +36,9 @@ class StackedHorizontalBarChartWidgetState
           ),
         ),
         tickProviderSpec: new charts.BasicNumericTickProviderSpec(
-            dataIsInWholeNumbers: true, desiredTickCount: 10),
+          dataIsInWholeNumbers: true,
+          desiredMaxTickCount: 10,
+        ),
       ),
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
