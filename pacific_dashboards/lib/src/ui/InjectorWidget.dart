@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/blocs/ExamsBloc.dart';
+import 'package:pacific_dashboards/src/blocs/SchoolAccreditationBloc.dart';
 import 'package:pacific_dashboards/src/blocs/SchoolsBloc.dart';
 import 'package:pacific_dashboards/src/blocs/TeachersBloc.dart';
 import 'package:pacific_dashboards/src/resources/FileProviderImpl.dart';
@@ -14,6 +15,7 @@ class InjectorWidget extends InheritedWidget {
   TeachersBloc _teachersBloc;
   SchoolsBloc _schoolsBloc;
   ExamsBloc _examsBloc;
+  SchoolAccreditationBloc _schoolAccreditationBloc;
   Repository _repository;
   SharedPreferences _sharedPreferences;
   GlobalSettings _globalSettings;
@@ -67,6 +69,13 @@ class InjectorWidget extends InheritedWidget {
     return _examsBloc;
   }
 
+  SchoolAccreditationBloc get schoolAccreditationsBloc {
+      if (_schoolAccreditationBloc == null) {
+        _schoolAccreditationBloc = SchoolAccreditationBloc(repository: _repository);
+      }
+
+      return _schoolAccreditationBloc;
+  } 
   SharedPreferences get sharedPreferences => _sharedPreferences;
 
   GlobalSettings get globalSettings => _globalSettings;

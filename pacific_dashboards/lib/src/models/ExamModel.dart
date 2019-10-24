@@ -9,7 +9,8 @@ class ExamModel {
   final List<int> resultsM;
   final List<int> resultsF;
 
-  ExamModel({
+  ExamModel(
+    {
     this.exam,
     this.examYear,
     this.districtCode,

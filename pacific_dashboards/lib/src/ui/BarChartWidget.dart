@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/src/config/Constants.dart';
-import 'package:pacific_dashboards/src/utils/HexColor.dart';
 
 class BarChartWidget extends StatefulWidget {
   final data;
@@ -16,16 +15,19 @@ class BarChartWidget extends StatefulWidget {
 class BarChartData {
   final String domain;
   final int measure;
+  final int color; 
 
-  BarChartData(this.domain, this.measure);
+  BarChartData(this.domain, this.measure, this.color);
 }
 
 class BarChartWidgetState extends State<BarChartWidget> {
   @override
   Widget build(BuildContext context) {
     List<BarChartData> data = [];
+    int id = 0;
     widget.data.forEach((k, v) {
-      data.add(BarChartData(k, v));
+      id++;
+      data.add(BarChartData(k, v, id));
     });
 
     var series = [
@@ -33,7 +35,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
         domainFn: (BarChartData chartData, _) => chartData.domain,
         measureFn: (BarChartData chartData, _) => chartData.measure,
         colorFn: (BarChartData chartData, _) =>
-            _getChartsColor(HexColor.fromStringHash(chartData.domain)),
+            _getChartsColorFromHex(chartData.color),
         id: "name",
         data: data,
       ),
@@ -61,6 +63,11 @@ class BarChartWidgetState extends State<BarChartWidget> {
         ),
       ),
     );
+  }
+
+  charts.Color _getChartsColorFromHex(int colorId) {
+    String color = AppColors.kGridColors[colorId] ?? "#1A73E8";
+    return charts.Color.fromHex(code: color);
   }
 
   charts.Color _getChartsColor(Color color) {

@@ -52,7 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "primary" : MessageLookupByLibrary.simpleMessage("Primary"),
     "publicPrivate" : MessageLookupByLibrary.simpleMessage("Public/Private"),
     "schoolAccreditations" : MessageLookupByLibrary.simpleMessage("School Accreditations"),
-    "schoolType" : MessageLookupByLibrary.simpleMessage("School \nType"),
+    "schoolType" : MessageLookupByLibrary.simpleMessage("School \n Levels"),
     "schools" : MessageLookupByLibrary.simpleMessage("Schools"),
     "schoolsEnrollment" : MessageLookupByLibrary.simpleMessage("Schools Enrollment"),
     "schoolsEnrollmentByAgeEducationLevel" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by Age, Education \nLevel and Gender"),

@@ -2,6 +2,9 @@ class LookupsModel {
   static const String LOOKUPS_KEY_GOVT = "authorityGovt";
   static const String LOOKUPS_KEY_STATE = "districts";
   static const String LOOKUPS_KEY_AUTHORITY = "authorities";
+  static const String LOOKUPS_KEY_STANDARD = "accreditationTerms";
+  static const String LOOKUPS_KEY_SCHOOL_LEVEL = "schoolTypes";
+  
   static const String LOOKUPS_KEY_NO_KEY = "";
 
   static const String LOOKUPS_KEY = "C";
@@ -21,9 +24,18 @@ class LookupsModel {
     return getFullName(key, LOOKUPS_KEY_STATE);
   }
 
+  String getFullStandart(String key) {
+    return getFullName(key, LOOKUPS_KEY_STANDARD); 
+  }
+
   String getFullAuthority(String key) {
     return getFullName(key, LOOKUPS_KEY_AUTHORITY);
   }
+
+    String getFullSchoolLevel(String key) {
+    return getFullName(key, LOOKUPS_KEY_SCHOOL_LEVEL);
+  }
+
 
   String getFullName(String key, String type) {
     try {
