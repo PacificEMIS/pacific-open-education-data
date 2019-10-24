@@ -185,13 +185,17 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
                   keyName: "Evaluated in $selectedYear",
                   firstColumnName: AppLocalizations.state,
                   data: _generateAccreditationTableData(
-                      data.statesChunk.getSortedWithFiltersByState(), false, selectedYear),
+                      data.statesChunk.getSortedWithFiltersByState(),
+                      false,
+                      selectedYear),
                 ),
                 AccreditationTable(
                   keyName: "Cumulative up to $selectedYear",
                   firstColumnName: AppLocalizations.state,
                   data: _generateAccreditationTableData(
-                      data.statesChunk.getSortedWithFiltersByState(), true, selectedYear),
+                      data.statesChunk.getSortedWithFiltersByState(),
+                      true,
+                      selectedYear),
                 ),
               ],
             ));
@@ -206,13 +210,17 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
                   keyName: "Evaluated in $selectedYear",
                   firstColumnName: AppLocalizations.standard,
                   data: _generateAccreditationTableData(
-                      data.standardsChunk.getSortedByStandart(), false, selectedYear),
+                      data.standardsChunk.getSortedByStandart(),
+                      false,
+                      selectedYear),
                 ),
                 AccreditationTable(
                   keyName: "Cumulative up to $selectedYear",
                   firstColumnName: AppLocalizations.standard,
                   data: _generateAccreditationTableData(
-                      data.standardsChunk.getSortedByStandart(), true, selectedYear),
+                      data.standardsChunk.getSortedByStandart(),
+                      true,
+                      selectedYear),
                 ),
               ],
             ));
@@ -245,12 +253,16 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       bool isCumulative,
       String currentYear) {
     var convertedData = Map<dynamic, AccreditationTableData>();
-
-    rawMapData.forEach((k, v) {
+    final sortedMapKeys = rawMapData.keys.toList()
+      ..sort((lv, rv) => rawMapData[lv]
+          .first
+          ?.standard
+          ?.compareTo(rawMapData[rv].first?.standard));
+    sortedMapKeys.forEach((key) {
       var levels = [0, 0, 0, 0, 0, 0, 0, 0];
-
-      for (var j = 0; j < v.length; ++j) {
-        var model = v;
+      final rawValue = rawMapData[key];
+      for (var j = 0; j < rawValue.length; ++j) {
+        var model = rawValue;
         var inspectionResult = model[j].result;
         var numThisYear = 0;
         var numSum = 0;
@@ -276,10 +288,10 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
       }
 
       if (isCumulative)
-        convertedData[k] =
+        convertedData[key] =
             AccreditationTableData(levels[4], levels[5], levels[6], levels[7]);
       else
-        convertedData[k] =
+        convertedData[key] =
             AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
     });
 
