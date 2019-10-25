@@ -3,10 +3,11 @@ import 'package:pacific_dashboards/src/ui/InjectorWidget.dart';
 import 'package:pacific_dashboards/src/ui/exams_ui/ExamsPage.dart';
 import 'package:pacific_dashboards/src/ui/home_ui/HomePage.dart';
 import 'package:pacific_dashboards/src/ui/schools_ui/SchoolsPage.dart';
-import 'package:pacific_dashboards/src/ui/splash_ui/SplashPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pacific_dashboards/src/ui/teaches_ui/TeachersPage.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
+
+import 'ui/schoolaccreditations_ui/SchoolAccreditationsPage.dart';
 
 class App extends StatelessWidget {
   @override
@@ -16,7 +17,7 @@ class App extends StatelessWidget {
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
+        GlobalWidgetsLocalizations.delegate 
       ],
       supportedLocales: [const Locale('en', 'EN'), const Locale('de', 'DE')],
       onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
@@ -38,7 +39,7 @@ class App extends StatelessWidget {
         "/Budgets": (context) => AlertWindowBack(),
         "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
         "/Indicators": (context) => AlertWindowBack(),
-        "/School Accreditations": (context) => AlertWindowBack(),
+        "/School Accreditations": (context) => SchoolAccreditationsPage(bloc:injector.schoolAccreditationsBloc),
         "/Schools": (context) => SchoolsPage(bloc: injector.schoolsBloc),
         "/Teachers": (context) => TeachersPage(bloc: injector.teachersBloc),
       },

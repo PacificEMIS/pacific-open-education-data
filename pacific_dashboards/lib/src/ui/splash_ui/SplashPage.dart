@@ -1,18 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/config/Constants.dart';
-import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class SplashPage extends StatefulWidget {
-  final GlobalSettings globalSettings;
 
   @override
   _SplashPageState createState() => _SplashPageState();
 
   SplashPage({
     Key key,
-    this.globalSettings,
   }) : super(key: key);
 }
 

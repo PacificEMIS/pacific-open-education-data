@@ -9,6 +9,7 @@ import 'package:appcenter_crashes/appcenter_crashes.dart';
 import 'package:flutter/services.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.white, 
     statusBarColor: Colors.white10, 

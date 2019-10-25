@@ -84,10 +84,7 @@ class TeachersPageState extends State<TeachersPage> {
         stream: widget.bloc.data,
         builder: (context, AsyncSnapshot<TeachersModel> snapshot) {
           if (snapshot.hasData) {
-            return Padding(
-              padding: EdgeInsets.all(16.0),
-              child: _buildList(snapshot),
-            );
+            return _buildList(snapshot);
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
@@ -137,6 +134,7 @@ class TeachersPageState extends State<TeachersPage> {
       builder: (context, orientation) {
         return ListView.builder(
           itemCount: 4,
+          padding: EdgeInsets.all(16.0),
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
@@ -171,7 +169,7 @@ class TeachersPageState extends State<TeachersPage> {
         break;
       case 1:
         return BaseTileWidget(
-          title: TitleWidget(AppLocalizations.schoolsEnrollmentGovtNonGovt,
+          title: TitleWidget(AppLocalizations.teachersEnrollmentGovtNonGovt,
               AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
@@ -215,7 +213,7 @@ class TeachersPageState extends State<TeachersPage> {
             _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
                 AppLocalizations.total, false),
             AppLocalizations.total,
-            AppLocalizations.schoolType));
+            AppLocalizations.schoolLevels));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
@@ -223,12 +221,12 @@ class TeachersPageState extends State<TeachersPage> {
               _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
                   statesKeys[i], true),
               data.lookupsModel.getFullState(statesKeys[i]),
-              AppLocalizations.schoolType));
+              AppLocalizations.schoolLevels));
         }
 
         return BaseTileWidget(
           title: TitleWidget(
-              AppLocalizations.schoolsEnrollmentBySchoolTypeStateAndGender,
+              AppLocalizations.teacherBySchoolTypeStateAndGender,
               AppColors.kRacingGreen),
           body: Column(
             children: widgets,

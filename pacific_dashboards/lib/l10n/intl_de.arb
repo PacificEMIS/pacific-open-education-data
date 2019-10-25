@@ -5,7 +5,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "construction": "Conssssssstruction",
+  "construction": "Construction",
   "@construction": {
     "type": "text",
     "placeholders": {}
@@ -75,8 +75,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "filterByStandart": "Filter by standart",
-  "@filterByStandart": {
+  "filterByStandard": "Filter by standard",
+  "@filterByStandard": {
     "type": "text",
     "placeholders": {}
   },

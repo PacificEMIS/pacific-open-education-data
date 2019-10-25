@@ -10,8 +10,11 @@ class SchoolsBloc extends BaseBloc<SchoolsModel> {
   SchoolsBloc({repository}) : super(repository: repository);
 
   fetchData() async {
-    var model = await repository.fetchAllSchools();
-    _fetcher.add(model);
+    try {
+      _fetcher.add(await repository.fetchAllSchools());
+    } catch (e) {
+      _fetcher.addError(e);
+    }
   }
 
   dispose() async {

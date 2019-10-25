@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:pacific_dashboards/src/models/LookupsModel.dart';
 import 'package:pacific_dashboards/src/models/ModelWithLookups.dart';
 import 'package:pacific_dashboards/src/models/TeacherModel.dart';
-import 'package:pacific_dashboards/src/resources/Filter.dart';
+import 'package:pacific_dashboards/src/models/Filter.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class TeachersModel extends ModelWithLookups {
@@ -125,25 +125,25 @@ class TeachersModel extends ModelWithLookups {
       'authority': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].authorityCode).toSet(),
-          AppLocalizations.filterByAuthority,
+          AppLocalizations.filterBySelectedAuthority,
           this,
           LookupsModel.LOOKUPS_KEY_AUTHORITY),
       'state': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].districtCode).toSet(),
-          AppLocalizations.filterByState,
+          AppLocalizations.filterBySelectedState,
           this,
           LookupsModel.LOOKUPS_KEY_STATE),
       'schoolType': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(),
-          AppLocalizations.filterBySchoolType,
+          AppLocalizations.filterBySelectedAuthority,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
       'govt': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].authorityGovt).toSet(),
-          AppLocalizations.filterByGovernment,
+          AppLocalizations.filterBySelectedGovtNonGovt,
           this,
           LookupsModel.LOOKUPS_KEY_GOVT),
       'year': Filter(
@@ -151,15 +151,15 @@ class TeachersModel extends ModelWithLookups {
                   _teachers.length, (i) => _teachers[i].surveyYear.toString())
               .reversed
               .toSet(),
-          AppLocalizations.filterByYear,
+          AppLocalizations.filterBySelectedYear,
           this,
           LookupsModel.LOOKUPS_KEY_NO_KEY),
       'schoolLevel': Filter(
           List<String>.generate(
-              _teachers.length, (i) => _teachers[i].iSCEDSubClass).toSet(),
-          AppLocalizations.filterByClassLevel,
+              _teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(),
+          AppLocalizations.filterBySelectedSchoolLevel,
           this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          LookupsModel.LOOKUPS_KEY_SCHOOL_LEVEL),
     };
     yearFilter.selectMax();
   }

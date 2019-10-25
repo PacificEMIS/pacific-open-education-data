@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/blocs/ExamsBloc.dart';
+import 'package:pacific_dashboards/src/blocs/SchoolAccreditationBloc.dart';
 import 'package:pacific_dashboards/src/blocs/SchoolsBloc.dart';
 import 'package:pacific_dashboards/src/blocs/TeachersBloc.dart';
-import 'package:pacific_dashboards/src/resources/FileProviderImpl.dart';
+import 'package:pacific_dashboards/src/resources/local/FileProviderImpl.dart';
 import 'package:pacific_dashboards/src/resources/Repository.dart';
 import 'package:pacific_dashboards/src/resources/RepositoryImpl.dart';
-import 'package:pacific_dashboards/src/resources/ServerBackendProvider.dart';
-import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
+import 'package:pacific_dashboards/src/resources/remote/ServerBackendProvider.dart';
+import 'package:pacific_dashboards/src/resources/GlobalSettings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -14,6 +15,7 @@ class InjectorWidget extends InheritedWidget {
   TeachersBloc _teachersBloc;
   SchoolsBloc _schoolsBloc;
   ExamsBloc _examsBloc;
+  SchoolAccreditationBloc _schoolAccreditationBloc;
   Repository _repository;
   SharedPreferences _sharedPreferences;
   GlobalSettings _globalSettings;
@@ -38,13 +40,15 @@ class InjectorWidget extends InheritedWidget {
     }
 
     _sharedPreferences = await SharedPreferences.getInstance();
-    var currentDataVersion = await ServerBackendProvider().fetchCurrentVersion();
+    // var currentDataVersion = await ServerBackendProvider().fetchCurrentVersion();
+    // _repository = RepositoryImpl(
+    //     ServerBackendProvider(_sharedPreferences), FileProviderImpl(_sharedPreferences));
     _globalSettings = GlobalSettings(_sharedPreferences);
-    _globalSettings.currentDataVersion = currentDataVersion;
+    // _globalSettings.currentDataVersion = currentDataVersion;
 
-    _repository = RepositoryImpl(
-        ServerBackendProvider(), FileProviderImpl(_sharedPreferences, currentDataVersion));
-        // fetch current version 
+    _repository = RepositoryImpl(ServerBackendProvider(_globalSettings),
+        FileProviderImpl(_sharedPreferences), _sharedPreferences);
+    // fetch current version
   }
 
   TeachersBloc get teachersBloc {
@@ -69,6 +73,15 @@ class InjectorWidget extends InheritedWidget {
     }
 
     return _examsBloc;
+  }
+
+  SchoolAccreditationBloc get schoolAccreditationsBloc {
+    if (_schoolAccreditationBloc == null) {
+      _schoolAccreditationBloc =
+          SchoolAccreditationBloc(repository: _repository);
+    }
+
+    return _schoolAccreditationBloc;
   }
 
   SharedPreferences get sharedPreferences => _sharedPreferences;

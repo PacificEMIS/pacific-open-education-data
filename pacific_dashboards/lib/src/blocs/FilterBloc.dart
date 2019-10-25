@@ -1,4 +1,4 @@
-import 'package:pacific_dashboards/src/resources/Filter.dart';
+import 'package:pacific_dashboards/src/models/Filter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FilterBloc {

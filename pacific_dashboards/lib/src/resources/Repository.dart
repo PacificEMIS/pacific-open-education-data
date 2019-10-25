@@ -1,5 +1,6 @@
 import 'package:pacific_dashboards/src/models/ExamsModel.dart';
 import 'package:pacific_dashboards/src/models/LookupsModel.dart';
+import 'package:pacific_dashboards/src/models/SchoolAccreditationsChunk.dart';
 import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
 import 'package:pacific_dashboards/src/models/TeachersModel.dart';
 
@@ -11,4 +12,6 @@ abstract class Repository {
   Future<ExamsModel> fetchAllExams();
 
   Future<LookupsModel> fetchAllLookups();
+
+  Future<SchoolAccreditationsChunk> fetchAllAccreditaitons();
 }
