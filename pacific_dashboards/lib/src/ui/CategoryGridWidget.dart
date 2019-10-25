@@ -8,8 +8,8 @@ class CategoryGridWidget extends StatelessWidget {
     AppLocalizations.teachers,
     AppLocalizations.exams,
     AppLocalizations.schoolAccreditations,
-    AppLocalizations.indicators,
-    AppLocalizations.budgets
+    // AppLocalizations.indicators,
+    // AppLocalizations.budgets
   ];
 
   @override

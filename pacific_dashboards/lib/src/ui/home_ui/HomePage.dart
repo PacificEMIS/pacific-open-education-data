@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/ui/CategoryGridWidget.dart';
-import 'package:pacific_dashboards/src/utils/GlobalSettings.dart';
+import 'package:pacific_dashboards/src/resources/GlobalSettings.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class HomePage extends StatefulWidget {

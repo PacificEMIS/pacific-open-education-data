@@ -17,14 +17,4 @@ abstract class FileProvider extends Provider {
   Future<bool> saveSchoolAccreditaitonsChunk(SchoolAccreditationsChunk chunk);
 
   Future<bool> saveLookupsModel(LookupsModel model);
-
-  Future<ExamsModel> fetchValidExamsModel();
-
-  Future<SchoolsModel> fetchValidSchoolsModel();
-
-  Future<TeachersModel> fetchValidTeachersModel();
-
-  Future<SchoolAccreditationsChunk> fetchValidSchoolAccreditationsChunk();
-
-  Future<LookupsModel> fetchValidLookupsModel();
 }

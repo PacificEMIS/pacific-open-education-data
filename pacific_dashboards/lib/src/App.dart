@@ -17,7 +17,7 @@ class App extends StatelessWidget {
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate 
+        GlobalWidgetsLocalizations.delegate
       ],
       supportedLocales: [const Locale('en', 'EN'), const Locale('de', 'DE')],
       onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
@@ -39,7 +39,8 @@ class App extends StatelessWidget {
         "/Budgets": (context) => AlertWindowBack(),
         "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
         "/Indicators": (context) => AlertWindowBack(),
-        "/School Accreditations": (context) => SchoolAccreditationsPage(bloc:injector.schoolAccreditationsBloc),
+        "/School Accreditations": (context) =>
+            SchoolAccreditationsPage(bloc: injector.schoolAccreditationsBloc),
         "/Schools": (context) => SchoolsPage(bloc: injector.schoolsBloc),
         "/Teachers": (context) => TeachersPage(bloc: injector.teachersBloc),
       },

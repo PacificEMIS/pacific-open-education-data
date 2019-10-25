@@ -3,7 +3,6 @@ import 'package:pacific_dashboards/src/blocs/ExamsBloc.dart';
 import 'package:pacific_dashboards/src/config/Constants.dart';
 import 'package:pacific_dashboards/src/models/ExamModel.dart';
 import 'package:pacific_dashboards/src/models/ExamsModel.dart';
-import 'package:pacific_dashboards/src/resources/ExamsDataNavigator.dart';
 import 'package:pacific_dashboards/src/ui/PlatformAppBar.dart';
 import 'package:pacific_dashboards/src/ui/exams_ui/ExamsStackedHorizontalBarChart.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';

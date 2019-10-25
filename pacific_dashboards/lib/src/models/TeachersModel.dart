@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:pacific_dashboards/src/models/LookupsModel.dart';
 import 'package:pacific_dashboards/src/models/ModelWithLookups.dart';
 import 'package:pacific_dashboards/src/models/TeacherModel.dart';
-import 'package:pacific_dashboards/src/resources/Filter.dart';
+import 'package:pacific_dashboards/src/models/Filter.dart';
 import 'package:pacific_dashboards/src/utils/Localizations.dart';
 
 class TeachersModel extends ModelWithLookups {

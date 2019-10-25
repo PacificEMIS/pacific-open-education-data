@@ -5,7 +5,7 @@ import 'package:pacific_dashboards/src/models/LookupsModel.dart';
 import 'package:pacific_dashboards/src/models/SchoolAccreditationsChunk.dart';
 import 'package:pacific_dashboards/src/models/SchoolsModel.dart';
 import 'package:pacific_dashboards/src/models/TeachersModel.dart';
-import 'package:pacific_dashboards/src/resources/FileProvider.dart';
+import 'package:pacific_dashboards/src/resources/local/FileProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,19 +20,18 @@ class FileProviderImpl extends FileProvider {
   static const _kCountryKey = "country";
   static const _kDefaultCountry = "Federated States of Micronesia";
 
+  String eTag;
   SharedPreferences _sharedPreferences;
-  String get basePath {
-    var basePath =
-        (_sharedPreferences.getString(_kCountryKey) ?? _kDefaultCountry) ==
-                _kDefaultCountry
-            ? _kMicronesiaPath
-            : _kMarshalsPath;
-    return basePath;
-  }
 
   FileProviderImpl(SharedPreferences sharedPreferences) {
     _sharedPreferences = sharedPreferences;
   }
+
+  String get basePath =>
+      (_sharedPreferences.getString(_kCountryKey) ?? _kDefaultCountry) ==
+              _kDefaultCountry
+          ? _kMicronesiaPath
+          : _kMarshalsPath;
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -57,38 +56,10 @@ class FileProviderImpl extends FileProvider {
   Future<File> _writeFile(String key, dynamic model) async {
     try {
       final file = await _createFile(key);
-      _saveTime(key);
       return file.writeAsString(jsonEncode(model.toJson()));
     } catch (e) {
       return null;
     }
-  }
-
-  Future<bool> _saveTime(String key) async {
-    final todayDate = DateTime.now();
-    return _sharedPreferences.setString(key + 'time', todayDate.toString());
-  }
-
-  Future<bool> _isTimePassed(String key) async {
-    try {
-      final timeStr = _sharedPreferences.getString(key + 'time') ??
-          new DateTime(0).toString();
-      DateTime oldDate = DateTime.parse(timeStr);
-      final todayDate = DateTime.now();
-      final timePass = todayDate.difference(oldDate);
-
-      return timePass.inHours > 12 || timePass.inMinutes < -5;
-    } catch (e) {
-      return true;
-    }
-  }
-
-  Future<String> loadFileData(String key) async {
-    if (!await _isTimePassed(basePath + key)) {
-      String result = await _readFile(basePath + key);
-      return result;
-    }
-    return null;
   }
 
   @override
@@ -99,87 +70,35 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<TeachersModel> fetchTeachersModel() async {
+    if (_isTimePassed(_kTeachersKey)) {
+      return null;
+    }
     return TeachersModel.fromJson(
         json.decode(await _readFile(basePath + _kTeachersKey)));
   }
 
   @override
   Future<ExamsModel> fetchExamsModel() async {
+    if (_isTimePassed(_kExamsKey)) {
+      return null;
+    }
     return ExamsModel.fromJson(
         json.decode(await _readFile(basePath + _kExamsKey)));
   }
 
   @override
   Future<SchoolAccreditationsChunk> fetchSchoolAccreditationsChunk() async {
-    Map<dynamic, dynamic> parsedJson =
-        json.decode(await _readFile(basePath + _kSchoolAccreditationKey));
-    return SchoolAccreditationsChunk.fromJson(parsedJson);
+    return SchoolAccreditationsChunk.fromJson(
+        json.decode(await _readFile(basePath + _kSchoolAccreditationKey)));
   }
 
   @override
   Future<LookupsModel> fetchLookupsModel() async {
+    if (_isTimePassed(_kLookupsKey)) {
+      return null;
+    }
     return LookupsModel.fromJson(
         jsonDecode(await _readFile(basePath + _kLookupsKey)));
-  }
-
-  @override
-  Future<SchoolsModel> fetchValidSchoolsModel() async {
-    try {
-      if (!await _isTimePassed(basePath + _kSchoolsKey)) {
-        return fetchSchoolsModel();
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  @override
-  Future<TeachersModel> fetchValidTeachersModel() async {
-    try {
-      if (!await _isTimePassed(basePath + _kTeachersKey)) {
-        return fetchTeachersModel();
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  @override
-  Future<ExamsModel> fetchValidExamsModel() async {
-    try {
-      if (!await _isTimePassed(basePath + _kExamsKey)) {
-        return fetchExamsModel();
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  @override
-  Future<SchoolAccreditationsChunk> fetchValidSchoolAccreditationsChunk() async {
-    try {
-      if (!await _isTimePassed(basePath + _kSchoolAccreditationKey)) {
-        return fetchSchoolAccreditationsChunk();
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  @override
-  Future<LookupsModel> fetchValidLookupsModel() async {
-    try {
-      if (!await _isTimePassed(basePath + _kLookupsKey)) {
-        return fetchLookupsModel();
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
   }
 
   @override
@@ -189,23 +108,44 @@ class FileProviderImpl extends FileProvider {
 
   @override
   Future<bool> saveTeachersModel(TeachersModel model) async {
+    await _saveTime(_kTeachersKey);
     return await _writeFile(basePath + _kTeachersKey, model) != null;
   }
 
   @override
   Future<bool> saveExamsModel(ExamsModel model) async {
+    await _saveTime(_kExamsKey);
     return await _writeFile(basePath + _kExamsKey, model) != null;
   }
 
   @override
   Future<bool> saveSchoolAccreditaitonsChunk(
       SchoolAccreditationsChunk chunk) async {
-    return await _writeFile(basePath + _kSchoolAccreditationKey, chunk) !=
-        null;
+    return await _writeFile(basePath + _kSchoolAccreditationKey, chunk) != null;
   }
 
   @override
   Future<bool> saveLookupsModel(LookupsModel model) async {
+    await _saveTime(_kLookupsKey);
     return await _writeFile(basePath + _kLookupsKey, model) != null;
+  }
+
+  // deprecated zone
+  Future<bool> _saveTime(String key) async {
+    final todayDate = DateTime.now();
+    return _sharedPreferences.setString(key + 'time', todayDate.toString());
+  }
+
+  bool _isTimePassed(String key) {
+    try {
+      final timeStr = _sharedPreferences.getString(key + 'time') ??
+          new DateTime(0).toString();
+      DateTime oldDate = DateTime.parse(timeStr);
+      final todayDate = DateTime.now();
+      final timePass = todayDate.difference(oldDate);
+      return timePass.inHours > 12 || timePass.inMinutes < -5;
+    } catch (e) {
+      return true;
+    }
   }
 }

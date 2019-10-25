@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/src/blocs/FilterBloc.dart';
 import 'package:pacific_dashboards/src/config/Constants.dart';
-import 'package:pacific_dashboards/src/resources/Filter.dart';
+import 'package:pacific_dashboards/src/models/Filter.dart';
 
 class FilterWidget extends StatefulWidget {
   final FilterBloc bloc;
