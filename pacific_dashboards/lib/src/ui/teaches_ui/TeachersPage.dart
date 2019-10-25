@@ -193,7 +193,7 @@ class TeachersPageState extends State<TeachersPage> {
           body: Column(
             children: <Widget>[
               ChartFactory.getBarChartViewByData(
-                  _generateMapOfSum(data.getSortedByState())),
+                  _generateMapOfSum(data.getSortedWithFiltersByState())),
               widget._dividerWidget,
               ChartInfoTable<TeacherModel>(
                   data.getSortedByState().keys.toList(),
