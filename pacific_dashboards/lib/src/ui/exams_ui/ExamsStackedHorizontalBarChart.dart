@@ -97,32 +97,36 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
 
   static List<charts.Series<ExamResultPercent, String>> _createData(
       ExamModel examModel) {
+    
+    bool isIncorrectFData = examModel.candidatesF == 0;
+    bool isIncorrectMData = examModel.candidatesM == 0;
+    
     final percentFail1 = [
       new ExamResultPercent(
-          'F', (-examModel.resultsF[0] * 100 / examModel.candidatesF).round()),
+          'F', isIncorrectFData ? 0 : (-examModel.resultsF[0] * 100 / examModel.candidatesF).round()),
       new ExamResultPercent(
-          'M', (-examModel.resultsM[0] * 100 / examModel.candidatesM).round()),
+          'M', isIncorrectMData ? 0 : (-examModel.resultsM[0] * 100 / examModel.candidatesM).round()),
     ];
 
     final percentFail2 = [
       new ExamResultPercent(
-          'F', (-examModel.resultsF[1] * 100 / examModel.candidatesF).round()),
+          'F', isIncorrectFData ? 0 : (-examModel.resultsF[1] * 100 / examModel.candidatesF).round()),
       new ExamResultPercent(
-          'M', (-examModel.resultsM[1] * 100 / examModel.candidatesM).round()),
+          'M', isIncorrectMData ? 0 : (-examModel.resultsM[1] * 100 / examModel.candidatesM).round()),
     ];
 
     final percentCompetent1 = [
       new ExamResultPercent(
-          'F', (examModel.resultsF[2] * 100 / examModel.candidatesF).round()),
+          'F', isIncorrectFData ? 0 : (examModel.resultsF[2] * 100 / examModel.candidatesF).round()),
       new ExamResultPercent(
-          'M', (examModel.resultsM[2] * 100 / examModel.candidatesM).round()),
+          'M', isIncorrectMData ? 0 : (examModel.resultsM[2] * 100 / examModel.candidatesM).round()),
     ];
 
     final percentCompetent2 = [
       new ExamResultPercent(
-          'F', (examModel.resultsF[3] * 100 / examModel.candidatesF).round()),
+          'F', isIncorrectFData ? 0 : (examModel.resultsF[3] * 100 / examModel.candidatesF).round()),
       new ExamResultPercent(
-          'M', (examModel.resultsM[3] * 100 / examModel.candidatesM).round()),
+          'M', isIncorrectMData ? 0 : (examModel.resultsM[3] * 100 / examModel.candidatesM).round()),
     ];
 
     final percentFiller1 = [
