@@ -12,13 +12,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RepositoryImpl implements Repository {
   final Provider _backendProvider;
   final FileProvider _fileProvider;
-  final SharedPreferences _sharedPreferences;
 
   RepositoryImpl(Provider backendProvider, FileProvider fileProvider,
       SharedPreferences sharedPreferences)
       : _backendProvider = backendProvider,
-        _fileProvider = fileProvider,
-        _sharedPreferences = sharedPreferences;
+        _fileProvider = fileProvider;
 
   @override
   Future<TeachersModel> fetchAllTeachers() async {

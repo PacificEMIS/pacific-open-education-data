@@ -47,7 +47,7 @@ class InjectorWidget extends InheritedWidget {
     // _globalSettings.currentDataVersion = currentDataVersion;
 
     _repository = RepositoryImpl(ServerBackendProvider(_globalSettings),
-        FileProviderImpl(_sharedPreferences), _sharedPreferences);
+        FileProviderImpl(_sharedPreferences, _globalSettings), _sharedPreferences);
     // fetch current version
   }
 

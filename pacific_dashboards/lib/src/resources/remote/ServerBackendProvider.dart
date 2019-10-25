@@ -37,10 +37,10 @@ class ServerBackendProvider implements Provider {
 
     final requestUrl = '$baseUrl/api/$path';
     final existingEtag = _settings.getEtag(requestUrl);
-    final Options options = !forced ? Options(headers: {'If-None-Match': existingEtag}) : null;
+    final Options options =
+        !forced ? Options(headers: {'If-None-Match': existingEtag}) : null;
 
-    final response = await _dio.get(requestUrl,
-        options: options);
+    final response = await _dio.get(requestUrl, options: options);
 
     if (response.statusCode == 304) {
       throw NoNewRemoteDataException();
@@ -58,7 +58,9 @@ class ServerBackendProvider implements Provider {
 
   @override
   Future<TeachersModel> fetchTeachersModel({bool force = false}) async {
-    final responseData = await _get(path: kTeachersApiKey, forced: true); // TODO: deprecated. forced disables ETag
+    final responseData = await _get(
+        path: kTeachersApiKey,
+        forced: true); // TODO: deprecated. forced disables ETag
     return TeachersModel.fromJson(responseData);
   }
 
@@ -70,14 +72,17 @@ class ServerBackendProvider implements Provider {
 
   @override
   Future<ExamsModel> fetchExamsModel({bool force = false}) async {
-    final responseData = await _get(path: kExamsApiKey, forced: true); // TODO: deprecated. forced disables ETag
+    final responseData = await _get(
+        path: kExamsApiKey,
+        forced: true); // TODO: deprecated. forced disables ETag
     return ExamsModel.fromJson(responseData);
   }
 
   @override
   Future<SchoolAccreditationsChunk> fetchSchoolAccreditationsChunk(
       {bool force = false}) async {
-    final responseData = await _get(path: _kSchoolAccreditationsByStandardApiKey);
+    final responseData =
+        await _get(path: _kSchoolAccreditationsByStandardApiKey);
     final testData = await _get(path: _kSchoolAccreditationsByStateApiKey);
     var modelByState = SchoolAccreditationsModel.fromJson(testData);
     var modelByStandard = SchoolAccreditationsModel.fromJson(responseData);
@@ -87,7 +92,9 @@ class ServerBackendProvider implements Provider {
 
   @override
   Future<LookupsModel> fetchLookupsModel({bool force = false}) async {
-    final responseData = await _get(path: _kLookupsApiKey, forced: true); // TODO: deprecated. forced disables ETag
+    final responseData = await _get(
+        path: _kLookupsApiKey,
+        forced: true); // TODO: deprecated. forced disables ETag
     return LookupsModel.fromJson(responseData);
   }
 }
