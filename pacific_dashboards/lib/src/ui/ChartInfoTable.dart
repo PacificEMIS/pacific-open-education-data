@@ -286,8 +286,8 @@ class _ChartInfoTableState<T> extends State<ChartInfoTable<T>> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(1.0)),
-                      color: HexColor(
-                          AppColors.kGridColors[index] ?? "#1A73E8"), 
+                      color: HexColor.fromStringHash(domain),
+                      // AppColors.kGridColors[index] ?? "#1A73E8"),
                     ),
                     height: 8.0,
                     width: 8.0,

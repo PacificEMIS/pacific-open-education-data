@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:pacific_dashboards/src/config/Constants.dart';
+import 'package:pacific_dashboards/src/utils/HexColor.dart';
 
 class PieChartWidget extends StatefulWidget {
   final bool animate;
@@ -16,10 +16,8 @@ class PieChartWidgetState extends State<PieChartWidget> {
   @override
   Widget build(BuildContext context) {
     List<PieChartData> data = [];
-    int id = 0;
     widget.data.forEach((k, v) {
-      id++;
-      data.add(PieChartData(k, v, id));
+      data.add(PieChartData(k, v, HexColor.fromStringHash(k)));
     });
     data.sort((a, b) => b.measure.compareTo(a.measure));
 
@@ -45,15 +43,19 @@ class PieChartWidgetState extends State<PieChartWidget> {
     );
   }
 
-  charts.Color _getChartsColor(int colorId) {
-    return charts.Color.fromHex(code: AppColors.kGridColors[colorId] ?? "#1A73E8");
+  charts.Color _getChartsColor(Color color) {
+    return charts.Color(
+        r: color.red, g: color.green, b: color.blue, a: color.alpha);
   }
+  // charts.Color _getChartsColor(int colorId) {
+  //   return charts.Color.fromHex(code: AppColors.kGridColors[colorId] ?? "#1A73E8");
+  // }
 }
 
 class PieChartData {
   final String domain;
   final int measure;
-  final int color;
+  final Color color;
 
   PieChartData(this.domain, this.measure, this.color);
 }
