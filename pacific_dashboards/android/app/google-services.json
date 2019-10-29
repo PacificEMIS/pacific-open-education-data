@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "1069155894532",
-    "firebase_url": "https://pacific-dashboards.firebaseio.com",
-    "project_id": "pacific-dashboards",
-    "storage_bucket": "pacific-dashboards.appspot.com"
+    "project_number": "269367888049",
+    "firebase_url": "https://pacific-dashboards-dev.firebaseio.com",
+    "project_id": "pacific-dashboards-dev",
+    "storage_bucket": "pacific-dashboards-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1069155894532:android:fdefdc017d7f9d50",
+        "mobilesdk_app_id": "1:269367888049:android:a95d72b5ad25c26940fa90",
         "android_client_info": {
           "package_name": "fm.doe.national.pacific_dashboards"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1069155894532-8moigfhuradj0eqq4vsjc2tl4oa69ibg.apps.googleusercontent.com",
+          "client_id": "269367888049-41l78bqg3mi4irui0mohebd6p41kg8u5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCQEuF9BmSZW778tQrWdqgP-3KQMRV1lVo"
+          "current_key": "AIzaSyA-8mI2dyVVCCGba8K6_yzUOSxL6kO2EuA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1069155894532-8moigfhuradj0eqq4vsjc2tl4oa69ibg.apps.googleusercontent.com",
+              "client_id": "269367888049-41l78bqg3mi4irui0mohebd6p41kg8u5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

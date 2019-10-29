@@ -1,25 +1,28 @@
-import 'dart:io' show Platform;
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-import 'src/App.dart';
-import 'src/ui/InjectorWidget.dart';
-import 'package:appcenter/appcenter.dart';
-import 'package:appcenter_analytics/appcenter_analytics.dart';
-import 'package:appcenter_crashes/appcenter_crashes.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_crashlytics/flutter_crashlytics.dart';
+import 'package:pacific_dashboards/src/App.dart';
+import 'package:pacific_dashboards/src/ui/InjectorWidget.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.white, 
-    statusBarColor: Colors.white10, 
+    systemNavigationBarColor: Colors.white,
+    statusBarColor: Colors.white10,
   ));
-  var appSecret = Platform.isAndroid
-      ? "3c6d3883-667f-434e-861a-1e168197aefb"
-      : "a1e06c9c-d224-4549-9e3c-26564d781a52";
-  await AppCenter.start(appSecret,
-      [AppCenterAnalytics.id, AppCenterCrashes.id]);
-  var injector = InjectorWidget(child : App());
+
+  var injector = InjectorWidget(child: App());
   await injector.init();
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    Zone.current.handleUncaughtError(details.exception, details.stack);
+  };
+
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  
   runApp(injector);
 }
