@@ -20,9 +20,9 @@ dependencies:
   path_provider: ^1.4.0
   shared_preferences: ^0.5.4
   flutter_svg: ^0.14.3
-  # appcenter: ^0.2.1
-  # appcenter_analytics: ^0.2.1
-  # appcenter_crashes: ^0.2.1
+  appcenter: ^0.2.1
+  appcenter_analytics: ^0.2.1
+  appcenter_crashes: ^0.2.1
   flutter_launcher_icons: ^0.7.3
 dev_dependencies:
   flutter_test:
