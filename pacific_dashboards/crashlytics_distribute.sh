@@ -21,7 +21,7 @@ flutter -v build apk --release --target-platform=android-arm
 # flutter -v build ios --release --no-codesign
 
 cd android
-sudo bundle exec fastlane distribute
+bundle exec fastlane distribute
 cd ../ios
 # sudo bundle exec fastlane distribute
 
