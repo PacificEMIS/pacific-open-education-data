@@ -1,38 +1,29 @@
+#!/bin/bash
+# fail if any command fails
+set -e
+# debug log
+set -x
+
+flutter channel stable
+flutter doctor
+
+flutter pub get
+
+cd lib/l10n/
+rm -fv *.dart
+cd ../../..
+flutter pub run intl_translation:extract_to_arb --output-dir=lib/l10n /Users/mac/pacific-dashboards/pacific_dashboards/lib/src/utils/Localizations.dart 
+flutter pub run intl_translation:generate_from_arb --output-dir=lib/l10n --no-use-deferred-loading lib/l10n/intl_messages.arb lib/l10n/intl_de.arb lib/l10n/intl_en.arb lib/src/utils/localizations.dart
+
 # Build android
-flutter -v build apk --release
+flutter -v build apk --release --target-platform=android-arm
 # Build ios
-flutter -v build ios --release --no-codesign
-
-
-# ### BEGIN MODIFICATIONS
-
-# # Copy mergeJniLibs to debugSymbols
-# cp -R ./build/app/intermediates/transforms/mergeJniLibs/release/0/lib debugSymbols
-
-# # The libflutter.so here is the same as in the artifacts.zip found with symbols.zip
-# cd debugSymbols/armeabi-v7a
-
-# # Download the corresponding libflutter.so with debug symbols
-# ENGINE_VERSION=`cat $HOME/flutter/bin/internal/engine.version`
-# gsutil cp gs://flutter_infra/flutter/${ENGINE_VERSION}/android-arm-release/symbols.zip .
-
-# # Replace libflutter.so
-# unzip -o symbols.zip
-# rm -rf symbols.zip
-
-# # Upload symbols to Crashlytics
-# cd ../../android
-# ./gradlew crashlyticsUploadSymbolsRelease
-
-# ### END MODIFICATIONS
-
-# # Release your app like usual
-# cd ../..
+# flutter -v build ios --release --no-codesign
 
 cd android
 sudo bundle exec fastlane distribute
 cd ../ios
-sudo bundle exec fastlane distribute
+# sudo bundle exec fastlane distribute
 
 echo 'SUCCESS'
 
