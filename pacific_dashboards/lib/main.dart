@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_crashlytics/flutter_crashlytics.dart';
-import 'package:pacific_dashboards/src/App.dart';
-import 'package:pacific_dashboards/src/ui/InjectorWidget.dart';
+import 'package:pacific_dashboards/App.dart';
+import 'package:pacific_dashboards/ui/InjectorWidget.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
