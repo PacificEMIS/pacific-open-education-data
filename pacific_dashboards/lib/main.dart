@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pacific_dashboards/App.dart';
-import 'package:pacific_dashboards/ui/InjectorWidget.dart';
+import 'package:pacific_dashboards/app.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

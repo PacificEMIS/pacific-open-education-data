@@ -1,4 +1,4 @@
-import 'package:pacific_dashboards/models/ModelWithLookups.dart';
+import 'package:pacific_dashboards/models/model_with_lookups.dart';
 
 class Filter {
   Map<String, bool> _filter = Map<String, bool>();
@@ -10,7 +10,8 @@ class Filter {
 
   Filter(Set filterOptions, String name, ModelWithLookups lookups,
       String lookupsName) {
-    _filter = Map.fromIterable(filterOptions, key: (i) => i, value: (i) => true);
+    _filter =
+        Map.fromIterable(filterOptions, key: (i) => i, value: (i) => true);
     filterName = name;
     lookupsModel = lookups;
     lookupsNameKey = lookupsName;

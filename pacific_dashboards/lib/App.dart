@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/localization/Localizations.dart';
-import 'package:pacific_dashboards/ui/InjectorWidget.dart';
-import 'package:pacific_dashboards/ui/exams_ui/ExamsPage.dart';
-import 'package:pacific_dashboards/ui/home_ui/HomePage.dart';
-import 'package:pacific_dashboards/ui/schoolaccreditations_ui/SchoolAccreditationsPage.dart';
-import 'package:pacific_dashboards/ui/schools_ui/SchoolsPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pacific_dashboards/ui/teaches_ui/TeachersPage.dart';
+import 'package:pacific_dashboards/pages/exams/exams_page.dart';
+import 'package:pacific_dashboards/pages/home/home_page.dart';
+import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
+import 'package:pacific_dashboards/pages/schools/schools_page.dart';
+import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
+import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
 
 class App extends StatelessWidget {
   @override
