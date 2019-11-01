@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pacific_dashboards/models/school_model.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
@@ -77,31 +76,50 @@ class SchoolsPageState extends State<SchoolsPage> {
           }
 
           if (state is LoadedSchoolsState) {
-            return ListView(
+            return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
-              children: [
-                ChartWithTable(
-                  title: AppLocalizations.schoolsEnrollmentByState,
-                  data: state.data.enrollmentByState,
-                  chartType: ChartType.bar, 
-                  tableKeyName: AppLocalizations.state, 
-                  tableValueName: AppLocalizations.schoolsEnrollment,
-                ),
-                ChartWithTable(
-                  title: AppLocalizations.schoolsEnrollmentByAuthority,
-                  data: state.data.enrollmentByAuthority,
-                  chartType: ChartType.pie, 
-                  tableKeyName: AppLocalizations.authority, 
-                  tableValueName: AppLocalizations.schoolsEnrollment,
-                ),
-                ChartWithTable(
-                  title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
-                  data: state.data.enrollmentByPrivacy,
-                  chartType: ChartType.pie, 
-                  tableKeyName: AppLocalizations.publicPrivate, 
-                  tableValueName: AppLocalizations.schoolsEnrollment,
-                ),
-              ],
+              child: Column(
+                children: [
+                  ChartWithTable(
+                    key: ObjectKey(state.data.enrollmentByState),
+                    title: AppLocalizations.schoolsEnrollmentByState,
+                    data: state.data.enrollmentByState,
+                    chartType: ChartType.bar,
+                    tableKeyName: AppLocalizations.state,
+                    tableValueName: AppLocalizations.schoolsEnrollment,
+                  ),
+                  ChartWithTable(
+                    key: ObjectKey(state.data.enrollmentByAuthority),
+                    title: AppLocalizations.schoolsEnrollmentByAuthority,
+                    data: state.data.enrollmentByAuthority,
+                    chartType: ChartType.pie,
+                    tableKeyName: AppLocalizations.authority,
+                    tableValueName: AppLocalizations.schoolsEnrollment,
+                  ),
+                  ChartWithTable(
+                    key: ObjectKey(state.data.enrollmentByPrivacy),
+                    title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
+                    data: state.data.enrollmentByPrivacy,
+                    chartType: ChartType.pie,
+                    tableKeyName: AppLocalizations.publicPrivate,
+                    tableValueName: AppLocalizations.schoolsEnrollment,
+                  ),
+                  MultiTable(
+                    key: ObjectKey(state.data.enrollmentByAgeAndEducation),
+                    title:
+                        AppLocalizations.schoolsEnrollmentByAgeEducationLevel,
+                    firstColumnName: AppLocalizations.age,
+                    data: state.data.enrollmentByAgeAndEducation,
+                  ),
+                  MultiTable(
+                    key: ObjectKey(state.data.enrollmentBySchoolLevelAndState),
+                    title: AppLocalizations
+                        .schoolsEnrollmentBySchoolTypeStateAndGender,
+                    firstColumnName: AppLocalizations.schoolType,
+                    data: state.data.enrollmentBySchoolLevelAndState,
+                  )
+                ],
+              ),
             );
           }
 
@@ -140,109 +158,43 @@ class SchoolsPageState extends State<SchoolsPage> {
       );
     }
   }
+}
 
-  // Widget _generateGridTile(SchoolsModel data, int index) {
-  //   switch (index) {
-  //     case 0:
-  //       break;
-  //     case 1:
-  //       break;
-  //     case 2:
-  //       break;
-  //     case 3:
-  //       var statesKeys = [
-  //         AppLocalizations.earlyChildhood,
-  //         AppLocalizations.primary,
-  //         AppLocalizations.secondary,
-  //         AppLocalizations.postSecondary
-  //       ];
-  //       List<Widget> widgets = List<Widget>();
+class MultiTable extends StatelessWidget {
+  const MultiTable(
+      {Key key,
+      @required String title,
+      @required String firstColumnName,
+      @required Map<String, Map<String, InfoTableData>> data})
+      : assert(title != null),
+        assert(firstColumnName != null),
+        assert(data != null),
+        _title = title,
+        _firstColumnName = firstColumnName,
+        _data = data,
+        super(key: key);
 
-  //       widgets.add(InfoTableWidget(
-  //           _generateInfoTableData(
-  //               data.getSortedByAge(0), AppLocalizations.total, false),
-  //           AppLocalizations.total,
-  //           AppLocalizations.age));
+  final String _title;
+  final String _firstColumnName;
+  final Map<String, Map<String, InfoTableData>> _data;
 
-  //       for (var i = 0; i < statesKeys.length; ++i) {
-  //         widgets.add(widget._dividerWidget);
-  //         widgets.add(InfoTableWidget(
-  //             _generateInfoTableData(
-  //                 data.getSortedByAge(i + 1), statesKeys[i], false),
-  //             statesKeys[i],
-  //             AppLocalizations.age));
-  //       }
-
-  //       return TileWidget(
-  //           title: TitleWidget(
-  //               AppLocalizations.schoolsEnrollmentByAgeEducationLevel,
-  //               AppColors.kRacingGreen),
-  //           body: Column(
-  //             children: widgets,
-  //           ));
-  //       break;
-  //     default:
-  //       var statesKeys = data.getDistrictCodeKeysList();
-  //       List<Widget> widgets = List<Widget>();
-
-  //       final filteredDataBySchoolType =
-  //           data.getSortedWithFilteringBySchoolType();
-  //       widgets.add(InfoTableWidget(
-  //           _generateInfoTableData(
-  //               filteredDataBySchoolType, AppLocalizations.total, false),
-  //           AppLocalizations.total,
-  //           AppLocalizations.schoolType));
-
-  //       for (var i = 0; i < statesKeys.length; ++i) {
-  //         widgets.add(widget._dividerWidget);
-  //         widgets.add(InfoTableWidget(
-  //             _generateInfoTableData(
-  //                 filteredDataBySchoolType, statesKeys[i], true),
-  //             data.lookupsModel.getFullState(statesKeys[i]),
-  //             AppLocalizations.schoolType));
-  //       }
-
-  //       return TileWidget(
-  //           title: TitleWidget(
-  //               AppLocalizations.schoolsEnrollmentBySchoolTypeStateAndGender,
-  //               AppColors.kRacingGreen),
-  //           body: Column(
-  //             children: widgets,
-  //           ));
-  //       break;
-  //   }
-  // }
-
-  Map<dynamic, InfoTableData> _generateInfoTableData(
-      Map<dynamic, List<SchoolModel>> rawMapData,
-      String keyName,
-      bool isSubTitle) {
-    var convertedData = Map<dynamic, InfoTableData>();
-    var totalMaleCount = 0;
-    var totalFemaleCount = 0;
-
-    rawMapData.forEach((k, v) {
-      var maleCount = 0;
-      var femaleCount = 0;
-
-      for (var j = 0; j < v.length; ++j) {
-        var model = v;
-        if (!isSubTitle ||
-            (isSubTitle && (keyName == model[j].districtCode)) ||
-            keyName == null) {
-          maleCount += model[j].enrolMale;
-          femaleCount += model[j].enrolFemale;
-        }
-      }
-
-      totalMaleCount += maleCount;
-      totalFemaleCount += femaleCount;
-      convertedData[k] = InfoTableData(maleCount, femaleCount);
-    });
-
-    convertedData[AppLocalizations.total] =
-        InfoTableData(totalMaleCount, totalFemaleCount);
-
-    return convertedData;
+  @override
+  Widget build(BuildContext context) {
+    return TileWidget(
+        title: TitleWidget(_title, AppColors.kRacingGreen),
+        body: Column(
+          children: _data.keys.map((key) {
+            return Padding(
+              padding: const EdgeInsets.only(
+                bottom: 8,
+              ),
+              child: InfoTableWidget(
+                _data[key],
+                key,
+                _firstColumnName,
+              ),
+            );
+          }).toList(),
+        ));
   }
 }

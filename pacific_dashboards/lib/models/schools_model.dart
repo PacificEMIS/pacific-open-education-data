@@ -90,9 +90,7 @@ class SchoolsModel extends ModelWithLookups {
   }
 
   List<String> getDistrictCodeKeysList() {
-    var statesGroup = groupBy(_schools, (obj) => obj.districtCode);
-
-    return statesGroup.keys.toList();
+    return groupBy<SchoolModel, String>(_schools, (obj) => obj.districtCode).keys.toList();
   }
 
   Map<String, List<SchoolModel>> getSortedWithFilteringBySchoolType() {
@@ -127,17 +125,17 @@ class SchoolsModel extends ModelWithLookups {
     return groupBy(_schools, (obj) => obj.classLevel);
   }
 
-  Map<String, List<SchoolModel>> getSortedByAge(int type) {
+  Map<String, List<SchoolModel>> getGroupedByAgeFileteredByEducationLevel(EducationLevel level) {
     var filteredList = _schools
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup) && i.age > 0);
 
-    switch (type) {
-      case 0:
+    switch (level) {
+      case EducationLevel.all:
         break;
-      case 1:
+      case EducationLevel.earlyChildhood:
         filteredList = filteredList.where((i) => ["GK"].contains(i.classLevel));
         break;
-      case 2:
+      case EducationLevel.primary:
         filteredList = filteredList.where((i) => [
               "G1",
               "G2",
@@ -149,11 +147,11 @@ class SchoolsModel extends ModelWithLookups {
               "G8"
             ].contains(i.classLevel));
         break;
-      case 3:
+      case EducationLevel.secondary:
         filteredList = filteredList
             .where((i) => ["G9", "G10", "G11", "G12"].contains(i.classLevel));
         break;
-      case 4:
+      case EducationLevel.postSecondary:
         filteredList = filteredList.where((i) => ![
               "GK",
               "G1",
@@ -169,8 +167,6 @@ class SchoolsModel extends ModelWithLookups {
               "G11",
               "G12"
             ].contains(i.classLevel));
-        break;
-      default:
         break;
     }
 
@@ -229,4 +225,8 @@ class SchoolsModel extends ModelWithLookups {
     };
     yearFilter.selectMax();
   }
+}
+
+enum EducationLevel {
+  all, earlyChildhood, primary, secondary, postSecondary
 }

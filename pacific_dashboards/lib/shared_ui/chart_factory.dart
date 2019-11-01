@@ -9,7 +9,7 @@ class ChartFactory {
         ? Container()
         : Container(
             height: 250.0,
-            child: BarChartWidget(data: chartData),
+            child: BarChartWidget(key: ObjectKey(chartData), data: chartData),
           );
   }
 
@@ -18,7 +18,7 @@ class ChartFactory {
         ? Container()
         : Container(
             height: 300.0,
-            child: PieChartWidget(data: chartData),
+            child: PieChartWidget(key: ObjectKey(chartData), data: chartData),
           );
   }
 

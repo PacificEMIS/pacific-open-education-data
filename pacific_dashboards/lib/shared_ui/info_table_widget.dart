@@ -23,7 +23,7 @@ class InfoTableData {
 class InfoTableWidget extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final Map<dynamic, InfoTableData> _data;
+  final Map<String, InfoTableData> _data;
 
   final String _keyName;
   final String _firstColumnName;

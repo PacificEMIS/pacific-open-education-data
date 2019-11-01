@@ -6,7 +6,6 @@ class TitleWidget extends StatelessWidget {
 
   TitleWidget(this._titleName, this._textColor);
 
-// TODO: refactor?
   @override
   Widget build(BuildContext context) {
     return Row(
