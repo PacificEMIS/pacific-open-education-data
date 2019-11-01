@@ -1,27 +1,28 @@
+import 'package:pacific_dashboards/models/emis.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GlobalSettings {
-  static const kDefaultCountry = "Federated States of Micronesia";
-  static const _kCountryKey = "country";
+  static const kDefaultEmis = Emis.fedemis;
+  static const _kEmisKey = "emis";
   static const _kVersionSuffix = "_version";
 
   final SharedPreferences _sharedPreferences;
 
   GlobalSettings(this._sharedPreferences);
 
-  String get currentCountry {
-    return _sharedPreferences.getString(_kCountryKey) ?? kDefaultCountry;
+  Emis get currentEmis {
+    return emisFromString(_sharedPreferences.getString(_kEmisKey)) ?? kDefaultEmis;
   }
 
-  set currentCountry(String country) {
-    _sharedPreferences.setString(_kCountryKey, country);
+  Future<bool> setCurrentEmis(Emis emis) {
+    return _sharedPreferences.setString(_kEmisKey, emis.toString());
   }
 
   String getEtag(String path) {
     return _sharedPreferences.getString(path + _kVersionSuffix);
   }
 
-  void setEtag(String path, String etag) {
-    _sharedPreferences.setString(path + _kVersionSuffix, etag);
+  Future<bool> setEtag(String path, String etag) {
+    return _sharedPreferences.setString(path + _kVersionSuffix, etag);
   }
 }

@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/data/global_settings.dart';
-import 'package:pacific_dashboards/pages/home/sections_grid_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pacific_dashboards/models/emis.dart';
+import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
+import 'package:pacific_dashboards/pages/home/sections_grid.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
 class HomePage extends StatefulWidget {
-  final GlobalSettings globalSettings;
+  static const String kRoute = "/";
 
   @override
   _HomePageState createState() => new _HomePageState();
 
-  HomePage({
-    Key key,
-    this.globalSettings,
-  }) : super(key: key);
+  HomePage({Key key}) : super(key: key);
 }
 
 class _HomePageState extends State<HomePage> {
-  String _currentCountry;
-
-  final String _kMarshallIslands = AppLocalizations.marshallIslands;
-  final String _kFederatedStateOfMicronesia =
-      AppLocalizations.federatedStateOfMicronesia;
-  final String _kFederatedStateOfMicronesiaWithSplitter =
-      AppLocalizations.federatedStateOfMicronesiaSplitted;
+  HomeBloc _homeBloc;
 
   @override
   void initState() {
     super.initState();
-    _currentCountry = widget.globalSettings.currentCountry;
+    _homeBloc = BlocProvider.of<HomeBloc>(context);
+  }
+
+  @override
+  void dispose() {
+    _homeBloc.close();
+    super.dispose();
   }
 
   @override
@@ -36,153 +36,145 @@ class _HomePageState extends State<HomePage> {
       resizeToAvoidBottomPadding: true,
       body: new Container(
         color: Color.fromRGBO(26, 115, 232, 1),
-        child: new ListView(children: <Widget>[
-          Container(
-            height: 80,
-            alignment: Alignment.centerRight,
-            child: _buildChooseCountry(context),
-          ),
-          Container(
-              height: 160,
-              width: 160,
-              child: Image.asset("images/logos/$_currentCountry.png")),
-          Container(
-            height: 96,
-            width: 266,
-            alignment: Alignment.center,
-            child: Center(
-                child: Text(
-                    (_currentCountry == _kFederatedStateOfMicronesia
-                        ? _kFederatedStateOfMicronesiaWithSplitter
-                        : _kMarshallIslands),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 24,
-                        fontFamily: "NotoSans",
-                        color: Colors.white))),
-          ),
-          Container(alignment: Alignment.center, child: CategoryGridWidget())
-        ]),
-      ),
-    );
-  }
+        child: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            if (state is LoadingHomeState) {
+              return Center(
+                child: PlatformProgressIndicator(),
+              );
+            }
 
-  _buildChooseCountry(BuildContext context) {
-    return FlatButton(
-      color: Color.fromRGBO(26, 115, 232, 1),
-      textColor: Colors.white,
-      disabledColor: Colors.grey,
-      disabledTextColor: Colors.black,
-      padding: EdgeInsets.all(8.0),
-      splashColor: Colors.lightBlue,
-      onPressed: () {
-        _showDialog(context);
-      },
-      child: Text(
-        AppLocalizations.changeCountry,
-        style: TextStyle(
-            fontSize: 16.0,
-            fontStyle: FontStyle.normal,
-            fontFamily: "NotoSans-Regular"),
-      ),
-    );
-  }
-
-  void _showDialog(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 244,
-          child: AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
-            contentPadding: EdgeInsets.only(top: 10.0, right: 0),
-            title: Text(
-              AppLocalizations.changeCountry,
-              style: TextStyle(
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 24,
-                  fontFamily: "NotoSans"),
-            ),
-            content: Container(
-              height: 200,
-              width: 280,
-              padding: const EdgeInsets.only(
-                  top: 10.0, bottom: 10.0, left: 0.0, right: 0.0),
-              child: Column(children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      setState(() {
-                        _onCountryChangeTap(_kFederatedStateOfMicronesia);
-                      });
+            if (state is LoadedHomeState) {
+              return ListView(children: <Widget>[
+                Container(
+                  height: 80,
+                  alignment: Alignment.centerRight,
+                  child: FlatButton(
+                    color: Color.fromRGBO(26, 115, 232, 1),
+                    textColor: Colors.white,
+                    disabledColor: Colors.grey,
+                    disabledTextColor: Colors.black,
+                    padding: EdgeInsets.all(8.0),
+                    splashColor: Colors.lightBlue,
+                    onPressed: () async {
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return _CountrySelectDialog(
+                            homeBloc: _homeBloc,
+                          );
+                        },
+                      );
                     },
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                            padding: const EdgeInsets.only(left: 30.0),
-                            child: Image.asset(
-                              "images/logos/$_kFederatedStateOfMicronesia.png",
-                              width: 40,
-                              height: 40,
-                            )),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20.0),
-                          child: Text(
-                              "$_kFederatedStateOfMicronesiaWithSplitter",
-                              style: TextStyle(fontFamily: "NotoSans")),
-                        ),
-                      ],
+                    child: Text(
+                      AppLocalizations.changeCountry,
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontStyle: FontStyle.normal,
+                          fontFamily: "NotoSans-Regular"),
                     ),
                   ),
                 ),
-                Expanded(
-                    child: InkWell(
+                Container(
+                  height: 160,
+                  width: 160,
+                  child: Image.asset(logoPathForEmis(state.emis)),
+                ),
+                Container(
+                  height: 96,
+                  width: 266,
+                  alignment: Alignment.center,
+                  child: Center(
+                      child: Text(
+                          state.emis == Emis.fedemis
+                              ? AppLocalizations
+                                  .federatedStateOfMicronesiaSplitted
+                              : nameOfEmis(state.emis),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24,
+                              fontFamily: "NotoSans",
+                              color: Colors.white))),
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    child: SectionsGrid(
+                      emis: state.emis,
+                    ))
+              ]);
+            }
+
+            throw FallThroughError();
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _CountrySelectDialog extends StatelessWidget {
+  _CountrySelectDialog({@required HomeBloc homeBloc})
+      : assert(homeBloc != null),
+        _homeBloc = homeBloc;
+
+  final HomeBloc _homeBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 244,
+      child: AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0))),
+        contentPadding: EdgeInsets.only(top: 10.0, right: 0),
+        title: Text(
+          AppLocalizations.changeCountry,
+          style: TextStyle(
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w700,
+              fontSize: 24,
+              fontFamily: "NotoSans"),
+        ),
+        content: Container(
+          height: 200,
+          width: 280,
+          padding: const EdgeInsets.only(
+              top: 10.0, bottom: 10.0, left: 0.0, right: 0.0),
+          child: Column(children: [
+            ...Emis.values.map((emis) {
+              return Expanded(
+                child: InkWell(
                   splashColor: Colors.blue.withAlpha(30),
                   onTap: () {
-                    setState(() {
-                      _onCountryChangeTap(_kMarshallIslands);
-                    });
+                    Navigator.of(context).pop();
+                    _homeBloc.add(EmisChanged(emis));
                   },
                   child: Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(left: 30.0),
-                        child: Image.asset(
-                          "images/logos/$_kMarshallIslands.png",
-                          width: 40,
-                          height: 40,
+                          padding: const EdgeInsets.only(left: 30.0),
+                          child: Image.asset(
+                            logoPathForEmis(emis),
+                            width: 40,
+                            height: 40,
+                          )),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text(nameOfEmis(emis),
+                              style: TextStyle(fontFamily: "NotoSans")),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(_kMarshallIslands,
-                            maxLines: 1,
-                            style: TextStyle(fontFamily: "NotoSans")),
                       ),
                     ],
                   ),
-                ))
-              ]),
-            ),
-          ),
-        );
-      },
+                ),
+              );
+            }),
+          ]),
+        ),
+      ),
     );
-  }
-
-  _onCountryChangeTap(String country) {
-    Navigator.of(context).pop();
-
-    widget.globalSettings.currentCountry = country;
-
-    setState(() {
-      _currentCountry = country;
-    });
   }
 }

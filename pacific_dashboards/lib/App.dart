@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
+import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
@@ -32,13 +34,18 @@ class App extends StatelessWidget {
           body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
       ),
-      initialRoute: "/",
+      initialRoute: HomePage.kRoute,
       routes: {
-        "/": (context) => HomePage(globalSettings: injector.globalSettings),
-        "/Home": (context) => HomePage(globalSettings: injector.globalSettings),
-        "/Budgets": (context) => AlertWindowBack(),
+        HomePage.kRoute: (context) => BlocProvider(
+              builder: (context) {
+                return injector.homeBloc
+                  ..add(StartedHomeEvent());
+              },
+              child: HomePage(),
+            ),
+        "/Budgets": (context) => _NotImplementedPage(),
         "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
-        "/Indicators": (context) => AlertWindowBack(),
+        "/Indicators": (context) => _NotImplementedPage(),
         "/School Accreditations": (context) =>
             SchoolAccreditationsPage(bloc: injector.schoolAccreditationsBloc),
         "/Schools": (context) => SchoolsPage(bloc: injector.schoolsBloc),
@@ -48,7 +55,7 @@ class App extends StatelessWidget {
   }
 }
 
-class AlertWindowBack extends StatelessWidget {
+class _NotImplementedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

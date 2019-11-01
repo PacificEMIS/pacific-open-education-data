@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/data/remote/backend_provider.dart';
 import 'package:pacific_dashboards/data/repository.dart';
 import 'package:pacific_dashboards/data/repository_impl.dart';
 import 'package:pacific_dashboards/pages/exams/exams_bloc.dart';
+import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_bloc.dart';
 import 'package:pacific_dashboards/pages/schools/schools_bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_bloc.dart';
@@ -80,6 +81,8 @@ class InjectorWidget extends InheritedWidget {
 
     return _schoolAccreditationBloc;
   }
+
+  HomeBloc get homeBloc => HomeBloc(globalSettings: _globalSettings);
 
   SharedPreferences get sharedPreferences => _sharedPreferences;
 

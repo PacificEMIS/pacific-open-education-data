@@ -31,7 +31,7 @@ class ServerBackendProvider implements Provider {
   }
 
   Future<dynamic> _get({@required String path, bool forced = false}) async {
-    final baseUrl = _settings.currentCountry == GlobalSettings.kDefaultCountry
+    final baseUrl = _settings.currentEmis == GlobalSettings.kDefaultEmis
         ? _kFederalStatesOfMicronesiaUrl
         : kMarshalIslandsUrl;
 

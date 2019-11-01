@@ -27,7 +27,7 @@ class FileProviderImpl extends FileProvider {
         _settings = settings;
 
   String get _basePath =>
-      _settings.currentCountry == GlobalSettings.kDefaultCountry
+      _settings.currentEmis == GlobalSettings.kDefaultEmis
           ? _kMicronesiaPath
           : _kMarshalsPath;
 

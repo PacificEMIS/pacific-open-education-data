@@ -22,6 +22,9 @@ dependencies:
   firebase_crashlytics: ^0.1.0+3
   firebase_core: ^0.4.0+9
   flutter_launcher_icons: ^0.7.3
+  bloc: ^1.0.0
+  flutter_bloc: ^1.0.0
+  equatable: ^0.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -31,17 +34,17 @@ flutter:
   uses-material-design: true
   
   assets:
-    - images/logos/Federated States of Micronesia.png
-    - images/logos/Marshall Islands.png
-    - images/splash/Splash.png
-    - images/icons/Budgets.svg
-    - images/icons/Exams.svg
-    - images/icons/Indicators.svg
-    - images/icons/School Accreditations.svg
-    - images/icons/Schools.svg
-    - images/icons/Teachers.svg
+    - images/fedemis.png
+    - images/miemis.png
+    - images/splash.png
+    - images/budgets.svg
+    - images/exams.svg
+    - images/indicators.svg
+    - images/school_accreditations.svg
+    - images/schools.svg
+    - images/teachers.svg
+    - images/tune.svg
     - fonts/NotoSans-Regular.ttf
-    - images/icons/Tune.svg
 
 flutter_icons:
   ios: true

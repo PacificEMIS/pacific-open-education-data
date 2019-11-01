@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _navigateToHome() {
-    Navigator.of(context).pushReplacementNamed("/Home");
+    Navigator.of(context).pushReplacementNamed("/");
   }
 
   void initState() {
