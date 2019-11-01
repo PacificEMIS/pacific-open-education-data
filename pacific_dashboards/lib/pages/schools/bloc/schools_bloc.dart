@@ -26,12 +26,18 @@ class SchoolsBloc extends Bloc<SchoolsEvent, SchoolsState> {
   ) async* {
     if (event is StartedSchoolsEvent) {
       _schoolsModel = await _repository.fetchAllSchools();
-      yield LoadedSchoolsState(await _transformSchoolsModel());
+      yield UpdatedSchoolsState(await _transformSchoolsModel());
+    }
+
+    if (event is FiltersAppliedSchoolsEvent) {
+      _schoolsModel = event.updatedModel;
+      yield UpdatedSchoolsState(await _transformSchoolsModel());
     }
   }
 
   Future<SchoolsPageData> _transformSchoolsModel() async {
     return SchoolsPageData(
+      rawModel: _schoolsModel,
       enrollmentByState:
           _calculatePeopleCount(_schoolsModel.getSortedWithFiltersByState()),
       enrollmentByAuthority: _calculatePeopleCount(

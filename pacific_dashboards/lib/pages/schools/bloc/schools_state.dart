@@ -10,8 +10,8 @@ abstract class SchoolsState extends Equatable {
 
 class LoadingSchoolsState extends SchoolsState {}
 
-class LoadedSchoolsState extends SchoolsState {
-  const LoadedSchoolsState(this.data);
+class UpdatedSchoolsState extends SchoolsState {
+  const UpdatedSchoolsState(this.data);
 
   final SchoolsPageData data;
 

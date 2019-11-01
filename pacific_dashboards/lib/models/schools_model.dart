@@ -13,17 +13,38 @@ class SchoolsModel extends ModelWithLookups {
 
   Filter get yearFilter => _filters['year'];
 
+  void updateYearFilter(Filter newFilter) {
+    _filters['year'] = newFilter;
+  }
+
   Filter get stateFilter => _filters['state'];
+
+  void updateStateFilter(Filter newFilter) {
+    _filters['state'] = newFilter;
+  }
+
 
   Filter get authorityFilter => _filters['authority'];
 
+  void updateAuthorityFilter(Filter newFilter) {
+    _filters['authority'] = newFilter;
+  }
+
   Filter get govtFilter => _filters['govt'];
+
+  void updateGovtFilter(Filter newFilter) {
+    _filters['govt'] = newFilter;
+  }
 
   Filter get schoolTypeFilter => _filters['schoolType'];
 
   Filter get ageFilter => _filters['age'];
 
   Filter get schoolLevelFilter => _filters['schoolLevel'];
+
+  void updateSchoolLevelFilter(Filter newFilter) {
+    _filters['schoolLevel'] = newFilter;
+  }
 
   SchoolsModel.fromJson(List parsedJson) {
     _schools = List<SchoolModel>();

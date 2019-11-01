@@ -24,138 +24,156 @@ class SchoolsPage extends StatefulWidget {
 }
 
 class SchoolsPageState extends State<SchoolsPage> {
-  SchoolsModel _dataLink;
+  bool areFiltersVisible = false;
 
-  SchoolsBloc _schoolsBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _schoolsBloc = BlocProvider.of<SchoolsBloc>(context);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _schoolsBloc.close();
+  void updateFiltersVisibility(BuildContext context) {
+    setState(() {
+      areFiltersVisible =
+          BlocProvider.of<SchoolsBloc>(context).state is UpdatedSchoolsState;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
-      appBar: PlatformAppBar(
-        iconTheme: new IconThemeData(color: AppColors.kWhite),
-        backgroundColor: AppColors.kAppBarBackground,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.tune,
-              color: AppColors.kWhite,
+    return BlocListener<SchoolsBloc, SchoolsState>(
+        listener: (context, state) {
+          updateFiltersVisibility(context);
+        },
+        child: Scaffold(
+          resizeToAvoidBottomPadding: true,
+          appBar: PlatformAppBar(
+            iconTheme: new IconThemeData(color: AppColors.kWhite),
+            backgroundColor: AppColors.kAppBarBackground,
+            actions: [
+              Visibility(
+                visible: areFiltersVisible,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.tune,
+                    color: AppColors.kWhite,
+                  ),
+                  onPressed: () {
+                    _openFilters(context);
+                  },
+                ),
+              ),
+            ],
+            title: Text(
+              AppLocalizations.schools,
+              style: TextStyle(
+                color: AppColors.kWhite,
+                fontSize: 18.0,
+                fontFamily: "Noto Sans",
+              ),
             ),
-            onPressed: () {
-              _createFilterPageRoute(context);
+          ),
+          body: BlocBuilder<SchoolsBloc, SchoolsState>(
+            builder: (context, state) {
+              if (state is LoadingSchoolsState) {
+                return Center(
+                  child: PlatformProgressIndicator(),
+                );
+              }
+
+              if (state is UpdatedSchoolsState) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      ChartWithTable(
+                        key: ObjectKey(state.data.enrollmentByState),
+                        title: AppLocalizations.schoolsEnrollmentByState,
+                        data: state.data.enrollmentByState,
+                        chartType: ChartType.bar,
+                        tableKeyName: AppLocalizations.state,
+                        tableValueName: AppLocalizations.schoolsEnrollment,
+                      ),
+                      ChartWithTable(
+                        key: ObjectKey(state.data.enrollmentByAuthority),
+                        title: AppLocalizations.schoolsEnrollmentByAuthority,
+                        data: state.data.enrollmentByAuthority,
+                        chartType: ChartType.pie,
+                        tableKeyName: AppLocalizations.authority,
+                        tableValueName: AppLocalizations.schoolsEnrollment,
+                      ),
+                      ChartWithTable(
+                        key: ObjectKey(state.data.enrollmentByPrivacy),
+                        title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
+                        data: state.data.enrollmentByPrivacy,
+                        chartType: ChartType.pie,
+                        tableKeyName: AppLocalizations.publicPrivate,
+                        tableValueName: AppLocalizations.schoolsEnrollment,
+                      ),
+                      MultiTable(
+                        key: ObjectKey(state.data.enrollmentByAgeAndEducation),
+                        title: AppLocalizations
+                            .schoolsEnrollmentByAgeEducationLevel,
+                        firstColumnName: AppLocalizations.age,
+                        data: state.data.enrollmentByAgeAndEducation,
+                      ),
+                      MultiTable(
+                        key: ObjectKey(
+                            state.data.enrollmentBySchoolLevelAndState),
+                        title: AppLocalizations
+                            .schoolsEnrollmentBySchoolTypeStateAndGender,
+                        firstColumnName: AppLocalizations.schoolType,
+                        data: state.data.enrollmentBySchoolLevelAndState,
+                      )
+                    ],
+                  ),
+                );
+              }
+
+              throw FallThroughError();
             },
           ),
-        ],
-        title: Text(
-          AppLocalizations.schools,
-          style: TextStyle(
-            color: AppColors.kWhite,
-            fontSize: 18.0,
-            fontFamily: "Noto Sans",
-          ),
-        ),
-      ),
-      body: BlocBuilder<SchoolsBloc, SchoolsState>(
-        builder: (context, state) {
-          if (state is LoadingSchoolsState) {
-            return Center(
-              child: PlatformProgressIndicator(),
-            );
-          }
-
-          if (state is LoadedSchoolsState) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  ChartWithTable(
-                    key: ObjectKey(state.data.enrollmentByState),
-                    title: AppLocalizations.schoolsEnrollmentByState,
-                    data: state.data.enrollmentByState,
-                    chartType: ChartType.bar,
-                    tableKeyName: AppLocalizations.state,
-                    tableValueName: AppLocalizations.schoolsEnrollment,
-                  ),
-                  ChartWithTable(
-                    key: ObjectKey(state.data.enrollmentByAuthority),
-                    title: AppLocalizations.schoolsEnrollmentByAuthority,
-                    data: state.data.enrollmentByAuthority,
-                    chartType: ChartType.pie,
-                    tableKeyName: AppLocalizations.authority,
-                    tableValueName: AppLocalizations.schoolsEnrollment,
-                  ),
-                  ChartWithTable(
-                    key: ObjectKey(state.data.enrollmentByPrivacy),
-                    title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
-                    data: state.data.enrollmentByPrivacy,
-                    chartType: ChartType.pie,
-                    tableKeyName: AppLocalizations.publicPrivate,
-                    tableValueName: AppLocalizations.schoolsEnrollment,
-                  ),
-                  MultiTable(
-                    key: ObjectKey(state.data.enrollmentByAgeAndEducation),
-                    title:
-                        AppLocalizations.schoolsEnrollmentByAgeEducationLevel,
-                    firstColumnName: AppLocalizations.age,
-                    data: state.data.enrollmentByAgeAndEducation,
-                  ),
-                  MultiTable(
-                    key: ObjectKey(state.data.enrollmentBySchoolLevelAndState),
-                    title: AppLocalizations
-                        .schoolsEnrollmentBySchoolTypeStateAndGender,
-                    firstColumnName: AppLocalizations.schoolType,
-                    data: state.data.enrollmentBySchoolLevelAndState,
-                  )
-                ],
-              ),
-            );
-          }
-
-          throw FallThroughError();
-        },
-      ),
-    );
+        ));
   }
 
-  void _createFilterPageRoute(BuildContext context) {
-    if (_dataLink != null) {
-      List<FilterBloc> filterBlocsList = List<FilterBloc>();
+// TODO: rewrite filters
+  void _openFilters(BuildContext context) {
+    final state = BlocProvider.of<SchoolsBloc>(context).state;
+    if (state is UpdatedSchoolsState) {
+      final model = state.data.rawModel;
 
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.yearFilter,
-          defaultSelectedKey: _dataLink.yearFilter.getMax()));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.stateFilter,
-          defaultSelectedKey: AppLocalizations.displayAllStates));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.authorityFilter,
-          defaultSelectedKey: AppLocalizations.displayAllAuthority));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.govtFilter,
-          defaultSelectedKey: AppLocalizations.displayAllGovernment));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.schoolLevelFilter,
-          defaultSelectedKey: AppLocalizations.displayAllLevelFilters));
-
-      debugPrint('FilterPage route created');
-      Navigator.push(
+      Navigator.push<List<FilterBloc>>(
         context,
         MaterialPageRoute(builder: (context) {
-          return FilterPage(blocs: filterBlocsList);
+          return FilterPage(blocs: [
+            FilterBloc(
+                filter: model.yearFilter,
+                defaultSelectedKey: model.yearFilter.getMax()),
+            FilterBloc(
+                filter: model.stateFilter,
+                defaultSelectedKey: AppLocalizations.displayAllStates),
+            FilterBloc(
+                filter: model.authorityFilter,
+                defaultSelectedKey: AppLocalizations.displayAllAuthority),
+            FilterBloc(
+                filter: model.govtFilter,
+                defaultSelectedKey: AppLocalizations.displayAllGovernment),
+            FilterBloc(
+                filter: model.schoolLevelFilter,
+                defaultSelectedKey: AppLocalizations.displayAllLevelFilters),
+          ]);
         }),
-      );
+      ).then((filterBlocs) {
+        _applyFilters(context, filterBlocs);
+      });
+    }
+  }
+
+  void _applyFilters(BuildContext context, List<FilterBloc> filterBlocs) {
+    final state = BlocProvider.of<SchoolsBloc>(context).state;
+    if (state is UpdatedSchoolsState) {
+      final model = state.data.rawModel;
+      model.updateYearFilter(filterBlocs[0].filter);
+      model.updateStateFilter(filterBlocs[1].filter);
+      model.updateAuthorityFilter(filterBlocs[2].filter);
+      model.updateGovtFilter(filterBlocs[3].filter);
+      model.updateSchoolLevelFilter(filterBlocs[4].filter);
+      BlocProvider.of<SchoolsBloc>(context)
+          .add(FiltersAppliedSchoolsEvent(updatedModel: model));
     }
   }
 }

@@ -51,17 +51,13 @@ class FilterPageState extends State<FilterPage> {
             child: Icon(Icons.done, color: AppColors.kWhite),
             color: AppColors.kRoyalBlue,
             onPressed: () {
-              _applyChanges();
-              Navigator.pop(context);
+              widget.blocs.forEach((bloc) => bloc.applyChanges());
+              Navigator.pop(context, widget.blocs);
             },
           ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
-  }
-
-  _applyChanges() {
-    widget.blocs.forEach((bloc) => bloc.applyChanges());
   }
 }
