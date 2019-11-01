@@ -154,15 +154,13 @@ class TeachersPageState extends State<TeachersPage> {
               AppLocalizations.teachersByAuthority, AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getPieChartViewByData(
+              ChartFactory.createPieChartViewByData(
                   _generateMapOfSum(data.getSortedByAuthority())),
               widget._dividerWidget,
-              ChartInfoTableWidget<TeacherModel>(
-                  data.getSortedByAuthority().keys.toList(),
+              ChartInfoTableWidget(
                   _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
                   AppLocalizations.authority,
-                  TeachersPage._measureName,
-                  data.authorityFilter.selectedKey),
+                  TeachersPage._measureName),
             ],
           ),
         );
@@ -173,15 +171,13 @@ class TeachersPageState extends State<TeachersPage> {
               AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getPieChartViewByData(
+              ChartFactory.createPieChartViewByData(
                   _generateMapOfSum(data.getSortedByGovt())),
               widget._dividerWidget,
-              ChartInfoTableWidget<TeacherModel>(
-                  data.getSortedByGovt().keys.toList(),
+              ChartInfoTableWidget(
                   _generateMapOfSum(data.getSortedWithFiltersByGovt()),
                   AppLocalizations.publicPrivate,
-                  TeachersPage._measureName,
-                  data.stateFilter.selectedKey),
+                  TeachersPage._measureName),
             ],
           ),
         );
@@ -192,15 +188,13 @@ class TeachersPageState extends State<TeachersPage> {
               AppLocalizations.teachersByState, AppColors.kRacingGreen),
           body: Column(
             children: <Widget>[
-              ChartFactory.getBarChartViewByData(
+              ChartFactory.createBarChartViewByData(
                   _generateMapOfSum(data.getSortedWithFiltersByState())),
               widget._dividerWidget,
-              ChartInfoTableWidget<TeacherModel>(
-                  data.getSortedByState().keys.toList(),
+              ChartInfoTableWidget(
                   _generateMapOfSum(data.getSortedWithFiltersByState()),
                   AppLocalizations.state,
-                  TeachersPage._measureName,
-                  data.stateFilter.selectedKey),
+                  TeachersPage._measureName),
             ],
           ),
         );

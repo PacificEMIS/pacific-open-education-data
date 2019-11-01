@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
+import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -36,7 +37,7 @@ class App extends StatelessWidget {
       ),
       initialRoute: HomePage.kRoute,
       routes: {
-        HomePage.kRoute: (context) => BlocProvider(
+        HomePage.kRoute: (context) => BlocProvider<HomeBloc>(
               builder: (context) {
                 return injector.homeBloc
                   ..add(StartedHomeEvent());
@@ -48,7 +49,13 @@ class App extends StatelessWidget {
         "/Indicators": (context) => _NotImplementedPage(),
         "/School Accreditations": (context) =>
             SchoolAccreditationsPage(bloc: injector.schoolAccreditationsBloc),
-        "/Schools": (context) => SchoolsPage(bloc: injector.schoolsBloc),
+        "/Schools": (context) => BlocProvider<SchoolsBloc>(
+              builder: (context) {
+                return injector.schoolsBloc
+                  ..add(StartedSchoolsEvent());
+              },
+              child: SchoolsPage(),
+        ),
         "/Teachers": (context) => TeachersPage(bloc: injector.teachersBloc),
       },
     );

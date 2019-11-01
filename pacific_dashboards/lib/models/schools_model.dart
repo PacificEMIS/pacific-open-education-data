@@ -35,7 +35,7 @@ class SchoolsModel extends ModelWithLookups {
     return _schools.map((i) => (i).toJson()).toList();
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedWithFiltersByState() {
+  Map<String, List<SchoolModel>> getSortedWithFiltersByState() {
     var filteredList = _schools
         .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
         .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
@@ -48,12 +48,12 @@ class SchoolsModel extends ModelWithLookups {
         filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedByState() {
+  Map<String, List<SchoolModel>> getSortedByState() {
     return groupBy(
         _schools, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedWithFiltersByAuthority() {
+  Map<String, List<SchoolModel>> getSortedWithFiltersByAuthority() {
     var filteredList = _schools
         .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
         .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
@@ -66,12 +66,12 @@ class SchoolsModel extends ModelWithLookups {
         (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedByAuthority() {
+  Map<String, List<SchoolModel>> getSortedByAuthority() {
     return groupBy(
         _schools, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedWithFiltersByGovt() {
+  Map<String, List<SchoolModel>> getSortedWithFiltersByGovt() {
     var filteredList = _schools
         .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
         .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
@@ -84,18 +84,18 @@ class SchoolsModel extends ModelWithLookups {
         filteredList, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedByGovt() {
+  Map<String, List<SchoolModel>> getSortedByGovt() {
     return groupBy(
         _schools, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
-  List<dynamic> getDistrictCodeKeysList() {
+  List<String> getDistrictCodeKeysList() {
     var statesGroup = groupBy(_schools, (obj) => obj.districtCode);
 
     return statesGroup.keys.toList();
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedWithFilteringBySchoolType() {
+  Map<String, List<SchoolModel>> getSortedWithFilteringBySchoolType() {
     var filteredList = _schools
         .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
         .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
@@ -107,11 +107,11 @@ class SchoolsModel extends ModelWithLookups {
     return groupBy(filteredList, (obj) => obj.schoolTypeCode);
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedBySchoolType() {
+  Map<String, List<SchoolModel>> getSortedBySchoolType() {
     return groupBy(_schools, (obj) => obj.schoolTypeCode);
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedWithFilteringBySchoolLevel() {
+  Map<String, List<SchoolModel>> getSortedWithFilteringBySchoolLevel() {
     var filteredList = _schools
         .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
         .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
@@ -123,11 +123,11 @@ class SchoolsModel extends ModelWithLookups {
     return groupBy(filteredList, (obj) => obj.classLevel);
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedBySchoolLevel() {
+  Map<String, List<SchoolModel>> getSortedBySchoolLevel() {
     return groupBy(_schools, (obj) => obj.classLevel);
   }
 
-  Map<dynamic, List<SchoolModel>> getSortedByAge(int type) {
+  Map<String, List<SchoolModel>> getSortedByAge(int type) {
     var filteredList = _schools
         .where((i) => ageFilter.isEnabledInFilter(i.ageGroup) && i.age > 0);
 
