@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
+typedef int KeySortFunc(String lv, String rv);
+
 class InfoTableData {
   static const String _kZeroSymbol = "-";
 
@@ -21,11 +23,27 @@ class InfoTableData {
 }
 
 class InfoTableWidget extends StatefulWidget {
+  InfoTableWidget({
+    Key key,
+    @required Map<String, InfoTableData> data,
+    @required String title,
+    @required String firstColumnName,
+    KeySortFunc keySortFunc,
+  })  : assert(data != null),
+        assert(title != null),
+        assert(firstColumnName != null),
+        _data = data,
+        _title = title,
+        _firstColumnName = firstColumnName,
+        _keySortFunc = keySortFunc,
+        super(key: key);
+
   static const double _kBorderWidth = 1.0;
 
   final Map<String, InfoTableData> _data;
+  final KeySortFunc _keySortFunc;
 
-  final String _keyName;
+  final String _title;
   final String _firstColumnName;
 
   final Color _borderColor = AppColors.kGeyser;
@@ -34,8 +52,6 @@ class InfoTableWidget extends StatefulWidget {
   final Color _evenRowColor = AppColors.kWhite;
   final Color _oddRowColor = AppColors.kAthensGray;
   final Color _titleTextColor = AppColors.kEndeavour;
-
-  InfoTableWidget(this._data, this._keyName, this._firstColumnName);
 
   @override
   State<InfoTableWidget> createState() => _InfoTableWidgetState();
@@ -46,13 +62,16 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Table(
-        border: _getTableBorder(widget._borderColor, InfoTableWidget._kBorderWidth),
+        border:
+            _getTableBorder(widget._borderColor, InfoTableWidget._kBorderWidth),
         children: [
-          _generateTableTitle(widget._borderColor, InfoTableWidget._kBorderWidth)
+          _generateTableTitle(
+              widget._borderColor, InfoTableWidget._kBorderWidth)
         ],
       ),
       Table(
-        border: _getTableBorder(widget._borderColor, InfoTableWidget._kBorderWidth),
+        border:
+            _getTableBorder(widget._borderColor, InfoTableWidget._kBorderWidth),
         children: _generateTableBody(
             widget._data,
             _generateSubTableTitle(
@@ -91,7 +110,7 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
             child: Row(
               children: <Widget>[
                 Text(
-                  widget._keyName,
+                  widget._title,
                   style: TextStyle(
                     fontSize: 14.0,
                     color: widget._titleTextColor,
@@ -225,17 +244,21 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
   }
 
   List<TableRow> _generateTableBody(
-      Map<dynamic, InfoTableData> data, TableRow subTitle) {
-    var rowsList = List<TableRow>();
-    rowsList.add(subTitle);
+      Map<String, InfoTableData> data, TableRow subTitle) {
+    final rows = List<TableRow>();
+    rows.add(subTitle);
 
-    int i = 0;
-    data.forEach((domain, measure) {
-      rowsList.add(_generateTableRow(domain, measure, i));
-      i++;
-    });
+    final keys = data.keys.toList();
+    if (widget._keySortFunc != null) {
+      keys.sort(widget._keySortFunc);
+    }
 
-    return rowsList;
+    for (var i = 0; i < keys.length; i++) {
+      final key = keys[i];
+      rows.add(_generateTableRow(key, data[key], i));
+    }
+
+    return rows;
   }
 
   TableRow _generateTableRow(String domain, InfoTableData measure, int index) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
@@ -110,6 +109,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                             .schoolsEnrollmentByAgeEducationLevel,
                         firstColumnName: AppLocalizations.age,
                         data: state.data.enrollmentByAgeAndEducation,
+                        keySortFunc: _sortEnrollmentByAgeAndEducation,
                       ),
                       MultiTable(
                         key: ObjectKey(
@@ -128,6 +128,27 @@ class SchoolsPageState extends State<SchoolsPage> {
             },
           ),
         ));
+  }
+
+  int _sortEnrollmentByAgeAndEducation(String lv, String rv) {
+    // formats like 1-12
+    final lvParts = lv.split('-');
+    if (lvParts.length < 1) {
+      return -1;
+    }
+
+    final rvParts = rv.split('-');
+    if (rvParts.length < 1) {
+      return 1;
+    }
+
+    try {
+      final lvNum = int.tryParse(lvParts.first);
+      final rvNum = int.tryParse(rvParts.first);
+      return lvNum.compareTo(rvNum);
+    } catch (_) {
+      return lvParts.first.compareTo(rvParts.first);
+    }
   }
 
 // TODO: rewrite filters
@@ -183,18 +204,21 @@ class MultiTable extends StatelessWidget {
       {Key key,
       @required String title,
       @required String firstColumnName,
-      @required Map<String, Map<String, InfoTableData>> data})
+      @required Map<String, Map<String, InfoTableData>> data,
+      KeySortFunc keySortFunc})
       : assert(title != null),
         assert(firstColumnName != null),
         assert(data != null),
         _title = title,
         _firstColumnName = firstColumnName,
         _data = data,
+        _keySortFunc = keySortFunc,
         super(key: key);
 
   final String _title;
   final String _firstColumnName;
   final Map<String, Map<String, InfoTableData>> _data;
+  final KeySortFunc _keySortFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -207,9 +231,10 @@ class MultiTable extends StatelessWidget {
                 bottom: 8,
               ),
               child: InfoTableWidget(
-                _data[key],
-                key,
-                _firstColumnName,
+                data: _data[key],
+                title: key,
+                firstColumnName: _firstColumnName,
+                keySortFunc: _keySortFunc,
               ),
             );
           }).toList(),

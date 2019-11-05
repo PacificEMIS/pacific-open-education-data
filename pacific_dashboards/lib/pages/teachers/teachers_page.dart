@@ -200,27 +200,30 @@ class TeachersPageState extends State<TeachersPage> {
         );
         break;
       default:
-        var statesKeys = data.getDistrictCodeKeysList();
+        final statesKeys = data.getDistrictCodeKeysList();
         List<Widget> widgets = List<Widget>();
 
         widgets.add(InfoTableWidget(
-            _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
-                AppLocalizations.total, false),
-            AppLocalizations.total,
-            AppLocalizations.schoolLevels));
+          data: _generateInfoTableData(
+              data.getSortedWithFilteringBySchoolType(),
+              AppLocalizations.total,
+              false),
+          title: AppLocalizations.total,
+          firstColumnName: AppLocalizations.schoolLevels,
+        ));
 
         for (var i = 0; i < statesKeys.length; ++i) {
           widgets.add(widget._dividerWidget);
           widgets.add(InfoTableWidget(
-              _generateInfoTableData(data.getSortedWithFilteringBySchoolType(),
-                  statesKeys[i], true),
-              data.lookupsModel.getFullState(statesKeys[i]),
-              AppLocalizations.schoolLevels));
+            data: _generateInfoTableData(
+                data.getSortedWithFilteringBySchoolType(), statesKeys[i], true),
+            title: data.lookupsModel.getFullState(statesKeys[i]),
+            firstColumnName: AppLocalizations.schoolLevels,
+          ));
         }
 
         return TileWidget(
-          title: TitleWidget(
-              AppLocalizations.teacherBySchoolTypeStateAndGender,
+          title: TitleWidget(AppLocalizations.teacherBySchoolTypeStateAndGender,
               AppColors.kRacingGreen),
           body: Column(
             children: widgets,
