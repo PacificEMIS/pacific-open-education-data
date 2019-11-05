@@ -17,7 +17,7 @@ class SectionsGrid extends StatelessWidget {
       crossAxisCount: 2,
       crossAxisSpacing: 24,
       mainAxisSpacing: 24,
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
       childAspectRatio: 1.0,
       shrinkWrap: true,
       children: _sectionsOfEmis(_emis)
