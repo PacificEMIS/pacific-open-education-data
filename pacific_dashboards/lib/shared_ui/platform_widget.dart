@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 abstract class PlatformWidget<I extends Widget, A extends Widget>
-    extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Size get preferredSize => Size.fromHeight(56);
+    extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {

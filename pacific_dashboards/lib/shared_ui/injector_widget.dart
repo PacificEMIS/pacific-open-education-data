@@ -8,18 +8,11 @@ import 'package:pacific_dashboards/pages/exams/exams_bloc.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_bloc.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
-import 'package:pacific_dashboards/pages/teachers/teachers_bloc.dart';
+import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class InjectorWidget extends InheritedWidget {
-  TeachersBloc _teachersBloc;
-  ExamsBloc _examsBloc;
-  SchoolAccreditationBloc _schoolAccreditationBloc;
-  Repository _repository;
-  SharedPreferences _sharedPreferences;
-  GlobalSettings _globalSettings;
-
   InjectorWidget({
     Key key,
     @required Widget child,
@@ -30,6 +23,12 @@ class InjectorWidget extends InheritedWidget {
     return context.inheritFromWidgetOfExactType(InjectorWidget)
         as InjectorWidget;
   }
+
+  ExamsBloc _examsBloc;
+  SchoolAccreditationBloc _schoolAccreditationBloc;
+  Repository _repository;
+  SharedPreferences _sharedPreferences;
+  GlobalSettings _globalSettings;
 
   @override
   bool updateShouldNotify(InjectorWidget old) => false;
@@ -48,15 +47,9 @@ class InjectorWidget extends InheritedWidget {
         _sharedPreferences);
   }
 
-  TeachersBloc get teachersBloc {
-    if (_teachersBloc == null) {
-      _teachersBloc = TeachersBloc(repository: _repository);
-    }
-
-    return _teachersBloc;
-  }
-
   SchoolsBloc get schoolsBloc => SchoolsBloc(repository: _repository);
+
+  TeachersBloc get teachersBloc => TeachersBloc(repository: _repository);
 
   ExamsBloc get examsBloc {
     if (_examsBloc == null) {

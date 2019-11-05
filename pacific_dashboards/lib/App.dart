@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
+import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
@@ -49,14 +50,20 @@ class App extends StatelessWidget {
         "/Indicators": (context) => _NotImplementedPage(),
         "/School Accreditations": (context) =>
             SchoolAccreditationsPage(bloc: injector.schoolAccreditationsBloc),
-        "/Schools": (context) => BlocProvider<SchoolsBloc>(
+        SchoolsPage.kRoute: (context) => BlocProvider<SchoolsBloc>(
               builder: (context) {
                 return injector.schoolsBloc
                   ..add(StartedSchoolsEvent());
               },
               child: SchoolsPage(),
         ),
-        "/Teachers": (context) => TeachersPage(bloc: injector.teachersBloc),
+        TeachersPage.kRoute: (context) => BlocProvider<TeachersBloc>(
+              builder: (context) {
+                return injector.teachersBloc
+                  ..add(StartedTeachersEvent());
+              },
+              child: TeachersPage(),
+        ),
       },
     );
   }

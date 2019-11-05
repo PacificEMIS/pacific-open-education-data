@@ -23,7 +23,6 @@ class SchoolsModel extends ModelWithLookups {
     _filters['state'] = newFilter;
   }
 
-
   Filter get authorityFilter => _filters['authority'];
 
   void updateAuthorityFilter(Filter newFilter) {

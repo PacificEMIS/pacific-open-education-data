@@ -1,35 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/models/teacher_model.dart';
-import 'package:pacific_dashboards/models/teachers_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
-import 'package:pacific_dashboards/pages/teachers/teachers_bloc.dart';
+import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
+import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
-import 'package:pacific_dashboards/shared_ui/chart_info_table_widget.dart';
-import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
+import 'package:pacific_dashboards/shared_ui/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
-import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
-import 'package:pacific_dashboards/shared_ui/title_widget.dart';
+import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
 class TeachersPage extends StatefulWidget {
-  static String _kPageName = AppLocalizations.teachers;
-  static String _measureName = AppLocalizations.teachers;
-
-  final TeachersBloc bloc;
-
-  final Color _filterIconColor = AppColors.kWhite;
-
-  final Widget _dividerWidget = Divider(
-    height: 16.0,
-    color: Colors.white,
-  );
-
   TeachersPage({
     Key key,
-    this.bloc,
   }) : super(key: key);
+
+  static const String kRoute = '/Teachers';
 
   @override
   State<StatefulWidget> createState() {
@@ -38,249 +26,166 @@ class TeachersPage extends StatefulWidget {
 }
 
 class TeachersPageState extends State<TeachersPage> {
-  TeachersModel _dataLink;
+  bool areFiltersVisible = false;
 
-  @override
-  void initState() {
-    super.initState();
-    widget.bloc.fetchData();
-  }
-
-  @override
-  void dispose() {
-    debugPrint("disposing");
-    widget.bloc.dispose();
-    super.dispose();
+  void updateFiltersVisibility(BuildContext context) {
+    setState(() {
+      areFiltersVisible =
+          BlocProvider.of<TeachersBloc>(context).state is UpdatedTeachersState;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
-      appBar: PlatformAppBar(
-        iconTheme: new IconThemeData(color: AppColors.kWhite),
-        backgroundColor: AppColors.kAppBarBackground,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.tune,
-              color: widget._filterIconColor,
+    return BlocListener<TeachersBloc, TeachersState>(
+      listener: (context, state) {
+        updateFiltersVisibility(context);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomPadding: true,
+        appBar: PlatformAppBar(
+          iconTheme: new IconThemeData(color: AppColors.kWhite),
+          backgroundColor: AppColors.kAppBarBackground,
+          actions: [
+            Visibility(
+              visible: areFiltersVisible,
+              child: IconButton(
+                icon: Icon(
+                  Icons.tune,
+                  color: AppColors.kWhite,
+                ),
+                onPressed: () {
+                  _openFilters(context);
+                },
+              ),
             ),
-            onPressed: () {
-              _createFilterPageRoute(context);
-            },
-          ),
-        ],
-        title: Text(
-          TeachersPage._kPageName,
-          style: TextStyle(
-            color: AppColors.kWhite,
-            fontSize: 18.0,
-            fontFamily: "Noto Sans",
+          ],
+          title: Text(
+            AppLocalizations.teachers,
+            style: TextStyle(
+              color: AppColors.kWhite,
+              fontSize: 18.0,
+              fontFamily: "Noto Sans",
+            ),
           ),
         ),
-      ),
-      body: StreamBuilder(
-        stream: widget.bloc.data,
-        builder: (context, AsyncSnapshot<TeachersModel> snapshot) {
-          if (snapshot.hasData) {
-            return _buildList(snapshot);
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          }
+        body: BlocBuilder<TeachersBloc, TeachersState>(
+          builder: (context, state) {
+            if (state is LoadingTeachersState) {
+              return Center(
+                child: PlatformProgressIndicator(),
+              );
+            }
 
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+            if (state is UpdatedTeachersState) {
+              return _LoadedContent(data: state.data);
+            }
+
+            throw FallThroughError();
+          },
+        ),
       ),
     );
   }
 
-  void _createFilterPageRoute(BuildContext context) {
-    if (_dataLink != null) {
-      List<FilterBloc> filterBlocsList = List<FilterBloc>();
-
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.yearFilter,
-          defaultSelectedKey: _dataLink.yearFilter.getMax()));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.stateFilter,
-          defaultSelectedKey: AppLocalizations.displayAllStates));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.authorityFilter,
-          defaultSelectedKey: AppLocalizations.displayAllAuthority));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.govtFilter,
-          defaultSelectedKey: AppLocalizations.displayAllGovernmentFilters));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.schoolLevelFilter,
-          defaultSelectedKey: AppLocalizations.displayAllLevel));
-
-      debugPrint('FilterPage route created');
-      Navigator.push(
+  // TODO: rewrite filters
+  void _openFilters(BuildContext context) {
+    final state = BlocProvider.of<TeachersBloc>(context).state;
+    if (state is UpdatedTeachersState) {
+      final model = state.data.rawModel;
+      Navigator.push<List<FilterBloc>>(
         context,
         MaterialPageRoute(builder: (context) {
-          return FilterPage(blocs: filterBlocsList);
+          return FilterPage(blocs: [
+            FilterBloc(
+                filter: model.yearFilter,
+                defaultSelectedKey: model.yearFilter.getMax()),
+            FilterBloc(
+                filter: model.stateFilter,
+                defaultSelectedKey: AppLocalizations.displayAllStates),
+            FilterBloc(
+                filter: model.authorityFilter,
+                defaultSelectedKey: AppLocalizations.displayAllAuthority),
+            FilterBloc(
+                filter: model.govtFilter,
+                defaultSelectedKey: AppLocalizations.displayAllGovernment),
+            FilterBloc(
+                filter: model.schoolLevelFilter,
+                defaultSelectedKey: AppLocalizations.displayAllLevelFilters),
+          ]);
         }),
-      );
-    }
-  }
-
-  Widget _buildList(AsyncSnapshot<TeachersModel> snapshot) {
-    _dataLink = snapshot.data;
-
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return ListView.builder(
-          itemCount: 4,
-          padding: EdgeInsets.all(16.0),
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
-              subtitle: _generateGridTile(snapshot.data, index),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _generateGridTile(TeachersModel data, int index) {
-    switch (index) {
-      case 0:
-        return TileWidget(
-          title: TitleWidget(
-              AppLocalizations.teachersByAuthority, AppColors.kRacingGreen),
-          body: Column(
-            children: <Widget>[
-              ChartFactory.createPieChartViewByData(
-                  _generateMapOfSum(data.getSortedByAuthority())),
-              widget._dividerWidget,
-              ChartInfoTableWidget(
-                  _generateMapOfSum(data.getSortedWithFiltersByAuthority()),
-                  AppLocalizations.authority,
-                  TeachersPage._measureName),
-            ],
-          ),
-        );
-        break;
-      case 1:
-        return TileWidget(
-          title: TitleWidget(AppLocalizations.teachersEnrollmentGovtNonGovt,
-              AppColors.kRacingGreen),
-          body: Column(
-            children: <Widget>[
-              ChartFactory.createPieChartViewByData(
-                  _generateMapOfSum(data.getSortedByGovt())),
-              widget._dividerWidget,
-              ChartInfoTableWidget(
-                  _generateMapOfSum(data.getSortedWithFiltersByGovt()),
-                  AppLocalizations.publicPrivate,
-                  TeachersPage._measureName),
-            ],
-          ),
-        );
-        break;
-      case 2:
-        return TileWidget(
-          title: TitleWidget(
-              AppLocalizations.teachersByState, AppColors.kRacingGreen),
-          body: Column(
-            children: <Widget>[
-              ChartFactory.createBarChartViewByData(
-                  _generateMapOfSum(data.getSortedWithFiltersByState())),
-              widget._dividerWidget,
-              ChartInfoTableWidget(
-                  _generateMapOfSum(data.getSortedWithFiltersByState()),
-                  AppLocalizations.state,
-                  TeachersPage._measureName),
-            ],
-          ),
-        );
-        break;
-      default:
-        final statesKeys = data.getDistrictCodeKeysList();
-        List<Widget> widgets = List<Widget>();
-
-        widgets.add(InfoTableWidget(
-          data: _generateInfoTableData(
-              data.getSortedWithFilteringBySchoolType(),
-              AppLocalizations.total,
-              false),
-          title: AppLocalizations.total,
-          firstColumnName: AppLocalizations.schoolLevels,
-        ));
-
-        for (var i = 0; i < statesKeys.length; ++i) {
-          widgets.add(widget._dividerWidget);
-          widgets.add(InfoTableWidget(
-            data: _generateInfoTableData(
-                data.getSortedWithFilteringBySchoolType(), statesKeys[i], true),
-            title: data.lookupsModel.getFullState(statesKeys[i]),
-            firstColumnName: AppLocalizations.schoolLevels,
-          ));
+      ).then((filterBlocs) {
+        if (filterBlocs != null) {
+          _applyFilters(context, filterBlocs);
         }
-
-        return TileWidget(
-          title: TitleWidget(AppLocalizations.teacherBySchoolTypeStateAndGender,
-              AppColors.kRacingGreen),
-          body: Column(
-            children: widgets,
-          ),
-        );
-        break;
-    }
-  }
-
-  static Map<dynamic, int> _generateMapOfSum(
-      Map<dynamic, List<TeacherModel>> listMap) {
-    Map<dynamic, int> mapOfSum = new Map<dynamic, int>();
-    int sum = 0;
-
-    listMap.forEach((k, v) {
-      sum = 0;
-
-      listMap[k].forEach((school) {
-        sum += school.numTeachersM + school.numTeachersF;
       });
-
-      mapOfSum[k] = sum;
-    });
-
-    return mapOfSum;
+    }
   }
 
-  Map<dynamic, InfoTableData> _generateInfoTableData(
-      Map<dynamic, List<TeacherModel>> rawMapData,
-      String keyName,
-      bool isSubTitle) {
-    var convertedData = Map<dynamic, InfoTableData>();
-    var totalMaleCount = 0;
-    var totalFemaleCount = 0;
+  void _applyFilters(BuildContext context, List<FilterBloc> filterBlocs) {
+    final state = BlocProvider.of<TeachersBloc>(context).state;
+    if (state is UpdatedTeachersState) {
+      final model = state.data.rawModel;
+      model.updateYearFilter(filterBlocs[0].filter);
+      model.updateStateFilter(filterBlocs[1].filter);
+      model.updateAuthorityFilter(filterBlocs[2].filter);
+      model.updateGovtFilter(filterBlocs[3].filter);
+      model.updateSchoolLevelFilter(filterBlocs[4].filter);
+      BlocProvider.of<TeachersBloc>(context)
+          .add(FiltersAppliedTeachersEvent(updatedModel: model));
+    }
+  }
 
-    rawMapData.forEach((k, v) {
-      var maleCount = 0;
-      var femaleCount = 0;
+}
 
-      for (var j = 0; j < v.length; ++j) {
-        var model = v;
-        if (!isSubTitle ||
-            (isSubTitle && (keyName == model[j].districtCode)) ||
-            keyName == null) {
-          maleCount += model[j].numTeachersM;
-          femaleCount += model[j].numTeachersF;
-        }
-      }
+class _LoadedContent extends StatelessWidget {
+  const _LoadedContent({
+    Key key,
+    @required TeachersPageData data,
+  })  : assert(data != null),
+        _data = data,
+        super(key: key);
 
-      totalMaleCount += maleCount;
-      totalFemaleCount += femaleCount;
-      convertedData[k] = InfoTableData(maleCount, femaleCount);
-    });
+  final TeachersPageData _data;
 
-    convertedData[AppLocalizations.total] =
-        InfoTableData(totalMaleCount, totalFemaleCount);
-
-    return convertedData;
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          ChartWithTable(
+            key: ObjectKey(_data.teachersByAuthority),
+            title: AppLocalizations.teachersByAuthority,
+            data: _data.teachersByAuthority,
+            chartType: ChartType.pie,
+            tableKeyName: AppLocalizations.authority,
+            tableValueName: AppLocalizations.teachers,
+          ),
+          ChartWithTable(
+            key: ObjectKey(_data.teachersByPrivacy),
+            title: AppLocalizations.teachersEnrollmentGovtNonGovt,
+            data: _data.teachersByPrivacy,
+            chartType: ChartType.pie,
+            tableKeyName: AppLocalizations.publicPrivate,
+            tableValueName: AppLocalizations.teachers,
+          ),
+          ChartWithTable(
+            key: ObjectKey(_data.teachersByState),
+            title: AppLocalizations.teachersByState,
+            data: _data.teachersByState,
+            chartType: ChartType.bar,
+            tableKeyName: AppLocalizations.state,
+            tableValueName: AppLocalizations.teachers,
+          ),
+          MultiTable(
+            key: ObjectKey(_data.teachersBySchoolLevelStateAndGender),
+            title: AppLocalizations.teacherBySchoolTypeStateAndGender,
+            firstColumnName: AppLocalizations.schoolLevels,
+            data: _data.teachersBySchoolLevelStateAndGender,
+          ),
+        ],
+      ),
+    );
   }
 }

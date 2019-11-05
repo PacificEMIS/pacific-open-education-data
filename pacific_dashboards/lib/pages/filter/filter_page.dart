@@ -23,7 +23,7 @@ class FilterPageState extends State<FilterPage> {
       appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.close),
-            onPressed: () => Navigator.pop(context, false),
+            onPressed: () => Navigator.pop(context),
           ),
           iconTheme: IconThemeData(
             color: AppColors.kWhite,

@@ -7,14 +7,14 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
-import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
-import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
-import 'package:pacific_dashboards/shared_ui/title_widget.dart';
 
 class SchoolsPage extends StatefulWidget {
   SchoolsPage({Key key}) : super(key: key);
+
+  static const String kRoute = '/Schools';
 
   @override
   State<StatefulWidget> createState() {
@@ -35,99 +35,100 @@ class SchoolsPageState extends State<SchoolsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SchoolsBloc, SchoolsState>(
-        listener: (context, state) {
-          updateFiltersVisibility(context);
-        },
-        child: Scaffold(
-          resizeToAvoidBottomPadding: true,
-          appBar: PlatformAppBar(
-            iconTheme: new IconThemeData(color: AppColors.kWhite),
-            backgroundColor: AppColors.kAppBarBackground,
-            actions: [
-              Visibility(
-                visible: areFiltersVisible,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.tune,
-                    color: AppColors.kWhite,
-                  ),
-                  onPressed: () {
-                    _openFilters(context);
-                  },
+      listener: (context, state) {
+        updateFiltersVisibility(context);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomPadding: true,
+        appBar: PlatformAppBar(
+          iconTheme: new IconThemeData(color: AppColors.kWhite),
+          backgroundColor: AppColors.kAppBarBackground,
+          actions: [
+            Visibility(
+              visible: areFiltersVisible,
+              child: IconButton(
+                icon: Icon(
+                  Icons.tune,
+                  color: AppColors.kWhite,
                 ),
-              ),
-            ],
-            title: Text(
-              AppLocalizations.schools,
-              style: TextStyle(
-                color: AppColors.kWhite,
-                fontSize: 18.0,
-                fontFamily: "Noto Sans",
+                onPressed: () {
+                  _openFilters(context);
+                },
               ),
             ),
+          ],
+          title: Text(
+            AppLocalizations.schools,
+            style: TextStyle(
+              color: AppColors.kWhite,
+              fontSize: 18.0,
+              fontFamily: "Noto Sans",
+            ),
           ),
-          body: BlocBuilder<SchoolsBloc, SchoolsState>(
-            builder: (context, state) {
-              if (state is LoadingSchoolsState) {
-                return Center(
-                  child: PlatformProgressIndicator(),
-                );
-              }
+        ),
+        body: BlocBuilder<SchoolsBloc, SchoolsState>(
+          builder: (context, state) {
+            if (state is LoadingSchoolsState) {
+              return Center(
+                child: PlatformProgressIndicator(),
+              );
+            }
 
-              if (state is UpdatedSchoolsState) {
-                return SingleChildScrollView(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      ChartWithTable(
-                        key: ObjectKey(state.data.enrollmentByState),
-                        title: AppLocalizations.schoolsEnrollmentByState,
-                        data: state.data.enrollmentByState,
-                        chartType: ChartType.bar,
-                        tableKeyName: AppLocalizations.state,
-                        tableValueName: AppLocalizations.schoolsEnrollment,
-                      ),
-                      ChartWithTable(
-                        key: ObjectKey(state.data.enrollmentByAuthority),
-                        title: AppLocalizations.schoolsEnrollmentByAuthority,
-                        data: state.data.enrollmentByAuthority,
-                        chartType: ChartType.pie,
-                        tableKeyName: AppLocalizations.authority,
-                        tableValueName: AppLocalizations.schoolsEnrollment,
-                      ),
-                      ChartWithTable(
-                        key: ObjectKey(state.data.enrollmentByPrivacy),
-                        title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
-                        data: state.data.enrollmentByPrivacy,
-                        chartType: ChartType.pie,
-                        tableKeyName: AppLocalizations.publicPrivate,
-                        tableValueName: AppLocalizations.schoolsEnrollment,
-                      ),
-                      MultiTable(
-                        key: ObjectKey(state.data.enrollmentByAgeAndEducation),
-                        title: AppLocalizations
-                            .schoolsEnrollmentByAgeEducationLevel,
-                        firstColumnName: AppLocalizations.age,
-                        data: state.data.enrollmentByAgeAndEducation,
-                        keySortFunc: _sortEnrollmentByAgeAndEducation,
-                      ),
-                      MultiTable(
-                        key: ObjectKey(
-                            state.data.enrollmentBySchoolLevelAndState),
-                        title: AppLocalizations
-                            .schoolsEnrollmentBySchoolTypeStateAndGender,
-                        firstColumnName: AppLocalizations.schoolType,
-                        data: state.data.enrollmentBySchoolLevelAndState,
-                      )
-                    ],
-                  ),
-                );
-              }
+            if (state is UpdatedSchoolsState) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    ChartWithTable(
+                      key: ObjectKey(state.data.enrollmentByState),
+                      title: AppLocalizations.schoolsEnrollmentByState,
+                      data: state.data.enrollmentByState,
+                      chartType: ChartType.bar,
+                      tableKeyName: AppLocalizations.state,
+                      tableValueName: AppLocalizations.schoolsEnrollment,
+                    ),
+                    ChartWithTable(
+                      key: ObjectKey(state.data.enrollmentByAuthority),
+                      title: AppLocalizations.schoolsEnrollmentByAuthority,
+                      data: state.data.enrollmentByAuthority,
+                      chartType: ChartType.pie,
+                      tableKeyName: AppLocalizations.authority,
+                      tableValueName: AppLocalizations.schoolsEnrollment,
+                    ),
+                    ChartWithTable(
+                      key: ObjectKey(state.data.enrollmentByPrivacy),
+                      title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
+                      data: state.data.enrollmentByPrivacy,
+                      chartType: ChartType.pie,
+                      tableKeyName: AppLocalizations.publicPrivate,
+                      tableValueName: AppLocalizations.schoolsEnrollment,
+                    ),
+                    MultiTable(
+                      key: ObjectKey(state.data.enrollmentByAgeAndEducation),
+                      title:
+                          AppLocalizations.schoolsEnrollmentByAgeEducationLevel,
+                      firstColumnName: AppLocalizations.age,
+                      data: state.data.enrollmentByAgeAndEducation,
+                      keySortFunc: _sortEnrollmentByAgeAndEducation,
+                    ),
+                    MultiTable(
+                      key:
+                          ObjectKey(state.data.enrollmentBySchoolLevelAndState),
+                      title: AppLocalizations
+                          .schoolsEnrollmentBySchoolTypeStateAndGender,
+                      firstColumnName: AppLocalizations.schoolType,
+                      data: state.data.enrollmentBySchoolLevelAndState,
+                    )
+                  ],
+                ),
+              );
+            }
 
-              throw FallThroughError();
-            },
-          ),
-        ));
+            throw FallThroughError();
+          },
+        ),
+      ),
+    );
   }
 
   int _sortEnrollmentByAgeAndEducation(String lv, String rv) {
@@ -179,7 +180,9 @@ class SchoolsPageState extends State<SchoolsPage> {
           ]);
         }),
       ).then((filterBlocs) {
-        _applyFilters(context, filterBlocs);
+        if (filterBlocs != null) {
+          _applyFilters(context, filterBlocs);
+        }
       });
     }
   }
@@ -196,48 +199,5 @@ class SchoolsPageState extends State<SchoolsPage> {
       BlocProvider.of<SchoolsBloc>(context)
           .add(FiltersAppliedSchoolsEvent(updatedModel: model));
     }
-  }
-}
-
-class MultiTable extends StatelessWidget {
-  const MultiTable(
-      {Key key,
-      @required String title,
-      @required String firstColumnName,
-      @required Map<String, Map<String, InfoTableData>> data,
-      KeySortFunc keySortFunc})
-      : assert(title != null),
-        assert(firstColumnName != null),
-        assert(data != null),
-        _title = title,
-        _firstColumnName = firstColumnName,
-        _data = data,
-        _keySortFunc = keySortFunc,
-        super(key: key);
-
-  final String _title;
-  final String _firstColumnName;
-  final Map<String, Map<String, InfoTableData>> _data;
-  final KeySortFunc _keySortFunc;
-
-  @override
-  Widget build(BuildContext context) {
-    return TileWidget(
-        title: TitleWidget(_title, AppColors.kRacingGreen),
-        body: Column(
-          children: _data.keys.map((key) {
-            return Padding(
-              padding: const EdgeInsets.only(
-                bottom: 8,
-              ),
-              child: InfoTableWidget(
-                data: _data[key],
-                title: key,
-                firstColumnName: _firstColumnName,
-                keySortFunc: _keySortFunc,
-              ),
-            );
-          }).toList(),
-        ));
   }
 }

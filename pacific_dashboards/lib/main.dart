@@ -21,7 +21,7 @@ void main() async {
     Zone.current.handleUncaughtError(details.exception, details.stack);
   };
 
-  Crashlytics.instance.enableInDevMode = true;
+  Crashlytics.instance.enableInDevMode = false;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   
   BlocSupervisor.delegate = LoggerBlocDelegate();
