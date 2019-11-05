@@ -24,9 +24,9 @@ class AccreditationTableData {
 class AccreditationTableWidget extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final Map<dynamic, AccreditationTableData> data;
+  final Map<String, AccreditationTableData> data;
 
-  final String keyName;
+  final String title;
   final String firstColumnName;
 
   final Color _borderColor = AppColors.kGeyser;
@@ -39,7 +39,7 @@ class AccreditationTableWidget extends StatefulWidget {
   AccreditationTableWidget(
       {Key key,
       @required this.data,
-      @required this.keyName,
+      @required this.title,
       @required this.firstColumnName})
       : super(key: key);
 
@@ -108,7 +108,7 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
             child: Row(
               children: <Widget>[
                 Text(
-                  widget.keyName,
+                  widget.title,
                   style: TextStyle(
                     fontSize: 14.0,
                     color: widget._titleTextColor,

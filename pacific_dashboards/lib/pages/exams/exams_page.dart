@@ -42,7 +42,7 @@ class ExamsPageState extends State<ExamsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.kWhite,
         appBar: PlatformAppBar(
           iconTheme: new IconThemeData(color: AppColors.kWhite),

@@ -12,6 +12,8 @@ import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
 
+import 'pages/school_accreditation/bloc/bloc.dart';
+
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,30 +42,33 @@ class App extends StatelessWidget {
       routes: {
         HomePage.kRoute: (context) => BlocProvider<HomeBloc>(
               builder: (context) {
-                return injector.homeBloc
-                  ..add(StartedHomeEvent());
+                return injector.homeBloc..add(StartedHomeEvent());
               },
               child: HomePage(),
             ),
         "/Budgets": (context) => _NotImplementedPage(),
         "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
         "/Indicators": (context) => _NotImplementedPage(),
-        "/School Accreditations": (context) =>
-            SchoolAccreditationsPage(bloc: injector.schoolAccreditationsBloc),
+        SchoolAccreditationsPage.kRoute: (context) =>
+            BlocProvider<AccreditationBloc>(
+              builder: (context) {
+                return injector.schoolAccreditationsBloc
+                  ..add(StartedAccreditationEvent());
+              },
+              child: SchoolAccreditationsPage(),
+            ),
         SchoolsPage.kRoute: (context) => BlocProvider<SchoolsBloc>(
               builder: (context) {
-                return injector.schoolsBloc
-                  ..add(StartedSchoolsEvent());
+                return injector.schoolsBloc..add(StartedSchoolsEvent());
               },
               child: SchoolsPage(),
-        ),
+            ),
         TeachersPage.kRoute: (context) => BlocProvider<TeachersBloc>(
               builder: (context) {
-                return injector.teachersBloc
-                  ..add(StartedTeachersEvent());
+                return injector.teachersBloc..add(StartedTeachersEvent());
               },
               child: TeachersPage(),
-        ),
+            ),
       },
     );
   }

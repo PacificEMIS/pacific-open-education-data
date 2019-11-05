@@ -6,7 +6,7 @@ import 'package:pacific_dashboards/data/repository.dart';
 import 'package:pacific_dashboards/data/repository_impl.dart';
 import 'package:pacific_dashboards/pages/exams/exams_bloc.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
-import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_bloc.dart';
+import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +25,6 @@ class InjectorWidget extends InheritedWidget {
   }
 
   ExamsBloc _examsBloc;
-  SchoolAccreditationBloc _schoolAccreditationBloc;
   Repository _repository;
   SharedPreferences _sharedPreferences;
   GlobalSettings _globalSettings;
@@ -59,14 +58,7 @@ class InjectorWidget extends InheritedWidget {
     return _examsBloc;
   }
 
-  SchoolAccreditationBloc get schoolAccreditationsBloc {
-    if (_schoolAccreditationBloc == null) {
-      _schoolAccreditationBloc =
-          SchoolAccreditationBloc(repository: _repository);
-    }
-
-    return _schoolAccreditationBloc;
-  }
+  AccreditationBloc get schoolAccreditationsBloc => AccreditationBloc(repository: _repository);
 
   HomeBloc get homeBloc => HomeBloc(globalSettings: _globalSettings);
 

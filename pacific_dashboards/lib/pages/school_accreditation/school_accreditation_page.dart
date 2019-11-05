@@ -1,34 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/school_accreditation_model.dart';
-import 'package:pacific_dashboards/models/school_accreditations_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
+import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
-import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_bloc.dart';
+import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
+import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
 import 'package:pacific_dashboards/shared_ui/title_widget.dart';
 
-//TODO: refactor
 class SchoolAccreditationsPage extends StatefulWidget {
-  static String _kPageName = AppLocalizations.schoolAccreditations;
-
-  final SchoolAccreditationBloc bloc;
-
-  final Color _filterIconColor = AppColors.kWhite;
-
-  final Widget _dividerWidget = Divider(
-    height: 16.0,
-    color: Colors.white,
-  );
+  static String kRoute = '/School Accreditations';
 
   SchoolAccreditationsPage({
     Key key,
-    this.bloc,
   }) : super(key: key);
 
   @override
@@ -38,283 +27,219 @@ class SchoolAccreditationsPage extends StatefulWidget {
 }
 
 class SchoolsPageState extends State<SchoolAccreditationsPage> {
-  SchoolAccreditationsModel _dataLink;
+  bool areFiltersVisible = false;
 
-  @override
-  void initState() {
-    super.initState();
-    widget.bloc.fetchData();
-  }
-
-  @override
-  void dispose() {
-    debugPrint("disposing");
-    widget.bloc.dispose();
-    super.dispose();
+  void updateFiltersVisibility(BuildContext context) {
+    setState(() {
+      areFiltersVisible = BlocProvider.of<AccreditationBloc>(context).state
+          is UpdatedAccreditationState;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
-      appBar: PlatformAppBar(
-        iconTheme: new IconThemeData(color: AppColors.kWhite),
-        backgroundColor: AppColors.kAppBarBackground,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.tune,
-              color: widget._filterIconColor,
+    return BlocListener<AccreditationBloc, AccreditationState>(
+      listener: (context, state) {
+        updateFiltersVisibility(context);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: PlatformAppBar(
+          iconTheme: new IconThemeData(color: AppColors.kWhite),
+          backgroundColor: AppColors.kAppBarBackground,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.tune,
+                color: AppColors.kWhite,
+              ),
+              onPressed: () {
+                _openFilters(context);
+              },
             ),
-            onPressed: () {
-              _createFilterPageRoute(context);
-            },
-          ),
-        ],
-        title: Text(
-          SchoolAccreditationsPage._kPageName,
-          style: TextStyle(
-            color: AppColors.kWhite,
-            fontSize: 18.0,
-            fontFamily: "Noto Sans",
+          ],
+          title: Text(
+            AppLocalizations.schoolAccreditations,
+            style: TextStyle(
+              color: AppColors.kWhite,
+              fontSize: 18.0,
+              fontFamily: "Noto Sans",
+            ),
           ),
         ),
-      ),
-      body: StreamBuilder(
-        stream: widget.bloc.data,
-        builder: (context, AsyncSnapshot<SchoolAccreditationsChunk> snapshot) {
-          if (snapshot.hasData) {
-            return _buildList(snapshot);
-          } else if (snapshot.hasError) {
-            debugPrint("ERROR");
-            return Text(snapshot.error.toString());
-          } else {
-            debugPrint("No data");
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+        body: BlocBuilder<AccreditationBloc, AccreditationState>(
+          builder: (context, state) {
+            if (state is LoadingAccreditationState) {
+              return Center(
+                child: PlatformProgressIndicator(),
+              );
+            }
+
+            if (state is UpdatedAccreditationState) {
+              return _ContentBody(
+                data: state.data,
+              );
+            }
+
+            throw FallThroughError();
+          },
+        ),
       ),
     );
   }
 
-  void _createFilterPageRoute(BuildContext context) {
-    if (_dataLink != null) {
-      List<FilterBloc> filterBlocsList = List<FilterBloc>();
-
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.yearFilter,
-          defaultSelectedKey: _dataLink.yearFilter.getMax()));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.stateFilter,
-          defaultSelectedKey: AppLocalizations.displayAllStates));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.govtFilter,
-          defaultSelectedKey: AppLocalizations.displayAllGovernment));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.authorityFilter,
-          defaultSelectedKey: AppLocalizations.displayAllAuthority));
-      filterBlocsList.add(FilterBloc(
-          filter: _dataLink.schoolLevelFilter,
-          defaultSelectedKey: AppLocalizations.displayAllLevelFilters));
-
-      debugPrint('FilterPage route created');
-      Navigator.push(
+  // TODO: rewrite filters
+  void _openFilters(BuildContext context) {
+    final state = BlocProvider.of<AccreditationBloc>(context).state;
+    if (state is UpdatedAccreditationState) {
+      final model = state.data.rawModel.statesChunk;
+      Navigator.push<List<FilterBloc>>(
         context,
         MaterialPageRoute(builder: (context) {
-          return FilterPage(blocs: filterBlocsList);
+          return FilterPage(blocs: [
+            FilterBloc(
+                filter: model.yearFilter,
+                defaultSelectedKey: model.yearFilter.getMax()),
+            FilterBloc(
+                filter: model.stateFilter,
+                defaultSelectedKey: AppLocalizations.displayAllStates),
+            FilterBloc(
+                filter: model.authorityFilter,
+                defaultSelectedKey: AppLocalizations.displayAllAuthority),
+            FilterBloc(
+                filter: model.govtFilter,
+                defaultSelectedKey: AppLocalizations.displayAllGovernment),
+            FilterBloc(
+                filter: model.schoolLevelFilter,
+                defaultSelectedKey: AppLocalizations.displayAllLevelFilters),
+          ]);
         }),
-      );
-    }
-  }
-
-  Widget _buildList(AsyncSnapshot<SchoolAccreditationsChunk> snapshot) {
-    final data = snapshot.data;
-    _dataLink = data.statesChunk;
-    var selectedYear = data.statesChunk.yearFilter.selectedKey;
-    if (selectedYear == "") {
-      selectedYear = data.statesChunk.yearFilter.getMax();
-    }
-
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return ListView(
-          padding: EdgeInsets.all(16.0),
-          children: <Widget>[
-            TileWidget(
-                title: TitleWidget(AppLocalizations.accreditationProgress,
-                    AppColors.kRacingGreen),
-                body: Column(
-                  children: <Widget>[
-                    ChartFactory.getStackedHorizontalBarChartViewByData(
-                        chartData: _generateCumulativeMap(
-                            data: data.statesChunk.getSortedByYear()),
-                        colorFunc: _levelIndexToColor),
-                    widget._dividerWidget,
-                  ],
-                )),
-            TileWidget(
-                title: TitleWidget(
-                    AppLocalizations.districtStatus, AppColors.kRacingGreen),
-                body: Column(
-                  children: <Widget>[
-                    ChartFactory.getStackedHorizontalBarChartViewByData(
-                        chartData: _generateCumulativeMap(
-                            data: data.statesChunk.getSortedByState(),
-                            year: selectedYear),
-                        colorFunc: _levelIndexToColor),
-                    widget._dividerWidget,
-                  ],
-                )),
-            TileWidget(
-                title: TitleWidget(AppLocalizations.accreditationStatusByState,
-                    AppColors.kRacingGreen),
-                body: Column(
-                  children: [
-                    AccreditationTableWidget(
-                      keyName: "Evaluated in $selectedYear",
-                      firstColumnName: AppLocalizations.state,
-                      data: _generateAccreditationTableData(
-                          data.statesChunk.getSortedWithFiltersByState(),
-                          false,
-                          selectedYear),
-                    ),
-                    AccreditationTableWidget(
-                      keyName: "Cumulative up to $selectedYear",
-                      firstColumnName: AppLocalizations.state,
-                      data: _generateAccreditationTableData(
-                          data.statesChunk.getSortedWithFiltersByState(),
-                          true,
-                          selectedYear),
-                    ),
-                  ],
-                )),
-            TileWidget(
-                title: TitleWidget(
-                    AppLocalizations.accreditationPerfomancebyStandard,
-                    AppColors.kRacingGreen),
-                body: Column(
-                  children: [
-                    AccreditationTableWidget(
-                      keyName: "Evaluated in $selectedYear",
-                      firstColumnName: AppLocalizations.standard,
-                      data: _generateAccreditationTableData(
-                          data.standardsChunk.getSortedByStandart(),
-                          false,
-                          selectedYear),
-                    ),
-                    AccreditationTableWidget(
-                      keyName: "Cumulative up to $selectedYear",
-                      firstColumnName: AppLocalizations.standard,
-                      data: _generateAccreditationTableData(
-                          data.standardsChunk.getSortedByStandart(),
-                          true,
-                          selectedYear),
-                    ),
-                  ],
-                ))
-          ],
-        );
-      },
-    );
-  }
-
-  Map<String, List<int>> _generateCumulativeMap(
-      {@required Map<dynamic, List<SchoolAccreditationModel>> data,
-      String year}) {
-    Map<String, List<int>> result = new Map<String, List<int>>();
-
-    data.forEach((key, value) {
-      final levels = [0, 0, 0, 0];
-
-      value.forEach((accreditation) {
-        final sum = accreditation.numSum;
-
-        if (year != null && accreditation.surveyYear.toString() != year) {
-          return;
-        }
-
-        switch (accreditation.level) {
-          case AccreditationLevel.level1:
-            levels[0] -= sum;
-            break;
-          case AccreditationLevel.level2:
-            levels[1] += sum;
-            break;
-          case AccreditationLevel.level3:
-            levels[2] += sum;
-            break;
-          case AccreditationLevel.level4:
-            levels[3] += sum;
-            break;
-          case AccreditationLevel.undefined:
-            break;
+      ).then((filterBlocs) {
+        if (filterBlocs != null) {
+          _applyFilters(context, filterBlocs);
         }
       });
-
-      result[key] = levels;
-    });
-
-    return result;
+    }
   }
 
-  Map<dynamic, AccreditationTableData> _generateAccreditationTableData(
-      Map<dynamic, List<SchoolAccreditationModel>> rawMapData,
-      bool isCumulative,
-      String currentYear) {
-    var convertedData = Map<dynamic, AccreditationTableData>();
-    final sortedMapKeys = rawMapData.keys.toList()
-      ..sort((lv, rv) => rawMapData[lv]
-          .first
-          ?.standard
-          ?.compareTo(rawMapData[rv].first?.standard));
-    sortedMapKeys.forEach((key) {
-      var levels = [0, 0, 0, 0, 0, 0, 0, 0];
-      final rawValue = rawMapData[key];
-      for (var j = 0; j < rawValue.length; ++j) {
-        var model = rawValue;
-        var level = model[j].level;
-        var numThisYear = 0;
-        var numSum = 0;
-        if (model[j].surveyYear.toString() == currentYear) {
-          numThisYear += model[j].numInYear ?? 0;
-          numSum += model[j].numSum ?? 0;
-          switch (level) {
-            case AccreditationLevel.level1:
-              levels[0] += numThisYear;
-              levels[4] += numSum;
-              break;
-            case AccreditationLevel.level2:
-              levels[1] += numThisYear;
-              levels[5] += numSum;
-              break;
-            case AccreditationLevel.level3:
-              levels[2] += numThisYear;
-              levels[6] += numSum;
-              break;
-            case AccreditationLevel.level4:
-              levels[3] += numThisYear;
-              levels[7] += numSum;
-              break;
-            case AccreditationLevel.undefined:
-              break;
-          }
-        }
-      }
+  void _applyFilters(BuildContext context, List<FilterBloc> filterBlocs) {
+    final state = BlocProvider.of<AccreditationBloc>(context).state;
+    if (state is UpdatedAccreditationState) {
+      final model = state.data.rawModel;
+      model.statesChunk.updateYearFilter(filterBlocs[0].filter);
+      model.statesChunk.updateStateFilter(filterBlocs[1].filter);
+      model.statesChunk.updateAuthorityFilter(filterBlocs[2].filter);
+      model.statesChunk.updateGovtFilter(filterBlocs[3].filter);
+      model.statesChunk.updateSchoolLevelFilter(filterBlocs[4].filter);
+      BlocProvider.of<AccreditationBloc>(context)
+          .add(FiltersAppliedAccreditationEvent(updatedModel: model));
+    }
+  }
+}
 
-      if (isCumulative)
-        convertedData[key] =
-            AccreditationTableData(levels[4], levels[5], levels[6], levels[7]);
-      else
-        convertedData[key] =
-            AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
-    });
+class _ContentBody extends StatelessWidget {
+  _ContentBody({
+    Key key,
+    @required AccreditationData data,
+  })  : assert(data != null),
+        _data = data,
+        super(key: key);
 
-    return convertedData;
+  final AccreditationData _data;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          TileWidget(
+            title: TitleWidget(
+              AppLocalizations.accreditationProgress,
+              AppColors.kRacingGreen,
+            ),
+            body: ChartFactory.getStackedHorizontalBarChartViewByData(
+              chartData: _data.accreditationProgressData,
+              colorFunc: _levelIndexToColor,
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          TileWidget(
+            title: TitleWidget(
+              AppLocalizations.districtStatus,
+              AppColors.kRacingGreen,
+            ),
+            body: ChartFactory.getStackedHorizontalBarChartViewByData(
+              chartData: _data.districtStatusData,
+              colorFunc: _levelIndexToColor,
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          _PerformanceTable(
+            title: AppLocalizations.accreditationStatusByState,
+            firstColumnName: AppLocalizations.state,
+            year: _data.year,
+            data: _data.accreditationStatusByState,
+          ),
+          _PerformanceTable(
+            title: AppLocalizations.accreditationPerfomancebyStandard,
+            firstColumnName: AppLocalizations.standard,
+            year: _data.year,
+            data: _data.performanceByStandard,
+          ),
+        ],
+      ),
+    );
   }
 
   Color _levelIndexToColor(int index) {
     return AppColors.kLevels[index];
+  }
+}
+
+class _PerformanceTable extends StatelessWidget {
+  const _PerformanceTable({
+    Key key,
+    @required String title,
+    @required String firstColumnName,
+    @required String year,
+    @required MultitableData data,
+  })  : _data = data,
+        _title = title,
+        _firstColumnName = firstColumnName,
+        _year = year,
+        super(key: key);
+
+  final MultitableData _data;
+  final String _title;
+  final String _firstColumnName;
+  final String _year;
+
+  @override
+  Widget build(BuildContext context) {
+    return TileWidget(
+      title: TitleWidget(
+        _title,
+        AppColors.kRacingGreen,
+      ),
+      body: Column(
+        children: [
+          AccreditationTableWidget(
+            title: "Evaluated in $_year",
+            firstColumnName: _firstColumnName,
+            data: _data.evaluatedData,
+          ),
+          AccreditationTableWidget(
+            title: "Cumulative up to $_year",
+            firstColumnName: _firstColumnName,
+            data: _data.cumulatedData,
+          ),
+        ],
+      ),
+    );
   }
 }

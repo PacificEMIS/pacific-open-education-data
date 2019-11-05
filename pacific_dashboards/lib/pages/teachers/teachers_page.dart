@@ -42,7 +42,7 @@ class TeachersPageState extends State<TeachersPage> {
         updateFiltersVisibility(context);
       },
       child: Scaffold(
-        resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: true,
         appBar: PlatformAppBar(
           iconTheme: new IconThemeData(color: AppColors.kWhite),
           backgroundColor: AppColors.kAppBarBackground,

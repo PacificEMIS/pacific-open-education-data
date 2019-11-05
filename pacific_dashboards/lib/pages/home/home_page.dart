@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: true,
       body: new Container(
         color: Color.fromRGBO(26, 115, 232, 1),
         child: BlocBuilder<HomeBloc, HomeState>(
