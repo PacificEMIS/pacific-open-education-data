@@ -4,9 +4,9 @@ import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import 'package:pacific_dashboards/res/strings/l10n/messages_all.dart';
 
-// flutter pub run intl_translation:extract_to_arb --output-dir=lib/localization/l10n lib/localization/Localizations.dart
+// flutter pub run intl_translation:extract_to_arb --output-dir=lib/res/strings/l10n lib/res/strings/strings.dart
 // edit translations
-// flutter pub pub run intl_translation:generate_from_arb --output-dir=lib/localization/l10n --no-use-deferred-loading lib/localization/Localizations.dart lib/localization/l10n/intl_en.arb lib/localization/l10n/intl_ru.arb
+// flutter pub pub run intl_translation:generate_from_arb --output-dir=lib/res/strings/l10n --no-use-deferred-loading lib/res/strings/strings.dart lib/res/strings/l10n/intl_en.arb
 
 class AppLocalizations {
   static Future<AppLocalizations> load(Locale locale) {
@@ -149,12 +149,19 @@ class AppLocalizations {
           name: "filterBySelectedSchoolLevels");
 
   static String get standard => Intl.message("Standard ", name: "standard");
+
   static String get accreditationStatusByState =>
       Intl.message("Accreditation Status by State ",
           name: "accreditationStatusByState");
   static String get accreditationPerfomancebyStandard =>
       Intl.message("Performance by Standard ",
           name: "accreditationPerfomancebyStandard");
+
+  static String get evaluatedIn =>
+      Intl.message("Evaluated in %s", name: "evaluatedIn");
+
+  static String get cumulativeUpTo =>
+      Intl.message("Cumulative up to %s", name: "cumulativeUpTo");
 
   static String get splash =>
       Intl.message("\nPACIFIC OPEN\n EDUCATION DATA", name: "splash");

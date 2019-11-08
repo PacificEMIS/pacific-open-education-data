@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/shared_ui/bar_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/pie_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/stacked_horizontal_bar_chart_widget.dart';
-import 'package:pacific_dashboards/ui/BarChartWidget.dart';
 
 class ChartFactory {
   static Widget createBarChartViewByData(Map<String, int> chartData) {

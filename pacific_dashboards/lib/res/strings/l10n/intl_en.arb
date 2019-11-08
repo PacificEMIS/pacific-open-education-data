@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-10-31T13:02:35.681501",
+  "@@last_modified": "2019-11-05T16:42:54.151103",
   "appName": "Custom Charts",
   "@appName": {
     "type": "text",
@@ -292,6 +292,16 @@
   },
   "accreditationPerfomancebyStandard": "Performance by Standard ",
   "@accreditationPerfomancebyStandard": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "evaluatedIn": "Evaluated in %s",
+  "@evaluatedIn": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cumulativeUpTo": "Cumulative up to %s",
+  "@cumulativeUpTo": {
     "type": "text",
     "placeholders": {}
   },
