@@ -26,7 +26,10 @@ class ServerBackendProvider implements Provider {
   Dio _dio;
 
   ServerBackendProvider(GlobalSettings settings) : _settings = settings {
-    _dio = Dio()
+    _dio = Dio(BaseOptions(
+      connectTimeout: Duration(seconds: 10).inMilliseconds,
+      receiveTimeout: Duration(minutes: 1).inMilliseconds,
+    ))
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
   }
 

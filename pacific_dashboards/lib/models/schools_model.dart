@@ -55,17 +55,18 @@ class SchoolsModel extends ModelWithLookups {
     return _schools.map((i) => (i).toJson()).toList();
   }
 
-  Map<String, List<SchoolModel>> getSortedWithFiltersByState() {
-    var filteredList = _schools
-        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
-        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
-        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
-        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode))
-        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
-        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
+  List<SchoolModel> get _filteredSchools => _schools
+      .where((it) => yearFilter.isEnabledInFilter(it.surveyYear.toString()))
+      .where((it) => authorityFilter.isEnabledInFilter(it.authorityCode))
+      .where((it) => govtFilter.isEnabledInFilter(it.authorityGovt))
+      .where((it) => schoolTypeFilter.isEnabledInFilter(it.schoolTypeCode))
+      .where((it) => ageFilter.isEnabledInFilter(it.ageGroup))
+      .where((it) => schoolLevelFilter.isEnabledInFilter(it.classLevel))
+      .toList();
 
+  Map<String, List<SchoolModel>> getSortedWithFiltersByState() {
     return groupBy(
-        filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
+        _filteredSchools, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Map<String, List<SchoolModel>> getSortedByState() {
@@ -74,15 +75,7 @@ class SchoolsModel extends ModelWithLookups {
   }
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByAuthority() {
-    var filteredList = _schools
-        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
-        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
-        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
-        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode))
-        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
-        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
-
-    return groupBy(filteredList,
+    return groupBy(_filteredSchools,
         (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
@@ -92,16 +85,8 @@ class SchoolsModel extends ModelWithLookups {
   }
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByGovt() {
-    var filteredList = _schools
-        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
-        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
-        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
-        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode))
-        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
-        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
-
     return groupBy(
-        filteredList, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+        _filteredSchools, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   Map<String, List<SchoolModel>> getSortedByGovt() {
@@ -110,19 +95,13 @@ class SchoolsModel extends ModelWithLookups {
   }
 
   List<String> getDistrictCodeKeysList() {
-    return groupBy<SchoolModel, String>(_schools, (obj) => obj.districtCode).keys.toList();
+    return groupBy<SchoolModel, String>(_schools, (obj) => obj.districtCode)
+        .keys
+        .toList();
   }
 
   Map<String, List<SchoolModel>> getSortedWithFilteringBySchoolType() {
-    var filteredList = _schools
-        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
-        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
-        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
-        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
-        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
-        .where((i) => schoolLevelFilter.isEnabledInFilter(i.classLevel));
-
-    return groupBy(filteredList, (obj) => obj.schoolTypeCode);
+    return groupBy(_filteredSchools, (obj) => obj.schoolTypeCode);
   }
 
   Map<String, List<SchoolModel>> getSortedBySchoolType() {
@@ -130,63 +109,53 @@ class SchoolsModel extends ModelWithLookups {
   }
 
   Map<String, List<SchoolModel>> getSortedWithFilteringBySchoolLevel() {
-    var filteredList = _schools
-        .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
-        .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
-        .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
-        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup))
-        .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt))
-        .where((i) => schoolTypeFilter.isEnabledInFilter(i.schoolTypeCode));
-
-    return groupBy(filteredList, (obj) => obj.classLevel);
+    return groupBy(_filteredSchools, (obj) => obj.classLevel);
   }
 
   Map<String, List<SchoolModel>> getSortedBySchoolLevel() {
     return groupBy(_schools, (obj) => obj.classLevel);
   }
 
-  Map<String, List<SchoolModel>> getGroupedByAgeFileteredByEducationLevel(EducationLevel level) {
-    var filteredList = _schools
-        .where((i) => ageFilter.isEnabledInFilter(i.ageGroup) && i.age > 0);
+  Map<String, List<SchoolModel>> getGroupedByAgeFileteredByEducationLevel(
+      EducationLevel level) {
+    var filteredList = _filteredSchools;
 
     switch (level) {
       case EducationLevel.all:
         break;
       case EducationLevel.earlyChildhood:
-        filteredList = filteredList.where((i) => ["GK"].contains(i.classLevel));
+        filteredList =
+            filteredList.where((i) => ["GK"].contains(i.classLevel)).toList();
         break;
       case EducationLevel.primary:
-        filteredList = filteredList.where((i) => [
-              "G1",
-              "G2",
-              "G3",
-              "G4",
-              "G5",
-              "G6",
-              "G7",
-              "G8"
-            ].contains(i.classLevel));
+        filteredList = filteredList
+            .where((i) => ["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"]
+                .contains(i.classLevel))
+            .toList();
         break;
       case EducationLevel.secondary:
         filteredList = filteredList
-            .where((i) => ["G9", "G10", "G11", "G12"].contains(i.classLevel));
+            .where((i) => ["G9", "G10", "G11", "G12"].contains(i.classLevel))
+            .toList();
         break;
       case EducationLevel.postSecondary:
-        filteredList = filteredList.where((i) => ![
-              "GK",
-              "G1",
-              "G2",
-              "G3",
-              "G4",
-              "G5",
-              "G6",
-              "G7",
-              "G8",
-              "G9",
-              "G10",
-              "G11",
-              "G12"
-            ].contains(i.classLevel));
+        filteredList = filteredList
+            .where((i) => ![
+                  "GK",
+                  "G1",
+                  "G2",
+                  "G3",
+                  "G4",
+                  "G5",
+                  "G6",
+                  "G7",
+                  "G8",
+                  "G9",
+                  "G10",
+                  "G11",
+                  "G12"
+                ].contains(i.classLevel))
+            .toList();
         break;
     }
 
@@ -247,6 +216,4 @@ class SchoolsModel extends ModelWithLookups {
   }
 }
 
-enum EducationLevel {
-  all, earlyChildhood, primary, secondary, postSecondary
-}
+enum EducationLevel { all, earlyChildhood, primary, secondary, postSecondary }
