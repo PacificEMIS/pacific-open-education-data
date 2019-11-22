@@ -109,7 +109,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                           AppLocalizations.schoolsEnrollmentByAgeEducationLevel,
                       firstColumnName: AppLocalizations.age,
                       data: state.data.enrollmentByAgeAndEducation,
-                      keySortFunc: _sortEnrollmentByAgeAndEducation,
+                      keySortFunc: _compareEnrollmentByAgeAndEducation,
                     ),
                     MultiTable(
                       key:
@@ -118,6 +118,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                           .schoolsEnrollmentBySchoolTypeStateAndGender,
                       firstColumnName: AppLocalizations.schoolType,
                       data: state.data.enrollmentBySchoolLevelAndState,
+                      keySortFunc: _compareEnrollmentBySchoolLevelAndState,
                     )
                   ],
                 ),
@@ -131,7 +132,11 @@ class SchoolsPageState extends State<SchoolsPage> {
     );
   }
 
-  int _sortEnrollmentByAgeAndEducation(String lv, String rv) {
+  int _compareEnrollmentBySchoolLevelAndState(String lv, String rv) {
+    return lv.compareTo(rv);
+  }
+
+  int _compareEnrollmentByAgeAndEducation(String lv, String rv) {
     // formats like 1-12
     final lvParts = lv.split('-');
     if (lvParts.length < 1) {

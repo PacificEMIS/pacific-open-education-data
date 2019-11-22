@@ -183,6 +183,7 @@ class _LoadedContent extends StatelessWidget {
             title: AppLocalizations.teacherBySchoolTypeStateAndGender,
             firstColumnName: AppLocalizations.schoolLevels,
             data: _data.teachersBySchoolLevelStateAndGender,
+            keySortFunc: (lv, rv) => lv.compareTo(rv),
           ),
         ],
       ),
