@@ -24,6 +24,13 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'io.fabric'
+
+crashlytics {
+    enableNdk true
+    androidNdkOut "../../debugSymbols"
+    androidNdkLibsOut "../../build/app/intermediates/transforms/stripDebugSymbol/release/0/lib"
+}
 
 android {
     compileSdkVersion 29
@@ -48,7 +55,7 @@ android {
     signingConfigs {
         release {
             storePassword "79u6CpiUSWVv"
-            storeFile file("../app/PacificDashboards.keystore")
+            storeFile file("PacificDashboards.keystore")
             keyAlias "MACKEYALIAS"
             keyPassword "aL7hELtUmY43"
         }
@@ -71,3 +78,5 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
