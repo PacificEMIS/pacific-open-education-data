@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
@@ -42,37 +44,65 @@ class ExamsPageState extends State<ExamsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: AppColors.kWhite,
-        appBar: PlatformAppBar(
-          iconTheme: new IconThemeData(color: AppColors.kWhite),
-          backgroundColor: AppColors.kRoyalBlue,
-          title: Text(
-            ExamsPage._kPageName,
-            style: TextStyle(
-              color: AppColors.kWhite,
-              fontSize: 18.0,
-              fontFamily: "Noto Sans",
-            ),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: AppColors.kWhite,
+      appBar: PlatformAppBar(
+        iconTheme: new IconThemeData(color: AppColors.kWhite),
+        backgroundColor: AppColors.kRoyalBlue,
+        title: Text(
+          ExamsPage._kPageName,
+          style: TextStyle(
+            color: AppColors.kWhite,
+            fontSize: 18.0,
+            fontFamily: "Noto Sans",
           ),
         ),
-        body: StreamBuilder(
-          stream: widget.bloc.data,
-          builder: (context, AsyncSnapshot<ExamsModel> snapshot) {
-            if (snapshot.hasData) {
-              return Stack(
-                children: [_buildList(snapshot), ..._buildBottomMenu(snapshot)],
-                alignment: Alignment.bottomCenter,
-              );
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-
-            return Center(
-              child: CircularProgressIndicator(),
+      ),
+      body: StreamBuilder(
+        stream: widget.bloc.data,
+        builder: (context, AsyncSnapshot<ExamsModel> snapshot) {
+          if (snapshot.hasData) {
+            return Stack(
+              children: [
+                _buildList(snapshot),
+              ],
+              alignment: Alignment.bottomCenter,
             );
-          },
-        ));
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
+
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+      bottomSheet: _BottomMenu(
+        alwaysVisibleHeight: 74,
+        totalHeight: 250,
+        bottomInset: MediaQuery.of(context).viewPadding.bottom,
+        children: <Widget>[
+          _BottomMenuRow(
+            rowName: AppLocalizations.exam,
+            name: 'name1',
+            onPrevTap: () {},
+            onNextTap: () {},
+          ),
+          _BottomMenuRow(
+            rowName: AppLocalizations.view,
+            name: 'name2',
+            onPrevTap: () {},
+            onNextTap: () {},
+          ),
+          _BottomMenuRow(
+            rowName: AppLocalizations.filterByStandard,
+            name: 'name3name3name3name3name3name3me3name3name3name3name3name3',
+            onPrevTap: () {},
+            onNextTap: () {},
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildList(AsyncSnapshot<ExamsModel> snapshot) {
@@ -133,167 +163,311 @@ class ExamsPageState extends State<ExamsPage> {
     });
     return widgetList;
   }
+}
 
-  List<Widget> _buildBottomMenu(AsyncSnapshot<ExamsModel> snapshot) {
-    double size = _bottomMenuExpanded ? 240 : 77;
-    double buttonSize = 50;
+class _BottomMenu extends StatefulWidget {
+  const _BottomMenu({
+    Key key,
+    @required List<Widget> children,
+    @required double alwaysVisibleHeight,
+    @required double totalHeight,
+    @required double bottomInset,
+  })  : assert(children != null),
+        assert(alwaysVisibleHeight != null),
+        assert(totalHeight != null),
+        assert(bottomInset != null),
+        _children = children,
+        _alwaysVisibleHeight = alwaysVisibleHeight,
+        _totalHeight = totalHeight,
+        _bottomInset = bottomInset,
+        super(key: key);
 
-    List<Widget> rows = new List<Widget>();
-    rows += _bottomMenuRow(
-        snapshot.data.examsDataNavigator.prevExamPage,
-        snapshot.data.examsDataNavigator.nextExamPage,
-        AppLocalizations.exam,
-        snapshot.data.examsDataNavigator.getExamPageName());
-    if (_bottomMenuExpanded) {
-      rows += _bottomMenuRow(
-          snapshot.data.examsDataNavigator.prevExamView,
-          snapshot.data.examsDataNavigator.nextExamView,
-          AppLocalizations.view,
-          snapshot.data.examsDataNavigator.getExamViewName());
-      rows += _bottomMenuRow(
-          snapshot.data.examsDataNavigator.prevExamStandard,
-          snapshot.data.examsDataNavigator.nextExamStandard,
-          AppLocalizations.filterByStandard,
-          snapshot.data.examsDataNavigator.getStandardName());
-    }
-    return [
-      new Positioned(
-          bottom: size - buttonSize / 1.5,
-          child: Container(
-            decoration: new BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  new BorderRadius.all(Radius.circular(buttonSize / 2)),
-              boxShadow: <BoxShadow>[
+  final List<Widget> _children;
+  final double _alwaysVisibleHeight;
+  final double _totalHeight;
+  final double _bottomInset;
+
+  @override
+  _BottomMenuState createState() => _BottomMenuState();
+}
+
+class _BottomMenuState extends State<_BottomMenu>
+    with TickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation<double> _insetAnimation;
+  Animation<double> _heightAnimation;
+  Animation<double> _iconOpacityAnimation;
+  Animation<double> _iconRotationAnimation;
+  bool _isCollapsed = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _configureAnimations();
+  }
+
+  void _configureAnimations() {
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 250),
+      vsync: this,
+    );
+
+    _insetAnimation = Tween<double>(begin: 0, end: widget._bottomInset).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Interval(0, 0.25),
+      ),
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.dismissed) {
+          _isCollapsed = true;
+        }
+      });
+
+    _heightAnimation = Tween<double>(
+      begin: 0,
+      end: widget._totalHeight - widget._alwaysVisibleHeight,
+    ).animate(_animationController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _isCollapsed = false;
+        }
+      });
+
+    _iconOpacityAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(_animationController);
+
+    _iconRotationAnimation = Tween<double>(
+      begin: 0,
+      end: 2 * pi,
+    ).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const buttonSize = 50.0;
+    const blurRadius = 10.0;
+    return AnimatedBuilder(
+      animation: _heightAnimation,
+      builder: (context, child) {
+        return Container(
+          height: widget._alwaysVisibleHeight +
+              _heightAnimation.value +
+              widget._bottomInset,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: child,
+        );
+      },
+      child: Stack(
+        overflow: Overflow.clip,
+        alignment: AlignmentDirectional.topCenter,
+        children: <Widget>[
+          Container(
+            width: buttonSize,
+            height: buttonSize,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
                 BoxShadow(
                   color: Colors.grey,
-                  blurRadius: 10.0,
+                  blurRadius: blurRadius,
+                ),
+              ],
+              color: Colors.white,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 18),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: const Radius.circular(8),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: blurRadius,
                 ),
               ],
             ),
-            height: buttonSize,
-            width: buttonSize,
-          )),
-      new Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-              decoration: new BoxDecoration(
-                color: Colors.white,
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(8.0),
-                    topRight: const Radius.circular(8.0)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 10.0,
-                  ),
+            child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (widget._children.length > 0) widget._children[0],
+                  if (widget._children.length > 1)
+                    SizedBox(
+                      width: double.infinity,
+                      height: _insetAnimation.value,
+                    ),
+                  ...widget._children.sublist(1),
+                  if (widget._bottomInset > 0)
+                    Container(
+                      width: double.infinity,
+                      height: widget._bottomInset,
+                    ),
                 ],
               ),
-              height: size,
-              width: double.infinity,
-              margin: new EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: rows,
-              ))),
-      new Positioned(
-          bottom: size - buttonSize / 1.5, child: _bottomMenuButton(buttonSize))
-    ];
-  }
-
-  Widget _bottomMenuButton(double buttonSize) {
-    var openIcon = new Icon(
-      Icons.check,
-      color: AppColors.kExamsTableTextGray,
-      size: 27.0,
-    );
-    var closedIcon = new Icon(
-      Icons.filter_list,
-      color: AppColors.kExamsTableTextGray,
-      size: 27.0,
-    );
-
-    return new Align(
-        alignment: Alignment.bottomCenter,
-        child: new Container(
-            width: buttonSize,
-            height: buttonSize,
-            child: new RawMaterialButton(
-                child: _bottomMenuExpanded ? openIcon : closedIcon,
+            ),
+          ),
+          AnimatedBuilder(
+            animation: _iconRotationAnimation,
+            builder: (context, child) {
+              return Transform.rotate(
+                angle: _iconRotationAnimation.value,
+                child: child,
+              );
+            },
+            child: Container(
+              width: buttonSize,
+              height: buttonSize,
+              child: RawMaterialButton(
+                child: Stack(
+                  children: <Widget>[
+                    AnimatedBuilder(
+                      animation: _iconOpacityAnimation,
+                      builder: (context, child) {
+                        return Opacity(
+                          opacity: _iconOpacityAnimation.value,
+                          child: child,
+                        );
+                      },
+                      child: Icon(
+                        Icons.check,
+                        color: AppColors.kExamsTableTextGray,
+                        size: 27.0,
+                      ),
+                    ),
+                    AnimatedBuilder(
+                      animation: _iconOpacityAnimation,
+                      builder: (context, child) {
+                        return Opacity(
+                          opacity: 1 - _iconOpacityAnimation.value,
+                          child: child,
+                        );
+                      },
+                      child: Icon(
+                        Icons.filter_list,
+                        color: AppColors.kExamsTableTextGray,
+                        size: 27.0,
+                      ),
+                    ),
+                  ],
+                ),
                 fillColor: Colors.white,
-                shape: new CircleBorder(),
+                shape: CircleBorder(),
                 elevation: 0.0,
                 highlightElevation: 0.0,
-                onPressed: () {
-                  setState(() {
-                    _bottomMenuExpanded = !_bottomMenuExpanded;
-                  });
-                })));
+                onPressed: _triggerCollapsing,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  List<Widget> _bottomMenuRow(
-      VoidCallback back, VoidCallback next, String rowName, String name) {
-    double fontSize = 14;
-    if (name.length > 20) {
-      fontSize -= (name.length - 20) / 10;
+  void _triggerCollapsing() {
+    if (!_animationController.isAnimating) {
+      if (_isCollapsed) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
     }
-    return [
-      new Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 0, 0),
-          child: new Text(
-            rowName,
+  }
+}
+
+class _BottomMenuRow extends StatelessWidget {
+  const _BottomMenuRow({
+    Key key,
+    @required String rowName,
+    @required String name,
+    @required VoidCallback onPrevTap,
+    @required VoidCallback onNextTap,
+  })  : assert(rowName != null),
+        assert(name != null),
+        assert(onPrevTap != null),
+        assert(onNextTap != null),
+        _rowName = rowName,
+        _name = name,
+        _onPrevTap = onPrevTap,
+        _onNextTap = onNextTap,
+        super(key: key);
+
+  final VoidCallback _onPrevTap;
+  final VoidCallback _onNextTap;
+  final String _rowName;
+  final String _name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: Text(
+            _rowName,
             style: new TextStyle(
-                fontSize: 14.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
+              fontSize: 14.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
             textAlign: TextAlign.left,
-          )),
-      new Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        ButtonTheme(
-            minWidth: 50,
-            height: 40,
-            child: FlatButton(
-              onPressed: () {
-                setState(() {
-                  back();
-                });
-              },
-              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-              child: new Icon(
-                Icons.chevron_left,
-                color: AppColors.kExamsTableTextGray,
-                size: 21.0,
-              ),
-            )),
-        Expanded(
-          child: new Text(
-            name,
-            style: new TextStyle(
-                fontSize: fontSize,
-                color: AppColors.kDenim,
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-            maxLines: 2,
           ),
         ),
         ButtonTheme(
-            minWidth: 50,
-            height: 40,
-            child: FlatButton(
-              onPressed: () {
-                setState(() {
-                  next();
-                });
-              },
-              padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-              child: new Icon(
-                Icons.chevron_right,
-                color: AppColors.kExamsTableTextGray,
-                size: 21.0,
+          minWidth: 50,
+          height: 40,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FlatButton(
+                onPressed: _onPrevTap,
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: Icon(
+                  Icons.chevron_left,
+                  color: AppColors.kExamsTableTextGray,
+                  size: 21.0,
+                ),
               ),
-            )),
-      ])
-    ];
+              Expanded(
+                child: Text(
+                  _name,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.kDenim,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              FlatButton(
+                onPressed: _onNextTap,
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: Icon(
+                  Icons.chevron_right,
+                  color: AppColors.kExamsTableTextGray,
+                  size: 21.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -37,6 +37,9 @@ class App extends StatelessWidget {
           title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
           body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.transparent,
+        ),
       ),
       initialRoute: HomePage.kRoute,
       routes: {
