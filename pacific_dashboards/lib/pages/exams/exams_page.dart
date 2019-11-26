@@ -78,8 +78,8 @@ class ExamsPageState extends State<ExamsPage> {
         },
       ),
       bottomSheet: _BottomMenu(
-        alwaysVisibleHeight: 74,
-        totalHeight: 250,
+        alwaysVisibleHeight: 96,
+        totalHeight: 244,
         bottomInset: MediaQuery.of(context).viewPadding.bottom,
         children: <Widget>[
           _BottomMenuRow(
@@ -212,10 +212,10 @@ class _BottomMenuState extends State<_BottomMenu>
       vsync: this,
     );
 
-    _insetAnimation = Tween<double>(begin: 0, end: widget._bottomInset).animate(
+    _insetAnimation = Tween<double>(begin: widget._bottomInset, end: 0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Interval(0, 0.25),
+        curve: Interval(0, 0.5),
       ),
     )..addStatusListener((status) {
         if (status == AnimationStatus.dismissed) {
@@ -305,9 +305,14 @@ class _BottomMenuState extends State<_BottomMenu>
                 children: [
                   if (widget._children.length > 0) widget._children[0],
                   if (widget._children.length > 1)
-                    SizedBox(
-                      width: double.infinity,
-                      height: _insetAnimation.value,
+                    AnimatedBuilder(
+                      animation: _insetAnimation,
+                      builder: (context, child) {
+                        return SizedBox(
+                          width: double.infinity,
+                          height: _insetAnimation.value,
+                        );
+                      },
                     ),
                   ...widget._children.sublist(1),
                   if (widget._bottomInset > 0)
