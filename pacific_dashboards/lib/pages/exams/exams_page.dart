@@ -1,23 +1,21 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
-import 'package:pacific_dashboards/pages/exams/exams_bloc.dart';
+import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/exams/exams_stacked_horizontal_bar_chart.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
+import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
 // TODO: refactor
 class ExamsPage extends StatefulWidget {
   static const String _kPageName = "Exams";
-  final ExamsBloc bloc;
 
-  ExamsPage({
-    Key key,
-    this.bloc,
-  }) : super(key: key);
+  ExamsPage({Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -29,21 +27,9 @@ class ExamsPageState extends State<ExamsPage> {
   bool _bottomMenuExpanded = false;
 
   @override
-  void initState() {
-    super.initState();
-    widget.bloc.fetchData();
-  }
-
-  @override
-  void dispose() {
-    debugPrint("disposing");
-    widget.bloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ObjectKey('Exams scaffold'),
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.kWhite,
       appBar: PlatformAppBar(
@@ -54,27 +40,25 @@ class ExamsPageState extends State<ExamsPage> {
           style: TextStyle(
             color: AppColors.kWhite,
             fontSize: 18.0,
-            fontFamily: "Noto Sans",
+            fontFamily: 'Noto Sans',
           ),
         ),
       ),
-      body: StreamBuilder(
-        stream: widget.bloc.data,
-        builder: (context, AsyncSnapshot<ExamsModel> snapshot) {
-          if (snapshot.hasData) {
-            return Stack(
-              children: [
-                _buildList(snapshot),
-              ],
-              alignment: Alignment.bottomCenter,
-            );
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
+      body: BlocBuilder<ExamsBloc, ExamsState>(
+        builder: (context, state) {
+          if (state is InitialExamsState) {
+            return Container();
           }
 
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          if (state is LoadingExamsState) {
+            return Center(
+              child: PlatformProgressIndicator(),
+            );
+          }
+
+          if (state is PopulatedExamsState) {}
+
+          throw FallThroughError();
         },
       ),
       bottomSheet: _BottomMenu(
@@ -102,25 +86,6 @@ class ExamsPageState extends State<ExamsPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildList(AsyncSnapshot<ExamsModel> snapshot) {
-    var listItems = snapshot.data.examsDataNavigator.getExamResults();
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return ListView.builder(
-          padding:
-              EdgeInsets.fromLTRB(16, 16, 16, _bottomMenuExpanded ? 246 : 136),
-          itemCount: listItems.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
-              subtitle: _generateGridTile(listItems, index),
-            );
-          },
-        );
-      },
     );
   }
 
@@ -162,6 +127,27 @@ class ExamsPageState extends State<ExamsPage> {
       widgetList.add(ExamsStackedHorizontalBarChart.fromModel(v));
     });
     return widgetList;
+  }
+}
+
+class _PopulatedContent extends StatelessWidget {
+  const _PopulatedContent({
+    Key key,
+    @required Map<String, Map<String, ExamModel>> examResults,
+  })  : assert(examResults != null),
+        _examResults = examResults,
+        super(key: key);
+
+  final Map<String, Map<String, ExamModel>> _examResults;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
+      children: <Widget>[
+
+      ],
+    );
   }
 }
 
