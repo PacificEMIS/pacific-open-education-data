@@ -35,9 +35,9 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
       yield* handleFetch(
         beforeFetchState: currentState,
         fetch: _repository.fetchAllAccreditaitons,
-        onSuccess: (data) async {
+        onSuccess: (data) async* {
           _chunk = data;
-          return UpdatedAccreditationState(_calculateData());
+          yield UpdatedAccreditationState(_calculateData());
         },
       );
     }

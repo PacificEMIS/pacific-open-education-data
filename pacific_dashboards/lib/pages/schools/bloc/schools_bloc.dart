@@ -34,9 +34,9 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
       yield* handleFetch(
         beforeFetchState: currentState,
         fetch: _repository.fetchAllSchools,
-        onSuccess: (data) async {
+        onSuccess: (data) async* {
           _schoolsModel = data;
-          return UpdatedSchoolsState(await _transformSchoolsModel());
+          yield UpdatedSchoolsState(await _transformSchoolsModel());
         },
       );
     }

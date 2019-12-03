@@ -30,10 +30,11 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
       yield LoadingExamsState();
       yield* handleFetch(
         beforeFetchState: currentState,
-        fetch: _repository.fetchAllSchools,
-        onSuccess: (data) async {
+        fetch: _repository.fetchAllExams,
+        onSuccess: (data) async* {
           _examsModel = data;
-          return PopulatedExamsState(await _convertExams());
+          yield PopulatedExamsState(await _convertExams());
+          yield _filterState;
         },
       );
     }
@@ -41,33 +42,45 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
     if (event is PrevExamSelectedEvent) {
       _examsModel.examsDataNavigator.prevExamPage();
       yield PopulatedExamsState(await _convertExams());
+      yield _filterState;
     }
 
     if (event is NextExamSelectedEvent) {
       _examsModel.examsDataNavigator.nextExamPage();
       yield PopulatedExamsState(await _convertExams());
+      yield _filterState;
     }
 
     if (event is PrevViewSelectedEvent) {
       _examsModel.examsDataNavigator.prevExamView();
       yield PopulatedExamsState(await _convertExams());
+      yield _filterState;
     }
 
     if (event is NextViewSelectedEvent) {
       _examsModel.examsDataNavigator.nextExamView();
       yield PopulatedExamsState(await _convertExams());
+      yield _filterState;
     }
 
     if (event is PrevFilterSelectedEvent) {
       _examsModel.examsDataNavigator.prevExamStandard();
       yield PopulatedExamsState(await _convertExams());
+      yield _filterState;
     }
 
     if (event is NextFilterSelectedEvent) {
       _examsModel.examsDataNavigator.nextExamStandard();
       yield PopulatedExamsState(await _convertExams());
+      yield _filterState;
     }
   }
+
+  PopulatedFilterState get _filterState => PopulatedFilterState(
+        _examsModel.examsDataNavigator.getExamPageName(),
+        _examsModel.examsDataNavigator.getExamViewName(),
+        _examsModel.examsDataNavigator.getStandardName(),
+      );
 
   Future<Map<String, Map<String, ExamModel>>> _convertExams() {
     return Future(() => _examsModel.examsDataNavigator.getExamResults());

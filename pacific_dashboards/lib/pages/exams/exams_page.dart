@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/exams/exams_stacked_horizontal_bar_chart.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
@@ -23,109 +25,118 @@ class ExamsPage extends StatefulWidget {
 }
 
 class ExamsPageState extends State<ExamsPage> {
-  bool _bottomMenuExpanded = false;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: ObjectKey('Exams scaffold'),
-      resizeToAvoidBottomInset: true,
-      backgroundColor: AppColors.kWhite,
-      appBar: PlatformAppBar(
-        iconTheme: new IconThemeData(color: AppColors.kWhite),
-        backgroundColor: AppColors.kRoyalBlue,
-        title: Text(
-          ExamsPage.kRoute,
-          style: TextStyle(
-            color: AppColors.kWhite,
-            fontSize: 18.0,
-            fontFamily: 'Noto Sans',
+    return BlocListener<ExamsBloc, ExamsState>(
+      listener: (context, state) {
+        if (state is ErrorState) {
+          _handleErrorState(state, context);
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: AppColors.kWhite,
+        appBar: PlatformAppBar(
+          iconTheme: new IconThemeData(color: AppColors.kWhite),
+          backgroundColor: AppColors.kRoyalBlue,
+          title: Text(
+            'Exams',
+            style: TextStyle(
+              color: AppColors.kWhite,
+              fontSize: 18.0,
+              fontFamily: 'Noto Sans',
+            ),
           ),
         ),
-      ),
-      body: BlocBuilder<ExamsBloc, ExamsState>(
-        builder: (context, state) {
-          if (state is InitialExamsState) {
-            return Container();
-          }
+        body: BlocBuilder<ExamsBloc, ExamsState>(
+          condition: (prevState, currentState) => currentState is BodyState,
+          builder: (context, state) {
+            if (state is InitialExamsState) {
+              return Container();
+            }
 
-          if (state is LoadingExamsState) {
-            return Center(
-              child: PlatformProgressIndicator(),
-            );
-          }
+            if (state is LoadingExamsState) {
+              return Center(
+                child: PlatformProgressIndicator(),
+              );
+            }
 
-          if (state is PopulatedExamsState) {}
+            if (state is PopulatedExamsState) {
+              return _PopulatedContent(
+                examResults: state.results,
+              );
+            }
 
-          throw FallThroughError();
-        },
-      ),
-      bottomSheet: _BottomMenu(
-        alwaysVisibleHeight: 96,
-        totalHeight: 244,
-        bottomInset: MediaQuery.of(context).viewPadding.bottom,
-        children: <Widget>[
-          _BottomMenuRow(
-            rowName: AppLocalizations.exam,
-            name: 'name1',
-            onPrevTap: () {},
-            onNextTap: () {},
-          ),
-          _BottomMenuRow(
-            rowName: AppLocalizations.view,
-            name: 'name2',
-            onPrevTap: () {},
-            onNextTap: () {},
-          ),
-          _BottomMenuRow(
-            rowName: AppLocalizations.filterByStandard,
-            name: 'name3name3name3name3name3name3me3name3name3name3name3name3',
-            onPrevTap: () {},
-            onNextTap: () {},
-          ),
-        ],
+            throw FallThroughError();
+          },
+        ),
+        bottomSheet: BlocBuilder<ExamsBloc, ExamsState>(
+          condition: (prevState, currentState) => currentState is FilterState,
+          builder: (context, state) {
+            if (state is InitialExamsState) {
+              return Container();
+            }
+
+            if (state is PopulatedFilterState) {
+              final bloc = BlocProvider.of<ExamsBloc>(context);
+              return _BottomMenu(
+                alwaysVisibleHeight: 96,
+                totalHeight: 244,
+                bottomInset: MediaQuery.of(context).viewPadding.bottom,
+                children: <Widget>[
+                  _BottomMenuRow(
+                    rowName: AppLocalizations.exam,
+                    name: state.examName,
+                    onPrevTap: () => bloc.add(PrevExamSelectedEvent()),
+                    onNextTap: () => bloc.add(NextExamSelectedEvent()),
+                  ),
+                  _BottomMenuRow(
+                    rowName: AppLocalizations.view,
+                    name: state.viewName,
+                    onPrevTap: () => bloc.add(PrevViewSelectedEvent()),
+                    onNextTap: () => bloc.add(NextViewSelectedEvent()),
+                  ),
+                  _BottomMenuRow(
+                    rowName: AppLocalizations.filterByStandard,
+                    name: state.standardName,
+                    onPrevTap: () => bloc.add(PrevFilterSelectedEvent()),
+                    onNextTap: () => bloc.add(NextFilterSelectedEvent()),
+                  ),
+                ],
+              );
+            }
+
+            throw FallThroughError();
+          },
+        ),
       ),
     );
   }
 
-  Widget _generateGridTile(
-      Map<String, Map<String, ExamModel>> data, int index) {
-    List<Widget> widgetList = [
-      new Text(
-        data.keys.toList()[index],
-        style: new TextStyle(fontSize: 14.0, color: Colors.black),
-        textAlign: TextAlign.left,
-        maxLines: 5,
-      ),
-    ];
-    widgetList.addAll(_generateSecondTiles(data[data.keys.toList()[index]]));
-
-    return Container(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: widgetList,
-    ));
-  }
-
-  List<Widget> _generateSecondTiles(Map<String, ExamModel> data) {
-    List<Widget> widgetList = new List<Widget>();
-    data.forEach((k, v) {
-      if (k != ExamsDataNavigator.kNoTitleKey) {
-        widgetList.add(new Container(
-            padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-            child: new Text(
-              k,
-              style: new TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left,
-            )));
-      }
-      widgetList.add(ExamsStackedHorizontalBarChart.fromModel(v));
-    });
-    return widgetList;
+  void _handleErrorState(ExamsState state, BuildContext context) {
+    if (state is UnknownErrorState) {
+      showDialog(
+        context: context,
+        builder: (buildContext) {
+          return PlatformAlertDialog(
+            title: 'Error',
+            message: 'Unknown error occurred',
+          );
+        },
+      );
+    }
+    if (state is ServerUnavailableState) {
+      showDialog(
+        context: context,
+        builder: (buildContext) {
+          return PlatformAlertDialog(
+            title: 'Error',
+            message:
+                'Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
+          );
+        },
+      );
+    }
   }
 }
 
@@ -141,11 +152,56 @@ class _PopulatedContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
-      children: <Widget>[
-
-      ],
+    return SingleChildScrollView(
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 260),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ..._examResults.keys.map((it) {
+            final results = _examResults[it];
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    it,
+                    style: new TextStyle(fontSize: 14.0, color: Colors.black),
+                    textAlign: TextAlign.left,
+                    maxLines: 5,
+                  ),
+                  ...results.keys.map((it) {
+                    final chart =
+                        ExamsStackedHorizontalBarChart.fromModel(results[it]);
+                    if (it != ExamsDataNavigator.kNoTitleKey) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                            child: new Text(
+                              it,
+                              style: new TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          chart,
+                        ],
+                      );
+                    }
+                    return chart;
+                  }).toList(),
+                ],
+              ),
+            );
+          }).toList(),
+        ],
+      ),
     );
   }
 }
