@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
@@ -8,6 +9,7 @@ import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
@@ -41,6 +43,9 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     return BlocListener<AccreditationBloc, AccreditationState>(
       listener: (context, state) {
         updateFiltersVisibility(context);
+        if (state is ErrorState) {
+          _handleErrorState(state, context);
+        }
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -68,7 +73,12 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
           ),
         ),
         body: BlocBuilder<AccreditationBloc, AccreditationState>(
+          condition: (prevState, currentState) => !(currentState is ErrorState),
           builder: (context, state) {
+            if (state is InitialAccreditationState) {
+              return Container();
+            }
+
             if (state is LoadingAccreditationState) {
               return Center(
                 child: PlatformProgressIndicator(),
@@ -86,6 +96,32 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
         ),
       ),
     );
+  }
+
+  void _handleErrorState(AccreditationState state, BuildContext context) {
+    if (state is UnknownErrorState) {
+      showDialog(
+        context: context,
+        builder: (buildContext) {
+          return PlatformAlertDialog(
+            title: 'Error',
+            message: 'Unknown error occurred',
+          );
+        },
+      );
+    }
+    if (state is ServerUnavailableState) {
+      showDialog(
+        context: context,
+        builder: (buildContext) {
+          return PlatformAlertDialog(
+            title: 'Error',
+            message:
+                'Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
+          );
+        },
+      );
+    }
   }
 
   // TODO: rewrite filters

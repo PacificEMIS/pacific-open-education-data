@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
@@ -9,6 +10,7 @@ import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/multi_table.dart';
+import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
@@ -40,6 +42,9 @@ class TeachersPageState extends State<TeachersPage> {
     return BlocListener<TeachersBloc, TeachersState>(
       listener: (context, state) {
         updateFiltersVisibility(context);
+        if (state is ErrorState) {
+          _handleErrorState(state, context);
+        }
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -70,7 +75,12 @@ class TeachersPageState extends State<TeachersPage> {
           ),
         ),
         body: BlocBuilder<TeachersBloc, TeachersState>(
+          condition: (prevState, currentState) => !(currentState is ErrorState),
           builder: (context, state) {
+            if (state is InitialTeachersState) {
+              return Container();
+            }
+
             if (state is LoadingTeachersState) {
               return Center(
                 child: PlatformProgressIndicator(),
@@ -86,6 +96,32 @@ class TeachersPageState extends State<TeachersPage> {
         ),
       ),
     );
+  }
+
+  void _handleErrorState(TeachersState state, BuildContext context) {
+    if (state is UnknownErrorState) {
+      showDialog(
+        context: context,
+        builder: (buildContext) {
+          return PlatformAlertDialog(
+            title: 'Error',
+            message: 'Unknown error occurred',
+          );
+        },
+      );
+    }
+    if (state is ServerUnavailableState) {
+      showDialog(
+        context: context,
+        builder: (buildContext) {
+          return PlatformAlertDialog(
+            title: 'Error',
+            message:
+                'Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
+          );
+        },
+      );
+    }
   }
 
   // TODO: rewrite filters

@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
 import 'package:pacific_dashboards/data/repository.dart';
 import 'package:pacific_dashboards/models/teacher_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
 import './bloc.dart';
 
-class TeachersBloc extends Bloc<TeachersEvent, TeachersState> {
+class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
   TeachersBloc({Repository repository})
       : assert(repository != null),
         _repository = repository;
@@ -18,15 +18,29 @@ class TeachersBloc extends Bloc<TeachersEvent, TeachersState> {
   TeachersModel _teachersModel;
 
   @override
-  TeachersState get initialState => LoadingTeachersState();
+  TeachersState get initialState => InitialTeachersState();
+
+  @override
+  TeachersState get serverUnavailableState => ServerUnavailableState();
+
+  @override
+  TeachersState get unknownErrorState => UnknownErrorState();
 
   @override
   Stream<TeachersState> mapEventToState(
     TeachersEvent event,
   ) async* {
     if (event is StartedTeachersEvent) {
-      _teachersModel = await _repository.fetchAllTeachers();
-      yield UpdatedTeachersState(await _transformTeachersModel());
+      final currentState = state;
+      yield LoadingTeachersState();
+      yield* handleFetch(
+        beforeFetchState: currentState,
+        fetch: _repository.fetchAllTeachers,
+        onSuccess: (data) async {
+          _teachersModel = data;
+          return UpdatedTeachersState(await _transformTeachersModel());
+        },
+      );
     }
 
     if (event is FiltersAppliedTeachersEvent) {

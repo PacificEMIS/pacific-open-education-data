@@ -30,18 +30,13 @@ class App extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        accentColor: Colors.deepOrangeAccent[100],
+        accentColor: Colors.blue[100],
         fontFamily: 'Montserrat',
-        textTheme: TextTheme(
-          headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-        ),
       ),
       initialRoute: HomePage.kRoute,
       routes: {
         HomePage.kRoute: (context) => BlocProvider<HomeBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.homeBloc..add(StartedHomeEvent());
               },
               child: HomePage(),
@@ -51,20 +46,20 @@ class App extends StatelessWidget {
         "/Indicators": (context) => _NotImplementedPage(),
         SchoolAccreditationsPage.kRoute: (context) =>
             BlocProvider<AccreditationBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.schoolAccreditationsBloc
                   ..add(StartedAccreditationEvent());
               },
               child: SchoolAccreditationsPage(),
             ),
         SchoolsPage.kRoute: (context) => BlocProvider<SchoolsBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.schoolsBloc..add(StartedSchoolsEvent());
               },
               child: SchoolsPage(),
             ),
         TeachersPage.kRoute: (context) => BlocProvider<TeachersBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.teachersBloc..add(StartedTeachersEvent());
               },
               child: TeachersPage(),

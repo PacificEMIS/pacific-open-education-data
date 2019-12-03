@@ -10,8 +10,10 @@ class ExamsBloc extends BaseBloc<ExamsModel> {
   ExamsBloc({repository}) : super(repository: repository);
 
   fetchData() async {
-    var model = await repository.fetchAllExams();
-    _fetcher.add(model);
+    final examsStream = repository.fetchAllExams();
+    await for (var it in examsStream) {
+      _fetcher.add(it.data);
+    }
   }
 
   dispose() async {

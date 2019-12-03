@@ -1,19 +1,19 @@
-class ApiException implements Exception {
-  final String apiKey;
+abstract class RemoteException implements Exception {}
+
+class NoNewDataRemoteException implements RemoteException {
+  const NoNewDataRemoteException();
+}
+
+class UnavailableRemoteException implements RemoteException {
+  const UnavailableRemoteException();
+}
+
+class ApiRemoteException implements RemoteException {
+  const ApiRemoteException({this.url, this.code, this.message});
+
   final int code;
-
-  ApiException(this.apiKey, this.code);
-
-  String toString() {
-    return "ApiException: $apiKey respond with code:$code";
-  }
+  final String message;
+  final String url;
 }
 
-class NoNewRemoteDataException implements Exception {
-
-  NoNewRemoteDataException();
-
-  String toString() {
-    return "NoNewRemoteDataException";
-  }
-}
+class NoDataException implements Exception {}
