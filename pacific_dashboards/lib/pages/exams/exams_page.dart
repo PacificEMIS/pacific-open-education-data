@@ -11,9 +11,8 @@ import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
-// TODO: refactor
 class ExamsPage extends StatefulWidget {
-  static const String _kPageName = "Exams";
+  static const String kRoute = "/Exams";
 
   ExamsPage({Key key}) : super(key: key);
 
@@ -36,7 +35,7 @@ class ExamsPageState extends State<ExamsPage> {
         iconTheme: new IconThemeData(color: AppColors.kWhite),
         backgroundColor: AppColors.kRoyalBlue,
         title: Text(
-          ExamsPage._kPageName,
+          ExamsPage.kRoute,
           style: TextStyle(
             color: AppColors.kWhite,
             fontSize: 18.0,

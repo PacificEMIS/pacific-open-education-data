@@ -8,7 +8,7 @@ import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/school_accreditations_model.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
-import 'package:pacific_dashboards/utils/Exceptions.dart';
+import 'package:pacific_dashboards/utils/exceptions.dart';
 
 class ServerBackendProvider implements Provider {
   static const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
@@ -43,12 +43,21 @@ class ServerBackendProvider implements Provider {
     final Options options =
         !forced ? Options(headers: {'If-None-Match': existingEtag}) : null;
 
-    final response = await _dio.get(requestUrl, options: options);
+    Response<dynamic> response;
+    try {
+      response = await _dio.get(requestUrl, options: options);
+    } on DioError catch (_) {
+      throw UnavailableRemoteException();
+    }
 
     if (response.statusCode == 304) {
-      throw NoNewRemoteDataException();
+      throw NoNewDataRemoteException();
     } else if (response.statusCode != 200) {
-      throw ApiException(requestUrl, response.statusCode);
+      throw ApiRemoteException(
+        url: requestUrl,
+        code: response.statusCode,
+        message: response.data.toString(),
+      );
     }
 
     final responseEtag = response.headers.value("ETag");

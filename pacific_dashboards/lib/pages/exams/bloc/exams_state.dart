@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 
 abstract class ExamsState extends Equatable {
   const ExamsState();
@@ -9,6 +10,10 @@ abstract class ExamsState extends Equatable {
 }
 
 class InitialExamsState extends ExamsState {}
+
+class ServerUnavailableState extends ExamsState implements ErrorState {}
+
+class UnknownErrorState extends ExamsState implements ErrorState {}
 
 class LoadingExamsState extends ExamsState {}
 

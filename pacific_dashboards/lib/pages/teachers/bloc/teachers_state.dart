@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 
 abstract class TeachersState extends Equatable {
@@ -18,3 +19,9 @@ class UpdatedTeachersState extends TeachersState {
   @override
   List<Object> get props => [data];
 }
+
+class ServerUnavailableState extends TeachersState implements ErrorState {}
+
+class UnknownErrorState extends TeachersState implements ErrorState {}
+
+class InitialTeachersState extends TeachersState {}

@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/data/repository.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/school_accreditation_model.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
 import './bloc.dart';
 
-class AccreditationBloc extends Bloc<AccreditationEvent, AccreditationState> {
+class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState> {
   AccreditationBloc({@required Repository repository})
       : assert(repository != null),
         _repository = repository;
@@ -17,15 +17,29 @@ class AccreditationBloc extends Bloc<AccreditationEvent, AccreditationState> {
   SchoolAccreditationsChunk _chunk;
 
   @override
-  AccreditationState get initialState => LoadingAccreditationState();
+  AccreditationState get initialState => InitialAccreditationState();
+
+  @override
+  AccreditationState get serverUnavailableState => ServerUnavailableState();
+
+  @override
+  AccreditationState get unknownErrorState => UnknownErrorState();
 
   @override
   Stream<AccreditationState> mapEventToState(
     AccreditationEvent event,
   ) async* {
     if (event is StartedAccreditationEvent) {
-      _chunk = await _repository.fetchAllAccreditaitons();
-      yield UpdatedAccreditationState(_calculateData());
+      final currentState = state;
+      yield LoadingAccreditationState();
+      yield* handleFetch(
+        beforeFetchState: currentState,
+        fetch: _repository.fetchAllAccreditaitons,
+        onSuccess: (data) async {
+          _chunk = data;
+          return UpdatedAccreditationState(_calculateData());
+        },
+      );
     }
 
     if (event is FiltersAppliedAccreditationEvent) {
@@ -57,14 +71,16 @@ class AccreditationBloc extends Bloc<AccreditationEvent, AccreditationState> {
   }
 
   MultitableData _collectAccreditationStatusByState() {
-    return _generateMultitableData(_chunk.statesChunk.getSortedWithFiltersByState());
+    return _generateMultitableData(
+        _chunk.statesChunk.getSortedWithFiltersByState());
   }
 
   MultitableData _collectPerformanceByStandard() {
     return _generateMultitableData(_chunk.standardsChunk.getSortedByStandart());
   }
 
-  MultitableData _generateMultitableData(Map<String, List<SchoolAccreditationModel>> data) {
+  MultitableData _generateMultitableData(
+      Map<String, List<SchoolAccreditationModel>> data) {
     return MultitableData(
       evaluatedData: _generateAccreditationTableData(
         data,

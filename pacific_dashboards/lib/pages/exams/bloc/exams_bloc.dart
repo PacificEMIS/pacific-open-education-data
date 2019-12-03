@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/data/repository.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import './bloc.dart';
 
-class ExamsBloc extends Bloc<ExamsEvent, ExamsState> {
+class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
   ExamsBloc({@required Repository repository})
       : assert(repository != null),
         _repository = repository;
@@ -18,11 +18,24 @@ class ExamsBloc extends Bloc<ExamsEvent, ExamsState> {
   ExamsState get initialState => InitialExamsState();
 
   @override
+  ExamsState get serverUnavailableState => ServerUnavailableState();
+
+  @override
+  ExamsState get unknownErrorState => UnknownErrorState();
+
+  @override
   Stream<ExamsState> mapEventToState(ExamsEvent event) async* {
     if (event is StartedExamsEvent) {
+      final currentState = state;
       yield LoadingExamsState();
-      _examsModel = await _repository.fetchAllExams();
-      yield PopulatedExamsState(await _convertExams());
+      yield* handleFetch(
+        beforeFetchState: currentState,
+        fetch: _repository.fetchAllSchools,
+        onSuccess: (data) async {
+          _examsModel = data;
+          return PopulatedExamsState(await _convertExams());
+        },
+      );
     }
 
     if (event is PrevExamSelectedEvent) {
@@ -57,6 +70,6 @@ class ExamsBloc extends Bloc<ExamsEvent, ExamsState> {
   }
 
   Future<Map<String, Map<String, ExamModel>>> _convertExams() {
-    return Future(() => _examsModel.examsDataNavigator.getExamResults()); 
+    return Future(() => _examsModel.examsDataNavigator.getExamResults());
   }
 }

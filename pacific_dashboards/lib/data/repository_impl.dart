@@ -6,7 +6,7 @@ import 'package:pacific_dashboards/models/lookups_model.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
-import 'package:pacific_dashboards/utils/Exceptions.dart';
+import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RepositoryImpl implements Repository {
@@ -19,131 +19,136 @@ class RepositoryImpl implements Repository {
         _fileProvider = fileProvider;
 
   @override
-  Future<TeachersModel> fetchAllTeachers() async {
-    final lookups = await fetchAllLookups();
-    // TeachersModel result;
-
-    // try {
-    //   result = await _backendProvider.fetchTeachersModel();
-    //   await _fileProvider.saveTeachersModel(result);
-    // } on NoNewRemoteDataException catch (_) {
-    //   result = await _fileProvider.fetchTeachersModel();
-    // }
-
-    // result.lookupsModel = lookups;
-    // return result;
-    // TODO: deprecated. Use code above when ETag will be added to request
-    TeachersModel result;
-
-    result = await _fileProvider.fetchTeachersModel();
-    if (result == null) {
-      try {
-        result = await _backendProvider.fetchTeachersModel();
-        await _fileProvider.saveTeachersModel(result);
-      } on NoNewRemoteDataException catch (_) {
-        // nothing: silence ETag presence 
-      }
-    }
-
-    if (result != null) {
-      result.lookupsModel = lookups;
-    }
-
-    return result;
+  Stream<RepositoryResponse<TeachersModel>> fetchAllTeachers() async* {
+    yield* _fetchWithoutEtag(
+      getLocal: _fileProvider.fetchTeachersModel,
+      getRemote: _backendProvider.fetchTeachersModel,
+      updateLocal: _fileProvider.saveTeachersModel,
+      lookupsSetter: (result, lookups) => result.lookupsModel = lookups,
+    );
   }
 
   @override
-  Future<SchoolsModel> fetchAllSchools() async {
-    final lookups = await fetchAllLookups();
-    SchoolsModel result;
-
-    try {
-      result = await _backendProvider.fetchSchoolsModel();
-      await _fileProvider.saveSchoolsModel(result);
-    } on NoNewRemoteDataException catch (_) {
-      result = await _fileProvider.fetchSchoolsModel();
-    }
-
-    result.lookupsModel = lookups;
-    return result;
+  Stream<RepositoryResponse<SchoolsModel>> fetchAllSchools() async* {
+    yield* _fetchWithEtag(
+      getLocal: _fileProvider.fetchSchoolsModel,
+      getRemote: _backendProvider.fetchSchoolsModel,
+      updateLocal: _fileProvider.saveSchoolsModel,
+      lookupsSetter: (result, lookups) => result.lookupsModel = lookups,
+    );
   }
 
   @override
-  Future<ExamsModel> fetchAllExams() async {
-    final lookups = await fetchAllLookups();
-    // ExamsModel result;
-
-    // try {
-    //   result = await _backendProvider.fetchExamsModel();
-    //   await _fileProvider.saveExamsModel(result);
-    // } on NoNewRemoteDataException catch (_) {
-    //   result = await _fileProvider.fetchExamsModel();
-    // }
-
-    // result.lookupsModel = lookups;
-    // return result;
-    // TODO: deprecated. Use code above when ETag will be added to request
-    ExamsModel result;
-
-    result = await _fileProvider.fetchExamsModel();
-    if (result == null) {
-      try {
-        result = await _backendProvider.fetchExamsModel();
-        await _fileProvider.saveExamsModel(result);
-      } on NoNewRemoteDataException catch (_) {
-        // nothing: silence ETag presence 
-      }
-    }
-
-    if (result != null) {
-      result.lookupsModel = lookups;
-    }
-
-    return result;
+  Stream<RepositoryResponse<ExamsModel>> fetchAllExams() async* {
+    yield* _fetchWithoutEtag(
+      getLocal: _fileProvider.fetchExamsModel,
+      getRemote: _backendProvider.fetchExamsModel,
+      updateLocal: _fileProvider.saveExamsModel,
+      lookupsSetter: (result, lookups) => result.lookupsModel = lookups,
+    );
   }
 
   @override
-  Future<SchoolAccreditationsChunk> fetchAllAccreditaitons() async {
-    final lookups = await fetchAllLookups();
-    SchoolAccreditationsChunk result;
-
-    try {
-      result = await _backendProvider.fetchSchoolAccreditationsChunk();
-      await _fileProvider.saveSchoolAccreditaitonsChunk(result);
-    } on NoNewRemoteDataException catch (_) {
-      result = await _fileProvider.fetchSchoolAccreditationsChunk();
-    }
-
-    result.statesChunk.lookupsModel = lookups;
-    result.standardsChunk.lookupsModel = lookups;
-    return result;
+  Stream<RepositoryResponse<SchoolAccreditationsChunk>>
+      fetchAllAccreditaitons() async* {
+    yield* _fetchWithEtag(
+      getLocal: _fileProvider.fetchSchoolAccreditationsChunk,
+      getRemote: _backendProvider.fetchSchoolAccreditationsChunk,
+      updateLocal: _fileProvider.saveSchoolAccreditaitonsChunk,
+      lookupsSetter: (result, lookups) {
+        result.statesChunk.lookupsModel = lookups;
+        result.standardsChunk.lookupsModel = lookups;
+      },
+    );
   }
 
-  @override
-  Future<LookupsModel> fetchAllLookups() async {
-    // LookupsModel result;
-
-    // try {
-    //   result = await _backendProvider.fetchLookupsModel();
-    //   await _fileProvider.saveLookupsModel(result);
-    // } on NoNewRemoteDataException catch (_) {
-    //   result = await _fileProvider.fetchLookupsModel();
-    // }
-
-    // return result;
-    // TODO: deprecated. Use code above when ETag will be added to request
+  Future<LookupsModel> _fetchAllLookups() async {
     LookupsModel result;
 
     result = await _fileProvider.fetchLookupsModel();
+
     if (result == null) {
-      try {
-        result = await _backendProvider.fetchLookupsModel();
-        await _fileProvider.saveLookupsModel(result);
-      } on NoNewRemoteDataException catch (_) {
-        // nothing: silence ETag presence 
-      }
+      result = await _backendProvider.fetchLookupsModel();
+      await _fileProvider.saveLookupsModel(result);
     }
 
+    if (result == null) throw NoDataException();
+
     return result;
+  }
+
+  Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({
+    Future<T> getLocal(),
+    Future<T> getRemote(),
+    Future<void> updateLocal(T remote),
+    void lookupsSetter(T result, LookupsModel lookups),
+  }) async* {
+    LookupsModel lookups;
+    try {
+      lookups = await _fetchAllLookups();
+    } catch (ex) {
+      yield FailureRepositoryResponse(RepositoryType.local, ex);
+      yield FailureRepositoryResponse(RepositoryType.remote, ex);
+      return;
+    }
+
+    T result = await getLocal();
+
+    if (result != null) {
+      lookupsSetter(result, lookups);
+      yield SuccessRepositoryResponse(RepositoryType.local, result);
+      yield SuccessRepositoryResponse(RepositoryType.remote, result);
+    } else {
+      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
+      try {
+        result = await getRemote();
+        await updateLocal(result);
+        lookupsSetter(result, lookups);
+        yield SuccessRepositoryResponse(RepositoryType.remote, result);
+      } catch (ex) {
+        yield FailureRepositoryResponse(RepositoryType.remote, ex);
+      }
+    }
+  }
+
+  Stream<RepositoryResponse<T>> _fetchWithEtag<T>({
+    Future<T> getLocal(),
+    Future<T> getRemote(),
+    Future<void> updateLocal(T remote),
+    void lookupsSetter(T result, LookupsModel lookups),
+  }) async* {
+    LookupsModel lookups;
+    try {
+      lookups = await _fetchAllLookups();
+    } catch (ex) {
+      yield FailureRepositoryResponse(RepositoryType.local, ex);
+      yield FailureRepositoryResponse(RepositoryType.remote, ex);
+      return;
+    }
+
+    T result = await getLocal();
+
+    if (result != null) {
+      lookupsSetter(result, lookups);
+      yield SuccessRepositoryResponse(RepositoryType.local, result);
+    } else {
+      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
+    }
+
+    try {
+      result = await getRemote();
+      await updateLocal(result);
+      lookupsSetter(result, lookups);
+      yield SuccessRepositoryResponse(RepositoryType.remote, result);
+    } on NoNewDataRemoteException catch (_) {
+      if (result != null) {
+        yield SuccessRepositoryResponse(RepositoryType.remote, result);
+      } else {
+        yield FailureRepositoryResponse(
+            RepositoryType.remote, NoDataException());
+      }
+    } catch (ex) {
+      yield FailureRepositoryResponse(RepositoryType.remote, ex);
+    }
   }
 }

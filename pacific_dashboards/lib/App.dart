@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
@@ -30,13 +31,8 @@ class App extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        accentColor: Colors.deepOrangeAccent[100],
+        accentColor: Colors.blue[100],
         fontFamily: 'Montserrat',
-        textTheme: TextTheme(
-          headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-        ),
         bottomSheetTheme: BottomSheetThemeData(
           backgroundColor: Colors.transparent,
         ),
@@ -44,34 +40,39 @@ class App extends StatelessWidget {
       initialRoute: HomePage.kRoute,
       routes: {
         HomePage.kRoute: (context) => BlocProvider<HomeBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.homeBloc..add(StartedHomeEvent());
               },
               child: HomePage(),
             ),
-        "/Budgets": (context) => _NotImplementedPage(),
-        "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
-        "/Indicators": (context) => _NotImplementedPage(),
+        ExamsPage.kRoute: (context) => BlocProvider<ExamsBloc>(
+              create: (context) {
+                return injector.examsBloc..add(StartedExamsEvent());
+              },
+              child: ExamsPage(),
+            ),
         SchoolAccreditationsPage.kRoute: (context) =>
             BlocProvider<AccreditationBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.schoolAccreditationsBloc
                   ..add(StartedAccreditationEvent());
               },
               child: SchoolAccreditationsPage(),
             ),
         SchoolsPage.kRoute: (context) => BlocProvider<SchoolsBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.schoolsBloc..add(StartedSchoolsEvent());
               },
               child: SchoolsPage(),
             ),
         TeachersPage.kRoute: (context) => BlocProvider<TeachersBloc>(
-              builder: (context) {
+              create: (context) {
                 return injector.teachersBloc..add(StartedTeachersEvent());
               },
               child: TeachersPage(),
             ),
+        "/Budgets": (context) => _NotImplementedPage(),
+        "/Indicators": (context) => _NotImplementedPage(),
       },
     );
   }
