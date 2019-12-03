@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "displayAllStates" : MessageLookupByLibrary.simpleMessage("Display All States"),
     "districtStatus" : MessageLookupByLibrary.simpleMessage("District Status"),
     "earlyChildhood" : MessageLookupByLibrary.simpleMessage("Early Childhood"),
+    "error" : MessageLookupByLibrary.simpleMessage("Error"),
     "evaluatedIn" : MessageLookupByLibrary.simpleMessage("Evaluated in %s"),
     "exam" : MessageLookupByLibrary.simpleMessage("Exam"),
     "exams" : MessageLookupByLibrary.simpleMessage("Exams"),
@@ -73,6 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "schoolsEnrollmentByState" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by State"),
     "schoolsEnrollmentGovtNonGovt" : MessageLookupByLibrary.simpleMessage("Schools Enrollment Govt / \nNon-govt"),
     "secondary" : MessageLookupByLibrary.simpleMessage("Secondary"),
+    "serverUnavailableError" : MessageLookupByLibrary.simpleMessage("Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection."),
     "splash" : MessageLookupByLibrary.simpleMessage("\nPACIFIC OPEN\n EDUCATION DATA"),
     "standard" : MessageLookupByLibrary.simpleMessage("Standard "),
     "state" : MessageLookupByLibrary.simpleMessage("State"),
@@ -82,6 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "teachersByState" : MessageLookupByLibrary.simpleMessage("Teachers by State"),
     "teachersEnrollmentGovtNonGovt" : MessageLookupByLibrary.simpleMessage("Teachers by Govt / \nNon-govt"),
     "total" : MessageLookupByLibrary.simpleMessage("Total"),
+    "unknownError" : MessageLookupByLibrary.simpleMessage("Unknown error occurred"),
     "view" : MessageLookupByLibrary.simpleMessage("View")
   };
 }
