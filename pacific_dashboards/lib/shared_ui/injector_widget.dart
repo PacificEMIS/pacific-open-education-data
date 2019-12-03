@@ -4,7 +4,7 @@ import 'package:pacific_dashboards/data/local/file_provider_impl.dart';
 import 'package:pacific_dashboards/data/remote/backend_provider.dart';
 import 'package:pacific_dashboards/data/repository.dart';
 import 'package:pacific_dashboards/data/repository_impl.dart';
-import 'package:pacific_dashboards/pages/exams/exams_bloc.dart';
+import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
@@ -24,7 +24,6 @@ class InjectorWidget extends InheritedWidget {
         as InjectorWidget;
   }
 
-  ExamsBloc _examsBloc;
   Repository _repository;
   SharedPreferences _sharedPreferences;
   GlobalSettings _globalSettings;
@@ -50,13 +49,7 @@ class InjectorWidget extends InheritedWidget {
 
   TeachersBloc get teachersBloc => TeachersBloc(repository: _repository);
 
-  ExamsBloc get examsBloc {
-    if (_examsBloc == null) {
-      _examsBloc = ExamsBloc(repository: _repository);
-    }
-
-    return _examsBloc;
-  }
+  ExamsBloc get examsBloc => ExamsBloc(repository: _repository);
 
   AccreditationBloc get schoolAccreditationsBloc => AccreditationBloc(repository: _repository);
 

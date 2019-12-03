@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
@@ -32,6 +33,9 @@ class App extends StatelessWidget {
         primaryColor: Colors.white,
         accentColor: Colors.blue[100],
         fontFamily: 'Montserrat',
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.transparent,
+        ),
       ),
       initialRoute: HomePage.kRoute,
       routes: {
@@ -41,9 +45,12 @@ class App extends StatelessWidget {
               },
               child: HomePage(),
             ),
-        "/Budgets": (context) => _NotImplementedPage(),
-        "/Exams": (context) => ExamsPage(bloc: injector.examsBloc),
-        "/Indicators": (context) => _NotImplementedPage(),
+        ExamsPage.kRoute: (context) => BlocProvider<ExamsBloc>(
+              create: (context) {
+                return injector.examsBloc..add(StartedExamsEvent());
+              },
+              child: ExamsPage(),
+            ),
         SchoolAccreditationsPage.kRoute: (context) =>
             BlocProvider<AccreditationBloc>(
               create: (context) {
@@ -64,6 +71,8 @@ class App extends StatelessWidget {
               },
               child: TeachersPage(),
             ),
+        "/Budgets": (context) => _NotImplementedPage(),
+        "/Indicators": (context) => _NotImplementedPage(),
       },
     );
   }

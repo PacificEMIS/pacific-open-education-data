@@ -13,7 +13,7 @@ abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
   Stream<State> handleFetch<T>({
     @required State beforeFetchState,
     @required Stream<RepositoryResponse<T>> fetch(),
-    @required Future<State> onSuccess(T data),
+    @required Stream<State> onSuccess(T data),
   }) async* {
     Stream<State> passStatesOnError(State errorState) async* {
       yield beforeFetchState;
@@ -25,7 +25,7 @@ abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
       var isCacheEmpty = false;
       await for (var response in fetchStream) {
         if (response is SuccessRepositoryResponse) {
-          yield await onSuccess(response.data);
+          yield* onSuccess(response.data);
         } else if (response is FailureRepositoryResponse) {
           switch (response.type) {
             case RepositoryType.local:

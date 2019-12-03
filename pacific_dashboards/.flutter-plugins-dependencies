@@ -1,0 +1,1 @@
+{"dependencyGraph":[{"name":"firebase_core","dependencies":[]},{"name":"firebase_crashlytics","dependencies":[]},{"name":"path_provider","dependencies":[]},{"name":"shared_preferences","dependencies":[]}]}

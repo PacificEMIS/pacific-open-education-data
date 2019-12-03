@@ -104,8 +104,8 @@ class TeachersPageState extends State<TeachersPage> {
         context: context,
         builder: (buildContext) {
           return PlatformAlertDialog(
-            title: 'Error',
-            message: 'Unknown error occurred',
+            title: AppLocalizations.error,
+            message: AppLocalizations.unknownError,
           );
         },
       );
@@ -115,9 +115,8 @@ class TeachersPageState extends State<TeachersPage> {
         context: context,
         builder: (buildContext) {
           return PlatformAlertDialog(
-            title: 'Error',
-            message:
-                'Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
+            title: AppLocalizations.error,
+            message: AppLocalizations.serverUnavailableError,
           );
         },
       );
