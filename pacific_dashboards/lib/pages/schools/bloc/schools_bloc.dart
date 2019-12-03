@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
 import 'package:pacific_dashboards/data/repository.dart';
 import 'package:pacific_dashboards/models/school_model.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
+import 'package:pacific_dashboards/pages/base/base_bloc.dart';
+import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
-import './bloc.dart';
 
-class SchoolsBloc extends Bloc<SchoolsEvent, SchoolsState> {
+class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
   SchoolsBloc({Repository repository})
       : assert(repository != null),
         _repository = repository;
@@ -18,15 +18,27 @@ class SchoolsBloc extends Bloc<SchoolsEvent, SchoolsState> {
   SchoolsModel _schoolsModel;
 
   @override
-  SchoolsState get initialState => LoadingSchoolsState();
+  SchoolsState get initialState => InitialSchoolsState();
 
   @override
-  Stream<SchoolsState> mapEventToState(
-    SchoolsEvent event,
-  ) async* {
+  SchoolsState get serverUnavailableState => ServerUnavailableState();
+
+  @override
+  SchoolsState get unknownErrorState => UnknownErrorState();
+
+  @override
+  Stream<SchoolsState> mapEventToState(SchoolsEvent event) async* {
     if (event is StartedSchoolsEvent) {
-      _schoolsModel = await _repository.fetchAllSchools();
-      yield UpdatedSchoolsState(await _transformSchoolsModel());
+      final currentState = state;
+      yield LoadingSchoolsState();
+      yield* handleFetch(
+        beforeFetchState: currentState,
+        fetch: _repository.fetchAllSchools,
+        onSuccess: (data) async {
+          _schoolsModel = data;
+          return UpdatedSchoolsState(await _transformSchoolsModel());
+        },
+      );
     }
 
     if (event is FiltersAppliedSchoolsEvent) {
@@ -45,7 +57,8 @@ class SchoolsBloc extends Bloc<SchoolsEvent, SchoolsState> {
       enrollmentByPrivacy:
           _calculatePeopleCount(_schoolsModel.getSortedWithFiltersByGovt()),
       enrollmentByAgeAndEducation: _calculateEnrollmentByAgeAndEducation(),
-      enrollmentBySchoolLevelAndState: _calculateEnrollmentBySchoolLevelAndState(),
+      enrollmentBySchoolLevelAndState:
+          _calculateEnrollmentBySchoolLevelAndState(),
     );
   }
 
