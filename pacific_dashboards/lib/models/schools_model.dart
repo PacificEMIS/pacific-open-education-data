@@ -117,49 +117,33 @@ class SchoolsModel extends ModelWithLookups {
   }
 
   Map<String, List<SchoolModel>> getGroupedByAgeFileteredByEducationLevel(
-      EducationLevel level) {
+    EducationLevel level,
+  ) {
+    final levelCode = _convertToLevelCode(level);
     var filteredList = _filteredSchools;
-
-    switch (level) {
-      case EducationLevel.all:
-        break;
-      case EducationLevel.earlyChildhood:
-        filteredList =
-            filteredList.where((i) => ["GK"].contains(i.classLevel)).toList();
-        break;
-      case EducationLevel.primary:
-        filteredList = filteredList
-            .where((i) => ["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"]
-                .contains(i.classLevel))
-            .toList();
-        break;
-      case EducationLevel.secondary:
-        filteredList = filteredList
-            .where((i) => ["G9", "G10", "G11", "G12"].contains(i.classLevel))
-            .toList();
-        break;
-      case EducationLevel.postSecondary:
-        filteredList = filteredList
-            .where((i) => ![
-                  "GK",
-                  "G1",
-                  "G2",
-                  "G3",
-                  "G4",
-                  "G5",
-                  "G6",
-                  "G7",
-                  "G8",
-                  "G9",
-                  "G10",
-                  "G11",
-                  "G12"
-                ].contains(i.classLevel))
-            .toList();
-        break;
+    if (level != EducationLevel.all) {
+      filteredList = _filteredSchools.where((it) {
+        return lookupsModel.getEducationLevel(it.classLevel) == levelCode;
+      }).toList();
     }
-
     return groupBy(filteredList, (obj) => obj.ageGroup);
+  }
+
+  String _convertToLevelCode(EducationLevel educationLevel) {
+    switch (educationLevel) {
+      case EducationLevel.all:
+        return null;
+      case EducationLevel.earlyChildhood:
+        return 'ECE';
+      case EducationLevel.primary:
+        return 'PRI';
+      case EducationLevel.secondary:
+        return 'SEC';
+      case EducationLevel.postSecondary:
+        return 'PSE';
+      default:
+        throw FallThroughError();
+    }
   }
 
   void _createFilters() {
