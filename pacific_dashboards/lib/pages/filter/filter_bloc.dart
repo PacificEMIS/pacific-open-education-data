@@ -8,7 +8,7 @@ class FilterBloc {
 
   String _tempSelectedKey = "";
 
-  Observable<Filter> get data => _fetcher.stream;
+  Stream<Filter> get data => _fetcher.stream;
 
   FilterBloc({this.filter, this.defaultSelectedKey});
 

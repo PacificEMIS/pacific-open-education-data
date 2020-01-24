@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 160,
                   width: 160,
-                  child: Image.asset(logoPathForEmis(state.emis)),
+                  child: Image.asset(state.emis.logo),
                 ),
                 Container(
                   height: 96,
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                           state.emis == Emis.fedemis
                               ? AppLocalizations
                                   .federatedStateOfMicronesiaSplitted
-                              : nameOfEmis(state.emis),
+                              : state.emis.name,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontStyle: FontStyle.normal,
@@ -127,8 +127,8 @@ class _CountrySelectDialog extends StatelessWidget {
       height: 244,
       child: AlertDialog(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0))),
-        contentPadding: EdgeInsets.only(top: 10.0, right: 0),
+            borderRadius: BorderRadius.all(const Radius.circular(8.0))),
+        contentPadding: const EdgeInsets.only(top: 10.0, right: 0),
         title: Text(
           AppLocalizations.changeCountry,
           style: TextStyle(
@@ -144,35 +144,55 @@ class _CountrySelectDialog extends StatelessWidget {
               top: 10.0, bottom: 10.0, left: 0.0, right: 0.0),
           child: Column(children: [
             ...Emis.values.map((emis) {
-              return Expanded(
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _homeBloc.add(EmisChanged(emis));
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.only(left: 30.0),
-                          child: Image.asset(
-                            logoPathForEmis(emis),
-                            width: 40,
-                            height: 40,
-                          )),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 20.0),
-                          child: Text(nameOfEmis(emis),
-                              style: TextStyle(fontFamily: "NotoSans")),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              return _Country(
+                emis: emis,
+                bloc: _homeBloc,
               );
             }),
           ]),
+        ),
+      ),
+    );
+  }
+}
+
+class _Country extends StatelessWidget {
+  final Emis _emis;
+  final HomeBloc _bloc;
+
+  const _Country({
+    Key key,
+    @required Emis emis,
+    @required HomeBloc bloc,
+  })  : assert(emis != null),
+        assert(bloc != null),
+        _emis = emis,
+        _bloc = bloc,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          Navigator.of(context).pop();
+          _bloc.add(EmisChanged(_emis));
+        },
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 30.0),
+              child: Image.asset(_emis.logo, width: 40, height: 40),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 20.0),
+                child:
+                    Text(_emis.name, style: TextStyle(fontFamily: "NotoSans")),
+              ),
+            ),
+          ],
         ),
       ),
     );

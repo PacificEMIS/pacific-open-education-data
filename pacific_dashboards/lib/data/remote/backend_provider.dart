@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/data/global_settings.dart';
 import 'package:pacific_dashboards/data/provider.dart';
+import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups_model.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
@@ -10,12 +15,17 @@ import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
+const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
+const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis";
+const _kKiribatiUrl = "https://data.moe.gov.ki/kemis";
+
 class ServerBackendProvider implements Provider {
-  static const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
-  static const kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis";
-  static const kTeachersApiKey = "warehouse/teachercount";
-  static const kSchoolsApiKey = "warehouse/tableenrol";
-  static const kExamsApiKey = "warehouse/examsdistrictresults";
+  static const platform =
+      const MethodChannel('fm.doe.national.pacific_dashboards/api');
+
+  static const _kTeachersApiKey = "warehouse/teachercount";
+  static const _kSchoolsApiKey = "warehouse/tableenrol";
+  static const _kExamsApiKey = "warehouse/examsdistrictresults";
   static const _kSchoolAccreditationsByStateApiKey =
       "warehouse/accreditations/table?byState";
   static const _kSchoolAccreditationsByStandardApiKey =
@@ -31,23 +41,39 @@ class ServerBackendProvider implements Provider {
       receiveTimeout: Duration(minutes: 1).inMilliseconds,
     ))
       ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter)?.onHttpClientCreate =
+        (client) {
+      client.badCertificateCallback = (cert, host, port) {
+        print("badCertificateCallback cert=$cert host=$host port=$port");
+        return true;
+      };
+    };
   }
 
   Future<dynamic> _get({@required String path, bool forced = false}) async {
-    final baseUrl = _settings.currentEmis == GlobalSettings.kDefaultEmis
-        ? _kFederalStatesOfMicronesiaUrl
-        : kMarshalIslandsUrl;
-
-    final requestUrl = '$baseUrl/api/$path';
-    final existingEtag = _settings.getEtag(requestUrl);
-    final Options options =
-        !forced ? Options(headers: {'If-None-Match': existingEtag}) : null;
-
+    final requestUrl = '${_settings.currentEmis.baseUrl}/api/$path';
+    final existingEtag = forced ? null : _settings.getEtag(requestUrl);
+    var headers = {
+      'Accept-Encoding': 'gzip, deflate',
+    };
+    if (existingEtag != null) {
+      headers['If-None-Match'] = existingEtag;
+    }
+    final options = Options(headers: headers);
     Response<dynamic> response;
+
     try {
       response = await _dio.get(requestUrl, options: options);
-    } on DioError catch (_) {
-      throw UnavailableRemoteException();
+    } on DioError catch (error) {
+      print(error.message);
+      // https://github.com/flutter/flutter/issues/41573
+      if (error.message.contains('full header') ||
+          error.message.contains('HttpException: ,')) {
+        response = await _fallbackApiGetCall(requestUrl, existingEtag);
+      } else {
+        throw UnavailableRemoteException();
+      }
     }
 
     if (response.statusCode == 304) {
@@ -71,21 +97,21 @@ class ServerBackendProvider implements Provider {
   @override
   Future<TeachersModel> fetchTeachersModel({bool force = false}) async {
     final responseData = await _get(
-        path: kTeachersApiKey,
+        path: _kTeachersApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
     return TeachersModel.fromJson(responseData);
   }
 
   @override
   Future<SchoolsModel> fetchSchoolsModel({bool force = false}) async {
-    final responseData = await _get(path: kSchoolsApiKey);
+    final responseData = await _get(path: _kSchoolsApiKey);
     return SchoolsModel.fromJson(responseData);
   }
 
   @override
   Future<ExamsModel> fetchExamsModel({bool force = false}) async {
     final responseData = await _get(
-        path: kExamsApiKey,
+        path: _kExamsApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
     return ExamsModel.fromJson(responseData);
   }
@@ -108,5 +134,32 @@ class ServerBackendProvider implements Provider {
         path: _kLookupsApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
     return LookupsModel.fromJson(responseData);
+  }
+
+  Future<Response<dynamic>> _fallbackApiGetCall(String url, String eTag) async {
+    final result = await platform.invokeMethod('apiGet', {
+      'url': url,
+      'eTag': eTag,
+    });
+    print(result);
+    return Response(
+      headers: Headers.fromMap({'ETag': result['etag']}),
+      statusCode: result['code'],
+      data: json.decode(result['body']),
+    );
+  }
+}
+
+extension Urls on Emis {
+  String get baseUrl {
+    switch (this) {
+      case Emis.miemis:
+        return _kFederalStatesOfMicronesiaUrl;
+      case Emis.fedemis:
+        return _kMarshalIslandsUrl;
+      case Emis.kemis:
+        return _kKiribatiUrl;
+    }
+    throw FallThroughError();
   }
 }

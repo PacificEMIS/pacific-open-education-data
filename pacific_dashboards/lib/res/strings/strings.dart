@@ -37,6 +37,7 @@ class AppLocalizations {
   static String get federatedStateOfMicronesia =>
       Intl.message('Federated States of Micronesia',
           name: 'federatedStateOfMicronesia');
+  static String get kiribati => Intl.message('Republic of Kiribati', name: 'kiribati');
   static String get federatedStateOfMicronesiaSplitted =>
       Intl.message('Federated States \nof Micronesia',
           name: 'federatedStateOfMicronesiaSplitted');
@@ -173,7 +174,7 @@ class AppLocalizations {
       Intl.message('Unknown error occurred', name: 'unknownError');
 
   static String get serverUnavailableError =>
-      Intl.message('Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.', name: 'serverUnavailableError');
+      Intl.message('You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.', name: 'serverUnavailableError');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
