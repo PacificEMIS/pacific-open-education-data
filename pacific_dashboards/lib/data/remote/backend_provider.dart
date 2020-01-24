@@ -137,16 +137,22 @@ class ServerBackendProvider implements Provider {
   }
 
   Future<Response<dynamic>> _fallbackApiGetCall(String url, String eTag) async {
-    final result = await platform.invokeMethod('apiGet', {
+    final Map result = await platform.invokeMethod('apiGet', {
       'url': url,
       'eTag': eTag,
     });
     print(result);
-    return Response(
-      headers: Headers.fromMap({'ETag': result['etag']}),
-      statusCode: result['code'],
-      data: json.decode(result['body']),
-    );
+    try {
+      final response = Response(
+        headers: Headers.fromMap({ 'ETag': [result['eTag']] }),
+        statusCode: result['code'],
+        data: json.decode(result['body']),
+      );
+      return response;
+    } catch (er) {
+      print(er);
+      rethrow;
+    }
   }
 }
 

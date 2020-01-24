@@ -20,7 +20,7 @@ class MainActivity : FlutterActivity() {
         MethodChannel(flutterView, "fm.doe.national.pacific_dashboards/api")
                 .setMethodCallHandler { call, result ->
                     when (call.method) {
-                        "apiGet" -> handleApiGet(call.argument("url")!!, call.argument("etag"), result)
+                        "apiGet" -> handleApiGet(call.argument("url")!!, call.argument("eTag"), result)
                         else -> result.notImplemented()
                     }
                 }
@@ -41,7 +41,6 @@ class MainActivity : FlutterActivity() {
             runOnUiThread {
                 result.success(mapOf(
                         "code" to response.code,
-                        "isSuccessful" to response.isSuccessful,
                         "eTag" to response.header("ETag"),
                         "body" to body
                 ))
