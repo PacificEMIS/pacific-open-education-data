@@ -30,7 +30,6 @@ class InfoTableWidget extends StatefulWidget {
     @required String firstColumnName,
     KeySortFunc keySortFunc,
   })  : assert(data != null),
-        assert(title != null),
         assert(firstColumnName != null),
         _data = data,
         _title = title,
@@ -110,7 +109,7 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
             child: Row(
               children: <Widget>[
                 Text(
-                  widget._title,
+                  widget._title ?? 'null',
                   style: TextStyle(
                     fontSize: 14.0,
                     color: widget._titleTextColor,
