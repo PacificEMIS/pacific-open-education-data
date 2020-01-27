@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                     alignment: Alignment.center,
                     child: SectionsGrid(
-                      emis: state.emis,
+                      sections: state.sections,
                     ))
               ]);
             }

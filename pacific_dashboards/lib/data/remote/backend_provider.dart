@@ -4,7 +4,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:pacific_dashboards/data/global_settings.dart';
+import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/provider.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';

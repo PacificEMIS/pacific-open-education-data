@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:pacific_dashboards/data/global_settings.dart';
+import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/local/file_provider.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups_model.dart';

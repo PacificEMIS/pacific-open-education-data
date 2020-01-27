@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/data/global_settings.dart';
+import 'package:pacific_dashboards/configs/global_settings.dart';
+import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/local/file_provider_impl.dart';
 import 'package:pacific_dashboards/data/remote/backend_provider.dart';
 import 'package:pacific_dashboards/data/repository.dart';
@@ -20,13 +21,13 @@ class InjectorWidget extends InheritedWidget {
         super(key: key, child: child);
 
   static InjectorWidget of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(InjectorWidget)
-        as InjectorWidget;
+    return context.dependOnInheritedWidgetOfExactType<InjectorWidget>();
   }
 
   Repository _repository;
   SharedPreferences _sharedPreferences;
   GlobalSettings _globalSettings;
+  RemoteConfig _remoteConfig;
 
   @override
   bool updateShouldNotify(InjectorWidget old) => false;
@@ -43,6 +44,10 @@ class InjectorWidget extends InheritedWidget {
         ServerBackendProvider(_globalSettings),
         FileProviderImpl(_sharedPreferences, _globalSettings),
         _sharedPreferences);
+
+    final fireRemoteConfig = FirebaseRemoteConfig();
+    _remoteConfig = fireRemoteConfig;
+    await fireRemoteConfig.init();
   }
 
   SchoolsBloc get schoolsBloc => SchoolsBloc(repository: _repository);
@@ -51,9 +56,11 @@ class InjectorWidget extends InheritedWidget {
 
   ExamsBloc get examsBloc => ExamsBloc(repository: _repository);
 
-  AccreditationBloc get schoolAccreditationsBloc => AccreditationBloc(repository: _repository);
+  AccreditationBloc get schoolAccreditationsBloc =>
+      AccreditationBloc(repository: _repository);
 
-  HomeBloc get homeBloc => HomeBloc(globalSettings: _globalSettings);
+  HomeBloc get homeBloc =>
+      HomeBloc(globalSettings: _globalSettings, remoteConfig: _remoteConfig);
 
   SharedPreferences get sharedPreferences => _sharedPreferences;
 

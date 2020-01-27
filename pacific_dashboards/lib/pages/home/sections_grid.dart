@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/emis.dart';
+import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/section.dart';
 
 class SectionsGrid extends StatelessWidget {
-  SectionsGrid({@required Emis emis})
-      : assert(emis != null),
-        _emis = emis;
+  SectionsGrid({@required List<Section> sections})
+      : assert(sections != null),
+        _sections = sections;
 
-  final Emis _emis;
+  final List<Section> _sections;
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +21,10 @@ class SectionsGrid extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       childAspectRatio: 1.0,
       shrinkWrap: true,
-      children: _sectionsOfEmis(_emis)
+      children: _sections
           .map((section) => _Section(section: section))
           .toList(),
     );
-  }
-
-  List<Section> _sectionsOfEmis(Emis emis) {
-    switch (emis) {
-      case Emis.miemis:
-        return [
-          Section.schools,
-          Section.teachers,
-          Section.exams,
-          Section.schoolAccreditations
-        ];
-      case Emis.fedemis:
-        return [
-          Section.schools,
-          Section.teachers,
-          Section.exams,
-          Section.schoolAccreditations
-        ];
-      case Emis.kemis:
-        return [Section.schools, Section.teachers, Section.exams];
-    }
-    throw FallThroughError();
   }
 }
 
