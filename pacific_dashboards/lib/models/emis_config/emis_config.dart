@@ -5,7 +5,6 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
 import 'package:pacific_dashboards/models/serialized/serializers.dart';
-import 'package:pacific_dashboards/pages/home/section.dart';
 
 part 'emis_config.g.dart';
 
