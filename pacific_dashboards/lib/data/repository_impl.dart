@@ -7,16 +7,12 @@ import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RepositoryImpl implements Repository {
   final Provider _backendProvider;
   final FileProvider _fileProvider;
 
-  RepositoryImpl(Provider backendProvider, FileProvider fileProvider,
-      SharedPreferences sharedPreferences)
-      : _backendProvider = backendProvider,
-        _fileProvider = fileProvider;
+  RepositoryImpl(this._backendProvider, this._fileProvider);
 
   @override
   Stream<RepositoryResponse<TeachersModel>> fetchAllTeachers() async* {

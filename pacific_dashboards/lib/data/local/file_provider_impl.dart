@@ -2,13 +2,14 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/local/file_provider.dart';
+import 'package:pacific_dashboards/data/local/storages/key_string_storage.dart';
+import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups_model.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FileProviderImpl extends FileProvider {
   static const _kSchoolsKey = "schools";
@@ -18,18 +19,24 @@ class FileProviderImpl extends FileProvider {
   static const _kLookupsKey = "lookups";
   static const _kMicronesiaPath = "FSOM";
   static const _kMarshalsPath = "MI";
+  static const _kKiribatiPath = "KI";
 
-  final SharedPreferences _sharedPreferences;
+  final KeyStringStorage _stringStorage;
   final GlobalSettings _settings;
 
-  FileProviderImpl(SharedPreferences sharedPreferences, GlobalSettings settings)
-      : _sharedPreferences = sharedPreferences,
-        _settings = settings;
+  FileProviderImpl(this._stringStorage, this._settings);
 
-  String get _basePath =>
-      _settings.currentEmis == GlobalSettings.kDefaultEmis
-          ? _kMicronesiaPath
-          : _kMarshalsPath;
+  String get _basePath {
+    switch (_settings.currentEmis) {
+      case Emis.miemis:
+        return _kMarshalsPath;
+      case Emis.fedemis:
+        return _kMicronesiaPath;
+      case Emis.kemis:
+        return _kKiribatiPath;
+    }
+    throw FallThroughError();
+  }
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -144,15 +151,14 @@ class FileProviderImpl extends FileProvider {
   }
 
   // TODO: deprecated zone
-  Future<bool> _saveTime(String key) async {
+  Future<void> _saveTime(String key) async {
     final todayDate = DateTime.now();
-    return _sharedPreferences.setString(key + 'time', todayDate.toString());
+    await _stringStorage.set(key + 'time', todayDate.toString());
   }
 
   bool _isTimePassed(String key) {
     try {
-      final timeStr = _sharedPreferences.getString(key + 'time') ??
-          new DateTime(0).toString();
+      final timeStr = _stringStorage.get(key + 'time') ?? DateTime(0).toString();
       DateTime oldDate = DateTime.parse(timeStr);
       final todayDate = DateTime.now();
       final timePass = todayDate.difference(oldDate);

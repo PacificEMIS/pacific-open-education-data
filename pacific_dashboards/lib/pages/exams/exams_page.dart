@@ -78,6 +78,7 @@ class ExamsPageState extends State<ExamsPage> {
             }
 
             if (state is PopulatedFilterState) {
+              // ignore: close_sinks
               final bloc = BlocProvider.of<ExamsBloc>(context);
               return _BottomMenu(
                 alwaysVisibleHeight: 96,
