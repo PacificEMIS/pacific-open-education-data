@@ -10,7 +10,7 @@ abstract class Repository {
 
   Stream<RepositoryResponse<ExamsModel>> fetchAllExams();
 
-  Stream<RepositoryResponse<SchoolAccreditationsChunk>> fetchAllAccreditaitons();
+  Stream<RepositoryResponse<SchoolAccreditationsChunk>> fetchAllAccreditations();
 }
 
 abstract class RepositoryResponse<T> {

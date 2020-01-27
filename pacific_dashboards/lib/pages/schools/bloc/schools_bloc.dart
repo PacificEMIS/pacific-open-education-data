@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:pacific_dashboards/data/repository.dart';
+import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/school_model.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
@@ -150,7 +150,7 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
     enrollment[AppLocalizations.total] = _generateInfoTableData(filteredData);
 
     districtKeys.forEach((district) {
-      enrollment[_schoolsModel.lookupsModel.getFullState(district)] =
+      enrollment[district] =
           _generateInfoTableData(filteredData, districtCode: district);
     });
 

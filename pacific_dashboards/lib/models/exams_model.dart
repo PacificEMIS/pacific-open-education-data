@@ -190,18 +190,17 @@ class ExamsDataNavigator {
 
   Map<String, Map<String, ExamModel>> _getExamResultsByState() {
     var groupedData = _getGroupedResults();
-    Map<String, Map<String, ExamModel>> results =
-        new Map<String, Map<String, ExamModel>>();
+    final results = Map<String, Map<String, ExamModel>>();
     groupedData.forEach((k, v) {
-      var groupedByStateData = new Map<String, ExamModel>();
+      final groupedByStateData = Map<String, ExamModel>();
       for (var item in v) {
-        var fullName =
-            _examsModel.lookupsModel.getFullState(item.districtCode.toString());
-        if (groupedByStateData.containsKey(fullName)) {
-          groupedByStateData[fullName] =
-              ExamModel.sum(groupedByStateData[fullName], item);
+        final district = item.districtCode;
+// TODO: this should be done somewhere else           _examsModel.lookupsModel.getFullState(item.districtCode.toString());
+        if (groupedByStateData.containsKey(district)) {
+          groupedByStateData[district] =
+              ExamModel.sum(groupedByStateData[district], item);
         } else {
-          groupedByStateData[fullName] = item;
+          groupedByStateData[district] = item;
         }
       }
       results[k] = groupedByStateData;

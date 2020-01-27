@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/data/repository.dart';
+import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/school_accreditation_model.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
@@ -34,7 +34,7 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
       yield LoadingAccreditationState();
       yield* handleFetch(
         beforeFetchState: currentState,
-        fetch: _repository.fetchAllAccreditaitons,
+        fetch: _repository.fetchAllAccreditations,
         onSuccess: (data) async* {
           _chunk = data;
           yield UpdatedAccreditationState(_calculateData());

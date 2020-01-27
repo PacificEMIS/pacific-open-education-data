@@ -1,16 +1,16 @@
-import 'package:pacific_dashboards/data/local/file_provider.dart';
-import 'package:pacific_dashboards/data/provider.dart';
-import 'package:pacific_dashboards/data/repository.dart';
+import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
+import 'package:pacific_dashboards/data/data_source/data_source.dart';
+import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
-import 'package:pacific_dashboards/models/lookups_model.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
 class RepositoryImpl implements Repository {
-  final Provider _backendProvider;
-  final FileProvider _fileProvider;
+  final DataSource _backendProvider;
+  final LocalDataSource _fileProvider;
 
   RepositoryImpl(this._backendProvider, this._fileProvider);
 
@@ -46,11 +46,11 @@ class RepositoryImpl implements Repository {
 
   @override
   Stream<RepositoryResponse<SchoolAccreditationsChunk>>
-      fetchAllAccreditaitons() async* {
+      fetchAllAccreditations() async* {
     yield* _fetchWithEtag(
       getLocal: _fileProvider.fetchSchoolAccreditationsChunk,
       getRemote: _backendProvider.fetchSchoolAccreditationsChunk,
-      updateLocal: _fileProvider.saveSchoolAccreditaitonsChunk,
+      updateLocal: _fileProvider.saveSchoolAccreditationsChunk,
       lookupsSetter: (result, lookups) {
         result.statesChunk.lookupsModel = lookups;
         result.standardsChunk.lookupsModel = lookups;
@@ -58,8 +58,8 @@ class RepositoryImpl implements Repository {
     );
   }
 
-  Future<LookupsModel> _fetchAllLookups() async {
-    LookupsModel result;
+  Future<Lookups> _fetchAllLookups() async {
+    Lookups result;
 
     result = await _fileProvider.fetchLookupsModel();
 
@@ -77,9 +77,9 @@ class RepositoryImpl implements Repository {
     Future<T> getLocal(),
     Future<T> getRemote(),
     Future<void> updateLocal(T remote),
-    void lookupsSetter(T result, LookupsModel lookups),
+    void lookupsSetter(T result, Lookups lookups),
   }) async* {
-    LookupsModel lookups;
+    Lookups lookups;
     try {
       lookups = await _fetchAllLookups();
     } catch (ex) {
@@ -111,9 +111,9 @@ class RepositoryImpl implements Repository {
     Future<T> getLocal(),
     Future<T> getRemote(),
     Future<void> updateLocal(T remote),
-    void lookupsSetter(T result, LookupsModel lookups),
+    void lookupsSetter(T result, Lookups lookups),
   }) async* {
-    LookupsModel lookups;
+    Lookups lookups;
     try {
       lookups = await _fetchAllLookups();
     } catch (ex) {

@@ -6,15 +6,12 @@ class Filter {
   String selectedKey = "";
   Map<String, bool> filterTemp = Map<String, bool>();
   ModelWithLookups lookupsModel;
-  String lookupsNameKey;
 
-  Filter(Set filterOptions, String name, ModelWithLookups lookups,
-      String lookupsName) {
+  Filter(Set filterOptions, String name, ModelWithLookups lookups) {
     _filter =
         Map.fromIterable(filterOptions, key: (i) => i, value: (i) => true);
     filterName = name;
     lookupsModel = lookups;
-    lookupsNameKey = lookupsName;
   }
 
   Map<String, bool> getFilter() {

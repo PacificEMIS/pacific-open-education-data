@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/data/repository.dart';
+import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
 abstract class BaseBloc<Event, State> extends Bloc<Event, State> {

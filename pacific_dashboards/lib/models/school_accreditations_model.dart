@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:pacific_dashboards/models/filter.dart';
-import 'package:pacific_dashboards/models/lookups_model.dart';
 import 'package:pacific_dashboards/models/model_with_lookups.dart';
 import 'package:pacific_dashboards/models/school_accreditation_model.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -57,25 +56,25 @@ class SchoolAccreditationsModel extends ModelWithLookups {
         .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode))
         .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt));
     return groupBy(
-        filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
+        filteredList, (obj) => obj.districtCode);
   }
 
   Map<String, List<SchoolAccreditationModel>> getSortedEvaluated(String year) {
     var filteredList =
         accreditations.where((i) => yearFilter.isEnabledInFilter(year));
     return groupBy(
-        filteredList, (obj) => lookupsModel.getFullState(obj.districtCode));
+        filteredList, (obj) => obj.districtCode);
   }
 
   Map<String, List<SchoolAccreditationModel>> getSortedByState() {
     return groupBy(
-        accreditations, (obj) => lookupsModel.getFullState(obj.districtCode));
+        accreditations, (obj) => obj.districtCode);
   }
 
   Map<String, List<SchoolAccreditationModel>> getSortedByStandart() {
     var filteredList = accreditations;
     return groupBy(
-        filteredList, (obj) => lookupsModel.getFullStandart(obj.standard));
+        filteredList, (obj) => obj.standard);
   }
 
   Map<String, List<SchoolAccreditationModel>>
@@ -85,12 +84,12 @@ class SchoolAccreditationsModel extends ModelWithLookups {
         .where((i) => stateFilter.isEnabledInFilter(i.districtCode))
         .where((i) => govtFilter.isEnabledInFilter(i.authorityGovt));
     return groupBy(filteredList,
-        (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
+        (obj) => obj.authorityCode);
   }
 
   Map<String, List<SchoolAccreditationModel>> getSortedByAuthority() {
     return groupBy(accreditations,
-        (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
+        (obj) => obj.authorityCode);
   }
 
   Map<String, List<SchoolAccreditationModel>> getSortedWithFiltersByGovt() {
@@ -99,12 +98,12 @@ class SchoolAccreditationsModel extends ModelWithLookups {
         .where((i) => yearFilter.isEnabledInFilter(i.surveyYear.toString()))
         .where((i) => authorityFilter.isEnabledInFilter(i.authorityCode));
     return groupBy(
-        filteredList, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+        filteredList, (obj) => obj.authorityGovt);
   }
 
   Map<String, List<SchoolAccreditationModel>> getSortedByGovt() {
     return groupBy(
-        accreditations, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+        accreditations, (obj) => obj.authorityGovt);
   }
 
   Map<String, List<SchoolAccreditationModel>>
@@ -147,49 +146,42 @@ class SchoolAccreditationsModel extends ModelWithLookups {
           List<String>.generate(accreditations.length,
               (i) => accreditations[i].surveyYear.toString()).toSet(),
           AppLocalizations.filterBySelectedYear,
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
       'state': Filter(
           List<String>.generate(
                   accreditations.length, (i) => accreditations[i].districtCode)
               .toSet(),
           AppLocalizations.filterBySelectedState,
-          this,
-          LookupsModel.LOOKUPS_KEY_STATE),
+          this),
       'govt': Filter(
           List<String>.generate(
                   accreditations.length, (i) => accreditations[i].authorityGovt)
               .toSet(),
           AppLocalizations.filterBySelectedGovtNonGovt,
-          this,
-          LookupsModel.LOOKUPS_KEY_STATE),
+          this),
       'authority': Filter(
           List<String>.generate(
                   accreditations.length, (i) => accreditations[i].authorityCode)
               .toSet(),
           AppLocalizations.filterBySelectedAuthority,
-          this,
-          LookupsModel.LOOKUPS_KEY_AUTHORITY),
+          this),
       'authority': Filter(
           List<String>.generate(
                   accreditations.length, (i) => accreditations[i].authorityCode)
               .toSet(),
           AppLocalizations.filterBySelectedAuthority,
-          this,
-          LookupsModel.LOOKUPS_KEY_AUTHORITY),
+          this),
       'school level': Filter(
           List<String>.generate(
                   accreditations.length, (i) => accreditations[i].authorityCode)
               .toSet(),
           AppLocalizations.filterBySelectedAuthority,
-          this,
-          LookupsModel.LOOKUPS_KEY_AUTHORITY),
+          this),
       'schoolLevel': Filter(
           List<String>.generate(accreditations.length,
               (i) => accreditations[i].schoolTypeCode).toSet(),
           AppLocalizations.filterBySelectedSchoolLevels,
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
     };
   }
 }

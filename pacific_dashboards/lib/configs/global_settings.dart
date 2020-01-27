@@ -1,4 +1,4 @@
-import 'package:pacific_dashboards/data/local/storages/key_string_storage.dart';
+import 'package:pacific_dashboards/data/data_source/local/key_string_storage.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 
 class GlobalSettings {

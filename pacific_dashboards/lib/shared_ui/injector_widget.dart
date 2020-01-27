@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
-import 'package:pacific_dashboards/data/local/file_provider_impl.dart';
-import 'package:pacific_dashboards/data/local/storages/key_string_storage.dart';
-import 'package:pacific_dashboards/data/remote/backend_provider.dart';
-import 'package:pacific_dashboards/data/repository.dart';
-import 'package:pacific_dashboards/data/repository_impl.dart';
+import 'package:pacific_dashboards/data/data_source/local/key_string_storage.dart';
+import 'package:pacific_dashboards/data/data_source/local/local_data_source_impl.dart';
+import 'package:pacific_dashboards/data/data_source/remote/remote_data_source_impl.dart';
+import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/data/repository/repository_impl.dart';
 import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
@@ -38,8 +38,8 @@ class InjectorWidget extends InheritedWidget {
     _globalSettings = GlobalSettings(stringsStorage);
 
     _repository = RepositoryImpl(
-      ServerBackendProvider(_globalSettings),
-      FileProviderImpl(stringsStorage, _globalSettings),
+      RemoteDataSourceImpl(_globalSettings),
+      LocalDataSourceImpl(stringsStorage, _globalSettings),
     );
 
     final fireRemoteConfig = FirebaseRemoteConfig();

@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
-import 'package:pacific_dashboards/data/provider.dart';
+import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
-import 'package:pacific_dashboards/models/lookups_model.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/school_accreditations_model.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
@@ -19,7 +19,7 @@ const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
 const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis";
 const _kKiribatiUrl = "https://data.moe.gov.ki/kemis";
 
-class ServerBackendProvider implements Provider {
+class RemoteDataSourceImpl implements RemoteDataSource {
   static const platform =
       const MethodChannel('fm.doe.national.pacific_dashboards/api');
 
@@ -35,7 +35,7 @@ class ServerBackendProvider implements Provider {
   final GlobalSettings _settings;
   Dio _dio;
 
-  ServerBackendProvider(GlobalSettings settings) : _settings = settings {
+  RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings {
     _dio = Dio(BaseOptions(
       connectTimeout: Duration(seconds: 10).inMilliseconds,
       receiveTimeout: Duration(minutes: 1).inMilliseconds,
@@ -129,11 +129,11 @@ class ServerBackendProvider implements Provider {
   }
 
   @override
-  Future<LookupsModel> fetchLookupsModel({bool force = false}) async {
+  Future<Lookups> fetchLookupsModel({bool force = false}) async {
     final responseData = await _get(
         path: _kLookupsApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
-    return LookupsModel.fromJson(responseData);
+    return Lookups.fromJson(responseData);
   }
 
   Future<Response<dynamic>> _fallbackApiGetCall(String url, String eTag) async {

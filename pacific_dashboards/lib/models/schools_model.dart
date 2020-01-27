@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:pacific_dashboards/models/filter.dart';
-import 'package:pacific_dashboards/models/lookups_model.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/model_with_lookups.dart';
 import 'package:pacific_dashboards/models/school_model.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -66,32 +66,32 @@ class SchoolsModel extends ModelWithLookups {
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByState() {
     return groupBy(
-        _filteredSchools, (obj) => lookupsModel.getFullState(obj.districtCode));
+        _filteredSchools, (obj) => obj.districtCode);
   }
 
   Map<String, List<SchoolModel>> getSortedByState() {
     return groupBy(
-        _schools, (obj) => lookupsModel.getFullState(obj.districtCode));
+        _schools, (obj) => obj.districtCode);
   }
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByAuthority() {
     return groupBy(_filteredSchools,
-        (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
+        (obj) => obj.authorityCode);
   }
 
   Map<String, List<SchoolModel>> getSortedByAuthority() {
     return groupBy(
-        _schools, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
+        _schools, (obj) => obj.authorityCode);
   }
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByGovt() {
     return groupBy(
-        _filteredSchools, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+        _filteredSchools, (obj) => obj.authorityGovt);
   }
 
   Map<String, List<SchoolModel>> getSortedByGovt() {
     return groupBy(
-        _schools, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+        _schools, (obj) => obj.authorityGovt);
   }
 
   List<String> getDistrictCodeKeysList() {
@@ -123,7 +123,7 @@ class SchoolsModel extends ModelWithLookups {
     var filteredList = _filteredSchools;
     if (level != EducationLevel.all) {
       filteredList = _filteredSchools.where((it) {
-        return lookupsModel.getEducationLevel(it.classLevel) == levelCode;
+        return it.classLevel == levelCode;
       }).toList();
     }
     return groupBy(filteredList, (obj) => obj.ageGroup);
@@ -154,47 +154,40 @@ class SchoolsModel extends ModelWithLookups {
           List<String>.generate(
               _schools.length, (i) => _schools[i].authorityCode).toSet(),
           AppLocalizations.filterByAuthority,
-          this,
-          LookupsModel.LOOKUPS_KEY_AUTHORITY),
+          this),
       'state': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].districtCode).toSet(),
           AppLocalizations.filterByState,
-          this,
-          LookupsModel.LOOKUPS_KEY_STATE),
+          this),
       'schoolType': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].schoolTypeCode).toSet(),
           'Schools Enrollment by School type, \nState and Gender',
-          this,
-          LookupsModel.LOOKUPS_KEY_GOVT),
+          this),
       'age': Filter(
           List<String>.generate(
                   _schoolsValidAge.length, (i) => _schoolsValidAge[i].ageGroup)
               .toSet(),
           'Schools Enrollment by Age',
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
       'govt': Filter(
           List<String>.generate(
               _schools.length, (i) => _schools[i].authorityGovt).toSet(),
           AppLocalizations.filterByGovernment,
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
       'year': Filter(
           List<String>.generate(
                   _schools.length, (i) => _schools[i].surveyYear.toString())
               .reversed
               .toSet(),
           AppLocalizations.filterByYear,
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
       'schoolLevel': Filter(
           List<String>.generate(_schools.length, (i) => _schools[i].classLevel)
               .toSet(),
           AppLocalizations.filterByClassLevel,
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
     };
     yearFilter.selectMax();
   }

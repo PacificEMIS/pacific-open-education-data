@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:pacific_dashboards/models/filter.dart';
-import 'package:pacific_dashboards/models/lookups_model.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/model_with_lookups.dart';
 import 'package:pacific_dashboards/models/teacher_model.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -54,8 +54,8 @@ class TeachersModel extends ModelWithLookups {
   }
 
   Map<String, List<TeacherModel>> getGroupedByStateWithFilters() {
-    return groupBy(
-        _filtered, (obj) => lookupsModel.getFullState(obj.districtCode));
+    return groupBy(_filtered, (obj) => obj.districtCode);
+// TODO: trash code      _filtered, (obj) => lookupsModel.getFullState(obj.districtCode));
   }
 
   Iterable<TeacherModel> get _filtered => _teachers
@@ -67,13 +67,13 @@ class TeachersModel extends ModelWithLookups {
       .where((it) => schoolTypeFilter.isEnabledInFilter(it.schoolTypeCode));
 
   Map<String, List<TeacherModel>> getGroupedByAuthorityWithFilters() {
-    return groupBy(
-        _filtered, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
+    return groupBy(_filtered, (obj) => obj.authorityCode);
+// TODO: trash code       _filtered, (obj) => lookupsModel.getFullAuthority(obj.authorityCode));
   }
 
   Map<String, List<TeacherModel>> getGroupedByGovtWithFilters() {
-    return groupBy(
-        _filtered, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
+    return groupBy(_filtered, (obj) => obj.authorityGovt);
+// TODO: trash code       _filtered, (obj) => lookupsModel.getFullGovt(obj.authorityGovt));
   }
 
   Map<String, List<TeacherModel>> getGroupedBySchoolTypeWithFilters() {
@@ -92,40 +92,34 @@ class TeachersModel extends ModelWithLookups {
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].authorityCode).toSet(),
           AppLocalizations.filterBySelectedAuthority,
-          this,
-          LookupsModel.LOOKUPS_KEY_AUTHORITY),
+          this),
       'state': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].districtCode).toSet(),
           AppLocalizations.filterBySelectedState,
-          this,
-          LookupsModel.LOOKUPS_KEY_STATE),
+          this),
       'schoolType': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(),
           AppLocalizations.filterBySelectedAuthority,
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
       'govt': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].authorityGovt).toSet(),
           AppLocalizations.filterBySelectedGovtNonGovt,
-          this,
-          LookupsModel.LOOKUPS_KEY_GOVT),
+          this),
       'year': Filter(
           List<String>.generate(
                   _teachers.length, (i) => _teachers[i].surveyYear.toString())
               .reversed
               .toSet(),
           AppLocalizations.filterBySelectedYear,
-          this,
-          LookupsModel.LOOKUPS_KEY_NO_KEY),
+          this),
       'schoolLevel': Filter(
           List<String>.generate(
               _teachers.length, (i) => _teachers[i].schoolTypeCode).toSet(),
           AppLocalizations.filterBySelectedSchoolLevels,
-          this,
-          LookupsModel.LOOKUPS_KEY_SCHOOL_LEVEL),
+          this),
     };
     yearFilter.selectMax();
   }

@@ -4,6 +4,8 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
+import 'package:pacific_dashboards/models/lookups/lookup.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
 part 'serializers.g.dart';
 
@@ -12,6 +14,8 @@ part 'serializers.g.dart';
   EmisesConfig,
   EmisConfig,
   ModuleConfig,
+  Lookup,
+  Lookups
 ])
 final Serializers serializers = _$serializers;
 

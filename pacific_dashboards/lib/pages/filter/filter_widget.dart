@@ -44,8 +44,7 @@ class FilterWidgetState extends State<FilterWidget> {
         child: Card(
           elevation: 4,
           child: RadioListTile<String>(
-            title: Text(widget.bloc.filter.lookupsModel.lookupsModel
-                .getFullName(key, widget.bloc.filter.lookupsNameKey)),
+            title: Text(key),
             value: key,
             onChanged: (String value) {
               setState(() {

@@ -1,5 +1,5 @@
-import 'package:pacific_dashboards/models/lookups_model.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
 class ModelWithLookups {
-  LookupsModel lookupsModel;
+  Lookups lookupsModel;
 }

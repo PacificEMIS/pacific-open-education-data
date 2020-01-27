@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/data/repository.dart';
+import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
