@@ -7,7 +7,6 @@
 - (BOOL)application:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [GeneratedPluginRegistrant registerWithRegistry:self];
-    [FIRApp configure];
     
     FlutterViewController* controller = (FlutterViewController*)self.window.rootViewController;
     FlutterMethodChannel* apiChannel = [FlutterMethodChannel methodChannelWithName:@"fm.doe.national.pacific_dashboards/api"
