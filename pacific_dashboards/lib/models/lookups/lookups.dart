@@ -34,12 +34,11 @@ abstract class Lookups implements Built<Lookups, LookupsBuilder> {
   BuiltList<Lookup> get accreditationTerms;
 
   String toJson() {
-    return json
-        .encode(standardSerializers.serializeWith(Lookups.serializer, this));
+    return json.encode(serializers.serializeWith(Lookups.serializer, this));
   }
 
   static Lookups fromJson(String jsonString) {
-    return standardSerializers.deserializeWith(
+    return serializers.deserializeWith(
         Lookups.serializer, json.decode(jsonString));
   }
 
@@ -52,4 +51,13 @@ abstract class Lookups implements Built<Lookups, LookupsBuilder> {
       authorities.isEmpty &&
       levels.isEmpty &&
       accreditationTerms.isEmpty;
+}
+
+extension Lookuped on String {
+  String from(Iterable<Lookup> lookup) {
+    return lookup
+            .firstWhere((it) => it.code == this, orElse: () => null)
+            ?.name ??
+        this;
+  }
 }

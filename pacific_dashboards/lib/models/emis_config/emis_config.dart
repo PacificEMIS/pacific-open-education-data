@@ -20,11 +20,11 @@ abstract class EmisConfig implements Built<EmisConfig, EmisConfigBuilder> {
   BuiltList<ModuleConfig> get modules;
 
   String toJson() {
-    return json.encode(standardSerializers.serializeWith(EmisConfig.serializer, this));
+    return json.encode(serializers.serializeWith(EmisConfig.serializer, this));
   }
 
   static EmisConfig fromJson(String jsonString) {
-    return standardSerializers.deserializeWith(
+    return serializers.deserializeWith(
         EmisConfig.serializer, json.decode(jsonString));
   }
 

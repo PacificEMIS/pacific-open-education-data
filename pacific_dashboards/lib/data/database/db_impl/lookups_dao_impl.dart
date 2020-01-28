@@ -6,10 +6,10 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
 class HiveLookupsDao extends LookupsDao {
 
-  static const _kLookupsKey = 'lookups';
+  static const _kKey = 'lookups';
 
   static Future<T> _withBox<T>(Future<T> action(Box<HiveLookups> box)) async {
-    final Box<HiveLookups> box = await Hive.openBox(_kLookupsKey);
+    final Box<HiveLookups> box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -29,18 +29,4 @@ class HiveLookupsDao extends LookupsDao {
     await _withBox((box) async => box.put(emis.id, hiveLookups));
   }
 
-}
-
-extension _HiveId on Emis {
-  int get id {
-    switch (this) {
-      case Emis.miemis:
-        return 0;
-      case Emis.fedemis:
-        return 1;
-      case Emis.kemis:
-        return 2;
-    }
-    throw FallThroughError();
-  }
 }

@@ -1,11 +1,12 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 
 class LocalDataSourceImpl extends LocalDataSource {
@@ -17,14 +18,8 @@ class LocalDataSourceImpl extends LocalDataSource {
   Future<Emis> get _emis => _globalSettings.currentEmis;
 
   @override
-  Future<SchoolsModel> fetchSchoolsModel() async {
-//    final cachedJson = await _readFile(_basePath + _kSchoolsKey);
-//    if (cachedJson == null) {
-//      return null;
-//    }
-//    return SchoolsModel.fromJson(json.decode(cachedJson));
-    return null;
-  }
+  Future<BuiltList<School>> fetchSchoolsModel() async =>
+      await _database.schools.get(await _emis);
 
   @override
   Future<TeachersModel> fetchTeachersModel() async {
@@ -67,14 +62,12 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   @override
   Future<Lookups> fetchLookupsModel() async {
-    final storedLookups = await _database.lookups.get(await _emis);
-    return storedLookups;
+    return await _database.lookups.get(await _emis);
   }
 
   @override
-  Future<void> saveSchoolsModel(SchoolsModel model) async {
-//    return await _writeFile(_basePath + _kSchoolsKey, model) != null;
-  }
+  Future<void> saveSchools(BuiltList<School> schools) async =>
+      await _database.schools.save(schools, await _emis);
 
   @override
   Future<void> saveTeachersModel(TeachersModel model) async {

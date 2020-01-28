@@ -1,10 +1,11 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/pie_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/stacked_horizontal_bar_chart_widget.dart';
 
 class ChartFactory {
-  static Widget createBarChartViewByData(Map<String, int> chartData) {
+  static Widget createBarChartViewByData(BuiltMap<String, int> chartData) {
     return (chartData.length == 0)
         ? Container()
         : Container(
@@ -13,7 +14,7 @@ class ChartFactory {
           );
   }
 
-  static Widget createPieChartViewByData(Map<String, int> chartData) {
+  static Widget createPieChartViewByData(BuiltMap<String, int> chartData) {
     return (chartData.length == 0)
         ? Container()
         : Container(
@@ -22,7 +23,7 @@ class ChartFactory {
           );
   }
 
-  static Widget createChart(ChartType type, Map<String, int> data) {
+  static Widget createChart(ChartType type, BuiltMap<String, int> data) {
     switch (type) {
       case ChartType.bar:
         return createBarChartViewByData(data);

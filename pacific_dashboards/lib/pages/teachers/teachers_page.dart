@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
@@ -192,7 +193,7 @@ class _LoadedContent extends StatelessWidget {
           ChartWithTable(
             key: ObjectKey(_data.teachersByAuthority),
             title: AppLocalizations.teachersByAuthority,
-            data: _data.teachersByAuthority,
+            data: _data.teachersByAuthority.build(),
             chartType: ChartType.pie,
             tableKeyName: AppLocalizations.authority,
             tableValueName: AppLocalizations.teachers,
@@ -200,7 +201,7 @@ class _LoadedContent extends StatelessWidget {
           ChartWithTable(
             key: ObjectKey(_data.teachersByPrivacy),
             title: AppLocalizations.teachersEnrollmentGovtNonGovt,
-            data: _data.teachersByPrivacy,
+            data: _data.teachersByPrivacy.build(),
             chartType: ChartType.pie,
             tableKeyName: AppLocalizations.publicPrivate,
             tableValueName: AppLocalizations.teachers,
@@ -208,7 +209,7 @@ class _LoadedContent extends StatelessWidget {
           ChartWithTable(
             key: ObjectKey(_data.teachersByState),
             title: AppLocalizations.teachersByState,
-            data: _data.teachersByState,
+            data: _data.teachersByState.build(),
             chartType: ChartType.bar,
             tableKeyName: AppLocalizations.state,
             tableValueName: AppLocalizations.teachers,
@@ -217,7 +218,7 @@ class _LoadedContent extends StatelessWidget {
             key: ObjectKey(_data.teachersBySchoolLevelStateAndGender),
             title: AppLocalizations.teacherBySchoolTypeStateAndGender,
             firstColumnName: AppLocalizations.schoolLevels,
-            data: _data.teachersBySchoolLevelStateAndGender,
+            data: _data.teachersBySchoolLevelStateAndGender.map((key, value) => MapEntry(key, value.build())).build(),
             keySortFunc: (lv, rv) => lv.compareTo(rv),
           ),
         ],

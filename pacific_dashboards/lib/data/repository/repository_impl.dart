@@ -1,11 +1,14 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/data_source/data_source.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,13 +16,19 @@ import 'package:rxdart/rxdart.dart';
 class RepositoryImpl implements Repository {
   final DataSource _remoteDataSource;
   final LocalDataSource _localDataSource;
+  final GlobalSettings _globalSettings;
 
-  final BehaviorSubject<Lookups> _lookupsSubject = BehaviorSubject();
+  final BehaviorSubject<Lookups> _fedemisLookupsSubject = BehaviorSubject();
+  final BehaviorSubject<Lookups> _miemisLookupsSubject = BehaviorSubject();
+  final BehaviorSubject<Lookups> _kemisLookupsSubject = BehaviorSubject();
 
-  RepositoryImpl(this._remoteDataSource, this._localDataSource);
+  RepositoryImpl(
+      this._remoteDataSource, this._localDataSource, this._globalSettings);
 
   void dispose() {
-    _lookupsSubject.close();
+    _fedemisLookupsSubject.close();
+    _miemisLookupsSubject.close();
+    _kemisLookupsSubject.close();
   }
 
   @override
@@ -32,11 +41,11 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<SchoolsModel>> fetchAllSchools() async* {
+  Stream<RepositoryResponse<BuiltList<School>>> fetchAllSchools() async* {
     yield* _fetchWithEtag(
       getLocal: _localDataSource.fetchSchoolsModel,
       getRemote: _remoteDataSource.fetchSchoolsModel,
-      updateLocal: _localDataSource.saveSchoolsModel,
+      updateLocal: _localDataSource.saveSchools,
     );
   }
 
@@ -61,28 +70,42 @@ class RepositoryImpl implements Repository {
 
   @override
   Stream<Lookups> get lookups {
-    if (!_lookupsSubject.hasValue) {
-      final pushSavedToSubject = () async {
-        final localLookups = await _localDataSource.fetchLookupsModel();
-        if (localLookups == null) {
-          return;
-        }
-        _lookupsSubject.add(localLookups);
-      };
+    return _globalSettings.currentEmis
+        .then((emis) {
+          switch (emis) {
+            case Emis.miemis:
+              return _miemisLookupsSubject;
+            case Emis.fedemis:
+              return _fedemisLookupsSubject;
+            case Emis.kemis:
+              return _kemisLookupsSubject;
+          }
+          throw FallThroughError();
+        })
+        .asStream()
+        .flatMap((subject) {
+          if (!subject.hasValue) {
+            final pushSavedToSubject = () async {
+              final localLookups = await _localDataSource.fetchLookupsModel();
+              if (localLookups == null) {
+                return;
+              }
+              subject.add(localLookups);
+            };
 
-      Connectivity().checkConnectivity().then((status) {
-        if (status == ConnectivityResult.none) {
-          return Future.value();
-        } else {
-          return _remoteDataSource
-              .fetchLookupsModel()
-              .then((remote) => _localDataSource.saveLookupsModel(remote));
-        }
-      }).then((_) => pushSavedToSubject(),
-          onError: (er) => pushSavedToSubject());
-    }
+            Connectivity().checkConnectivity().then((status) {
+              if (status == ConnectivityResult.none) {
+                return Future.value();
+              } else {
+                return _remoteDataSource.fetchLookupsModel().then(
+                    (remote) => _localDataSource.saveLookupsModel(remote));
+              }
+            }).then((_) => pushSavedToSubject(),
+                onError: (er) => pushSavedToSubject());
+          }
 
-    return _lookupsSubject;
+          return subject;
+        });
   }
 
   Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({
@@ -135,6 +158,7 @@ class RepositoryImpl implements Repository {
             RepositoryType.remote, NoDataException());
       }
     } catch (ex) {
+      print(ex);
       yield FailureRepositoryResponse(RepositoryType.remote, ex);
     }
   }

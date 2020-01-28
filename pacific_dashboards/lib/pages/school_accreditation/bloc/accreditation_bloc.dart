@@ -27,7 +27,7 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
   AccreditationState get unknownErrorState => UnknownErrorState();
 
   @override
-  Stream<Lookups> get lookups => _repository.lookups;
+  Stream<Lookups> get lookupsStream => _repository.lookups;
 
   @override
   Stream<AccreditationState> mapEventToState(

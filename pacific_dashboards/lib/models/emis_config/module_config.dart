@@ -22,11 +22,11 @@ abstract class ModuleConfig
 
   String toJson() {
     return json
-        .encode(standardSerializers.serializeWith(ModuleConfig.serializer, this));
+        .encode(serializers.serializeWith(ModuleConfig.serializer, this));
   }
 
   static ModuleConfig fromJson(String jsonString) {
-    return standardSerializers.deserializeWith(
+    return serializers.deserializeWith(
         ModuleConfig.serializer, json.decode(jsonString));
   }
 

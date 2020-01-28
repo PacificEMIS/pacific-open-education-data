@@ -19,11 +19,11 @@ abstract class Lookup implements Built<Lookup, LookupBuilder> {
 
   String toJson() {
     return json
-        .encode(standardSerializers.serializeWith(Lookup.serializer, this));
+        .encode(serializers.serializeWith(Lookup.serializer, this));
   }
 
   static Lookup fromJson(String jsonString) {
-    return standardSerializers.deserializeWith(
+    return serializers.deserializeWith(
         Lookup.serializer, json.decode(jsonString));
   }
 

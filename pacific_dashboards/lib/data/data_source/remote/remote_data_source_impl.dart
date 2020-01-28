@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:built_collection/built_collection.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -7,9 +10,9 @@ import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.da
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/school_accreditations_model.dart';
-import 'package:pacific_dashboards/models/schools_model.dart';
+import 'package:pacific_dashboards/models/serialized/serializers.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
@@ -94,7 +97,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<TeachersModel> fetchTeachersModel({bool force = false}) async {
+  Future<TeachersModel> fetchTeachersModel() async {
     final responseData = await _get(
         path: _kTeachersApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
@@ -103,14 +106,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<SchoolsModel> fetchSchoolsModel({bool force = false}) async {
+  Future<BuiltList<School>> fetchSchoolsModel() async {
     final responseData = await _get(path: _kSchoolsApiKey);
-    return null;
-//    return SchoolsModel.fromJson(responseData);
+    final List<dynamic> data = json.decode(responseData);
+    return data
+        .map((item) => serializers.deserializeWith(School.serializer, item))
+        .toBuiltList();
   }
 
   @override
-  Future<ExamsModel> fetchExamsModel({bool force = false}) async {
+  Future<ExamsModel> fetchExamsModel() async {
     final responseData = await _get(
         path: _kExamsApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
@@ -119,8 +124,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<SchoolAccreditationsChunk> fetchSchoolAccreditationsChunk(
-      {bool force = false}) async {
+  Future<SchoolAccreditationsChunk> fetchSchoolAccreditationsChunk() async {
     final responseData =
         await _get(path: _kSchoolAccreditationsByStandardApiKey);
     return null;
@@ -132,7 +136,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<Lookups> fetchLookupsModel({bool force = false}) async {
+  Future<Lookups> fetchLookupsModel() async {
     final responseData = await _get(
         path: _kLookupsApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
@@ -147,7 +151,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       });
       print(result);
       final response = Response<String>(
-        headers: Headers.fromMap({ 'ETag': [result['eTag']] }),
+        headers: Headers.fromMap({
+          'ETag': [result['eTag']]
+        }),
         statusCode: result['code'],
         data: result['body'],
       );
@@ -163,9 +169,9 @@ extension Urls on Emis {
   String get baseUrl {
     switch (this) {
       case Emis.miemis:
-        return _kFederalStatesOfMicronesiaUrl;
-      case Emis.fedemis:
         return _kMarshalIslandsUrl;
+      case Emis.fedemis:
+        return _kFederalStatesOfMicronesiaUrl;
       case Emis.kemis:
         return _kKiribatiUrl;
     }

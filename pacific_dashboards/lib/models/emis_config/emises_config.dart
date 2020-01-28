@@ -20,11 +20,11 @@ abstract class EmisesConfig
 
   String toJson() {
     return json
-        .encode(standardSerializers.serializeWith(EmisesConfig.serializer, this));
+        .encode(serializers.serializeWith(EmisesConfig.serializer, this));
   }
 
   static EmisesConfig fromJson(String jsonString) {
-    return standardSerializers.deserializeWith(
+    return serializers.deserializeWith(
         EmisesConfig.serializer, json.decode(jsonString));
   }
 

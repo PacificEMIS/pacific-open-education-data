@@ -43,6 +43,7 @@ class InjectorWidget extends InheritedWidget {
     _repository = RepositoryImpl(
       RemoteDataSourceImpl(_globalSettings),
       LocalDataSourceImpl(_database, _globalSettings),
+      _globalSettings,
     );
 
     final fireRemoteConfig = FirebaseRemoteConfig();

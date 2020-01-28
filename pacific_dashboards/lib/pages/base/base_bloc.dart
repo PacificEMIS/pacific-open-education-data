@@ -12,7 +12,10 @@ abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
   State get unknownErrorState;
 
   @protected
-  Stream<Lookups> get lookups;
+  Stream<Lookups> get lookupsStream;
+
+  @protected
+  Future<Lookups> get lookups => lookupsStream.first;
 
   @protected
   Stream<State> handleFetch<T>({

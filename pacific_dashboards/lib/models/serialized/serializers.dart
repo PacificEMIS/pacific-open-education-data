@@ -6,6 +6,7 @@ import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/school/school.dart';
 
 part 'serializers.g.dart';
 
@@ -15,9 +16,13 @@ part 'serializers.g.dart';
   EmisConfig,
   ModuleConfig,
   Lookup,
-  Lookups
+  Lookups,
+  School,
 ])
-final Serializers serializers = _$serializers;
-
-final Serializers standardSerializers =
-    (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+final Serializers serializers = (_$serializers.toBuilder()
+      ..addPlugin(StandardJsonPlugin())
+      ..addBuilderFactory(
+        const FullType(BuiltList, const [const FullType(School)]),
+        () => ListBuilder<School>(),
+      ))
+    .build();

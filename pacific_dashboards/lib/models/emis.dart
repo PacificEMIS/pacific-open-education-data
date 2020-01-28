@@ -32,3 +32,17 @@ extension UI on Emis {
   }
 
 }
+
+extension Id on Emis {
+  int get id {
+    switch (this) {
+      case Emis.miemis:
+        return 0;
+      case Emis.fedemis:
+        return 1;
+      case Emis.kemis:
+        return 2;
+    }
+    throw FallThroughError();
+  }
+}

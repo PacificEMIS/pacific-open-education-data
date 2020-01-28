@@ -28,7 +28,7 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
   TeachersState get unknownErrorState => UnknownErrorState();
 
   @override
-  Stream<Lookups> get lookups => _repository.lookups;
+  Stream<Lookups> get lookupsStream => _repository.lookups;
 
   @override
   Stream<TeachersState> mapEventToState(

@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:pacific_dashboards/models/filter.dart';
-import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/model_with_lookups.dart';
 import 'package:pacific_dashboards/models/school_model.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -65,33 +64,27 @@ class SchoolsModel extends ModelWithLookups {
       .toList();
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByState() {
-    return groupBy(
-        _filteredSchools, (obj) => obj.districtCode);
+    return groupBy(_filteredSchools, (obj) => obj.districtCode);
   }
 
   Map<String, List<SchoolModel>> getSortedByState() {
-    return groupBy(
-        _schools, (obj) => obj.districtCode);
+    return groupBy(_schools, (obj) => obj.districtCode);
   }
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByAuthority() {
-    return groupBy(_filteredSchools,
-        (obj) => obj.authorityCode);
+    return groupBy(_filteredSchools, (obj) => obj.authorityCode);
   }
 
   Map<String, List<SchoolModel>> getSortedByAuthority() {
-    return groupBy(
-        _schools, (obj) => obj.authorityCode);
+    return groupBy(_schools, (obj) => obj.authorityCode);
   }
 
   Map<String, List<SchoolModel>> getSortedWithFiltersByGovt() {
-    return groupBy(
-        _filteredSchools, (obj) => obj.authorityGovt);
+    return groupBy(_filteredSchools, (obj) => obj.authorityGovt);
   }
 
   Map<String, List<SchoolModel>> getSortedByGovt() {
-    return groupBy(
-        _schools, (obj) => obj.authorityGovt);
+    return groupBy(_schools, (obj) => obj.authorityGovt);
   }
 
   List<String> getDistrictCodeKeysList() {

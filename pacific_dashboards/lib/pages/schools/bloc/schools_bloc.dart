@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/school_model.dart';
-import 'package:pacific_dashboards/models/schools_model.dart';
+import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/utils/collection_extensions.dart';
 
 class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
   SchoolsBloc({Repository repository})
@@ -16,7 +18,7 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
 
   final Repository _repository;
 
-  SchoolsModel _schoolsModel;
+  BuiltList<School> _schools;
 
   @override
   SchoolsState get initialState => InitialSchoolsState();
@@ -28,7 +30,7 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
   SchoolsState get unknownErrorState => UnknownErrorState();
 
   @override
-  Stream<Lookups> get lookups => _repository.lookups;
+  Stream<Lookups> get lookupsStream => _repository.lookups;
 
   @override
   Stream<SchoolsState> mapEventToState(SchoolsEvent event) async* {
@@ -39,83 +41,64 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
         beforeFetchState: currentState,
         fetch: _repository.fetchAllSchools,
         onSuccess: (data) async* {
-          _schoolsModel = data;
+          _schools = data;
           yield UpdatedSchoolsState(await _transformSchoolsModel());
         },
       );
     }
 
-    if (event is FiltersAppliedSchoolsEvent) {
-      _schoolsModel = event.updatedModel;
-      yield UpdatedSchoolsState(await _transformSchoolsModel());
-    }
+//    if (event is FiltersAppliedSchoolsEvent) {
+//      _schoolsModel = event.updatedModel;
+//      yield UpdatedSchoolsState(await _transformSchoolsModel());
+//    }
   }
 
   Future<SchoolsPageData> _transformSchoolsModel() async {
+    final schoolsByDistrict = _schools.groupBy((it) => it.districtCode);
+    final schoolsByAuthority = _schools.groupBy((it) => it.authorityCode);
+    final schoolsByGovt = _schools.groupBy((it) => it.authorityGovt);
+    final translates = await lookups;
     return SchoolsPageData(
-      rawModel: _schoolsModel,
-      enrollmentByState:
-          _calculatePeopleCount(_schoolsModel.getSortedWithFiltersByState()),
-      enrollmentByAuthority: _calculatePeopleCount(
-          _schoolsModel.getSortedWithFiltersByAuthority()),
-      enrollmentByPrivacy:
-          _calculatePeopleCount(_schoolsModel.getSortedWithFiltersByGovt()),
-      enrollmentByAgeAndEducation: _calculateEnrollmentByAgeAndEducation(),
-      enrollmentBySchoolLevelAndState:
-          _calculateEnrollmentBySchoolLevelAndState(),
+      schools: _schools,
+      enrolByDistrict: _calculatePeopleCount(schoolsByDistrict).map((key, v) {
+        return MapEntry(key.from(translates.districts), v);
+      }),
+      enrolByAuthority: _calculatePeopleCount(schoolsByAuthority).map((key, v) {
+        return MapEntry(key.from(translates.authorities), v);
+      }),
+      enrolByPrivacy: _calculatePeopleCount(schoolsByGovt).map((key, v) {
+        return MapEntry(key.from(translates.authorityGovt), v);
+      }),
+      enrolByAgeAndEducation: _calculateEnrollmentByAgeAndEducation(translates),
+      enrolBySchoolLevelAndDistrict:
+          _calculateEnrolBySchoolLevelAndDistrict(translates),
     );
   }
 
-  Map<String, int> _calculatePeopleCount(
-          Map<String, List<SchoolModel>> groupedSchoolModels) =>
-      groupedSchoolModels.map(
+  BuiltMap<String, int> _calculatePeopleCount(
+          BuiltMap<String, BuiltList<School>> groupedSchools) =>
+      groupedSchools.map(
         (key, value) => MapEntry(
-            key,
-            value
-                .map((it) => it.enrolMale + it.enrolFemale)
-                .reduce((lv, rv) => lv + rv)),
+          key,
+          value.map((it) => it.enrol ?? 0).reduce((lv, rv) => lv + rv),
+        ),
       );
 
-  Map<String, Map<String, InfoTableData>>
-      _calculateEnrollmentByAgeAndEducation() {
-    final enrollment = Map<String, Map<String, InfoTableData>>();
-    final educationLevels = [
-      EducationLevel.all,
-      EducationLevel.earlyChildhood,
-      EducationLevel.primary,
-      EducationLevel.secondary,
-      EducationLevel.postSecondary
-    ];
+  BuiltMap<String, BuiltMap<String, InfoTableData>>
+      _calculateEnrollmentByAgeAndEducation(Lookups lookups) {
+    final groupedByLevelWithTotal = {AppLocalizations.total: _schools};
+    groupedByLevelWithTotal
+        .addEntries(_schools.groupBy((it) => it.classLevel).entries);
 
-    for (var i = 0; i < educationLevels.length; i++) {
-      final level = educationLevels[i];
-      final levelName = _educationLevelToString(level);
-      enrollment[levelName] = _generateInfoTableData(
-        _schoolsModel.getGroupedByAgeFileteredByEducationLevel(level),
-      );
-    }
-
-    return enrollment;
+    return groupedByLevelWithTotal.map((level, schools) {
+      final groupedByAge =
+          _generateInfoTableData(schools.groupBy((it) => it.ageGroup));
+      return MapEntry(level.from(lookups.levels), groupedByAge);
+    }).build();
   }
 
-  String _educationLevelToString(EducationLevel level) {
-    switch (level) {
-      case EducationLevel.all:
-        return AppLocalizations.total;
-      case EducationLevel.earlyChildhood:
-        return AppLocalizations.earlyChildhood;
-      case EducationLevel.primary:
-        return AppLocalizations.primary;
-      case EducationLevel.secondary:
-        return AppLocalizations.secondary;
-      case EducationLevel.postSecondary:
-        return AppLocalizations.postSecondary;
-    }
-    return null;
-  }
-
-  Map<String, InfoTableData> _generateInfoTableData(
-      Map<String, List<SchoolModel>> groupedData,
+  BuiltMap<String, InfoTableData> _generateInfoTableData(
+      BuiltMap<String, BuiltList<School>> groupedData,
       {String districtCode}) {
     final convertedData = Map<String, InfoTableData>();
     var totalMaleCount = 0;
@@ -129,8 +112,14 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
           .where((school) =>
               districtCode == null || school.districtCode == districtCode)
           .forEach((school) {
-        maleCount += school.enrolMale;
-        femaleCount += school.enrolFemale;
+        switch (school.gender) {
+          case Gender.male:
+            maleCount += school.enrol ?? 0;
+            break;
+          case Gender.female:
+            femaleCount += school.enrol ?? 0;
+            break;
+        }
       });
 
       convertedData[group] = InfoTableData(maleCount, femaleCount);
@@ -142,22 +131,21 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
     convertedData[AppLocalizations.total] =
         InfoTableData(totalMaleCount, totalFemaleCount);
 
-    return convertedData;
+    return convertedData.build();
   }
 
-  Map<String, Map<String, InfoTableData>>
-      _calculateEnrollmentBySchoolLevelAndState() {
-    final enrollment = Map<String, Map<String, InfoTableData>>();
-    final districtKeys = _schoolsModel.getDistrictCodeKeysList();
-    final filteredData = _schoolsModel.getSortedWithFilteringBySchoolType();
+  BuiltMap<String, BuiltMap<String, InfoTableData>>
+      _calculateEnrolBySchoolLevelAndDistrict(Lookups lookups) {
+    final groupedByDistrictWithTotal = {AppLocalizations.total: _schools};
+    groupedByDistrictWithTotal.addEntries(
+      _schools.groupBy((it) => it.districtCode).entries,
+    );
 
-    enrollment[AppLocalizations.total] = _generateInfoTableData(filteredData);
-
-    districtKeys.forEach((district) {
-      enrollment[district] =
-          _generateInfoTableData(filteredData, districtCode: district);
-    });
-
-    return enrollment;
+    return groupedByDistrictWithTotal.map((districtCode, schools) {
+      final groupedBySchoolType = schools
+          .groupBy((it) => it.schoolTypeCode);
+      return MapEntry(districtCode.from(lookups.districts),
+          _generateInfoTableData(groupedBySchoolType));
+    }).build();
   }
 }

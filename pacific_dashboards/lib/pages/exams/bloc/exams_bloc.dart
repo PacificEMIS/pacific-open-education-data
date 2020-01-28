@@ -25,7 +25,7 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
   ExamsState get unknownErrorState => UnknownErrorState();
 
   @override
-  Stream<Lookups> get lookups => _repository.lookups;
+  Stream<Lookups> get lookupsStream => _repository.lookups;
 
   @override
   Stream<ExamsState> mapEventToState(ExamsEvent event) async* {

@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
@@ -6,8 +7,8 @@ import 'package:pacific_dashboards/utils/hex_color.dart';
 class ChartInfoTableWidget extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final List<String> _keys;
-  final Map<String, int> _data;
+  final BuiltList<String> _keys;
+  final BuiltMap<String, int> _data;
   final String _titleName;
   final String _titleValue;
 
@@ -19,7 +20,7 @@ class ChartInfoTableWidget extends StatefulWidget {
   final Color _iconArrowColor = AppColors.kTuna;
 
   ChartInfoTableWidget(this._data, this._titleName, this._titleValue)
-      : _keys = _data.keys.toList();
+      : _keys = _data.keys.toBuiltList();
 
   @override
   _ChartInfoTableWidgetState createState() => _ChartInfoTableWidgetState();
@@ -48,7 +49,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
         },
         border: _getTableBorder(
             widget._borderColor, ChartInfoTableWidget._kBorderWidth, false),
-        children: _generateTableBody(widget._keys, widget._data),
+        children: _generateTableBody(widget._keys.toList(), widget._data),
       )
     ]);
   }
@@ -154,7 +155,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   }
 
   List<TableRow> _generateTableBody(
-      List<dynamic> keys, Map<dynamic, int> dataMap) {
+      List<dynamic> keys, BuiltMap<dynamic, int> dataMap) {
     final rowsList = List<TableRow>();
     List<int> sortedValues = dataMap.values.toList();
 

@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
@@ -25,7 +26,7 @@ class InfoTableData {
 class InfoTableWidget extends StatefulWidget {
   InfoTableWidget({
     Key key,
-    @required Map<String, InfoTableData> data,
+    @required BuiltMap<String, InfoTableData> data,
     @required String title,
     @required String firstColumnName,
     KeySortFunc keySortFunc,
@@ -39,7 +40,7 @@ class InfoTableWidget extends StatefulWidget {
 
   static const double _kBorderWidth = 1.0;
 
-  final Map<String, InfoTableData> _data;
+  final BuiltMap<String, InfoTableData> _data;
   final KeySortFunc _keySortFunc;
 
   final String _title;
@@ -243,7 +244,7 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
   }
 
   List<TableRow> _generateTableBody(
-      Map<String, InfoTableData> data, TableRow subTitle) {
+      BuiltMap<String, InfoTableData> data, TableRow subTitle) {
     final rows = List<TableRow>();
     rows.add(subTitle);
 
