@@ -28,7 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeEvent event,
   ) async* {
     if (event is StartedHomeEvent) {
-      final currentEmis = _globalSettings.currentEmis;
+      final currentEmis = await _globalSettings.currentEmis;
       yield LoadedHomeState(
           currentEmis, await configureSectionsForEmis(currentEmis));
     }

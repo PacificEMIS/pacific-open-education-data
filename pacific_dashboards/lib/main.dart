@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/app.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:pacific_dashboards/data/data_source/local/hive_config.dart';
 import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
 
 void main() async {
@@ -14,8 +13,6 @@ void main() async {
     systemNavigationBarColor: Colors.white,
     statusBarColor: Colors.white10,
   ));
-
-  await configureHive();
 
   var injector = InjectorWidget(child: App());
   await injector.init();

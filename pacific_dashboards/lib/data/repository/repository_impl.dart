@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/data_source/data_source.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
@@ -7,40 +8,44 @@ import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
+import 'package:rxdart/rxdart.dart';
 
 class RepositoryImpl implements Repository {
-  final DataSource _backendProvider;
-  final LocalDataSource _fileProvider;
+  final DataSource _remoteDataSource;
+  final LocalDataSource _localDataSource;
 
-  RepositoryImpl(this._backendProvider, this._fileProvider);
+  final BehaviorSubject<Lookups> _lookupsSubject = BehaviorSubject();
+
+  RepositoryImpl(this._remoteDataSource, this._localDataSource);
+
+  void dispose() {
+    _lookupsSubject.close();
+  }
 
   @override
   Stream<RepositoryResponse<TeachersModel>> fetchAllTeachers() async* {
     yield* _fetchWithoutEtag(
-      getLocal: _fileProvider.fetchTeachersModel,
-      getRemote: _backendProvider.fetchTeachersModel,
-      updateLocal: _fileProvider.saveTeachersModel,
-      lookupsSetter: (result, lookups) => result.lookupsModel = lookups,
+      getLocal: _localDataSource.fetchTeachersModel,
+      getRemote: _remoteDataSource.fetchTeachersModel,
+      updateLocal: _localDataSource.saveTeachersModel,
     );
   }
 
   @override
   Stream<RepositoryResponse<SchoolsModel>> fetchAllSchools() async* {
     yield* _fetchWithEtag(
-      getLocal: _fileProvider.fetchSchoolsModel,
-      getRemote: _backendProvider.fetchSchoolsModel,
-      updateLocal: _fileProvider.saveSchoolsModel,
-      lookupsSetter: (result, lookups) => result.lookupsModel = lookups,
+      getLocal: _localDataSource.fetchSchoolsModel,
+      getRemote: _remoteDataSource.fetchSchoolsModel,
+      updateLocal: _localDataSource.saveSchoolsModel,
     );
   }
 
   @override
   Stream<RepositoryResponse<ExamsModel>> fetchAllExams() async* {
     yield* _fetchWithoutEtag(
-      getLocal: _fileProvider.fetchExamsModel,
-      getRemote: _backendProvider.fetchExamsModel,
-      updateLocal: _fileProvider.saveExamsModel,
-      lookupsSetter: (result, lookups) => result.lookupsModel = lookups,
+      getLocal: _localDataSource.fetchExamsModel,
+      getRemote: _remoteDataSource.fetchExamsModel,
+      updateLocal: _localDataSource.saveExamsModel,
     );
   }
 
@@ -48,50 +53,46 @@ class RepositoryImpl implements Repository {
   Stream<RepositoryResponse<SchoolAccreditationsChunk>>
       fetchAllAccreditations() async* {
     yield* _fetchWithEtag(
-      getLocal: _fileProvider.fetchSchoolAccreditationsChunk,
-      getRemote: _backendProvider.fetchSchoolAccreditationsChunk,
-      updateLocal: _fileProvider.saveSchoolAccreditationsChunk,
-      lookupsSetter: (result, lookups) {
-        result.statesChunk.lookupsModel = lookups;
-        result.standardsChunk.lookupsModel = lookups;
-      },
+      getLocal: _localDataSource.fetchSchoolAccreditationsChunk,
+      getRemote: _remoteDataSource.fetchSchoolAccreditationsChunk,
+      updateLocal: _localDataSource.saveSchoolAccreditationsChunk,
     );
   }
 
-  Future<Lookups> _fetchAllLookups() async {
-    Lookups result;
+  @override
+  Stream<Lookups> get lookups {
+    if (!_lookupsSubject.hasValue) {
+      final pushSavedToSubject = () async {
+        final localLookups = await _localDataSource.fetchLookupsModel();
+        if (localLookups == null) {
+          return;
+        }
+        _lookupsSubject.add(localLookups);
+      };
 
-    result = await _fileProvider.fetchLookupsModel();
-
-    if (result == null) {
-      result = await _backendProvider.fetchLookupsModel();
-      await _fileProvider.saveLookupsModel(result);
+      Connectivity().checkConnectivity().then((status) {
+        if (status == ConnectivityResult.none) {
+          return Future.value();
+        } else {
+          return _remoteDataSource
+              .fetchLookupsModel()
+              .then((remote) => _localDataSource.saveLookupsModel(remote));
+        }
+      }).then((_) => pushSavedToSubject(),
+          onError: (er) => pushSavedToSubject());
     }
 
-    if (result == null) throw NoDataException();
-
-    return result;
+    return _lookupsSubject;
   }
 
   Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({
     Future<T> getLocal(),
     Future<T> getRemote(),
     Future<void> updateLocal(T remote),
-    void lookupsSetter(T result, Lookups lookups),
   }) async* {
-    Lookups lookups;
-    try {
-      lookups = await _fetchAllLookups();
-    } catch (ex) {
-      yield FailureRepositoryResponse(RepositoryType.local, ex);
-      yield FailureRepositoryResponse(RepositoryType.remote, ex);
-      return;
-    }
-
     T result = await getLocal();
 
     if (result != null) {
-      lookupsSetter(result, lookups);
       yield SuccessRepositoryResponse(RepositoryType.local, result);
       yield SuccessRepositoryResponse(RepositoryType.remote, result);
     } else {
@@ -99,7 +100,6 @@ class RepositoryImpl implements Repository {
       try {
         result = await getRemote();
         await updateLocal(result);
-        lookupsSetter(result, lookups);
         yield SuccessRepositoryResponse(RepositoryType.remote, result);
       } catch (ex) {
         yield FailureRepositoryResponse(RepositoryType.remote, ex);
@@ -111,21 +111,10 @@ class RepositoryImpl implements Repository {
     Future<T> getLocal(),
     Future<T> getRemote(),
     Future<void> updateLocal(T remote),
-    void lookupsSetter(T result, Lookups lookups),
   }) async* {
-    Lookups lookups;
-    try {
-      lookups = await _fetchAllLookups();
-    } catch (ex) {
-      yield FailureRepositoryResponse(RepositoryType.local, ex);
-      yield FailureRepositoryResponse(RepositoryType.remote, ex);
-      return;
-    }
-
     T result = await getLocal();
 
     if (result != null) {
-      lookupsSetter(result, lookups);
       yield SuccessRepositoryResponse(RepositoryType.local, result);
     } else {
       yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
@@ -133,8 +122,10 @@ class RepositoryImpl implements Repository {
 
     try {
       result = await getRemote();
+      if (result == null) {
+        throw NoDataException();
+      }
       await updateLocal(result);
-      lookupsSetter(result, lookups);
       yield SuccessRepositoryResponse(RepositoryType.remote, result);
     } on NoNewDataRemoteException catch (_) {
       if (result != null) {

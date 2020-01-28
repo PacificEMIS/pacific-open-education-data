@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/school_accreditation_model.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
@@ -24,6 +25,9 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
 
   @override
   AccreditationState get unknownErrorState => UnknownErrorState();
+
+  @override
+  Stream<Lookups> get lookups => _repository.lookups;
 
   @override
   Stream<AccreditationState> mapEventToState(

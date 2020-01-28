@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import './bloc.dart';
 
@@ -22,6 +23,9 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
 
   @override
   ExamsState get unknownErrorState => UnknownErrorState();
+
+  @override
+  Stream<Lookups> get lookups => _repository.lookups;
 
   @override
   Stream<ExamsState> mapEventToState(ExamsEvent event) async* {

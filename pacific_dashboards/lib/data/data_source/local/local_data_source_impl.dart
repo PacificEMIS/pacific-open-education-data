@@ -1,9 +1,6 @@
-import 'dart:convert';
-import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
-import 'package:pacific_dashboards/data/data_source/local/key_string_storage.dart';
-import 'package:pacific_dashboards/data/data_source/local/model/lookup/hive_lookups.dart';
+import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
@@ -12,31 +9,12 @@ import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/models/teachers_model.dart';
 
 class LocalDataSourceImpl extends LocalDataSource {
-  static const _kSchoolsKey = 'schools';
-  static const _kTeachersKey = 'teachers';
-  static const _kExamsKey = 'exams';
-  static const _kSchoolAccreditationKey = 'accreditations';
-  static const _kLookupsKey = 'lookups';
-  static const _kMicronesiaPath = 'FSOM';
-  static const _kMarshalsPath = 'MI';
-  static const _kKiribatiPath = 'KI';
+  final Database _database;
+  final GlobalSettings _globalSettings;
 
-  final KeyStringStorage _stringStorage;
-  final GlobalSettings _settings;
+  LocalDataSourceImpl(this._database, this._globalSettings);
 
-  LocalDataSourceImpl(this._stringStorage, this._settings);
-
-  String get _basePath {
-    switch (_settings.currentEmis) {
-      case Emis.miemis:
-        return _kMarshalsPath;
-      case Emis.fedemis:
-        return _kMicronesiaPath;
-      case Emis.kemis:
-        return _kKiribatiPath;
-    }
-    throw FallThroughError();
-  }
+  Future<Emis> get _emis => _globalSettings.currentEmis;
 
   @override
   Future<SchoolsModel> fetchSchoolsModel() async {
@@ -45,7 +23,7 @@ class LocalDataSourceImpl extends LocalDataSource {
 //      return null;
 //    }
 //    return SchoolsModel.fromJson(json.decode(cachedJson));
-  return null;
+    return null;
   }
 
   @override
@@ -89,9 +67,8 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   @override
   Future<Lookups> fetchLookupsModel() async {
-    final Box<HiveLookups> box = await Hive.openBox(_kLookupsKey);
-    final storedLookups = box.get(0);
-    return storedLookups.toLookups();
+    final storedLookups = await _database.lookups.get(await _emis);
+    return storedLookups;
   }
 
   @override
@@ -119,12 +96,6 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
-  Future<void> saveLookupsModel(Lookups model) async {
-    final hiveLookups = HiveLookups.from(model)
-      ..timestamp = DateTime.now().millisecondsSinceEpoch;
-
-    final box = await Hive.openBox(_kLookupsKey);
-    box.put(0, hiveLookups);
-  }
-
+  Future<void> saveLookupsModel(Lookups model) async =>
+      await _database.lookups.save(model, await _emis);
 }

@@ -1,4 +1,4 @@
-import 'package:pacific_dashboards/data/data_source/local/key_string_storage.dart';
+import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 
 class GlobalSettings {
@@ -6,23 +6,21 @@ class GlobalSettings {
   static const _kEmisKey = "emis";
   static const _kVersionSuffix = "_version";
 
-  final KeyStringStorage _storage;
+  final StringsDao _stringsDao;
 
-  GlobalSettings(this._storage);
+  GlobalSettings(this._stringsDao);
 
-  Emis get currentEmis {
-    return emisFromString(_storage.get(_kEmisKey)) ?? kDefaultEmis;
+  Future<Emis> get currentEmis async {
+    return emisFromString(await _stringsDao.getByKey(_kEmisKey)) ??
+        kDefaultEmis;
   }
 
-  Future<void> setCurrentEmis(Emis emis) {
-    return _storage.set(_kEmisKey, emis.toString());
-  }
+  Future<void> setCurrentEmis(Emis emis) =>
+      _stringsDao.save(_kEmisKey, emis.toString());
 
-  String getEtag(String path) {
-    return _storage.get(path + _kVersionSuffix);
-  }
+  Future<String> getEtag(String path) =>
+      _stringsDao.getByKey(path + _kVersionSuffix);
 
-  Future<void> setEtag(String path, String etag) {
-    return _storage.set(path + _kVersionSuffix, etag);
-  }
+  Future<void> setEtag(String path, String etag) =>
+      _stringsDao.save(path + _kVersionSuffix, etag);
 }

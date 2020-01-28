@@ -1,13 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
 abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
   @protected
   State get serverUnavailableState;
+
   @protected
   State get unknownErrorState;
+
+  @protected
+  Stream<Lookups> get lookups;
 
   @protected
   Stream<State> handleFetch<T>({

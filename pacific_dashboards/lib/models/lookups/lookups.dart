@@ -13,6 +13,8 @@ abstract class Lookups implements Built<Lookups, LookupsBuilder> {
 
   factory Lookups([updates(LookupsBuilder b)]) = _$Lookups;
 
+  static Lookups empty() => Lookups((b) {});
+
   @BuiltValueField(wireName: 'authorityGovt')
   BuiltList<Lookup> get authorityGovt;
 
@@ -32,7 +34,8 @@ abstract class Lookups implements Built<Lookups, LookupsBuilder> {
   BuiltList<Lookup> get accreditationTerms;
 
   String toJson() {
-    return json.encode(standardSerializers.serializeWith(Lookups.serializer, this));
+    return json
+        .encode(standardSerializers.serializeWith(Lookups.serializer, this));
   }
 
   static Lookups fromJson(String jsonString) {
@@ -41,4 +44,12 @@ abstract class Lookups implements Built<Lookups, LookupsBuilder> {
   }
 
   static Serializer<Lookups> get serializer => _$lookupsSerializer;
+
+  bool isEmpty() =>
+      authorityGovt.isEmpty &&
+      schoolTypes.isEmpty &&
+      districts.isEmpty &&
+      authorities.isEmpty &&
+      levels.isEmpty &&
+      accreditationTerms.isEmpty;
 }

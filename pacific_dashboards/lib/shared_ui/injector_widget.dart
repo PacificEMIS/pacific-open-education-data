@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
-import 'package:pacific_dashboards/data/data_source/local/key_string_storage.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source_impl.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source_impl.dart';
+import 'package:pacific_dashboards/data/database/database.dart';
+import 'package:pacific_dashboards/data/database/db_impl/hive_database.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/data/repository/repository_impl.dart';
 import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
@@ -27,19 +28,21 @@ class InjectorWidget extends InheritedWidget {
   Repository _repository;
   GlobalSettings _globalSettings;
   RemoteConfig _remoteConfig;
+  Database _database;
 
   @override
   bool updateShouldNotify(InjectorWidget old) => false;
 
   init() async {
-    final stringsStorage = HiveKeyStringStorage();
-    await stringsStorage.init();
+    final database = HiveDatabase();
+    await database.init();
+    _database = database;
 
-    _globalSettings = GlobalSettings(stringsStorage);
+    _globalSettings = GlobalSettings(_database.strings);
 
     _repository = RepositoryImpl(
       RemoteDataSourceImpl(_globalSettings),
-      LocalDataSourceImpl(stringsStorage, _globalSettings),
+      LocalDataSourceImpl(_database, _globalSettings),
     );
 
     final fireRemoteConfig = FirebaseRemoteConfig();

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -51,9 +49,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     };
   }
 
-  Future<dynamic> _get({@required String path, bool forced = false}) async {
-    final requestUrl = '${_settings.currentEmis.baseUrl}/api/$path';
-    final existingEtag = forced ? null : _settings.getEtag(requestUrl);
+  Future<String> _get({@required String path, bool forced = false}) async {
+    final emis = await _settings.currentEmis;
+    final requestUrl = '${emis.baseUrl}/api/$path';
+    final existingEtag = forced ? null : await _settings.getEtag(requestUrl);
     var headers = {
       'Accept-Encoding': 'gzip, deflate',
     };
@@ -61,7 +60,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       headers['If-None-Match'] = existingEtag;
     }
     final options = Options(headers: headers);
-    Response<dynamic> response;
+    Response<String> response;
 
     try {
       response = await _dio.get(requestUrl, options: options);
@@ -99,13 +98,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     final responseData = await _get(
         path: _kTeachersApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
-    return TeachersModel.fromJson(responseData);
+    return null;
+//    return TeachersModel.fromJson(responseData);
   }
 
   @override
   Future<SchoolsModel> fetchSchoolsModel({bool force = false}) async {
     final responseData = await _get(path: _kSchoolsApiKey);
-    return SchoolsModel.fromJson(responseData);
+    return null;
+//    return SchoolsModel.fromJson(responseData);
   }
 
   @override
@@ -113,7 +114,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     final responseData = await _get(
         path: _kExamsApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
-    return ExamsModel.fromJson(responseData);
+    return null;
+//    return ExamsModel.fromJson(responseData);
   }
 
   @override
@@ -121,11 +123,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       {bool force = false}) async {
     final responseData =
         await _get(path: _kSchoolAccreditationsByStandardApiKey);
-    final testData = await _get(path: _kSchoolAccreditationsByStateApiKey);
-    var modelByState = SchoolAccreditationsModel.fromJson(testData);
-    var modelByStandard = SchoolAccreditationsModel.fromJson(responseData);
-    return SchoolAccreditationsChunk(
-        statesChunk: modelByState, standardsChunk: modelByStandard);
+    return null;
+//    final testData = await _get(path: _kSchoolAccreditationsByStateApiKey);
+//    var modelByState = SchoolAccreditationsModel.fromJson(testData);
+//    var modelByStandard = SchoolAccreditationsModel.fromJson(responseData);
+//    return SchoolAccreditationsChunk(
+//        statesChunk: modelByState, standardsChunk: modelByStandard);
   }
 
   @override
@@ -136,22 +139,22 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return Lookups.fromJson(responseData);
   }
 
-  Future<Response<dynamic>> _fallbackApiGetCall(String url, String eTag) async {
-    final Map result = await platform.invokeMethod('apiGet', {
-      'url': url,
-      'eTag': eTag,
-    });
-    print(result);
+  Future<Response<String>> _fallbackApiGetCall(String url, String eTag) async {
     try {
-      final response = Response(
+      final Map result = await platform.invokeMethod('apiGet', {
+        'url': url,
+        'eTag': eTag,
+      });
+      print(result);
+      final response = Response<String>(
         headers: Headers.fromMap({ 'ETag': [result['eTag']] }),
         statusCode: result['code'],
-        data: json.decode(result['body']),
+        data: result['body'],
       );
       return response;
-    } catch (er) {
-      print(er);
-      rethrow;
+    } catch (error) {
+      print(error);
+      throw ApiRemoteException(url: url, code: 0, message: error.toString());
     }
   }
 }

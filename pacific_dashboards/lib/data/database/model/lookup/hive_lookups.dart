@@ -1,7 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/data/data_source/local/model/expirable.dart';
-import 'package:pacific_dashboards/data/data_source/local/model/lookup/hive_lookup.dart';
+import 'package:pacific_dashboards/data/database/model/expirable.dart';
+import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
 part 'hive_lookups.g.dart';

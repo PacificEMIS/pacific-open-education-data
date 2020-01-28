@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school_model.dart';
 import 'package:pacific_dashboards/models/schools_model.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
@@ -25,6 +26,9 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
 
   @override
   SchoolsState get unknownErrorState => UnknownErrorState();
+
+  @override
+  Stream<Lookups> get lookups => _repository.lookups;
 
   @override
   Stream<SchoolsState> mapEventToState(SchoolsEvent event) async* {
