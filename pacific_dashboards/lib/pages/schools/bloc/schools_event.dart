@@ -1,6 +1,7 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/models/schools_model.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 
 abstract class SchoolsEvent extends Equatable {
   const SchoolsEvent();
@@ -12,10 +13,10 @@ abstract class SchoolsEvent extends Equatable {
 class StartedSchoolsEvent extends SchoolsEvent {}
 
 class FiltersAppliedSchoolsEvent extends SchoolsEvent {
-  const FiltersAppliedSchoolsEvent({@required this.updatedModel});
+  const FiltersAppliedSchoolsEvent({@required this.filters});
 
-  final SchoolsModel updatedModel;
+  final BuiltList<Filter> filters;
 
   @override
-  List<Object> get props => [updatedModel];
+  List<Object> get props => [filters];
 }

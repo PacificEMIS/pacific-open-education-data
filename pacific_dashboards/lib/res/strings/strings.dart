@@ -175,6 +175,8 @@ class AppLocalizations {
 
   static String get serverUnavailableError =>
       Intl.message('You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.', name: 'serverUnavailableError');
+
+  static String get filtersTitle => Intl.message('Filter', name: 'filtersTitle');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
