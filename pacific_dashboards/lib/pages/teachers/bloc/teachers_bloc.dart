@@ -4,7 +4,7 @@ import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/teachers/teacher.dart';
+import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';

@@ -8,12 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/exams_model.dart';
+import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/serialized/serializers.dart';
-import 'package:pacific_dashboards/models/teachers/teacher.dart';
+import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
@@ -115,12 +115,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<ExamsModel> fetchExamsModel() async {
-    final responseData = await _get(
-        path: _kExamsApiKey,
-        forced: true); // TODO: deprecated. forced disables ETag
-    return null;
-//    return ExamsModel.fromJson(responseData);
+  Future<BuiltList<Exam>> fetchExams() async {
+    final responseData = await _get(path: _kExamsApiKey);
+    final List<dynamic> data = json.decode(responseData);
+    return data
+        .map((item) => serializers.deserializeWith(Exam.serializer, item))
+        .toBuiltList();
   }
 
   @override

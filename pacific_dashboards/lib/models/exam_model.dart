@@ -1,3 +1,4 @@
+@deprecated
 class ExamModel {
   final String exam;
   final int examYear;

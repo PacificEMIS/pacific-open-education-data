@@ -3,11 +3,11 @@ import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/exams_model.dart';
+import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/teachers/teacher.dart';
+import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 class LocalDataSourceImpl extends LocalDataSource {
   final Database _database;
@@ -23,21 +23,11 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   @override
   Future<BuiltList<Teacher>> fetchTeachers() async =>
-  await _database.teachers.get(await _emis);
+      await _database.teachers.get(await _emis);
 
   @override
-  Future<ExamsModel> fetchExamsModel() async {
-//    if (_isTimePassed(_kExamsKey)) {
-//      return null;
-//    }
-//    final cachedJson = await _readFile(_basePath + _kExamsKey);
-//    if (cachedJson == null) {
-//      return null;
-//    }
-//    return ExamsModel.fromJson(json.decode(cachedJson));
-
-    return null;
-  }
+  Future<BuiltList<Exam>> fetchExams() async =>
+      await _database.exams.get(await _emis);
 
   @override
   Future<SchoolAccreditationsChunk> fetchSchoolAccreditationsChunk() async {
@@ -64,10 +54,8 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.teachers.save(teachers, await _emis);
 
   @override
-  Future<void> saveExamsModel(ExamsModel model) async {
-//    await _saveTime(_kExamsKey);
-//    return await _writeFile(_basePath + _kExamsKey, model) != null;
-  }
+  Future<void> saveExams(BuiltList<Exam> exams) async =>
+      await _database.exams.save(exams, await _emis);
 
   @override
   Future<void> saveSchoolAccreditationsChunk(

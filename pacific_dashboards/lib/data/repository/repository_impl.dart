@@ -5,11 +5,11 @@ import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart
 import 'package:pacific_dashboards/data/data_source/data_source.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/exams_model.dart';
+import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/teachers/teacher.dart';
+import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -50,11 +50,11 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<ExamsModel>> fetchAllExams() async* {
+  Stream<RepositoryResponse<BuiltList<Exam>>> fetchAllExams() async* {
     yield* _fetchWithoutEtag(
-      getLocal: _localDataSource.fetchExamsModel,
-      getRemote: _remoteDataSource.fetchExamsModel,
-      updateLocal: _localDataSource.saveExamsModel,
+      getLocal: _localDataSource.fetchExams,
+      getRemote: _remoteDataSource.fetchExams,
+      updateLocal: _localDataSource.saveExams,
     );
   }
 

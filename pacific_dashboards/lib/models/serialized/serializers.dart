@@ -1,14 +1,15 @@
-import 'package:built_value/serializer.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
+import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
-import 'package:pacific_dashboards/models/teachers/teacher.dart';
+import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 part 'serializers.g.dart';
 
@@ -22,15 +23,8 @@ part 'serializers.g.dart';
   School,
   Filter,
   Teacher,
+  Exam,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..addPlugin(StandardJsonPlugin()))
-//      ..addBuilderFactory(
-//        const FullType(BuiltList, const [const FullType(School)]),
-//        () => ListBuilder<School>(),
-//      )
-//      ..addBuilderFactory(
-//        const FullType(BuiltList, const [const FullType(Teacher)]),
-//        () => ListBuilder<Teacher>(),
-//      ))
     .build();

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
-import 'package:pacific_dashboards/models/teachers/teacher.dart';
+import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 part 'hive_teacher.g.dart';
 

@@ -1,9 +1,9 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
-import 'package:pacific_dashboards/data/database/model/teachers/hive_teacher.dart';
+import 'package:pacific_dashboards/data/database/model/teacher/hive_teacher.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/teachers/teacher.dart';
+import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 class HiveTeachersDao extends TeachersDao {
   static const _kKey = 'teachers';

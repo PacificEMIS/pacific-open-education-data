@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
-import 'package:pacific_dashboards/models/exam_model.dart';
-import 'package:pacific_dashboards/models/exams_model.dart';
+import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
+import 'package:pacific_dashboards/pages/exams/bloc/exams_navigator.dart';
 import './bloc.dart';
 
 class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
@@ -13,7 +14,8 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
         _repository = repository;
 
   final Repository _repository;
-  ExamsModel _examsModel;
+
+  ExamsNavigator _navigator;
 
   @override
   ExamsState get initialState => InitialExamsState();
@@ -36,7 +38,7 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
         beforeFetchState: currentState,
         fetch: _repository.fetchAllExams,
         onSuccess: (data) async* {
-          _examsModel = data;
+          _navigator = ExamsNavigator(data);
           yield PopulatedExamsState(await _convertExams());
           yield _filterState;
         },
@@ -44,49 +46,50 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
     }
 
     if (event is PrevExamSelectedEvent) {
-      _examsModel.examsDataNavigator.prevExamPage();
+      _navigator.prevExamPage();
       yield PopulatedExamsState(await _convertExams());
       yield _filterState;
     }
 
     if (event is NextExamSelectedEvent) {
-      _examsModel.examsDataNavigator.nextExamPage();
+      _navigator.nextExamPage();
       yield PopulatedExamsState(await _convertExams());
       yield _filterState;
     }
 
     if (event is PrevViewSelectedEvent) {
-      _examsModel.examsDataNavigator.prevExamView();
+      _navigator.prevExamView();
       yield PopulatedExamsState(await _convertExams());
       yield _filterState;
     }
 
     if (event is NextViewSelectedEvent) {
-      _examsModel.examsDataNavigator.nextExamView();
+      _navigator.nextExamView();
       yield PopulatedExamsState(await _convertExams());
       yield _filterState;
     }
 
     if (event is PrevFilterSelectedEvent) {
-      _examsModel.examsDataNavigator.prevExamStandard();
+      _navigator.prevExamStandard();
       yield PopulatedExamsState(await _convertExams());
       yield _filterState;
     }
 
     if (event is NextFilterSelectedEvent) {
-      _examsModel.examsDataNavigator.nextExamStandard();
+      _navigator.nextExamStandard();
       yield PopulatedExamsState(await _convertExams());
       yield _filterState;
     }
   }
 
   PopulatedFilterState get _filterState => PopulatedFilterState(
-        _examsModel.examsDataNavigator.getExamPageName(),
-        _examsModel.examsDataNavigator.getExamViewName(),
-        _examsModel.examsDataNavigator.getStandardName(),
+        _navigator.pageName,
+        _navigator.viewName,
+        _navigator.standardName,
       );
 
-  Future<Map<String, Map<String, ExamModel>>> _convertExams() {
-    return Future(() => _examsModel.examsDataNavigator.getExamResults());
+  Future<BuiltMap<String, BuiltMap<String, Exam>>> _convertExams() {
+    return lookups
+        .then((lookups) => Future(() => _navigator.getExamResults(lookups)));
   }
 }

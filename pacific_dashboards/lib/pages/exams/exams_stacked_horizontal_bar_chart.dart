@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:pacific_dashboards/models/exam_model.dart';
+import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
 class ExamsStackedHorizontalBarChart extends StatelessWidget {
@@ -9,9 +9,9 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
 
   ExamsStackedHorizontalBarChart(this.seriesList, {this.animate});
 
-  factory ExamsStackedHorizontalBarChart.fromModel(ExamModel examModel) {
+  factory ExamsStackedHorizontalBarChart.fromModel(Exam exam) {
     return new ExamsStackedHorizontalBarChart(
-      _createData(examModel),
+      _createData(exam),
       animate: false,
     );
   }
@@ -97,22 +97,21 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
     return titlesList;
   }
 
-  static List<charts.Series<ExamResultPercent, String>> _createData(
-      ExamModel examModel) {
-    bool isIncorrectFData = examModel.candidatesF == 0;
-    bool isIncorrectMData = examModel.candidatesM == 0;
+  static List<charts.Series<ExamResultPercent, String>> _createData(Exam exam) {
+    bool isIncorrectFData = exam.candidatesF == 0;
+    bool isIncorrectMData = exam.candidatesM == 0;
 
     final percentFail1 = [
       new ExamResultPercent(
           'F',
           isIncorrectFData
               ? 0
-              : (-examModel.resultsF[0] * 100 / examModel.candidatesF).round()),
+              : (-exam.wellBelowCompetentF * 100 / exam.candidatesF).round()),
       new ExamResultPercent(
           'M',
           isIncorrectMData
               ? 0
-              : (-examModel.resultsM[0] * 100 / examModel.candidatesM).round()),
+              : (-exam.wellBelowCompetentM * 100 / exam.candidatesM).round()),
     ];
 
     final percentFail2 = [
@@ -120,12 +119,12 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
           'F',
           isIncorrectFData
               ? 0
-              : (-examModel.resultsF[1] * 100 / examModel.candidatesF).round()),
+              : (-exam.approachingCompetenceF * 100 / exam.candidatesF).round()),
       new ExamResultPercent(
           'M',
           isIncorrectMData
               ? 0
-              : (-examModel.resultsM[1] * 100 / examModel.candidatesM).round()),
+              : (-exam.approachingCompetenceM * 100 / exam.candidatesM).round()),
     ];
 
     final percentCompetent1 = [
@@ -133,12 +132,12 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
           'F',
           isIncorrectFData
               ? 0
-              : (examModel.resultsF[2] * 100 / examModel.candidatesF).round()),
+              : (exam.minimallyCompetentF * 100 / exam.candidatesF).round()),
       new ExamResultPercent(
           'M',
           isIncorrectMData
               ? 0
-              : (examModel.resultsM[2] * 100 / examModel.candidatesM).round()),
+              : (exam.minimallyCompetentM * 100 / exam.candidatesM).round()),
     ];
 
     final percentCompetent2 = [
@@ -146,12 +145,12 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
           'F',
           isIncorrectFData
               ? 0
-              : (examModel.resultsF[3] * 100 / examModel.candidatesF).round()),
+              : (exam.competentF * 100 / exam.candidatesF).round()),
       new ExamResultPercent(
           'M',
           isIncorrectMData
               ? 0
-              : (examModel.resultsM[3] * 100 / examModel.candidatesM).round()),
+              : (exam.competentM * 100 / exam.candidatesM).round()),
     ];
 
     final percentFiller1 = [

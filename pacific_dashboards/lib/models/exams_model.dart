@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:pacific_dashboards/models/exam_model.dart';
 import 'package:pacific_dashboards/models/model_with_lookups.dart';
 
+@deprecated
 class ExamsModel extends ModelWithLookups {
   List<ExamModel> _exams;
 
