@@ -82,14 +82,6 @@ class _FilterPageState extends State<FilterPage> {
                         .rebuild((b) => b..selectedIndex = changedIndex),
                   ]),
               );
-//              _filters = _filters.mapIndexed((i, f) {
-//                if (i == filterIndex) {
-//                  f.selectedIndex = changedIndex;
-//                  return f;
-//                } else {
-//                  return f;
-//                }
-//              }).toBuiltList();
             });
           },
         );
