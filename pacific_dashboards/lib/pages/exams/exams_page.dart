@@ -4,9 +4,9 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
-import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
+import 'package:pacific_dashboards/pages/exams/bloc/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/exams_stacked_horizontal_bar_chart.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -175,7 +175,7 @@ class _PopulatedContent extends StatelessWidget {
                   ...results.keys.map((it) {
                     final chart =
                         ExamsStackedHorizontalBarChart.fromModel(results[it]);
-                    if (it != ExamsDataNavigator.kNoTitleKey) {
+                    if (it != ExamsNavigator.kNoTitleKey) {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
