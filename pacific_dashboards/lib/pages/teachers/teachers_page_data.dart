@@ -1,32 +1,32 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/models/teachers_model.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
 
 class TeachersPageData extends Equatable {
   TeachersPageData({
-    @required this.rawModel,
-    @required this.teachersByState,
+    @required this.teachersByDistrict,
     @required this.teachersByAuthority,
     @required this.teachersByPrivacy,
     @required this.teachersBySchoolLevelStateAndGender,
-  })  : assert(rawModel != null),
-        assert(teachersByState != null),
+    @required this.filters,
+  })  : assert(teachersByDistrict != null),
         assert(teachersByAuthority != null),
         assert(teachersByPrivacy != null),
-        assert(teachersBySchoolLevelStateAndGender != null);
+        assert(teachersBySchoolLevelStateAndGender != null),
+        assert(filters != null);
 
-  final TeachersModel rawModel;
-  final Map<String, int> teachersByState;
-  final Map<String, int> teachersByAuthority;
-  final Map<String, int> teachersByPrivacy;
-  final Map<String, Map<String, InfoTableData>>
+  final BuiltMap<String, int> teachersByDistrict;
+  final BuiltMap<String, int> teachersByAuthority;
+  final BuiltMap<String, int> teachersByPrivacy;
+  final BuiltMap<String, BuiltMap<String, InfoTableData>>
       teachersBySchoolLevelStateAndGender;
+  final BuiltList<Filter> filters;
 
   @override
   List<Object> get props => [
-        rawModel,
-        teachersByState,
+        teachersByDistrict,
         teachersByAuthority,
         teachersByPrivacy,
         teachersBySchoolLevelStateAndGender,

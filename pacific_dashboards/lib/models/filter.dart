@@ -1,5 +1,6 @@
 import 'package:pacific_dashboards/models/model_with_lookups.dart';
 
+@deprecated
 class Filter {
   Map<String, bool> _filter = Map<String, bool>();
   String filterName;

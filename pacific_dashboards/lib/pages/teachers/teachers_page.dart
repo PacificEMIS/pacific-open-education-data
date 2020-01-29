@@ -1,9 +1,9 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
-import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
-import 'package:pacific_dashboards/pages/filter/filter_page.dart';
+import 'package:pacific_dashboards/pages/filter2/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -31,7 +31,7 @@ class TeachersPage extends StatefulWidget {
 class TeachersPageState extends State<TeachersPage> {
   bool areFiltersVisible = false;
 
-  void updateFiltersVisibility(BuildContext context) {
+  void _updateFiltersVisibility(BuildContext context) {
     setState(() {
       areFiltersVisible =
           BlocProvider.of<TeachersBloc>(context).state is UpdatedTeachersState;
@@ -42,7 +42,7 @@ class TeachersPageState extends State<TeachersPage> {
   Widget build(BuildContext context) {
     return BlocListener<TeachersBloc, TeachersState>(
       listener: (context, state) {
-        updateFiltersVisibility(context);
+        _updateFiltersVisibility(context);
         if (state is ErrorState) {
           _handleErrorState(state, context);
         }
@@ -124,54 +124,30 @@ class TeachersPageState extends State<TeachersPage> {
     }
   }
 
-  // TODO: rewrite filters
   void _openFilters(BuildContext context) {
     final state = BlocProvider.of<TeachersBloc>(context).state;
     if (state is UpdatedTeachersState) {
-      final model = state.data.rawModel;
-      Navigator.push<List<FilterBloc>>(
+      Navigator.push<BuiltList<Filter>>(
         context,
         MaterialPageRoute(builder: (context) {
-          return FilterPage(blocs: [
-            FilterBloc(
-                filter: model.yearFilter,
-                defaultSelectedKey: model.yearFilter.getMax()),
-            FilterBloc(
-                filter: model.stateFilter,
-                defaultSelectedKey: AppLocalizations.displayAllStates),
-            FilterBloc(
-                filter: model.authorityFilter,
-                defaultSelectedKey: AppLocalizations.displayAllAuthority),
-            FilterBloc(
-                filter: model.govtFilter,
-                defaultSelectedKey: AppLocalizations.displayAllGovernment),
-            FilterBloc(
-                filter: model.schoolLevelFilter,
-                defaultSelectedKey: AppLocalizations.displayAllLevelFilters),
-          ]);
+          return FilterPage(
+            filters: state.data.filters,
+          );
         }),
-      ).then((filterBlocs) {
-        if (filterBlocs != null) {
-          _applyFilters(context, filterBlocs);
-        }
-      });
+      ).then((filters) => _applyFilters(context, filters));
     }
   }
 
-  void _applyFilters(BuildContext context, List<FilterBloc> filterBlocs) {
+  void _applyFilters(BuildContext context, BuiltList<Filter> filters) {
+    if (filters == null) {
+      return;
+    }
     final state = BlocProvider.of<TeachersBloc>(context).state;
     if (state is UpdatedTeachersState) {
-      final model = state.data.rawModel;
-      model.updateYearFilter(filterBlocs[0].filter);
-      model.updateStateFilter(filterBlocs[1].filter);
-      model.updateAuthorityFilter(filterBlocs[2].filter);
-      model.updateGovtFilter(filterBlocs[3].filter);
-      model.updateSchoolLevelFilter(filterBlocs[4].filter);
       BlocProvider.of<TeachersBloc>(context)
-          .add(FiltersAppliedTeachersEvent(updatedModel: model));
+          .add(FiltersAppliedTeachersEvent(filters: filters));
     }
   }
-
 }
 
 class _LoadedContent extends StatelessWidget {
@@ -193,7 +169,7 @@ class _LoadedContent extends StatelessWidget {
           ChartWithTable(
             key: ObjectKey(_data.teachersByAuthority),
             title: AppLocalizations.teachersByAuthority,
-            data: _data.teachersByAuthority.build(),
+            data: _data.teachersByAuthority,
             chartType: ChartType.pie,
             tableKeyName: AppLocalizations.authority,
             tableValueName: AppLocalizations.teachers,
@@ -201,15 +177,15 @@ class _LoadedContent extends StatelessWidget {
           ChartWithTable(
             key: ObjectKey(_data.teachersByPrivacy),
             title: AppLocalizations.teachersEnrollmentGovtNonGovt,
-            data: _data.teachersByPrivacy.build(),
+            data: _data.teachersByPrivacy,
             chartType: ChartType.pie,
             tableKeyName: AppLocalizations.publicPrivate,
             tableValueName: AppLocalizations.teachers,
           ),
           ChartWithTable(
-            key: ObjectKey(_data.teachersByState),
+            key: ObjectKey(_data.teachersByDistrict),
             title: AppLocalizations.teachersByState,
-            data: _data.teachersByState.build(),
+            data: _data.teachersByDistrict,
             chartType: ChartType.bar,
             tableKeyName: AppLocalizations.state,
             tableValueName: AppLocalizations.teachers,
@@ -218,7 +194,7 @@ class _LoadedContent extends StatelessWidget {
             key: ObjectKey(_data.teachersBySchoolLevelStateAndGender),
             title: AppLocalizations.teacherBySchoolTypeStateAndGender,
             firstColumnName: AppLocalizations.schoolLevels,
-            data: _data.teachersBySchoolLevelStateAndGender.map((key, value) => MapEntry(key, value.build())).build(),
+            data: _data.teachersBySchoolLevelStateAndGender,
             keySortFunc: (lv, rv) => lv.compareTo(rv),
           ),
         ],

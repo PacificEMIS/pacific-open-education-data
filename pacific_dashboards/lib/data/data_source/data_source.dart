@@ -3,12 +3,12 @@ import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/teachers_model.dart';
+import 'package:pacific_dashboards/models/teachers/teacher.dart';
 
 abstract class DataSource {
-  Future<TeachersModel> fetchTeachersModel();
+  Future<BuiltList<Teacher>> fetchTeachers();
 
-  Future<BuiltList<School>> fetchSchoolsModel();
+  Future<BuiltList<School>> fetchSchools();
 
   Future<ExamsModel> fetchExamsModel();
 

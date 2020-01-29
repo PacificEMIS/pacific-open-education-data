@@ -4,12 +4,12 @@ import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/teachers_model.dart';
+import 'package:pacific_dashboards/models/teachers/teacher.dart';
 
 abstract class LocalDataSource extends DataSource {
   Future<void> saveExamsModel(ExamsModel model);
 
-  Future<void> saveTeachersModel(TeachersModel model);
+  Future<void> saveTeachers(BuiltList<Teacher> teachers);
 
   Future<void> saveSchools(BuiltList<School> schools);
 

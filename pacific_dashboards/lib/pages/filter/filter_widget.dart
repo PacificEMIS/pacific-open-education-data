@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/models/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
+@deprecated
 class FilterWidget extends StatefulWidget {
   final FilterBloc bloc;
 

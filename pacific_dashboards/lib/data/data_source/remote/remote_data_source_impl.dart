@@ -13,7 +13,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/serialized/serializers.dart';
-import 'package:pacific_dashboards/models/teachers_model.dart';
+import 'package:pacific_dashboards/models/teachers/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
@@ -97,16 +97,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<TeachersModel> fetchTeachersModel() async {
-    final responseData = await _get(
-        path: _kTeachersApiKey,
-        forced: true); // TODO: deprecated. forced disables ETag
-    return null;
-//    return TeachersModel.fromJson(responseData);
+  Future<BuiltList<Teacher>> fetchTeachers() async {
+    final responseData = await _get(path: _kTeachersApiKey);
+    final List<dynamic> data = json.decode(responseData);
+    return data
+        .map((item) => serializers.deserializeWith(Teacher.serializer, item))
+        .toBuiltList();
   }
 
   @override
-  Future<BuiltList<School>> fetchSchoolsModel() async {
+  Future<BuiltList<School>> fetchSchools() async {
     final responseData = await _get(path: _kSchoolsApiKey);
     final List<dynamic> data = json.decode(responseData);
     return data

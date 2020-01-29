@@ -1,6 +1,7 @@
 import 'package:pacific_dashboards/models/filter.dart';
 import 'package:rxdart/rxdart.dart';
 
+@deprecated
 class FilterBloc {
   final Filter filter;
   final _fetcher = BehaviorSubject<Filter>();

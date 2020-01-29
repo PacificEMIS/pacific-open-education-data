@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/teachers/teacher.dart';
 
 part 'serializers.g.dart';
 
@@ -20,11 +21,16 @@ part 'serializers.g.dart';
   Lookups,
   School,
   Filter,
+  Teacher,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
-      ..addPlugin(StandardJsonPlugin())
-      ..addBuilderFactory(
-        const FullType(BuiltList, const [const FullType(School)]),
-        () => ListBuilder<School>(),
-      ))
+      ..addPlugin(StandardJsonPlugin()))
+//      ..addBuilderFactory(
+//        const FullType(BuiltList, const [const FullType(School)]),
+//        () => ListBuilder<School>(),
+//      )
+//      ..addBuilderFactory(
+//        const FullType(BuiltList, const [const FullType(Teacher)]),
+//        () => ListBuilder<Teacher>(),
+//      ))
     .build();

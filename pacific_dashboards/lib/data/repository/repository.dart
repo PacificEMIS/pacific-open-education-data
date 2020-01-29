@@ -3,10 +3,10 @@ import 'package:pacific_dashboards/models/exams_model.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/teachers_model.dart';
+import 'package:pacific_dashboards/models/teachers/teacher.dart';
 
 abstract class Repository {
-  Stream<RepositoryResponse<TeachersModel>> fetchAllTeachers();
+  Stream<RepositoryResponse<BuiltList<Teacher>>> fetchAllTeachers();
 
   Stream<RepositoryResponse<BuiltList<School>>> fetchAllSchools();
 
