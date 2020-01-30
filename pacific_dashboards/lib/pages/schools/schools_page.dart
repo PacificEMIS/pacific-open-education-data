@@ -47,30 +47,18 @@ class SchoolsPageState extends State<SchoolsPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: PlatformAppBar(
-          iconTheme: new IconThemeData(color: AppColors.kWhite),
-          backgroundColor: AppColors.kAppBarBackground,
           actions: [
             Visibility(
               visible: areFiltersVisible,
               child: IconButton(
-                icon: Icon(
-                  Icons.tune,
-                  color: AppColors.kWhite,
-                ),
+                icon: Icon(Icons.tune),
                 onPressed: () {
                   _openFilters(context);
                 },
               ),
             ),
           ],
-          title: Text(
-            AppLocalizations.schools,
-            style: TextStyle(
-              color: AppColors.kWhite,
-              fontSize: 18.0,
-              fontFamily: "Noto Sans",
-            ),
-          ),
+          title: Text(AppLocalizations.schools),
         ),
         body: BlocBuilder<SchoolsBloc, SchoolsState>(
           condition: (prevState, currentState) => !(currentState is ErrorState),

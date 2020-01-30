@@ -25,19 +25,13 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kWhite,
+      backgroundColor: Colors.white,
       appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => _close(context),
           ),
-          iconTheme: IconThemeData(
-            color: AppColors.kWhite,
-          ),
-          title: Text(
-            AppLocalizations.filtersTitle,
-            style: TextStyle(color: AppColors.kWhite),
-          ),
+          title: Text(AppLocalizations.filtersTitle),
           backgroundColor: AppColors.kRoyalBlue),
       body: ListView(
           padding: const EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 100.0),
@@ -51,7 +45,7 @@ class _FilterPageState extends State<FilterPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(22.0),
             ),
-            child: Icon(Icons.done, color: AppColors.kWhite),
+            child: Icon(Icons.done),
             color: AppColors.kRoyalBlue,
             onPressed: () => _apply(context),
           ),

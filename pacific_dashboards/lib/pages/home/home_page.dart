@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/sections_grid.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
@@ -34,108 +35,96 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: new Container(
-        color: Color.fromRGBO(26, 115, 232, 1),
-        child: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            if (state is LoadingHomeState) {
-              return Center(
-                child: PlatformProgressIndicator(),
-              );
-            }
+      backgroundColor: Theme.of(context).primaryColor,
+      body: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          if (state is LoadingHomeState) {
+            return Center(
+              child: PlatformProgressIndicator(),
+            );
+          }
 
-            if (state is LoadedHomeState) {
-              return ListView(children: <Widget>[
-                Container(
-                  height: 80,
-                  alignment: Alignment.centerRight,
-                  child: FlatButton(
-                    color: Color.fromRGBO(26, 115, 232, 1),
-                    textColor: Colors.white,
-                    disabledColor: Colors.grey,
-                    disabledTextColor: Colors.black,
-                    padding: EdgeInsets.all(8.0),
-                    splashColor: Colors.lightBlue,
-                    onPressed: () async {
-                      await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return _CountrySelectDialog(
-                            homeBloc: _homeBloc,
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      AppLocalizations.changeCountry,
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          fontStyle: FontStyle.normal,
-                          fontFamily: "NotoSans-Regular"),
-                    ),
+          if (state is LoadedHomeState) {
+            return ListView(children: <Widget>[
+              Container(
+                height: 80,
+                alignment: Alignment.centerRight,
+                child: FlatButton(
+                  padding: EdgeInsets.all(8.0),
+                  onPressed: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return _CountrySelectDialog(
+                          homeBloc: _homeBloc,
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    AppLocalizations.changeCountry,
+                    style: Theme.of(context).textTheme.button.copyWith(
+                          color: Colors.white,
+                        ),
                   ),
                 ),
-                Container(
-                  height: 160,
-                  width: 160,
-                  child: Image.asset(state.emis.logo),
+              ),
+              Container(
+                height: 160,
+                width: 160,
+                child: Image.asset(state.emis.logo),
+              ),
+              Container(
+                height: 96,
+                width: 266,
+                alignment: Alignment.center,
+                child: Center(
+                  child: Text(
+                    state.emis == Emis.fedemis
+                        ? AppLocalizations.federatedStateOfMicronesiaSplitted
+                        : state.emis.name,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.display2,
+                  ),
                 ),
-                Container(
-                  height: 96,
-                  width: 266,
+              ),
+              Container(
                   alignment: Alignment.center,
-                  child: Center(
-                      child: Text(
-                          state.emis == Emis.fedemis
-                              ? AppLocalizations
-                                  .federatedStateOfMicronesiaSplitted
-                              : state.emis.name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24,
-                              fontFamily: "NotoSans",
-                              color: Colors.white))),
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    child: SectionsGrid(
-                      sections: state.sections,
-                    ))
-              ]);
-            }
+                  child: SectionsGrid(
+                    sections: state.sections,
+                  ))
+            ]);
+          }
 
-            throw FallThroughError();
-          },
-        ),
+          throw FallThroughError();
+        },
       ),
     );
   }
 }
 
 class _CountrySelectDialog extends StatelessWidget {
-  _CountrySelectDialog({@required HomeBloc homeBloc})
+  final HomeBloc _homeBloc;
+
+  const _CountrySelectDialog({@required HomeBloc homeBloc})
       : assert(homeBloc != null),
         _homeBloc = homeBloc;
-
-  final HomeBloc _homeBloc;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 244,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(const Radius.circular(8.0))),
+        shape: const RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
+        ),
         contentPadding: const EdgeInsets.only(top: 10.0, right: 0),
         title: Text(
           AppLocalizations.changeCountry,
-          style: TextStyle(
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-              fontFamily: "NotoSans"),
+          style: Theme.of(context)
+              .textTheme
+              .display2
+              .copyWith(color: AppColors.kTimberGreen),
         ),
         content: Container(
           height: 200,
@@ -174,7 +163,7 @@ class _Country extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
-        splashColor: Colors.blue.withAlpha(30),
+        splashColor: Theme.of(context).accentColor.withAlpha(30),
         onTap: () {
           Navigator.of(context).pop();
           _bloc.add(EmisChanged(_emis));
@@ -187,9 +176,11 @@ class _Country extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 20.0),
-                child:
-                    Text(_emis.name, style: TextStyle(fontFamily: "NotoSans")),
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(
+                  _emis.name,
+                  style: Theme.of(context).textTheme.button,
+                ),
               ),
             ),
           ],

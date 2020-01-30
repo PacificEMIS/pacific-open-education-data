@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
 
 import 'pages/school_accreditation/bloc/bloc.dart';
@@ -26,17 +27,9 @@ class App extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [const Locale('en'), const Locale('ru')],
+      supportedLocales: [const Locale('en')],
       onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primaryColor: Colors.white,
-        accentColor: Colors.blue[100],
-        fontFamily: 'Montserrat',
-        bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: Colors.transparent,
-        ),
-      ),
+      theme: appTheme,
       initialRoute: HomePage.kRoute,
       routes: {
         HomePage.kRoute: (context) => BlocProvider<HomeBloc>(

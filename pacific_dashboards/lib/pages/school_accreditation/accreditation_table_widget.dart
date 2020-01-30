@@ -33,7 +33,7 @@ class AccreditationTableWidget extends StatefulWidget {
   final Color _borderColor = AppColors.kGeyser;
   final Color _textColor = AppColors.kTimberGreen;
   final Color _subTitleTextColor = AppColors.kNevada;
-  final Color _evenRowColor = AppColors.kWhite;
+  final Color _evenRowColor = Colors.white;
   final Color _oddRowColor = AppColors.kAthensGray;
   final Color _titleTextColor = AppColors.kEndeavour;
 

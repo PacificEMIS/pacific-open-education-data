@@ -1,6 +1,5 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';

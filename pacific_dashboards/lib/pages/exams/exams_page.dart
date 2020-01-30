@@ -36,18 +36,9 @@ class ExamsPageState extends State<ExamsPage> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: AppColors.kWhite,
+        backgroundColor: Colors.white,
         appBar: PlatformAppBar(
-          iconTheme: new IconThemeData(color: AppColors.kWhite),
-          backgroundColor: AppColors.kRoyalBlue,
-          title: Text(
-            AppLocalizations.exams,
-            style: TextStyle(
-              color: AppColors.kWhite,
-              fontSize: 18.0,
-              fontFamily: 'Noto Sans',
-            ),
-          ),
+          title: Text(AppLocalizations.exams),
         ),
         body: BlocBuilder<ExamsBloc, ExamsState>(
           condition: (prevState, currentState) => currentState is BodyState,

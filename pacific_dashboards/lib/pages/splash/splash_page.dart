@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 
 class SplashPage extends StatefulWidget {
-
   @override
   _SplashPageState createState() => _SplashPageState();
 
@@ -33,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
         body: Center(
           child: Stack(children: <Widget>[
             Container(
-              decoration: new BoxDecoration(color: AppColors.kAppBarBackground),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               child: Image.asset(
                 "images/splash/Splash.png",
                 fit: BoxFit.cover,
@@ -47,16 +45,11 @@ class _SplashPageState extends State<SplashPage> {
                 AppLocalizations.splash,
                 textAlign: TextAlign.center,
                 softWrap: true,
-                style: TextStyle(
-                  fontFamily: "NotoSans",
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.display3,
               ),
             )
           ]),
         ),
-        backgroundColor: AppColors.kAppBarBackground);
+        backgroundColor: Theme.of(context).primaryColor);
   }
 }

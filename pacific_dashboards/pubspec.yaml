@@ -52,15 +52,21 @@ flutter:
     - images/schools.svg
     - images/teachers.svg
     - images/tune.svg
-    - fonts/NotoSans-Regular.ttf
+
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: fonts/NotoSans-Regular.ttf
+        - asset: fonts/NotoSans-Italic.ttf
+          style: italic
+        - asset: fonts/NotoSans-Bold.ttf
+          weight: 700
+        - asset: fonts/NotoSans-BoldItalic.ttf
+          style: italic
+          weight: 700
 
 flutter_icons:
   ios: true
   android: true
   image_path_ios: "images/logos/logo.png"
   image_path_android: "images/logos/logo.png"
-
-  fonts:
-    - family: NotoSans
-      fonts:
-        - asset: assets/fonts/NotoSans-Regular.ttf

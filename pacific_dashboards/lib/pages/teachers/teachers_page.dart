@@ -6,7 +6,6 @@ import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
-import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
@@ -50,30 +49,18 @@ class TeachersPageState extends State<TeachersPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: PlatformAppBar(
-          iconTheme: new IconThemeData(color: AppColors.kWhite),
-          backgroundColor: AppColors.kAppBarBackground,
           actions: [
             Visibility(
               visible: areFiltersVisible,
               child: IconButton(
-                icon: Icon(
-                  Icons.tune,
-                  color: AppColors.kWhite,
-                ),
+                icon: Icon(Icons.tune),
                 onPressed: () {
                   _openFilters(context);
                 },
               ),
             ),
           ],
-          title: Text(
-            AppLocalizations.teachers,
-            style: TextStyle(
-              color: AppColors.kWhite,
-              fontSize: 18.0,
-              fontFamily: "Noto Sans",
-            ),
-          ),
+          title: Text(AppLocalizations.teachers),
         ),
         body: BlocBuilder<TeachersBloc, TeachersState>(
           condition: (prevState, currentState) => !(currentState is ErrorState),

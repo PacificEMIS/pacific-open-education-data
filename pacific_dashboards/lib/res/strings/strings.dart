@@ -25,7 +25,7 @@ class AppLocalizations {
   }
 
   // App
-  static String get appName => Intl.message('Custom Charts', name: 'appName');
+  static String get appName => Intl.message('Pacific Open Education Data', name: 'appName');
 
   static String get construction =>
       Intl.message('Construction', name: 'construction');

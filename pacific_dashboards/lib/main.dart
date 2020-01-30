@@ -9,9 +9,10 @@ import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.white,
-    statusBarColor: Colors.white10,
+    systemNavigationBarColor: Colors.transparent,
+    statusBarColor: Colors.transparent,
   ));
 
   var injector = InjectorWidget(child: App());
