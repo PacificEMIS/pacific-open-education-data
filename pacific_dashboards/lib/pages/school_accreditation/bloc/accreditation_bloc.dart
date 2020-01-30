@@ -68,12 +68,15 @@ class AccreditationBloc
 
   Future<AccreditationData> _calculateData() async {
     final filteredChunk = await _chunk.applyFilters(_filters);
+    final transations = await lookups;
     return AccreditationData(
       year: _selectedYear.toString(),
       accreditationProgressData: _collectAccreditationProgressData(_chunk),
-      districtStatusData: _collectDistrictStatusData(_chunk),
+      districtStatusData: _collectDistrictStatusData(_chunk).map(
+          (districtCode, v) =>
+              MapEntry(districtCode.from(transations.districts), v)),
       accreditationStatusByState:
-          _collectAccreditationStatusByState(filteredChunk),
+          _collectAccreditationStatusByState(filteredChunk, transations),
       performanceByStandard: _collectPerformanceByStandard(_chunk),
       filters: _filters,
     );
@@ -93,9 +96,10 @@ class AccreditationBloc
     );
   }
 
-  MultitableData _collectAccreditationStatusByState(AccreditationChunk chunk) {
-    return _generateMultitableData(
-        chunk.byDistrict.groupBy((it) => it.districtCode));
+  MultitableData _collectAccreditationStatusByState(
+      AccreditationChunk chunk, Lookups lookups) {
+    return _generateMultitableData(chunk.byDistrict
+        .groupBy((it) => it.districtCode.from(lookups.districts)));
   }
 
   MultitableData _collectPerformanceByStandard(AccreditationChunk chunk) {

@@ -62,10 +62,10 @@ class HiveTeacher extends HiveObject with Expirable {
         (b) => b
           ..surveyYear = surveyYear
           ..ageGroup = ageGroup
-          ..districtCode = districtCode
-          ..authorityCode = authorityCode
-          ..authorityGovt = authorityGovt
-          ..schoolTypeCode = schoolTypeCode
+          ..districtCodeOptional = districtCode
+          ..authorityCodeOptional = authorityCode
+          ..authorityGovtOptional = authorityGovt
+          ..schoolTypeCodeOptional = schoolTypeCode
           ..sector = sector
           ..iSCEDSubClass = iSCEDSubClass
           ..numTeachersM = numTeachersM

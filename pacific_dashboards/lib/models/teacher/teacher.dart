@@ -24,17 +24,21 @@ abstract class Teacher implements Built<Teacher, TeacherBuilder> {
   @BuiltValueField(wireName: 'AgeGroup')
   String get ageGroup;
 
+  @nullable
   @BuiltValueField(wireName: 'DistrictCode')
-  String get districtCode;
+  String get districtCodeOptional;
 
+  @nullable
   @BuiltValueField(wireName: 'AuthorityCode')
-  String get authorityCode;
+  String get authorityCodeOptional;
 
+  @nullable
   @BuiltValueField(wireName: 'AuthorityGovt')
-  String get authorityGovt;
+  String get authorityGovtOptional;
 
+  @nullable
   @BuiltValueField(wireName: 'SchoolTypeCode')
-  String get schoolTypeCode;
+  String get schoolTypeCodeOptional;
 
   @nullable
   @BuiltValueField(wireName: 'Sector')
@@ -75,6 +79,11 @@ abstract class Teacher implements Built<Teacher, TeacherBuilder> {
   @nullable
   @BuiltValueField(wireName: 'CertQualF')
   int get certQualF;
+
+  String get districtCode => districtCodeOptional ?? "";
+  String get authorityCode => authorityCodeOptional ?? "";
+  String get authorityGovt => authorityGovtOptional ?? "";
+  String get schoolTypeCode => schoolTypeCodeOptional ?? "";
 
   int getTeachersCount(Gender gender) {
     switch (gender) {
