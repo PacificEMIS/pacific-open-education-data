@@ -21,7 +21,7 @@ final ThemeData appTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     display1: const TextStyle(
-      color: AppColors.kNevada,
+      color: AppColors.kTimberGreen,
       fontSize: 16.0,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
@@ -50,30 +50,27 @@ final ThemeData appTheme = ThemeData(
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
     ),
+    subtitle: const TextStyle(
+      color: AppColors.kTimberGreen,
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      fontStyle: FontStyle.normal,
+    ),
     overline: const TextStyle(
       color: AppColors.kNevada,
       fontSize: 10.0,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
     ),
+    body2: const TextStyle(
+      color: AppColors.kEndeavour,
+      fontSize: 14.0,
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      fontFamily: 'Roboto',
+    ),
   ),
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
   ),
 );
-
-/*
-    this.display4,
-    this.display3, -
-    this.display2, -
-    this.display1, -
-    this.headline, -
-    this.title, -
-    this.subhead, -
-    this.body2,
-    this.body1,
-    this.caption,
-    this.button, -
-    this.subtitle,
-    this.overline, -
-*/

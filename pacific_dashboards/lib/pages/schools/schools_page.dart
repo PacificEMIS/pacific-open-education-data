@@ -1,10 +1,10 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
-import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
@@ -45,20 +45,19 @@ class SchoolsPageState extends State<SchoolsPage> {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
         appBar: PlatformAppBar(
+          title: Text(AppLocalizations.schools),
           actions: [
             Visibility(
               visible: areFiltersVisible,
               child: IconButton(
-                icon: Icon(Icons.tune),
+                icon: SvgPicture.asset('images/filter.svg'),
                 onPressed: () {
                   _openFilters(context);
                 },
               ),
             ),
           ],
-          title: Text(AppLocalizations.schools),
         ),
         body: BlocBuilder<SchoolsBloc, SchoolsState>(
           condition: (prevState, currentState) => !(currentState is ErrorState),
@@ -75,7 +74,7 @@ class SchoolsPageState extends State<SchoolsPage> {
 
             if (state is UpdatedSchoolsState) {
               return SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
                     ChartWithTable(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
 
-// TODO: REFACTOR THIS
 class ChartInfoTableWidget extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
@@ -13,11 +12,6 @@ class ChartInfoTableWidget extends StatefulWidget {
   final String _titleValue;
 
   final Color _borderColor = AppColors.kGeyser;
-  final Color _textColor = AppColors.kTimberGreen;
-  final Color _titleTextColor = AppColors.kNevada;
-  final Color _evenRowColor = Colors.white;
-  final Color _oddRowColor = AppColors.kAthensGray;
-  final Color _iconArrowColor = AppColors.kTuna;
 
   ChartInfoTableWidget(this._data, this._titleName, this._titleValue)
       : _keys = _data.keys.toBuiltList();
@@ -65,75 +59,48 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
       ),
       children: [
         TableCell(
-          child: Padding(
+          child: _SortingTitle(
+            title: widget._titleName,
+            useUpArrowIcon: !_domainSortedByIncreasing,
             padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  widget._titleName,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: widget._titleTextColor,
-                  ),
-                ),
-                InkResponse(
-                  child: Icon(
-                    (_domainSortedByIncreasing
-                        ? Icons.keyboard_arrow_down
-                        : Icons.keyboard_arrow_up),
-                    color: widget._iconArrowColor,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _sortType = SortType.domain;
-                      _domainSortedByIncreasing = !_domainSortedByIncreasing;
-                    });
-                  },
-                  highlightShape: BoxShape.rectangle,
-                ),
-              ],
+              top: 10.0,
+              bottom: 10.0,
+              left: 16.0,
+              right: 16.0,
             ),
+            onTap: () {
+              setState(() {
+                _sortType = SortType.domain;
+                _domainSortedByIncreasing = !_domainSortedByIncreasing;
+              });
+            },
           ),
         ),
         TableCell(
-          child: Padding(
+          child: _SortingTitle(
+            title: widget._titleValue,
             padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 6.0, right: 1.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  widget._titleValue,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: widget._titleTextColor,
-                  ),
-                ),
-                InkResponse(
-                  child: Icon(
-                    (_measureSortedByIncreasing
-                        ? Icons.keyboard_arrow_down
-                        : Icons.keyboard_arrow_up),
-                    color: widget._iconArrowColor,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _sortType = SortType.measure;
-                      _measureSortedByIncreasing = !_measureSortedByIncreasing;
-                    });
-                  },
-                  highlightShape: BoxShape.rectangle,
-                ),
-              ],
+              top: 10.0,
+              bottom: 10.0,
+              left: 6.0,
+              right: 8.0,
             ),
+            alignment: MainAxisAlignment.end,
+            useUpArrowIcon: !_measureSortedByIncreasing,
+            onTap: () {
+              setState(() {
+                _sortType = SortType.measure;
+                _measureSortedByIncreasing = !_measureSortedByIncreasing;
+              });
+            },
           ),
         ),
       ],
     );
   }
 
-  TableBorder _getTableBorder(Color borderColor, double borderWidth, bool top) {
+  TableBorder _getTableBorder(
+      Color borderColor, double borderWidth, bool isTop) {
     return TableBorder(
       top: BorderSide(
         width: borderWidth,
@@ -148,7 +115,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
         color: borderColor,
       ),
       bottom: BorderSide(
-        width: top ? 0 : borderWidth,
+        width: isTop ? 0 : borderWidth,
         color: borderColor,
       ),
     );
@@ -234,29 +201,28 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   }
 
   TableRow _generateTableRow(String domain, int measure, int index) {
-    final rowTextStyle = TextStyle(
-      fontSize: 14.0,
-      color: widget._textColor,
-    );
-
     return TableRow(
       decoration: BoxDecoration(
-        color: ((index % 2 == 0) ? widget._evenRowColor : widget._oddRowColor),
+        color: ((index % 2 == 0) ? Colors.white : AppColors.kAthensGray),
       ),
       children: [
         TableCell(
           child: Padding(
             padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 8.0, right: 7.0),
+              top: 10.0,
+              bottom: 10.0,
+              left: 8.0,
+              right: 7.0,
+            ),
             child: Row(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(1.0)),
+                      borderRadius:
+                          const BorderRadius.all(const Radius.circular(1.0)),
                       color: HexColor.fromStringHash(domain),
-                      // AppColors.kGridColors[index] ?? "#1A73E8"),
                     ),
                     height: 8.0,
                     width: 8.0,
@@ -265,7 +231,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
                 Expanded(
                   child: Text(
                     domain,
-                    style: rowTextStyle,
+                    style: Theme.of(context).textTheme.subhead,
                   ),
                 ),
               ],
@@ -276,19 +242,74 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
           verticalAlignment: TableCellVerticalAlignment.fill,
           child: Padding(
             padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
+              top: 10.0,
+              bottom: 10.0,
+              left: 16.0,
+              right: 16.0,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Text(
                   measure.toString(),
-                  style: rowTextStyle,
+                  style: Theme.of(context).textTheme.subhead,
                 ),
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SortingTitle extends StatelessWidget {
+  const _SortingTitle({
+    Key key,
+    @required String title,
+    @required bool useUpArrowIcon,
+    @required GestureTapCallback onTap,
+    EdgeInsetsGeometry padding = const EdgeInsets.only(),
+    MainAxisAlignment alignment = MainAxisAlignment.start,
+  })  : _title = title,
+        _useUpArrowIcon = useUpArrowIcon,
+        _onTap = onTap,
+        _padding = padding,
+        _alignment = alignment,
+        super(key: key);
+
+  final MainAxisAlignment _alignment;
+  final EdgeInsetsGeometry _padding;
+  final String _title;
+  final bool _useUpArrowIcon;
+  final GestureTapCallback _onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: _padding,
+      child: Row(
+        mainAxisAlignment: _alignment,
+        children: <Widget>[
+          Text(
+            _title,
+            style: Theme.of(context)
+                .textTheme
+                .body2
+                .copyWith(color: AppColors.kNevada),
+          ),
+          InkResponse(
+            child: Icon(
+              (_useUpArrowIcon
+                  ? Icons.keyboard_arrow_up
+                  : Icons.keyboard_arrow_down),
+              color: AppColors.kTuna,
+            ),
+            onTap: _onTap,
+            highlightShape: BoxShape.rectangle,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -4,7 +4,7 @@ class TileWidget extends StatelessWidget {
   final Widget title;
   final Widget body;
 
-  TileWidget({this.title, this.body});
+  const TileWidget({this.title, this.body});
 
   @override
   Widget build(BuildContext context) {

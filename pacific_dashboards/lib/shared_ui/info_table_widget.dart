@@ -10,6 +10,8 @@ class InfoTableData {
   final int _maleAmount;
   final int _femaleAmount;
 
+  const InfoTableData(this._maleAmount, this._femaleAmount);
+
   String get maleAmount =>
       _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
 
@@ -19,8 +21,6 @@ class InfoTableData {
   String get total => (_maleAmount + _femaleAmount) != 0
       ? (_maleAmount + _femaleAmount).toString()
       : _kZeroSymbol;
-
-  InfoTableData(this._maleAmount, this._femaleAmount);
 }
 
 class InfoTableWidget extends StatefulWidget {
@@ -47,11 +47,6 @@ class InfoTableWidget extends StatefulWidget {
   final String _firstColumnName;
 
   final Color _borderColor = AppColors.kGeyser;
-  final Color _textColor = AppColors.kTimberGreen;
-  final Color _subTitleTextColor = AppColors.kNevada;
-  final Color _evenRowColor = Colors.white;
-  final Color _oddRowColor = AppColors.kAthensGray;
-  final Color _titleTextColor = AppColors.kEndeavour;
 
   @override
   State<InfoTableWidget> createState() => _InfoTableWidgetState();
@@ -107,16 +102,9 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
           child: Padding(
             padding: const EdgeInsets.only(
                 top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  widget._title ?? 'null',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: widget._titleTextColor,
-                  ),
-                ),
-              ],
+            child: Text(
+              widget._title ?? 'null',
+              style: Theme.of(context).textTheme.body2,
             ),
           ),
         ),
@@ -148,75 +136,16 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
       ),
       children: [
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  widget._firstColumnName,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._subTitleTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _SubTitleCell(name: widget._firstColumnName),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Male",
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._subTitleTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _SubTitleCell(name: 'Male'),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Female",
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._subTitleTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _SubTitleCell(name: 'Female'),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Total",
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._subTitleTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _SubTitleCell(name: 'Total'),
         ),
       ],
     );
@@ -264,81 +193,77 @@ class _InfoTableWidgetState extends State<InfoTableWidget> {
   TableRow _generateTableRow(String domain, InfoTableData measure, int index) {
     return TableRow(
       decoration: BoxDecoration(
-        color: index % 2 == 0 ? widget._evenRowColor : widget._oddRowColor,
+        color: index % 2 == 0 ? Colors.white : AppColors.kAthensGray,
       ),
       children: [
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  domain,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _Cell(value: domain),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.maleAmount.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _Cell(value: measure.maleAmount.toString()),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.femaleAmount.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _Cell(value: measure.femaleAmount.toString()),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.total.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _Cell(value: measure.total.toString()),
         ),
       ],
+    );
+  }
+}
+
+class _Cell extends StatelessWidget {
+  const _Cell({
+    Key key,
+    @required String value,
+  })  : _value = value,
+        super(key: key);
+
+  final String _value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            _value,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SubTitleCell extends StatelessWidget {
+  const _SubTitleCell({
+    Key key,
+    @required String name,
+  })  : _name = name,
+        super(key: key);
+
+  final String _name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            _name,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle
+                .copyWith(color: AppColors.kNevada),
+          ),
+        ],
+      ),
     );
   }
 }

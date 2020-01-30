@@ -1,20 +1,19 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_info_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
-import 'package:pacific_dashboards/shared_ui/title_widget.dart';
 
 class ChartWithTable extends StatelessWidget {
-  const ChartWithTable(
-      {Key key,
-      @required String title,
-      @required BuiltMap<String, int> data,
-      @required ChartType chartType,
-      @required String tableKeyName,
-      @required String tableValueName})
-      : assert(title != null),
+  const ChartWithTable({
+    Key key,
+    @required String title,
+    @required BuiltMap<String, int> data,
+    @required ChartType chartType,
+    @required String tableKeyName,
+    @required String tableValueName,
+  })  : assert(title != null),
         assert(data != null),
         assert(chartType != null),
         assert(tableKeyName != null),
@@ -35,13 +34,14 @@ class ChartWithTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TileWidget(
-      title: TitleWidget(_title, AppColors.kRacingGreen),
+      title: Text(
+        _title,
+        style: Theme.of(context).textTheme.display1,
+      ),
       body: Column(
         children: <Widget>[
           ChartFactory.createChart(_chartType, _data),
-          SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
           ChartInfoTableWidget(
             _data,
             _tableKeyName,

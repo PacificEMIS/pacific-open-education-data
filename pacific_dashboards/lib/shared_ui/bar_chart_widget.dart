@@ -16,9 +16,9 @@ class BarChartWidget extends StatefulWidget {
 class BarChartData {
   final String domain;
   final int measure;
-  final Color color; 
+  final Color color;
 
-  BarChartData(this.domain, this.measure, this.color);
+  const BarChartData(this.domain, this.measure, this.color);
 }
 
 class BarChartWidgetState extends State<BarChartWidget> {
@@ -33,8 +33,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
       charts.Series(
         domainFn: (BarChartData chartData, _) => chartData.domain,
         measureFn: (BarChartData chartData, _) => chartData.measure,
-        colorFn: (BarChartData chartData, _) =>
-            _getChartsColor(chartData.color),
+        colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
         id: "name",
         data: data,
       ),
@@ -46,9 +45,9 @@ class BarChartWidgetState extends State<BarChartWidget> {
       primaryMeasureAxis: charts.NumericAxisSpec(
         renderSpec: charts.GridlineRendererSpec(
           labelStyle: charts.TextStyleSpec(
-              fontSize: 10, color: _getChartsColor(AppColors.kNevada)),
+              fontSize: 10, color: AppColors.kNevada.chartsColor),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(AppColors.kLoblolly),
+            color: AppColors.kLoblolly.chartsColor,
           ),
         ),
       ),
@@ -57,20 +56,19 @@ class BarChartWidgetState extends State<BarChartWidget> {
           labelStyle: charts.TextStyleSpec(
               fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(AppColors.kLoblolly),
+            color: AppColors.kLoblolly.chartsColor,
           ),
         ),
       ),
     );
   }
+}
 
-  // charts.Color _getChartsColorFromHex(int colorId) {
-  //   String color = AppColors.kGridColors[colorId] ?? "#1A73E8";
-  //   return charts.Color.fromHex(code: color);
-  // }
-
-  charts.Color _getChartsColor(Color color) {
-    return charts.Color(
-        r: color.red, g: color.green, b: color.blue, a: color.alpha);
-  }
+extension ChartColor on Color {
+  charts.Color get chartsColor => charts.Color(
+        r: red,
+        g: green,
+        b: blue,
+        a: alpha,
+      );
 }
