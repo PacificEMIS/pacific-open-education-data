@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/pair.dart';
 
 class HiveLookupsDao extends LookupsDao {
 
@@ -16,9 +17,14 @@ class HiveLookupsDao extends LookupsDao {
   }
 
   @override
-  Future<Lookups> get(Emis emis) async {
+  Future<Pair<bool, Lookups>> get(Emis emis) async {
     final storedLookups = await _withBox((box) async => box.get(emis.id));
-    return storedLookups?.toLookups() ?? null;
+
+    if (storedLookups == null) {
+      return Pair(false, null);
+    }
+
+    return Pair(storedLookups.isExpired(), storedLookups.toLookups());
   }
 
   @override

@@ -1,20 +1,22 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
-import 'package:pacific_dashboards/data/data_source/data_source.dart';
+import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
 
 class RepositoryImpl implements Repository {
-  final DataSource _remoteDataSource;
+  final RemoteDataSource _remoteDataSource;
   final LocalDataSource _localDataSource;
   final GlobalSettings _globalSettings;
 
@@ -87,10 +89,10 @@ class RepositoryImpl implements Repository {
           if (!subject.hasValue) {
             final pushSavedToSubject = () async {
               final localLookups = await _localDataSource.fetchLookupsModel();
-              if (localLookups == null) {
+              if (localLookups.v2 == null) {
                 return;
               }
-              subject.add(localLookups);
+              subject.add(localLookups.v2);
             };
 
             Connectivity().checkConnectivity().then((status) {
@@ -109,13 +111,15 @@ class RepositoryImpl implements Repository {
   }
 
   Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({
-    Future<T> getLocal(),
+    Future<Pair<bool, T>> getLocal(),
     Future<T> getRemote(),
     Future<void> updateLocal(T remote),
   }) async* {
-    T result = await getLocal();
+    final local = await getLocal();
+    var result = local.v2;
+    final isLocalExpired = local.v1;
 
-    if (result != null) {
+    if (!isLocalExpired && result != null) {
       yield SuccessRepositoryResponse(RepositoryType.local, result);
       yield SuccessRepositoryResponse(RepositoryType.remote, result);
     } else {

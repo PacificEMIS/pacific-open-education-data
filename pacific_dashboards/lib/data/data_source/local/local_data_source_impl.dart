@@ -6,6 +6,7 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
@@ -22,11 +23,11 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.schools.get(await _emis);
 
   @override
-  Future<BuiltList<Teacher>> fetchTeachers() async =>
+  Future<Pair<bool, BuiltList<Teacher>>> fetchTeachers() async =>
       await _database.teachers.get(await _emis);
 
   @override
-  Future<BuiltList<Exam>> fetchExams() async =>
+  Future<Pair<bool, BuiltList<Exam>>> fetchExams() async =>
       await _database.exams.get(await _emis);
 
   @override
@@ -34,7 +35,7 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.accreditations.get(await _emis);
 
   @override
-  Future<Lookups> fetchLookupsModel() async =>
+  Future<Pair<bool, Lookups>> fetchLookupsModel() async =>
       await _database.lookups.get(await _emis);
 
   @override

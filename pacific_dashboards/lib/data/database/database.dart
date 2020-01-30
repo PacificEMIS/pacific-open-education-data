@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
@@ -17,7 +18,7 @@ abstract class Database {
 
 abstract class LookupsDao {
   Future<void> save(Lookups lookups, Emis emis);
-  Future<Lookups> get(Emis emis);
+  Future<Pair<bool, Lookups>> get(Emis emis);
 }
 
 abstract class StringsDao {
@@ -32,12 +33,12 @@ abstract class SchoolsDao {
 
 abstract class TeachersDao {
   Future<void> save(BuiltList<Teacher> teachers, Emis emis);
-  Future<BuiltList<Teacher>> get(Emis emis);
+  Future<Pair<bool, BuiltList<Teacher>>> get(Emis emis);
 }
 
 abstract class ExamsDao {
   Future<void> save(BuiltList<Exam> exams, Emis emis);
-  Future<BuiltList<Exam>> get(Emis emis);
+  Future<Pair<bool, BuiltList<Exam>>> get(Emis emis);
 }
 
 abstract class AccreditationsDao {

@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/pair.dart';
 
 class HiveExamsDao extends ExamsDao {
   static const _kKey = 'exams';
@@ -16,18 +17,20 @@ class HiveExamsDao extends ExamsDao {
   }
 
   @override
-  Future<BuiltList<Exam>> get(Emis emis) async {
+  Future<Pair<bool, BuiltList<Exam>>> get(Emis emis) async {
     final storedExams =
     await _withBox((box) async => box.get(emis.id));
     if (storedExams == null) {
-      return null;
+      return Pair(false, null);
     }
+    var expired = false;
     List<Exam> storedItems = [];
     for (var value in storedExams) {
       final hiveExam = value as HiveExam;
+      expired |= hiveExam.isExpired();
       storedItems.add(hiveExam.toExam());
     }
-    return storedItems.build();
+    return Pair(expired, storedItems.build());
   }
 
   @override
