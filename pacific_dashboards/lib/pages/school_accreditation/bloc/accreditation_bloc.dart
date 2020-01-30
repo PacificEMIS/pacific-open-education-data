@@ -1,21 +1,27 @@
 import 'dart:async';
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/models/accreditations/accreditation.dart';
+import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/school_accreditation_model.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
 import './bloc.dart';
+import 'package:pacific_dashboards/utils/collections.dart';
 
-class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState> {
+class AccreditationBloc
+    extends BaseBloc<AccreditationEvent, AccreditationState> {
   AccreditationBloc({@required Repository repository})
       : assert(repository != null),
         _repository = repository;
 
   final Repository _repository;
-  SchoolAccreditationsChunk _chunk;
+
+  AccreditationChunk _chunk;
+  BuiltList<Filter> _filters;
 
   @override
   AccreditationState get initialState => InitialAccreditationState();
@@ -41,50 +47,64 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
         fetch: _repository.fetchAllAccreditations,
         onSuccess: (data) async* {
           _chunk = data;
-          yield UpdatedAccreditationState(_calculateData());
+          _filters = await _initFilters();
+          yield UpdatedAccreditationState(await _calculateData());
         },
       );
     }
 
     if (event is FiltersAppliedAccreditationEvent) {
-      _chunk = event.updatedModel;
-      yield UpdatedAccreditationState(_calculateData());
+      _filters = event.filters;
+      yield UpdatedAccreditationState(await _calculateData());
     }
   }
 
-  AccreditationData _calculateData() {
+  Future<BuiltList<Filter>> _initFilters() async {
+    if (_chunk == null) {
+      return null;
+    }
+    return _chunk.generateDefaultFilters(await lookups);
+  }
+
+  Future<AccreditationData> _calculateData() async {
+    final filteredChunk = await _chunk.applyFilters(_filters);
     return AccreditationData(
-      rawModel: _chunk,
-      year: _selectedYear,
-      accreditationProgressData: _collectAccreditationProgressData(),
-      districtStatusData: _collectDistrictStatusData(),
-      accreditationStatusByState: _collectAccreditationStatusByState(),
-      performanceByStandard: _collectPerformanceByStandard(),
+      year: _selectedYear.toString(),
+      accreditationProgressData: _collectAccreditationProgressData(_chunk),
+      districtStatusData: _collectDistrictStatusData(_chunk),
+      accreditationStatusByState:
+          _collectAccreditationStatusByState(filteredChunk),
+      performanceByStandard: _collectPerformanceByStandard(_chunk),
+      filters: _filters,
     );
   }
 
-  Map<String, List<int>> _collectAccreditationProgressData() {
-    return _generateCumulativeMap(data: _chunk.statesChunk.getSortedByYear());
-  }
-
-  Map<String, List<int>> _collectDistrictStatusData() {
+  BuiltMap<String, BuiltList<int>> _collectAccreditationProgressData(
+      AccreditationChunk chunk) {
     return _generateCumulativeMap(
-      data: _chunk.statesChunk.getSortedByState(),
+        data: chunk.byDistrict.groupBy((it) => it.surveyYear.toString()));
+  }
+
+  BuiltMap<String, BuiltList<int>> _collectDistrictStatusData(
+      AccreditationChunk chunk) {
+    return _generateCumulativeMap(
+      data: _chunk.byDistrict.groupBy((it) => it.districtCode),
       year: _selectedYear,
     );
   }
 
-  MultitableData _collectAccreditationStatusByState() {
+  MultitableData _collectAccreditationStatusByState(AccreditationChunk chunk) {
     return _generateMultitableData(
-        _chunk.statesChunk.getSortedWithFiltersByState());
+        chunk.byDistrict.groupBy((it) => it.districtCode));
   }
 
-  MultitableData _collectPerformanceByStandard() {
-    return _generateMultitableData(_chunk.standardsChunk.getSortedByStandart());
+  MultitableData _collectPerformanceByStandard(AccreditationChunk chunk) {
+    return _generateMultitableData(
+        chunk.byStandard.groupBy((it) => it.standard ?? ""));
   }
 
   MultitableData _generateMultitableData(
-      Map<String, List<SchoolAccreditationModel>> data) {
+      BuiltMap<String, BuiltList<Accreditation>> data) {
     return MultitableData(
       evaluatedData: _generateAccreditationTableData(
         data,
@@ -99,19 +119,19 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
     );
   }
 
-  Map<String, List<int>> _generateCumulativeMap({
-    @required Map<String, List<SchoolAccreditationModel>> data,
-    String year,
+  BuiltMap<String, BuiltList<int>> _generateCumulativeMap({
+    @required BuiltMap<String, BuiltList<Accreditation>> data,
+    int year,
   }) {
-    final result = Map<String, List<int>>();
+    final result = Map<String, BuiltList<int>>();
 
     data.forEach((key, value) {
       final levels = [0, 0, 0, 0];
 
       value.forEach((accreditation) {
-        final sum = accreditation.numSum;
+        final sum = accreditation.num;
 
-        if (year != null && accreditation.surveyYear.toString() != year) {
+        if (year != null && accreditation.surveyYear != year) {
           return;
         }
 
@@ -133,30 +153,26 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
         }
       });
 
-      result[key] = levels;
+      result[key] = levels.build();
     });
 
-    return result;
+    return result.build();
   }
 
-  String get _selectedYear {
-    var selectedYear = _chunk.statesChunk.yearFilter.selectedKey;
-    if (selectedYear == "") {
-      selectedYear = _chunk.statesChunk.yearFilter.getMax();
-    }
-    return selectedYear;
+  int get _selectedYear {
+    return _filters.firstWhere((it) => it.id == 0).intValue;
   }
 
-  Map<String, AccreditationTableData> _generateAccreditationTableData(
-      Map<String, List<SchoolAccreditationModel>> rawMapData,
+  BuiltMap<String, AccreditationTableData> _generateAccreditationTableData(
+      BuiltMap<String, BuiltList<Accreditation>> rawMapData,
       bool isCumulative,
-      String currentYear) {
+      int currentYear) {
     final convertedData = Map<String, AccreditationTableData>();
     final sortedMapKeys = rawMapData.keys.toList()
       ..sort((lv, rv) => rawMapData[lv]
           .first
-          ?.standard
-          ?.compareTo(rawMapData[rv].first?.standard));
+          ?.sortField
+          ?.compareTo(rawMapData[rv].first?.sortField));
     sortedMapKeys.forEach((key) {
       var levels = [0, 0, 0, 0, 0, 0, 0, 0];
       final rawValue = rawMapData[key];
@@ -165,9 +181,9 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
         var level = model[j].level;
         var numThisYear = 0;
         var numSum = 0;
-        if (model[j].surveyYear.toString() == currentYear) {
-          numThisYear += model[j].numInYear ?? 0;
-          numSum += model[j].numSum ?? 0;
+        if (model[j].surveyYear == currentYear) {
+          numThisYear += model[j].numThisYear ?? 0;
+          numSum += model[j].num ?? 0;
           switch (level) {
             case AccreditationLevel.level1:
               levels[0] += numThisYear;
@@ -199,6 +215,6 @@ class AccreditationBloc extends BaseBloc<AccreditationEvent, AccreditationState>
             AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
     });
 
-    return convertedData;
+    return convertedData.build();
   }
 }

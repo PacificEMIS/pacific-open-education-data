@@ -2,11 +2,11 @@ import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
+import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
-import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 class LocalDataSourceImpl extends LocalDataSource {
@@ -30,20 +30,12 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.exams.get(await _emis);
 
   @override
-  Future<SchoolAccreditationsChunk> fetchSchoolAccreditationsChunk() async {
-//    final cachedJson = await _readFile(_basePath + _kSchoolAccreditationKey);
-//    if (cachedJson == null) {
-//      return null;
-//    }
-//    return SchoolAccreditationsChunk.fromJson(json.decode(cachedJson));
-
-    return null;
-  }
+  Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async =>
+      await _database.accreditations.get(await _emis);
 
   @override
-  Future<Lookups> fetchLookupsModel() async {
-    return await _database.lookups.get(await _emis);
-  }
+  Future<Lookups> fetchLookupsModel() async =>
+      await _database.lookups.get(await _emis);
 
   @override
   Future<void> saveSchools(BuiltList<School> schools) async =>
@@ -58,11 +50,8 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.exams.save(exams, await _emis);
 
   @override
-  Future<void> saveSchoolAccreditationsChunk(
-      SchoolAccreditationsChunk chunk) async {
-//    return await _writeFile(_basePath + _kSchoolAccreditationKey, chunk) !=
-//        null;
-  }
+  Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk) async =>
+      await _database.accreditations.save(chunk, await _emis);
 
   @override
   Future<void> saveLookupsModel(Lookups model) async =>

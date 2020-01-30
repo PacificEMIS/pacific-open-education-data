@@ -1,4 +1,5 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
@@ -11,6 +12,7 @@ abstract class Database {
   SchoolsDao get schools;
   TeachersDao get teachers;
   ExamsDao get exams;
+  AccreditationsDao get accreditations;
 }
 
 abstract class LookupsDao {
@@ -36,4 +38,9 @@ abstract class TeachersDao {
 abstract class ExamsDao {
   Future<void> save(BuiltList<Exam> exams, Emis emis);
   Future<BuiltList<Exam>> get(Emis emis);
+}
+
+abstract class AccreditationsDao {
+  Future<void> save(AccreditationChunk chunk, Emis emis);
+  Future<AccreditationChunk> get(Emis emis);
 }

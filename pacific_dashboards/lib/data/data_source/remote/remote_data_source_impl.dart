@@ -7,11 +7,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
+import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
+import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
-import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/serialized/serializers.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
@@ -124,15 +126,23 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<SchoolAccreditationsChunk> fetchSchoolAccreditationsChunk() async {
-    final responseData =
-        await _get(path: _kSchoolAccreditationsByStandardApiKey);
-    return null;
-//    final testData = await _get(path: _kSchoolAccreditationsByStateApiKey);
-//    var modelByState = SchoolAccreditationsModel.fromJson(testData);
-//    var modelByStandard = SchoolAccreditationsModel.fromJson(responseData);
-//    return SchoolAccreditationsChunk(
-//        statesChunk: modelByState, standardsChunk: modelByStandard);
+  Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async {
+    final List<dynamic> byStandardData =
+        json.decode(await _get(path: _kSchoolAccreditationsByStandardApiKey));
+    final List<dynamic> byDistrictData =
+        json.decode(await _get(path: _kSchoolAccreditationsByStateApiKey));
+
+    final modelByStandard = byStandardData.map((item) =>
+        serializers.deserializeWith(StandardAccreditation.serializer, item));
+
+    final modelByDistrict = byDistrictData.map((item) =>
+        serializers.deserializeWith(DistrictAccreditation.serializer, item));
+
+    return AccreditationChunk(
+      (b) => b
+        ..byStandard = ListBuilder<StandardAccreditation>(modelByStandard)
+        ..byDistrict = ListBuilder<DistrictAccreditation>(modelByDistrict),
+    );
   }
 
   @override

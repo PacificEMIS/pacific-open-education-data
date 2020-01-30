@@ -27,6 +27,7 @@ abstract class Exam implements Built<Exam, ExamBuilder> {
   @BuiltValueField(wireName: 'ExamBenchmark')
   String get benchmark;
 
+  @nullable
   @BuiltValueField(wireName: 'CandidatesM')
   int get candidatesM;
 

@@ -1,6 +1,7 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 
 abstract class AccreditationEvent extends Equatable {
   const AccreditationEvent();  
@@ -12,10 +13,10 @@ abstract class AccreditationEvent extends Equatable {
 class StartedAccreditationEvent extends AccreditationEvent {}
 
 class FiltersAppliedAccreditationEvent extends AccreditationEvent {
-  const FiltersAppliedAccreditationEvent({@required this.updatedModel});
+  const FiltersAppliedAccreditationEvent({@required this.filters});
 
-  final SchoolAccreditationsChunk updatedModel;
+  final BuiltList<Filter> filters;
 
   @override
-  List<Object> get props => [updatedModel];
+  List<Object> get props => [filters];
 }

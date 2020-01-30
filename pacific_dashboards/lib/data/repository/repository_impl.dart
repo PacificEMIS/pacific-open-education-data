@@ -4,11 +4,11 @@ import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/data_source/data_source.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
+import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
-import 'package:pacific_dashboards/models/school_accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
@@ -59,7 +59,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<SchoolAccreditationsChunk>>
+  Stream<RepositoryResponse<AccreditationChunk>>
       fetchAllAccreditations() async* {
     yield* _fetchWithEtag(
       getLocal: _localDataSource.fetchSchoolAccreditationsChunk,

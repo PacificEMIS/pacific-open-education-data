@@ -1,6 +1,9 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
+import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
+import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
@@ -24,7 +27,9 @@ part 'serializers.g.dart';
   Filter,
   Teacher,
   Exam,
+  DistrictAccreditation,
+  AccreditationChunk,
+  StandardAccreditation,
 ])
-final Serializers serializers = (_$serializers.toBuilder()
-      ..addPlugin(StandardJsonPlugin()))
-    .build();
+final Serializers serializers =
+    (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

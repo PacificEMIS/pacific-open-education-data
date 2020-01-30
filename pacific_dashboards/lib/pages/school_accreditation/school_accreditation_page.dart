@@ -1,7 +1,8 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
-import 'package:pacific_dashboards/pages/filter/filter_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
@@ -123,51 +124,28 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
     }
   }
 
-  // TODO: rewrite filters
   void _openFilters(BuildContext context) {
     final state = BlocProvider.of<AccreditationBloc>(context).state;
     if (state is UpdatedAccreditationState) {
-      final model = state.data.rawModel.statesChunk;
-      Navigator.push<List<FilterBloc>>(
+      Navigator.push<BuiltList<Filter>>(
         context,
         MaterialPageRoute(builder: (context) {
-          return FilterPage(blocs: [
-            FilterBloc(
-                filter: model.yearFilter,
-                defaultSelectedKey: model.yearFilter.getMax()),
-            FilterBloc(
-                filter: model.stateFilter,
-                defaultSelectedKey: AppLocalizations.displayAllStates),
-            FilterBloc(
-                filter: model.authorityFilter,
-                defaultSelectedKey: AppLocalizations.displayAllAuthority),
-            FilterBloc(
-                filter: model.govtFilter,
-                defaultSelectedKey: AppLocalizations.displayAllGovernment),
-            FilterBloc(
-                filter: model.schoolLevelFilter,
-                defaultSelectedKey: AppLocalizations.displayAllLevelFilters),
-          ]);
+          return FilterPage(
+            filters: state.data.filters,
+          );
         }),
-      ).then((filterBlocs) {
-        if (filterBlocs != null) {
-          _applyFilters(context, filterBlocs);
-        }
-      });
+      ).then((filters) => _applyFilters(context, filters));
     }
   }
 
-  void _applyFilters(BuildContext context, List<FilterBloc> filterBlocs) {
+  void _applyFilters(BuildContext context, BuiltList<Filter> filters) {
+    if (filters == null) {
+      return;
+    }
     final state = BlocProvider.of<AccreditationBloc>(context).state;
     if (state is UpdatedAccreditationState) {
-      final model = state.data.rawModel;
-      model.statesChunk.updateYearFilter(filterBlocs[0].filter);
-      model.statesChunk.updateStateFilter(filterBlocs[1].filter);
-      model.statesChunk.updateAuthorityFilter(filterBlocs[2].filter);
-      model.statesChunk.updateGovtFilter(filterBlocs[3].filter);
-      model.statesChunk.updateSchoolLevelFilter(filterBlocs[4].filter);
       BlocProvider.of<AccreditationBloc>(context)
-          .add(FiltersAppliedAccreditationEvent(updatedModel: model));
+          .add(FiltersAppliedAccreditationEvent(filters: filters));
     }
   }
 }
