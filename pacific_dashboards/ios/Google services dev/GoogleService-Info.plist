@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>269367888049-ol5ea5t4ie2egpiq4iblj57odfk1kb6k.apps.googleusercontent.com</string>
+	<string>154037620831-9va0omgpsj7s1ed8h0ercr6mlvkbv2tg.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.269367888049-ol5ea5t4ie2egpiq4iblj57odfk1kb6k</string>
+	<string>com.googleusercontent.apps.154037620831-9va0omgpsj7s1ed8h0ercr6mlvkbv2tg</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAabzKbZL9UQX0dfuLy_LzJmYOxs2MBJt0</string>
+	<string>AIzaSyBf5fhdyxHPw1f5ytQQOYY4-Sk2TTZMyOM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>269367888049</string>
+	<string>154037620831</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>fm.doe.national.pacificdashboards</string>
 	<key>PROJECT_ID</key>
-	<string>pacific-dashboards-dev</string>
+	<string>pacific-open-education-data</string>
 	<key>STORAGE_BUCKET</key>
-	<string>pacific-dashboards-dev.appspot.com</string>
+	<string>pacific-open-education-data.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:269367888049:ios:107856bd8b08932840fa90</string>
+	<string>1:154037620831:ios:44a895aed2e771999d8bea</string>
 	<key>DATABASE_URL</key>
-	<string>https://pacific-dashboards-dev.firebaseio.com</string>
+	<string>https://pacific-open-education-data.firebaseio.com</string>
 </dict>
 </plist>
