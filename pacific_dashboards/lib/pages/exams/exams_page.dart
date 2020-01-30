@@ -369,6 +369,11 @@ class _BottomMenuState extends State<_BottomMenu>
               width: buttonSize,
               height: buttonSize,
               child: RawMaterialButton(
+                fillColor: Colors.white,
+                shape: CircleBorder(),
+                elevation: 0.0,
+                highlightElevation: 0.0,
+                onPressed: _triggerCollapsing,
                 child: Stack(
                   children: <Widget>[
                     AnimatedBuilder(
@@ -381,7 +386,7 @@ class _BottomMenuState extends State<_BottomMenu>
                       },
                       child: Icon(
                         Icons.check,
-                        color: AppColors.kExamsTableTextGray,
+                        color: AppColors.kNevada,
                         size: 27.0,
                       ),
                     ),
@@ -395,17 +400,12 @@ class _BottomMenuState extends State<_BottomMenu>
                       },
                       child: Icon(
                         Icons.filter_list,
-                        color: AppColors.kExamsTableTextGray,
+                        color: AppColors.kNevada,
                         size: 27.0,
                       ),
                     ),
                   ],
                 ),
-                fillColor: Colors.white,
-                shape: CircleBorder(),
-                elevation: 0.0,
-                highlightElevation: 0.0,
-                onPressed: _triggerCollapsing,
               ),
             ),
           ),
@@ -477,7 +477,7 @@ class _BottomMenuRow extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Icon(
                   Icons.chevron_left,
-                  color: AppColors.kExamsTableTextGray,
+                  color: AppColors.kNevada,
                   size: 21.0,
                 ),
               ),
@@ -498,7 +498,7 @@ class _BottomMenuRow extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Icon(
                   Icons.chevron_right,
-                  color: AppColors.kExamsTableTextGray,
+                  color: AppColors.kNevada,
                   size: 21.0,
                 ),
               ),

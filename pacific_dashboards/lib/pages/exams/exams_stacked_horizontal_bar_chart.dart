@@ -76,7 +76,7 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
             child: new Text(
               text != "0" ? text : "",
               style: new TextStyle(
-                  fontSize: 12.0, color: AppColors.kExamsTableTextGray),
+                  fontSize: 12.0, color: AppColors.kNevada),
               textAlign: TextAlign.center,
               maxLines: 1,
             ),
@@ -87,7 +87,7 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
             width: 25,
             child: Center(
                 child: Container(
-              color: AppColors.kExamsTableTextGray,
+              color: AppColors.kNevada,
               width: 1,
               height: 120,
             ))));

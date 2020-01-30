@@ -12,16 +12,14 @@ class SectionsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
       crossAxisSpacing: 24,
       mainAxisSpacing: 24,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       childAspectRatio: 1.0,
       shrinkWrap: true,
-      children: _sections
-          .map((section) => _Section(section: section))
-          .toList(),
+      children: _sections.map((section) => _Section(section: section)).toList(),
     );
   }
 }
@@ -49,10 +47,10 @@ class _Section extends StatelessWidget {
       ),
       child: Card(
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(const Radius.circular(16.0)),
+          borderRadius: const BorderRadius.all(const Radius.circular(16.0)),
         ),
         child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
+          splashColor: Theme.of(context).accentColor.withAlpha(30),
           onTap: () {
             Navigator.pushNamed(context, _section.routeName);
           },
@@ -66,8 +64,10 @@ class _Section extends StatelessWidget {
                   flex: 5,
                   child: Container(
                     margin: const EdgeInsets.all(20.0),
-                    child: SvgPicture.asset(_section.logoPath,
-                        fit: BoxFit.fitHeight),
+                    child: SvgPicture.asset(
+                      _section.logoPath,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -78,11 +78,7 @@ class _Section extends StatelessWidget {
                       _section.name,
                       textAlign: TextAlign.center,
                       softWrap: true,
-                      style: TextStyle(
-                          fontFamily: "NotoSans",
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: const Color.fromRGBO(99, 105, 109, 1.0)),
+                      style: Theme.of(context).textTheme.headline,
                     ),
                   ),
                 ),

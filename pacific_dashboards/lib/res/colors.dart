@@ -14,7 +14,6 @@ class AppColors {
   static Color kGeyser = HexColor("#DBE0E4");
   static Color kAthensGray = HexColor("#F5F6F8");
   static Color kTuna = HexColor("#33373D");
-  static Color kExamsTableTextGray = HexColor("#63696D");
   
   static List<Color> kLevels = [
     HexColor('#F85454'),
