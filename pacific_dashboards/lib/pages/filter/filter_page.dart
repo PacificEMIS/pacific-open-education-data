@@ -27,15 +27,16 @@ class _FilterPageState extends State<FilterPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => _close(context),
-          ),
-          title: Text(AppLocalizations.filtersTitle),
-          backgroundColor: AppColors.kRoyalBlue),
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => _close(context),
+        ),
+        title: Text(AppLocalizations.filtersTitle),
+      ),
       body: ListView(
-          padding: const EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 100.0),
-          children: _createFilterSections(_filters)),
+        padding: const EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 100.0),
+        children: _createFilterSections(_filters),
+      ),
       floatingActionButton: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SizedBox(
@@ -45,8 +46,11 @@ class _FilterPageState extends State<FilterPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(22.0),
             ),
-            child: Icon(Icons.done),
-            color: AppColors.kRoyalBlue,
+            child: const Icon(
+              Icons.done,
+              color: Colors.white,
+            ),
+            color: Theme.of(context).accentColor,
             onPressed: () => _apply(context),
           ),
         ),
@@ -106,14 +110,11 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 2.0),
       child: Text(
         _title,
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.display1,
       ),
     );
   }
@@ -142,12 +143,15 @@ class _Item extends StatelessWidget {
     return Card(
       elevation: 4,
       child: RadioListTile<int>(
-        title: Text(_filter.items[_index].visibleName),
+        title: Text(
+          _filter.items[_index].visibleName,
+          style: Theme.of(context).textTheme.subhead,
+        ),
         value: _index,
         groupValue: _filter.selectedIndex,
         onChanged: _onChanged,
         controlAffinity: ListTileControlAffinity.leading,
-        activeColor: AppColors.kRoyalBlue,
+        activeColor: Theme.of(context).accentColor,
       ),
       borderOnForeground: false,
     );

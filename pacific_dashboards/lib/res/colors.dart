@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/utils/hex_color.dart';
 
 class AppColors {
   static const Color kRoyalBlue = const Color.fromARGB(255, 26, 115, 232);
@@ -10,14 +9,13 @@ class AppColors {
   static const Color kGeyser = const Color.fromARGB(255, 219, 224, 228);
   static const Color kAthensGray = const Color.fromARGB(255, 245, 246, 248);
   static const Color kTuna = const Color.fromARGB(255, 51, 55, 61);
-
-  static Color kRacingGreen = HexColor("#112313");
-  static Color kDenim = HexColor("#155CBA");
+  static const Color kRacingGreen = const Color.fromARGB(255, 17, 35, 19);
+  static const Color kDenim = const Color.fromARGB(255, 21, 92, 186);
   
-  static List<Color> kLevels = [
-    HexColor('#F85454'),
-    HexColor('#FFBA0A'),
-    HexColor('#94DC39'),
-    HexColor('#0DD35C'),
+  static const List<Color> kLevels = [
+    const Color.fromARGB(255, 248, 84, 84),
+    const Color.fromARGB(255, 255, 186, 10),
+    const Color.fromARGB(255, 148, 220, 57),
+    const Color.fromARGB(255, 13, 211, 92),
   ];
 }
