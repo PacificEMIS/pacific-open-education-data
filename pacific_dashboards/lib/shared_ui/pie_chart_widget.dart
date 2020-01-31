@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
 
 class PieChartWidget extends StatefulWidget {
@@ -27,8 +28,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
         domainFn: (PieChartData chartData, _) => chartData.domain,
         measureFn: (PieChartData chartData, _) => chartData.measure,
         labelAccessorFn: (PieChartData chartData, _) => chartData.domain,
-        colorFn: (PieChartData chartData, _) =>
-            _getChartsColor(chartData.color),
+        colorFn: (PieChartData chartData, _) => chartData.color.chartsColor,
         data: data,
       ),
     ];
@@ -42,14 +42,6 @@ class PieChartWidgetState extends State<PieChartWidget> {
       ),
     );
   }
-
-  charts.Color _getChartsColor(Color color) {
-    return charts.Color(
-        r: color.red, g: color.green, b: color.blue, a: color.alpha);
-  }
-  // charts.Color _getChartsColor(int colorId) {
-  //   return charts.Color.fromHex(code: AppColors.kGridColors[colorId] ?? "#1A73E8");
-  // }
 }
 
 class PieChartData {

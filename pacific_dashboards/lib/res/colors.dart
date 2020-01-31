@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class AppColors {
   static const Color kRoyalBlue = const Color.fromARGB(255, 26, 115, 232);
@@ -10,7 +11,6 @@ class AppColors {
   static const Color kAthensGray = const Color.fromARGB(255, 245, 246, 248);
   static const Color kTuna = const Color.fromARGB(255, 51, 55, 61);
   static const Color kRacingGreen = const Color.fromARGB(255, 17, 35, 19);
-  static const Color kDenim = const Color.fromARGB(255, 21, 92, 186);
   
   static const List<Color> kLevels = [
     const Color.fromARGB(255, 248, 84, 84),
@@ -18,4 +18,14 @@ class AppColors {
     const Color.fromARGB(255, 148, 220, 57),
     const Color.fromARGB(255, 13, 211, 92),
   ];
+}
+
+
+extension ChartColor on Color {
+  charts.Color get chartsColor => charts.Color(
+        r: red,
+        g: green,
+        b: blue,
+        a: alpha,
+      );
 }

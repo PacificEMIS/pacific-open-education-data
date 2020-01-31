@@ -63,12 +63,3 @@ class BarChartWidgetState extends State<BarChartWidget> {
     );
   }
 }
-
-extension ChartColor on Color {
-  charts.Color get chartsColor => charts.Color(
-        r: red,
-        g: green,
-        b: blue,
-        a: alpha,
-      );
-}

@@ -62,16 +62,16 @@ class HiveExam extends HiveObject with Expirable {
           ..districtCode = districtCode
           ..standard = standard
           ..benchmark = benchmark
-          ..candidatesM = candidatesM
-          ..wellBelowCompetentM = wellBelowCompetentM
-          ..approachingCompetenceM = approachingCompetenceM
-          ..minimallyCompetentM = minimallyCompetentM
-          ..competentM = competentM
-          ..candidatesF = candidatesF
-          ..wellBelowCompetentF = wellBelowCompetentF
-          ..approachingCompetenceF = approachingCompetenceF
-          ..minimallyCompetentF = minimallyCompetentF
-          ..competentF = competentF,
+          ..candidatesMOptional = candidatesM
+          ..wellBelowCompetentMOptional = wellBelowCompetentM
+          ..approachingCompetenceMOptional = approachingCompetenceM
+          ..minimallyCompetentMOptional = minimallyCompetentM
+          ..competentMOptional = competentM
+          ..candidatesFOptional = candidatesF
+          ..wellBelowCompetentFOptional = wellBelowCompetentF
+          ..approachingCompetenceFOptional = approachingCompetenceF
+          ..minimallyCompetentFOptional = minimallyCompetentF
+          ..competentFOptional = competentF,
       );
 
   static HiveExam from(Exam exam) => HiveExam()

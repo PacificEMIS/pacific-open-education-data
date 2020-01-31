@@ -45,3 +45,11 @@ extension Indexed<E> on Iterable<E> {
     }
   }
 }
+
+List<T> generateIteratingList<T>(
+  int startingValue,
+  int endingValue,
+  int step,
+  T Function(int value) transform,
+) =>
+    [for (int i = startingValue; i <= endingValue; i += step) transform(i)];

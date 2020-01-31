@@ -74,7 +74,7 @@ class ExamsPageState extends State<ExamsPage> {
               final bloc = BlocProvider.of<ExamsBloc>(context);
               return _BottomMenu(
                 alwaysVisibleHeight: 96,
-                totalHeight: 244,
+                totalHeight: 256,
                 bottomInset: MediaQuery.of(context).viewPadding.bottom,
                 children: <Widget>[
                   _BottomMenuRow(
@@ -145,7 +145,7 @@ class _PopulatedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(16, 16, 16, 260),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 260),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -159,7 +159,7 @@ class _PopulatedContent extends StatelessWidget {
                 children: [
                   Text(
                     it,
-                    style: new TextStyle(fontSize: 14.0, color: Colors.black),
+                    style: Theme.of(context).textTheme.subtitle,
                     textAlign: TextAlign.left,
                     maxLines: 5,
                   ),
@@ -170,15 +170,16 @@ class _PopulatedContent extends StatelessWidget {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Container(
+                          Padding(
                             padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                            child: new Text(
+                            child: Text(
                               it,
-                              style: new TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline
+                                  .copyWith(fontSize: 12.0),
                               textAlign: TextAlign.left,
                             ),
                           ),
@@ -294,7 +295,7 @@ class _BottomMenuState extends State<_BottomMenu>
           height: widget._alwaysVisibleHeight +
               _heightAnimation.value +
               widget._bottomInset,
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 8),
           child: child,
         );
       },
@@ -370,7 +371,7 @@ class _BottomMenuState extends State<_BottomMenu>
               height: buttonSize,
               child: RawMaterialButton(
                 fillColor: Colors.white,
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 elevation: 0.0,
                 highlightElevation: 0.0,
                 onPressed: _triggerCollapsing,
@@ -384,7 +385,7 @@ class _BottomMenuState extends State<_BottomMenu>
                           child: child,
                         );
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.check,
                         color: AppColors.kNevada,
                         size: 27.0,
@@ -398,7 +399,7 @@ class _BottomMenuState extends State<_BottomMenu>
                           child: child,
                         );
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.filter_list,
                         color: AppColors.kNevada,
                         size: 27.0,
@@ -457,11 +458,7 @@ class _BottomMenuRow extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
           child: Text(
             _rowName,
-            style: new TextStyle(
-              fontSize: 14.0,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.headline,
             textAlign: TextAlign.left,
           ),
         ),
@@ -475,7 +472,7 @@ class _BottomMenuRow extends StatelessWidget {
               FlatButton(
                 onPressed: _onPrevTap,
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: Icon(
+                child: const Icon(
                   Icons.chevron_left,
                   color: AppColors.kNevada,
                   size: 21.0,
@@ -484,10 +481,10 @@ class _BottomMenuRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   _name,
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.kDenim,
-                      fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .body2
+                      .copyWith(color: Theme.of(context).accentColor),
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -496,7 +493,7 @@ class _BottomMenuRow extends StatelessWidget {
               FlatButton(
                 onPressed: _onNextTap,
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: Icon(
+                child: const Icon(
                   Icons.chevron_right,
                   color: AppColors.kNevada,
                   size: 21.0,

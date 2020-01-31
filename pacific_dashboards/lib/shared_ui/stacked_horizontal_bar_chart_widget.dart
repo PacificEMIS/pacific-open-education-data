@@ -10,9 +10,11 @@ class StackedHorizontalBarChartWidget extends StatefulWidget {
   final BuiltMap<String, BuiltList<int>> data;
   final ColorFunc colorFunc;
 
-  StackedHorizontalBarChartWidget(
-      {Key key, @required this.data, this.colorFunc})
-      : super(key: key);
+  StackedHorizontalBarChartWidget({
+    Key key,
+    @required this.data,
+    this.colorFunc,
+  }) : super(key: key);
 
   @override
   StackedHorizontalBarChartWidgetState createState() =>
@@ -31,12 +33,12 @@ class StackedHorizontalBarChartWidgetState
       primaryMeasureAxis: charts.NumericAxisSpec(
         renderSpec: charts.GridlineRendererSpec(
           labelStyle: charts.TextStyleSpec(
-              fontSize: 10, color: _getChartsColor(AppColors.kNevada)),
+              fontSize: 10, color: AppColors.kNevada.chartsColor),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(AppColors.kLoblolly),
+            color: AppColors.kLoblolly.chartsColor,
           ),
         ),
-        tickProviderSpec: new charts.BasicNumericTickProviderSpec(
+        tickProviderSpec: const charts.BasicNumericTickProviderSpec(
           dataIsInWholeNumbers: true,
           desiredMaxTickCount: 10,
         ),
@@ -46,20 +48,15 @@ class StackedHorizontalBarChartWidgetState
           labelStyle: charts.TextStyleSpec(
               fontSize: 10, color: charts.MaterialPalette.gray.shadeDefault),
           lineStyle: charts.LineStyleSpec(
-            color: _getChartsColor(AppColors.kLoblolly),
+            color: AppColors.kLoblolly.chartsColor,
           ),
         ),
       ),
-      defaultRenderer: new charts.BarRendererConfig(
+      defaultRenderer: charts.BarRendererConfig(
           stackHorizontalSeparator: 0,
           groupingType: charts.BarGroupingType.stacked,
           strokeWidthPx: 1),
     );
-  }
-
-  charts.Color _getChartsColor(Color color) {
-    return charts.Color(
-        r: color.red, g: color.green, b: color.blue, a: color.alpha);
   }
 
   List<charts.Series<_Data, String>> _createSeries(
@@ -78,11 +75,12 @@ class StackedHorizontalBarChartWidgetState
                 : HexColor.fromStringHash(values[i].toString())));
       });
       series.add(charts.Series<_Data, String>(
-          id: 'series_${i.toString()}',
-          domainFn: (_Data data, int _) => data.domain,
-          measureFn: (_Data data, int _) => data.measure,
-          colorFn: (_Data data, int _) => _getChartsColor(data.color),
-          data: chunk));
+        id: 'series_${i.toString()}',
+        domainFn: (_Data data, int _) => data.domain,
+        measureFn: (_Data data, int _) => data.measure,
+        colorFn: (_Data data, int _) => data.color.chartsColor,
+        data: chunk,
+      ));
     }
 
     return series;

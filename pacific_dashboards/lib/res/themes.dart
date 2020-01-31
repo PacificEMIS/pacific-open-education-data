@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:charts_flutter/flutter.dart' as charts show TextStyleSpec, Color;
 
 final ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
@@ -61,6 +62,7 @@ final ThemeData appTheme = ThemeData(
       fontSize: 10.0,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
+      letterSpacing: 0.0,
     ),
     body2: const TextStyle(
       color: AppColors.kEndeavour,
@@ -74,3 +76,18 @@ final ThemeData appTheme = ThemeData(
     backgroundColor: Colors.transparent,
   ),
 );
+
+const charts.TextStyleSpec largeChartsDomain = const charts.TextStyleSpec(
+    fontFamily: 'NotoSans',
+    color: charts.Color(a: 255, r: 99, g: 105, b: 109),
+    fontSize: 14,
+);
+
+extension ChartsTextStyle on TextStyle {
+  charts.TextStyleSpec get chartsSpec => charts.TextStyleSpec(
+    fontFamily: this.fontFamily,
+    color: this.color.chartsColor,
+    fontSize: this.fontSize.round(),
+    lineHeight: this.height,
+  );
+}

@@ -29,59 +29,79 @@ abstract class Exam implements Built<Exam, ExamBuilder> {
 
   @nullable
   @BuiltValueField(wireName: 'CandidatesM')
-  int get candidatesM;
+  int get candidatesMOptional;
 
   @nullable
   @BuiltValueField(wireName: '1M')
-  int get wellBelowCompetentM;
+  int get wellBelowCompetentMOptional;
 
   @nullable
   @BuiltValueField(wireName: 'ApproachingCompetenceM')
-  int get approachingCompetenceM;
+  int get approachingCompetenceMOptional;
 
   @nullable
   @BuiltValueField(wireName: 'MinimallyCompetentM')
-  int get minimallyCompetentM;
+  int get minimallyCompetentMOptional;
 
   @nullable
   @BuiltValueField(wireName: 'CompetentM')
-  int get competentM;
+  int get competentMOptional;
 
   @nullable
   @BuiltValueField(wireName: 'CandidatesF')
-  int get candidatesF;
+  int get candidatesFOptional;
 
   @nullable
   @BuiltValueField(wireName: 'WellBelowCompetentF')
-  int get wellBelowCompetentF;
+  int get wellBelowCompetentFOptional;
 
   @nullable
   @BuiltValueField(wireName: 'ApproachingCompetenceF')
-  int get approachingCompetenceF;
+  int get approachingCompetenceFOptional;
 
   @nullable
   @BuiltValueField(wireName: 'MinimallyCompetentF')
-  int get minimallyCompetentF;
+  int get minimallyCompetentFOptional;
 
   @nullable
   @BuiltValueField(wireName: 'CompetentF')
-  int get competentF;
+  int get competentFOptional;
+
+  int get candidatesM => candidatesMOptional ?? 0;
+
+  int get wellBelowCompetentM => wellBelowCompetentMOptional ?? 0;
+
+  int get approachingCompetenceM => approachingCompetenceMOptional ?? 0;
+
+  int get minimallyCompetentM => minimallyCompetentMOptional ?? 0;
+
+  int get competentM => competentMOptional ?? 0;
+
+  int get candidatesF => candidatesFOptional ?? 0;
+
+  int get wellBelowCompetentF => wellBelowCompetentFOptional ?? 0;
+
+  int get approachingCompetenceF => approachingCompetenceFOptional ?? 0;
+
+  int get minimallyCompetentF => minimallyCompetentFOptional ?? 0;
+
+  int get competentF => competentFOptional ?? 0;
 
   Exam operator +(Exam other) {
     return this.rebuild(
       (b) => b
-        ..candidatesM = (candidatesM ?? 0) + (other.candidatesM ?? 0)
-        ..wellBelowCompetentM = (wellBelowCompetentM ?? 0) + (other.wellBelowCompetentM ?? 0)
-        ..approachingCompetenceM =
-        (approachingCompetenceM ?? 0) + (other.approachingCompetenceM ?? 0)
-        ..minimallyCompetentM = (minimallyCompetentM ?? 0) + (other.minimallyCompetentM ?? 0)
-        ..competentM = (competentM ?? 0) + (other.competentM ?? 0)
-        ..candidatesF = (candidatesF ?? 0) + (other.candidatesF ?? 0)
-        ..wellBelowCompetentF = (wellBelowCompetentF ?? 0) + (other.wellBelowCompetentF ?? 0)
-        ..approachingCompetenceF =
-        (approachingCompetenceF ?? 0) + (other.approachingCompetenceF ?? 0)
-        ..minimallyCompetentF = (minimallyCompetentF ?? 0) + (other.minimallyCompetentF ?? 0)
-        ..competentF = (competentF ?? 0) + (other.competentF ?? 0),
+        ..candidatesMOptional = candidatesM + other.candidatesM
+        ..wellBelowCompetentMOptional = wellBelowCompetentM + other.wellBelowCompetentM
+        ..approachingCompetenceMOptional =
+            approachingCompetenceM + other.approachingCompetenceM
+        ..minimallyCompetentMOptional = minimallyCompetentM + other.minimallyCompetentM
+        ..competentMOptional = competentM + other.competentM
+        ..candidatesFOptional = candidatesF + other.candidatesF
+        ..wellBelowCompetentFOptional = wellBelowCompetentF + other.wellBelowCompetentF
+        ..approachingCompetenceFOptional =
+            approachingCompetenceF + other.approachingCompetenceF
+        ..minimallyCompetentFOptional = minimallyCompetentF + other.minimallyCompetentF
+        ..competentFOptional = competentF + other.competentF,
     );
   }
 
