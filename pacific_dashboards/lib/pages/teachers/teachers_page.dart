@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
@@ -53,7 +54,7 @@ class TeachersPageState extends State<TeachersPage> {
             Visibility(
               visible: areFiltersVisible,
               child: IconButton(
-                icon: Icon(Icons.tune),
+                icon: SvgPicture.asset('images/filter.svg'),
                 onPressed: () {
                   _openFilters(context);
                 },
@@ -150,7 +151,7 @@ class _LoadedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           ChartWithTable(
