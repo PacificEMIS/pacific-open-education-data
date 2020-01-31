@@ -33,7 +33,9 @@ class StackedHorizontalBarChartWidgetState
       primaryMeasureAxis: charts.NumericAxisSpec(
         renderSpec: charts.GridlineRendererSpec(
           labelStyle: charts.TextStyleSpec(
-              fontSize: 10, color: AppColors.kNevada.chartsColor),
+            fontSize: 10,
+            color: AppColors.kNevada.chartsColor,
+          ),
           lineStyle: charts.LineStyleSpec(
             color: AppColors.kLoblolly.chartsColor,
           ),
@@ -46,16 +48,19 @@ class StackedHorizontalBarChartWidgetState
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
           labelStyle: charts.TextStyleSpec(
-              fontSize: 10, color: charts.MaterialPalette.gray.shadeDefault),
+            fontSize: 10,
+            color: charts.MaterialPalette.gray.shadeDefault,
+          ),
           lineStyle: charts.LineStyleSpec(
             color: AppColors.kLoblolly.chartsColor,
           ),
         ),
       ),
       defaultRenderer: charts.BarRendererConfig(
-          stackHorizontalSeparator: 0,
-          groupingType: charts.BarGroupingType.stacked,
-          strokeWidthPx: 1),
+        stackHorizontalSeparator: 0,
+        groupingType: charts.BarGroupingType.stacked,
+        strokeWidthPx: 1,
+      ),
     );
   }
 

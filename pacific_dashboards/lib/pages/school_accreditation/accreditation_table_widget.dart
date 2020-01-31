@@ -1,8 +1,9 @@
+import 'dart:ui';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
-//TODO: refactor required
 class AccreditationTableData {
   static const String _kZeroSymbol = "-";
   final int level1;
@@ -31,93 +32,48 @@ class AccreditationTableWidget extends StatefulWidget {
   final String firstColumnName;
 
   final Color _borderColor = AppColors.kGeyser;
-  final Color _textColor = AppColors.kTimberGreen;
-  final Color _subTitleTextColor = AppColors.kNevada;
   final Color _evenRowColor = Colors.white;
   final Color _oddRowColor = AppColors.kAthensGray;
-  final Color _titleTextColor = AppColors.kEndeavour;
 
-  AccreditationTableWidget(
-      {Key key,
-      @required this.data,
-      @required this.title,
-      @required this.firstColumnName})
-      : super(key: key);
+  AccreditationTableWidget({
+    Key key,
+    @required this.data,
+    @required this.title,
+    @required this.firstColumnName,
+  }) : super(key: key);
 
   @override
-  State<AccreditationTableWidget> createState() => _AccreditationTableWidgetState();
+  State<AccreditationTableWidget> createState() =>
+      _AccreditationTableWidgetState();
 }
 
 class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Table(
-        columnWidths: {
-          0: FlexColumnWidth(2.2),
-          1: FlexColumnWidth(1),
-        },
-        border: _getTableBorder(
-            widget._borderColor, AccreditationTableWidget._kBorderWidth),
-        children: [
-          _generateTableTitle(
-              widget._borderColor, AccreditationTableWidget._kBorderWidth)
-        ],
-      ),
-      Table(
-        columnWidths: {
-          0: FlexColumnWidth(2.2),
-          1: FlexColumnWidth(1),
-        },
-        border: _getTableBorder(
-            widget._borderColor, AccreditationTableWidget._kBorderWidth),
-        children: _generateTableBody(
-            widget.data,
-            _generateSubTableTitle(
-                widget._borderColor, AccreditationTableWidget._kBorderWidth)),
-      ),
-    ]);
-  }
-
-  TableRow _generateTableTitle(Color borderColor, double borderWidth) {
-    return TableRow(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            width: borderWidth,
-            color: borderColor,
-          ),
-          bottom: BorderSide(
-            width: borderWidth,
-            color: borderColor,
-          ),
-          left: BorderSide(
-            width: borderWidth,
-            color: borderColor,
-          ),
-          right: BorderSide(
-            width: borderWidth,
-            color: borderColor,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+          child: Row(
+            children: <Widget>[
+              Text(
+                widget.title,
+                style: Theme.of(context).textTheme.body2,
+              ),
+            ],
           ),
         ),
-      ),
-      children: [
-        TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  widget.title,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: widget._titleTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+        Table(
+          columnWidths: {
+            0: FlexColumnWidth(2.2),
+            1: FlexColumnWidth(1),
+          },
+          border: _getTableBorder(
+              widget._borderColor, AccreditationTableWidget._kBorderWidth),
+          children: _generateTableBody(
+              widget.data,
+              _generateSubTableTitle(
+                  widget._borderColor, AccreditationTableWidget._kBorderWidth)),
         ),
       ],
     );
@@ -144,151 +100,56 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
             color: borderColor,
           ),
         ),
+        color: Colors.black.withOpacity(0.05),
       ),
       children: [
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  widget.firstColumnName,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._subTitleTextColor,
-                  ),
-                ),
-              ],
+          child: _SubTitleCell(
+            name: widget.firstColumnName,
+            padding: const EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 16.0,
             ),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "1",
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: widget._subTitleTextColor,
-                      ),
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.red,
-                      size: 13.0,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          child: _SubTitleCell(
+            name: '1',
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            icon: const Icon(Icons.star, color: Colors.red, size: 13.0),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "2",
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: widget._subTitleTextColor,
-                      ),
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                      size: 13.0,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          child: _SubTitleCell(
+            name: '2',
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            icon: const Icon(Icons.star, color: Colors.yellow, size: 13.0),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "3",
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: widget._subTitleTextColor,
-                      ),
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.lightGreen,
-                      size: 13.0,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          child: _SubTitleCell(
+            name: '3',
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            icon: const Icon(Icons.star, color: Colors.lightGreen, size: 13.0),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "4",
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: widget._subTitleTextColor,
-                      ),
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.green,
-                      size: 13.0,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          child: _SubTitleCell(
+            name: '4',
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            icon: const Icon(Icons.star, color: Colors.green, size: 13.0),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Text(
-              "Total",
-              style: TextStyle(
-                fontSize: 12.0,
-                color: widget._subTitleTextColor,
-              ),
-            ),
+          child: _SubTitleCell(
+            name: 'Total',
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Text(
-              "Accreditated",
-              style: TextStyle(
-                fontSize: 12.0,
-                color: widget._subTitleTextColor,
-              ),
-            ),
+          child: _SubTitleCell(
+            name: 'Accreditated',
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
           ),
         ),
       ],
@@ -317,7 +178,9 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
   }
 
   List<TableRow> _generateTableBody(
-      BuiltMap<dynamic, AccreditationTableData> data, TableRow subTitle) {
+    BuiltMap<dynamic, AccreditationTableData> data,
+    TableRow subTitle,
+  ) {
     var rowsList = List<TableRow>();
     rowsList.add(subTitle);
 
@@ -331,136 +194,158 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
   }
 
   TableRow _generateTableRow(
-      String domain, AccreditationTableData measure, int index) {
+    String domain,
+    AccreditationTableData measure,
+    int index,
+  ) {
     return TableRow(
       decoration: BoxDecoration(
         color: index % 2 == 0 ? widget._evenRowColor : widget._oddRowColor,
       ),
       children: [
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 16.0, right: 16.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    domain,
-                    maxLines: 3,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 9.0,
-                      color: widget._textColor,
-                    ),
-                  ),
-                ),
-              ],
+          verticalAlignment: TableCellVerticalAlignment.fill,
+          child: _Cell(
+            value: domain,
+            padding: const EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 16.0,
             ),
+            customFontSize: 9.0,
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.level1Amount.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
+          verticalAlignment: TableCellVerticalAlignment.fill,
+          child: _Cell(
+            value: measure.level1Amount.toString(),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.level2Amount.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
+          verticalAlignment: TableCellVerticalAlignment.fill,
+          child: _Cell(
+            value: measure.level2Amount.toString(),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.level3Amount.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
+          verticalAlignment: TableCellVerticalAlignment.fill,
+          child: _Cell(
+            value: measure.level3Amount.toString(),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.level4Amount.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
+          verticalAlignment: TableCellVerticalAlignment.fill,
+          child: _Cell(
+            value: measure.level4Amount.toString(),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.total.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
+          verticalAlignment: TableCellVerticalAlignment.fill,
+          child: _Cell(
+            value: measure.total.toString(),
           ),
         ),
         TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  measure.accreditated.toString(),
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: widget._textColor,
-                  ),
-                ),
-              ],
-            ),
+          child: _Cell(
+            value: measure.accreditated.toString(),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SubTitleCell extends StatelessWidget {
+  const _SubTitleCell({
+    Key key,
+    @required String name,
+    Icon icon,
+    EdgeInsets padding = const EdgeInsets.only(),
+  })  : _name = name,
+        _icon = icon,
+        _padding = padding,
+        super(key: key);
+
+  final String _name;
+  final Icon _icon;
+  final EdgeInsets _padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: _padding,
+      height: 40.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if (_icon == null)
+            Expanded(
+              child: _SubTitle(name: _name),
+            ),
+          if (_icon != null) _SubTitle(name: _name),
+          if (_icon != null) _icon,
+        ],
+      ),
+    );
+  }
+}
+
+class _SubTitle extends StatelessWidget {
+  const _SubTitle({
+    Key key,
+    @required String name,
+  })  : _name = name,
+        super(key: key);
+
+  final String _name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _name,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.subtitle,
+    );
+  }
+}
+
+class _Cell extends StatelessWidget {
+  const _Cell({
+    Key key,
+    @required String value,
+    EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10.0),
+    double customFontSize,
+  })  : _value = value,
+        _padding = padding,
+        _customFontSize = customFontSize,
+        super(key: key);
+
+  final String _value;
+  final EdgeInsets _padding;
+  final double _customFontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: _padding,
+      child: Center(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                _value.isEmpty ? '-' : _value,
+                maxLines: 3,
+                textAlign: TextAlign.left,
+                style: _customFontSize == null
+                    ? Theme.of(context).textTheme.subtitle
+                    : Theme.of(context)
+                        .textTheme
+                        .subtitle
+                        .copyWith(fontSize: 9.0),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

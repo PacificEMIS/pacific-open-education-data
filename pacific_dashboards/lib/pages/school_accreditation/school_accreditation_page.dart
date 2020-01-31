@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
@@ -14,7 +15,6 @@ import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
-import 'package:pacific_dashboards/shared_ui/title_widget.dart';
 
 class SchoolAccreditationsPage extends StatefulWidget {
   static String kRoute = '/School Accreditations';
@@ -53,7 +53,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
         appBar: PlatformAppBar(
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.tune),
+              icon: SvgPicture.asset('images/filter.svg'),
               onPressed: () {
                 _openFilters(context);
               },
@@ -155,31 +155,27 @@ class _ContentBody extends StatelessWidget {
       child: Column(
         children: [
           TileWidget(
-            title: TitleWidget(
+            title: Text(
               AppLocalizations.accreditationProgress,
-              AppColors.kRacingGreen,
+              style: Theme.of(context).textTheme.display1,
             ),
             body: ChartFactory.getStackedHorizontalBarChartViewByData(
               chartData: _data.accreditationProgressData,
               colorFunc: _levelIndexToColor,
             ),
           ),
-          SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
           TileWidget(
-            title: TitleWidget(
+            title: Text(
               AppLocalizations.districtStatus,
-              AppColors.kRacingGreen,
+              style: Theme.of(context).textTheme.display1,
             ),
             body: ChartFactory.getStackedHorizontalBarChartViewByData(
               chartData: _data.districtStatusData,
               colorFunc: _levelIndexToColor,
             ),
           ),
-          SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
           _PerformanceTable(
             title: AppLocalizations.accreditationStatusByState,
             firstColumnName: AppLocalizations.state,
@@ -223,19 +219,19 @@ class _PerformanceTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TileWidget(
-      title: TitleWidget(
+      title: Text(
         _title,
-        AppColors.kRacingGreen,
+        style: Theme.of(context).textTheme.display1,
       ),
       body: Column(
         children: [
           AccreditationTableWidget(
-            title: "Evaluated in $_year",
+            title: 'Evaluated in $_year',
             firstColumnName: _firstColumnName,
             data: _data.evaluatedData,
           ),
           AccreditationTableWidget(
-            title: "Cumulative up to $_year",
+            title: 'Cumulative up to $_year',
             firstColumnName: _firstColumnName,
             data: _data.cumulatedData,
           ),
