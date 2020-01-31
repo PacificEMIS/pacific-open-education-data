@@ -204,7 +204,6 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
       ),
       children: [
         TableCell(
-          verticalAlignment: TableCellVerticalAlignment.fill,
           child: _Cell(
             value: domain,
             padding: const EdgeInsets.symmetric(
@@ -215,31 +214,26 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
           ),
         ),
         TableCell(
-          verticalAlignment: TableCellVerticalAlignment.fill,
           child: _Cell(
             value: measure.level1Amount.toString(),
           ),
         ),
         TableCell(
-          verticalAlignment: TableCellVerticalAlignment.fill,
           child: _Cell(
             value: measure.level2Amount.toString(),
           ),
         ),
         TableCell(
-          verticalAlignment: TableCellVerticalAlignment.fill,
           child: _Cell(
             value: measure.level3Amount.toString(),
           ),
         ),
         TableCell(
-          verticalAlignment: TableCellVerticalAlignment.fill,
           child: _Cell(
             value: measure.level4Amount.toString(),
           ),
         ),
         TableCell(
-          verticalAlignment: TableCellVerticalAlignment.fill,
           child: _Cell(
             value: measure.total.toString(),
           ),
@@ -325,16 +319,15 @@ class _Cell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: _padding,
-      child: Center(
+    return Center(
+      child: Padding(
+        padding: _padding,
         child: Row(
-          children: <Widget>[
+          children: [
             Expanded(
               child: Text(
                 _value.isEmpty ? '-' : _value,
-                maxLines: 3,
-                textAlign: TextAlign.left,
+                overflow: TextOverflow.fade,
                 style: _customFontSize == null
                     ? Theme.of(context).textTheme.subtitle
                     : Theme.of(context)

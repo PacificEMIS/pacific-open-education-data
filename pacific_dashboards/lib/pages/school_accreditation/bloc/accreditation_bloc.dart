@@ -77,7 +77,7 @@ class AccreditationBloc
               MapEntry(districtCode.from(transations.districts), v)),
       accreditationStatusByState:
           _collectAccreditationStatusByState(filteredChunk, transations),
-      performanceByStandard: _collectPerformanceByStandard(_chunk),
+      performanceByStandard: _collectPerformanceByStandard(_chunk, transations),
       filters: _filters,
     );
   }
@@ -102,9 +102,10 @@ class AccreditationBloc
         .groupBy((it) => it.districtCode.from(lookups.districts)));
   }
 
-  MultitableData _collectPerformanceByStandard(AccreditationChunk chunk) {
-    return _generateMultitableData(
-        chunk.byStandard.groupBy((it) => it.standard ?? ""));
+  MultitableData _collectPerformanceByStandard(
+      AccreditationChunk chunk, Lookups lookups) {
+    return _generateMultitableData(chunk.byStandard
+        .groupBy((it) => (it.standard ?? '').from(lookups.accreditationTerms)));
   }
 
   MultitableData _generateMultitableData(
