@@ -26,8 +26,11 @@ class HiveLookups extends HiveObject with Expirable {
   @HiveField(5)
   List<HiveLookup> accreditationTerms;
 
-  @override
   @HiveField(6)
+  List<HiveLookup> educationLevels;
+
+  @override
+  @HiveField(7)
   int timestamp;
 
   Lookups toLookups() => Lookups(
@@ -39,7 +42,9 @@ class HiveLookups extends HiveObject with Expirable {
           ..authorities = ListBuilder(authorities.map((it) => it.toLookup()))
           ..levels = ListBuilder(levels.map((it) => it.toLookup()))
           ..accreditationTerms =
-              ListBuilder(accreditationTerms.map((it) => it.toLookup())),
+              ListBuilder(accreditationTerms.map((it) => it.toLookup()))
+          ..educationLevels =
+              ListBuilder(educationLevels.map((it) => it.toLookup())),
       );
 
   static HiveLookups from(Lookups lookups) => HiveLookups()
@@ -52,5 +57,7 @@ class HiveLookups extends HiveObject with Expirable {
         lookups.authorities.map((it) => HiveLookup.from(it)).toList()
     ..levels = lookups.levels.map((it) => HiveLookup.from(it)).toList()
     ..accreditationTerms =
-        lookups.accreditationTerms.map((it) => HiveLookup.from(it)).toList();
+        lookups.accreditationTerms.map((it) => HiveLookup.from(it)).toList()
+    ..educationLevels =
+        lookups.educationLevels.map((it) => HiveLookup.from(it)).toList();
 }

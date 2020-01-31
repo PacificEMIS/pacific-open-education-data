@@ -17,6 +17,10 @@ abstract class Lookup implements Built<Lookup, LookupBuilder> {
   @BuiltValueField(wireName: 'N')
   String get name;
 
+  @nullable
+  @BuiltValueField(wireName: 'L')
+  String get l;
+
   String toJson() {
     return json
         .encode(serializers.serializeWith(Lookup.serializer, this));

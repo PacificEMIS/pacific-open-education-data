@@ -101,13 +101,14 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
     Lookups lookups,
   }) {
     final groupedByLevelWithTotal = {AppLocalizations.total: schools};
-    groupedByLevelWithTotal
-        .addEntries(schools.groupBy((it) => it.classLevel).entries);
+    groupedByLevelWithTotal.addEntries(schools
+        .groupBy((it) => it.classLevel.educationLevelFrom(lookups))
+        .entries);
 
     return groupedByLevelWithTotal.map((level, schools) {
       final groupedByAge =
           _generateInfoTableData(schools.groupBy((it) => it.ageGroup));
-      return MapEntry(level.from(lookups.levels), groupedByAge);
+      return MapEntry(level, groupedByAge);
     }).build();
   }
 

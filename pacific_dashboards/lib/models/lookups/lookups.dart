@@ -33,6 +33,9 @@ abstract class Lookups implements Built<Lookups, LookupsBuilder> {
   @BuiltValueField(wireName: 'accreditationTerms')
   BuiltList<Lookup> get accreditationTerms;
 
+  @BuiltValueField(wireName: 'educationLevels')
+  BuiltList<Lookup> get educationLevels;
+
   String toJson() {
     return json.encode(serializers.serializeWith(Lookups.serializer, this));
   }
@@ -59,5 +62,17 @@ extension Lookuped on String {
             .firstWhere((it) => it.code == this, orElse: () => null)
             ?.name ??
         this;
+  }
+
+  String educationLevelFrom(Lookups lookups) {
+    final educationLevelCode = lookups.levels
+        .firstWhere((it) => it.code == this, orElse: () => null)
+        ?.l;
+
+    if (educationLevelCode == null) {
+      return this;
+    }
+
+    return educationLevelCode.from(lookups.educationLevels);
   }
 }
