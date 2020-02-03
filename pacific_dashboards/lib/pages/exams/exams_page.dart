@@ -149,62 +149,58 @@ class _PopulatedContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 260),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (_note != null)
-            ModuleNote(
-              note: _note,
-            ),
-          ..._examResults.keys.map((it) {
-            final results = _examResults[it];
-            return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    it,
-                    style: Theme.of(context).textTheme.subtitle,
-                    textAlign: TextAlign.left,
-                    maxLines: 5,
-                  ),
-                  ...results.keys.map((it) {
-                    final chart =
-                        ExamsStackedHorizontalBarChart.fromModel(results[it]);
-                    if (it != ExamsNavigator.kNoTitleKey) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                            child: Text(
-                              it,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline
-                                  .copyWith(fontSize: 12.0),
-                              textAlign: TextAlign.left,
-                            ),
+      children: <Widget>[
+        if (_note != null)
+          ModuleNote(
+            note: _note,
+          ),
+        ..._examResults.keys.map((it) {
+          final results = _examResults[it];
+          return Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  it,
+                  style: Theme.of(context).textTheme.subtitle,
+                  textAlign: TextAlign.left,
+                  maxLines: 5,
+                ),
+                ...results.keys.map((it) {
+                  final chart =
+                      ExamsStackedHorizontalBarChart.fromModel(results[it]);
+                  if (it != ExamsNavigator.kNoTitleKey) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                          child: Text(
+                            it,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline
+                                .copyWith(fontSize: 12.0),
+                            textAlign: TextAlign.left,
                           ),
-                          chart,
-                        ],
-                      );
-                    }
-                    return chart;
-                  }).toList(),
-                ],
-              ),
-            );
-          }).toList(),
-        ],
-      ),
+                        ),
+                        chart,
+                      ],
+                    );
+                  }
+                  return chart;
+                }).toList(),
+              ],
+            ),
+          );
+        }).toList(),
+      ],
     );
   }
 }
