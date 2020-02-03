@@ -26,11 +26,12 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
-          border: Border.all(
-            width: _kBorderWidth,
-            color: _kBorderColor,
-          )),
+        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        border: Border.all(
+          width: _kBorderWidth,
+          color: _kBorderColor,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
