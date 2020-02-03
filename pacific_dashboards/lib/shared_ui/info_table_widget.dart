@@ -126,37 +126,6 @@ class InfoTableWidget extends StatelessWidget {
   }
 }
 
-//   List<TableRow> _generateTableBody(
-//       BuiltMap<String, InfoTableData> data, TableRow subTitle) {
-//     final rows = List<TableRow>();
-//     rows.add(subTitle);
-
-//     return rows;
-//   }
-
-//   TableRow _generateTableRow(String domain, InfoTableData measure, int index) {
-//     return TableRow(
-//       decoration: BoxDecoration(
-//         color: index % 2 == 0 ? Colors.white : AppColors.kAthensGray,
-//       ),
-//       children: [
-//         TableCell(
-//           child: _Cell(value: domain),
-//         ),
-//         TableCell(
-//           child: _Cell(value: measure.maleAmount.toString()),
-//         ),
-//         TableCell(
-//           child: _Cell(value: measure.femaleAmount.toString()),
-//         ),
-//         TableCell(
-//           child: _Cell(value: measure.total.toString()),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 class _Cell extends StatelessWidget {
   const _Cell({
     Key key,
