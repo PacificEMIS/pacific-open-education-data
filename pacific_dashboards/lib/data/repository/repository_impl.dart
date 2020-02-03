@@ -120,7 +120,6 @@ class RepositoryImpl implements Repository {
 
     if (!isLocalExpired && result != null) {
       yield SuccessRepositoryResponse(RepositoryType.local, result);
-      yield SuccessRepositoryResponse(RepositoryType.remote, result);
     } else {
       yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
       try {
@@ -138,27 +137,29 @@ class RepositoryImpl implements Repository {
     Future<T> getRemote(),
     Future<void> updateLocal(T remote),
   }) async* {
-    T result = await getLocal();
+    final localResult = await getLocal();
 
-    if (result != null) {
-      yield SuccessRepositoryResponse(RepositoryType.local, result);
+    if (localResult != null) {
+      yield SuccessRepositoryResponse(RepositoryType.local, localResult);
     } else {
       yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
     }
 
     try {
-      result = await getRemote();
-      if (result == null) {
+      final remoteResult = await getRemote();
+      if (remoteResult == null) {
         throw NoDataException();
       }
-      await updateLocal(result);
-      yield SuccessRepositoryResponse(RepositoryType.remote, result);
+      await updateLocal(remoteResult);
+      if (remoteResult != localResult) {
+        yield SuccessRepositoryResponse(RepositoryType.remote, remoteResult);
+      }
     } on NoNewDataRemoteException catch (_) {
-      if (result != null) {
-        yield SuccessRepositoryResponse(RepositoryType.remote, result);
-      } else {
+      if (localResult == null) {
         yield FailureRepositoryResponse(
-            RepositoryType.remote, NoDataException());
+          RepositoryType.remote,
+          NoDataException(),
+        );
       }
     } catch (ex) {
       print(ex);
