@@ -1,265 +1,160 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
+import 'package:pacific_dashboards/utils/collections.dart';
+
+const double _kBorderWidth = 1.0;
+const Color _kBorderColor = AppColors.kGeyser;
 
 class ChartInfoTableWidget extends StatefulWidget {
-  static const double _kBorderWidth = 1.0;
-
-  final BuiltList<String> _keys;
   final BuiltMap<String, int> _data;
   final String _titleName;
   final String _titleValue;
 
-  final Color _borderColor = AppColors.kGeyser;
-
-  ChartInfoTableWidget(this._data, this._titleName, this._titleValue)
-      : _keys = _data.keys.toBuiltList();
+  ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
 
   @override
   _ChartInfoTableWidgetState createState() => _ChartInfoTableWidgetState();
 }
 
 class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
-  bool _domainSortedByIncreasing = true;
-  bool _measureSortedByIncreasing = true;
-  SortType _sortType = SortType.notSorted;
+  SortType _sortType = SortType.domainInc;
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Table(
-        border: _getTableBorder(
-            widget._borderColor, ChartInfoTableWidget._kBorderWidth, true),
-        children: [
-          _generateTableTitle(
-              widget._borderColor, ChartInfoTableWidget._kBorderWidth, true)
+    return Container(
+      foregroundDecoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+          border: Border.all(
+            width: _kBorderWidth,
+            color: _kBorderColor,
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _SortingTitle(
+                title: widget._titleName,
+                icon: _sortType.iconFor(ValueType.domain),
+                onTap: () => _onSortTap(ValueType.domain),
+              ),
+              _SortingTitle(
+                title: widget._titleValue,
+                icon: _sortType.iconFor(ValueType.measure),
+                onTap: () => _onSortTap(ValueType.measure),
+              )
+            ],
+          ),
+          FutureBuilder(
+              future: _sortedRowDatas,
+              builder: (context, AsyncSnapshot<BuiltList<_RowData>> snapshot) {
+                if (!snapshot.hasData) {
+                  return Container();
+                }
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: _kBorderWidth,
+                      color: _kBorderColor,
+                    ),
+                    ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
+                  ],
+                );
+              })
         ],
       ),
-      Table(
-        columnWidths: {
-          0: FlexColumnWidth(1.7),
-          1: FlexColumnWidth(1),
-        },
-        border: _getTableBorder(
-            widget._borderColor, ChartInfoTableWidget._kBorderWidth, false),
-        children: _generateTableBody(widget._keys.toList(), widget._data),
-      )
-    ]);
-  }
-
-  TableRow _generateTableTitle(
-      Color borderColor, double borderWidth, bool top) {
-    return TableRow(
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: borderWidth,
-          color: borderColor,
-        ),
-      ),
-      children: [
-        TableCell(
-          child: _SortingTitle(
-            title: widget._titleName,
-            useUpArrowIcon: !_domainSortedByIncreasing,
-            padding: const EdgeInsets.only(
-              top: 10.0,
-              bottom: 10.0,
-              left: 16.0,
-              right: 16.0,
-            ),
-            onTap: () {
-              setState(() {
-                _sortType = SortType.domain;
-                _domainSortedByIncreasing = !_domainSortedByIncreasing;
-              });
-            },
-          ),
-        ),
-        TableCell(
-          child: _SortingTitle(
-            title: widget._titleValue,
-            padding: const EdgeInsets.only(
-              top: 10.0,
-              bottom: 10.0,
-              left: 6.0,
-              right: 8.0,
-            ),
-            alignment: MainAxisAlignment.end,
-            useUpArrowIcon: !_measureSortedByIncreasing,
-            onTap: () {
-              setState(() {
-                _sortType = SortType.measure;
-                _measureSortedByIncreasing = !_measureSortedByIncreasing;
-              });
-            },
-          ),
-        ),
-      ],
     );
   }
 
-  TableBorder _getTableBorder(
-      Color borderColor, double borderWidth, bool isTop) {
-    return TableBorder(
-      top: BorderSide(
-        width: borderWidth,
-        color: borderColor,
-      ),
-      right: BorderSide(
-        width: borderWidth,
-        color: borderColor,
-      ),
-      left: BorderSide(
-        width: borderWidth,
-        color: borderColor,
-      ),
-      bottom: BorderSide(
-        width: isTop ? 0 : borderWidth,
-        color: borderColor,
-      ),
-    );
-  }
-
-  List<TableRow> _generateTableBody(
-      List<dynamic> keys, BuiltMap<dynamic, int> dataMap) {
-    final rowsList = List<TableRow>();
-    List<int> sortedValues = dataMap.values.toList();
-
-    switch (_sortType) {
-      case SortType.domain:
-        if (_domainSortedByIncreasing) {
-          keys.sort((a, b) => a.compareTo(b));
-        } else {
-          keys.sort((a, b) => b.compareTo(a));
-        }
-
-        for (int i = 0; i < keys.length; ++i) {
-          if (dataMap.containsKey(keys[i])) {
-            rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i));
-          } else {
-            rowsList.add(_generateTableRow(keys[i], 0, i));
-          }
+  void _onSortTap(ValueType valueType) {
+    var newSortType = _sortType;
+    switch (valueType) {
+      case ValueType.domain:
+        switch (_sortType) {
+          case SortType.domainInc:
+            newSortType = SortType.domainDec;
+            break;
+          case SortType.domainDec:
+            newSortType = SortType.domainInc;
+            break;
+          case SortType.measureInc:
+          case SortType.measureDec:
+          case SortType.none:
+            newSortType = SortType.domainInc;
+            break;
         }
         break;
-      case SortType.measure:
-        if (_measureSortedByIncreasing) {
-          sortedValues.sort((a, b) => a.compareTo(b));
-        } else {
-          sortedValues.sort((a, b) => b.compareTo(a));
-        }
-
-        var globalIndex = 0;
-
-        if (_measureSortedByIncreasing) {
-          for (var i = 0; i < keys.length; ++i) {
-            if (!dataMap.containsKey(keys[i])) {
-              rowsList.add(_generateTableRow(keys[i], 0, globalIndex));
-              globalIndex++;
-            }
-          }
-
-          for (int i = 0; i < sortedValues.length; ++i) {
-            var key = dataMap.keys.firstWhere(
-                (k) => dataMap[k] == sortedValues[i],
-                orElse: () => null);
-            rowsList.add(_generateTableRow(key, dataMap[key], globalIndex));
-
-            globalIndex++;
-          }
-        } else {
-          for (int i = 0; i < sortedValues.length; ++i) {
-            var key = dataMap.keys.firstWhere(
-                (k) => dataMap[k] == sortedValues[i],
-                orElse: () => null);
-            rowsList.add(_generateTableRow(key, dataMap[key], globalIndex));
-
-            globalIndex++;
-          }
-
-          for (var i = 0; i < keys.length; ++i) {
-            if (!dataMap.containsKey(keys[i])) {
-              rowsList.add(_generateTableRow(keys[i], 0, globalIndex));
-
-              globalIndex++;
-            }
-          }
-        }
-        break;
-      case SortType.notSorted:
-        for (int i = 0; i < keys.length; ++i) {
-          if (dataMap.containsKey(keys[i])) {
-            rowsList.add(_generateTableRow(keys[i], dataMap[keys[i]], i));
-          } else {
-            rowsList.add(_generateTableRow(keys[i], 0, i));
-          }
+      case ValueType.measure:
+        switch (_sortType) {
+          case SortType.measureInc:
+            newSortType = SortType.measureDec;
+            break;
+          case SortType.measureDec:
+            newSortType = SortType.measureInc;
+            break;
+          case SortType.domainInc:
+          case SortType.domainDec:
+          case SortType.none:
+            newSortType = SortType.measureInc;
+            break;
         }
         break;
     }
 
-    return rowsList;
+    setState(() {
+      _sortType = newSortType;
+    });
   }
 
-  TableRow _generateTableRow(String domain, int measure, int index) {
-    return TableRow(
-      decoration: BoxDecoration(
-        color: ((index % 2 == 0) ? Colors.white : AppColors.kAthensGray),
-      ),
-      children: [
-        TableCell(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 10.0,
-              bottom: 10.0,
-              left: 8.0,
-              right: 7.0,
-            ),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(const Radius.circular(1.0)),
-                      color: HexColor.fromStringHash(domain),
-                    ),
-                    height: 8.0,
-                    width: 8.0,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    domain,
-                    style: Theme.of(context).textTheme.subhead,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        TableCell(
-          verticalAlignment: TableCellVerticalAlignment.fill,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 10.0,
-              bottom: 10.0,
-              left: 16.0,
-              right: 16.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  measure.toString(),
-                  style: Theme.of(context).textTheme.subhead,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+  Future<BuiltList<_RowData>> get _sortedRowDatas {
+    return Future.microtask(() {
+      final convertToRowData = (int index, Pair<String, int> pair) => _RowData(
+            index: index,
+            domain: pair.v1,
+            measure: pair.v2,
+          );
+      switch (_sortType) {
+        case SortType.measureInc:
+          return widget._data
+              .mapToList((domain, measure) => Pair(domain, measure))
+              .sort((lv, rv) => lv.v2.compareTo(rv.v2))
+              .mapIndexed(convertToRowData)
+              .toBuiltList();
+        case SortType.measureDec:
+          return widget._data
+              .mapToList((domain, measure) => Pair(domain, measure))
+              .sort((lv, rv) => rv.v2.compareTo(lv.v2))
+              .mapIndexed(convertToRowData)
+              .toBuiltList();
+        case SortType.domainInc:
+          return widget._data
+              .mapToList((domain, measure) => Pair(domain, measure))
+              .sort((lv, rv) => lv.v1.compareTo(rv.v1))
+              .mapIndexed(convertToRowData)
+              .toBuiltList();
+        case SortType.domainDec:
+          return widget._data
+              .mapToList((domain, measure) => Pair(domain, measure))
+              .sort((lv, rv) => rv.v1.compareTo(lv.v1))
+              .mapIndexed(convertToRowData)
+              .toBuiltList();
+        case SortType.none:
+          return widget._data
+              .mapToList((domain, measure) => Pair(domain, measure))
+              .mapIndexed(convertToRowData)
+              .toBuiltList();
+      }
+
+      throw FallThroughError();
+    });
   }
 }
 
@@ -267,29 +162,22 @@ class _SortingTitle extends StatelessWidget {
   const _SortingTitle({
     Key key,
     @required String title,
-    @required bool useUpArrowIcon,
+    @required Icon icon,
     @required GestureTapCallback onTap,
-    EdgeInsetsGeometry padding = const EdgeInsets.only(),
-    MainAxisAlignment alignment = MainAxisAlignment.start,
   })  : _title = title,
-        _useUpArrowIcon = useUpArrowIcon,
+        _icon = icon,
         _onTap = onTap,
-        _padding = padding,
-        _alignment = alignment,
         super(key: key);
 
-  final MainAxisAlignment _alignment;
-  final EdgeInsetsGeometry _padding;
   final String _title;
-  final bool _useUpArrowIcon;
+  final Icon _icon;
   final GestureTapCallback _onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: _padding,
+    return FlatButton(
+      onPressed: _onTap,
       child: Row(
-        mainAxisAlignment: _alignment,
         children: <Widget>[
           Text(
             _title,
@@ -298,15 +186,80 @@ class _SortingTitle extends StatelessWidget {
                 .body2
                 .copyWith(color: AppColors.kNevada),
           ),
-          InkResponse(
-            child: Icon(
-              (_useUpArrowIcon
-                  ? Icons.keyboard_arrow_up
-                  : Icons.keyboard_arrow_down),
-              color: AppColors.kTuna,
+          _icon,
+        ],
+      ),
+    );
+  }
+}
+
+class _Row extends StatelessWidget {
+  final _RowData _rowData;
+
+  const _Row({Key key, @required _RowData rowData})
+      : assert(rowData != null),
+        _rowData = rowData,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: ((_rowData.index % 2 == 0)
+          ? Colors.transparent
+          : AppColors.kAthensGray),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(const Radius.circular(1.0)),
+                        color: HexColor.fromStringHash(_rowData.domain),
+                      ),
+                      height: 8.0,
+                      width: 8.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      _rowData.domain,
+                      style: Theme.of(context).textTheme.subhead,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            onTap: _onTap,
-            highlightShape: BoxShape.rectangle,
+          ),
+          Flexible(
+            flex: 1,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _rowData.measure.toString(),
+                      style: Theme.of(context).textTheme.subhead,
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -314,8 +267,68 @@ class _SortingTitle extends StatelessWidget {
   }
 }
 
+class _RowData {
+  final String domain;
+  final int measure;
+  final int index;
+
+  _RowData({
+    @required this.domain,
+    @required this.measure,
+    @required this.index,
+  });
+}
+
 enum SortType {
-  measure,
-  domain,
-  notSorted,
+  measureInc,
+  measureDec,
+  domainInc,
+  domainDec,
+  none,
+}
+
+enum ValueType { domain, measure }
+
+extension SortTypeIcon on SortType {
+  Icon iconFor(ValueType valueType) {
+    const downIcon = const Icon(
+      Icons.expand_more,
+      color: AppColors.kNevada,
+    );
+    const upIcon = const Icon(
+      Icons.expand_less,
+      color: AppColors.kNevada,
+    );
+    const noneIcon = const Icon(
+      Icons.minimize,
+      color: Colors.transparent,
+    );
+    switch (valueType) {
+      case ValueType.domain:
+        switch (this) {
+          case SortType.domainInc:
+            return downIcon;
+          case SortType.domainDec:
+            return upIcon;
+          case SortType.measureInc:
+          case SortType.measureDec:
+          case SortType.none:
+            return noneIcon;
+        }
+        throw FallThroughError();
+      case ValueType.measure:
+        switch (this) {
+          case SortType.measureInc:
+            return downIcon;
+          case SortType.measureDec:
+            return upIcon;
+          case SortType.domainInc:
+          case SortType.domainDec:
+          case SortType.none:
+            return noneIcon;
+        }
+        throw FallThroughError();
+    }
+    throw FallThroughError();
+  }
 }

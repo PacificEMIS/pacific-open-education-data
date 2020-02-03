@@ -53,3 +53,13 @@ List<T> generateIteratingList<T>(
   T Function(int value) transform,
 ) =>
     [for (int i = startingValue; i <= endingValue; i += step) transform(i)];
+
+extension BuiltMapExt<K, V> on BuiltMap<K, V>{
+  BuiltList<T> mapToList<T>(T fn(K key, V value)) {
+    final List<T> result = [];
+    this.forEach((k, v) {
+      result.add(fn(k, v));
+    });
+    return result.build();
+  }
+}
