@@ -11,6 +11,7 @@ class TeachersPageData extends Equatable {
     @required this.teachersByPrivacy,
     @required this.teachersBySchoolLevelStateAndGender,
     @required this.filters,
+    this.note,
   })  : assert(teachersByDistrict != null),
         assert(teachersByAuthority != null),
         assert(teachersByPrivacy != null),
@@ -23,6 +24,7 @@ class TeachersPageData extends Equatable {
   final BuiltMap<String, BuiltMap<String, InfoTableData>>
       teachersBySchoolLevelStateAndGender;
   final BuiltList<Filter> filters;
+  final String note;
 
   @override
   List<Object> get props => [
@@ -30,5 +32,6 @@ class TeachersPageData extends Equatable {
         teachersByAuthority,
         teachersByPrivacy,
         teachersBySchoolLevelStateAndGender,
+        note,
       ];
 }

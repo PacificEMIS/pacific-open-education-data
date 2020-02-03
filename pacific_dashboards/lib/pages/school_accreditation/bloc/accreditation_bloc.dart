@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pacific_dashboards/configs/global_settings.dart';
+import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
+import 'package:pacific_dashboards/pages/home/section.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
 import './bloc.dart';
@@ -14,14 +17,24 @@ import 'package:pacific_dashboards/utils/collections.dart';
 
 class AccreditationBloc
     extends BaseBloc<AccreditationEvent, AccreditationState> {
-  AccreditationBloc({@required Repository repository})
-      : assert(repository != null),
-        _repository = repository;
+  AccreditationBloc({
+    Repository repository,
+    RemoteConfig remoteConfig,
+    GlobalSettings globalSettings,
+  })  : assert(repository != null),
+        assert(remoteConfig != null),
+        assert(globalSettings != null),
+        _repository = repository,
+        _remoteConfig = remoteConfig,
+        _globalSettings = globalSettings;
 
   final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
 
   AccreditationChunk _chunk;
   BuiltList<Filter> _filters;
+  String _note;
 
   @override
   AccreditationState get initialState => InitialAccreditationState();
@@ -42,6 +55,10 @@ class AccreditationBloc
     if (event is StartedAccreditationEvent) {
       final currentState = state;
       yield LoadingAccreditationState();
+      _note = (await _remoteConfig.emises)
+          .getEmisConfigFor(await _globalSettings.currentEmis)
+          ?.moduleConfigFor(Section.schoolAccreditations)
+          ?.note;
       yield* handleFetch(
         beforeFetchState: currentState,
         fetch: _repository.fetchAllAccreditations,
@@ -79,6 +96,7 @@ class AccreditationBloc
           _collectAccreditationStatusByState(filteredChunk, transations),
       performanceByStandard: _collectPerformanceByStandard(_chunk, transations),
       filters: _filters,
+      note: _note,
     );
   }
 

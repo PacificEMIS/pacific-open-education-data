@@ -25,8 +25,10 @@ class FirebaseRemoteConfig extends RemoteConfig {
 
   @override
   Future<EmisesConfig> get emises async {
-    final remote = _remoteConfig.getString(_kConfigName);
-    return EmisesConfig.fromJson(remote);
+    return Future.microtask(() {
+      final remote = _remoteConfig.getString(_kConfigName);
+      return EmisesConfig.fromJson(remote);
+    });
   }
 }
 

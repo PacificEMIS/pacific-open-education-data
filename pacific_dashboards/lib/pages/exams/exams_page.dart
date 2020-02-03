@@ -10,6 +10,7 @@ import 'package:pacific_dashboards/pages/exams/bloc/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/exams_stacked_horizontal_bar_chart.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/shared_ui/module_note.dart';
 import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
@@ -56,6 +57,7 @@ class ExamsPageState extends State<ExamsPage> {
             if (state is PopulatedExamsState) {
               return _PopulatedContent(
                 examResults: state.results,
+                note: state.note,
               );
             }
 
@@ -136,11 +138,14 @@ class _PopulatedContent extends StatelessWidget {
   const _PopulatedContent({
     Key key,
     @required BuiltMap<String, BuiltMap<String, Exam>> examResults,
+    @required String note,
   })  : assert(examResults != null),
         _examResults = examResults,
+        _note = note,
         super(key: key);
 
   final BuiltMap<String, BuiltMap<String, Exam>> _examResults;
+  final String _note;
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +153,12 @@ class _PopulatedContent extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 260),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          if (_note != null)
+            ModuleNote(
+              note: _note,
+            ),
           ..._examResults.keys.map((it) {
             final results = _examResults[it];
             return Container(

@@ -9,6 +9,7 @@ import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
+import 'package:pacific_dashboards/shared_ui/module_note.dart';
 import 'package:pacific_dashboards/shared_ui/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
@@ -76,9 +77,14 @@ class SchoolsPageState extends State<SchoolsPage> {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    if (state.data.note != null)
+                      ModuleNote(
+                        note: state.data.note,
+                      ),
                     ChartWithTable(
-                      key: ObjectKey(state.data.enrolByDistrict),
+                      key: ValueKey(state.data.enrolByDistrict),
                       title: AppLocalizations.schoolsEnrollmentByState,
                       data: state.data.enrolByDistrict,
                       chartType: ChartType.bar,
@@ -86,7 +92,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                       tableValueName: AppLocalizations.schoolsEnrollment,
                     ),
                     ChartWithTable(
-                      key: ObjectKey(state.data.enrolByAuthority),
+                      key: ValueKey(state.data.enrolByAuthority),
                       title: AppLocalizations.schoolsEnrollmentByAuthority,
                       data: state.data.enrolByAuthority,
                       chartType: ChartType.pie,
@@ -94,7 +100,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                       tableValueName: AppLocalizations.schoolsEnrollment,
                     ),
                     ChartWithTable(
-                      key: ObjectKey(state.data.enrolByPrivacy),
+                      key: ValueKey(state.data.enrolByPrivacy),
                       title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
                       data: state.data.enrolByPrivacy,
                       chartType: ChartType.pie,
@@ -102,7 +108,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                       tableValueName: AppLocalizations.schoolsEnrollment,
                     ),
                     MultiTable(
-                      key: ObjectKey(state.data.enrolByAgeAndEducation),
+                      key: ValueKey(state.data.enrolByAgeAndEducation),
                       title:
                           AppLocalizations.schoolsEnrollmentByAgeEducationLevel,
                       firstColumnName: AppLocalizations.age,
@@ -110,7 +116,7 @@ class SchoolsPageState extends State<SchoolsPage> {
                       keySortFunc: _compareEnrollmentByAgeAndEducation,
                     ),
                     MultiTable(
-                      key: ObjectKey(state.data.enrolBySchoolLevelAndDistrict),
+                      key: ValueKey(state.data.enrolBySchoolLevelAndDistrict),
                       title: AppLocalizations
                           .schoolsEnrollmentBySchoolTypeStateAndGender,
                       firstColumnName: AppLocalizations.schoolType,

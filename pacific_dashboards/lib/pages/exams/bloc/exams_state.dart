@@ -21,12 +21,16 @@ class UnknownErrorState extends ExamsState implements ErrorState {}
 class LoadingExamsState extends BodyState {}
 
 class PopulatedExamsState extends BodyState {
-  PopulatedExamsState(this.results);
+  PopulatedExamsState(this.results, this.note);
 
   final BuiltMap<String, BuiltMap<String, Exam>> results;
+  final String note;
 
   @override
-  List<Object> get props => [results];
+  List<Object> get props => [
+        results,
+        note,
+      ];
 }
 
 class PopulatedFilterState extends FilterState {

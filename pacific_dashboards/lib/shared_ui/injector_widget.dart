@@ -51,17 +51,35 @@ class InjectorWidget extends InheritedWidget {
     await fireRemoteConfig.init();
   }
 
-  SchoolsBloc get schoolsBloc => SchoolsBloc(repository: _repository);
+  SchoolsBloc get schoolsBloc => SchoolsBloc(
+        repository: _repository,
+        remoteConfig: _remoteConfig,
+        globalSettings: _globalSettings,
+      );
 
-  TeachersBloc get teachersBloc => TeachersBloc(repository: _repository);
+  TeachersBloc get teachersBloc => TeachersBloc(
+        repository: _repository,
+        remoteConfig: _remoteConfig,
+        globalSettings: _globalSettings,
+      );
 
-  ExamsBloc get examsBloc => ExamsBloc(repository: _repository);
+  ExamsBloc get examsBloc => ExamsBloc(
+        repository: _repository,
+        remoteConfig: _remoteConfig,
+        globalSettings: _globalSettings,
+      );
 
   AccreditationBloc get schoolAccreditationsBloc =>
-      AccreditationBloc(repository: _repository);
+      AccreditationBloc(
+        repository: _repository,
+        remoteConfig: _remoteConfig,
+        globalSettings: _globalSettings,
+      );
 
-  HomeBloc get homeBloc =>
-      HomeBloc(globalSettings: _globalSettings, remoteConfig: _remoteConfig);
+  HomeBloc get homeBloc => HomeBloc(
+        globalSettings: _globalSettings,
+        remoteConfig: _remoteConfig,
+      );
 
   GlobalSettings get globalSettings => _globalSettings;
 }

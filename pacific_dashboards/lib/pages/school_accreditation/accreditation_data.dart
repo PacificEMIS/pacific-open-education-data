@@ -12,6 +12,7 @@ class AccreditationData extends Equatable {
     @required this.accreditationStatusByState,
     @required this.performanceByStandard,
     @required this.filters,
+    this.note,
   })  : assert(accreditationProgressData != null),
         assert(districtStatusData != null),
         assert(year != null),
@@ -25,6 +26,7 @@ class AccreditationData extends Equatable {
   final MultitableData accreditationStatusByState;
   final MultitableData performanceByStandard;
   final BuiltList<Filter> filters;
+  final String note;
 
   @override
   List<Object> get props => [
@@ -34,6 +36,7 @@ class AccreditationData extends Equatable {
         accreditationStatusByState,
         performanceByStandard,
         filters,
+        note,
       ];
 }
 

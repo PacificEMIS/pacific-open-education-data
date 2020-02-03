@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:built_collection/built_collection.dart';
+import 'package:pacific_dashboards/configs/global_settings.dart';
+import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
+import 'package:pacific_dashboards/pages/home/section.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
@@ -13,14 +16,24 @@ import 'package:pacific_dashboards/utils/collections.dart';
 import './bloc.dart';
 
 class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
-  TeachersBloc({Repository repository})
-      : assert(repository != null),
-        _repository = repository;
+  TeachersBloc({
+    Repository repository,
+    RemoteConfig remoteConfig,
+    GlobalSettings globalSettings,
+  })  : assert(repository != null),
+        assert(remoteConfig != null),
+        assert(globalSettings != null),
+        _repository = repository,
+        _remoteConfig = remoteConfig,
+        _globalSettings = globalSettings;
 
   final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
 
   BuiltList<Teacher> _teachers;
   BuiltList<Filter> _filters;
+  String _note;
 
   @override
   TeachersState get initialState => InitialTeachersState();
@@ -41,6 +54,10 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
     if (event is StartedTeachersEvent) {
       final currentState = state;
       yield LoadingTeachersState();
+      _note = (await _remoteConfig.emises)
+          .getEmisConfigFor(await _globalSettings.currentEmis)
+          ?.moduleConfigFor(Section.teachers)
+          ?.note;
       yield* handleFetch(
         beforeFetchState: currentState,
         fetch: _repository.fetchAllTeachers,
@@ -93,6 +110,7 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
         lookups: translates,
       ),
       filters: _filters,
+      note: _note,
     );
   }
 
