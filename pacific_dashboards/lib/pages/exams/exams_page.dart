@@ -29,6 +29,7 @@ class ExamsPage extends StatefulWidget {
 class ExamsPageState extends State<ExamsPage> {
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).padding.bottom;
     return BlocListener<ExamsBloc, ExamsState>(
       listener: (context, state) {
         if (state is ErrorState) {
@@ -77,7 +78,7 @@ class ExamsPageState extends State<ExamsPage> {
               return _BottomMenu(
                 alwaysVisibleHeight: 96,
                 totalHeight: 256,
-                bottomInset: MediaQuery.of(context).viewPadding.bottom,
+                bottomInset: bottomInset,
                 children: <Widget>[
                   _BottomMenuRow(
                     rowName: AppLocalizations.exam,

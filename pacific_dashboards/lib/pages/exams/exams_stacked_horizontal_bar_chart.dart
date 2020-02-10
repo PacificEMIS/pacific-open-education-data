@@ -73,7 +73,7 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
               children: <Widget>[
                 Container(width: 30),
                 ...generateIteratingList(-80, 80, 20, (it) {
-                  final text = it.toString();
+                  final text = it.abs().toString();
                   if (text != "0") {
                     return Container(
                       width: 25,
