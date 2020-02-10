@@ -1,0 +1,32 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Submit a new Beta Build to Firebase"
+  lane :distribute do
+    get_certificates
+    get_provisioning_profile
+    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+    firebase_app_distribution(
+      app: "1:269367888049:android:a95d72b5ad25c26940fa90",
+      groups: "internal-testers",
+      release_notes: last_git_commit[:message],
+      firebase_cli_path: "/usr/local/bin/firebase",
+      firebase_cli_token: "1//0cpc5U3AP1_GsCgYIARAAGAwSNwF-L9Ir4NYP95gdslUeOBfRCF51wEWGO3Fv0CB7FSlJ4GfXwt_7o-j6uGouUDTf6SovTsPMoTc"
+    )
+  end
+end

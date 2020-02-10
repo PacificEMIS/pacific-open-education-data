@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "154037620831",
+    "firebase_url": "https://pacific-open-education-data.firebaseio.com",
+    "project_id": "pacific-open-education-data",
+    "storage_bucket": "pacific-open-education-data.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154037620831:android:da8d38c28952cb0f9d8bea",
+        "android_client_info": {
+          "package_name": "fm.doe.national.pacific_dashboards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154037620831-2bdtrvhasodv8od8rq38pl0tqq638204.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPcHp3WWkFlWaOEQEv3P9cA2QbuUEKRnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154037620831-2bdtrvhasodv8od8rq38pl0tqq638204.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
