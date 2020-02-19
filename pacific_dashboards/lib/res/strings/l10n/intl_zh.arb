@@ -50,7 +50,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "exams": "Exams",
+  "exams": "National Tests",
   "@exams": {
     "type": "text",
     "placeholders": {}
@@ -80,7 +80,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "filterByStandard": "Filter by standard",
+  "filterByStandard": "Filter by test",
   "@filterByStandard": {
     "type": "text",
     "placeholders": {}
@@ -90,7 +90,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "displayAllStates": "Display All States",
+  "displayAllStates": "Display All Districts",
   "@displayAllStates": {
     "type": "text",
     "placeholders": {}
@@ -110,7 +110,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "schoolsEnrollmentByState": "Schools Enrollment by State",
+  "schoolsEnrollmentByState": "Schools Enrollment by District",
   "@schoolsEnrollmentByState": {
     "type": "text",
     "placeholders": {}
@@ -130,7 +130,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "state": "State",
+  "state": "District",
   "@state": {
     "type": "text",
     "placeholders": {}
@@ -175,7 +175,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "schoolsEnrollmentBySchoolTypeStateAndGender": "Schools Enrollment by School Levels, \nState and Gender",
+  "schoolsEnrollmentBySchoolTypeStateAndGender": "Schools Enrollment by School Levels, \nDistrict and Gender",
   "@schoolsEnrollmentBySchoolTypeStateAndGender": {
     "type": "text",
     "placeholders": {}
@@ -195,12 +195,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "filterByState": "Filter by state",
+  "filterByState": "Filter by district",
   "@filterByState": {
     "type": "text",
     "placeholders": {}
   },
-  "filterBySchoolType": "Teachers by School Levels, State and Gender",
+  "filterBySchoolType": "Teachers by School Levels, District and Gender",
   "@filterBySchoolType": {
     "type": "text",
     "placeholders": {}
@@ -235,12 +235,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "teachersByState": "Teachers by State",
+  "teachersByState": "Teachers by District",
   "@teachersByState": {
     "type": "text",
     "placeholders": {}
   },
-  "teacherBySchoolTypeStateAndGender": "Teacher by School Levels, \nState and Gender",
+  "teacherBySchoolTypeStateAndGender": "Teacher by School Levels, \nDistrict and Gender",
   "@teacherBySchoolTypeStateAndGender": {
     "type": "text",
     "placeholders": {}
@@ -265,7 +265,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "filterBySelectedState": "Selected State",
+  "filterBySelectedState": "Selected District",
   "@filterBySelectedState": {
     "type": "text",
     "placeholders": {}
@@ -285,17 +285,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "standard": "Standard ",
+  "standard": "Test ",
   "@standard": {
     "type": "text",
     "placeholders": {}
   },
-  "accreditationStatusByState": "Accreditation Status by State ",
+  "accreditationStatusByState": "Accreditation Status by District ",
   "@accreditationStatusByState": {
     "type": "text",
     "placeholders": {}
   },
-  "accreditationPerfomancebyStandard": "Performance by Standard ",
+  "accreditationPerfomancebyStandard": "Performance by Test ",
   "@accreditationPerfomancebyStandard": {
     "type": "text",
     "placeholders": {}
@@ -335,17 +335,17 @@
     "type": "text",
     "placeholders": {}
   },
-  "examsByBenchmarkAndGender": "By Benchmarks and Gender",
+  "examsByBenchmarkAndGender": "By Outcomes and Gender",
   "@examsByBenchmarkAndGender": {
     "type": "text",
     "placeholders": {}
   },
-  "examsByStandardsAndGender": "By Standards and Gender for Last 3 Years",
+  "examsByStandardsAndGender": "By Tests and Gender for Last 3 Years",
   "@examsByStandardsAndGender": {
     "type": "text",
     "placeholders": {}
   },
-  "examsByStandardsAndState": "By Standards and State",
+  "examsByStandardsAndState": "By Tests and District",
   "@examsByStandardsAndState": {
     "type": "text",
     "placeholders": {}

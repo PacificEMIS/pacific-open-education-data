@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en locale. All the
+// This is a library that provides messages for a zh locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -17,7 +17,7 @@ final messages = new MessageLookup();
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'ZH';
+  String get localeName => 'zh';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "accreditationProgress" : MessageLookupByLibrary.simpleMessage("Accreditation Progress"),
     "accreditationStatusByState" : MessageLookupByLibrary.simpleMessage("Accreditation Status by District "),
     "age" : MessageLookupByLibrary.simpleMessage("Age"),
-    "appName" : MessageLookupByLibrary.simpleMessage("Custom Charts"),
+    "appName" : MessageLookupByLibrary.simpleMessage("Pacific Open Education Data"),
     "authority" : MessageLookupByLibrary.simpleMessage("Authority"),
     "budgets" : MessageLookupByLibrary.simpleMessage("Budgets"),
     "changeCountry" : MessageLookupByLibrary.simpleMessage("Change country"),
@@ -43,9 +43,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "error" : MessageLookupByLibrary.simpleMessage("Error"),
     "evaluatedIn" : MessageLookupByLibrary.simpleMessage("Evaluated in %s"),
     "exam" : MessageLookupByLibrary.simpleMessage("Exam"),
-    "exams" : MessageLookupByLibrary.simpleMessage("National tests"),
-    "federatedStateOfMicronesia" : MessageLookupByLibrary.simpleMessage("Federated Districts of Micronesia"),
-    "federatedStateOfMicronesiaSplitted" : MessageLookupByLibrary.simpleMessage("Federated Districts \nof Micronesia"),
+    "exams" : MessageLookupByLibrary.simpleMessage("National Tests"),
+    "examsByBenchmarkAndGender" : MessageLookupByLibrary.simpleMessage("By Outcomes and Gender"),
+    "examsByStandardsAndGender" : MessageLookupByLibrary.simpleMessage("By Tests and Gender for Last 3 Years"),
+    "examsByStandardsAndState" : MessageLookupByLibrary.simpleMessage("By Tests and District"),
+    "federatedStateOfMicronesia" : MessageLookupByLibrary.simpleMessage("Federated States of Micronesia"),
+    "federatedStateOfMicronesiaSplitted" : MessageLookupByLibrary.simpleMessage("Federated States \nof Micronesia"),
     "filterByAuthority" : MessageLookupByLibrary.simpleMessage("Filter by authority"),
     "filterByClassLevel" : MessageLookupByLibrary.simpleMessage("Filter by class level"),
     "filterByGovernment" : MessageLookupByLibrary.simpleMessage("Filter by government"),
@@ -55,10 +58,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterBySelectedSchoolLevels" : MessageLookupByLibrary.simpleMessage("Selected School Levels"),
     "filterBySelectedState" : MessageLookupByLibrary.simpleMessage("Selected District"),
     "filterBySelectedYear" : MessageLookupByLibrary.simpleMessage("Selected Year"),
-    "filterByStandard" : MessageLookupByLibrary.simpleMessage("Filter by Test"),
+    "filterByStandard" : MessageLookupByLibrary.simpleMessage("Filter by test"),
     "filterByState" : MessageLookupByLibrary.simpleMessage("Filter by district"),
     "filterByYear" : MessageLookupByLibrary.simpleMessage("Filter by year"),
+    "filtersTitle" : MessageLookupByLibrary.simpleMessage("Filter"),
     "indicators" : MessageLookupByLibrary.simpleMessage("Indicators"),
+    "kiribati" : MessageLookupByLibrary.simpleMessage("Republic of Kiribati"),
     "marshallIslands" : MessageLookupByLibrary.simpleMessage("Marshall Islands"),
     "postSecondary" : MessageLookupByLibrary.simpleMessage("Post Secondary"),
     "primary" : MessageLookupByLibrary.simpleMessage("Primary"),
@@ -74,21 +79,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "schoolsEnrollmentByState" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by District"),
     "schoolsEnrollmentGovtNonGovt" : MessageLookupByLibrary.simpleMessage("Schools Enrollment Govt / \nNon-govt"),
     "secondary" : MessageLookupByLibrary.simpleMessage("Secondary"),
-    "serverUnavailableError" : MessageLookupByLibrary.simpleMessage("Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection."),
+    "serverUnavailableError" : MessageLookupByLibrary.simpleMessage("You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection."),
     "splash" : MessageLookupByLibrary.simpleMessage("\nPACIFIC OPEN\n EDUCATION DATA"),
     "standard" : MessageLookupByLibrary.simpleMessage("Test "),
     "state" : MessageLookupByLibrary.simpleMessage("District"),
-    "teacherBySchoolTypeStateAndGender" : MessageLookupByLibrary.simpleMessage("Teacher by School Levels, \District and Gender"),
+    "teacherBySchoolTypeStateAndGender" : MessageLookupByLibrary.simpleMessage("Teacher by School Levels, \nDistrict and Gender"),
     "teachers" : MessageLookupByLibrary.simpleMessage("Teachers"),
     "teachersByAuthority" : MessageLookupByLibrary.simpleMessage("Teachers by Authority"),
     "teachersByState" : MessageLookupByLibrary.simpleMessage("Teachers by District"),
     "teachersEnrollmentGovtNonGovt" : MessageLookupByLibrary.simpleMessage("Teachers by Govt / \nNon-govt"),
     "total" : MessageLookupByLibrary.simpleMessage("Total"),
     "unknownError" : MessageLookupByLibrary.simpleMessage("Unknown error occurred"),
-    "view" : MessageLookupByLibrary.simpleMessage("View"),
-    "examsByStandardsAndGender" : MessageLookupByLibrary.simpleMessage("By Tests and Gender for Last 3 Years"),
-    "examsByStandardsAndState" : MessageLookupByLibrary.simpleMessage("By Tests and District"),
-    "teachersByState" : MessageLookupByLibrary.simpleMessage("Teachers by District"),
-    "examsByBenchmarkAndGender": MessageLookupByLibrary.simpleMessage("By Outcome and Gender")
+    "view" : MessageLookupByLibrary.simpleMessage("View")
   };
 }
