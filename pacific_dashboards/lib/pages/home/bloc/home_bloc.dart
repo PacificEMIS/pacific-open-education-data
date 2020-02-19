@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
@@ -6,6 +7,7 @@ import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/pages/home/section.dart';
+import 'package:pacific_dashboards/res/strings/strings.dart';
 import './bloc.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -34,6 +36,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
 
     if (event is EmisChanged) {
+      if (event.emis == Emis.kemis) AppLocalizations.load(Locale('zh'));
+      else AppLocalizations.load(Locale('en'));
       final emis = event.emis;
       await _globalSettings.setCurrentEmis(emis);
       yield LoadedHomeState(emis, await configureSectionsForEmis(emis));
