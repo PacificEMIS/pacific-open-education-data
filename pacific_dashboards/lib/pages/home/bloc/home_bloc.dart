@@ -31,13 +31,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async* {
     if (event is StartedHomeEvent) {
       final currentEmis = await _globalSettings.currentEmis;
+      if (currentEmis == Emis.kemis) {
+        AppLocalizations.load(Locale('zh'));
+      } else {
+        AppLocalizations.load(Locale('en'));
+      }
       yield LoadedHomeState(
           currentEmis, await configureSectionsForEmis(currentEmis));
     }
 
     if (event is EmisChanged) {
-      if (event.emis == Emis.kemis) AppLocalizations.load(Locale('zh'));
-      else AppLocalizations.load(Locale('en'));
+      if (event.emis == Emis.kemis) {
+        AppLocalizations.load(Locale('zh'));
+      } else {
+        AppLocalizations.load(Locale('en'));
+      }
       final emis = event.emis;
       await _globalSettings.setCurrentEmis(emis);
       yield LoadedHomeState(emis, await configureSectionsForEmis(emis));
