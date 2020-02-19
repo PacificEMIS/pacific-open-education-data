@@ -21,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "accreditationPerfomancebyStandard" : MessageLookupByLibrary.simpleMessage("Performance by Standard "),
+    "accreditationPerfomancebyStandard" : MessageLookupByLibrary.simpleMessage("Performance by Test "),
     "accreditationProgress" : MessageLookupByLibrary.simpleMessage("Accreditation Progress"),
     "accreditationStatusByState" : MessageLookupByLibrary.simpleMessage("Accreditation Status by District "),
     "age" : MessageLookupByLibrary.simpleMessage("Age"),
@@ -55,7 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "filterBySelectedSchoolLevels" : MessageLookupByLibrary.simpleMessage("Selected School Levels"),
     "filterBySelectedState" : MessageLookupByLibrary.simpleMessage("Selected District"),
     "filterBySelectedYear" : MessageLookupByLibrary.simpleMessage("Selected Year"),
-    "filterByStandard" : MessageLookupByLibrary.simpleMessage("Filter by standard"),
+    "filterByStandard" : MessageLookupByLibrary.simpleMessage("Filter by Test"),
     "filterByState" : MessageLookupByLibrary.simpleMessage("Filter by district"),
     "filterByYear" : MessageLookupByLibrary.simpleMessage("Filter by year"),
     "indicators" : MessageLookupByLibrary.simpleMessage("Indicators"),
@@ -70,13 +70,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "schoolsEnrollment" : MessageLookupByLibrary.simpleMessage("Schools Enrollment"),
     "schoolsEnrollmentByAgeEducationLevel" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by Age, Education \nLevel and Gender"),
     "schoolsEnrollmentByAuthority" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by Authority"),
-    "schoolsEnrollmentBySchoolTypeStateAndGender" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by School Levels, \nState and Gender"),
+    "schoolsEnrollmentBySchoolTypeStateAndGender" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by School Levels, \nDistrict and Gender"),
     "schoolsEnrollmentByState" : MessageLookupByLibrary.simpleMessage("Schools Enrollment by District"),
     "schoolsEnrollmentGovtNonGovt" : MessageLookupByLibrary.simpleMessage("Schools Enrollment Govt / \nNon-govt"),
     "secondary" : MessageLookupByLibrary.simpleMessage("Secondary"),
     "serverUnavailableError" : MessageLookupByLibrary.simpleMessage("Are are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection."),
     "splash" : MessageLookupByLibrary.simpleMessage("\nPACIFIC OPEN\n EDUCATION DATA"),
-    "standard" : MessageLookupByLibrary.simpleMessage("Standard "),
+    "standard" : MessageLookupByLibrary.simpleMessage("Test "),
     "state" : MessageLookupByLibrary.simpleMessage("District"),
     "teacherBySchoolTypeStateAndGender" : MessageLookupByLibrary.simpleMessage("Teacher by School Levels, \District and Gender"),
     "teachers" : MessageLookupByLibrary.simpleMessage("Teachers"),
