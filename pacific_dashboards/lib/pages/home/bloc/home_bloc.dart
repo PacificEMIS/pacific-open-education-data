@@ -33,7 +33,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final currentEmis = await _globalSettings.currentEmis;
       if (currentEmis == Emis.kemis) {
         AppLocalizations.load(Locale('zh'));
-      } else {
+      } else if (currentEmis == Emis.miemis) {
+        AppLocalizations.load(Locale('he'));
+      }
+      else {
         AppLocalizations.load(Locale('en'));
       }
       yield LoadedHomeState(
@@ -43,7 +46,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is EmisChanged) {
       if (event.emis == Emis.kemis) {
         AppLocalizations.load(Locale('zh'));
-      } else {
+      } else if (event.emis == Emis.miemis) {
+        AppLocalizations.load(Locale('he'));
+      }
+      else {
         AppLocalizations.load(Locale('en'));
       }
       final emis = event.emis;

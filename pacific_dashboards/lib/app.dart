@@ -27,7 +27,7 @@ class App extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [const Locale('en'), const Locale('zh')], 
+      supportedLocales: [const Locale('en'), const Locale('zh'), const Locale('he')], 
       onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
       theme: appTheme,
       initialRoute: HomePage.kRoute,
