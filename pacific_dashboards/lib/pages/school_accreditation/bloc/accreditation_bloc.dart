@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
@@ -33,7 +32,7 @@ class AccreditationBloc
   final GlobalSettings _globalSettings;
 
   AccreditationChunk _chunk;
-  BuiltList<Filter> _filters;
+  List<Filter> _filters;
   String _note;
 
   @override
@@ -76,7 +75,7 @@ class AccreditationBloc
     }
   }
 
-  Future<BuiltList<Filter>> _initFilters() async {
+  Future<List<Filter>> _initFilters() async {
     if (_chunk == null) {
       return null;
     }
@@ -100,13 +99,13 @@ class AccreditationBloc
     );
   }
 
-  BuiltMap<String, BuiltList<int>> _collectAccreditationProgressData(
+  Map<String, List<int>> _collectAccreditationProgressData(
       AccreditationChunk chunk) {
     return _generateCumulativeMap(
         data: chunk.byDistrict.groupBy((it) => it.surveyYear.toString()));
   }
 
-  BuiltMap<String, BuiltList<int>> _collectDistrictStatusData(
+  Map<String, List<int>> _collectDistrictStatusData(
       AccreditationChunk chunk) {
     return _generateCumulativeMap(
       data: _chunk.byDistrict.groupBy((it) => it.districtCode),
@@ -127,7 +126,7 @@ class AccreditationBloc
   }
 
   MultitableData _generateMultitableData(
-      BuiltMap<String, BuiltList<Accreditation>> data) {
+      Map<String, List<Accreditation>> data) {
     return MultitableData(
       evaluatedData: _generateAccreditationTableData(
         data,
@@ -142,17 +141,17 @@ class AccreditationBloc
     );
   }
 
-  BuiltMap<String, BuiltList<int>> _generateCumulativeMap({
-    @required BuiltMap<String, BuiltList<Accreditation>> data,
+  Map<String, List<int>> _generateCumulativeMap({
+    @required Map<String, List<Accreditation>> data,
     int year,
   }) {
-    final result = Map<String, BuiltList<int>>();
+    final result = Map<String, List<int>>();
 
     data.forEach((key, value) {
       final levels = [0, 0, 0, 0];
 
       value.forEach((accreditation) {
-        final sum = accreditation.num;
+        final sum = accreditation.total;
 
         if (year != null && accreditation.surveyYear != year) {
           return;
@@ -176,18 +175,18 @@ class AccreditationBloc
         }
       });
 
-      result[key] = levels.build();
+      result[key] = levels;
     });
 
-    return result.build();
+    return result;
   }
 
   int get _selectedYear {
     return _filters.firstWhere((it) => it.id == 0).intValue;
   }
 
-  BuiltMap<String, AccreditationTableData> _generateAccreditationTableData(
-      BuiltMap<String, BuiltList<Accreditation>> rawMapData,
+  Map<String, AccreditationTableData> _generateAccreditationTableData(
+      Map<String, List<Accreditation>> rawMapData,
       bool isCumulative,
       int currentYear) {
     final convertedData = Map<String, AccreditationTableData>();
@@ -206,7 +205,7 @@ class AccreditationBloc
         var numSum = 0;
         if (model[j].surveyYear == currentYear) {
           numThisYear += model[j].numThisYear ?? 0;
-          numSum += model[j].num ?? 0;
+          numSum += model[j].total ?? 0;
           switch (level) {
             case AccreditationLevel.level1:
               levels[0] += numThisYear;
@@ -238,6 +237,6 @@ class AccreditationBloc
             AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
     });
 
-    return convertedData.build();
+    return convertedData;
   }
 }

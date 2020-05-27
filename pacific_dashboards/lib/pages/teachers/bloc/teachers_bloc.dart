@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
@@ -31,8 +30,8 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
   final RemoteConfig _remoteConfig;
   final GlobalSettings _globalSettings;
 
-  BuiltList<Teacher> _teachers;
-  BuiltList<Filter> _filters;
+  List<Teacher> _teachers;
+  List<Filter> _filters;
   String _note;
 
   @override
@@ -75,7 +74,7 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
     }
   }
 
-  Future<BuiltList<Filter>> _initFilters() async {
+  Future<List<Filter>> _initFilters() async {
     if (_teachers == null) {
       return null;
     }
@@ -114,8 +113,8 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
     );
   }
 
-  BuiltMap<String, int> _calculatePeopleCount(
-          BuiltMap<String, BuiltList<Teacher>> groupedTeachers) =>
+  Map<String, int> _calculatePeopleCount(
+          Map<String, List<Teacher>> groupedTeachers) =>
       groupedTeachers.map(
         (key, value) => MapEntry(
             key,
@@ -124,9 +123,9 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
                 .reduce((lv, rv) => lv + rv)),
       );
 
-  BuiltMap<String, BuiltMap<String, InfoTableData>>
+  Map<String, Map<String, InfoTableData>>
       _calculateEnrolBySchoolLevelAndDistrict({
-    BuiltList<Teacher> teachers,
+    List<Teacher> teachers,
     Lookups lookups,
   }) {
     final groupedByDistrictWithTotal = {AppLocalizations.total: teachers};
@@ -138,11 +137,11 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
       final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
       return MapEntry(districtCode.from(lookups.districts),
           _generateInfoTableData(groupedBySchoolType));
-    }).build();
+    });
   }
 
-  BuiltMap<String, InfoTableData> _generateInfoTableData(
-      BuiltMap<String, BuiltList<Teacher>> groupedData,
+  Map<String, InfoTableData> _generateInfoTableData(
+      Map<String, List<Teacher>> groupedData,
       {String districtCode}) {
     final convertedData = Map<String, InfoTableData>();
     var totalMaleCount = 0;
@@ -169,6 +168,6 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
     convertedData[AppLocalizations.total] =
         InfoTableData(totalMaleCount, totalFemaleCount);
 
-    return convertedData.build();
+    return convertedData;
   }
 }

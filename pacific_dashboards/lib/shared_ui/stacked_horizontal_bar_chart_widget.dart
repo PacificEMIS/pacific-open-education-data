@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/colors.dart';
@@ -7,7 +6,7 @@ import 'package:pacific_dashboards/utils/hex_color.dart';
 typedef Color ColorFunc(int index);
 
 class StackedHorizontalBarChartWidget extends StatefulWidget {
-  final BuiltMap<String, BuiltList<int>> data;
+  final Map<String, List<int>> data;
   final ColorFunc colorFunc;
 
   StackedHorizontalBarChartWidget({
@@ -65,7 +64,8 @@ class StackedHorizontalBarChartWidgetState
   }
 
   List<charts.Series<_Data, String>> _createSeries(
-      BuiltMap<String, BuiltList<int>> data) {
+    Map<String, List<int>> data,
+  ) {
     final length = _getDataLengthWithChecks(data);
     final series = List<charts.Series<_Data, String>>();
 
@@ -91,7 +91,7 @@ class StackedHorizontalBarChartWidgetState
     return series;
   }
 
-  int _getDataLengthWithChecks(BuiltMap<String, BuiltList<int>> data) {
+  int _getDataLengthWithChecks(Map<String, List<int>> data) {
     var length = -1;
     data.forEach((_, value) {
       if (length == -1) {

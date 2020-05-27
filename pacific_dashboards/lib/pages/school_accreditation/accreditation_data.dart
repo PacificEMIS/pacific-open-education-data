@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
@@ -20,12 +19,12 @@ class AccreditationData extends Equatable {
         assert(performanceByStandard != null),
         assert(filters != null);
 
-  final BuiltMap<String, BuiltList<int>> accreditationProgressData;
-  final BuiltMap<String, BuiltList<int>> districtStatusData;
+  final Map<String, List<int>> accreditationProgressData;
+  final Map<String, List<int>> districtStatusData;
   final String year;
   final MultitableData accreditationStatusByState;
   final MultitableData performanceByStandard;
-  final BuiltList<Filter> filters;
+  final List<Filter> filters;
   final String note;
 
   @override
@@ -47,8 +46,8 @@ class MultitableData extends Equatable {
   })  : assert(evaluatedData != null),
         assert(cumulatedData != null);
 
-  final BuiltMap<String, AccreditationTableData> evaluatedData;
-  final BuiltMap<String, AccreditationTableData> cumulatedData;
+  final Map<String, AccreditationTableData> evaluatedData;
+  final Map<String, AccreditationTableData> cumulatedData;
 
   @override
   List<Object> get props => [

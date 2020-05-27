@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -9,7 +8,7 @@ const double _kBorderWidth = 1.0;
 const Color _kBorderColor = AppColors.kGeyser;
 
 class ChartInfoTableWidget extends StatefulWidget {
-  final BuiltMap<String, int> _data;
+  final Map<String, int> _data;
   final String _titleName;
   final String _titleValue;
 
@@ -53,7 +52,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
           ),
           FutureBuilder(
               future: _sortedRowDatas,
-              builder: (context, AsyncSnapshot<BuiltList<_RowData>> snapshot) {
+              builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
                 if (!snapshot.hasData) {
                   return Container();
                 }
@@ -115,7 +114,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
     });
   }
 
-  Future<BuiltList<_RowData>> get _sortedRowDatas {
+  Future<List<_RowData>> get _sortedRowDatas {
     return Future.microtask(() {
       final convertToRowData = (int index, Pair<String, int> pair) => _RowData(
             index: index,
@@ -126,32 +125,32 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
         case SortType.measureInc:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .sort((lv, rv) => lv.v2.compareTo(rv.v2))
+              .chainSort((lv, rv) => lv.v2.compareTo(rv.v2))
               .mapIndexed(convertToRowData)
-              .toBuiltList();
+              .toList();
         case SortType.measureDec:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .sort((lv, rv) => rv.v2.compareTo(lv.v2))
+              .chainSort((lv, rv) => rv.v2.compareTo(lv.v2))
               .mapIndexed(convertToRowData)
-              .toBuiltList();
+              .toList();
         case SortType.domainInc:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .sort((lv, rv) => lv.v1.compareTo(rv.v1))
+              .chainSort((lv, rv) => lv.v1.compareTo(rv.v1))
               .mapIndexed(convertToRowData)
-              .toBuiltList();
+              .toList();
         case SortType.domainDec:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .sort((lv, rv) => rv.v1.compareTo(lv.v1))
+              .chainSort((lv, rv) => rv.v1.compareTo(lv.v1))
               .mapIndexed(convertToRowData)
-              .toBuiltList();
+              .toList();
         case SortType.none:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
               .mapIndexed(convertToRowData)
-              .toBuiltList();
+              .toList();
       }
 
       throw FallThroughError();

@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -10,18 +9,18 @@ class ExamsNavigator {
   int _selectedExamViewId = 0;
   int _selectedExamStandardId = 0;
 
-  final BuiltList<String> _examPageNames;
-  final BuiltList<String> _examViews = BuiltList.of([
+  final List<String> _examPageNames;
+  final List<String> _examViews = [
     AppLocalizations.examsByBenchmarkAndGender,
     AppLocalizations.examsByStandardsAndGender,
     AppLocalizations.examsByStandardsAndState,
-  ]);
-  final BuiltList<Exam> _exams;
+  ];
+  final List<Exam> _exams;
 
-  BuiltList<String> _examStandards;
+  List<String> _examStandards;
 
-  ExamsNavigator(BuiltList<Exam> exams)
-      : _examPageNames = exams.uniques((it) => it.name).toBuiltList(),
+  ExamsNavigator(List<Exam> exams)
+      : _examPageNames = exams.uniques((it) => it.name),
         _exams = exams {
     _changeExamPage();
   }
@@ -111,23 +110,23 @@ class ExamsNavigator {
     return _examStandards[_selectedExamStandardId];
   }
 
-  BuiltList<Exam> _getExamPage(String examPageName) {
-    return _exams.where((i) => i.name == examPageName).toBuiltList();
+  List<Exam> _getExamPage(String examPageName) {
+    return _exams.where((i) => i.name == examPageName).toList();
   }
 
-  BuiltList<String> _getStandardsNames() {
+  List<String> _getStandardsNames() {
     return _getExamPage(pageName).uniques((it) => it.standard);
   }
 
-  BuiltMap<String, BuiltList<Exam>> _getGroupedResults() {
+  Map<String, List<Exam>> _getGroupedResults() {
     final page = _getExamPage(pageName);
     return page
         .where((i) => i.standard == standardName)
-        .toBuiltList()
+        .toList()
         .groupBy((it) => it.benchmark);
   }
 
-  BuiltMap<String, BuiltMap<String, Exam>> _getExamResultsByBenchmark() {
+  Map<String, Map<String, Exam>> _getExamResultsByBenchmark() {
     return _getGroupedResults().map((benchmark, exams) {
       final groupedByBenchmarkData = Map<String, Exam>();
       exams.forEach((exam) {
@@ -138,11 +137,11 @@ class ExamsNavigator {
           groupedByBenchmarkData[kNoTitleKey] = exam;
         }
       });
-      return MapEntry(benchmark, groupedByBenchmarkData.build());
+      return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
-  BuiltMap<String, BuiltMap<String, Exam>> _getExamResultsByYear() {
+  Map<String, Map<String, Exam>> _getExamResultsByYear() {
     return _getGroupedResults().map((benchmark, exams) {
       final groupedByBenchmarkData = Map<String, Exam>();
       exams.forEach((exam) {
@@ -153,11 +152,11 @@ class ExamsNavigator {
           groupedByBenchmarkData[year] = exam;
         }
       });
-      return MapEntry(benchmark, groupedByBenchmarkData.build());
+      return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
-  BuiltMap<String, BuiltMap<String, Exam>> _getExamResultsByState(
+  Map<String, Map<String, Exam>> _getExamResultsByState(
       Lookups lookups) {
     return _getGroupedResults().map((benchmark, exams) {
       final groupedByBenchmarkData = Map<String, Exam>();
@@ -170,11 +169,11 @@ class ExamsNavigator {
           groupedByBenchmarkData[district] = exam;
         }
       });
-      return MapEntry(benchmark, groupedByBenchmarkData.build());
+      return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
-  BuiltMap<String, BuiltMap<String, Exam>> getExamResults(Lookups lookups) {
+  Map<String, Map<String, Exam>> getExamResults(Lookups lookups) {
     switch (_selectedExamViewId) {
       case 1:
         return _getExamResultsByYear();

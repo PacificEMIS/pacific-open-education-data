@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
@@ -33,7 +32,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<BuiltList<Teacher>>> fetchAllTeachers() async* {
+  Stream<RepositoryResponse<List<Teacher>>> fetchAllTeachers() async* {
     yield* _fetchWithoutEtag(
       getLocal: _localDataSource.fetchTeachers,
       getRemote: _remoteDataSource.fetchTeachers,
@@ -42,7 +41,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<BuiltList<School>>> fetchAllSchools() async* {
+  Stream<RepositoryResponse<List<School>>> fetchAllSchools() async* {
     yield* _fetchWithEtag(
       getLocal: _localDataSource.fetchSchools,
       getRemote: _remoteDataSource.fetchSchools,
@@ -51,7 +50,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<BuiltList<Exam>>> fetchAllExams() async* {
+  Stream<RepositoryResponse<List<Exam>>> fetchAllExams() async* {
     yield* _fetchWithoutEtag(
       getLocal: _localDataSource.fetchExams,
       getRemote: _remoteDataSource.fetchExams,

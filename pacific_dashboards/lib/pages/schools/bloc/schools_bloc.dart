@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
@@ -31,8 +30,8 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
   final RemoteConfig _remoteConfig;
   final GlobalSettings _globalSettings;
 
-  BuiltList<School> _schools;
-  BuiltList<Filter> _filters;
+  List<School> _schools;
+  List<Filter> _filters;
   String _note;
 
   @override
@@ -104,8 +103,8 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
     );
   }
 
-  BuiltMap<String, int> _calculatePeopleCount(
-          BuiltMap<String, BuiltList<School>> groupedSchools) =>
+  Map<String, int> _calculatePeopleCount(
+          Map<String, List<School>> groupedSchools) =>
       groupedSchools.map(
         (key, value) => MapEntry(
           key,
@@ -113,9 +112,9 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
         ),
       );
 
-  BuiltMap<String, BuiltMap<String, InfoTableData>>
+  Map<String, Map<String, InfoTableData>>
       _calculateEnrollmentByAgeAndEducation({
-    BuiltList<School> schools,
+    List<School> schools,
     Lookups lookups,
   }) {
     final groupedByLevelWithTotal = {AppLocalizations.total: schools};
@@ -127,12 +126,12 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
       final groupedByAge =
           _generateInfoTableData(schools.groupBy((it) => it.ageGroup));
       return MapEntry(level, groupedByAge);
-    }).build();
+    });
   }
 
-  BuiltMap<String, BuiltMap<String, InfoTableData>>
+  Map<String, Map<String, InfoTableData>>
       _calculateEnrolBySchoolLevelAndDistrict({
-    BuiltList<School> schools,
+    List<School> schools,
     Lookups lookups,
   }) {
     final groupedByDistrictWithTotal = {AppLocalizations.total: schools};
@@ -144,11 +143,11 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
       final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
       return MapEntry(districtCode.from(lookups.districts),
           _generateInfoTableData(groupedBySchoolType));
-    }).build();
+    });
   }
 
-  BuiltMap<String, InfoTableData> _generateInfoTableData(
-      BuiltMap<String, BuiltList<School>> groupedData,
+  Map<String, InfoTableData> _generateInfoTableData(
+      Map<String, List<School>> groupedData,
       {String districtCode}) {
     final convertedData = Map<String, InfoTableData>();
     var totalMaleCount = 0;
@@ -181,10 +180,10 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
     convertedData[AppLocalizations.total] =
         InfoTableData(totalMaleCount, totalFemaleCount);
 
-    return convertedData.build();
+    return convertedData;
   }
 
-  Future<BuiltList<Filter>> _initFilters() async {
+  Future<List<Filter>> _initFilters() async {
     if (_schools == null) {
       return null;
     }

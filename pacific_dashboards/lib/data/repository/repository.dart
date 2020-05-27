@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
@@ -6,11 +5,11 @@ import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class Repository {
-  Stream<RepositoryResponse<BuiltList<Teacher>>> fetchAllTeachers();
+  Stream<RepositoryResponse<List<Teacher>>> fetchAllTeachers();
 
-  Stream<RepositoryResponse<BuiltList<School>>> fetchAllSchools();
+  Stream<RepositoryResponse<List<School>>> fetchAllSchools();
 
-  Stream<RepositoryResponse<BuiltList<Exam>>> fetchAllExams();
+  Stream<RepositoryResponse<List<Exam>>> fetchAllExams();
 
   Stream<RepositoryResponse<AccreditationChunk>> fetchAllAccreditations();
 

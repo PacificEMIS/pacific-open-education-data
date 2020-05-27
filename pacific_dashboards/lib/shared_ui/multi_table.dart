@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
@@ -9,7 +8,7 @@ class MultiTable extends StatelessWidget {
     Key key,
     @required String title,
     @required String firstColumnName,
-    @required BuiltMap<String, BuiltMap<String, InfoTableData>> data,
+    @required Map<String, Map<String, InfoTableData>> data,
     KeySortFunc keySortFunc,
   })  : assert(title != null),
         assert(firstColumnName != null),
@@ -22,7 +21,7 @@ class MultiTable extends StatelessWidget {
 
   final String _title;
   final String _firstColumnName;
-  final BuiltMap<String, BuiltMap<String, InfoTableData>> _data;
+  final Map<String, Map<String, InfoTableData>> _data;
   final KeySortFunc _keySortFunc;
 
   @override

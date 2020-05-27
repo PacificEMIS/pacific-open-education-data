@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
@@ -8,21 +7,21 @@ import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class LocalDataSource {
 
-  Future<Pair<bool, BuiltList<Teacher>>> fetchTeachers();
+  Future<Pair<bool, List<Teacher>>> fetchTeachers();
 
-  Future<BuiltList<School>> fetchSchools();
+  Future<List<School>> fetchSchools();
 
-  Future<Pair<bool, BuiltList<Exam>>> fetchExams();
+  Future<Pair<bool, List<Exam>>> fetchExams();
 
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk();
 
   Future<Pair<bool, Lookups>> fetchLookupsModel();
 
-  Future<void> saveExams(BuiltList<Exam> exams);
+  Future<void> saveExams(List<Exam> exams);
 
-  Future<void> saveTeachers(BuiltList<Teacher> teachers);
+  Future<void> saveTeachers(List<Teacher> teachers);
 
-  Future<void> saveSchools(BuiltList<School> schools);
+  Future<void> saveSchools(List<School> schools);
 
   Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk);
 

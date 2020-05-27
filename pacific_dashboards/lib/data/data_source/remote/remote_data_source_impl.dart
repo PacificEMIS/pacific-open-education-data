@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -14,7 +13,6 @@ import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
@@ -99,7 +97,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<BuiltList<Teacher>> fetchTeachers() async {
+  Future<List<Teacher>> fetchTeachers() async {
     final responseData = await _get(path: _kTeachersApiKey);
     final List<dynamic> data = json.decode(responseData);
     return data
@@ -108,7 +106,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<BuiltList<School>> fetchSchools() async {
+  Future<List<School>> fetchSchools() async {
     final responseData = await _get(path: _kSchoolsApiKey);
     final List<dynamic> data = json.decode(responseData);
     return data
@@ -117,7 +115,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<BuiltList<Exam>> fetchExams() async {
+  Future<List<Exam>> fetchExams() async {
     final responseData = await _get(path: _kExamsApiKey);
     final List<dynamic> data = json.decode(responseData);
     return data

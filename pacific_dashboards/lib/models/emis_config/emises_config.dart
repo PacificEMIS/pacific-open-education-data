@@ -1,34 +1,20 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 
 part 'emises_config.g.dart';
 
-abstract class EmisesConfig
-    implements Built<EmisesConfig, EmisesConfigBuilder> {
-  EmisesConfig._();
+@JsonSerializable()
+class EmisesConfig {
+  @JsonKey(name: 'emises')
+  final List<EmisConfig> emises;
 
-  factory EmisesConfig([updates(EmisesConfigBuilder b)]) = _$EmisesConfig;
+  const EmisesConfig(this.emises);
 
-  @BuiltValueField(wireName: 'emises')
-  BuiltList<EmisConfig> get emises;
+  factory EmisesConfig.fromJson(Map<String, dynamic> json) =>
+      _$EmisesConfigFromJson(json);
 
-  String toJson() {
-    return json
-        .encode(serializers.serializeWith(EmisesConfig.serializer, this));
-  }
-
-  static EmisesConfig fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        EmisesConfig.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<EmisesConfig> get serializer => _$emisesConfigSerializer;
+  Map<String, dynamic> toJson() => _$EmisesConfigToJson(this);
 
   EmisConfig getEmisConfigFor(Emis emis) {
     return emises.firstWhere((it) => it.id == emis.key, orElse: () => null);

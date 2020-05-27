@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
@@ -26,7 +25,7 @@ class AccreditationTableData {
 class AccreditationTableWidget extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final BuiltMap<String, AccreditationTableData> data;
+  final Map<String, AccreditationTableData> data;
 
   final String title;
   final String firstColumnName;
@@ -178,7 +177,7 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
   }
 
   List<TableRow> _generateTableBody(
-    BuiltMap<dynamic, AccreditationTableData> data,
+    Map<dynamic, AccreditationTableData> data,
     TableRow subTitle,
   ) {
     var rowsList = List<TableRow>();

@@ -1,96 +1,92 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 
 part 'teacher.g.dart';
 
-abstract class Teacher implements Built<Teacher, TeacherBuilder> {
-  Teacher._();
+@JsonSerializable()
+class Teacher {
+  @JsonKey(name: 'SurveyYear')
+  final int surveyYear;
 
-  factory Teacher([updates(TeacherBuilder b)]) = _$Teacher;
+  @JsonKey(name: 'AgeGroup')
+  final String ageGroup;
 
-  @BuiltValueField(wireName: 'SurveyYear')
-  int get surveyYear;
+  @JsonKey(name: 'DistrictCode', defaultValue: '')
+  final String districtCode;
 
-  @nullable
-  @BuiltValueField(wireName: 'AgeGroup')
-  String get ageGroup;
+  @JsonKey(name: 'AuthorityCode', defaultValue: '')
+  final String authorityCode;
 
-  @nullable
-  @BuiltValueField(wireName: 'DistrictCode')
-  String get districtCodeOptional;
+  @JsonKey(name: 'AuthorityGovt', defaultValue: '')
+  final String authorityGovt;
 
-  @nullable
-  @BuiltValueField(wireName: 'AuthorityCode')
-  String get authorityCodeOptional;
+  @JsonKey(name: 'SchoolTypeCode', defaultValue: '')
+  final String schoolTypeCode;
 
-  @nullable
-  @BuiltValueField(wireName: 'AuthorityGovt')
-  String get authorityGovtOptional;
+  @JsonKey(name: 'Sector')
+  final String sector;
 
-  @nullable
-  @BuiltValueField(wireName: 'SchoolTypeCode')
-  String get schoolTypeCodeOptional;
+  @JsonKey(name: 'ISCEDSubClass')
+  final String iSCEDSubClass;
 
-  @nullable
-  @BuiltValueField(wireName: 'Sector')
-  String get sector;
+  @JsonKey(name: 'NumTeachersM', defaultValue: 0)
+  final int numTeachersM;
 
-  @nullable
-  @BuiltValueField(wireName: 'ISCEDSubClass')
-  String get iSCEDSubClass;
+  @JsonKey(name: 'NumTeachersF', defaultValue: 0)
+  final int numTeachersF;
 
-  @nullable
-  @BuiltValueField(wireName: 'NumTeachersM')
-  int get numTeachersM;
+  @JsonKey(name: 'CertifiedM', defaultValue: 0)
+  final int certifiedM;
 
-  @nullable
-  @BuiltValueField(wireName: 'NumTeachersF')
-  int get numTeachersF;
+  @JsonKey(name: 'CertifiedF', defaultValue: 0)
+  final int certifiedF;
 
-  @nullable
-  @BuiltValueField(wireName: 'CertifiedM')
-  int get certifiedM;
+  @JsonKey(name: 'QualifiedM', defaultValue: 0)
+  final int qualifiedM;
 
-  @nullable
-  @BuiltValueField(wireName: 'CertifiedF')
-  int get certifiedF;
+  @JsonKey(name: 'QualifiedF', defaultValue: 0)
+  final int qualifiedF;
 
-  @nullable
-  @BuiltValueField(wireName: 'QualifiedM')
-  int get qualifiedM;
+  @JsonKey(name: 'CertQualM', defaultValue: 0)
+  final int certQualM;
 
-  @nullable
-  @BuiltValueField(wireName: 'QualifiedF')
-  int get qualifiedF;
+  @JsonKey(name: 'CertQualF', defaultValue: 0)
+  final int certQualF;
 
-  @nullable
-  @BuiltValueField(wireName: 'CertQualM')
-  int get certQualM;
+  const Teacher({
+    @required this.surveyYear,
+    @required this.ageGroup,
+    @required this.districtCode,
+    @required this.authorityCode,
+    @required this.authorityGovt,
+    @required this.schoolTypeCode,
+    @required this.sector,
+    @required this.iSCEDSubClass,
+    @required this.numTeachersM,
+    @required this.numTeachersF,
+    @required this.certifiedM,
+    @required this.certifiedF,
+    @required this.qualifiedM,
+    @required this.qualifiedF,
+    @required this.certQualM,
+    @required this.certQualF,
+  });
 
-  @nullable
-  @BuiltValueField(wireName: 'CertQualF')
-  int get certQualF;
+  factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
 
-  String get districtCode => districtCodeOptional ?? "";
-  String get authorityCode => authorityCodeOptional ?? "";
-  String get authorityGovt => authorityGovtOptional ?? "";
-  String get schoolTypeCode => schoolTypeCodeOptional ?? "";
+  Map<String, dynamic> toJson() => _$TeacherToJson(this);
 
   int getTeachersCount(Gender gender) {
     switch (gender) {
       case Gender.male:
-        return numTeachersM ?? 0;
+        return numTeachersM;
       case Gender.female:
-        return numTeachersF ?? 0;
+        return numTeachersF;
     }
     throw FallThroughError();
   }
@@ -98,21 +94,9 @@ abstract class Teacher implements Built<Teacher, TeacherBuilder> {
   int get totalTeachersCount {
     return getTeachersCount(Gender.male) + getTeachersCount(Gender.female);
   }
-
-  String toJson() {
-    return json.encode(serializers.serializeWith(Teacher.serializer, this));
-  }
-
-  static Teacher fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        Teacher.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<Teacher> get serializer => _$teacherSerializer;
 }
 
-
-extension Filters on BuiltList<Teacher> {
+extension Filters on List<Teacher> {
   // ignore: unused_field
   static const _kYearFilterId = 0;
   // ignore: unused_field
@@ -122,69 +106,63 @@ extension Filters on BuiltList<Teacher> {
   // ignore: unused_field
   static const _kGovtFilterId = 3;
 
-  BuiltList<Filter> generateDefaultFilters(Lookups lookups) {
-    return BuiltList.of([
+  List<Filter> generateDefaultFilters(Lookups lookups) {
+    return [
       Filter(
-            (b) => b
-          ..id = _kYearFilterId
-          ..title = AppLocalizations.filterByYear
-          ..items = ListBuilder<FilterItem>(
-            this
-                .uniques((it) => it.surveyYear)
-                .sort((lv, rv) => rv.compareTo(lv))
-                .map((it) => FilterItem(it, it.toString())),
-          )
-          ..selectedIndex = 0,
+        id: _kYearFilterId,
+        title: AppLocalizations.filterByYear,
+        items: this
+            .uniques((it) => it.surveyYear)
+            .chainSort((lv, rv) => rv.compareTo(lv))
+            .map((it) => FilterItem(it, it.toString())),
+        selectedIndex: 0,
       ),
       Filter(
-            (b) => b
-          ..id = _kDistrictFilterId
-          ..title = AppLocalizations.filterByState
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllStates),
-            ...this
-                .uniques((it) => it.districtCode)
-                .map((it) => FilterItem(it, it.from(lookups.districts))),
-          ])
-          ..selectedIndex = 0,
+        id: _kDistrictFilterId,
+        title: AppLocalizations.filterByState,
+        items: [
+          FilterItem(null, AppLocalizations.displayAllStates),
+          ...this
+              .uniques((it) => it.districtCode)
+              .map((it) => FilterItem(it, it.from(lookups.districts))),
+        ],
+        selectedIndex: 0,
       ),
       Filter(
-            (b) => b
-          ..id = _kAuthorityFilterId
-          ..title = AppLocalizations.filterByAuthority
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllAuthority),
-            ...this
-                .uniques((it) => it.authorityCode)
-                .map((it) => FilterItem(it, it.from(lookups.authorities))),
-          ])
-          ..selectedIndex = 0,
+        id: _kAuthorityFilterId,
+        title: AppLocalizations.filterByAuthority,
+        items: [
+          FilterItem(null, AppLocalizations.displayAllAuthority),
+          ...this
+              .uniques((it) => it.authorityCode)
+              .map((it) => FilterItem(it, it.from(lookups.authorities))),
+        ],
+        selectedIndex: 0,
       ),
       Filter(
-            (b) => b
-          ..id = _kGovtFilterId
-          ..title = AppLocalizations.filterByGovernment
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllGovernment),
-            ...this
-                .uniques((it) => it.authorityGovt)
-                .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
-          ])
-          ..selectedIndex = 0,
+        id: _kGovtFilterId,
+        title: AppLocalizations.filterByGovernment,
+        items: [
+          FilterItem(null, AppLocalizations.displayAllGovernment),
+          ...this
+              .uniques((it) => it.authorityGovt)
+              .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
+        ],
+        selectedIndex: 0,
       ),
-    ]);
+    ];
   }
 
-  Future<BuiltList<Teacher>> applyFilters(BuiltList<Filter> filters) {
+  Future<List<Teacher>> applyFilters(List<Filter> filters) {
     return Future(() {
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
 
       final districtFilter =
-      filters.firstWhere((it) => it.id == _kDistrictFilterId);
+          filters.firstWhere((it) => it.id == _kDistrictFilterId);
 
       final authorityFilter =
-      filters.firstWhere((it) => it.id == _kAuthorityFilterId);
+          filters.firstWhere((it) => it.id == _kAuthorityFilterId);
 
       final govtFilter = filters.firstWhere((it) => it.id == _kGovtFilterId);
 
@@ -209,7 +187,7 @@ extension Filters on BuiltList<Teacher> {
         }
 
         return true;
-      }).toBuiltList();
+      }).toList();
     });
   }
 }

@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
@@ -23,7 +22,7 @@ class LoadingExamsState extends BodyState {}
 class PopulatedExamsState extends BodyState {
   PopulatedExamsState(this.results, this.note);
 
-  final BuiltMap<String, BuiltMap<String, Exam>> results;
+  final Map<String, Map<String, Exam>> results;
   final String note;
 
   @override

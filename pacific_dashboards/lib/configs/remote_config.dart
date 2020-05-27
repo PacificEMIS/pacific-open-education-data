@@ -1,6 +1,7 @@
-import 'package:built_collection/built_collection.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart'
-    as fireConfig;
+import 'dart:convert';
+
+import 'package:firebase_remote_config/firebase_remote_config.dart' as fireConfig;
+import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
@@ -25,44 +26,43 @@ class FirebaseRemoteConfig extends RemoteConfig {
 
   @override
   Future<EmisesConfig> get emises async {
-    return Future.microtask(() {
-      final remote = _remoteConfig.getString(_kConfigName);
-      return EmisesConfig.fromJson(remote);
-    });
+    final remoteConfigString = _remoteConfig.getString(_kConfigName);
+    return compute(_parseEmisesConfig, remoteConfigString);
+  }
+
+  static EmisesConfig _parseEmisesConfig(String jsonConfig) {
+    final parsedJson = json.decode(jsonConfig);
+    return EmisesConfig.fromJson(parsedJson);
   }
 }
 
 EmisesConfig _defaultConfig = EmisesConfig(
-  (b) => b
-    ..emises = ListBuilder<EmisConfig>([
-      EmisConfig(
-        (b) => b
-          ..id = 'miemis'
-          ..modules = ListBuilder<ModuleConfig>([
-            ModuleConfig((b) => b..id = 'schools'),
-            ModuleConfig((b) => b..id = 'teachers'),
-            ModuleConfig((b) => b..id = 'exams'),
-            ModuleConfig((b) => b..id = 's_accreditation'),
-          ]),
-      ),
-      EmisConfig(
-        (b) => b
-          ..id = 'fedemis'
-          ..modules = ListBuilder<ModuleConfig>([
-            ModuleConfig((b) => b..id = 'schools'),
-            ModuleConfig((b) => b..id = 'teachers'),
-            ModuleConfig((b) => b..id = 'exams'),
-            ModuleConfig((b) => b..id = 's_accreditation'),
-          ]),
-      ),
-      EmisConfig(
-        (b) => b
-          ..id = 'kemis'
-          ..modules = ListBuilder<ModuleConfig>([
-            ModuleConfig((b) => b..id = 'schools'),
-            ModuleConfig((b) => b..id = 'teachers'),
-            ModuleConfig((b) => b..id = 'exams'),
-          ]),
-      ),
-    ]),
+  [
+    EmisConfig(
+      id: 'miemis',
+      modules: [
+        ModuleConfig(id: 'schools'),
+        ModuleConfig(id: 'teachers'),
+        ModuleConfig(id: 'exams'),
+        ModuleConfig(id: 's_accreditation'),
+      ],
+    ),
+    EmisConfig(
+      id: 'fedemis',
+      modules: [
+        ModuleConfig(id: 'schools'),
+        ModuleConfig(id: 'teachers'),
+        ModuleConfig(id: 'exams'),
+        ModuleConfig(id: 's_accreditation'),
+      ],
+    ),
+    EmisConfig(
+      id: 'kemis',
+      modules: [
+        ModuleConfig(id: 'schools'),
+        ModuleConfig(id: 'teachers'),
+        ModuleConfig(id: 'exams'),
+      ],
+    ),
+  ],
 );

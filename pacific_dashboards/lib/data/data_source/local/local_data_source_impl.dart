@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
@@ -19,15 +18,15 @@ class LocalDataSourceImpl extends LocalDataSource {
   Future<Emis> get _emis => _globalSettings.currentEmis;
 
   @override
-  Future<BuiltList<School>> fetchSchools() async =>
+  Future<List<School>> fetchSchools() async =>
       await _database.schools.get(await _emis);
 
   @override
-  Future<Pair<bool, BuiltList<Teacher>>> fetchTeachers() async =>
+  Future<Pair<bool, List<Teacher>>> fetchTeachers() async =>
       await _database.teachers.get(await _emis);
 
   @override
-  Future<Pair<bool, BuiltList<Exam>>> fetchExams() async =>
+  Future<Pair<bool, List<Exam>>> fetchExams() async =>
       await _database.exams.get(await _emis);
 
   @override
@@ -39,15 +38,15 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.lookups.get(await _emis);
 
   @override
-  Future<void> saveSchools(BuiltList<School> schools) async =>
+  Future<void> saveSchools(List<School> schools) async =>
       await _database.schools.save(schools, await _emis);
 
   @override
-  Future<void> saveTeachers(BuiltList<Teacher> teachers) async =>
+  Future<void> saveTeachers(List<Teacher> teachers) async =>
       await _database.teachers.save(teachers, await _emis);
 
   @override
-  Future<void> saveExams(BuiltList<Exam> exams) async =>
+  Future<void> saveExams(List<Exam> exams) async =>
       await _database.exams.save(exams, await _emis);
 
   @override

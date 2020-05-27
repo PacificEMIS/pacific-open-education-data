@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:built_collection/built_collection.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
@@ -104,7 +103,7 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
         _navigator.standardName,
       );
 
-  Future<BuiltMap<String, BuiltMap<String, Exam>>> _convertExams() {
+  Future<Map<String, Map<String, Exam>>> _convertExams() {
     return lookups
         .then((lookups) => Future(() => _navigator.getExamResults(lookups)));
   }

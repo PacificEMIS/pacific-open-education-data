@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
@@ -138,14 +137,14 @@ class ExamsPageState extends State<ExamsPage> {
 class _PopulatedContent extends StatelessWidget {
   const _PopulatedContent({
     Key key,
-    @required BuiltMap<String, BuiltMap<String, Exam>> examResults,
+    @required Map<String, Map<String, Exam>> examResults,
     @required String note,
   })  : assert(examResults != null),
         _examResults = examResults,
         _note = note,
         super(key: key);
 
-  final BuiltMap<String, BuiltMap<String, Exam>> _examResults;
+  final Map<String, Map<String, Exam>> _examResults;
   final String _note;
 
   @override

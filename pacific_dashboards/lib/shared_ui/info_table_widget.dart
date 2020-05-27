@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
@@ -11,7 +10,7 @@ const double _kBorderWidth = 1.0;
 class InfoTableWidget extends StatelessWidget {
   InfoTableWidget({
     Key key,
-    @required BuiltMap<String, InfoTableData> data,
+    @required Map<String, InfoTableData> data,
     @required String title,
     @required String firstColumnName,
     KeySortFunc keySortFunc,
@@ -23,7 +22,7 @@ class InfoTableWidget extends StatelessWidget {
         _keySortFunc = keySortFunc,
         super(key: key);
 
-  final BuiltMap<String, InfoTableData> _data;
+  final Map<String, InfoTableData> _data;
   final KeySortFunc _keySortFunc;
   final String _title;
   final String _firstColumnName;
@@ -82,9 +81,9 @@ class InfoTableWidget extends StatelessWidget {
                         measure: _data[key],
                         index: index,
                       ))
-                  .toBuiltList();
+                  .toList();
             }),
-            builder: (context, AsyncSnapshot<BuiltList<_CellData>> snapshot) {
+            builder: (context, AsyncSnapshot<List<_CellData>> snapshot) {
               if (!snapshot.hasData) {
                 return Container();
               }

@@ -1,50 +1,57 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 
 part 'school.g.dart';
 
-abstract class School implements Built<School, SchoolBuilder> {
-  School._();
+@JsonSerializable()
+class School {
+  @JsonKey(name: 'SurveyYear')
+  final int surveyYear;
 
-  factory School([updates(SchoolBuilder b)]) = _$School;
+  @JsonKey(name: 'ClassLevel')
+  final String classLevel;
 
-  @BuiltValueField(wireName: 'SurveyYear')
-  int get surveyYear;
+  @JsonKey(name: 'Age')
+  final int age;
 
-  @BuiltValueField(wireName: 'ClassLevel')
-  String get classLevel;
+  @JsonKey(name: 'DistrictCode')
+  final String districtCode;
 
-  @nullable
-  @BuiltValueField(wireName: 'Age')
-  int get age;
+  @JsonKey(name: 'AuthorityCode')
+  final String authorityCode;
 
-  @BuiltValueField(wireName: 'DistrictCode')
-  String get districtCode;
+  @JsonKey(name: 'AuthorityGovt')
+  final String authorityGovt;
 
-  @BuiltValueField(wireName: 'AuthorityCode')
-  String get authorityCode;
+  @JsonKey(name: 'GenderCode')
+  final String genderCode;
 
-  @BuiltValueField(wireName: 'AuthorityGovt')
-  String get authorityGovt;
+  @JsonKey(name: 'SchoolTypeCode')
+  final String schoolTypeCode;
 
-  @BuiltValueField(wireName: 'GenderCode')
-  String get genderCode;
+  @JsonKey(name: 'Enrol')
+  final int enrol;
 
-  @BuiltValueField(wireName: 'SchoolTypeCode')
-  String get schoolTypeCode;
+  const School({
+    @required this.surveyYear,
+    @required this.classLevel,
+    @required this.age,
+    @required this.districtCode,
+    @required this.authorityCode,
+    @required this.authorityGovt,
+    @required this.genderCode,
+    @required this.schoolTypeCode,
+    @required this.enrol,
+  });
 
-  @nullable
-  @BuiltValueField(wireName: 'Enrol')
-  int get enrol;
+  factory School.fromJson(Map<String, dynamic> json) => _$SchoolFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SchoolToJson(this);
 
   Gender get gender {
     switch (genderCode) {
@@ -63,20 +70,9 @@ abstract class School implements Built<School, SchoolBuilder> {
     int ageCoeff = age ~/ 5 + 1;
     return '${((ageCoeff * 5) - 4)}-${(ageCoeff * 5)}';
   }
-
-  String toJson() {
-    return json.encode(serializers.serializeWith(School.serializer, this));
-  }
-
-  static School fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        School.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<School> get serializer => _$schoolSerializer;
 }
 
-extension Filters on BuiltList<School> {
+extension Filters on List<School> {
   // ignore: unused_field
   static const _kYearFilterId = 0;
   // ignore: unused_field
@@ -88,72 +84,65 @@ extension Filters on BuiltList<School> {
   // ignore: unused_field
   static const _kClassLevelFilterId = 4;
 
-  BuiltList<Filter> generateDefaultFilters(Lookups lookups) {
-    return BuiltList.of([
+  List<Filter> generateDefaultFilters(Lookups lookups) {
+    return [
       Filter(
-        (b) => b
-          ..id = _kYearFilterId
-          ..title = AppLocalizations.filterByYear
-          ..items = ListBuilder<FilterItem>(
-            this
-                .uniques((it) => it.surveyYear)
-                .sort((lv, rv) => rv.compareTo(lv))
-                .map((it) => FilterItem(it, it.toString())),
-          )
-          ..selectedIndex = 0,
+        id: _kYearFilterId,
+        title: AppLocalizations.filterByYear,
+        items: this
+            .uniques((it) => it.surveyYear)
+            .chainSort((lv, rv) => rv.compareTo(lv))
+            .map((it) => FilterItem(it, it.toString())),
+        selectedIndex: 0,
       ),
       Filter(
-        (b) => b
-          ..id = _kDistrictFilterId
-          ..title = AppLocalizations.filterByState
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllStates),
-            ...this
-                .uniques((it) => it.districtCode)
-                .map((it) => FilterItem(it, it.from(lookups.districts))),
-          ])
-          ..selectedIndex = 0,
+        id: _kDistrictFilterId,
+        title: AppLocalizations.filterByState,
+        items: [
+          FilterItem(null, AppLocalizations.displayAllStates),
+          ...this
+              .uniques((it) => it.districtCode)
+              .map((it) => FilterItem(it, it.from(lookups.districts))),
+        ],
+        selectedIndex: 0,
       ),
       Filter(
-            (b) => b
-          ..id = _kAuthorityFilterId
-          ..title = AppLocalizations.filterByAuthority
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllAuthority),
-            ...this
-                .uniques((it) => it.authorityCode)
-                .map((it) => FilterItem(it, it.from(lookups.authorities))),
-          ])
-          ..selectedIndex = 0,
+        id: _kAuthorityFilterId,
+        title: AppLocalizations.filterByAuthority,
+        items: [
+          FilterItem(null, AppLocalizations.displayAllAuthority),
+          ...this
+              .uniques((it) => it.authorityCode)
+              .map((it) => FilterItem(it, it.from(lookups.authorities))),
+        ],
+        selectedIndex: 0,
       ),
       Filter(
-            (b) => b
-          ..id = _kGovtFilterId
-          ..title = AppLocalizations.filterByGovernment
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllGovernment),
-            ...this
-                .uniques((it) => it.authorityGovt)
-                .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
-          ])
-          ..selectedIndex = 0,
+        id: _kGovtFilterId,
+        title: AppLocalizations.filterByGovernment,
+        items: [
+          FilterItem(null, AppLocalizations.displayAllGovernment),
+          ...this
+              .uniques((it) => it.authorityGovt)
+              .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
+        ],
+        selectedIndex: 0,
       ),
       Filter(
-            (b) => b
-          ..id = _kClassLevelFilterId
-          ..title = AppLocalizations.filterByClassLevel
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllLevelFilters),
-            ...this
-                .uniques((it) => it.classLevel)
-                .map((it) => FilterItem(it, it.from(lookups.levels))),
-          ])
-          ..selectedIndex = 0,
+        id: _kClassLevelFilterId,
+        title: AppLocalizations.filterByClassLevel,
+        items: [
+          FilterItem(null, AppLocalizations.displayAllLevelFilters),
+          ...this
+              .uniques((it) => it.classLevel)
+              .map((it) => FilterItem(it, it.from(lookups.levels))),
+        ],
+        selectedIndex: 0,
       ),
-    ]);
+    ];
   }
 
-  Future<BuiltList<School>> applyFilters(BuiltList<Filter> filters) {
+  Future<List<School>> applyFilters(List<Filter> filters) {
     return Future(() {
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
@@ -195,7 +184,7 @@ extension Filters on BuiltList<School> {
         }
 
         return true;
-      }).toBuiltList();
+      }).toList();
     });
   }
 }

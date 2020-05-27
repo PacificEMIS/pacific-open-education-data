@@ -1,51 +1,44 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 
-part 'lookups.g.dart';
+class Lookups {
+  final List<Lookup> authorityGovt;
+  final List<Lookup> schoolTypes;
+  final List<Lookup> districts;
+  final List<Lookup> authorities;
+  final List<Lookup> levels;
+  final List<Lookup> accreditationTerms;
+  final List<Lookup> educationLevels;
 
-abstract class Lookups implements Built<Lookups, LookupsBuilder> {
-  Lookups._();
+  const Lookups({
+    this.authorityGovt,
+    this.schoolTypes,
+    this.districts,
+    this.authorities,
+    this.levels,
+    this.accreditationTerms,
+    this.educationLevels,
+  });
 
-  factory Lookups([updates(LookupsBuilder b)]) = _$Lookups;
-
-  static Lookups empty() => Lookups((b) {});
-
-  @BuiltValueField(wireName: 'authorityGovt')
-  BuiltList<Lookup> get authorityGovt;
-
-  @BuiltValueField(wireName: 'schoolTypes')
-  BuiltList<Lookup> get schoolTypes;
-
-  @BuiltValueField(wireName: 'districts')
-  BuiltList<Lookup> get districts;
-
-  @BuiltValueField(wireName: 'authorities')
-  BuiltList<Lookup> get authorities;
-
-  @BuiltValueField(wireName: 'levels')
-  BuiltList<Lookup> get levels;
-
-  @BuiltValueField(wireName: 'accreditationTerms')
-  BuiltList<Lookup> get accreditationTerms;
-
-  @BuiltValueField(wireName: 'educationLevels')
-  BuiltList<Lookup> get educationLevels;
-
-  String toJson() {
-    return json.encode(serializers.serializeWith(Lookups.serializer, this));
+  factory Lookups.empty() {
+    return Lookups();
   }
 
-  static Lookups fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        Lookups.serializer, json.decode(jsonString));
+  factory Lookups.fromJson(Map<String, dynamic> json) {
+    return Lookups(
+      authorityGovt:
+          json['authorityGovt'].map((it) => Lookup.fromJson(it)).toList(),
+      schoolTypes:
+          json['schoolTypes'].map((it) => Lookup.fromJson(it)).toList(),
+      districts: json['districts'].map((it) => Lookup.fromJson(it)).toList(),
+      authorities:
+          json['authorities'].map((it) => Lookup.fromJson(it)).toList(),
+      levels: json['levels'].map((it) => Lookup.fromJson(it)).toList(),
+      accreditationTerms:
+          json['accreditationTerms'].map((it) => Lookup.fromJson(it)).toList(),
+      educationLevels:
+          json['educationLevels'].map((it) => Lookup.fromJson(it)).toList(),
+    );
   }
-
-  static Serializer<Lookups> get serializer => _$lookupsSerializer;
 
   bool isEmpty() =>
       authorityGovt.isEmpty &&

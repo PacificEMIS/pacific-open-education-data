@@ -1,13 +1,12 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 
 class FilterPage extends StatefulWidget {
-  final BuiltList<Filter> _filters;
+  final List<Filter> _filters;
 
-  const FilterPage({Key key, @required BuiltList<Filter> filters})
+  const FilterPage({Key key, @required List<Filter> filters})
       : assert(filters != null),
         _filters = filters,
         super(key: key);
@@ -17,7 +16,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  BuiltList<Filter> _filters;
+  List<Filter> _filters;
 
   _FilterPageState(this._filters);
 
@@ -58,7 +57,7 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 
-  List<Widget> _createFilterSections(BuiltList<Filter> filters) {
+  List<Widget> _createFilterSections(List<Filter> filters) {
     final List<Widget> sections = [];
 
     filters.forEachIndexed((filterIndex, filter) {
@@ -72,13 +71,7 @@ class _FilterPageState extends State<FilterPage> {
           index: itemIndex,
           onChanged: (changedIndex) {
             setState(() {
-              _filters = _filters.rebuild(
-                (b) => b
-                  ..replaceRange(filterIndex, filterIndex + 1, [
-                    _filters[filterIndex]
-                        .rebuild((b) => b..selectedIndex = changedIndex),
-                  ]),
-              );
+              _filters[filterIndex].selectedIndex = changedIndex;
             });
           },
         );

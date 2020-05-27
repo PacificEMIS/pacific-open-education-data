@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
@@ -20,14 +19,14 @@ class SchoolsPageData extends Equatable {
         assert(enrolBySchoolLevelAndDistrict != null),
         assert(filters != null);
 
-  final BuiltMap<String, int> enrolByDistrict;
-  final BuiltMap<String, int> enrolByAuthority;
-  final BuiltMap<String, int> enrolByPrivacy;
-  final BuiltMap<String, BuiltMap<String, InfoTableData>>
+  final Map<String, int> enrolByDistrict;
+  final Map<String, int> enrolByAuthority;
+  final Map<String, int> enrolByPrivacy;
+  final Map<String, Map<String, InfoTableData>>
       enrolByAgeAndEducation;
-  final BuiltMap<String, BuiltMap<String, InfoTableData>>
+  final Map<String, Map<String, InfoTableData>>
       enrolBySchoolLevelAndDistrict;
-  final BuiltList<Filter> filters;
+  final List<Filter> filters;
   final String note;
 
   @override

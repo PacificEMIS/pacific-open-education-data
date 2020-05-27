@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -188,7 +187,7 @@ class SchoolsPageState extends State<SchoolsPage> {
   void _openFilters(BuildContext context) {
     final state = BlocProvider.of<SchoolsBloc>(context).state;
     if (state is UpdatedSchoolsState) {
-      Navigator.push<BuiltList<Filter>>(
+      Navigator.push<List<Filter>>(
         context,
         MaterialPageRoute(builder: (context) {
           return FilterPage(
@@ -199,7 +198,7 @@ class SchoolsPageState extends State<SchoolsPage> {
     }
   }
 
-  void _applyFilters(BuildContext context, BuiltList<Filter> filters) {
+  void _applyFilters(BuildContext context, List<Filter> filters) {
     if (filters == null) {
       return;
     }

@@ -1,75 +1,64 @@
-library standard_accreditation;
-
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 
 part 'standard_accreditation.g.dart';
 
-abstract class StandardAccreditation
-    implements Built<StandardAccreditation, StandardAccreditationBuilder>, Accreditation {
-  StandardAccreditation._();
-
-  factory StandardAccreditation([updates(StandardAccreditationBuilder b)]) =
-      _$StandardAccreditation;
-
+@JsonSerializable()
+class StandardAccreditation implements Accreditation {
+  @JsonKey(name: 'SurveyYear')
   @override
-  @BuiltValueField(wireName: 'SurveyYear')
-  int get surveyYear;
+  final int surveyYear;
 
+  @JsonKey(name: 'DistrictCode')
   @override
-  @BuiltValueField(wireName: 'DistrictCode')
-  String get districtCode;
+  final String districtCode;
 
+  @JsonKey(name: 'AuthorityCode')
   @override
-  @BuiltValueField(wireName: 'AuthorityCode')
-  String get authorityCode;
+  final String authorityCode;
 
+  @JsonKey(name: 'AuthorityGovtCode')
   @override
-  @BuiltValueField(wireName: 'AuthorityGovtCode')
-  String get authorityGovtCode;
+  final String authorityGovtCode;
 
-  @BuiltValueField(wireName: 'SchoolTypeCode')
-  String get schoolTypeCode;
+  @JsonKey(name: 'SchoolTypeCode')
+  final String schoolTypeCode;
 
-  @nullable
-  @BuiltValueField(wireName: 'Standard')
-  String get standard;
+  @JsonKey(name: 'Standard')
+  final String standard;
 
+  @JsonKey(name: 'Result')
   @override
-  @nullable
-  @BuiltValueField(wireName: 'Result')
-  String get result;
+  final String result;
 
+  @JsonKey(name: 'Num')
   @override
-  @nullable
-  @BuiltValueField(wireName: 'Num')
-  int get num;
+  final int total;
 
-  @nullable
-  @BuiltValueField(wireName: 'NumInYear')
-  int get numInYear;
+  @JsonKey(name: 'NumInYear')
+  final int numInYear;
+
+  const StandardAccreditation({
+    @required this.surveyYear,
+    @required this.districtCode,
+    @required this.authorityCode,
+    @required this.authorityGovtCode,
+    @required this.schoolTypeCode,
+    @required this.standard,
+    @required this.result,
+    @required this.total,
+    @required this.numInYear,
+  });
+
+  factory StandardAccreditation.fromJson(Map<String, dynamic> json) =>
+      _$StandardAccreditationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StandardAccreditationToJson(this);
 
   @override
   int get numThisYear => numInYear;
 
   @override
   Comparable get sortField => standard ?? "";
-
-  String toJson() {
-    return json.encode(
-        serializers.serializeWith(StandardAccreditation.serializer, this));
-  }
-
-  static StandardAccreditation fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        StandardAccreditation.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<StandardAccreditation> get serializer =>
-      _$standardAccreditationSerializer;
 }
