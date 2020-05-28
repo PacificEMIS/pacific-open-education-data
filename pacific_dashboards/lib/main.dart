@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/app.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:pacific_dashboards/shared_ui/injector_widget.dart';
+import 'package:worker_manager/worker_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,8 @@ void main() async {
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   
   BlocSupervisor.delegate = LoggerBlocDelegate();
+
+  await Executor().warmUp();
   
   runApp(injector);
 }

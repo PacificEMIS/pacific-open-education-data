@@ -15,6 +15,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
+import 'package:worker_manager/worker_manager.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
 const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis";
@@ -99,47 +100,62 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<List<Teacher>> fetchTeachers() async {
     final responseData = await _get(path: _kTeachersApiKey);
-    final List<dynamic> data = json.decode(responseData);
-    return data
-        .map((item) => serializers.deserializeWith(Teacher.serializer, item))
-        .toBuiltList();
+    return Executor().execute(arg1: responseData, fun1: _parseTeachersList);
+  }
+
+  static List<Teacher> _parseTeachersList(String jsonString) {
+    final List<Map<String, dynamic>> data = json.decode(jsonString);
+    return data.map((it) => Teacher.fromJson(it)).toList();
   }
 
   @override
   Future<List<School>> fetchSchools() async {
     final responseData = await _get(path: _kSchoolsApiKey);
-    final List<dynamic> data = json.decode(responseData);
-    return data
-        .map((item) => serializers.deserializeWith(School.serializer, item))
-        .toBuiltList();
+    return Executor().execute(arg1: responseData, fun1: _parseSchoolsList);
+  }
+
+  static List<School> _parseSchoolsList(String jsonString) {
+    final List<Map<String, dynamic>> data = json.decode(jsonString);
+    return data.map((it) => School.fromJson(it)).toList();
   }
 
   @override
   Future<List<Exam>> fetchExams() async {
     final responseData = await _get(path: _kExamsApiKey);
-    final List<dynamic> data = json.decode(responseData);
-    return data
-        .map((item) => serializers.deserializeWith(Exam.serializer, item))
-        .toBuiltList();
+    return Executor().execute(arg1: responseData, fun1: _parseExamsList);
+  }
+
+  static List<Exam> _parseExamsList(String jsonString) {
+    final List<Map<String, dynamic>> data = json.decode(jsonString);
+    return data.map((it) => Exam.fromJson(it)).toList();
   }
 
   @override
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async {
-    final List<dynamic> byStandardData =
-        json.decode(await _get(path: _kSchoolAccreditationsByStandardApiKey));
-    final List<dynamic> byDistrictData =
-        json.decode(await _get(path: _kSchoolAccreditationsByStateApiKey));
+    final byStandardData =
+        await _get(path: _kSchoolAccreditationsByStandardApiKey);
+    final byDistrictData =
+        await _get(path: _kSchoolAccreditationsByStateApiKey);
+    return Executor().execute(
+      arg1: byStandardData,
+      arg2: byDistrictData,
+      fun2: _parseAccreditationData,
+    );
+  }
 
-    final modelByStandard = byStandardData.map((item) =>
-        serializers.deserializeWith(StandardAccreditation.serializer, item));
-
-    final modelByDistrict = byDistrictData.map((item) =>
-        serializers.deserializeWith(DistrictAccreditation.serializer, item));
-
+  static AccreditationChunk _parseAccreditationData(
+    String standardDataJsonString,
+    String districtDataJsonString,
+  ) {
+    final List<Map<String, dynamic>> standardData =
+        json.decode(standardDataJsonString);
+    final List<Map<String, dynamic>> districtData =
+        json.decode(districtDataJsonString);
     return AccreditationChunk(
-      (b) => b
-        ..byStandard = ListBuilder<StandardAccreditation>(modelByStandard)
-        ..byDistrict = ListBuilder<DistrictAccreditation>(modelByDistrict),
+      byDistrict:
+          districtData.map((it) => DistrictAccreditation.fromJson(it)).toList(),
+      byStandard:
+          standardData.map((it) => StandardAccreditation.fromJson(it)).toList(),
     );
   }
 
@@ -148,7 +164,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     final responseData = await _get(
         path: _kLookupsApiKey,
         forced: true); // TODO: deprecated. forced disables ETag
-    return Lookups.fromJson(responseData);
+    return Executor().execute(arg1: responseData, fun1: _parseLookups);
+  }
+
+  Lookups _parseLookups(String jsonString) {
+    return Lookups.fromJson(json.decode(jsonString));
   }
 
   Future<Response<String>> _fallbackApiGetCall(String url, String eTag) async {

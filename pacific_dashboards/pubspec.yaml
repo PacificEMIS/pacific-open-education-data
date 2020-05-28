@@ -30,6 +30,7 @@ dependencies:
   path: ^1.7.0
   path_provider: ^1.6.9
   json_annotation: ^3.0.1
+  worker_manager: ^2.6.8
 
 dev_dependencies:
   flutter_test:
