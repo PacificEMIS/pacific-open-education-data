@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_district_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_standard_accreditation.dart';
@@ -20,11 +19,8 @@ class HiveAccreditationChunk extends HiveObject with Expirable {
   int timestamp;
 
   AccreditationChunk toAccreditationChunk() => AccreditationChunk(
-        (b) => b
-          ..byDistrict =
-              ListBuilder(byDistrict.map((it) => it.toAccreditation()))
-          ..byStandard =
-              ListBuilder(byStandard.map((it) => it.toAccreditation())),
+        byDistrict: byDistrict.map((it) => it.toAccreditation()).toList(),
+          byStandard: byStandard.map((it) => it.toAccreditation()).toList(),
       );
 
   static HiveAccreditationChunk from(AccreditationChunk accreditationChunk) =>

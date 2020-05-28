@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/teacher/hive_teacher.dart';
@@ -17,7 +16,7 @@ class HiveTeachersDao extends TeachersDao {
   }
 
   @override
-  Future<Pair<bool, BuiltList<Teacher>>> get(Emis emis) async {
+  Future<Pair<bool, List<Teacher>>> get(Emis emis) async {
     final storedTeachers = await _withBox((box) async => box.get(emis.id));
     if (storedTeachers == null) {
       return Pair(false, null);
@@ -29,11 +28,11 @@ class HiveTeachersDao extends TeachersDao {
       expired |= hiveTeacher.isExpired();
       storedItems.add(hiveTeacher.toTeacher());
     }
-    return Pair(expired, storedItems.build());
+    return Pair(expired, storedItems);
   }
 
   @override
-  Future<void> save(BuiltList<Teacher> teachers, Emis emis) async {
+  Future<void> save(List<Teacher> teachers, Emis emis) async {
     final hiveTeachers = teachers
         .map((it) => HiveTeacher.from(it)
           ..timestamp = DateTime.now().millisecondsSinceEpoch)

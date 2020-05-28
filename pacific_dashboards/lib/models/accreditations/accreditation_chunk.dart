@@ -31,6 +31,16 @@ class AccreditationChunk {
   Map<String, dynamic> toJson() => _$AccreditationChunkToJson(this);
 }
 
+class AccreditationChunkJsonParts {
+  final String byDistrictJsonString;
+  final String byStandardJsonString;
+
+  const AccreditationChunkJsonParts({
+    this.byDistrictJsonString,
+    this.byStandardJsonString,
+  });
+}
+
 extension Filters on AccreditationChunk {
   // ignore: unused_field
   static const _kYearFilterId = 0;
@@ -54,7 +64,8 @@ extension Filters on AccreditationChunk {
         items: allItems
             .uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
-            .map((it) => FilterItem(it, it.toString())),
+            .map((it) => FilterItem(it, it.toString()))
+            .toList(),
         selectedIndex: 0,
       ),
       Filter(

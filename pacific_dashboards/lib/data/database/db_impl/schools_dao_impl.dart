@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/school/hive_school.dart';
@@ -16,7 +15,7 @@ class HiveSchoolsDao extends SchoolsDao {
   }
 
   @override
-  Future<BuiltList<School>> get(Emis emis) async {
+  Future<List<School>> get(Emis emis) async {
     final storedSchools =
         await _withBox((box) async => box.get(emis.id));
     if (storedSchools == null) {
@@ -27,11 +26,11 @@ class HiveSchoolsDao extends SchoolsDao {
       final hiveSchool = value as HiveSchool;
       storedItems.add(hiveSchool.toSchool());
     }
-    return storedItems.build();
+    return storedItems;
   }
 
   @override
-  Future<void> save(BuiltList<School> schools, Emis emis) async {
+  Future<void> save(List<School> schools, Emis emis) async {
     final hiveSchools = schools
         .map((it) => HiveSchool.from(it)
           ..timestamp = DateTime.now().millisecondsSinceEpoch)

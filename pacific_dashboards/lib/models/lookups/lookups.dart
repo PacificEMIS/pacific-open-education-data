@@ -1,12 +1,29 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
 
+part 'lookups.g.dart';
+
+@JsonSerializable()
 class Lookups {
+  @JsonKey(name: 'authorityGovt')
   final List<Lookup> authorityGovt;
+
+  @JsonKey(name: 'schoolTypes')
   final List<Lookup> schoolTypes;
+
+  @JsonKey(name: 'districts')
   final List<Lookup> districts;
+
+  @JsonKey(name: 'authorities')
   final List<Lookup> authorities;
+
+  @JsonKey(name: 'levels')
   final List<Lookup> levels;
+
+  @JsonKey(name: 'accreditationTerms')
   final List<Lookup> accreditationTerms;
+
+  @JsonKey(name: 'educationLevels')
   final List<Lookup> educationLevels;
 
   const Lookups({
@@ -23,22 +40,9 @@ class Lookups {
     return Lookups();
   }
 
-  factory Lookups.fromJson(Map<String, dynamic> json) {
-    return Lookups(
-      authorityGovt:
-          json['authorityGovt'].map((it) => Lookup.fromJson(it)).toList(),
-      schoolTypes:
-          json['schoolTypes'].map((it) => Lookup.fromJson(it)).toList(),
-      districts: json['districts'].map((it) => Lookup.fromJson(it)).toList(),
-      authorities:
-          json['authorities'].map((it) => Lookup.fromJson(it)).toList(),
-      levels: json['levels'].map((it) => Lookup.fromJson(it)).toList(),
-      accreditationTerms:
-          json['accreditationTerms'].map((it) => Lookup.fromJson(it)).toList(),
-      educationLevels:
-          json['educationLevels'].map((it) => Lookup.fromJson(it)).toList(),
-    );
-  }
+  factory Lookups.fromJson(Map<String, dynamic> json) => _$LookupsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LookupsToJson(this);
 
   bool isEmpty() =>
       authorityGovt.isEmpty &&

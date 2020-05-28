@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
@@ -34,17 +33,14 @@ class HiveLookups extends HiveObject with Expirable {
   int timestamp;
 
   Lookups toLookups() => Lookups(
-        (b) => b
-          ..authorityGovt =
-              ListBuilder(authorityGovt.map((it) => it.toLookup()))
-          ..schoolTypes = ListBuilder(schoolTypes.map((it) => it.toLookup()))
-          ..districts = ListBuilder(districts.map((it) => it.toLookup()))
-          ..authorities = ListBuilder(authorities.map((it) => it.toLookup()))
-          ..levels = ListBuilder(levels.map((it) => it.toLookup()))
-          ..accreditationTerms =
-              ListBuilder(accreditationTerms.map((it) => it.toLookup()))
-          ..educationLevels =
-              ListBuilder(educationLevels.map((it) => it.toLookup())),
+        authorityGovt: authorityGovt.map((it) => it.toLookup()).toList(),
+        schoolTypes: schoolTypes.map((it) => it.toLookup()).toList(),
+        districts: districts.map((it) => it.toLookup()).toList(),
+        authorities: authorities.map((it) => it.toLookup()).toList(),
+        levels: levels.map((it) => it.toLookup()).toList(),
+        accreditationTerms:
+            accreditationTerms.map((it) => it.toLookup()).toList(),
+        educationLevels: educationLevels.map((it) => it.toLookup()).toList(),
       );
 
   static HiveLookups from(Lookups lookups) => HiveLookups()

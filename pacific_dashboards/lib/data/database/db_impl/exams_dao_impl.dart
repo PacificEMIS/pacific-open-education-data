@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
@@ -17,7 +16,7 @@ class HiveExamsDao extends ExamsDao {
   }
 
   @override
-  Future<Pair<bool, BuiltList<Exam>>> get(Emis emis) async {
+  Future<Pair<bool, List<Exam>>> get(Emis emis) async {
     final storedExams =
     await _withBox((box) async => box.get(emis.id));
     if (storedExams == null) {
@@ -30,11 +29,11 @@ class HiveExamsDao extends ExamsDao {
       expired |= hiveExam.isExpired();
       storedItems.add(hiveExam.toExam());
     }
-    return Pair(expired, storedItems.build());
+    return Pair(expired, storedItems);
   }
 
   @override
-  Future<void> save(BuiltList<Exam> exams, Emis emis) async {
+  Future<void> save(List<Exam> exams, Emis emis) async {
     final hiveExams = exams
         .map((it) => HiveExam.from(it)
       ..timestamp = DateTime.now().millisecondsSinceEpoch)

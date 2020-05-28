@@ -114,7 +114,8 @@ extension Filters on List<Teacher> {
         items: this
             .uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
-            .map((it) => FilterItem(it, it.toString())),
+            .map((it) => FilterItem(it, it.toString()))
+            .toList(),
         selectedIndex: 0,
       ),
       Filter(
