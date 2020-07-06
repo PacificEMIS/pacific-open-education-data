@@ -62,7 +62,7 @@ class SchoolsPageState extends State<SchoolAccreditationsPage> {
           title: Text(AppLocalizations.schoolAccreditations),
         ),
         body: BlocBuilder<AccreditationBloc, AccreditationState>(
-          condition: (prevState, currentState) => !(currentState is ErrorState),
+          buildWhen: (prevState, currentState) => !(currentState is ErrorState),
           builder: (context, state) {
             if (state is InitialAccreditationState) {
               return Container();

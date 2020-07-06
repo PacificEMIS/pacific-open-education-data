@@ -25,12 +25,12 @@ void main() async {
   Crashlytics.instance.enableInDevMode = false;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   
-  BlocSupervisor.delegate = LoggerBlocDelegate();
+  Bloc.observer = _LoggerBlocObserver();
   
   runApp(injector);
 }
 
-class LoggerBlocDelegate extends BlocDelegate {
+class _LoggerBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);

@@ -5,6 +5,9 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
 abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
+  
+  BaseBloc(State initialState) : super(initialState);
+
   @protected
   State get serverUnavailableState;
 

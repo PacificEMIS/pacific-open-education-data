@@ -24,7 +24,8 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
         assert(globalSettings != null),
         _repository = repository,
         _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings;
+        _globalSettings = globalSettings, 
+        super(InitialSchoolsState());
 
   final Repository _repository;
   final RemoteConfig _remoteConfig;
@@ -33,9 +34,6 @@ class SchoolsBloc extends BaseBloc<SchoolsEvent, SchoolsState> {
   List<School> _schools;
   List<Filter> _filters;
   String _note;
-
-  @override
-  SchoolsState get initialState => InitialSchoolsState();
 
   @override
   SchoolsState get serverUnavailableState => ServerUnavailableState();

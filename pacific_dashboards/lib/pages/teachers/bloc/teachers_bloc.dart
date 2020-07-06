@@ -15,6 +15,11 @@ import 'package:pacific_dashboards/utils/collections.dart';
 import './bloc.dart';
 
 class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
+
+  final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
+  
   TeachersBloc({
     Repository repository,
     RemoteConfig remoteConfig,
@@ -24,18 +29,11 @@ class TeachersBloc extends BaseBloc<TeachersEvent, TeachersState> {
         assert(globalSettings != null),
         _repository = repository,
         _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings;
-
-  final Repository _repository;
-  final RemoteConfig _remoteConfig;
-  final GlobalSettings _globalSettings;
+        _globalSettings = globalSettings, super(InitialTeachersState());
 
   List<Teacher> _teachers;
   List<Filter> _filters;
   String _note;
-
-  @override
-  TeachersState get initialState => InitialTeachersState();
 
   @override
   TeachersState get serverUnavailableState => ServerUnavailableState();

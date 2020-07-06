@@ -60,7 +60,7 @@ class SchoolsPageState extends State<SchoolsPage> {
           ],
         ),
         body: BlocBuilder<SchoolsBloc, SchoolsState>(
-          condition: (prevState, currentState) => !(currentState is ErrorState),
+          buildWhen: (prevState, currentState) => !(currentState is ErrorState),
           builder: (context, state) {
             if (state is InitialSchoolsState) {
               return Container();

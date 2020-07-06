@@ -30,6 +30,7 @@ class ExamsPageState extends State<ExamsPage> {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).padding.bottom;
     return BlocListener<ExamsBloc, ExamsState>(
+      listenWhen: (prevState, currentState) => currentState is ErrorState,
       listener: (context, state) {
         if (state is ErrorState) {
           _handleErrorState(state, context);
@@ -42,7 +43,7 @@ class ExamsPageState extends State<ExamsPage> {
           title: Text(AppLocalizations.exams),
         ),
         body: BlocBuilder<ExamsBloc, ExamsState>(
-          condition: (prevState, currentState) => currentState is BodyState,
+          buildWhen: (prevState, currentState) => currentState is BodyState,
           builder: (context, state) {
             if (state is InitialExamsState) {
               return Container();
@@ -65,7 +66,7 @@ class ExamsPageState extends State<ExamsPage> {
           },
         ),
         bottomSheet: BlocBuilder<ExamsBloc, ExamsState>(
-          condition: (prevState, currentState) => currentState is FilterState,
+          buildWhen: (prevState, currentState) => currentState is FilterState,
           builder: (context, state) {
             if (state is InitialExamsState) {
               return Container();

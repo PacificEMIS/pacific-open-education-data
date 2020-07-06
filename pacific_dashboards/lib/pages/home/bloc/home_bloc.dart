@@ -17,13 +17,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   })  : assert(globalSettings != null),
         assert(remoteConfig != null),
         _globalSettings = globalSettings,
-        _remoteConfig = remoteConfig;
+        _remoteConfig = remoteConfig, 
+        super(LoadingHomeState());
 
   final GlobalSettings _globalSettings;
   final RemoteConfig _remoteConfig;
-
-  @override
-  HomeState get initialState => LoadingHomeState();
 
   @override
   Stream<HomeState> mapEventToState(

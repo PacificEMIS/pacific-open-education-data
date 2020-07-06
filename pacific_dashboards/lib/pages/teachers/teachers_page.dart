@@ -64,7 +64,7 @@ class TeachersPageState extends State<TeachersPage> {
           title: Text(AppLocalizations.teachers),
         ),
         body: BlocBuilder<TeachersBloc, TeachersState>(
-          condition: (prevState, currentState) => !(currentState is ErrorState),
+          buildWhen: (prevState, currentState) => !(currentState is ErrorState),
           builder: (context, state) {
             if (state is InitialTeachersState) {
               return Container();

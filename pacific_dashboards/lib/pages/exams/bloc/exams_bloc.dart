@@ -10,6 +10,11 @@ import 'package:pacific_dashboards/pages/home/section.dart';
 import './bloc.dart';
 
 class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
+
+  final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
+
   ExamsBloc({
     Repository repository,
     RemoteConfig remoteConfig,
@@ -19,17 +24,11 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
         assert(globalSettings != null),
         _repository = repository,
         _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings;
-
-  final Repository _repository;
-  final RemoteConfig _remoteConfig;
-  final GlobalSettings _globalSettings;
+        _globalSettings = globalSettings, 
+        super(InitialExamsState());
 
   ExamsNavigator _navigator;
   String _note;
-
-  @override
-  ExamsState get initialState => InitialExamsState();
 
   @override
   ExamsState get serverUnavailableState => ServerUnavailableState();

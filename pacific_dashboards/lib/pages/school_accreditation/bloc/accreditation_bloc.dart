@@ -25,7 +25,8 @@ class AccreditationBloc
         assert(globalSettings != null),
         _repository = repository,
         _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings;
+        _globalSettings = globalSettings,
+        super(InitialAccreditationState());
 
   final Repository _repository;
   final RemoteConfig _remoteConfig;
@@ -34,9 +35,6 @@ class AccreditationBloc
   AccreditationChunk _chunk;
   List<Filter> _filters;
   String _note;
-
-  @override
-  AccreditationState get initialState => InitialAccreditationState();
 
   @override
   AccreditationState get serverUnavailableState => ServerUnavailableState();
