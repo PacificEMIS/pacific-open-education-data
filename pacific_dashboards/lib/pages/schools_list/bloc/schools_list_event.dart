@@ -17,3 +17,12 @@ class SearchTextChangedSchoolsListEvent extends SchoolsListEvent {
   @override
   List<Object> get props => [super.props, text];
 }
+
+class SchoolSelectedSchoolsListEvent extends SchoolsListEvent {
+  final String id;
+
+  const SchoolSelectedSchoolsListEvent(this.id);
+
+  @override
+  List<Object> get props => [super.props, id];
+}

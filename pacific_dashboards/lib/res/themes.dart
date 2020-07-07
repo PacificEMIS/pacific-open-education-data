@@ -5,10 +5,11 @@ import 'package:charts_flutter/flutter.dart' as charts
 
 final ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: AppColors.kRoyalBlue,
+  primaryColor: AppColors.kBlue,
   accentColor: AppColors.kEndeavour,
   fontFamily: 'NotoSans',
   iconTheme: const IconThemeData(color: Colors.white),
+  splashColor: AppColors.kRipple,
   textTheme: const TextTheme(
       headline2: const TextStyle(
         color: Colors.white,

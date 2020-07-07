@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,7 +42,7 @@ class SchoolsListPageState extends State<SchoolsListPage> {
                 itemCount: 20,
                 itemBuilder: (ctx, index) {
                   return _SchoolRow(
-                    id: 'SCH$index',
+                    id: 'SCH00$index',
                     name: 'School of great $index',
                     isEven: index.isEven,
                   );
@@ -144,9 +146,12 @@ class _SearchBarState extends State<_SearchBar> {
             width: 24,
             height: 24,
             child: _isCloseButtonVisible
-                ? SvgPicture.asset(
-                    'images/ic_search_close.svg',
-                    fit: BoxFit.contain,
+                ? InkResponse(
+                    onTap: () => _controller.clear(),
+                    child: SvgPicture.asset(
+                      'images/ic_search_close.svg',
+                      fit: BoxFit.contain,
+                    ),
                   )
                 : Container(),
           ),
@@ -178,15 +183,39 @@ class _SchoolRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        height: 36.0,
-        color: _isEven ? AppColors.kCoolGray : Colors.transparent,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(_id),
-            Text(_name),
-          ],
+      child: InkWell(
+        onTap: () => BlocProvider.of<SchoolsListBloc>(context)
+            .add(SchoolSelectedSchoolsListEvent(_id)),
+        child: Container(
+          height: 36.0,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          color: _isEven ? AppColors.kCoolGray : Colors.transparent,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 86,
+                child: Text(
+                  _id,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    color: AppColors.kBlue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  _name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
