@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                         ? AppLocalizations.federatedStateOfMicronesiaSplitted
                         : state.emis.name,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.display2,
+                    style: Theme.of(context).textTheme.headline3,
                   ),
                 ),
               ),
@@ -123,8 +123,8 @@ class _CountrySelectDialog extends StatelessWidget {
           AppLocalizations.changeCountry,
           style: Theme.of(context)
               .textTheme
-              .display2
-              .copyWith(color: AppColors.kTimberGreen),
+              .headline3
+              .copyWith(color: AppColors.kTextMain),
         ),
         content: Container(
           height: 200,

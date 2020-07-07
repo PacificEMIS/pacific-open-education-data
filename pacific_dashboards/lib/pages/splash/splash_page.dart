@@ -45,7 +45,7 @@ class _SplashPageState extends State<SplashPage> {
                 AppLocalizations.splash,
                 textAlign: TextAlign.center,
                 softWrap: true,
-                style: Theme.of(context).textTheme.display3,
+                style: Theme.of(context).textTheme.headline2,
               ),
             )
           ]),

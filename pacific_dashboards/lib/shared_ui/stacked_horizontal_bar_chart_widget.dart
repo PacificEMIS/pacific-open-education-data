@@ -36,7 +36,7 @@ class StackedHorizontalBarChartWidgetState
             color: AppColors.kNevada.chartsColor,
           ),
           lineStyle: charts.LineStyleSpec(
-            color: AppColors.kLoblolly.chartsColor,
+            color: AppColors.kCoolGray.chartsColor,
           ),
         ),
         tickProviderSpec: const charts.BasicNumericTickProviderSpec(
@@ -51,7 +51,7 @@ class StackedHorizontalBarChartWidgetState
             color: charts.MaterialPalette.gray.shadeDefault,
           ),
           lineStyle: charts.LineStyleSpec(
-            color: AppColors.kLoblolly.chartsColor,
+            color: AppColors.kCoolGray.chartsColor,
           ),
         ),
       ),

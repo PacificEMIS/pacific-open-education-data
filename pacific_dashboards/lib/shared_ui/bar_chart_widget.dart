@@ -54,7 +54,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
               labelStyle: charts.TextStyleSpec(
                   fontSize: 10, color: AppColors.kNevada.chartsColor),
               lineStyle: charts.LineStyleSpec(
-                color: AppColors.kLoblolly.chartsColor,
+                color: AppColors.kCoolGray.chartsColor,
               ),
             ),
           ),
@@ -63,7 +63,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
               labelStyle: charts.TextStyleSpec(
                   fontSize: 0, color: charts.MaterialPalette.gray.shadeDefault),
               lineStyle: charts.LineStyleSpec(
-                color: AppColors.kLoblolly.chartsColor,
+                color: AppColors.kCoolGray.chartsColor,
               ),
             ),
           ),

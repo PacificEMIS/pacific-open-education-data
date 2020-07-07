@@ -49,7 +49,7 @@ class InfoTableWidget extends StatelessWidget {
                     horizontal: 16.0, vertical: 13.0),
                 child: Text(
                   _title ?? 'null',
-                  style: Theme.of(context).textTheme.body2,
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
             ],
@@ -144,7 +144,7 @@ class _Cell extends StatelessWidget {
           children: <Widget>[
             Text(
               _value,
-              style: Theme.of(context).textTheme.subtitle,
+              style: Theme.of(context).textTheme.subtitle2,
             ),
           ],
         ),
@@ -174,7 +174,7 @@ class _SubTitleCell extends StatelessWidget {
               _name,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle
+                  .subtitle2
                   .copyWith(color: AppColors.kNevada),
             ),
           ],

@@ -25,7 +25,8 @@ class AppLocalizations {
   }
 
   // App
-  static String get appName => Intl.message('Pacific Open Education Data', name: 'appName');
+  static String get appName =>
+      Intl.message('Pacific Open Education Data', name: 'appName');
 
   static String get construction =>
       Intl.message('Construction', name: 'construction');
@@ -65,6 +66,9 @@ class AppLocalizations {
       Intl.message('Indicators', name: 'indicators');
 
   static String get budgets => Intl.message('Budgets', name: 'budgets');
+
+  static String get individualSchools =>
+      Intl.message('Individual Schools', name: 'individualSchools');
 
   // Exams
   static String get exam => Intl.message('Exam', name: 'exam');
@@ -245,6 +249,9 @@ class AppLocalizations {
 
   static String get examsByStandardsAndState =>
       Intl.message('By Standards and State', name: 'examsByStandardsAndState');
+
+  static String get searchSchoolsHint =>
+      Intl.message('Search', name: 'searchSchoolsHint');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

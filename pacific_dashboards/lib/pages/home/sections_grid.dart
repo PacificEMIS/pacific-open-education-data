@@ -78,7 +78,7 @@ class _Section extends StatelessWidget {
                       _section.name,
                       textAlign: TextAlign.center,
                       softWrap: true,
-                      style: Theme.of(context).textTheme.headline,
+                      style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
                 ),

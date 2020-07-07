@@ -6,7 +6,6 @@ part 'module_config.g.dart';
 
 @JsonSerializable()
 class ModuleConfig {
-
   @JsonKey(name: 'id')
   final String id;
 
@@ -18,7 +17,8 @@ class ModuleConfig {
     this.note,
   });
 
-  factory ModuleConfig.fromJson(Map<String, dynamic> json) => _$ModuleConfigFromJson(json);
+  factory ModuleConfig.fromJson(Map<String, dynamic> json) =>
+      _$ModuleConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$ModuleConfigToJson(this);
 
@@ -36,6 +36,8 @@ class ModuleConfig {
         return Section.indicators;
       case 'budgets':
         return Section.budgets;
+      case 'individual_schools':
+        return Section.individualSchools;
     }
     return null;
   }

@@ -30,6 +30,7 @@ class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {
   ExamsNavigator _navigator;
   String _note;
 
+
   @override
   ExamsState get serverUnavailableState => ServerUnavailableState();
 

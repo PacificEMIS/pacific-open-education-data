@@ -35,7 +35,7 @@ class ChartWithTable extends StatelessWidget {
     return TileWidget(
       title: Text(
         _title,
-        style: Theme.of(context).textTheme.display1,
+        style: Theme.of(context).textTheme.headline4,
       ),
       body: Column(
         children: <Widget>[

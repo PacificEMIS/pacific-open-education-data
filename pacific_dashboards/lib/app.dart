@@ -8,6 +8,8 @@ import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
+import 'package:pacific_dashboards/pages/schools_list/bloc/schools_list_bloc.dart';
+import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
 import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -27,7 +29,11 @@ class App extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [const Locale('en'), const Locale('zh'), const Locale('he')], 
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('zh'),
+        const Locale('he')
+      ],
       onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
       theme: appTheme,
       initialRoute: HomePage.kRoute,
@@ -63,6 +69,12 @@ class App extends StatelessWidget {
                 return injector.teachersBloc..add(StartedTeachersEvent());
               },
               child: TeachersPage(),
+            ),
+        SchoolsListPage.kRoute: (context) => BlocProvider<SchoolsListBloc>(
+              create: (context) {
+                return injector.schoolsListBloc..add(StartedSchoolsListEvent());
+              },
+              child: SchoolsListPage(),
             ),
         "/Budgets": (context) => _NotImplementedPage(),
         "/Indicators": (context) => _NotImplementedPage(),

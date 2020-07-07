@@ -106,7 +106,7 @@ class _Title extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 2.0),
       child: Text(
         _title,
-        style: Theme.of(context).textTheme.display1,
+        style: Theme.of(context).textTheme.headline4,
       ),
     );
   }
@@ -137,7 +137,7 @@ class _Item extends StatelessWidget {
       child: RadioListTile<int>(
         title: Text(
           _filter.items[_index].visibleName,
-          style: Theme.of(context).textTheme.subhead,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         value: _index,
         groupValue: _filter.selectedIndex,

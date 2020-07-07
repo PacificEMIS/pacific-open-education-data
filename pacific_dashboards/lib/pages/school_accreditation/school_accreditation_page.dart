@@ -162,7 +162,7 @@ class _ContentBody extends StatelessWidget {
           TileWidget(
             title: Text(
               AppLocalizations.accreditationProgress,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             body: ChartFactory.getStackedHorizontalBarChartViewByData(
               chartData: _data.accreditationProgressData,
@@ -173,7 +173,7 @@ class _ContentBody extends StatelessWidget {
           TileWidget(
             title: Text(
               AppLocalizations.districtStatus,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             body: ChartFactory.getStackedHorizontalBarChartViewByData(
               chartData: _data.districtStatusData,
@@ -226,7 +226,7 @@ class _PerformanceTable extends StatelessWidget {
     return TileWidget(
       title: Text(
         _title,
-        style: Theme.of(context).textTheme.display1,
+        style: Theme.of(context).textTheme.headline4,
       ),
       body: Column(
         children: [

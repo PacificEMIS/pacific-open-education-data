@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/pages/exams/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/home/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
 import 'package:pacific_dashboards/pages/schools/bloc/bloc.dart';
+import 'package:pacific_dashboards/pages/schools_list/bloc/schools_list_bloc.dart';
 import 'package:pacific_dashboards/pages/teachers/bloc/bloc.dart';
 
 // ignore: must_be_immutable
@@ -69,8 +70,7 @@ class InjectorWidget extends InheritedWidget {
         globalSettings: _globalSettings,
       );
 
-  AccreditationBloc get schoolAccreditationsBloc =>
-      AccreditationBloc(
+  AccreditationBloc get schoolAccreditationsBloc => AccreditationBloc(
         repository: _repository,
         remoteConfig: _remoteConfig,
         globalSettings: _globalSettings,
@@ -82,4 +82,8 @@ class InjectorWidget extends InheritedWidget {
       );
 
   GlobalSettings get globalSettings => _globalSettings;
+
+  SchoolsListBloc get schoolsListBloc => SchoolsListBloc(
+        repository: _repository,
+      );
 }

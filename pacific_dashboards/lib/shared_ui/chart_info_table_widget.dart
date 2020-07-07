@@ -183,7 +183,7 @@ class _SortingTitle extends StatelessWidget {
             _title,
             style: Theme.of(context)
                 .textTheme
-                .body2
+                .bodyText1
                 .copyWith(color: AppColors.kNevada),
           ),
           _icon,
@@ -233,7 +233,7 @@ class _Row extends StatelessWidget {
                   Expanded(
                     child: Text(
                       _rowData.domain,
-                      style: Theme.of(context).textTheme.subhead,
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
                 ],
@@ -251,7 +251,7 @@ class _Row extends StatelessWidget {
                   Expanded(
                     child: Text(
                       _rowData.measure.toString(),
-                      style: Theme.of(context).textTheme.subhead,
+                      style: Theme.of(context).textTheme.subtitle1,
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       textAlign: TextAlign.end,

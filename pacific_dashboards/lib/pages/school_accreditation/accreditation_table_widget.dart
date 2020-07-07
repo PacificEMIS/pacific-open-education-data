@@ -57,7 +57,7 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: Theme.of(context).textTheme.body2,
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             ],
           ),
@@ -296,7 +296,7 @@ class _SubTitle extends StatelessWidget {
     return Text(
       _name,
       overflow: TextOverflow.ellipsis,
-      style: Theme.of(context).textTheme.subtitle,
+      style: Theme.of(context).textTheme.subtitle2,
     );
   }
 }
@@ -328,10 +328,10 @@ class _Cell extends StatelessWidget {
                 _value.isEmpty ? '-' : _value,
                 overflow: TextOverflow.fade,
                 style: _customFontSize == null
-                    ? Theme.of(context).textTheme.subtitle
+                    ? Theme.of(context).textTheme.subtitle2
                     : Theme.of(context)
                         .textTheme
-                        .subtitle
+                        .subtitle2
                         .copyWith(fontSize: 9.0),
               ),
             ),

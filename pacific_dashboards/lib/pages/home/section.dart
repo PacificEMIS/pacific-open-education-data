@@ -1,3 +1,8 @@
+import 'package:pacific_dashboards/pages/exams/exams_page.dart';
+import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
+import 'package:pacific_dashboards/pages/schools/schools_page.dart';
+import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
+import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 
 enum Section {
@@ -6,11 +11,11 @@ enum Section {
   exams,
   schoolAccreditations,
   indicators,
-  budgets
+  budgets,
+  individualSchools
 }
 
 extension UI on Section {
-
   String get logoPath {
     switch (this) {
       case Section.schools:
@@ -25,6 +30,8 @@ extension UI on Section {
         return "images/indicators.svg";
       case Section.budgets:
         return "images/budgets.svg";
+      case Section.individualSchools:
+        return "images/budgets.svg"; // TODO: waiting for icon
     }
     throw FallThroughError();
   }
@@ -43,6 +50,8 @@ extension UI on Section {
         return AppLocalizations.budgets;
       case Section.exams:
         return AppLocalizations.exams;
+      case Section.individualSchools:
+        return AppLocalizations.individualSchools;
     }
 
     throw FallThroughError();
@@ -51,20 +60,21 @@ extension UI on Section {
   String get routeName {
     switch (this) {
       case Section.schools:
-        return "/Schools";
+        return SchoolsPage.kRoute;
       case Section.teachers:
-        return "/Teachers";
+        return TeachersPage.kRoute;
       case Section.schoolAccreditations:
-        return "/School Accreditations";
+        return SchoolAccreditationsPage.kRoute;
       case Section.exams:
-        return "/Exams";
+        return ExamsPage.kRoute;
       case Section.indicators:
         return "/Indicators";
       case Section.budgets:
         return "/Budgets";
+      case Section.individualSchools:
+        return SchoolsListPage.kRoute;
     }
 
     throw FallThroughError();
   }
-
 }

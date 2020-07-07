@@ -167,7 +167,7 @@ class _PopulatedContent extends StatelessWidget {
               children: [
                 Text(
                   it,
-                  style: Theme.of(context).textTheme.subtitle,
+                  style: Theme.of(context).textTheme.subtitle2,
                   textAlign: TextAlign.left,
                   maxLines: 5,
                 ),
@@ -186,7 +186,7 @@ class _PopulatedContent extends StatelessWidget {
                             it,
                             style: Theme.of(context)
                                 .textTheme
-                                .headline
+                                .headline5
                                 .copyWith(fontSize: 12.0),
                             textAlign: TextAlign.left,
                           ),
@@ -465,7 +465,7 @@ class _BottomMenuRow extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
           child: Text(
             _rowName,
-            style: Theme.of(context).textTheme.headline,
+            style: Theme.of(context).textTheme.headline5,
             textAlign: TextAlign.left,
           ),
         ),
@@ -490,7 +490,7 @@ class _BottomMenuRow extends StatelessWidget {
                   _name,
                   style: Theme.of(context)
                       .textTheme
-                      .body2
+                      .bodyText1
                       .copyWith(color: Theme.of(context).accentColor),
                   textAlign: TextAlign.center,
                   maxLines: 2,
