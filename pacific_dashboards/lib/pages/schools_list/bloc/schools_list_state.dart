@@ -9,6 +9,8 @@ abstract class SchoolsListState extends Equatable {
 
 class SchoolsListInitial extends SchoolsListState {}
 
+class LoadingSchoolsListState extends SchoolsListState {}
+
 class ServerUnavailableState extends SchoolsListState implements ErrorState {}
 
 class UnknownErrorState extends SchoolsListState implements ErrorState {}

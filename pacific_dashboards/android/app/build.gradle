@@ -44,7 +44,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "fm.doe.national.pacific_dashboards"
+        applicationId "org.pacific_emis.opendata"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()

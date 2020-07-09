@@ -1,10 +1,8 @@
-package fm.doe.national.pacific_dashboards
+package org.pacific_emis.opendata
 
 import android.os.Bundle
-import androidx.annotation.NonNull
 
 import io.flutter.app.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 import kotlinx.coroutines.GlobalScope
@@ -17,7 +15,7 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
         GeneratedPluginRegistrant.registerWith(this)
 
-        MethodChannel(flutterView, "fm.doe.national.pacific_dashboards/api")
+        MethodChannel(flutterView, "org.pacific_emis.opendata/api")
                 .setMethodCallHandler { call, result ->
                     when (call.method) {
                         "apiGet" -> handleApiGet(call.argument("url")!!, call.argument("eTag"), result)

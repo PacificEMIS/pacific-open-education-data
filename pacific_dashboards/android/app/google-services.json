@@ -30,6 +30,49 @@
             {
               "client_id": "154037620831-2bdtrvhasodv8od8rq38pl0tqq638204.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "154037620831-am2iusd4bjue390n24v7mdna2jqluep8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.pacific-emis.pacificdashboards"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154037620831:android:0293696eb2ee224e9d8bea",
+        "android_client_info": {
+          "package_name": "org.pacific_emis.opendata"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154037620831-2bdtrvhasodv8od8rq38pl0tqq638204.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPcHp3WWkFlWaOEQEv3P9cA2QbuUEKRnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154037620831-2bdtrvhasodv8od8rq38pl0tqq638204.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "154037620831-am2iusd4bjue390n24v7mdna2jqluep8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.pacific-emis.pacificdashboards"
+              }
             }
           ]
         }

@@ -22,7 +22,7 @@ const _kKiribatiUrl = "https://data.moe.gov.ki/kemis";
 
 class RemoteDataSourceImpl implements RemoteDataSource {
   static const platform =
-      const MethodChannel('fm.doe.national.pacific_dashboards/api');
+      const MethodChannel('com.pacific_emis.opendata/api');
 
   static const _kTeachersApiKey = "warehouse/teachercount";
   static const _kSchoolsApiKey = "warehouse/tableenrol";
@@ -34,23 +34,19 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   static const _kLookupsApiKey = "lookups/collection/core";
 
   final GlobalSettings _settings;
-  Dio _dio;
 
-  RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings {
-    _dio = Dio(BaseOptions(
-      connectTimeout: Duration(seconds: 10).inMilliseconds,
-      receiveTimeout: Duration(minutes: 1).inMilliseconds,
-    ))
-      ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+  final Dio _dio = Dio(BaseOptions(
+    connectTimeout: Duration(seconds: 10).inMilliseconds,
+    receiveTimeout: Duration(minutes: 1).inMilliseconds,
+  ))
+    ..interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ),
+    );
 
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter)?.onHttpClientCreate =
-        (client) {
-      client.badCertificateCallback = (cert, host, port) {
-        print("badCertificateCallback cert=$cert host=$host port=$port");
-        return true;
-      };
-    };
-  }
+  RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings;
 
   Future<String> _get({@required String path, bool forced = false}) async {
     final emis = await _settings.currentEmis;
@@ -145,10 +141,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   static AccreditationChunk _parseAccreditationData(
       AccreditationChunkJsonParts parts) {
-    final List<dynamic> standardData =
-        json.decode(parts.byStandardJsonString);
-    final List<dynamic> districtData =
-        json.decode(parts.byDistrictJsonString);
+    final List<dynamic> standardData = json.decode(parts.byStandardJsonString);
+    final List<dynamic> districtData = json.decode(parts.byDistrictJsonString);
     return AccreditationChunk(
       byDistrict:
           districtData.map((it) => DistrictAccreditation.fromJson(it)).toList(),
