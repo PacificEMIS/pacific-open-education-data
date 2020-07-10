@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/pages/base/base_bloc.dart';
+import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
-import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
+import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
-import 'package:pacific_dashboards/shared_ui/module_note.dart';
-import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
+import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
+import 'package:pacific_dashboards/view_model_factory.dart';
 
-class SchoolAccreditationsPage extends StatefulWidget {
-  static String kRoute = '/School Accreditations';
+class SchoolAccreditationsPage extends MvvmStatefulWidget {
+  static String kRoute = '/SchoolAccreditations';
 
   SchoolAccreditationsPage({
     Key key,
-  }) : super(key: key);
+  }) : super(
+          key: key,
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.schoolAccreditation,
+        );
 
   @override
   State<StatefulWidget> createState() {
@@ -29,112 +32,71 @@ class SchoolAccreditationsPage extends StatefulWidget {
   }
 }
 
-class SchoolsPageState extends State<SchoolAccreditationsPage> {
-  bool areFiltersVisible = false;
-
-  void updateFiltersVisibility(BuildContext context) {
-    setState(() {
-      areFiltersVisible = BlocProvider.of<AccreditationBloc>(context).state
-          is UpdatedAccreditationState;
-    });
-  }
-
+class SchoolsPageState
+    extends MvvmState<SchoolAccreditationViewModel, SchoolAccreditationsPage> {
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<AccreditationBloc, AccreditationState>(
-      listener: (context, state) {
-        updateFiltersVisibility(context);
-        if (state is ErrorState) {
-          _handleErrorState(state, context);
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: PlatformAppBar(
-          actions: <Widget>[
-            IconButton(
-              icon: SvgPicture.asset('images/filter.svg'),
-              onPressed: () {
-                _openFilters(context);
+  Widget buildWidget(BuildContext context) {
+    return Scaffold(
+      appBar: PlatformAppBar(
+        title: Text(AppLocalizations.schools),
+        actions: <Widget>[
+          StreamBuilder<List<Filter>>(
+            stream: viewModel.filtersStream,
+            builder: (ctx, snapshot) {
+              return Visibility(
+                visible: snapshot.hasData,
+                child: IconButton(
+                  icon: SvgPicture.asset('images/filter.svg'),
+                  onPressed: () {
+                    _openFilters(snapshot.data);
+                  },
+                ),
+              );
+            },
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            PageNoteWidget(noteStream: viewModel.noteStream),
+            StreamBuilder<AccreditationData>(
+              stream: viewModel.dataStream,
+              builder: (ctx, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: PlatformProgressIndicator(),
+                  );
+                } else {
+                  return _ContentBody(data: snapshot.data);
+                }
               },
             ),
           ],
-          title: Text(AppLocalizations.schoolAccreditations),
-        ),
-        body: BlocBuilder<AccreditationBloc, AccreditationState>(
-          buildWhen: (prevState, currentState) => !(currentState is ErrorState),
-          builder: (context, state) {
-            if (state is InitialAccreditationState) {
-              return Container();
-            }
-
-            if (state is LoadingAccreditationState) {
-              return Center(
-                child: PlatformProgressIndicator(),
-              );
-            }
-
-            if (state is UpdatedAccreditationState) {
-              return _ContentBody(
-                data: state.data,
-              );
-            }
-
-            throw FallThroughError();
-          },
         ),
       ),
     );
   }
 
-  void _handleErrorState(AccreditationState state, BuildContext context) {
-    if (state is UnknownErrorState) {
-      showDialog(
-        context: context,
-        builder: (buildContext) {
-          return PlatformAlertDialog(
-            title: AppLocalizations.error,
-            message: AppLocalizations.unknownError,
-          );
-        },
-      );
-    }
-    if (state is ServerUnavailableState) {
-      showDialog(
-        context: context,
-        builder: (buildContext) {
-          return PlatformAlertDialog(
-            title: AppLocalizations.error,
-            message: AppLocalizations.serverUnavailableError,
-          );
-        },
-      );
-    }
-  }
-
-  void _openFilters(BuildContext context) {
-    final state = BlocProvider.of<AccreditationBloc>(context).state;
-    if (state is UpdatedAccreditationState) {
-      Navigator.push<List<Filter>>(
-        context,
-        MaterialPageRoute(builder: (context) {
-          return FilterPage(
-            filters: state.data.filters,
-          );
-        }),
-      ).then((filters) => _applyFilters(context, filters));
-    }
+  void _openFilters(List<Filter> filters) {
+    Navigator.push<List<Filter>>(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return FilterPage(
+          filters: filters,
+        );
+      }),
+    ).then((filters) => _applyFilters(context, filters));
   }
 
   void _applyFilters(BuildContext context, List<Filter> filters) {
     if (filters == null) {
       return;
     }
-    final state = BlocProvider.of<AccreditationBloc>(context).state;
-    if (state is UpdatedAccreditationState) {
-      BlocProvider.of<AccreditationBloc>(context)
-          .add(FiltersAppliedAccreditationEvent(filters: filters));
-    }
+    viewModel.onFiltersChanged(filters);
   }
 }
 
@@ -150,51 +112,44 @@ class _ContentBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (_data.note != null)
-            ModuleNote(
-              note: _data.note,
-            ),
-          TileWidget(
-            title: Text(
-              AppLocalizations.accreditationProgress,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            body: ChartFactory.getStackedHorizontalBarChartViewByData(
-              chartData: _data.accreditationProgressData,
-              colorFunc: _levelIndexToColor,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TileWidget(
+          title: Text(
+            AppLocalizations.accreditationProgress,
+            style: Theme.of(context).textTheme.headline4,
           ),
-          const SizedBox(height: 16),
-          TileWidget(
-            title: Text(
-              AppLocalizations.districtStatus,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            body: ChartFactory.getStackedHorizontalBarChartViewByData(
-              chartData: _data.districtStatusData,
-              colorFunc: _levelIndexToColor,
-            ),
+          body: ChartFactory.getStackedHorizontalBarChartViewByData(
+            chartData: _data.accreditationProgressData,
+            colorFunc: _levelIndexToColor,
           ),
-          const SizedBox(height: 16),
-          _PerformanceTable(
-            title: AppLocalizations.accreditationStatusByState,
-            firstColumnName: AppLocalizations.state,
-            year: _data.year,
-            data: _data.accreditationStatusByState,
+        ),
+        const SizedBox(height: 16),
+        TileWidget(
+          title: Text(
+            AppLocalizations.districtStatus,
+            style: Theme.of(context).textTheme.headline4,
           ),
-          _PerformanceTable(
-            title: AppLocalizations.accreditationPerfomancebyStandard,
-            firstColumnName: AppLocalizations.standard,
-            year: _data.year,
-            data: _data.performanceByStandard,
+          body: ChartFactory.getStackedHorizontalBarChartViewByData(
+            chartData: _data.districtStatusData,
+            colorFunc: _levelIndexToColor,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 16),
+        _PerformanceTable(
+          title: AppLocalizations.accreditationStatusByState,
+          firstColumnName: AppLocalizations.state,
+          year: _data.year,
+          data: _data.accreditationStatusByState,
+        ),
+        _PerformanceTable(
+          title: AppLocalizations.accreditationPerfomancebyStandard,
+          firstColumnName: AppLocalizations.standard,
+          year: _data.year,
+          data: _data.performanceByStandard,
+        ),
+      ],
     );
   }
 
