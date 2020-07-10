@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
@@ -30,12 +31,7 @@ class App extends StatelessWidget {
         SchoolsPage.kRoute: (context) => SchoolsPage(),
         TeachersPage.kRoute: (context) => TeachersPage(),
         SchoolAccreditationsPage.kRoute: (context) => SchoolAccreditationsPage(),
-//        ExamsPage.kRoute: (context) => BlocProvider<ExamsBloc>(
-//              create: (context) {
-//                return injector.examsBloc..add(StartedExamsEvent());
-//              },
-//              child: ExamsPage(),
-//            ),
+        ExamsPage.kRoute: (context) => ExamsPage(),
 //        SchoolsListPage.kRoute: (context) => BlocProvider<SchoolsListBloc>(
 //              create: (context) {
 //                return injector.schoolsListBloc..add(StartedSchoolsListEvent());
