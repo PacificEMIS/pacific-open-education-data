@@ -36,6 +36,7 @@ class App extends StatelessWidget {
       initialRoute: HomePage.kRoute,
       routes: {
         HomePage.kRoute: (context) => HomePage(),
+        SchoolsPage.kRoute: (context) => SchoolsPage(),
 //        ExamsPage.kRoute: (context) => BlocProvider<ExamsBloc>(
 //              create: (context) {
 //                return injector.examsBloc..add(StartedExamsEvent());
@@ -49,12 +50,6 @@ class App extends StatelessWidget {
 //                  ..add(StartedAccreditationEvent());
 //              },
 //              child: SchoolAccreditationsPage(),
-//            ),
-//        SchoolsPage.kRoute: (context) => BlocProvider<SchoolsBloc>(
-//              create: (context) {
-//                return injector.schoolsBloc..add(StartedSchoolsEvent());
-//              },
-//              child: SchoolsPage(),
 //            ),
 //        TeachersPage.kRoute: (context) => BlocProvider<TeachersBloc>(
 //              create: (context) {

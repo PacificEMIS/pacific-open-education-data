@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:pacific_dashboards/mvvm/mvvm_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
 
 typedef ViewModelBuilder = ViewModel Function(BuildContext);
 typedef StreamFilterPredicate<T> = bool Function(T);
@@ -49,15 +51,9 @@ abstract class MvvmState<VM extends ViewModel, W extends MvvmStatefulWidget>
         showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              title: const Text('Error'),
-              content: Text(errorMessage),
-              actions: [
-                FlatButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('OK'),
-                )
-              ],
+            return PlatformAlertDialog(
+              title: AppLocalizations.error,
+              message: errorMessage,
             );
           },
         );
