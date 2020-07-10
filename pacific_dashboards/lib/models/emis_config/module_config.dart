@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pacific_dashboards/pages/home/section.dart';
+import 'package:pacific_dashboards/pages/home/components/section.dart';
 
 part 'module_config.g.dart';
 

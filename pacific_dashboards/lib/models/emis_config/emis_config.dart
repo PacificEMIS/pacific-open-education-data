@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
-import 'package:pacific_dashboards/pages/home/section.dart';
+import 'package:pacific_dashboards/pages/home/components/section.dart';
 
 part 'emis_config.g.dart';
 

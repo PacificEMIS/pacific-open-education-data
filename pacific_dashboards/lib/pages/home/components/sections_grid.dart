@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pacific_dashboards/pages/home/section.dart';
+import 'package:pacific_dashboards/pages/home/components/section.dart';
 
 class SectionsGrid extends StatelessWidget {
   SectionsGrid({@required List<Section> sections})

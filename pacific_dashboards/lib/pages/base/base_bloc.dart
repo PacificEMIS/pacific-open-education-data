@@ -44,7 +44,7 @@ abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
               break;
             case RepositoryType.remote:
               if (isCacheEmpty) {
-                if (response.exception is UnavailableRemoteException) {
+                if (response.exception is NoInternetException) {
                   yield* passStatesOnError(serverUnavailableState);
                 } else {
                   yield* passStatesOnError(unknownErrorState);

@@ -6,7 +6,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/exams/bloc/exams_navigator.dart';
-import 'package:pacific_dashboards/pages/home/section.dart';
+import 'package:pacific_dashboards/pages/home/components/section.dart';
 import './bloc.dart';
 
 class ExamsBloc extends BaseBloc<ExamsEvent, ExamsState> {

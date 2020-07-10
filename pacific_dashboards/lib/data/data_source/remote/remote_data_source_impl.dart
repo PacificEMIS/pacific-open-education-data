@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -70,14 +69,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
           error.message.contains('HttpException: ,')) {
         response = await _fallbackApiGetCall(requestUrl, existingEtag);
       } else {
-        throw UnavailableRemoteException();
+        throw NoInternetException();
       }
     }
 
     if (response.statusCode == 304) {
-      throw NoNewDataRemoteException();
+      throw NoNewDataRemoteException(url: requestUrl);
     } else if (response.statusCode != 200) {
-      throw ApiRemoteException(
+      throw RemoteException(
         url: requestUrl,
         code: response.statusCode,
         message: response.data.toString(),
@@ -181,7 +180,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return response;
     } catch (error) {
       print(error);
-      throw ApiRemoteException(url: url, code: 0, message: error.toString());
+      throw RemoteException(url: url, code: 0, message: error.toString());
     }
   }
 }
