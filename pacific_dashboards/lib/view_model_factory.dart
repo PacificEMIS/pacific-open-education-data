@@ -2,6 +2,7 @@ import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
+import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
 import 'package:pacific_dashboards/service_locator.dart';
 
@@ -51,6 +52,14 @@ class ViewModelFactory {
 
   ExamsViewModel get exams {
     return ExamsViewModel(
+      repository: serviceLocator.repository,
+      remoteConfig: serviceLocator.remoteConfig,
+      globalSettings: serviceLocator.globalSettings,
+    );
+  }
+
+  SchoolsListViewModel get individualSchoolsList {
+    return SchoolsListViewModel(
       repository: serviceLocator.repository,
       remoteConfig: serviceLocator.remoteConfig,
       globalSettings: serviceLocator.globalSettings,

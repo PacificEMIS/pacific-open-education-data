@@ -156,8 +156,7 @@ class ExamsNavigator {
     });
   }
 
-  Map<String, Map<String, Exam>> _getExamResultsByState(
-      Lookups lookups) {
+  Map<String, Map<String, Exam>> _getExamResultsByState(Lookups lookups) {
     return _getGroupedResults().map((benchmark, exams) {
       final groupedByBenchmarkData = Map<String, Exam>();
       exams.forEach((exam) {

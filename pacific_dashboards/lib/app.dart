@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
+import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
@@ -32,12 +33,7 @@ class App extends StatelessWidget {
         TeachersPage.kRoute: (context) => TeachersPage(),
         SchoolAccreditationsPage.kRoute: (context) => SchoolAccreditationsPage(),
         ExamsPage.kRoute: (context) => ExamsPage(),
-//        SchoolsListPage.kRoute: (context) => BlocProvider<SchoolsListBloc>(
-//              create: (context) {
-//                return injector.schoolsListBloc..add(StartedSchoolsListEvent());
-//              },
-//              child: SchoolsListPage(),
-//            ),
+        SchoolsListPage.kRoute: (context) => SchoolsListPage(),
         "/Budgets": (context) => _NotImplementedPage(),
         "/Indicators": (context) => _NotImplementedPage(),
       },

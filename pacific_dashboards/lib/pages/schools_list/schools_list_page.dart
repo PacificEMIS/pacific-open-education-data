@@ -1,17 +1,25 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pacific_dashboards/pages/schools_list/bloc/schools_list_bloc.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/mvvm/mvvm.dart';
+import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
+import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
+import 'package:pacific_dashboards/view_model_factory.dart';
 
-class SchoolsListPage extends StatefulWidget {
-  const SchoolsListPage({Key key}) : super(key: key);
-
+class SchoolsListPage extends MvvmStatefulWidget {
   static const String kRoute = '/SchoolList';
+
+  SchoolsListPage({Key key})
+      : super(
+          key: key,
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.individualSchoolsList,
+        );
 
   @override
   State<StatefulWidget> createState() {
@@ -19,44 +27,63 @@ class SchoolsListPage extends StatefulWidget {
   }
 }
 
-class SchoolsListPageState extends State<SchoolsListPage> {
+class SchoolsListPageState
+    extends MvvmState<SchoolsListViewModel, SchoolsListPage> {
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<SchoolsListBloc, SchoolsListState>(
-      listener: (ctx, state) {},
-      child: Scaffold(
-        appBar: PlatformAppBar(
-          title: Text(AppLocalizations.individualSchools),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            _SearchBar(),
-            Container(
-              height: 1,
-              color: AppColors.kCoolGray,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (ctx, index) {
-                  return _SchoolRow(
-                    id: 'SCH00$index',
-                    name: 'School of great $index',
-                    isEven: index.isEven,
+  Widget buildWidget(BuildContext context) {
+    return Scaffold(
+      appBar: PlatformAppBar(
+        title: Text(AppLocalizations.individualSchools),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          _SearchBar(viewModel: viewModel),
+          Container(
+            height: 1,
+            color: AppColors.kCoolGray,
+          ),
+          Expanded(
+            child: StreamBuilder<List<ShortSchool>>(
+              stream: viewModel.schoolsStream,
+              builder: (ctx, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: PlatformProgressIndicator(),
                   );
-                },
-              ),
+                } else {
+                  final data = snapshot.data;
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (ctx, index) {
+                      final school = data[index];
+                      return _SchoolRow(
+                        viewModel: viewModel,
+                        id: school.id,
+                        name: school.name,
+                        isEven: index.isEven,
+                      );
+                    },
+                  );
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class _SearchBar extends StatefulWidget {
+  final SchoolsListViewModel _viewModel;
+
+  const _SearchBar({Key key, SchoolsListViewModel viewModel})
+      : assert(viewModel != null),
+        _viewModel = viewModel,
+        super(key: key);
+
   @override
   _SearchBarState createState() => _SearchBarState();
 }
@@ -76,8 +103,10 @@ class _SearchBarState extends State<_SearchBar> {
   }
 
   void _onTextChanged() {
+    final text = _controller.text;
+    widget._viewModel.onSearchTextChanged(text);
     setState(() {
-      _isCloseButtonVisible = _controller.text.isNotEmpty;
+      _isCloseButtonVisible = text.isNotEmpty;
     });
   }
 
@@ -117,10 +146,6 @@ class _SearchBarState extends State<_SearchBar> {
           ),
           Expanded(
             child: TextField(
-              onChanged: (text) {
-                BlocProvider.of<SchoolsListBloc>(context)
-                    .add(SearchTextChangedSchoolsListEvent(text));
-              },
               controller: _controller,
               focusNode: _focusNode,
               keyboardType: TextInputType.text,
@@ -165,15 +190,19 @@ class _SchoolRow extends StatelessWidget {
   final bool _isEven;
   final String _id;
   final String _name;
+  final SchoolsListViewModel _viewModel;
 
   const _SchoolRow({
     Key key,
+    @required SchoolsListViewModel viewModel,
     @required String id,
     @required String name,
     @required bool isEven,
-  })  : assert(id != null),
+  })  : assert(viewModel != null),
+        assert(id != null),
         assert(name != null),
         assert(isEven != null),
+        _viewModel = viewModel,
         _id = id,
         _name = name,
         _isEven = isEven,
@@ -184,8 +213,7 @@ class _SchoolRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: InkWell(
-        onTap: () => BlocProvider.of<SchoolsListBloc>(context)
-            .add(SchoolSelectedSchoolsListEvent(_id)),
+        onTap: () => _viewModel.onSchoolPressed(_id),
         child: Container(
           height: 36.0,
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -201,9 +229,9 @@ class _SchoolRow extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
-                    color: AppColors.kBlue,
-                    decoration: TextDecoration.underline,
-                  ),
+                        color: AppColors.kBlue,
+                        decoration: TextDecoration.underline,
+                      ),
                 ),
               ),
               Expanded(
