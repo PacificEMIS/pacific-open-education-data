@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
+import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
@@ -34,6 +35,7 @@ class App extends StatelessWidget {
         SchoolAccreditationsPage.kRoute: (context) => SchoolAccreditationsPage(),
         ExamsPage.kRoute: (context) => ExamsPage(),
         SchoolsListPage.kRoute: (context) => SchoolsListPage(),
+        IndividualSchoolPage.kRoute: (context) => IndividualSchoolPage(),
         "/Budgets": (context) => _NotImplementedPage(),
         "/Indicators": (context) => _NotImplementedPage(),
       },

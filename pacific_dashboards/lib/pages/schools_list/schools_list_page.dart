@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -18,7 +18,7 @@ class SchoolsListPage extends MvvmStatefulWidget {
       : super(
           key: key,
           viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.individualSchoolsList,
+              ViewModelFactory.instance.createIndividualSchoolsList(ctx),
         );
 
   @override

@@ -1,7 +1,7 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
@@ -23,7 +23,7 @@ class SchoolAccreditationsPage extends MvvmStatefulWidget {
   }) : super(
           key: key,
           viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.schoolAccreditation,
+              ViewModelFactory.instance.createSchoolAccreditationViewModel(ctx),
         );
 
   @override

@@ -1,3 +1,9 @@
+class Collections {
+  static bool isNullOrEmpty(Iterable iterable) {
+    return iterable == null || iterable.isEmpty;
+  }
+}
+
 extension IterableExt<E extends Object> on Iterable<E> {
   /// Groups the elements in [values] by the value returned by [key].
   ///

@@ -1,4 +1,5 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
@@ -9,7 +10,9 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -106,6 +109,76 @@ class RepositoryImpl implements Repository {
 
           return subject;
         });
+  }
+
+  @override
+  Stream<RepositoryResponse<SchoolEnrollChunk>> fetchIndividualSchoolEnroll(
+    String schoolId,
+    String districtCode,
+  ) async* {
+    final localSchoolEnroll =
+        await _localDataSource.fetchIndividualSchoolEnroll(schoolId);
+    final localDistrictEnroll =
+        await _localDataSource.fetchIndividualDistrictEnroll(districtCode);
+    final localNationEnroll =
+        await _localDataSource.fetchIndividualNationEnroll();
+
+    bool haveLocalResponse = true;
+
+    if (Collections.isNullOrEmpty(localSchoolEnroll) ||
+        Collections.isNullOrEmpty(localDistrictEnroll) ||
+        Collections.isNullOrEmpty(localNationEnroll)) {
+      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
+      haveLocalResponse = false;
+    } else {
+      yield SuccessRepositoryResponse(
+        RepositoryType.local,
+        await compute<SchoolEnrollChunk, SchoolEnrollChunk>(
+          SchoolEnrollChunk.fromNonCollapsed,
+          SchoolEnrollChunk(
+            schoolData: localSchoolEnroll,
+            districtData: localDistrictEnroll,
+            nationalData: localNationEnroll,
+          ),
+        ),
+      );
+    }
+
+    try {
+      final remoteSchoolEnroll =
+          await _remoteDataSource.fetchIndividualSchoolEnroll(schoolId);
+      final remoteDistrictEnroll =
+          await _remoteDataSource.fetchIndividualDistrictEnroll(districtCode);
+      final remoteNationEnroll =
+          await _remoteDataSource.fetchIndividualNationEnroll();
+
+      await _localDataSource.saveIndividualSchoolEnroll(
+          schoolId, remoteSchoolEnroll);
+      await _localDataSource.saveIndividualDistrictEnroll(
+          districtCode, remoteDistrictEnroll);
+      await _localDataSource.saveIndividualNationEnroll(remoteNationEnroll);
+
+      yield SuccessRepositoryResponse(
+        RepositoryType.remote,
+        await compute<SchoolEnrollChunk, SchoolEnrollChunk>(
+          SchoolEnrollChunk.fromNonCollapsed,
+          SchoolEnrollChunk(
+            schoolData: remoteSchoolEnroll,
+            districtData: remoteDistrictEnroll,
+            nationalData: remoteNationEnroll,
+          ),
+        ),
+      );
+    } on NoNewDataRemoteException catch (_) {
+      if (!haveLocalResponse) {
+        yield FailureRepositoryResponse(
+          RepositoryType.remote,
+          NoDataException(),
+        );
+      }
+    } catch (e) {
+      yield FailureRepositoryResponse(RepositoryType.remote, e);
+    }
   }
 
   Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({

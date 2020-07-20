@@ -1,18 +1,21 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
-import 'package:pacific_dashboards/utils/exceptions.dart';
 
 abstract class BaseViewModel extends ViewModel {
+
+  BaseViewModel(BuildContext ctx) : super(ctx);
+
 
   @override
   @protected
   void handleAppException(AppException appException) {
     if (appException is NoInternetException) {
-      errorMessagesSubject.add(AppLocalizations.serverUnavailableError);
+      notifyErrorMessage(AppLocalizations.serverUnavailableError);
     } else {
-      errorMessagesSubject.add(AppLocalizations.unknownError);
+      notifyErrorMessage(AppLocalizations.unknownError);
     }
   }
 
@@ -33,7 +36,7 @@ abstract class BaseViewModel extends ViewModel {
               break;
             case RepositoryType.remote:
               if (isCacheEmpty) {
-                throw response.exception;
+                throw response.throwable;
               }
               break;
           }

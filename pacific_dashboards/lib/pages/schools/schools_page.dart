@@ -1,6 +1,6 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
 import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
@@ -20,7 +20,8 @@ class SchoolsPage extends MvvmStatefulWidget {
   SchoolsPage({Key key})
       : super(
           key: key,
-          viewModelBuilder: (ctx) => ViewModelFactory.instance.schools,
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createSchoolsViewModel(ctx),
         );
 
   @override
@@ -100,7 +101,8 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                         keySortFunc: _compareEnrollmentByAgeAndEducation,
                       ),
                       MultiTable(
-                        key: ValueKey(snapshot.data.enrolBySchoolLevelAndDistrict),
+                        key: ValueKey(
+                            snapshot.data.enrolBySchoolLevelAndDistrict),
                         title: AppLocalizations
                             .schoolsEnrollmentBySchoolTypeStateAndGender,
                         firstColumnName: AppLocalizations.schoolType,

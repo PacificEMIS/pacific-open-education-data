@@ -1,11 +1,12 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
-import 'package:pacific_dashboards/pages/home/components/section.dart';
+import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SchoolsListViewModel extends BaseViewModel {
@@ -18,7 +19,8 @@ class SchoolsListViewModel extends BaseViewModel {
 
   List<ShortSchool> _schools;
 
-  SchoolsListViewModel({
+  SchoolsListViewModel(
+    BuildContext ctx, {
     @required Repository repository,
     @required RemoteConfig remoteConfig,
     @required GlobalSettings globalSettings,
@@ -27,7 +29,8 @@ class SchoolsListViewModel extends BaseViewModel {
         assert(globalSettings != null),
         _repository = repository,
         _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings;
+        _globalSettings = globalSettings,
+        super(ctx);
 
   @override
   void onInit() {
@@ -101,5 +104,14 @@ class SchoolsListViewModel extends BaseViewModel {
     });
   }
 
-  void onSchoolPressed(String id) {}
+  void onSchoolPressed(String id) {
+    navigator.pushNamed(
+      IndividualSchoolPage.kRoute,
+      arguments: IndividualSchoolPageArgs(
+        schoolId: 'CHK001',
+        schoolName: 'Akoyikoyi School',
+        districtCode: 'CHK',
+      ),
+    );
+  }
 }

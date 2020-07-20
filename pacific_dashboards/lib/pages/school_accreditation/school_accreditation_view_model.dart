@@ -1,4 +1,6 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
@@ -9,7 +11,6 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:rxdart/rxdart.dart';
@@ -27,7 +28,8 @@ class SchoolAccreditationViewModel extends BaseViewModel {
   List<Filter> _filters;
   Lookups _lookups;
 
-  SchoolAccreditationViewModel({
+  SchoolAccreditationViewModel(
+    BuildContext ctx, {
     @required Repository repository,
     @required RemoteConfig remoteConfig,
     @required GlobalSettings globalSettings,
@@ -36,7 +38,8 @@ class SchoolAccreditationViewModel extends BaseViewModel {
         assert(globalSettings != null),
         _repository = repository,
         _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings;
+        _globalSettings = globalSettings,
+        super(ctx);
 
   @override
   void onInit() {

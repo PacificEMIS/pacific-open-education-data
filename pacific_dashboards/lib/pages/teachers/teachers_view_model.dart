@@ -1,4 +1,6 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
@@ -9,7 +11,6 @@ import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
@@ -24,7 +25,8 @@ class TeachersViewModel extends BaseViewModel {
   final Subject<TeachersPageData> _dataSubject = BehaviorSubject();
   final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
-  TeachersViewModel({
+  TeachersViewModel(
+    BuildContext ctx, {
     @required Repository repository,
     @required RemoteConfig remoteConfig,
     @required GlobalSettings globalSettings,
@@ -33,7 +35,8 @@ class TeachersViewModel extends BaseViewModel {
         assert(globalSettings != null),
         _repository = repository,
         _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings;
+        _globalSettings = globalSettings,
+        super(ctx);
 
   List<Teacher> _teachers;
   List<Filter> _filters;
@@ -126,7 +129,8 @@ class _TeachersModel {
 Future<TeachersPageData> _transformTeachersModel(
   _TeachersModel _teachersModel,
 ) async {
-  final filteredTeachers = await _teachersModel.teachers.applyFilters(_teachersModel.filters);
+  final filteredTeachers =
+      await _teachersModel.teachers.applyFilters(_teachersModel.filters);
   final teachersByDistrict = filteredTeachers.groupBy((it) => it.districtCode);
   final teachersByAuthority =
       filteredTeachers.groupBy((it) => it.authorityCode);

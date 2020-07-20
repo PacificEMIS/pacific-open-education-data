@@ -1,6 +1,6 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/exams/components/exams_filters.dart';
 import 'package:pacific_dashboards/pages/exams/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/components/exams_stacked_horizontal_bar_chart.dart';
@@ -17,7 +17,8 @@ class ExamsPage extends MvvmStatefulWidget {
   ExamsPage({Key key})
       : super(
           key: key,
-          viewModelBuilder: (ctx) => ViewModelFactory.instance.exams,
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createExamsViewModel(ctx),
         );
 
   @override

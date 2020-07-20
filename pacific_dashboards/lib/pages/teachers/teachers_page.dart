@@ -1,7 +1,7 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
@@ -21,7 +21,8 @@ class TeachersPage extends MvvmStatefulWidget {
     Key key,
   }) : super(
           key: key,
-          viewModelBuilder: (ctx) => ViewModelFactory.instance.teachers,
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createTeachersViewModel(ctx),
         );
 
   @override

@@ -1,10 +1,10 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:rxdart/rxdart.dart';
@@ -20,13 +20,15 @@ class HomeViewModel extends ViewModel {
 
   Stream<List<Section>> get sectionStream => _sectionsSubject.stream;
 
-  HomeViewModel({
+  HomeViewModel(
+    BuildContext ctx, {
     @required GlobalSettings globalSettings,
     @required RemoteConfig remoteConfig,
   })  : assert(globalSettings != null),
         assert(remoteConfig != null),
         _globalSettings = globalSettings,
-        _remoteConfig = remoteConfig;
+        _remoteConfig = remoteConfig,
+        super(ctx);
 
   @override
   void onInit() {

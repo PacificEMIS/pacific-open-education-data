@@ -2,6 +2,7 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class Repository {
@@ -14,12 +15,18 @@ abstract class Repository {
   Stream<RepositoryResponse<AccreditationChunk>> fetchAllAccreditations();
 
   Stream<Lookups> get lookups;
+
+  Stream<RepositoryResponse<SchoolEnrollChunk>> fetchIndividualSchoolEnroll(
+    String schoolId,
+    String districtCode,
+  );
 }
 
 abstract class RepositoryResponse<T> {
-  const RepositoryResponse(this.data, this.exception, this.type);
+  const RepositoryResponse(this.data, this.throwable, this.type);
+
   final T data;
-  final Exception exception;
+  final Object throwable;
   final RepositoryType type;
 }
 
@@ -29,10 +36,8 @@ class SuccessRepositoryResponse<T> extends RepositoryResponse<T> {
 }
 
 class FailureRepositoryResponse<T> extends RepositoryResponse<T> {
-  FailureRepositoryResponse(RepositoryType type, Exception exception)
-      : super(null, exception, type);
+  FailureRepositoryResponse(RepositoryType type, Object throwable)
+      : super(null, throwable, type);
 }
 
-enum RepositoryType {
-  local, remote
-}
+enum RepositoryType { local, remote }

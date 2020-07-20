@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:arch/arch.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -12,16 +13,16 @@ import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
-const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
-const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis";
-const _kKiribatiUrl = "https://data.moe.gov.ki/kemis";
+const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
+const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis/api/";
+const _kKiribatiUrl = "https://data.moe.gov.ki/kemis/api/";
 
 class RemoteDataSourceImpl implements RemoteDataSource {
-  static const platform =
-      const MethodChannel('com.pacific_emis.opendata/api');
+  static const platform = const MethodChannel('com.pacific_emis.opendata/api');
 
   static const _kTeachersApiKey = "warehouse/teachercount";
   static const _kSchoolsApiKey = "warehouse/tableenrol";
@@ -31,6 +32,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   static const _kSchoolAccreditationsByStandardApiKey =
       "warehouse/accreditations/table?byStandard";
   static const _kLookupsApiKey = "lookups/collection/core";
+  static const _kIndividualSchoolEnrollApiKey = "warehouse/enrol/school/";
+  static const _kIndividualDistrictEnrollApiKey = "warehouse/enrol/district/";
+  static const _kIndividualNationEnrollApiKey = "warehouse/enrol/electoraten";
 
   final GlobalSettings _settings;
 
@@ -47,9 +51,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings;
 
-  Future<String> _get({@required String path, bool forced = false}) async {
+  Future<String> _get({
+    @required String path,
+    String restApiParameter,
+    Map<String, String> queryParameters,
+    bool forced = false,
+  }) async {
     final emis = await _settings.currentEmis;
-    final requestUrl = '${emis.baseUrl}/api/$path';
+    final requestUrl = '${emis.baseUrl}$path${restApiParameter ?? ''}';
     final existingEtag = forced ? null : await _settings.getEtag(requestUrl);
     var headers = {
       'Accept-Encoding': 'gzip, deflate',
@@ -61,7 +70,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     Response<String> response;
 
     try {
-      response = await _dio.get(requestUrl, options: options);
+      response = await _dio.get(
+        requestUrl,
+        options: options,
+        queryParameters: queryParameters,
+      );
     } on DioError catch (error) {
       print(error.message);
       // https://github.com/flutter/flutter/issues/41573
@@ -75,12 +88,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
     if (response.statusCode == 304) {
       throw NoNewDataRemoteException(url: requestUrl);
-    } else if (response.statusCode != 200) {
-      throw RemoteException(
-        url: requestUrl,
-        code: response.statusCode,
-        message: response.data.toString(),
-      );
     }
 
     final responseEtag = response.headers.value("ETag");
@@ -163,6 +170,42 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return Lookups.fromJson(data);
   }
 
+  @override
+  Future<List<SchoolEnroll>> fetchIndividualSchoolEnroll(
+    String schoolId,
+  ) async {
+    final responseData = await _get(
+      path: _kIndividualSchoolEnrollApiKey,
+      restApiParameter: '$schoolId?report',
+    );
+    return compute(_parseSchoolEnrollList, responseData);
+  }
+
+  @override
+  Future<List<SchoolEnroll>> fetchIndividualDistrictEnroll(
+    String districtCode,
+  ) async {
+    final responseData = await _get(
+      path: _kIndividualDistrictEnrollApiKey,
+      restApiParameter: '$districtCode?report',
+    );
+    return compute(_parseSchoolEnrollList, responseData);
+  }
+
+  @override
+  Future<List<SchoolEnroll>> fetchIndividualNationEnroll() async {
+    final responseData = await _get(
+      path: _kIndividualNationEnrollApiKey,
+      restApiParameter: '?report',
+    );
+    return compute(_parseSchoolEnrollList, responseData);
+  }
+
+  static List<SchoolEnroll> _parseSchoolEnrollList(String jsonString) {
+    final List<dynamic> data = json.decode(jsonString);
+    return data.map((it) => SchoolEnroll.fromJson(it)).toList();
+  }
+
   Future<Response<String>> _fallbackApiGetCall(String url, String eTag) async {
     try {
       final Map result = await platform.invokeMethod('apiGet', {
@@ -180,7 +223,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return response;
     } catch (error) {
       print(error);
-      throw RemoteException(url: url, code: 0, message: error.toString());
+      throw UnknownRemoteException(url: url);
     }
   }
 }

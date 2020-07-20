@@ -1,5 +1,5 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/mvvm/mvvm.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -18,7 +18,8 @@ class HomePage extends MvvmStatefulWidget {
   HomePage({Key key})
       : super(
           key: key,
-          viewModelBuilder: (ctx) => ViewModelFactory.instance.home,
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createHomeViewModel(ctx),
         );
 }
 

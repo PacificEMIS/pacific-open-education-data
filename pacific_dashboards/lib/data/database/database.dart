@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class Database {
@@ -13,6 +14,9 @@ abstract class Database {
   TeachersDao get teachers;
   ExamsDao get exams;
   AccreditationsDao get accreditations;
+  SchoolEnrollDao get schoolEnroll;
+  DistrictEnrollDao get districtEnroll;
+  NationEnrollDao get nationEnroll;
 }
 
 abstract class LookupsDao {
@@ -43,4 +47,19 @@ abstract class ExamsDao {
 abstract class AccreditationsDao {
   Future<void> save(AccreditationChunk chunk, Emis emis);
   Future<AccreditationChunk> get(Emis emis);
+}
+
+abstract class SchoolEnrollDao {
+  Future<void> save(String schoolId, List<SchoolEnroll> enroll, Emis emis);
+  Future<List<SchoolEnroll>> get(String schoolId, Emis emis);
+}
+
+abstract class DistrictEnrollDao {
+  Future<void> save(String districtCode, List<SchoolEnroll> enroll, Emis emis);
+  Future<List<SchoolEnroll>> get(String districtCode, Emis emis);
+}
+
+abstract class NationEnrollDao {
+  Future<void> save(List<SchoolEnroll> enroll, Emis emis);
+  Future<List<SchoolEnroll>> get(Emis emis);
 }
