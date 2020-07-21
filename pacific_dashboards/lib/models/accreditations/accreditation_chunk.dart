@@ -32,12 +32,12 @@ class AccreditationChunk {
 }
 
 class AccreditationChunkJsonParts {
-  final String byDistrictJsonString;
-  final String byStandardJsonString;
+  final List<dynamic> byDistrictJson;
+  final List<dynamic> byStandardJson;
 
   const AccreditationChunkJsonParts({
-    this.byDistrictJsonString,
-    this.byStandardJsonString,
+    this.byDistrictJson,
+    this.byStandardJson,
   });
 }
 

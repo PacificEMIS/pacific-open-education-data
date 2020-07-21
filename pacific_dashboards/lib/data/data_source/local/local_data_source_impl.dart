@@ -10,6 +10,8 @@ import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
+const _kAccessTokenKey = '_kAccessTokenKey';
+
 class LocalDataSourceImpl extends LocalDataSource {
   final Database _database;
   final GlobalSettings _globalSettings;
@@ -94,4 +96,12 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<void> saveIndividualNationEnroll(List<SchoolEnroll> enroll) async =>
       _database.nationEnroll.save(enroll, await _emis);
+
+  @override
+  Future<String> fetchAccessToken() =>
+      _database.strings.getByKey(_kAccessTokenKey);
+
+  @override
+  Future<void> saveAccessToken(String token) =>
+      _database.strings.save(_kAccessTokenKey, token);
 }

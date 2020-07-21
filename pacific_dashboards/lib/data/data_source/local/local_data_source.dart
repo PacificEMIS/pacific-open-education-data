@@ -46,4 +46,9 @@ abstract class LocalDataSource {
   Future<void> saveIndividualNationEnroll(
     List<SchoolEnroll> enroll,
   );
+
+  Future<void> saveAccessToken(String token);
+
+  Future<String> fetchAccessToken();
+
 }

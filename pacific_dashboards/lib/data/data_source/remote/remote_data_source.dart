@@ -21,4 +21,6 @@ abstract class RemoteDataSource {
   Future<List<SchoolEnroll>> fetchIndividualDistrictEnroll(String districtCode);
 
   Future<List<SchoolEnroll>> fetchIndividualNationEnroll();
+
+  Future<String> fetchAccessToken();
 }

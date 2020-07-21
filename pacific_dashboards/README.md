@@ -10,7 +10,7 @@ This README file explains how to build and run Flutter application for Android a
 ### Build
 
   - After the project is open in any IDE, you will see a lot of errors
-  - We are using code-generation, so you need to run `flutter packages pub run build_runner build` in project root
+  - We are using code-generation, so you need to run `flutter packages pub run build_runner build --delete-conflicting-outputs` in project root
   - Now all error should be gone, select target device and run the application
 
 

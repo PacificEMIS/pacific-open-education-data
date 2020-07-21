@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:arch/arch.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
@@ -16,6 +19,8 @@ import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
 
+typedef _AuthorizedCallable<T> = FutureOr<T> Function(String);
+
 class RepositoryImpl implements Repository {
   final RemoteDataSource _remoteDataSource;
   final LocalDataSource _localDataSource;
@@ -32,6 +37,84 @@ class RepositoryImpl implements Repository {
     _fedemisLookupsSubject.close();
     _miemisLookupsSubject.close();
     _kemisLookupsSubject.close();
+  }
+
+
+  Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({
+    Future<Pair<bool, T>> getLocal(),
+    Future<T> getRemote(),
+    Future<void> updateLocal(T remote),
+  }) async* {
+    final local = await getLocal();
+    var result = local.v2;
+    final isLocalExpired = local.v1;
+
+    if (!isLocalExpired && result != null) {
+      yield SuccessRepositoryResponse(RepositoryType.local, result);
+    } else {
+      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
+      try {
+        result = await getRemote();
+        await updateLocal(result);
+        yield SuccessRepositoryResponse(RepositoryType.remote, result);
+      } catch (ex) {
+        yield FailureRepositoryResponse(RepositoryType.remote, ex);
+      }
+    }
+  }
+
+  Stream<RepositoryResponse<T>> _fetchWithEtag<T>({
+    Future<T> getLocal(),
+    Future<T> getRemote(),
+    Future<void> updateLocal(T remote),
+  }) async* {
+    final localResult = await getLocal();
+
+    if (localResult != null) {
+      yield SuccessRepositoryResponse(RepositoryType.local, localResult);
+    } else {
+      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
+    }
+
+    try {
+      final remoteResult = await getRemote();
+      if (remoteResult == null) {
+        throw NoDataException();
+      }
+      await updateLocal(remoteResult);
+      if (remoteResult != localResult) {
+        yield SuccessRepositoryResponse(RepositoryType.remote, remoteResult);
+      }
+    } on NoNewDataRemoteException catch (_) {
+      if (localResult == null) {
+        yield FailureRepositoryResponse(
+          RepositoryType.remote,
+          NoDataException(),
+        );
+      }
+    } catch (ex) {
+      print(ex);
+      yield FailureRepositoryResponse(RepositoryType.remote, ex);
+    }
+  }
+
+  Future<T> _callAuthorized<T>(_AuthorizedCallable callable) async {
+    final fallback = () async {
+      final newAccessToken = await _remoteDataSource.fetchAccessToken();
+      _localDataSource.saveAccessToken(newAccessToken);
+      return _callAuthorized(callable);
+    };
+
+    final savedAccessToken = await _localDataSource.fetchAccessToken();
+    if (savedAccessToken == null || savedAccessToken.isEmpty) {
+      await fallback();
+    }
+
+    try {
+      return await callable.call(savedAccessToken);
+    } on UnauthorizedRemoteException catch (_) {
+      return await fallback();
+    }
   }
 
   @override
@@ -178,64 +261,6 @@ class RepositoryImpl implements Repository {
       }
     } catch (e) {
       yield FailureRepositoryResponse(RepositoryType.remote, e);
-    }
-  }
-
-  Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({
-    Future<Pair<bool, T>> getLocal(),
-    Future<T> getRemote(),
-    Future<void> updateLocal(T remote),
-  }) async* {
-    final local = await getLocal();
-    var result = local.v2;
-    final isLocalExpired = local.v1;
-
-    if (!isLocalExpired && result != null) {
-      yield SuccessRepositoryResponse(RepositoryType.local, result);
-    } else {
-      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
-      try {
-        result = await getRemote();
-        await updateLocal(result);
-        yield SuccessRepositoryResponse(RepositoryType.remote, result);
-      } catch (ex) {
-        yield FailureRepositoryResponse(RepositoryType.remote, ex);
-      }
-    }
-  }
-
-  Stream<RepositoryResponse<T>> _fetchWithEtag<T>({
-    Future<T> getLocal(),
-    Future<T> getRemote(),
-    Future<void> updateLocal(T remote),
-  }) async* {
-    final localResult = await getLocal();
-
-    if (localResult != null) {
-      yield SuccessRepositoryResponse(RepositoryType.local, localResult);
-    } else {
-      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
-    }
-
-    try {
-      final remoteResult = await getRemote();
-      if (remoteResult == null) {
-        throw NoDataException();
-      }
-      await updateLocal(remoteResult);
-      if (remoteResult != localResult) {
-        yield SuccessRepositoryResponse(RepositoryType.remote, remoteResult);
-      }
-    } on NoNewDataRemoteException catch (_) {
-      if (localResult == null) {
-        yield FailureRepositoryResponse(
-          RepositoryType.remote,
-          NoDataException(),
-        );
-      }
-    } catch (ex) {
-      print(ex);
-      yield FailureRepositoryResponse(RepositoryType.remote, ex);
     }
   }
 }
