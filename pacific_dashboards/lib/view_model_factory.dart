@@ -70,8 +70,6 @@ class ViewModelFactory {
     return SchoolsListViewModel(
       ctx,
       repository: serviceLocator.repository,
-      remoteConfig: serviceLocator.remoteConfig,
-      globalSettings: serviceLocator.globalSettings,
     );
   }
 

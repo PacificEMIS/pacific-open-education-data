@@ -26,6 +26,9 @@ class Lookups {
   @JsonKey(name: 'educationLevels')
   final List<Lookup> educationLevels;
 
+  @JsonKey(name: 'schoolCodes')
+  final List<Lookup> schoolCodes;
+
   const Lookups({
     this.authorityGovt,
     this.schoolTypes,
@@ -34,11 +37,8 @@ class Lookups {
     this.levels,
     this.accreditationTerms,
     this.educationLevels,
+    this.schoolCodes,
   });
-
-  factory Lookups.empty() {
-    return Lookups();
-  }
 
   factory Lookups.fromJson(Map<String, dynamic> json) => _$LookupsFromJson(json);
 

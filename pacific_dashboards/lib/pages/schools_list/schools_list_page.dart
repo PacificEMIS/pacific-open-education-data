@@ -60,8 +60,7 @@ class SchoolsListPageState
                       final school = data[index];
                       return _SchoolRow(
                         viewModel: viewModel,
-                        id: school.id,
-                        name: school.name,
+                        school: school,
                         isEven: index.isEven,
                       );
                     },
@@ -188,23 +187,19 @@ class _SearchBarState extends State<_SearchBar> {
 
 class _SchoolRow extends StatelessWidget {
   final bool _isEven;
-  final String _id;
-  final String _name;
+  final ShortSchool _school;
   final SchoolsListViewModel _viewModel;
 
   const _SchoolRow({
     Key key,
     @required SchoolsListViewModel viewModel,
-    @required String id,
-    @required String name,
+    @required ShortSchool school,
     @required bool isEven,
   })  : assert(viewModel != null),
-        assert(id != null),
-        assert(name != null),
+        assert(school != null),
         assert(isEven != null),
         _viewModel = viewModel,
-        _id = id,
-        _name = name,
+        _school = school,
         _isEven = isEven,
         super(key: key);
 
@@ -213,7 +208,7 @@ class _SchoolRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: InkWell(
-        onTap: () => _viewModel.onSchoolPressed(_id),
+        onTap: () => _viewModel.onSchoolPressed(_school),
         child: Container(
           height: 36.0,
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -225,7 +220,7 @@ class _SchoolRow extends StatelessWidget {
               Container(
                 width: 86,
                 child: Text(
-                  _id,
+                  _school.id,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
@@ -236,7 +231,7 @@ class _SchoolRow extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  _name,
+                  _school.name,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.subtitle2,
