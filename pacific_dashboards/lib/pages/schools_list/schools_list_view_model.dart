@@ -70,9 +70,7 @@ class SchoolsListViewModel extends BaseViewModel {
     navigator.pushNamed(
       IndividualSchoolPage.kRoute,
       arguments: IndividualSchoolPageArgs(
-        schoolId: school.id,
-        schoolName: school.name,
-        districtCode: 'CHK',
+        school: school,
       ),
     );
   }

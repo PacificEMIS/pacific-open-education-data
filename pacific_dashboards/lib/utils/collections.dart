@@ -4,7 +4,7 @@ class Collections {
   }
 }
 
-extension IterableExt<E extends Object> on Iterable<E> {
+extension IterableExt<E> on Iterable<E> {
   /// Groups the elements in [values] by the value returned by [key].
   ///
   /// Returns a map from keys computed by [key] to a list of all values for which
@@ -28,9 +28,7 @@ extension IterableExt<E extends Object> on Iterable<E> {
   List<T> uniques<T>(T key(E lv)) {
     return this.map((it) => key(it)).toSet().toList();
   }
-}
 
-extension Indexed<E> on Iterable<E> {
   Iterable<V> mapIndexed<V>(V Function(int index, E item) f) sync* {
     var index = 0;
 
@@ -47,6 +45,22 @@ extension Indexed<E> on Iterable<E> {
       f(index, item);
       index = index + 1;
     }
+  }
+
+  E get head {
+    Iterator<E> it = iterator;
+    if (!it.moveNext()) {
+      return null;
+    }
+    return it.current;
+  }
+
+  List<E> get tail {
+    if (this.length < 2) {
+      return [];
+    }
+    final list = this.toList();
+    return list.sublist(1);
   }
 }
 

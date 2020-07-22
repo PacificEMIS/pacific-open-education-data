@@ -45,7 +45,7 @@ abstract class RestClient {
     @Path('districtCode') String districtCode,
   );
 
-  @GET('warehouse/enrol/electoraten?report')
+  @GET('warehouse/enrol/nation?report')
   Future<List<SchoolEnroll>> getIndividualNationEnroll();
 
   @POST('token')

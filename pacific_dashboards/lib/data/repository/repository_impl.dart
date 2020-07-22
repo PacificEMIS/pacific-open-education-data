@@ -13,6 +13,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
@@ -210,21 +211,109 @@ class RepositoryImpl implements Repository {
     String districtCode,
   ) async* {
     final localSchoolEnroll =
-        await _localDataSource.fetchIndividualSchoolEnroll(schoolId);
+        await _localDataSource.fetchIndividualSchoolEnroll(schoolId) ?? [];
     final localDistrictEnroll =
-        await _localDataSource.fetchIndividualDistrictEnroll(districtCode);
+        await _localDataSource.fetchIndividualDistrictEnroll(districtCode) ??
+            [];
     final localNationEnroll =
-        await _localDataSource.fetchIndividualNationEnroll();
+        await _localDataSource.fetchIndividualNationEnroll() ?? [];
 
-    bool haveLocalResponse = true;
+    final localHandle = await _handleIndividualSchoolEnrollLocalResults(
+      localSchoolEnroll: localSchoolEnroll,
+      localDistrictEnroll: localDistrictEnroll,
+      localNationEnroll: localNationEnroll,
+    );
+    final haveLocalResponse = localHandle.v1;
+    yield localHandle.v2;
 
-    if (Collections.isNullOrEmpty(localSchoolEnroll) ||
-        Collections.isNullOrEmpty(localDistrictEnroll) ||
-        Collections.isNullOrEmpty(localNationEnroll)) {
-      yield FailureRepositoryResponse(RepositoryType.local, NoDataException());
-      haveLocalResponse = false;
+    try {
+      final schoolFetchResult = await _fetchRemoteSchoolEnrollData(
+        local: localSchoolEnroll,
+        getRemote: () =>
+            _remoteDataSource.fetchIndividualSchoolEnroll(schoolId),
+        updateLocal: (enroll) => _localDataSource.saveIndividualSchoolEnroll(
+          schoolId,
+          enroll,
+        ),
+      );
+      final districtFetchResult = await _fetchRemoteSchoolEnrollData(
+        local: localSchoolEnroll,
+        getRemote: () =>
+            _remoteDataSource.fetchIndividualDistrictEnroll(districtCode),
+        updateLocal: (enroll) => _localDataSource.saveIndividualDistrictEnroll(
+          districtCode,
+          enroll,
+        ),
+      );
+      final nationFetchResult = await _fetchRemoteSchoolEnrollData(
+        local: localSchoolEnroll,
+        getRemote: _remoteDataSource.fetchIndividualNationEnroll,
+        updateLocal: _localDataSource.saveIndividualNationEnroll,
+      );
+      final haveRemoteChanges = schoolFetchResult.v1 ||
+          districtFetchResult.v1 ||
+          nationFetchResult.v1;
+
+      if (haveRemoteChanges) {
+        yield SuccessRepositoryResponse(
+          RepositoryType.remote,
+          await compute<SchoolEnrollChunk, SchoolEnrollChunk>(
+            SchoolEnrollChunk.fromNonCollapsed,
+            SchoolEnrollChunk(
+              schoolData: schoolFetchResult.v2,
+              districtData: districtFetchResult.v2,
+              nationalData: nationFetchResult.v2,
+            ),
+          ),
+        );
+      } else if (!haveLocalResponse) {
+        yield FailureRepositoryResponse(
+          RepositoryType.remote,
+          NoDataException(),
+        );
+      }
+    } catch (ex) {
+      yield FailureRepositoryResponse(RepositoryType.remote, ex);
+    }
+  }
+
+  Future<Pair<bool, List<SchoolEnroll>>> _fetchRemoteSchoolEnrollData({
+    @required List<SchoolEnroll> local,
+    @required Future<List<SchoolEnroll>> getRemote(),
+    @required Future<void> updateLocal(List<SchoolEnroll> remote),
+  }) async {
+    List<SchoolEnroll> remoteEnroll = [];
+    bool haveData = true;
+    try {
+      remoteEnroll = await getRemote();
+      await updateLocal(remoteEnroll);
+    } on NoNewDataRemoteException catch (_) {
+      haveData = false;
+      if (local.isNotEmpty) {
+        remoteEnroll = local;
+      }
+    }
+    return Pair(haveData, remoteEnroll);
+  }
+
+  Future<Pair<bool, RepositoryResponse<SchoolEnrollChunk>>>
+      _handleIndividualSchoolEnrollLocalResults({
+    @required List<SchoolEnroll> localSchoolEnroll,
+    @required List<SchoolEnroll> localDistrictEnroll,
+    @required List<SchoolEnroll> localNationEnroll,
+  }) async {
+    final bool haveLocalResponse = localSchoolEnroll.isNotEmpty ||
+        localDistrictEnroll.isNotEmpty ||
+        localNationEnroll.isNotEmpty;
+
+    RepositoryResponse<SchoolEnrollChunk> response;
+    if (!haveLocalResponse) {
+      response = FailureRepositoryResponse(
+        RepositoryType.local,
+        NoDataException(),
+      );
     } else {
-      yield SuccessRepositoryResponse(
+      response = SuccessRepositoryResponse(
         RepositoryType.local,
         await compute<SchoolEnrollChunk, SchoolEnrollChunk>(
           SchoolEnrollChunk.fromNonCollapsed,
@@ -236,42 +325,7 @@ class RepositoryImpl implements Repository {
         ),
       );
     }
-
-    try {
-      final remoteSchoolEnroll =
-          await _remoteDataSource.fetchIndividualSchoolEnroll(schoolId);
-      final remoteDistrictEnroll =
-          await _remoteDataSource.fetchIndividualDistrictEnroll(districtCode);
-      final remoteNationEnroll =
-          await _remoteDataSource.fetchIndividualNationEnroll();
-
-      await _localDataSource.saveIndividualSchoolEnroll(
-          schoolId, remoteSchoolEnroll);
-      await _localDataSource.saveIndividualDistrictEnroll(
-          districtCode, remoteDistrictEnroll);
-      await _localDataSource.saveIndividualNationEnroll(remoteNationEnroll);
-
-      yield SuccessRepositoryResponse(
-        RepositoryType.remote,
-        await compute<SchoolEnrollChunk, SchoolEnrollChunk>(
-          SchoolEnrollChunk.fromNonCollapsed,
-          SchoolEnrollChunk(
-            schoolData: remoteSchoolEnroll,
-            districtData: remoteDistrictEnroll,
-            nationalData: remoteNationEnroll,
-          ),
-        ),
-      );
-    } on NoNewDataRemoteException catch (_) {
-      if (!haveLocalResponse) {
-        yield FailureRepositoryResponse(
-          RepositoryType.remote,
-          NoDataException(),
-        );
-      }
-    } catch (e) {
-      yield FailureRepositoryResponse(RepositoryType.remote, e);
-    }
+    return Pair(haveLocalResponse, response);
   }
 
   @override

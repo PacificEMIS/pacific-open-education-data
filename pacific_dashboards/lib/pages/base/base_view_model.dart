@@ -43,8 +43,7 @@ abstract class BaseViewModel extends ViewModel {
         }
       }
     } catch (ex) {
-      debugPrint(ex.toString());
-      rethrow;
+      handleThrows(ex);
     }
   }
 

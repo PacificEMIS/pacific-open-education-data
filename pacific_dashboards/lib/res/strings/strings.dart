@@ -252,6 +252,9 @@ class AppLocalizations {
 
   static String get searchSchoolsHint =>
       Intl.message('Search', name: 'searchSchoolsHint');
+
+  static String get individualSchoolEnrollTitle =>
+      Intl.message('Enrollment', name: 'individualSchoolEnrollTitle');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

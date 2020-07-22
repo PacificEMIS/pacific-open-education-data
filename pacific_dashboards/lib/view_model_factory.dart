@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
@@ -82,14 +83,12 @@ class ViewModelFactory {
 
   DashboardsViewModel createDashboardsViewModel(
     BuildContext ctx,
-    String schoolId,
-    String districtCode,
+    ShortSchool school,
   ) {
     return DashboardsViewModel(
       ctx,
       repository: serviceLocator.repository,
-      schoolId: schoolId,
-      districtCode: districtCode,
+      school: school,
     );
   }
 }
