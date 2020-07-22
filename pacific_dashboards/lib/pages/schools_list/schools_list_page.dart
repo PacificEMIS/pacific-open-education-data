@@ -205,39 +205,42 @@ class _SchoolRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: InkWell(
-        onTap: () => _viewModel.onSchoolPressed(_school),
-        child: Container(
-          height: 36.0,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          color: _isEven ? AppColors.kCoolGray : Colors.transparent,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 86,
-                child: Text(
-                  _school.id,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle2.copyWith(
-                        color: AppColors.kBlue,
-                        decoration: TextDecoration.underline,
-                      ),
+    return Container(
+      height: 36.0,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      color: _isEven ? AppColors.kAthensGray : Colors.transparent,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _viewModel.onSchoolPressed(_school),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 86,
+                  child: Text(
+                    _school.id,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(
+                          color: AppColors.kBlue,
+                          decoration: TextDecoration.underline,
+                        ),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Text(
-                  _school.name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle2,
+                Expanded(
+                  child: Text(
+                    _school.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

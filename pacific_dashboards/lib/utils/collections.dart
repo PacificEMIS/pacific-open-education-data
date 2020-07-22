@@ -22,7 +22,7 @@ extension IterableExt<E extends Object> on Iterable<E> {
   List<E> chainSort(int compare(E lv, E rv)) {
     final thisAsList = this.toList();
     thisAsList.sort(compare);
-    return this;
+    return thisAsList;
   }
 
   List<T> uniques<T>(T key(E lv)) {

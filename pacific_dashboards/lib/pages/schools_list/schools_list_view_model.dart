@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:pacific_dashboards/utils/collections.dart';
 
 class SchoolsListViewModel extends BaseViewModel {
   final Repository _repository;
@@ -40,9 +41,8 @@ class SchoolsListViewModel extends BaseViewModel {
   void _onDataLoaded(Lookups lookups) {
     launchHandled(() {
       final schoolCodes = lookups.schoolCodes ?? [];
-      _schools = schoolCodes
-          .map((it) => ShortSchool(it.code, it.name))
-          .toList();
+      _schools =
+          schoolCodes.map((it) => ShortSchool(it.code, it.name)).toList();
       _applyFilters();
     });
   }
@@ -59,9 +59,12 @@ class SchoolsListViewModel extends BaseViewModel {
       if (_schools == null) return;
       final lowercaseQuery = _searchQuery.toLowerCase();
       final filteredSchools = _schools
-          .where((it) =>
-      it.id.toLowerCase().contains(lowercaseQuery) ||
-          it.name.toLowerCase().contains(lowercaseQuery))
+          .where(
+            (it) =>
+                it.id.toLowerCase().contains(lowercaseQuery) ||
+                it.name.toLowerCase().contains(lowercaseQuery),
+          )
+          .chainSort((lv, rv) => lv.id.compareTo(rv.id))
           .toList();
       _schoolsSubject.add(filteredSchools);
     });
