@@ -2,7 +2,6 @@ import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
-import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
@@ -32,19 +31,16 @@ class SchoolsListViewModel extends BaseViewModel {
   }
 
   void _loadData() {
-    notifyHaveProgress(true);
-    _repository.lookups
+    handleRepositoryFetch(fetch: _repository.fetchSchoolsList)
+        .doOnListen(() => notifyHaveProgress(true))
+        .doOnEach((_) => notifyHaveProgress(false))
         .listen(_onDataLoaded, onError: handleThrows, cancelOnError: false)
         .disposeWith(disposeBag);
   }
 
-  void _onDataLoaded(Lookups lookups) {
-    launchHandled(() {
-      final schoolCodes = lookups.schoolCodes ?? [];
-      _schools =
-          schoolCodes.map((it) => ShortSchool(it.code, it.name)).toList();
-      _applyFilters();
-    });
+  void _onDataLoaded(List<ShortSchool> schools) {
+    _schools = schools;
+    _applyFilters();
   }
 
   Stream<List<ShortSchool>> get schoolsStream => _schoolsSubject.stream;

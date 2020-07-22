@@ -13,6 +13,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
@@ -83,6 +84,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   void _handleErrors(DioError error) {
     final response = error.response;
+    if (response == null) {
+      throw UnknownRemoteException(url: '');
+    }
     final code = response.statusCode;
     final url = response.requestUrl;
     switch (code) {
@@ -132,9 +136,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<String> fetchAccessToken() {
-    // TODO: implement fetchAccessToken
-    throw UnimplementedError();
+  Future<String> fetchAccessToken() async {
+    final response = await _withHandlers(
+      (client) => client.getToken(
+        'password',
+        _settings.getApiUserName(),
+        _settings.getApiPassword(),
+      ),
+    );
+    return response.accessToken;
   }
 
   @override
@@ -188,6 +198,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return _withHandlers((client) => client.getTeachers());
   }
 
+  @override
+  Future<List<ShortSchool>> fetchSchoolsList(String accessToken) async {
+    final response = await _withHandlers(
+      (client) => client.getSchoolsList('Bearer $accessToken', 0),
+    );
+    return response.schools;
+  }
 }
 
 extension Urls on Emis {

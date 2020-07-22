@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 const _kAccessTokenKey = '_kAccessTokenKey';
@@ -102,6 +103,14 @@ class LocalDataSourceImpl extends LocalDataSource {
       _database.strings.getByKey(_kAccessTokenKey);
 
   @override
-  Future<void> saveAccessToken(String token) =>
+  Future<void> saveAccessToken(String token) async =>
       _database.strings.save(_kAccessTokenKey, token);
+
+  @override
+  Future<List<ShortSchool>> fetchSchoolsList() async =>
+      await _database.shortSchool.get(await _emis);
+
+  @override
+  Future<void> saveSchoolsList(List<ShortSchool> schools) async =>
+      _database.shortSchool.save(schools, await _emis);
 }

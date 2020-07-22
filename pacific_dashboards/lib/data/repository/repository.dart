@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class Repository {
@@ -15,6 +16,8 @@ abstract class Repository {
   Stream<RepositoryResponse<AccreditationChunk>> fetchAllAccreditations();
 
   Stream<Lookups> get lookups;
+
+  Stream<RepositoryResponse<List<ShortSchool>>> fetchSchoolsList();
 
   Stream<RepositoryResponse<SchoolEnrollChunk>> fetchIndividualSchoolEnroll(
     String schoolId,

@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
-import 'package:pacific_dashboards/data/data_source/remote/entities/token_response_body.dart';
+import 'package:pacific_dashboards/data/data_source/remote/entities/schools_list/schools_list_response_body.dart';
+import 'package:pacific_dashboards/data/data_source/remote/entities/token/token_response_body.dart';
 import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -52,5 +54,11 @@ abstract class RestClient {
     @Field('grant_type') String grantType,
     @Field('username') String username,
     @Field('password') String password,
+  );
+
+  @GET('schools')
+  Future<SchoolsListResponseBody> getSchoolsList(
+    @Header('Authorization') String bearerToken,
+    @Query('PageSize') int pageSize,
   );
 }

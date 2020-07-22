@@ -14,6 +14,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
@@ -38,7 +39,6 @@ class RepositoryImpl implements Repository {
     _miemisLookupsSubject.close();
     _kemisLookupsSubject.close();
   }
-
 
   Stream<RepositoryResponse<T>> _fetchWithoutEtag<T>({
     Future<Pair<bool, T>> getLocal(),
@@ -98,16 +98,26 @@ class RepositoryImpl implements Repository {
     }
   }
 
-  Future<T> _callAuthorized<T>(_AuthorizedCallable callable) async {
+  Future<T> _callAuthorized<T>(
+    _AuthorizedCallable callable, {
+    bool isFallback = false,
+  }) async {
     final fallback = () async {
+      if (isFallback) {
+        throw UnauthorizedRemoteException(
+          code: 401,
+          url: '',
+          message: 'Failed to repeat auth',
+        );
+      }
       final newAccessToken = await _remoteDataSource.fetchAccessToken();
       _localDataSource.saveAccessToken(newAccessToken);
-      return _callAuthorized(callable);
+      return _callAuthorized(callable, isFallback: true);
     };
 
     final savedAccessToken = await _localDataSource.fetchAccessToken();
     if (savedAccessToken == null || savedAccessToken.isEmpty) {
-      await fallback();
+      return await fallback();
     }
 
     try {
@@ -262,5 +272,16 @@ class RepositoryImpl implements Repository {
     } catch (e) {
       yield FailureRepositoryResponse(RepositoryType.remote, e);
     }
+  }
+
+  @override
+  Stream<RepositoryResponse<List<ShortSchool>>> fetchSchoolsList() async* {
+    yield* _fetchWithEtag(
+      getLocal: _localDataSource.fetchSchoolsList,
+      getRemote: () => _callAuthorized(
+        (token) => _remoteDataSource.fetchSchoolsList(token),
+      ),
+      updateLocal: _localDataSource.saveSchoolsList,
+    );
   }
 }

@@ -45,23 +45,30 @@ class SchoolsListPageState
             color: AppColors.kCoolGray,
           ),
           Expanded(
-            child: StreamBuilder<List<ShortSchool>>(
-              stream: viewModel.schoolsStream,
+            child: StreamBuilder<bool>(
+              stream: viewModel.activityIndicatorStream,
+              initialData: false,
               builder: (ctx, snapshot) {
-                if (!snapshot.hasData) {
+                final haveProgress = snapshot.data;
+                if (haveProgress) {
                   return Center(
                     child: PlatformProgressIndicator(),
                   );
                 } else {
-                  final data = snapshot.data;
-                  return ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (ctx, index) {
-                      final school = data[index];
-                      return _SchoolRow(
-                        viewModel: viewModel,
-                        school: school,
-                        isEven: index.isEven,
+                  return StreamBuilder<List<ShortSchool>>(
+                    stream: viewModel.schoolsStream,
+                    builder: (ctx, snapshot) {
+                      final data = snapshot.data ?? [];
+                      return ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (ctx, index) {
+                          final school = data[index];
+                          return _SchoolRow(
+                            viewModel: viewModel,
+                            school: school,
+                            isEven: index.isEven,
+                          );
+                        },
                       );
                     },
                   );
