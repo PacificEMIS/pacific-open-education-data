@@ -12,7 +12,7 @@ import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
-import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -164,7 +164,7 @@ Map<String, int> _calculatePeopleCount(
           value.map((it) => it.totalTeachersCount).reduce((lv, rv) => lv + rv)),
     );
 
-Map<String, Map<String, InfoTableData>>
+Map<String, Map<String, GenderTableData>>
     _calculateEnrolBySchoolLevelAndDistrict({
   List<Teacher> teachers,
   Lookups lookups,
@@ -181,10 +181,10 @@ Map<String, Map<String, InfoTableData>>
   });
 }
 
-Map<String, InfoTableData> _generateInfoTableData(
+Map<String, GenderTableData> _generateInfoTableData(
     Map<String, List<Teacher>> groupedData,
     {String districtCode}) {
-  final convertedData = Map<String, InfoTableData>();
+  final convertedData = Map<String, GenderTableData>();
   var totalMaleCount = 0;
   var totalFemaleCount = 0;
 
@@ -200,14 +200,14 @@ Map<String, InfoTableData> _generateInfoTableData(
       femaleCount += teacher.getTeachersCount(Gender.female);
     });
 
-    convertedData[group] = InfoTableData(maleCount, femaleCount);
+    convertedData[group] = GenderTableData(maleCount, femaleCount);
 
     totalMaleCount += maleCount;
     totalFemaleCount += femaleCount;
   });
 
   convertedData[AppLocalizations.total] =
-      InfoTableData(totalMaleCount, totalFemaleCount);
+      GenderTableData(totalMaleCount, totalFemaleCount);
 
   return convertedData;
 }

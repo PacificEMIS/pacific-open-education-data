@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 
 typedef int KeySortFunc(String lv, String rv);
@@ -7,12 +8,12 @@ typedef int KeySortFunc(String lv, String rv);
 const Color _kBorderColor = AppColors.kGeyser;
 const double _kBorderWidth = 1.0;
 
-class InfoTableWidget extends StatelessWidget {
-  InfoTableWidget({
+class GenderTableWidget extends StatelessWidget {
+  GenderTableWidget({
     Key key,
-    @required Map<String, InfoTableData> data,
-    @required String title,
+    @required Map<String, GenderTableData> data,
     @required String firstColumnName,
+    String title,
     KeySortFunc keySortFunc,
   })  : assert(data != null),
         assert(firstColumnName != null),
@@ -22,10 +23,12 @@ class InfoTableWidget extends StatelessWidget {
         _keySortFunc = keySortFunc,
         super(key: key);
 
-  final Map<String, InfoTableData> _data;
+  final Map<String, GenderTableData> _data;
   final KeySortFunc _keySortFunc;
   final String _title;
   final String _firstColumnName;
+
+  bool get _haveTitle => _title != null && _title.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {
@@ -41,31 +44,33 @@ class InfoTableWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 13.0),
-                child: Text(
-                  _title ?? 'null',
-                  style: Theme.of(context).textTheme.bodyText1,
+          if (_haveTitle)
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 13.0),
+                  child: Text(
+                    _title ?? 'null',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-            height: _kBorderWidth,
-            color: _kBorderColor,
-          ),
+              ],
+            ),
+          if (_haveTitle)
+            Container(
+              height: _kBorderWidth,
+              color: _kBorderColor,
+            ),
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               _SubTitleCell(name: _firstColumnName),
-              _SubTitleCell(name: 'Male'),
-              _SubTitleCell(name: 'Female'),
-              _SubTitleCell(name: 'Total'),
+              _SubTitleCell(name: AppLocalizations.male),
+              _SubTitleCell(name: AppLocalizations.female),
+              _SubTitleCell(name: AppLocalizations.total),
             ],
           ),
           FutureBuilder(
@@ -175,7 +180,7 @@ class _SubTitleCell extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .subtitle2
-                  .copyWith(color: AppColors.kNevada),
+                  .copyWith(color: AppColors.kTextMinor),
             ),
           ],
         ),
@@ -184,13 +189,13 @@ class _SubTitleCell extends StatelessWidget {
   }
 }
 
-class InfoTableData {
+class GenderTableData {
   static const String _kZeroSymbol = "-";
 
   final int _maleAmount;
   final int _femaleAmount;
 
-  const InfoTableData(this._maleAmount, this._femaleAmount);
+  const GenderTableData(this._maleAmount, this._femaleAmount);
 
   String get maleAmount =>
       _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
@@ -205,9 +210,12 @@ class InfoTableData {
 
 class _CellData {
   final String domain;
-  final InfoTableData measure;
+  final GenderTableData measure;
   final int index;
 
-  _CellData(
-      {@required this.domain, @required this.measure, @required this.index});
+  const _CellData({
+    @required this.domain,
+    @required this.measure,
+    @required this.index,
+  });
 }

@@ -184,7 +184,7 @@ class _SortingTitle extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyText1
-                .copyWith(color: AppColors.kNevada),
+                .copyWith(color: AppColors.kTextMinor),
           ),
           _icon,
         ],
@@ -293,11 +293,11 @@ extension SortTypeIcon on SortType {
   Icon iconFor(ValueType valueType) {
     const downIcon = const Icon(
       Icons.expand_more,
-      color: AppColors.kNevada,
+      color: AppColors.kTextMinor,
     );
     const upIcon = const Icon(
       Icons.expand_less,
-      color: AppColors.kNevada,
+      color: AppColors.kTextMinor,
     );
     const noneIcon = const Icon(
       Icons.minimize,

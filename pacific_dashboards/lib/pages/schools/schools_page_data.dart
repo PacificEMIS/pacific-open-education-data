@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
 
 class SchoolsPageData {
   SchoolsPageData({
@@ -17,6 +17,6 @@ class SchoolsPageData {
   final Map<String, int> enrolByDistrict;
   final Map<String, int> enrolByAuthority;
   final Map<String, int> enrolByPrivacy;
-  final Map<String, Map<String, InfoTableData>> enrolByAgeAndEducation;
-  final Map<String, Map<String, InfoTableData>> enrolBySchoolLevelAndDistrict;
+  final Map<String, Map<String, GenderTableData>> enrolByAgeAndEducation;
+  final Map<String, Map<String, GenderTableData>> enrolBySchoolLevelAndDistrict;
 }

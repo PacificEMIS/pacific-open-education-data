@@ -247,7 +247,7 @@ class _BottomMenuState extends State<_BottomMenu>
                       },
                       child: const Icon(
                         Icons.check,
-                        color: AppColors.kNevada,
+                        color: AppColors.kTextMinor,
                         size: 27.0,
                       ),
                     ),
@@ -261,7 +261,7 @@ class _BottomMenuState extends State<_BottomMenu>
                       },
                       child: const Icon(
                         Icons.filter_list,
-                        color: AppColors.kNevada,
+                        color: AppColors.kTextMinor,
                         size: 27.0,
                       ),
                     ),
@@ -334,7 +334,7 @@ class _BottomMenuRow extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: const Icon(
                   Icons.chevron_left,
-                  color: AppColors.kNevada,
+                  color: AppColors.kTextMinor,
                   size: 21.0,
                 ),
               ),
@@ -355,7 +355,7 @@ class _BottomMenuRow extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: const Icon(
                   Icons.chevron_right,
-                  color: AppColors.kNevada,
+                  color: AppColors.kTextMinor,
                   size: 21.0,
                 ),
               ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
 
 class MultiTable extends StatelessWidget {
@@ -8,7 +8,7 @@ class MultiTable extends StatelessWidget {
     Key key,
     @required String title,
     @required String firstColumnName,
-    @required Map<String, Map<String, InfoTableData>> data,
+    @required Map<String, Map<String, GenderTableData>> data,
     KeySortFunc keySortFunc,
   })  : assert(title != null),
         assert(firstColumnName != null),
@@ -21,7 +21,7 @@ class MultiTable extends StatelessWidget {
 
   final String _title;
   final String _firstColumnName;
-  final Map<String, Map<String, InfoTableData>> _data;
+  final Map<String, Map<String, GenderTableData>> _data;
   final KeySortFunc _keySortFunc;
 
   @override
@@ -35,7 +35,7 @@ class MultiTable extends StatelessWidget {
           children: _data.keys.map((key) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: InfoTableWidget(
+              child: GenderTableWidget(
                 data: _data[key],
                 title: key,
                 firstColumnName: _firstColumnName,

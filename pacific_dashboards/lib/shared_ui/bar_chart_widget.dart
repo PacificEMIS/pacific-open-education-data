@@ -52,7 +52,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
           primaryMeasureAxis: charts.NumericAxisSpec(
             renderSpec: charts.GridlineRendererSpec(
               labelStyle: charts.TextStyleSpec(
-                  fontSize: 10, color: AppColors.kNevada.chartsColor),
+                  fontSize: 10, color: AppColors.kTextMinor.chartsColor),
               lineStyle: charts.LineStyleSpec(
                 color: AppColors.kCoolGray.chartsColor,
               ),

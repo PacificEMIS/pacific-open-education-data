@@ -126,6 +126,10 @@ class AppLocalizations {
 
   static String get total => Intl.message('Total', name: 'total');
 
+  static String get male => Intl.message('Male', name: 'male');
+
+  static String get female => Intl.message('Female', name: 'female');
+
   static String get age => Intl.message('Age', name: 'age');
 
   static String get schoolsEnrollmentByAgeEducationLevel =>
@@ -255,6 +259,26 @@ class AppLocalizations {
 
   static String get individualSchoolEnrollTitle =>
       Intl.message('Enrollment', name: 'individualSchoolEnrollTitle');
+
+  static String get individualSchoolEnrollByLevelAndGender =>
+      Intl.message('By Grade Level and Gender',
+          name: 'individualSchoolEnrollByLevelAndGender');
+
+  static String get individualSchoolEnrollByLevelAndGenderHistory =>
+      Intl.message('By Grade Level and Gender History',
+          name: 'individualSchoolEnrollByLevelAndGenderHistory');
+
+  static String get individualSchoolEnrollByLevelAndGenderChart =>
+      Intl.message('Chart',
+          name: 'individualSchoolEnrollByLevelAndGenderChart');
+
+  static String get individualSchoolEnrollByLevelAndGenderTable =>
+      Intl.message('Table',
+          name: 'individualSchoolEnrollByLevelAndGenderTable');
+
+  static String get individualSchoolEnrollByLevelAndGenderGrade =>
+      Intl.message('Grade',
+          name: 'individualSchoolEnrollByLevelAndGenderGrade');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
