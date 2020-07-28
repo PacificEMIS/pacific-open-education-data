@@ -15,6 +15,7 @@ import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
@@ -333,6 +334,17 @@ class RepositoryImpl implements Repository {
         (token) => _remoteDataSource.fetchSchoolsList(token),
       ),
       updateLocal: _localDataSource.saveSchoolsList,
+    );
+  }
+
+  @override
+  Stream<RepositoryResponse<List<SchoolFlow>>> fetchIndividualSchoolFlow(
+    String schoolId,
+  )  async* {
+    yield* _fetchWithEtag(
+      getLocal: () => _localDataSource.fetchSchoolFlow(schoolId),
+      getRemote: () => _remoteDataSource.fetchSchoolFlow(schoolId),
+      updateLocal: (flows) => _localDataSource.saveSchoolFlow(schoolId, flows),
     );
   }
 }

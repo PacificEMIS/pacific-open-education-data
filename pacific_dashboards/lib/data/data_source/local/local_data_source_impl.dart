@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
@@ -113,4 +114,13 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<void> saveSchoolsList(List<ShortSchool> schools) async =>
       _database.shortSchool.save(schools, await _emis);
+
+  @override
+  Future<List<SchoolFlow>> fetchSchoolFlow(String schoolId) async =>
+      await _database.schoolFlow.get(schoolId, await _emis);
+
+  @override
+  Future<void> saveSchoolFlow(
+          String schoolId, List<SchoolFlow> schoolFlows) async =>
+      await _database.schoolFlow.save(schoolId, schoolFlows, await _emis);
 }

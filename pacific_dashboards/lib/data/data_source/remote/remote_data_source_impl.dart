@@ -13,6 +13,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
@@ -205,6 +206,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     );
     return response.schools;
   }
+
+  @override
+  Future<List<SchoolFlow>> fetchSchoolFlow(String schoolId) {
+    return _withHandlers((client) => client.getSchoolFlow(schoolId));
+  }
+
 }
 
 extension Urls on Emis {

@@ -1,6 +1,7 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
@@ -68,8 +69,21 @@ class _DashboardComponentState
                   color: AppColors.kSpace,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: const Text('Not Implemented'),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    AppLocalizations.individualSchoolFlowTitle,
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+                StreamBuilder<List<SchoolFlow>>(
+                  stream: viewModel.flowStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container();
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
               ],
             ),

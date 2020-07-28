@@ -262,6 +262,9 @@ class AppLocalizations {
   static String get individualSchoolEnrollTitle =>
       Intl.message('Enrollment', name: 'individualSchoolEnrollTitle');
 
+  static String get individualSchoolFlowTitle =>
+      Intl.message('Rates', name: 'individualSchoolFlowTitle');
+
   static String get individualSchoolEnrollByLevelAndGender =>
       Intl.message('By Grade Level and Gender',
           name: 'individualSchoolEnrollByLevelAndGender');

@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/data/database/db_impl/exams_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/lookups_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/nation_enroll_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/school_enroll_dao_impl.dart';
+import 'package:pacific_dashboards/data/database/db_impl/school_flow_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/schools_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/short_school_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/strings_dao_impl.dart';
@@ -19,10 +20,11 @@ import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';
 import 'package:pacific_dashboards/data/database/model/school/hive_school.dart';
 import 'package:pacific_dashboards/data/database/model/school_enroll/hive_school_enroll.dart';
+import 'package:pacific_dashboards/data/database/model/school_flow/hive_school_flow.dart';
 import 'package:pacific_dashboards/data/database/model/short_school/hive_short_school.dart';
 import 'package:pacific_dashboards/data/database/model/teacher/hive_teacher.dart';
 
-// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9}
+// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10}
 class HiveDatabase extends Database {
   LookupsDao _lookupsDao;
   StringsDao _stringsDao;
@@ -34,6 +36,7 @@ class HiveDatabase extends Database {
   DistrictEnrollDao _districtEnroll;
   NationEnrollDao _nationEnroll;
   ShortSchoolDao _shortSchoolDao;
+  SchoolFlowDao _schoolFlowDao;
 
   Future<void> init() async {
     await Hive.initFlutter();
@@ -47,7 +50,8 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveDistrictAccreditationAdapter())
       ..registerAdapter(HiveAccreditationChunkAdapter())
       ..registerAdapter(HiveSchoolEnrollAdapter())
-      ..registerAdapter(HiveShortSchoolAdapter());
+      ..registerAdapter(HiveShortSchoolAdapter())
+      ..registerAdapter(HiveSchoolFlowAdapter());
 
     _lookupsDao = HiveLookupsDao();
 
@@ -63,6 +67,7 @@ class HiveDatabase extends Database {
     _districtEnroll = HiveDistrictEnrollDao();
     _nationEnroll = HiveNationEnrollDao();
     _shortSchoolDao = HiveShortSchoolDao();
+    _schoolFlowDao = HiveSchoolFlowDao();
   }
 
   @override
@@ -94,4 +99,7 @@ class HiveDatabase extends Database {
 
   @override
   ShortSchoolDao get shortSchool => _shortSchoolDao;
+
+  @override
+  SchoolFlowDao get schoolFlow => _schoolFlowDao;
 }

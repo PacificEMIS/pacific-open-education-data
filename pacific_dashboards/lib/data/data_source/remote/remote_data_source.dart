@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
@@ -26,4 +27,6 @@ abstract class RemoteDataSource {
   Future<String> fetchAccessToken();
 
   Future<List<ShortSchool>> fetchSchoolsList(String accessToken);
+
+  Future<List<SchoolFlow>> fetchSchoolFlow(String schoolId);
 }

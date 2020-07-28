@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
@@ -22,6 +23,10 @@ abstract class Repository {
   Stream<RepositoryResponse<SchoolEnrollChunk>> fetchIndividualSchoolEnroll(
     String schoolId,
     String districtCode,
+  );
+
+  Stream<RepositoryResponse<List<SchoolFlow>>> fetchIndividualSchoolFlow(
+    String schoolId,
   );
 }
 
