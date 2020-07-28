@@ -62,7 +62,11 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
                   district: widget.district,
                 );
               case _Tab.history:
-                return _HistoryChart(data: widget.data.femalePartHistory);
+                return _HistoryChart(
+                  data: widget.data.femalePartHistory,
+                  schoolId: widget.schoolId,
+                  district: widget.district,
+                );
             }
             throw FallThroughError();
           },
@@ -213,11 +217,17 @@ class _DetailedChart extends StatelessWidget {
 
 class _HistoryChart extends StatelessWidget {
   final List<EnrollDataByFemalePartHistory> _data;
+  final String schoolId;
+  final String district;
 
   const _HistoryChart({
     Key key,
     @required List<EnrollDataByFemalePartHistory> data,
+    @required this.schoolId,
+    @required this.district,
   })  : assert(data != null),
+        assert(schoolId != null),
+        assert(district != null),
         _data = data,
         super(key: key);
 
@@ -228,7 +238,7 @@ class _HistoryChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         AspectRatio(
-          aspectRatio: 328 / 182,
+          aspectRatio: 328 / 248,
           child: FutureBuilder(
             future: _series,
             builder: (context, snapshot) {
@@ -266,25 +276,25 @@ class _HistoryChart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             ChartLegendItem(
-              color: AppColors.kBlue,
-              value: AppLocalizations.male,
-            ),
-            SizedBox(
-              width: 16,
-            ),
-            ChartLegendItem(
-              color: AppColors.kRed,
-              value: AppLocalizations.female,
+              color: AppColors.kPeacockBlue,
+              value: schoolId,
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kGreen,
-              value: AppLocalizations.total,
+              value: district,
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            ChartLegendItem(
+              color: AppColors.kOrange,
+              value: AppLocalizations.national,
             ),
           ],
-        )
+        ),
       ],
     );
   }

@@ -38,12 +38,20 @@ class EnrollViewModel extends BaseViewModel {
         _generateGenderDataHistory,
         _chunk.schoolData,
       );
+      final femalePartOnLastYear = await compute(
+        _generateFemaleDataOnLastYear,
+        _chunk,
+      );
+      final femalePartHistory = await compute(
+        _generateFemalePartHistory,
+        _chunk,
+      );
       final data = EnrollData(
         gradeDataOnLastYear: gradeDataOnLastYear,
         gradeDataHistory: gradeDataHistory,
         genderDataHistory: genderByYearHistory,
-        femalePartOnLastYear: _generateFemaleDataOnLastYear(_chunk), // TODO: compute
-        femalePartHistory: null,
+        femalePartOnLastYear: femalePartOnLastYear,
+        femalePartHistory: femalePartHistory,
       );
       _dataSubject.add(data);
     }, notifyProgress: true);
@@ -143,4 +151,33 @@ EnrollDataByFemalePartOnLastYear _generateFemaleDataOnLastYear(
   });
 
   return EnrollDataByFemalePartOnLastYear(year: lastSchoolYear, data: data);
+}
+
+List<EnrollDataByFemalePartHistory> _generateFemalePartHistory(
+  SchoolEnrollChunk chunk,
+) {
+  final groupedByYearSchool = chunk.schoolData.groupBy((it) => it.year);
+  final groupedByYearDistrict = chunk.districtData.groupBy((it) => it.year);
+  final groupedByYearNation = chunk.nationalData.groupBy((it) => it.year);
+
+  final List<EnrollDataByFemalePartHistory> result = [];
+
+  groupedByYearSchool.forEach((year, enrollData) {
+    final districtEnrollData = groupedByYearDistrict[year] ?? [];
+    final nationEnrollData = groupedByYearNation[year] ?? [];
+    result.add(EnrollDataByFemalePartHistory(
+      year: year,
+      school: enrollData
+          .map((it) => it.enrollFemale)
+          .fold(0, (prev, newValue) => prev + newValue),
+      district: districtEnrollData
+          .map((it) => it.enrollFemale)
+          .fold(0, (prev, newValue) => prev + newValue),
+      nation: nationEnrollData
+          .map((it) => it.enrollFemale)
+          .fold(0, (prev, newValue) => prev + newValue),
+    ));
+  });
+
+  return result;
 }
