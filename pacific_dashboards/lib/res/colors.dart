@@ -15,6 +15,7 @@ class AppColors {
   static const Color kSpace = const Color.fromARGB(255, 239, 243, 248);
   static const Color kRed = const Color.fromARGB(255, 248, 84, 84);
   static const Color kGreen = const Color.fromARGB(255, 13, 211, 92);
+  static const Color kOrange = const Color.fromARGB(255, 255, 149, 26);
   static const List<Color> kLevels = [
     kRed,
     const Color.fromARGB(255, 255, 186, 10),

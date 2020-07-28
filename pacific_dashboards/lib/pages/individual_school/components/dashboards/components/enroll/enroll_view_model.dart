@@ -42,7 +42,7 @@ class EnrollViewModel extends BaseViewModel {
         gradeDataOnLastYear: gradeDataOnLastYear,
         gradeDataHistory: gradeDataHistory,
         genderDataHistory: genderByYearHistory,
-        femalePartOnLastYear: null,
+        femalePartOnLastYear: _generateFemaleDataOnLastYear(_chunk), // TODO: compute
         femalePartHistory: null,
       );
       _dataSubject.add(data);
@@ -102,4 +102,45 @@ List<EnrollDataByYear> _generateGenderDataHistory(
     ));
   });
   return results.chainSort((lv, rv) => lv.year.compareTo(rv.year));
+}
+
+EnrollDataByFemalePartOnLastYear _generateFemaleDataOnLastYear(
+  SchoolEnrollChunk chunk,
+) {
+  final groupedByYearSchool = chunk.schoolData.groupBy((it) => it.year);
+  final groupedByYearDistrict = chunk.districtData.groupBy((it) => it.year);
+  final groupedByYearNation = chunk.nationalData.groupBy((it) => it.year);
+  final lastSchoolYear =
+      groupedByYearSchool.keys.chainSort((lv, rv) => rv.compareTo(lv)).first;
+
+  final schoolDataOnLastYear = groupedByYearSchool[lastSchoolYear];
+  final districtDataOnLastYear = groupedByYearDistrict[lastSchoolYear] ?? [];
+  final nationDataOnLastYear = groupedByYearNation[lastSchoolYear] ?? [];
+
+  final schoolDataOnLastYearByGrade =
+      schoolDataOnLastYear.groupBy((it) => it.classLevel);
+  final districtDataOnLastYearByGrade =
+      districtDataOnLastYear.groupBy((it) => it.classLevel);
+  final nationDataOnLastYearByGrade =
+      nationDataOnLastYear.groupBy((it) => it.classLevel);
+
+  final List<EnrollDataByFemalePart> data = [];
+  schoolDataOnLastYearByGrade.forEach((grade, enrollData) {
+    final districtEnrollData = districtDataOnLastYearByGrade[grade] ?? [];
+    final nationEnrollData = nationDataOnLastYearByGrade[grade] ?? [];
+    data.add(EnrollDataByFemalePart(
+      grade: grade,
+      school: enrollData
+          .map((it) => it.enrollFemale)
+          .fold(0, (prev, newValue) => prev + newValue),
+      district: districtEnrollData
+          .map((it) => it.enrollFemale)
+          .fold(0, (prev, newValue) => prev + newValue),
+      nation: nationEnrollData
+          .map((it) => it.enrollFemale)
+          .fold(0, (prev, newValue) => prev + newValue),
+    ));
+  });
+
+  return EnrollDataByFemalePartOnLastYear(year: lastSchoolYear, data: data);
 }

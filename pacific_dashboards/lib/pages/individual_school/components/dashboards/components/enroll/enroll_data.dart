@@ -4,7 +4,7 @@ class EnrollData {
   final EnrollDataByGradeHistory gradeDataOnLastYear;
   final List<EnrollDataByGradeHistory> gradeDataHistory;
   final List<EnrollDataByYear> genderDataHistory;
-  final List<EnrollDataByFemalePart> femalePartOnLastYear;
+  final EnrollDataByFemalePartOnLastYear femalePartOnLastYear;
   final List<EnrollDataByFemalePartHistory> femalePartHistory;
 
   EnrollData({
@@ -51,6 +51,16 @@ class EnrollDataByYear {
     @required this.female,
     @required this.male,
     @required this.total,
+  });
+}
+
+class EnrollDataByFemalePartOnLastYear {
+  final int year;
+  final List<EnrollDataByFemalePart> data;
+
+  EnrollDataByFemalePartOnLastYear({
+    @required this.year,
+    @required this.data,
   });
 }
 

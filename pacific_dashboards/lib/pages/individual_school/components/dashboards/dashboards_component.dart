@@ -10,9 +10,11 @@ import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class DashboardComponent extends MvvmStatefulWidget {
+  final ShortSchool school;
+
   DashboardComponent({
     Key key,
-    @required ShortSchool school,
+    @required this.school,
   }) : super(
           key: key,
           viewModelBuilder: (ctx) =>
@@ -52,7 +54,10 @@ class _DashboardComponentState
                   stream: viewModel.enrollStream,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return EnrollComponent(chunk: snapshot.data);
+                      return EnrollComponent(
+                        chunk: snapshot.data,
+                        school: widget.school,
+                      );
                     } else {
                       return Container();
                     }

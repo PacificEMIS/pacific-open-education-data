@@ -1,6 +1,8 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/female_part_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/gender_history_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/level_and_gender_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/level_and_gender_history_component.dart';
@@ -8,10 +10,14 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
 
 class EnrollComponent extends MvvmStatefulWidget {
+  final ShortSchool school;
+
   EnrollComponent({
     Key key,
     @required SchoolEnrollChunk chunk,
+    @required this.school,
   })  : assert(chunk != null),
+        assert(school != null),
         super(
           key: key,
           viewModelBuilder: (ctx) => EnrollViewModel(ctx, chunk),
@@ -40,6 +46,11 @@ class _EnrollComponentState
                 data: snapshot.data.gradeDataHistory,
               ),
               GenderHistoryComponent(data: snapshot.data.genderDataHistory),
+              FemalePartComponent(
+                data: snapshot.data,
+                schoolId: widget.school.id,
+                district: widget.school.districtName,
+              )
             ],
           );
         } else {

@@ -8,20 +8,26 @@ import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class GenderHistoryComponent extends StatefulWidget {
-  final List<EnrollDataByYear> data;
+class FemalePartComponent extends StatefulWidget {
+  final EnrollData data;
+  final String schoolId;
+  final String district;
 
-  const GenderHistoryComponent({
+  const FemalePartComponent({
     Key key,
     @required this.data,
+    @required this.schoolId,
+    @required this.district,
   })  : assert(data != null),
+        assert(schoolId != null),
+        assert(district != null),
         super(key: key);
 
   @override
-  _GenderHistoryComponentState createState() => _GenderHistoryComponentState();
+  _FemalePartComponentState createState() => _FemalePartComponentState();
 }
 
-class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
+class _FemalePartComponentState extends State<FemalePartComponent> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -32,7 +38,7 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            AppLocalizations.individualSchoolEnrollByGenderHistory,
+            AppLocalizations.individualSchoolEnrollFemalePart,
             style: textTheme.individualDashboardsSubtitle,
           ),
         ),
@@ -40,21 +46,23 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
           tabs: _Tab.values,
           tabNameBuilder: (tab) {
             switch (tab) {
-              case _Tab.stacked:
-                return AppLocalizations
-                    .individualSchoolEnrollByGenderHistoryStacked;
-              case _Tab.unstacked:
-                return AppLocalizations
-                    .individualSchoolEnrollByGenderHistoryUnstacked;
+              case _Tab.detailed:
+                return '${widget.data.femalePartOnLastYear.year}${AppLocalizations.individualSchoolEnrollFemalePartDetailed}';
+              case _Tab.history:
+                return AppLocalizations.individualSchoolEnrollFemalePartHistory;
             }
             throw FallThroughError();
           },
           builder: (ctx, tab) {
             switch (tab) {
-              case _Tab.stacked:
-                return _StackedChart(data: widget.data);
-              case _Tab.unstacked:
-                return _UnstackedChart(data: widget.data);
+              case _Tab.detailed:
+                return _DetailedChart(
+                  data: widget.data.femalePartOnLastYear.data,
+                  schoolId: widget.schoolId,
+                  district: widget.district,
+                );
+              case _Tab.history:
+                return _HistoryChart(data: widget.data.femalePartHistory);
             }
             throw FallThroughError();
           },
@@ -64,15 +72,21 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
   }
 }
 
-enum _Tab { stacked, unstacked }
+enum _Tab { detailed, history }
 
-class _StackedChart extends StatelessWidget {
-  final List<EnrollDataByYear> _data;
+class _DetailedChart extends StatelessWidget {
+  final List<EnrollDataByFemalePart> _data;
+  final String schoolId;
+  final String district;
 
-  const _StackedChart({
+  const _DetailedChart({
     Key key,
-    @required List<EnrollDataByYear> data,
+    @required List<EnrollDataByFemalePart> data,
+    @required this.schoolId,
+    @required this.district,
   })  : assert(data != null),
+        assert(schoolId != null),
+        assert(district != null),
         _data = data,
         super(key: key);
 
@@ -83,7 +97,7 @@ class _StackedChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         AspectRatio(
-          aspectRatio: 328 / 198,
+          aspectRatio: 328 / 248,
           child: FutureBuilder(
             future: _series,
             builder: (context, snapshot) {
@@ -91,13 +105,10 @@ class _StackedChart extends StatelessWidget {
                 return Container();
               }
 
-              return charts.OrdinalComboChart(
+              return charts.BarChart(
                 snapshot.data,
                 animate: false,
-                defaultRenderer: charts.LineRendererConfig(
-                  includeArea: true,
-                  stacked: true,
-                ),
+                barGroupingType: charts.BarGroupingType.grouped,
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickProviderSpec: charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
@@ -124,36 +135,52 @@ class _StackedChart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             ChartLegendItem(
-              color: AppColors.kBlue,
-              value: AppLocalizations.male,
+              color: AppColors.kPeacockBlue,
+              value: schoolId,
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
-              color: AppColors.kRed,
-              value: AppLocalizations.female,
+              color: AppColors.kGreen,
+              value: district,
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            ChartLegendItem(
+              color: AppColors.kOrange,
+              value: AppLocalizations.national,
             ),
           ],
-        )
+        ),
       ],
     );
   }
 
   Future<List<charts.Series<BarChartData, String>>> get _series {
     return Future.microtask(() {
-      final maleData = _data.map((it) {
+      final schoolData = _data.map((it) {
         return BarChartData(
-          '${it.year}',
-          it.male,
-          AppColors.kBlue,
+          it.grade,
+          it.school,
+          AppColors.kPeacockBlue,
         );
       }).toList();
-      final femaleData = _data.map((it) {
+
+      final districtData = _data.map((it) {
         return BarChartData(
-          '${it.year}',
-          it.female,
-          AppColors.kRed,
+          it.grade,
+          it.district,
+          AppColors.kGreen,
+        );
+      }).toList();
+
+      final nationData = _data.map((it) {
+        return BarChartData(
+          it.grade,
+          it.nation,
+          AppColors.kOrange,
         );
       }).toList();
 
@@ -162,31 +189,34 @@ class _StackedChart extends StatelessWidget {
           domainFn: (BarChartData chartData, _) => chartData.domain,
           measureFn: (BarChartData chartData, _) => chartData.measure,
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
-              chartData.color.chartsColor,
-          id: AppLocalizations.female,
-          data: femaleData,
+          id: 'school',
+          data: schoolData,
         ),
         charts.Series(
           domainFn: (BarChartData chartData, _) => chartData.domain,
           measureFn: (BarChartData chartData, _) => chartData.measure,
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
-              chartData.color.chartsColor,
-          id: AppLocalizations.male,
-          data: maleData,
+          id: 'district',
+          data: districtData,
+        ),
+        charts.Series(
+          domainFn: (BarChartData chartData, _) => chartData.domain,
+          measureFn: (BarChartData chartData, _) => chartData.measure,
+          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          id: 'nation',
+          data: nationData,
         ),
       ];
     });
   }
 }
 
-class _UnstackedChart extends StatelessWidget {
-  final List<EnrollDataByYear> _data;
+class _HistoryChart extends StatelessWidget {
+  final List<EnrollDataByFemalePartHistory> _data;
 
-  const _UnstackedChart({
+  const _HistoryChart({
     Key key,
-    @required List<EnrollDataByYear> data,
+    @required List<EnrollDataByFemalePartHistory> data,
   })  : assert(data != null),
         _data = data,
         super(key: key);
@@ -198,7 +228,7 @@ class _UnstackedChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         AspectRatio(
-          aspectRatio: 328 / 198,
+          aspectRatio: 328 / 182,
           child: FutureBuilder(
             future: _series,
             builder: (context, snapshot) {
@@ -261,26 +291,27 @@ class _UnstackedChart extends StatelessWidget {
 
   Future<List<charts.Series<BarChartData, String>>> get _series {
     return Future.microtask(() {
-      final maleData = _data.map((it) {
+      final schoolData = _data.map((it) {
         return BarChartData(
           '${it.year}',
-          it.male,
-          AppColors.kBlue,
-        );
-      }).toList();
-      final femaleData = _data.map((it) {
-        return BarChartData(
-          '${it.year}',
-          it.female,
-          AppColors.kRed,
+          it.school,
+          AppColors.kPeacockBlue,
         );
       }).toList();
 
-      final totalData = _data.map((it) {
+      final districtData = _data.map((it) {
         return BarChartData(
           '${it.year}',
-          it.total,
+          it.district,
           AppColors.kGreen,
+        );
+      }).toList();
+
+      final nationData = _data.map((it) {
+        return BarChartData(
+          '${it.year}',
+          it.nation,
+          AppColors.kOrange,
         );
       }).toList();
 
@@ -291,8 +322,8 @@ class _UnstackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.male,
-          data: maleData,
+          id: 'school',
+          data: schoolData,
         ),
         charts.Series(
           domainFn: (BarChartData chartData, _) => chartData.domain,
@@ -300,8 +331,8 @@ class _UnstackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.female,
-          data: femaleData,
+          id: 'district',
+          data: districtData,
         ),
         charts.Series(
           domainFn: (BarChartData chartData, _) => chartData.domain,
@@ -309,8 +340,8 @@ class _UnstackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.total,
-          data: totalData,
+          id: 'nation',
+          data: nationData,
         ),
       ];
     });
