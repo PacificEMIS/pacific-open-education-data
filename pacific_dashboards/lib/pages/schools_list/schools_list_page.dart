@@ -58,18 +58,22 @@ class SchoolsListPageState
                   return StreamBuilder<List<ShortSchool>>(
                     stream: viewModel.schoolsStream,
                     builder: (ctx, snapshot) {
-                      final data = snapshot.data ?? [];
-                      return ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (ctx, index) {
-                          final school = data[index];
-                          return _SchoolRow(
-                            viewModel: viewModel,
-                            school: school,
-                            isEven: index.isEven,
-                          );
-                        },
-                      );
+                      if (snapshot.hasData) {
+                        final data = snapshot.data;
+                        return ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (ctx, index) {
+                            final school = data[index];
+                            return _SchoolRow(
+                              viewModel: viewModel,
+                              school: school,
+                              isEven: index.isEven,
+                            );
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
                     },
                   );
                 }

@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 class DashboardsViewModel extends BaseViewModel {
   final Repository _repository;
   final ShortSchool _school;
-  final Subject<SchoolEnrollChunk> _enrollSubject = PublishSubject();
+  final Subject<SchoolEnrollChunk> _enrollSubject = BehaviorSubject();
 
   DashboardsViewModel(
     BuildContext ctx, {
@@ -35,6 +35,8 @@ class DashboardsViewModel extends BaseViewModel {
         _school.districtCode,
       ),
     )
+        .doOnListen(() => notifyHaveProgress(true))
+        .doOnEach((_) => notifyHaveProgress(false))
         .listen(
           _onEnrollLoaded,
           onError: (t) => handleThrows,
@@ -46,8 +48,6 @@ class DashboardsViewModel extends BaseViewModel {
   void _onEnrollLoaded(SchoolEnrollChunk chunk) {
     _enrollSubject.add(chunk);
   }
-
-
 
   Stream<SchoolEnrollChunk> get enrollStream => _enrollSubject.stream;
 }

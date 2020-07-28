@@ -11,7 +11,7 @@ import 'package:pacific_dashboards/utils/collections.dart';
 class SchoolsListViewModel extends BaseViewModel {
   final Repository _repository;
 
-  final Subject<List<ShortSchool>> _schoolsSubject = PublishSubject();
+  final Subject<List<ShortSchool>> _schoolsSubject = BehaviorSubject();
 
   List<ShortSchool> _schools;
   String _searchQuery = '';

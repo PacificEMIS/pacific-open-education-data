@@ -236,7 +236,7 @@ class RepositoryImpl implements Repository {
         ),
       );
       final districtFetchResult = await _fetchRemoteSchoolEnrollData(
-        local: localSchoolEnroll,
+        local: localDistrictEnroll,
         getRemote: () =>
             _remoteDataSource.fetchIndividualDistrictEnroll(districtCode),
         updateLocal: (enroll) => _localDataSource.saveIndividualDistrictEnroll(
@@ -245,7 +245,7 @@ class RepositoryImpl implements Repository {
         ),
       );
       final nationFetchResult = await _fetchRemoteSchoolEnrollData(
-        local: localSchoolEnroll,
+        local: localNationEnroll,
         getRemote: _remoteDataSource.fetchIndividualNationEnroll,
         updateLocal: _localDataSource.saveIndividualNationEnroll,
       );
@@ -301,9 +301,7 @@ class RepositoryImpl implements Repository {
     @required List<SchoolEnroll> localDistrictEnroll,
     @required List<SchoolEnroll> localNationEnroll,
   }) async {
-    final bool haveLocalResponse = localSchoolEnroll.isNotEmpty ||
-        localDistrictEnroll.isNotEmpty ||
-        localNationEnroll.isNotEmpty;
+    final bool haveLocalResponse = localSchoolEnroll.isNotEmpty;
 
     RepositoryResponse<SchoolEnrollChunk> response;
     if (!haveLocalResponse) {
@@ -318,8 +316,8 @@ class RepositoryImpl implements Repository {
           SchoolEnrollChunk.fromNonCollapsed,
           SchoolEnrollChunk(
             schoolData: localSchoolEnroll,
-            districtData: localDistrictEnroll,
-            nationalData: localNationEnroll,
+            districtData: localDistrictEnroll ?? [],
+            nationalData: localNationEnroll ?? [],
           ),
         ),
       );

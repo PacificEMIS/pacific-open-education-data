@@ -10,7 +10,7 @@ import 'package:rxdart/rxdart.dart';
 
 class EnrollViewModel extends BaseViewModel {
   final SchoolEnrollChunk _chunk;
-  final Subject<EnrollData> _dataSubject = PublishSubject();
+  final Subject<EnrollData> _dataSubject = BehaviorSubject();
 
   EnrollViewModel(BuildContext ctx, SchoolEnrollChunk enrollChunk)
       : assert(enrollChunk != null),

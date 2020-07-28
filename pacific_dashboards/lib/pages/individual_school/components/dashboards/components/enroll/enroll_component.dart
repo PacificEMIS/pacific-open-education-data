@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/level_and_gender_history_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
+import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 
 class EnrollComponent extends MvvmStatefulWidget {
   final ShortSchool school;
@@ -31,31 +32,44 @@ class _EnrollComponentState
     extends MvvmState<EnrollViewModel, EnrollComponent> {
   @override
   Widget buildWidget(BuildContext context) {
-    return StreamBuilder<EnrollData>(
-      stream: viewModel.dataStream,
+    return StreamBuilder<bool>(
+      stream: viewModel.activityIndicatorStream,
+      initialData: false,
       builder: (ctx, snapshot) {
-        if (snapshot.hasData) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              LevelAndGenderComponent(
-                data: snapshot.data.gradeDataOnLastYear,
-              ),
-              LevelAndGenderHistoryComponent(
-                data: snapshot.data.gradeDataHistory,
-              ),
-              GenderHistoryComponent(data: snapshot.data.genderDataHistory),
-              FemalePartComponent(
-                data: snapshot.data,
-                schoolId: widget.school.id,
-                district: widget.school.districtName,
-              )
-            ],
+        if (snapshot.data) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: PlatformProgressIndicator(),
+            ),
           );
         } else {
-          return Center(
-            child: const Text('-'),
+          return StreamBuilder<EnrollData>(
+            stream: viewModel.dataStream,
+            builder: (ctx, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    LevelAndGenderComponent(
+                      data: snapshot.data.gradeDataOnLastYear,
+                    ),
+                    LevelAndGenderHistoryComponent(
+                      data: snapshot.data.gradeDataHistory,
+                    ),
+                    GenderHistoryComponent(data: snapshot.data.genderDataHistory),
+                    FemalePartComponent(
+                      data: snapshot.data,
+                      schoolId: widget.school.id,
+                      district: widget.school.districtName,
+                    )
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            },
           );
         }
       },
