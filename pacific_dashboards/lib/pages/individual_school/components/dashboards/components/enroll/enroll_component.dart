@@ -1,6 +1,7 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/gender_history_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/level_and_gender_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/level_and_gender_history_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
@@ -38,6 +39,7 @@ class _EnrollComponentState
               LevelAndGenderHistoryComponent(
                 data: snapshot.data.gradeDataHistory,
               ),
+              GenderHistoryComponent(data: snapshot.data.genderDataHistory),
             ],
           );
         } else {

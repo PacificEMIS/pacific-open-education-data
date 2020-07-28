@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:charts_flutter/flutter.dart' as charts
-    show TextStyleSpec, Color;
+    show TextStyleSpec, Color, LineStyleSpec;
 
 final ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
@@ -90,6 +90,15 @@ const charts.TextStyleSpec largeChartsDomain = const charts.TextStyleSpec(
   fontSize: 14,
 );
 
+final chartAxisTextStyle = charts.TextStyleSpec(
+  fontSize: 10,
+  color: AppColors.kTextMinor.chartsColor,
+);
+
+final chartAxisLineStyle = charts.LineStyleSpec(
+  color: AppColors.kCoolGray.chartsColor,
+);
+
 extension ChartsTextStyle on TextStyle {
   charts.TextStyleSpec get chartsSpec => charts.TextStyleSpec(
         fontFamily: this.fontFamily,
@@ -115,4 +124,7 @@ extension TextThemeExt on TextTheme {
         color: AppColors.kPeacockBlue,
         fontWeight: FontWeight.bold,
       );
+
+  TextStyle get individualDashboardsSubtitle =>
+      this.headline4.copyWith(fontSize: 12);
 }

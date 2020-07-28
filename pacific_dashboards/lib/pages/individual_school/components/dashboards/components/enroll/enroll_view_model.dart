@@ -34,10 +34,14 @@ class EnrollViewModel extends BaseViewModel {
       );
       final gradeDataOnLastYear = gradeHistory.head;
       final gradeDataHistory = gradeHistory.tail;
+      final genderByYearHistory = await compute(
+        _generateGenderDataHistory,
+        _chunk.schoolData,
+      );
       final data = EnrollData(
         gradeDataOnLastYear: gradeDataOnLastYear,
         gradeDataHistory: gradeDataHistory,
-        genderDataHistory: null,
+        genderDataHistory: genderByYearHistory,
         femalePartOnLastYear: null,
         femalePartHistory: null,
       );
@@ -73,4 +77,29 @@ List<EnrollDataByGradeHistory> _generateGradeDataHistory(
     ));
   });
   return results.chainSort((lv, rv) => rv.year.compareTo(lv.year));
+}
+
+List<EnrollDataByYear> _generateGenderDataHistory(
+  List<SchoolEnroll> schoolData,
+) {
+  final List<EnrollDataByYear> results = [];
+  final groupedByYear = schoolData.groupBy((it) => it.year);
+
+  groupedByYear.forEach((year, enrollList) {
+    int femaleByYear = 0;
+    int maleByYear = 0;
+    int totalByYear = 0;
+    for (var enrollData in enrollList) {
+      femaleByYear += enrollData.enrollFemale;
+      maleByYear += enrollData.enrollMale;
+      totalByYear += enrollData.totalEnroll;
+    }
+    results.add(EnrollDataByYear(
+      year: year,
+      female: femaleByYear,
+      male: maleByYear,
+      total: totalByYear,
+    ));
+  });
+  return results.chainSort((lv, rv) => lv.year.compareTo(rv.year));
 }

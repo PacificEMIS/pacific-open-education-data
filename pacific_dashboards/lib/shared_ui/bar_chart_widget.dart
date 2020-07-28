@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
 
 class BarChartWidget extends StatefulWidget {
@@ -11,14 +12,6 @@ class BarChartWidget extends StatefulWidget {
 
   @override
   BarChartWidgetState createState() => BarChartWidgetState();
-}
-
-class BarChartData {
-  final String domain;
-  final int measure;
-  final Color color;
-
-  const BarChartData(this.domain, this.measure, this.color);
 }
 
 class BarChartWidgetState extends State<BarChartWidget> {

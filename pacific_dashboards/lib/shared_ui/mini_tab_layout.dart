@@ -81,6 +81,9 @@ class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
             height: 8,
           ),
           widget.builder(context, _selectedTab),
+          SizedBox(
+            height: 16,
+          ),
         ],
       ),
     );

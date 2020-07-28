@@ -268,6 +268,10 @@ class AppLocalizations {
       Intl.message('By Grade Level and Gender History',
           name: 'individualSchoolEnrollByLevelAndGenderHistory');
 
+  static String get individualSchoolEnrollByGenderHistory =>
+      Intl.message('Enrollment by Gender History',
+          name: 'individualSchoolEnrollByGenderHistory');
+
   static String get individualSchoolEnrollByLevelAndGenderChart =>
       Intl.message('Chart',
           name: 'individualSchoolEnrollByLevelAndGenderChart');
@@ -279,6 +283,14 @@ class AppLocalizations {
   static String get individualSchoolEnrollByLevelAndGenderGrade =>
       Intl.message('Grade',
           name: 'individualSchoolEnrollByLevelAndGenderGrade');
+
+  static String get individualSchoolEnrollByGenderHistoryStacked =>
+      Intl.message('Stacked',
+          name: 'individualSchoolEnrollByGenderHistoryStacked');
+
+  static String get individualSchoolEnrollByGenderHistoryUnstacked =>
+      Intl.message('Unstacked',
+          name: 'individualSchoolEnrollByGenderHistoryUnstacked');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

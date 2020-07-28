@@ -3,10 +3,11 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_widget.dart';
+import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:pacific_dashboards/res/themes.dart';
 
 class LevelAndGenderComponent extends StatefulWidget {
   final EnrollDataByGradeHistory data;
@@ -18,7 +19,8 @@ class LevelAndGenderComponent extends StatefulWidget {
         super(key: key);
 
   @override
-  _LevelAndGenderComponentState createState() => _LevelAndGenderComponentState();
+  _LevelAndGenderComponentState createState() =>
+      _LevelAndGenderComponentState();
 }
 
 class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
@@ -33,7 +35,7 @@ class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             '${AppLocalizations.individualSchoolEnrollByLevelAndGender} (${widget.data.year})',
-            style: textTheme.headline4.copyWith(fontSize: 12),
+            style: textTheme.individualDashboardsSubtitle,
           ),
         ),
         MiniTabLayout(
@@ -58,9 +60,6 @@ class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
             }
             throw FallThroughError();
           },
-        ),
-        SizedBox(
-          height: 16,
         ),
       ],
     );
@@ -93,14 +92,6 @@ class _Chart extends StatelessWidget {
               if (!snapshot.hasData) {
                 return Container();
               }
-
-              final chartAxisTextStyle = charts.TextStyleSpec(
-                fontSize: 10,
-                color: AppColors.kTextMinor.chartsColor,
-              );
-              final chartAxisLineStyle = charts.LineStyleSpec(
-                color: AppColors.kCoolGray.chartsColor,
-              );
 
               return charts.BarChart(
                 snapshot.data,
@@ -143,7 +134,7 @@ class _Chart extends StatelessWidget {
               value: AppLocalizations.female,
             ),
           ],
-        )
+        ),
       ],
     );
   }

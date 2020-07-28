@@ -14,11 +14,12 @@ class AppColors {
   static const Color kRacingGreen = const Color.fromARGB(255, 17, 35, 19);
   static const Color kSpace = const Color.fromARGB(255, 239, 243, 248);
   static const Color kRed = const Color.fromARGB(255, 248, 84, 84);
+  static const Color kGreen = const Color.fromARGB(255, 13, 211, 92);
   static const List<Color> kLevels = [
     kRed,
     const Color.fromARGB(255, 255, 186, 10),
     const Color.fromARGB(255, 148, 220, 57),
-    const Color.fromARGB(255, 13, 211, 92),
+    kGreen,
   ];
 }
 
