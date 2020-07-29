@@ -75,7 +75,7 @@ class RateSliceComponent extends StatelessWidget {
                   yearRateAccessor: _yearRateAccessor,
                 );
               case _Tab.historyTable:
-                return _Chart(
+                return _HistoryTable(
                   data: _ratesData.historicalData,
                   yearRateAccessor: _yearRateAccessor,
                 );
@@ -315,3 +315,180 @@ class _LongLegend extends StatelessWidget {
     return result;
   }
 }
+
+const Color _kBorderColor = AppColors.kGeyser;
+const double _kBorderWidth = 1.0;
+const double _kCellWidth = 64;
+const double _kCellHeight = 40;
+
+class _HistoryTable extends StatelessWidget {
+  final List<YearByClassLevelRateData> _data;
+  final YearRateAccessor _yearRateAccessor;
+
+  const _HistoryTable({
+    Key key,
+    @required List<YearByClassLevelRateData> data,
+    @required YearRateAccessor yearRateAccessor,
+  })  : assert(data != null),
+        assert(yearRateAccessor != null),
+        _data = data,
+        _yearRateAccessor = yearRateAccessor,
+        super(key: key);
+
+  List<int> _generateDomainYears() {
+    final Set<int> years = {};
+    _data.forEach((dataByClassLevel) {
+      years.addAll(dataByClassLevel.data.map((it) => it.year));
+    });
+    return years.toList().chainSort((lv, rv) => lv.compareTo(rv));
+  }
+
+  List<String> get _classLevels {
+    return _data.map((it) => it.classLevel).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final years = _generateDomainYears();
+    return Container(
+      foregroundDecoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        border: Border.all(
+          width: _kBorderWidth,
+          color: _kBorderColor,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _Cell(
+                value: AppLocalizations
+                    .individualSchoolFlowHistoryTableDomainTitle,
+                cellType: _CellType.header,
+              ),
+              Container(
+                width: _kCellWidth,
+                height: _kBorderWidth,
+                color: _kBorderColor,
+              ),
+              for (var classLevel in _classLevels)
+                _Cell(
+                  value: classLevel,
+                  cellType: _CellType.domain,
+                ),
+            ],
+          ),
+          Container(
+            height: _kCellHeight * (_classLevels.length + 1),
+            width: _kBorderWidth,
+            color: _kBorderColor,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: years
+                        .map((year) => _Cell(
+                              value: '$year',
+                              cellType: _CellType.header,
+                            ))
+                        .toList(),
+                  ),
+                  Container(
+                    width: _kCellWidth * years.length,
+                    height: _kBorderWidth,
+                    color: _kBorderColor,
+                  ),
+                  for (var measure in _data)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: years.map(
+                        (year) {
+                          final dataOnYear = measure.data.firstWhere(
+                            (it) => it.year == year,
+                            orElse: () => null,
+                          );
+                          String value = '-';
+                          if (dataOnYear != null) {
+                            value = _yearRateAccessor
+                                    .call(dataOnYear)
+                                    ?.toStringAsFixed(2) ??
+                                '-';
+                          }
+                          return _Cell(
+                            value: value,
+                            cellType: _CellType.measure,
+                          );
+                        },
+                      ).toList(),
+                    ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _Cell extends StatelessWidget {
+  final String _value;
+  final _CellType _cellType;
+
+  const _Cell({
+    Key key,
+    @required String value,
+    @required _CellType cellType,
+  })  : _value = value,
+        _cellType = cellType,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: _kCellWidth,
+      height: _kCellHeight,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: Text(
+            _value,
+            maxLines: 1,
+            style: _getTextStyle(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  TextStyle _getTextStyle(BuildContext context) {
+    switch (_cellType) {
+      case _CellType.header:
+        return Theme.of(context)
+            .textTheme
+            .subtitle2
+            .copyWith(color: AppColors.kTextMinor);
+      case _CellType.domain:
+        return Theme.of(context).textTheme.overline;
+      case _CellType.measure:
+        return Theme.of(context)
+            .textTheme
+            .overline
+            .copyWith(fontWeight: FontWeight.w600);
+    }
+    throw FallThroughError();
+  }
+}
+
+enum _CellType { header, domain, measure }

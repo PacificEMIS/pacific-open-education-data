@@ -336,6 +336,10 @@ class AppLocalizations {
   static String get individualSchoolFlowHistoryTable =>
       Intl.message('History (table)',
           name: 'individualSchoolFlowHistoryTable');
+
+  static String get individualSchoolFlowHistoryTableDomainTitle =>
+      Intl.message('GR',
+          name: 'individualSchoolFlowHistoryTableDomainTitle');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
