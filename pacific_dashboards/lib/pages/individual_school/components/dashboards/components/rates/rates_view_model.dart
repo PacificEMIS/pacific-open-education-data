@@ -49,43 +49,29 @@ class RatesViewModel extends BaseViewModel {
   }
 
   void _onFlowLoaded(List<SchoolFlow> flows) {
-    print('data loaded ${flows.length}');
     _data = flows;
     _parseData();
   }
 
   void _parseData() {
-    print('_parseData');
     if (_data == null) return;
     launchHandled(() async {
-      print('_parseData launchHandled');
       final lookups = await _repository.lookups.first;
-      print('lookups loaded');
       final flowsLookuped = _FlowsLookuped(_data, lookups);
       final dataOnLastYear = await compute(
         _generateLastYearData,
         flowsLookuped,
       );
-      print('dataOnLastYear loaded');
       final historicalData = await compute(
         _generateHistoricalData,
         flowsLookuped,
       );
-      print('historicalData loaded');
       final data = RatesData(
         lastYearRatesData: dataOnLastYear,
         historicalData: historicalData,
       );
-      print('data loaded');
       _dataSubject.add(data);
-      print('_dataSubject added');
     }, notifyProgress: true);
-  }
-
-  @override
-  void handleThrows(Object thrownObject) {
-    // TODO: implement handleThrows
-    super.handleThrows(thrownObject);
   }
 }
 
@@ -154,7 +140,7 @@ List<YearByClassLevelRateData> _generateHistoricalData(
           repeatRate: it.repeatRate,
           survivalRate: it.survivalRate,
         );
-      }).toList(),
+      }).toList().chainSort((lv, rv) => lv.year.compareTo(rv.year)),
     ));
   }
 
