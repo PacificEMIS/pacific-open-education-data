@@ -1,20 +1,29 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EnrollViewModel extends BaseViewModel {
-  final SchoolEnrollChunk _chunk;
+  final Repository _repository;
+  final ShortSchool _school;
   final Subject<EnrollData> _dataSubject = BehaviorSubject();
+  SchoolEnrollChunk _chunk;
 
-  EnrollViewModel(BuildContext ctx, SchoolEnrollChunk enrollChunk)
-      : assert(enrollChunk != null),
-        _chunk = enrollChunk,
+  EnrollViewModel(
+    BuildContext ctx, {
+    @required ShortSchool school,
+    @required Repository repository,
+  })  : assert(repository != null),
+        assert(school != null),
+        _school = school,
+        _repository = repository,
         super(ctx);
 
   Stream<EnrollData> get dataStream => _dataSubject.stream;
@@ -23,10 +32,32 @@ class EnrollViewModel extends BaseViewModel {
   void onInit() {
     super.onInit();
     _dataSubject.disposeWith(disposeBag);
+    _loadEnrollData();
+  }
+
+  void _loadEnrollData() {
+    handleRepositoryFetch(
+      fetch: () => _repository.fetchIndividualSchoolEnroll(
+        _school.id,
+        _school.districtCode,
+      ),
+    )
+        .doOnListen(() => notifyHaveProgress(true))
+        .listen(
+          _onEnrollLoaded,
+          onError: (t) => handleThrows,
+          cancelOnError: false,
+        )
+        .disposeWith(disposeBag);
+  }
+
+  void _onEnrollLoaded(SchoolEnrollChunk chunk) {
+    _chunk = chunk;
     _parseData();
   }
 
   void _parseData() {
+    if (_chunk == null) return;
     launchHandled(() async {
       final gradeHistory = await compute(
         _generateGradeDataHistory,

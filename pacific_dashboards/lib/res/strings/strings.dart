@@ -308,6 +308,34 @@ class AppLocalizations {
   static String get individualSchoolEnrollFemalePartHistory =>
       Intl.message('Full History',
           name: 'individualSchoolEnrollFemalePartHistory');
+
+  static String get individualSchoolFlowDropout =>
+      Intl.message('Dropout Rate',
+          name: 'individualSchoolFlowDropout');
+
+  static String get individualSchoolFlowPromote =>
+      Intl.message('Promote Rate',
+          name: 'individualSchoolFlowPromote');
+
+  static String get individualSchoolFlowRepeat =>
+      Intl.message('Repeat Rate',
+          name: 'individualSchoolFlowRepeat');
+
+  static String get individualSchoolFlowSurvival =>
+      Intl.message('Survival Rate',
+          name: 'individualSchoolFlowSurvival');
+
+  static String get individualSchoolFlowDetailed =>
+      Intl.message(' in details',
+          name: 'individualSchoolFlowDetailed');
+
+  static String get individualSchoolFlowHistoryChart =>
+      Intl.message('History (chart)',
+          name: 'individualSchoolFlowHistoryChart');
+
+  static String get individualSchoolFlowHistoryTable =>
+      Intl.message('History (table)',
+          name: 'individualSchoolFlowHistoryTable');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,6 +1,5 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/female_part_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/gender_history_component.dart';
@@ -9,19 +8,22 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
+import 'package:pacific_dashboards/view_model_factory.dart';
 
 class EnrollComponent extends MvvmStatefulWidget {
   final ShortSchool school;
 
   EnrollComponent({
     Key key,
-    @required SchoolEnrollChunk chunk,
     @required this.school,
-  })  : assert(chunk != null),
-        assert(school != null),
+  })  : assert(school != null),
         super(
           key: key,
-          viewModelBuilder: (ctx) => EnrollViewModel(ctx, chunk),
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createEnrollViewModel(
+            ctx,
+            school,
+          ),
         );
 
   @override
@@ -58,7 +60,8 @@ class _EnrollComponentState
                     LevelAndGenderHistoryComponent(
                       data: snapshot.data.gradeDataHistory,
                     ),
-                    GenderHistoryComponent(data: snapshot.data.genderDataHistory),
+                    GenderHistoryComponent(
+                        data: snapshot.data.genderDataHistory),
                     FemalePartComponent(
                       data: snapshot.data,
                       schoolId: widget.school.id,

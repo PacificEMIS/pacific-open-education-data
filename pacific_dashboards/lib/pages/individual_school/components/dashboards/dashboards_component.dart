@@ -1,9 +1,8 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
-import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_component.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
@@ -19,7 +18,7 @@ class DashboardComponent extends MvvmStatefulWidget {
   }) : super(
           key: key,
           viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.createDashboardsViewModel(ctx, school),
+              ViewModelFactory.instance.createDashboardsViewModel(ctx),
         );
 
   @override
@@ -40,52 +39,37 @@ class _DashboardComponentState
           );
         } else {
           return SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    AppLocalizations.individualSchoolEnrollTitle,
-                    style: Theme.of(context).textTheme.headline4,
+            child: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      AppLocalizations.individualSchoolEnrollTitle,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
                   ),
-                ),
-                StreamBuilder<SchoolEnrollChunk>(
-                  stream: viewModel.enrollStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return EnrollComponent(
-                        chunk: snapshot.data,
-                        school: widget.school,
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-                Container(
-                  height: 8,
-                  color: AppColors.kSpace,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    AppLocalizations.individualSchoolFlowTitle,
-                    style: Theme.of(context).textTheme.headline4,
+                  EnrollComponent(
+                    school: widget.school,
                   ),
-                ),
-                StreamBuilder<List<SchoolFlow>>(
-                  stream: viewModel.flowStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Container();
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ],
+                  Container(
+                    height: 8,
+                    color: AppColors.kSpace,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      AppLocalizations.individualSchoolFlowTitle,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ),
+                  RatesComponent(
+                    school: widget.school,
+                  ),
+                ],
+              ),
             ),
           );
         }

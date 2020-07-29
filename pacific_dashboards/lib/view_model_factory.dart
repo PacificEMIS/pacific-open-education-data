@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_view_model.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
@@ -83,9 +85,26 @@ class ViewModelFactory {
 
   DashboardsViewModel createDashboardsViewModel(
     BuildContext ctx,
+  ) {
+    return DashboardsViewModel(ctx);
+  }
+
+  EnrollViewModel createEnrollViewModel(
+    BuildContext ctx,
     ShortSchool school,
   ) {
-    return DashboardsViewModel(
+    return EnrollViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      school: school,
+    );
+  }
+
+  RatesViewModel createRatesViewModel(
+    BuildContext ctx,
+    ShortSchool school,
+  ) {
+    return RatesViewModel(
       ctx,
       repository: serviceLocator.repository,
       school: school,

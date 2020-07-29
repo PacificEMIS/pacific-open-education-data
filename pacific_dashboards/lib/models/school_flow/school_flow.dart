@@ -11,16 +11,16 @@ class SchoolFlow {
   @JsonKey(name: 'YearOfEd')
   int yearOfEducation;
 
-  @JsonKey(name: 'RepeatRate')
+  @JsonKey(name: 'RepeatRate', defaultValue: 0.0)
   double repeatRate;
 
-  @JsonKey(name: 'PromoteRate')
+  @JsonKey(name: 'PromoteRate', defaultValue: 0.0)
   double promoteRate;
 
-  @JsonKey(name: 'DropoutRate')
+  @JsonKey(name: 'DropoutRate', defaultValue: 0.0)
   double dropoutRate;
 
-  @JsonKey(name: 'SurvivalRate')
+  @JsonKey(name: 'SurvivalRate', defaultValue: 0.0)
   double survivalRate;
 
   SchoolFlow();

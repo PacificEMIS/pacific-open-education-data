@@ -11,13 +11,9 @@ class Lookup {
   @JsonKey(name: 'N')
   final String name;
 
-  @JsonKey(name: 'L')
-  final String l;
-
   const Lookup({
     @required this.code,
     @required this.name,
-    @required this.l,
   });
 
   factory Lookup.fromJson(Map<String, dynamic> json) => _$LookupFromJson(json);

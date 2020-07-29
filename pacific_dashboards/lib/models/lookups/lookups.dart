@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pacific_dashboards/models/lookups/class_level_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
 
 part 'lookups.g.dart';
@@ -18,7 +19,7 @@ class Lookups {
   final List<Lookup> authorities;
 
   @JsonKey(name: 'levels')
-  final List<Lookup> levels;
+  final List<ClassLevelLookup> levels;
 
   @JsonKey(name: 'accreditationTerms')
   final List<Lookup> accreditationTerms;
@@ -53,7 +54,7 @@ class Lookups {
       accreditationTerms.isEmpty;
 }
 
-extension Lookuped on String {
+extension LookupedString on String {
   String from(Iterable<Lookup> lookup) {
     return lookup
             .firstWhere((it) => it.code == this, orElse: () => null)
@@ -72,4 +73,16 @@ extension Lookuped on String {
 
     return educationLevelCode.from(lookups.educationLevels);
   }
+}
+
+extension LookupedInt on int {
+
+  String educationLevelCodeFrom(Lookups lookups) {
+    final educationLevelCode = lookups.levels
+        .firstWhere((it) => it.yearOfEducation == this, orElse: () => null)
+        ?.code;
+
+    return educationLevelCode ?? 'Class $this';
+  }
+
 }

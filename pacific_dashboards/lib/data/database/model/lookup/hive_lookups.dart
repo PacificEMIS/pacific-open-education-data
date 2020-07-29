@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
+import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
@@ -20,7 +21,7 @@ class HiveLookups extends HiveObject with Expirable {
   List<HiveLookup> authorities;
 
   @HiveField(4)
-  List<HiveLookup> levels;
+  List<HiveClassLevelLookup> levels;
 
   @HiveField(5)
   List<HiveLookup> accreditationTerms;
@@ -55,7 +56,8 @@ class HiveLookups extends HiveObject with Expirable {
     ..districts = lookups.districts.map((it) => HiveLookup.from(it)).toList()
     ..authorities =
         lookups.authorities.map((it) => HiveLookup.from(it)).toList()
-    ..levels = lookups.levels.map((it) => HiveLookup.from(it)).toList()
+    ..levels =
+        lookups.levels.map((it) => HiveClassLevelLookup.from(it)).toList()
     ..accreditationTerms =
         lookups.accreditationTerms.map((it) => HiveLookup.from(it)).toList()
     ..educationLevels =

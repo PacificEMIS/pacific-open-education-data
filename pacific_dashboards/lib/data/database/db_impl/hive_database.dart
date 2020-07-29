@@ -16,6 +16,7 @@ import 'package:pacific_dashboards/data/database/model/accreditation/hive_distri
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_standard_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_accreditation_chunk.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
+import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';
 import 'package:pacific_dashboards/data/database/model/school/hive_school.dart';
@@ -24,7 +25,7 @@ import 'package:pacific_dashboards/data/database/model/school_flow/hive_school_f
 import 'package:pacific_dashboards/data/database/model/short_school/hive_short_school.dart';
 import 'package:pacific_dashboards/data/database/model/teacher/hive_teacher.dart';
 
-// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10}
+// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11}
 class HiveDatabase extends Database {
   LookupsDao _lookupsDao;
   StringsDao _stringsDao;
@@ -51,7 +52,8 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveAccreditationChunkAdapter())
       ..registerAdapter(HiveSchoolEnrollAdapter())
       ..registerAdapter(HiveShortSchoolAdapter())
-      ..registerAdapter(HiveSchoolFlowAdapter());
+      ..registerAdapter(HiveSchoolFlowAdapter())
+      ..registerAdapter(HiveClassLevelLookupAdapter());
 
     _lookupsDao = HiveLookupsDao();
 
