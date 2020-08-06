@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/components/enroll_data_by_grade_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
@@ -31,7 +31,8 @@ class _LevelAndGenderHistoryComponentState
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            AppLocalizations.individualSchoolEnrollByLevelAndGenderHistory,
+            'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle'
+                .localized(context),
             style: textTheme.individualDashboardsSubtitle,
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 class CurrentEmisWidget extends StatelessWidget {
   final HomeViewModel _viewModel;
@@ -33,8 +33,8 @@ class CurrentEmisWidget extends StatelessWidget {
               child: Center(
                 child: snapshot.hasData ? Text(
                   snapshot.data == Emis.fedemis
-                      ? AppLocalizations.federatedStateOfMicronesiaSplitted
-                      : snapshot.data.name,
+                      ? 'fedemisTitleMultiline'.localized(context)
+                      : snapshot.data.getName(context),
                   textAlign: TextAlign.center,
                   style: Theme
                       .of(context)

@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/pages/exams/components/exams_filters.dart';
 import 'package:pacific_dashboards/pages/exams/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/components/exams_stacked_horizontal_bar_chart.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
@@ -35,7 +36,7 @@ class ExamsPageState extends MvvmState<ExamsViewModel, ExamsPage> {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: PlatformAppBar(
-        title: Text(AppLocalizations.exams),
+        title: Text('examsDashboardsTitle'.localized(context)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 260),

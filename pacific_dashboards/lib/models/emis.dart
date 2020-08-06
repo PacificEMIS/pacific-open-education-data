@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 
 enum Emis { miemis, fedemis, kemis }
@@ -7,14 +9,14 @@ Emis emisFromString(String string) =>
 
 extension UI on Emis {
 
-  String get name {
+  String getName(BuildContext context) {
     switch (this) {
       case Emis.miemis:
-        return AppLocalizations.marshallIslands;
+        return 'emisTitle'.localized(context);
       case Emis.fedemis:
-        return AppLocalizations.federatedStateOfMicronesia;
+        return 'fedemisTitle'.localized(context);
       case Emis.kemis:
-        return AppLocalizations.kiribati;
+        return 'kiemisTitle'.localized(context);
     }
     throw FallThroughError();
   }

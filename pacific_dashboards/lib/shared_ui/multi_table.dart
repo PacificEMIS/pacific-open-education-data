@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 class MultiTable extends StatelessWidget {
   const MultiTable({
@@ -27,22 +28,23 @@ class MultiTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TileWidget(
-        title: Text(
-          _title,
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        body: Column(
-          children: _data.keys.map((key) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: GenderTableWidget(
-                data: _data[key],
-                title: key,
-                firstColumnName: _firstColumnName,
-                keySortFunc: _keySortFunc,
-              ),
-            );
-          }).toList(),
-        ));
+      title: Text(
+        _title,
+        style: Theme.of(context).textTheme.headline4,
+      ),
+      body: Column(
+        children: _data.keys.map((key) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: GenderTableWidget(
+              data: _data[key],
+              title: key,
+              firstColumnName: _firstColumnName,
+              keySortFunc: _keySortFunc,
+            ),
+          );
+        }).toList(),
+      ),
+    );
   }
 }

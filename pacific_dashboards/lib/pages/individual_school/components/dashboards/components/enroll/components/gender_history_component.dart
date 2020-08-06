@@ -6,6 +6,7 @@ import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/res/themes.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class GenderHistoryComponent extends StatefulWidget {
@@ -32,7 +33,8 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            AppLocalizations.individualSchoolEnrollByGenderHistory,
+            'individualSchoolDashboardEnrollByGenderHistoryTitle'
+                .localized(context),
             style: textTheme.individualDashboardsSubtitle,
           ),
         ),
@@ -41,11 +43,11 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
           tabNameBuilder: (tab) {
             switch (tab) {
               case _Tab.stacked:
-                return AppLocalizations
-                    .individualSchoolEnrollByGenderHistoryStacked;
+                return 'individualSchoolDashboardEnrollByGradeLevelGenderHistoryStacked'
+                    .localized(context);
               case _Tab.unstacked:
-                return AppLocalizations
-                    .individualSchoolEnrollByGenderHistoryUnstacked;
+                return 'individualSchoolDashboardEnrollByGradeLevelGenderHistoryUnstacked'
+                    .localized(context);
             }
             throw FallThroughError();
           },
@@ -125,14 +127,14 @@ class _StackedChart extends StatelessWidget {
           children: <Widget>[
             ChartLegendItem(
               color: AppColors.kBlue,
-              value: AppLocalizations.male,
+              value: 'labelMale'.localized(context),
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kRed,
-              value: AppLocalizations.female,
+              value: 'labelFemale'.localized(context),
             ),
           ],
         )
@@ -164,7 +166,7 @@ class _StackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.female,
+          id: 'femaledata',
           data: femaleData,
         ),
         charts.Series(
@@ -173,7 +175,7 @@ class _StackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.male,
+          id: 'maledata',
           data: maleData,
         ),
       ];
@@ -237,21 +239,21 @@ class _UnstackedChart extends StatelessWidget {
           children: <Widget>[
             ChartLegendItem(
               color: AppColors.kBlue,
-              value: AppLocalizations.male,
+              value: 'labelMale'.localized(context),
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kRed,
-              value: AppLocalizations.female,
+              value: 'labelFemale'.localized(context),
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kGreen,
-              value: AppLocalizations.total,
+              value: 'labelTotal'.localized(context),
             ),
           ],
         )
@@ -291,7 +293,7 @@ class _UnstackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.male,
+          id: 'maledata',
           data: maleData,
         ),
         charts.Series(
@@ -300,7 +302,7 @@ class _UnstackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.female,
+          id: 'femaledata',
           data: femaleData,
         ),
         charts.Series(
@@ -309,7 +311,7 @@ class _UnstackedChart extends StatelessWidget {
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
           areaColorFn: (BarChartData chartData, _) =>
               chartData.color.chartsColor,
-          id: AppLocalizations.total,
+          id: 'totaldata',
           data: totalData,
         ),
       ];

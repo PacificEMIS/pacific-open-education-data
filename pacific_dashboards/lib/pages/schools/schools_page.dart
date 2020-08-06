@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
 import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
@@ -33,7 +34,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: PlatformAppBar(
-        title: Text(AppLocalizations.schools),
+        title: Text('schoolsDashboardsTitle'.localized(context)),
         actions: <Widget>[
           StreamBuilder<List<Filter>>(
             stream: viewModel.filtersStream,
@@ -70,42 +71,53 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                     children: <Widget>[
                       ChartWithTable(
                         key: ValueKey(snapshot.data.enrolByDistrict),
-                        title: AppLocalizations.schoolsEnrollmentByState,
+                        title: 'schoolsDashboardsEnrollByStateTitle'
+                            .localized(context),
                         data: snapshot.data.enrolByDistrict,
                         chartType: ChartType.bar,
-                        tableKeyName: AppLocalizations.state,
-                        tableValueName: AppLocalizations.schoolsEnrollment,
+                        tableKeyName:
+                            'schoolsDashboardsStateDomain'.localized(context),
+                        tableValueName:
+                            'schoolsDashboardsMeasureEnroll'.localized(context),
                       ),
                       ChartWithTable(
                         key: ValueKey(snapshot.data.enrolByAuthority),
-                        title: AppLocalizations.schoolsEnrollmentByAuthority,
+                        title: 'schoolsDashboardsEnrollByAuthorityTitle'
+                            .localized(context),
                         data: snapshot.data.enrolByAuthority,
                         chartType: ChartType.pie,
-                        tableKeyName: AppLocalizations.authority,
-                        tableValueName: AppLocalizations.schoolsEnrollment,
+                        tableKeyName: 'schoolsDashboardsAuthorityDomain'
+                            .localized(context),
+                        tableValueName:
+                            'schoolsDashboardsMeasureEnroll'.localized(context),
                       ),
                       ChartWithTable(
                         key: ValueKey(snapshot.data.enrolByPrivacy),
-                        title: AppLocalizations.schoolsEnrollmentGovtNonGovt,
+                        title: 'schoolsDashboardsEnrollByGovernmentTitle'
+                            .localized(context),
                         data: snapshot.data.enrolByPrivacy,
                         chartType: ChartType.pie,
-                        tableKeyName: AppLocalizations.publicPrivate,
-                        tableValueName: AppLocalizations.schoolsEnrollment,
+                        tableKeyName:
+                            'schoolsDashboardsPrivacyDomain'.localized(context),
+                        tableValueName:
+                            'schoolsDashboardsMeasureEnroll'.localized(context),
                       ),
                       MultiTable(
                         key: ValueKey(snapshot.data.enrolByAgeAndEducation),
-                        title: AppLocalizations
-                            .schoolsEnrollmentByAgeEducationLevel,
-                        firstColumnName: AppLocalizations.age,
+                        title: 'schoolsDashboardsEnrollByAgeLevelGenderTitle'
+                            .localized(context),
+                        firstColumnName:
+                            'schoolsDashboardsAgeDomain'.localized(context),
                         data: snapshot.data.enrolByAgeAndEducation,
                         keySortFunc: _compareEnrollmentByAgeAndEducation,
                       ),
                       MultiTable(
                         key: ValueKey(
                             snapshot.data.enrolBySchoolLevelAndDistrict),
-                        title: AppLocalizations
-                            .schoolsEnrollmentBySchoolTypeStateAndGender,
-                        firstColumnName: AppLocalizations.schoolType,
+                        title: 'schoolsDashboardsEnrollByLevelStateGenderTitle'
+                            .localized(context),
+                        firstColumnName:
+                            'schoolsDashboardsSchoolLevelDomain'.localized(context),
                         data: snapshot.data.enrolBySchoolLevelAndDistrict,
                         keySortFunc: _compareEnrollmentBySchoolLevelAndState,
                       ),

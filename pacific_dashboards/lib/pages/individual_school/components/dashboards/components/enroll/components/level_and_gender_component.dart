@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
@@ -34,7 +35,7 @@ class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${AppLocalizations.individualSchoolEnrollByLevelAndGender} (${widget.data.year})',
+            '${'individualSchoolDashboardEnrollByGradeLevelGenderTitle'.localized(context)} (${widget.data.year})',
             style: textTheme.individualDashboardsSubtitle,
           ),
         ),
@@ -43,11 +44,11 @@ class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
           tabNameBuilder: (tab) {
             switch (tab) {
               case _View.chart:
-                return AppLocalizations
-                    .individualSchoolEnrollByLevelAndGenderChart;
+                return 'individualSchoolDashboardEnrollByGradeLevelGenderChart'
+                    .localized(context);
               case _View.table:
-                return AppLocalizations
-                    .individualSchoolEnrollByLevelAndGenderTable;
+                return 'individualSchoolDashboardEnrollByGradeLevelGenderTable'
+                    .localized(context);
             }
             throw FallThroughError();
           },
@@ -124,14 +125,14 @@ class _Chart extends StatelessWidget {
           children: <Widget>[
             ChartLegendItem(
               color: AppColors.kBlue,
-              value: AppLocalizations.male,
+              value: 'labelMale'.localized(context),
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kRed,
-              value: AppLocalizations.female,
+              value: 'labelFemale'.localized(context),
             ),
           ],
         ),
@@ -161,14 +162,14 @@ class _Chart extends StatelessWidget {
           domainFn: (BarChartData chartData, _) => chartData.domain,
           measureFn: (BarChartData chartData, _) => chartData.measure,
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          id: AppLocalizations.male,
+          id: 'maledata',
           data: maleData,
         ),
         charts.Series(
           domainFn: (BarChartData chartData, _) => chartData.domain,
           measureFn: (BarChartData chartData, _) => chartData.measure,
           colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          id: AppLocalizations.female,
+          id: 'femaledata',
           data: femaleData,
         ),
       ];

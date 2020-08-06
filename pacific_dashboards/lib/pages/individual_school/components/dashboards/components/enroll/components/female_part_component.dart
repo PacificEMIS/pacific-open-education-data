@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
@@ -38,7 +39,7 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            AppLocalizations.individualSchoolEnrollFemalePart,
+            'individualSchoolDashboardEnrollFemalePartTitle'.localized(context),
             style: textTheme.individualDashboardsSubtitle,
           ),
         ),
@@ -47,9 +48,11 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
           tabNameBuilder: (tab) {
             switch (tab) {
               case _Tab.detailed:
-                return '${widget.data.femalePartOnLastYear.year}${AppLocalizations.individualSchoolEnrollFemalePartDetailed}';
+                return '${widget.data.femalePartOnLastYear.year}'
+                    '${'individualSchoolDashboardEnrollFemalePartDetailed'.localized(context)}';
               case _Tab.history:
-                return AppLocalizations.individualSchoolEnrollFemalePartHistory;
+                return 'individualSchoolDashboardEnrollFemalePartHistory'
+                    .localized(context);
             }
             throw FallThroughError();
           },
@@ -154,7 +157,7 @@ class _DetailedChart extends StatelessWidget {
             ),
             ChartLegendItem(
               color: AppColors.kOrange,
-              value: AppLocalizations.national,
+              value: 'labelNational'.localized(context),
             ),
           ],
         ),
@@ -291,7 +294,7 @@ class _HistoryChart extends StatelessWidget {
             ),
             ChartLegendItem(
               color: AppColors.kOrange,
-              value: AppLocalizations.national,
+              value: 'labelNational'.localized(context),
             ),
           ],
         ),

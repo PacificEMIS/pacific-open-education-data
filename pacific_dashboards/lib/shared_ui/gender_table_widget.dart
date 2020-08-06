@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 
 typedef int KeySortFunc(String lv, String rv);
@@ -52,7 +52,7 @@ class GenderTableWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 13.0),
                   child: Text(
-                    _title ?? 'null',
+                    _title?.localized(context) ?? 'null',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -67,10 +67,10 @@ class GenderTableWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _SubTitleCell(name: _firstColumnName),
-              _SubTitleCell(name: AppLocalizations.male),
-              _SubTitleCell(name: AppLocalizations.female),
-              _SubTitleCell(name: AppLocalizations.total),
+              _SubTitleCell(name: _firstColumnName.localized(context)),
+              _SubTitleCell(name: 'labelMale'.localized(context)),
+              _SubTitleCell(name: 'labelFemale'.localized(context)),
+              _SubTitleCell(name: 'labelTotal'.localized(context)),
             ],
           ),
           FutureBuilder(
@@ -148,7 +148,7 @@ class _Cell extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text(
-              _value,
+              _value.localized(context),
               style: Theme.of(context).textTheme.subtitle2,
             ),
           ],

@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
@@ -36,7 +37,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: PlatformAppBar(
-        title: Text(AppLocalizations.schools),
+        title: Text('teachersDashboardsTitle'.localized(context)),
         actions: <Widget>[
           StreamBuilder<List<Filter>>(
             stream: viewModel.filtersStream,
@@ -73,34 +74,44 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                     children: <Widget>[
                       ChartWithTable(
                         key: ObjectKey(snapshot.data.teachersByAuthority),
-                        title: AppLocalizations.teachersByAuthority,
+                        title: 'teachersDashboardsEnrollByAuthorityTitle'
+                            .localized(context),
                         data: snapshot.data.teachersByAuthority,
                         chartType: ChartType.pie,
-                        tableKeyName: AppLocalizations.authority,
-                        tableValueName: AppLocalizations.teachers,
+                        tableKeyName: 'teachersDashboardsAuthorityDomain'
+                            .localized(context),
+                        tableValueName:
+                            'teachersDashboardsEnrollDomain'.localized(context),
                       ),
                       ChartWithTable(
                         key: ObjectKey(snapshot.data.teachersByPrivacy),
-                        title: AppLocalizations.teachersEnrollmentGovtNonGovt,
+                        title: 'teachersDashboardsEnrollByGovernmentTitle'
+                            .localized(context),
                         data: snapshot.data.teachersByPrivacy,
                         chartType: ChartType.pie,
-                        tableKeyName: AppLocalizations.publicPrivate,
-                        tableValueName: AppLocalizations.teachers,
+                        tableKeyName: 'teachersDashboardsPrivacyDomain'
+                            .localized(context),
+                        tableValueName:
+                            'teachersDashboardsEnrollDomain'.localized(context),
                       ),
                       ChartWithTable(
                         key: ObjectKey(snapshot.data.teachersByDistrict),
-                        title: AppLocalizations.teachersByState,
+                        title: 'teachersDashboardsEnrollByStateTitle'
+                            .localized(context),
                         data: snapshot.data.teachersByDistrict,
                         chartType: ChartType.bar,
-                        tableKeyName: AppLocalizations.state,
-                        tableValueName: AppLocalizations.teachers,
+                        tableKeyName:
+                            'teachersDashboardsStateDomain'.localized(context),
+                        tableValueName:
+                            'teachersDashboardsEnrollDomain'.localized(context),
                       ),
                       MultiTable(
                         key: ObjectKey(
                             snapshot.data.teachersBySchoolLevelStateAndGender),
-                        title:
-                            AppLocalizations.teacherBySchoolTypeStateAndGender,
-                        firstColumnName: AppLocalizations.schoolLevels,
+                        title: 'teachersDashboardsEnrollByLevelStateGenderTitle'
+                            .localized(context),
+                        firstColumnName: 'teachersDashboardsSchoolLevelDomain'
+                            .localized(context),
                         data: snapshot.data.teachersBySchoolLevelStateAndGender,
                         keySortFunc: (lv, rv) => lv.compareTo(rv),
                       ),

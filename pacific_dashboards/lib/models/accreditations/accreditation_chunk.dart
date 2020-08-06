@@ -60,7 +60,7 @@ extension Filters on AccreditationChunk {
     return List.of([
       Filter(
         id: _kYearFilterId,
-        title: AppLocalizations.filterByYear,
+        title: 'filtersByYear',
         items: allItems
             .uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
@@ -70,9 +70,9 @@ extension Filters on AccreditationChunk {
       ),
       Filter(
         id: _kDistrictFilterId,
-        title: AppLocalizations.filterByState,
+        title: 'filtersByState',
         items: [
-          FilterItem(null, AppLocalizations.displayAllStates),
+          FilterItem(null, 'filtersDisplayAllStates'),
           ...allItems
               .uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
@@ -81,9 +81,9 @@ extension Filters on AccreditationChunk {
       ),
       Filter(
         id: _kAuthorityFilterId,
-        title: AppLocalizations.filterByAuthority,
+        title: 'filtersByAuthority',
         items: [
-          FilterItem(null, AppLocalizations.displayAllAuthority),
+          FilterItem(null, 'filtersDisplayAllAuthority'),
           ...allItems
               .uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
@@ -92,9 +92,9 @@ extension Filters on AccreditationChunk {
       ),
       Filter(
         id: _kGovtFilterId,
-        title: AppLocalizations.filterByGovernment,
+        title: 'filtersByGovernment',
         items: [
-          FilterItem(null, AppLocalizations.displayAllGovernment),
+          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
           ...allItems
               .uniques((it) => it.authorityGovtCode)
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),

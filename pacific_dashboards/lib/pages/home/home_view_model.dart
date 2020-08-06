@@ -6,6 +6,7 @@ import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -46,13 +47,7 @@ class HomeViewModel extends ViewModel {
   }
 
   void _configureLanguageChanges(Emis currentEmis) {
-    if (currentEmis == Emis.kemis) {
-      AppLocalizations.load(Locale('zh'));
-    } else if (currentEmis == Emis.miemis) {
-      AppLocalizations.load(Locale('he'));
-    } else {
-      AppLocalizations.load(Locale('en'));
-    }
+    Strings.emis = currentEmis;
   }
 
   void onEmisChanged(Emis emis) {

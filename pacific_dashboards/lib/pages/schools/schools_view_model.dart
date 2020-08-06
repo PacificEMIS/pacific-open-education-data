@@ -166,11 +166,14 @@ Map<String, int> _calculatePeopleCount(
       ),
     );
 
-Map<String, Map<String, GenderTableData>> _calculateEnrollmentByAgeAndEducation({
+Map<String, Map<String, GenderTableData>>
+    _calculateEnrollmentByAgeAndEducation({
   List<School> schools,
   Lookups lookups,
 }) {
-  final groupedByLevelWithTotal = {AppLocalizations.total: schools};
+  final groupedByLevelWithTotal = {
+    'labelTotal': schools,
+  };
   groupedByLevelWithTotal.addEntries(schools
       .groupBy((it) => it.classLevel.educationLevelFrom(lookups))
       .entries);
@@ -187,7 +190,9 @@ Map<String, Map<String, GenderTableData>>
   List<School> schools,
   Lookups lookups,
 }) {
-  final groupedByDistrictWithTotal = {AppLocalizations.total: schools};
+  final groupedByDistrictWithTotal = {
+    'labelTotal': schools,
+  };
   groupedByDistrictWithTotal.addEntries(
     schools.groupBy((it) => it.districtCode).entries,
   );
@@ -230,7 +235,7 @@ Map<String, GenderTableData> _generateInfoTableData(
     totalFemaleCount += femaleCount;
   });
 
-  convertedData[AppLocalizations.total] =
+  convertedData['labelTotal'] =
       GenderTableData(totalMaleCount, totalFemaleCount);
 
   return convertedData;

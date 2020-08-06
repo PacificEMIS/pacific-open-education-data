@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
@@ -33,7 +34,7 @@ class SchoolsListPageState
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: PlatformAppBar(
-        title: Text(AppLocalizations.individualSchools),
+        title: Text('schoolsListTitle'.localized(context)),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -163,7 +164,7 @@ class _SearchBarState extends State<_SearchBar> {
               cursorColor: AppColors.kTextMain,
               style: Theme.of(context).textTheme.subtitle2,
               decoration: InputDecoration(
-                hintText: AppLocalizations.searchSchoolsHint,
+                hintText: 'schoolsListSearchHint'.localized(context),
                 hintStyle: Theme.of(context).textTheme.subtitle2.copyWith(
                       color: AppColors.kCoolGray,
                       fontStyle: FontStyle.italic,

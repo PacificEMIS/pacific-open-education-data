@@ -14,9 +14,9 @@ abstract class BaseViewModel extends ViewModel {
   @protected
   void handleAppException(AppException appException) {
     if (appException is NoInternetException) {
-      notifyErrorMessage(AppLocalizations.serverUnavailableError);
+      notifyErrorMessage('error_server_unavailable');
     } else {
-      notifyErrorMessage(AppLocalizations.unknownError);
+      notifyErrorMessage('error_unknown');
     }
   }
 

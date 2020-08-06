@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/exams/exams_filter_data.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 
 class ExamsFiltersWidget extends StatelessWidget {
@@ -34,19 +35,19 @@ class ExamsFiltersWidget extends StatelessWidget {
             bottomInset: _bottomInset,
             children: <Widget>[
               _BottomMenuRow(
-                rowName: AppLocalizations.exam,
+                rowName: 'examsDashboardsFilterExam'.localized(context),
                 name: snapshot.data.examName,
                 onPrevTap: _viewModel.onPrevExamPressed,
                 onNextTap: _viewModel.onNextExamPressed,
               ),
               _BottomMenuRow(
-                rowName: AppLocalizations.view,
+                rowName: 'examsDashboardsFilterView'.localized(context),
                 name: snapshot.data.viewName,
                 onPrevTap: _viewModel.onPrevViewPressed,
                 onNextTap: _viewModel.onNextViewPressed,
               ),
               _BottomMenuRow(
-                rowName: AppLocalizations.filterByStandard,
+                rowName: 'examsDashboardsFilterStandard'.localized(context),
                 name: snapshot.data.standardName,
                 onPrevTap: _viewModel.onPrevStandardPressed,
                 onNextTap: _viewModel.onNextStandardPressed,
@@ -340,7 +341,7 @@ class _BottomMenuRow extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  _name,
+                  _name.localized(context),
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1

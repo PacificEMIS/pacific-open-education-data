@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/pages/school_accreditation/school_accreditati
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
@@ -15,17 +16,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: [
-        AppLocalizationsDelegate(),
+        StringsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale('en'),
-        const Locale('zh'),
-        const Locale('he')
       ],
-      onGenerateTitle: (BuildContext context) => AppLocalizations.appName,
+      onGenerateTitle: (BuildContext context) => 'appName'.localized(context),
       theme: appTheme,
       initialRoute: HomePage.kRoute,
       routes: {
@@ -50,8 +49,8 @@ class _NotImplementedPage extends StatelessWidget {
       appBar: AppBar(),
       body: Center(
         child: AlertDialog(
-          title: Text(AppLocalizations.construction),
-          content: Text(AppLocalizations.constructionDescription),
+          title: Text('notImplementedTitle'.localized(context)),
+          content: Text('notImplementedMessage'.localized(context)),
         ),
       ),
     );

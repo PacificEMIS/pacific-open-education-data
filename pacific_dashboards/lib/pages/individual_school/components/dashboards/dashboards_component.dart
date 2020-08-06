@@ -5,7 +5,7 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
@@ -47,7 +47,7 @@ class _DashboardComponentState
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      AppLocalizations.individualSchoolEnrollTitle,
+                      'individualSchoolDashboardEnrollTitle'.localized(context),
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
@@ -61,7 +61,7 @@ class _DashboardComponentState
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      AppLocalizations.individualSchoolFlowTitle,
+                      'individualSchoolDashboardRatesTitle'.localized(context),
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),

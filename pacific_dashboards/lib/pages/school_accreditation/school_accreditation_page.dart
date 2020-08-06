@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
@@ -38,7 +39,7 @@ class SchoolsPageState
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: PlatformAppBar(
-        title: Text(AppLocalizations.schools),
+        title: Text('schoolsAccreditationDashboardsTitle'.localized(context)),
         actions: <Widget>[
           StreamBuilder<List<Filter>>(
             stream: viewModel.filtersStream,
@@ -117,7 +118,7 @@ class _ContentBody extends StatelessWidget {
       children: [
         TileWidget(
           title: Text(
-            AppLocalizations.accreditationProgress,
+            'schoolsAccreditationDashboardsProgressTitle'.localized(context),
             style: Theme.of(context).textTheme.headline4,
           ),
           body: ChartFactory.getStackedHorizontalBarChartViewByData(
@@ -128,7 +129,7 @@ class _ContentBody extends StatelessWidget {
         const SizedBox(height: 16),
         TileWidget(
           title: Text(
-            AppLocalizations.districtStatus,
+            'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
             style: Theme.of(context).textTheme.headline4,
           ),
           body: ChartFactory.getStackedHorizontalBarChartViewByData(
@@ -138,14 +139,18 @@ class _ContentBody extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _PerformanceTable(
-          title: AppLocalizations.accreditationStatusByState,
-          firstColumnName: AppLocalizations.state,
+          title: 'schoolsAccreditationDashboardsStatusByStateTitle'
+              .localized(context),
+          firstColumnName:
+              'schoolsAccreditationDashboardsStateDomain'.localized(context),
           year: _data.year,
           data: _data.accreditationStatusByState,
         ),
         _PerformanceTable(
-          title: AppLocalizations.accreditationPerfomancebyStandard,
-          firstColumnName: AppLocalizations.standard,
+          title: 'schoolsAccreditationDashboardsPerformanceByStandardTitle'
+              .localized(context),
+          firstColumnName:
+              'schoolsAccreditationDashboardsStandardDomain'.localized(context),
           year: _data.year,
           data: _data.performanceByStandard,
         ),

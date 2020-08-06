@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -42,7 +42,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
             Center(
               child: Text(
-                AppLocalizations.splash,
+                'splash'.localized(context),
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: Theme.of(context).textTheme.headline2,

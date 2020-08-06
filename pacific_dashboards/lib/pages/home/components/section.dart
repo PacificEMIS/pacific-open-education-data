@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 enum Section {
   schools,
@@ -36,22 +37,22 @@ extension UI on Section {
     throw FallThroughError();
   }
 
-  String get name {
+  String getName(BuildContext context) {
     switch (this) {
       case Section.schools:
-        return AppLocalizations.schools;
+        return 'homeSectionSchoolsDashboards'.localized(context);
       case Section.teachers:
-        return AppLocalizations.teachers;
+        return 'homeSectionTeachersDashboards'.localized(context);
       case Section.schoolAccreditations:
-        return AppLocalizations.schoolAccreditations;
+        return 'homeSectionSchoolsAccreditationDashboards'.localized(context);
       case Section.indicators:
-        return AppLocalizations.indicators;
+        return 'homeSectionIndicators'.localized(context);
       case Section.budgets:
-        return AppLocalizations.budgets;
+        return 'homeSectionBudgets'.localized(context);
       case Section.exams:
-        return AppLocalizations.exams;
+        return 'homeSectionExamsDashboards'.localized(context);
       case Section.individualSchools:
-        return AppLocalizations.individualSchools;
+        return 'homeSectionIndividualSchools'.localized(context);
     }
 
     throw FallThroughError();

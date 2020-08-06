@@ -110,7 +110,7 @@ extension Filters on List<Teacher> {
     return [
       Filter(
         id: _kYearFilterId,
-        title: AppLocalizations.filterByYear,
+        title: 'filtersByYear',
         items: this
             .uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
@@ -120,9 +120,9 @@ extension Filters on List<Teacher> {
       ),
       Filter(
         id: _kDistrictFilterId,
-        title: AppLocalizations.filterByState,
+        title: 'filtersByState',
         items: [
-          FilterItem(null, AppLocalizations.displayAllStates),
+          FilterItem(null, 'filtersDisplayAllStates'),
           ...this
               .uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
@@ -131,9 +131,9 @@ extension Filters on List<Teacher> {
       ),
       Filter(
         id: _kAuthorityFilterId,
-        title: AppLocalizations.filterByAuthority,
+        title: 'filtersByAuthority',
         items: [
-          FilterItem(null, AppLocalizations.displayAllAuthority),
+          FilterItem(null, 'filtersDisplayAllAuthority'),
           ...this
               .uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
@@ -142,9 +142,9 @@ extension Filters on List<Teacher> {
       ),
       Filter(
         id: _kGovtFilterId,
-        title: AppLocalizations.filterByGovernment,
+        title: 'filtersByGovernment',
         items: [
-          FilterItem(null, AppLocalizations.displayAllGovernment),
+          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
           ...this
               .uniques((it) => it.authorityGovt)
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),

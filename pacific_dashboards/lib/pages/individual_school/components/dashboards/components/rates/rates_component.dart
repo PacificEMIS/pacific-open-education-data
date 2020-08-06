@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_data.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_view_model.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
@@ -45,25 +46,29 @@ class _RatesComponentState extends MvvmState<RatesViewModel, RatesComponent> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     RateSliceComponent(
-                      title: AppLocalizations.individualSchoolFlowDropout,
+                      title: 'individualSchoolDashboardRatesDropoutTitle'
+                          .localized(context),
                       ratesData: snapshot.data,
                       classLevelRateAccessor: (data) => data.dropoutRate,
                       yearRateAccessor: (data) => data.dropoutRate,
                     ),
                     RateSliceComponent(
-                      title: AppLocalizations.individualSchoolFlowPromote,
+                      title: 'individualSchoolDashboardRatesPromoteTitle'
+                          .localized(context),
                       ratesData: snapshot.data,
                       classLevelRateAccessor: (data) => data.promoteRate,
                       yearRateAccessor: (data) => data.promoteRate,
                     ),
                     RateSliceComponent(
-                      title: AppLocalizations.individualSchoolFlowRepeat,
+                      title: 'individualSchoolDashboardRatesRepeatTitle'
+                          .localized(context),
                       ratesData: snapshot.data,
                       classLevelRateAccessor: (data) => data.repeatRate,
                       yearRateAccessor: (data) => data.repeatRate,
                     ),
                     RateSliceComponent(
-                      title: AppLocalizations.individualSchoolFlowSurvival,
+                      title: 'individualSchoolDashboardRatesSurvivalTitle'
+                          .localized(context),
                       ratesData: snapshot.data,
                       classLevelRateAccessor: (data) => data.survivalRate,
                       yearRateAccessor: (data) => data.survivalRate,

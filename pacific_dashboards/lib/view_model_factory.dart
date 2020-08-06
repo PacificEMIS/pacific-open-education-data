@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/exams/individual_exams_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_view_model.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
@@ -105,6 +106,17 @@ class ViewModelFactory {
     ShortSchool school,
   ) {
     return RatesViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      school: school,
+    );
+  }
+
+  IndividualExamsViewModel createIndividualExamsViewModel(
+    BuildContext ctx,
+    ShortSchool school,
+  ) {
+    return IndividualExamsViewModel(
       ctx,
       repository: serviceLocator.repository,
       school: school,

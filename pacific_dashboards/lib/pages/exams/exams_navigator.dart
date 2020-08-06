@@ -11,9 +11,9 @@ class ExamsNavigator {
 
   final List<String> _examPageNames;
   final List<String> _examViews = [
-    AppLocalizations.examsByBenchmarkAndGender,
-    AppLocalizations.examsByStandardsAndGender,
-    AppLocalizations.examsByStandardsAndState,
+    'examsDashboardsViewByBenchmarkAndGender',
+    'examsDashboardsViewByStandardAndGender',
+    'examsDashboardsViewByStandardAndState',
   ];
   final List<Exam> _exams;
 

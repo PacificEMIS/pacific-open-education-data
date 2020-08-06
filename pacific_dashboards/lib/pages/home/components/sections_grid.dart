@@ -75,7 +75,7 @@ class _Section extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.only(left: 5.0, right: 5.0),
                     child: Text(
-                      _section.name,
+                      _section.getName(context),
                       textAlign: TextAlign.center,
                       softWrap: true,
                       style: Theme.of(context).textTheme.headline5,

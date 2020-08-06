@@ -169,7 +169,9 @@ Map<String, Map<String, GenderTableData>>
   List<Teacher> teachers,
   Lookups lookups,
 }) {
-  final groupedByDistrictWithTotal = {AppLocalizations.total: teachers};
+  final groupedByDistrictWithTotal = {
+    'labelTotal': teachers,
+  };
   groupedByDistrictWithTotal.addEntries(
     teachers.groupBy((it) => it.districtCode).entries,
   );
@@ -206,7 +208,7 @@ Map<String, GenderTableData> _generateInfoTableData(
     totalFemaleCount += femaleCount;
   });
 
-  convertedData[AppLocalizations.total] =
+  convertedData['labelTotal'] =
       GenderTableData(totalMaleCount, totalFemaleCount);
 
   return convertedData;

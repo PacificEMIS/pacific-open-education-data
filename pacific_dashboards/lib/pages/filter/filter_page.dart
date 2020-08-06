@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 class FilterPage extends StatefulWidget {
   final List<Filter> _filters;
@@ -29,11 +30,11 @@ class _FilterPageState extends State<FilterPage> {
           icon: const Icon(Icons.close),
           onPressed: () => _close(context),
         ),
-        title: Text(AppLocalizations.filtersTitle),
+        title: Text('filtersTitle'.localized(context)),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 100.0),
-        children: _createFilterSections(_filters),
+        children: _createFilterSections(context, _filters),
       ),
       floatingActionButton: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -57,11 +58,11 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 
-  List<Widget> _createFilterSections(List<Filter> filters) {
+  List<Widget> _createFilterSections(BuildContext context, List<Filter> filters) {
     final List<Widget> sections = [];
 
     filters.forEachIndexed((filterIndex, filter) {
-      final title = filter.title;
+      final title = filter.title.localized(context);
       sections.add(_Title(key: ValueKey('Title $filterIndex'), title: title));
 
       sections.addAll(filter.items.mapIndexed((itemIndex, item) {
@@ -136,7 +137,7 @@ class _Item extends StatelessWidget {
       elevation: 4,
       child: RadioListTile<int>(
         title: Text(
-          _filter.items[_index].visibleName,
+          _filter.items[_index].visibleName.localized(context),
           style: Theme.of(context).textTheme.subtitle1,
         ),
         value: _index,

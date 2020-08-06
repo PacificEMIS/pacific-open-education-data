@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
@@ -54,11 +54,14 @@ class RateSliceComponent extends StatelessWidget {
           tabNameBuilder: (tab) {
             switch (tab) {
               case _Tab.lastYearDetailed:
-                return '${_ratesData.lastYearRatesData.year}${AppLocalizations.individualSchoolFlowDetailed}';
+                return '${_ratesData.lastYearRatesData.year}'
+                    '${'individualSchoolDashboardRatesDetailed'.localized(context)}';
               case _Tab.historyChart:
-                return AppLocalizations.individualSchoolFlowHistoryChart;
+                return 'individualSchoolDashboardRatesHistoryChart'
+                    .localized(context);
               case _Tab.historyTable:
-                return AppLocalizations.individualSchoolFlowHistoryTable;
+                return 'individualSchoolDashboardRatesHistoryTable'
+                    .localized(context);
             }
             throw FallThroughError();
           },
@@ -366,8 +369,8 @@ class _HistoryTable extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               _Cell(
-                value: AppLocalizations
-                    .individualSchoolFlowHistoryTableDomainTitle,
+                value: 'individualSchoolDashboardRatesHistoryTableDomain'
+                    .localized(context),
                 cellType: _CellType.header,
               ),
               Container(

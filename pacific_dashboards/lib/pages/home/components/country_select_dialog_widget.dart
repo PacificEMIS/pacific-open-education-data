@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/strings/strings.dart';
 
 import '../home_view_model.dart';
@@ -25,7 +26,7 @@ class CountrySelectDialog extends StatelessWidget {
         ),
         contentPadding: const EdgeInsets.only(top: 10.0, right: 0),
         title: Text(
-          AppLocalizations.changeCountry,
+          'homeChangeCountryTitle'.localized(context),
           style: Theme.of(context)
               .textTheme
               .headline3
@@ -89,7 +90,7 @@ class _Country extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Text(
-                  _emis.name,
+                  _emis.getName(context),
                   style: Theme.of(context).textTheme.button,
                 ),
               ),
