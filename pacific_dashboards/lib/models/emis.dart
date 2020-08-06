@@ -12,7 +12,7 @@ extension UI on Emis {
   String getName(BuildContext context) {
     switch (this) {
       case Emis.miemis:
-        return 'emisTitle'.localized(context);
+        return 'miemisTitle'.localized(context);
       case Emis.fedemis:
         return 'fedemisTitle'.localized(context);
       case Emis.kemis:
