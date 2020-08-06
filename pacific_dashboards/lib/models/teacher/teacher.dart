@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 
 part 'teacher.g.dart';

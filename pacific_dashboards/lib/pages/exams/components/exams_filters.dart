@@ -5,7 +5,6 @@ import 'package:pacific_dashboards/pages/exams/exams_filter_data.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 
 class ExamsFiltersWidget extends StatelessWidget {
   final double _bottomInset;

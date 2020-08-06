@@ -1,6 +1,5 @@
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/utils/collections.dart';
 
 class ExamsNavigator {

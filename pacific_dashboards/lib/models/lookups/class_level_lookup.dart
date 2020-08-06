@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
-import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
 part 'class_level_lookup.g.dart';
 

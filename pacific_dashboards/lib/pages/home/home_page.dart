@@ -2,7 +2,6 @@ import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 import 'components/country_select_dialog_widget.dart';

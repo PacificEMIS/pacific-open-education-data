@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 
 import '../home_view_model.dart';
 

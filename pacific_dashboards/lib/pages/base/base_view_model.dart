@@ -2,8 +2,6 @@ import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
-import 'package:rxdart/rxdart.dart';
 
 abstract class BaseViewModel extends ViewModel {
 

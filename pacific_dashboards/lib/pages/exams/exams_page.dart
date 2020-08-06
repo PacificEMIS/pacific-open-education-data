@@ -6,7 +6,6 @@ import 'package:pacific_dashboards/pages/exams/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/components/exams_stacked_horizontal_bar_chart.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';

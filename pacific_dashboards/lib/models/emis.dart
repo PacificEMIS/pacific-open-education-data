@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 
 enum Emis { miemis, fedemis, kemis }
 

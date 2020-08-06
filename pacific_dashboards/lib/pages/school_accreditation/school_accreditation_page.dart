@@ -8,7 +8,6 @@ import 'package:pacific_dashboards/pages/school_accreditation/accreditation_tabl
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';

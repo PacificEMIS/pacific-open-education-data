@@ -4,7 +4,6 @@ import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/components/rate_slice_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_data.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_view_model.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';

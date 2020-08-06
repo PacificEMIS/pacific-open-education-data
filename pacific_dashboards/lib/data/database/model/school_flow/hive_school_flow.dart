@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 
 part 'hive_school_flow.g.dart';

@@ -1,9 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
-import 'package:pacific_dashboards/data/database/model/school_enroll/hive_school_enroll.dart';
 import 'package:pacific_dashboards/data/database/model/school_flow/hive_school_flow.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 
 class HiveSchoolFlowDao extends SchoolFlowDao {

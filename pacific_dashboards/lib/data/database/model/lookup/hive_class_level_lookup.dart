@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/models/lookups/class_level_lookup.dart';
-import 'package:pacific_dashboards/models/lookups/lookup.dart';
 
 part 'hive_class_level_lookup.g.dart';
 

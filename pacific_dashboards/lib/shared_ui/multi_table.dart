@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
-import 'package:pacific_dashboards/res/strings.dart';
 
 class MultiTable extends StatelessWidget {
   const MultiTable({

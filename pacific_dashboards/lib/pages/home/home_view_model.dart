@@ -7,7 +7,6 @@ import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeViewModel extends ViewModel {
