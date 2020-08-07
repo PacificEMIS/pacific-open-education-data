@@ -103,6 +103,8 @@ class Strings {
       'schoolsListTitle': 'Individual Schools',
       'schoolsListSearchHint': 'Search',
 
+      'individualSchoolDashboardsTitle': 'DASHBOARDS',
+      'individualSchoolExamsTitle': 'EXAMS',
       'individualSchoolDashboardEnrollTitle': 'Enrollment',
       'individualSchoolDashboardRatesTitle': 'Rates',
       'individualSchoolDashboardEnrollByGradeLevelGenderTitle': 'By Grade Level and Gender',
@@ -124,6 +126,13 @@ class Strings {
       'individualSchoolDashboardRatesHistoryChart': 'History (chart)',
       'individualSchoolDashboardRatesHistoryTable': 'History (table)',
       'individualSchoolDashboardRatesHistoryTableDomain': 'GR',
+      'individualSchoolExamsByBenchmarkTitle': 'Achievement Results by Benchmark',
+      'individualSchoolExamsByBenchmarkWellBelowLevel': 'Well below',
+      'individualSchoolExamsByBenchmarkApproachingLevel': 'Approaching',
+      'individualSchoolExamsByBenchmarkMinimallyLevel': 'Minimally',
+      'individualSchoolExamsByBenchmarkCompetentLevel': 'Competent',
+      'individualSchoolExamsByGenderTitle': 'Achievement by Gender',
+      'individualSchoolExamsHistoryTitle': 'Achievement Table History',
     },
   };
 

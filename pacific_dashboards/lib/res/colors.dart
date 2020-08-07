@@ -16,14 +16,15 @@ class AppColors {
   static const Color kRed = const Color.fromARGB(255, 248, 84, 84);
   static const Color kGreen = const Color.fromARGB(255, 13, 211, 92);
   static const Color kOrange = const Color.fromARGB(255, 255, 149, 26);
+  static const Color kYellow = const Color.fromARGB(255, 252, 204, 36);
+  static const Color kLightGreen = const Color.fromARGB(255, 148, 220, 57);
   static const List<Color> kLevels = [
     kRed,
-    const Color.fromARGB(255, 255, 186, 10),
-    const Color.fromARGB(255, 148, 220, 57),
+    kYellow,
+    kLightGreen,
     kGreen,
   ];
 }
-
 
 extension ChartColor on Color {
   charts.Color get chartsColor => charts.Color(

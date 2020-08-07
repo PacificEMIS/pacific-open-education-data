@@ -4,8 +4,11 @@ import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/exams/individual_exams_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_view_model.dart';
+import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 class IndividualSchoolPageArgs {
   final ShortSchool school;
@@ -46,6 +49,9 @@ class _IndividualSchoolPageState
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             TabBar(
+              labelStyle: Theme.of(context).textTheme.bigTab,
+              labelColor: AppColors.kBlue,
+              unselectedLabelColor: AppColors.kTextMinor,
               tabs: [
                 Tab(
                   text: PageTab.dashboards.getText(context),
@@ -77,11 +83,9 @@ extension PageTabExt on PageTab {
   String getText(BuildContext context) {
     switch (this) {
       case PageTab.dashboards:
-        // TODO: Handle this case.
-        break;
+        return 'individualSchoolDashboardsTitle'.localized(context);
       case PageTab.exams:
-        // TODO: Handle this case.
-        break;
+        return 'individualSchoolExamsTitle'.localized(context);
     }
     throw FallThroughError();
   }

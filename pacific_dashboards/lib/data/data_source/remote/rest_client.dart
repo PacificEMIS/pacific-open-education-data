@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:retrofit/retrofit.dart';
@@ -64,4 +65,9 @@ abstract class RestClient {
 
   @GET('warehouse/flow/school/{schoolId}?report&asperc')
   Future<List<SchoolFlow>> getSchoolFlow(@Path('schoolId') String schoolId);
+
+  @GET('warehouse/exams/school/{schoolId}?report')
+  Future<List<SchoolExamReport>> getSchoolExamReports(
+    @Path('schoolId') String schoolId,
+  );
 }

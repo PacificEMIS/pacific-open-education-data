@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
@@ -61,4 +62,10 @@ abstract class LocalDataSource {
 
   Future<void> saveSchoolFlow(String schoolId, List<SchoolFlow> schoolFlows);
 
+  Future<List<SchoolExamReport>> fetchSchoolExamReports(String schoolId);
+
+  Future<void> saveSchoolExamReports(
+    String schoolId,
+    List<SchoolExamReport> reports,
+  );
 }

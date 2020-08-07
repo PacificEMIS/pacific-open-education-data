@@ -293,7 +293,7 @@ class _LongLegend extends StatelessWidget {
                 ChartLegendItem(
                   color: HexColor.fromStringHash(item),
                   value: item,
-                )
+                ),
               ],
             );
           }).toList(),

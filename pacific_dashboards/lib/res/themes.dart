@@ -127,4 +127,15 @@ extension TextThemeExt on TextTheme {
 
   TextStyle get individualDashboardsSubtitle =>
       this.headline4.copyWith(fontSize: 12);
+
+  TextStyle get bigTab =>
+      this.headline5.copyWith(fontSize: 12, letterSpacing: 0.25);
+
+  TextStyle get individualDashboardsExamSubtitle =>
+      this.headline5.copyWith(fontSize: 12, letterSpacing: 0.25);
+
+  TextStyle get individualDashboardsExamBody =>
+      this.individualDashboardsExamSubtitle.copyWith(
+            fontWeight: FontWeight.normal,
+          );
 }

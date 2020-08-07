@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
@@ -21,6 +22,7 @@ abstract class Database {
   NationEnrollDao get nationEnroll;
   ShortSchoolDao get shortSchool;
   SchoolFlowDao get schoolFlow;
+  SchoolExamReportsDao get schoolExamReports;
 }
 
 abstract class LookupsDao {
@@ -76,4 +78,9 @@ abstract class ShortSchoolDao {
 abstract class SchoolFlowDao {
   Future<void> save(String schoolId, List<SchoolFlow> schoolFlows, Emis emis);
   Future<List<SchoolFlow>> get(String schoolId, Emis emis);
+}
+
+abstract class SchoolExamReportsDao {
+  Future<void> save(String schoolId, List<SchoolExamReport> reports, Emis emis);
+  Future<List<SchoolExamReport>> get(String schoolId, Emis emis);
 }
