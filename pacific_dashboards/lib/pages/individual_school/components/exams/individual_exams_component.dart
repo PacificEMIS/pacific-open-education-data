@@ -2,6 +2,7 @@ import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/exams/components/filtered_results_by_benchmark_component.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/exams/components/filtered_results_by_gender_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/exams/individual_exams_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
@@ -62,6 +63,10 @@ class _IndividualsExamsComponentState
                       'individualSchoolExamsByGenderTitle'.localized(context),
                       style: Theme.of(context).textTheme.headline4,
                     ),
+                  ),
+                  FilteredResultsByGenderComponent(
+                    loadingStream: viewModel.filteredDataLoadingStream,
+                    dataStream: viewModel.filteredDataStream,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),

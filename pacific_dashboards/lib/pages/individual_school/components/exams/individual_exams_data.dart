@@ -63,10 +63,10 @@ class ExamReportsGenderResults {
 }
 
 class ExamReportsGenderData {
-  final int male;
-  final int female;
+  int male;
+  int female;
 
-  const ExamReportsGenderData({
+  ExamReportsGenderData({
     @required this.male,
     @required this.female,
   });

@@ -146,7 +146,10 @@ class IndividualExamsViewModel extends BaseViewModel {
           _generateBenchmarkResults,
           filteredReportsList,
         ),
-        byGender: null,
+        byGender: await compute(
+          _generateGenderResults,
+          filteredReportsList,
+        ),
       ));
 
       _isFilteredDataLoadingSubject.add(false);
@@ -218,5 +221,85 @@ int _getTotalCandidatesWithLevel(int level, List<SchoolExamReport> list) {
   return list
       .where((it) => it.achievementLevel == level)
       .map((it) => it.totalCandidates)
+      .fold(0, (previousValue, element) => previousValue + element);
+}
+
+ExamReportsGenderResults _generateGenderResults(
+  List<SchoolExamReport> reports,
+) {
+  final reportsByLevel = reports.groupBy((it) => it.achievementLevel);
+
+  final wellBelowData = ExamReportsGenderData(male: 0, female: 0);
+  final approachingData = ExamReportsGenderData(male: 0, female: 0);
+  final minimallyData = ExamReportsGenderData(male: 0, female: 0);
+  final competentData = ExamReportsGenderData(male: 0, female: 0);
+
+  var maxMaleCandidates = 0;
+  var maxFemaleCandidates = 0;
+
+  reportsByLevel.forEach((level, reports) {
+    switch (level) {
+      case 1:
+        wellBelowData.male = _getTotalMaleCandidates(reports);
+        if (wellBelowData.male > maxMaleCandidates) {
+          maxMaleCandidates = wellBelowData.male;
+        }
+        wellBelowData.female = _getTotalFemaleCandidates(reports);
+        if (wellBelowData.female > maxFemaleCandidates) {
+          maxFemaleCandidates = wellBelowData.female;
+        }
+        break;
+      case 2:
+        approachingData.male = _getTotalMaleCandidates(reports);
+        if (approachingData.male > maxMaleCandidates) {
+          maxMaleCandidates = approachingData.male;
+        }
+        approachingData.female = _getTotalFemaleCandidates(reports);
+        if (approachingData.female > maxFemaleCandidates) {
+          maxFemaleCandidates = approachingData.female;
+        }
+        break;
+      case 3:
+        minimallyData.male = _getTotalMaleCandidates(reports);
+        if (minimallyData.male > maxMaleCandidates) {
+          maxMaleCandidates = minimallyData.male;
+        }
+        minimallyData.female = _getTotalFemaleCandidates(reports);
+        if (minimallyData.female > maxFemaleCandidates) {
+          maxFemaleCandidates = minimallyData.female;
+        }
+        break;
+      case 4:
+        competentData.male = _getTotalMaleCandidates(reports);
+        if (competentData.male > maxMaleCandidates) {
+          maxMaleCandidates = competentData.male;
+        }
+        competentData.female = _getTotalFemaleCandidates(reports);
+        if (competentData.female > maxFemaleCandidates) {
+          maxFemaleCandidates = competentData.female;
+        }
+        break;
+    }
+  });
+
+  return ExamReportsGenderResults(
+    maxFemaleCandidates: maxFemaleCandidates,
+    maxMaleCandidates: maxMaleCandidates,
+    competentData: competentData,
+    minimallyData: minimallyData,
+    approachingData: approachingData,
+    wellBelowData: wellBelowData,
+  );
+}
+
+int _getTotalMaleCandidates(List<SchoolExamReport> list) {
+  return list
+      .map((it) => it.maleCandidates)
+      .fold(0, (previousValue, element) => previousValue + element);
+}
+
+int _getTotalFemaleCandidates(List<SchoolExamReport> list) {
+  return list
+      .map((it) => it.femaleCandidates)
       .fold(0, (previousValue, element) => previousValue + element);
 }
