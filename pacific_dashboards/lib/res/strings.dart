@@ -133,6 +133,8 @@ class Strings {
       'individualSchoolExamsByBenchmarkCompetentLevel': 'Competent',
       'individualSchoolExamsByGenderTitle': 'Achievement by Gender',
       'individualSchoolExamsHistoryTitle': 'Achievement Table History',
+      'individualSchoolExamsFilterYear': 'Exam Year',
+      'individualSchoolExamsFilterType': 'Exam Type',
     },
   };
 

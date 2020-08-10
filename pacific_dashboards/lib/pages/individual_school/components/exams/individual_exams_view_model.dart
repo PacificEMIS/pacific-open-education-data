@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/exams/components/individual_exams_filter.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/exams/individual_exams_data.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -15,6 +16,8 @@ class IndividualExamsViewModel extends BaseViewModel {
   final ShortSchool _school;
 
   final Subject<ExamReportsFilteredData> _filterDataSubject = BehaviorSubject();
+  final Subject<IndividualExamsFiltersData> _filterViewDataSubject =
+      BehaviorSubject();
   final Subject<bool> _isFilteredDataLoadingSubject =
       BehaviorSubject.seeded(true);
 
@@ -38,20 +41,35 @@ class IndividualExamsViewModel extends BaseViewModel {
     super.onInit();
     _filterDataSubject.disposeWith(disposeBag);
     _isFilteredDataLoadingSubject.disposeWith(disposeBag);
+    _filterViewDataSubject.disposeWith(disposeBag);
     _loadExamReports();
   }
 
   Stream<ExamReportsFilteredData> get filteredDataStream =>
       _filterDataSubject.stream;
 
+  Stream<IndividualExamsFiltersData> get filterViewDataStream =>
+      _filterViewDataSubject.stream;
+
   Stream<bool> get filteredDataLoadingStream =>
       _isFilteredDataLoadingSubject.stream;
+
+  void _notifyFilterViewDataChanged() {
+    final year = _preparedViewModelData.sortedYears[_yearIndexForFilter];
+    _filterViewDataSubject.add(IndividualExamsFiltersData(
+      year,
+      _preparedViewModelData.sortedExamCodesByYear[year]
+          [_examCodeIndexForFilter],
+    ));
+  }
 
   void onNextYearFilterPressed() {
     _yearIndexForFilter++;
     if (_yearIndexForFilter >= _preparedViewModelData.sortedYears.length) {
       _yearIndexForFilter = 0;
     }
+    _examCodeIndexForFilter = 0;
+    _notifyFilterViewDataChanged();
     _applyFilters();
   }
 
@@ -60,6 +78,8 @@ class IndividualExamsViewModel extends BaseViewModel {
     if (_yearIndexForFilter < 0) {
       _yearIndexForFilter = _preparedViewModelData.sortedYears.length - 1;
     }
+    _examCodeIndexForFilter = 0;
+    _notifyFilterViewDataChanged();
     _applyFilters();
   }
 
@@ -67,9 +87,12 @@ class IndividualExamsViewModel extends BaseViewModel {
     _examCodeIndexForFilter++;
     if (_examCodeIndexForFilter >=
         _preparedViewModelData
-            .sortedExamCodesByYear[_yearIndexForFilter].length) {
+            .sortedExamCodesByYear[
+                _preparedViewModelData.sortedYears[_yearIndexForFilter]]
+            .length) {
       _examCodeIndexForFilter = 0;
     }
+    _notifyFilterViewDataChanged();
     _applyFilters();
   }
 
@@ -77,9 +100,12 @@ class IndividualExamsViewModel extends BaseViewModel {
     _examCodeIndexForFilter--;
     if (_examCodeIndexForFilter < 0) {
       _examCodeIndexForFilter = _preparedViewModelData
-              .sortedExamCodesByYear[_yearIndexForFilter].length -
+              .sortedExamCodesByYear[
+                  _preparedViewModelData.sortedYears[_yearIndexForFilter]]
+              .length -
           1;
     }
+    _notifyFilterViewDataChanged();
     _applyFilters();
   }
 
@@ -124,6 +150,7 @@ class IndividualExamsViewModel extends BaseViewModel {
 
       notifyHaveProgress(false);
 
+      _notifyFilterViewDataChanged();
       _applyFilters();
     });
   }
