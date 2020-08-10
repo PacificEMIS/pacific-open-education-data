@@ -1,6 +1,6 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
-import 'package:pacific_dashboards/utils/collections.dart';
 
 class SchoolEnrollChunk {
   final List<SchoolEnroll> schoolData;

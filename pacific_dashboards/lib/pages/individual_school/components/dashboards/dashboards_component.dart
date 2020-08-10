@@ -6,7 +6,6 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class DashboardComponent extends MvvmStatefulWidget {

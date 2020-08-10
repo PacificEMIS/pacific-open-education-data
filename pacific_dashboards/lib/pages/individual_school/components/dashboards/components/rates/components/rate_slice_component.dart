@@ -1,3 +1,4 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -6,7 +7,6 @@ import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/utils/hex_color.dart';
 

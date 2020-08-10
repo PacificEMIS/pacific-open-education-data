@@ -8,7 +8,6 @@ import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
-import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class ExamsPage extends MvvmStatefulWidget {

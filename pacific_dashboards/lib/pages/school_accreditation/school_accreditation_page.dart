@@ -11,7 +11,6 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
-import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 

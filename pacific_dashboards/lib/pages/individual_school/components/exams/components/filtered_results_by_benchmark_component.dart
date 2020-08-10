@@ -1,3 +1,4 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/exams/individual_exams_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -5,7 +6,6 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
-import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class FilteredResultsByBenchmarkComponent extends StatelessWidget {

@@ -7,7 +7,6 @@ import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
-import 'package:pacific_dashboards/utils/collections.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EnrollViewModel extends BaseViewModel {

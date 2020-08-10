@@ -1,8 +1,8 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
-import 'package:pacific_dashboards/utils/collections.dart';
 
 const double _kBorderWidth = 1.0;
 const Color _kBorderColor = AppColors.kGeyser;

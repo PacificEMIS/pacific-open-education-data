@@ -1,7 +1,7 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/utils/collections.dart';
 
 typedef int KeySortFunc(String lv, String rv);
 

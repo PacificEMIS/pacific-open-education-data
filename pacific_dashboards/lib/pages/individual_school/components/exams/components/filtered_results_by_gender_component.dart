@@ -1,3 +1,4 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/exams/individual_exams_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -5,9 +6,7 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
-import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:pacific_dashboards/utils/collections.dart';
 
 class FilteredResultsByGenderComponent extends StatelessWidget {
   final Stream<bool> _loadingStream;
@@ -62,13 +61,13 @@ class FilteredResultsByGenderComponent extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  ...generateIteratingList(0, 3, 1, (i) {
+                  ...List.generate(4, (index) {
                     return _GenderResults(
                       maxMale: data.byGender.maxMaleCandidates,
                       maxFemale: data.byGender.maxFemaleCandidates,
-                      data: _getGenderDataByIndex(i, data.byGender),
-                      title: _getGenderDataTitleByIndex(context, i),
-                      needToShowMeasureAxis: i == 3,
+                      data: _getGenderDataByIndex(index, data.byGender),
+                      title: _getGenderDataTitleByIndex(context, index),
+                      needToShowMeasureAxis: index == 3,
                     );
                   }),
                   Row(
@@ -104,13 +103,13 @@ class FilteredResultsByGenderComponent extends StatelessWidget {
   ) {
     switch (index) {
       case 0:
-        return results.wellBelowData;
-      case 1:
-        return results.approachingData;
-      case 2:
-        return results.minimallyData;
-      case 3:
         return results.competentData;
+      case 1:
+        return results.minimallyData;
+      case 2:
+        return results.approachingData;
+      case 3:
+        return results.wellBelowData;
     }
     throw FallThroughError();
   }
@@ -118,16 +117,16 @@ class FilteredResultsByGenderComponent extends StatelessWidget {
   String _getGenderDataTitleByIndex(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return 'individualSchoolExamsByBenchmarkWellBelowLevel'
+        return 'individualSchoolExamsByBenchmarkCompetentLevel'
             .localized(context);
       case 1:
-        return 'individualSchoolExamsByBenchmarkApproachingLevel'
-            .localized(context);
-      case 2:
         return 'individualSchoolExamsByBenchmarkMinimallyLevel'
             .localized(context);
+      case 2:
+        return 'individualSchoolExamsByBenchmarkApproachingLevel'
+            .localized(context);
       case 3:
-        return 'individualSchoolExamsByBenchmarkCompetentLevel'
+        return 'individualSchoolExamsByBenchmarkWellBelowLevel'
             .localized(context);
     }
     throw FallThroughError();

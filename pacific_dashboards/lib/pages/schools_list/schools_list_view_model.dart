@@ -6,7 +6,6 @@ import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:pacific_dashboards/utils/collections.dart';
 
 class SchoolsListViewModel extends BaseViewModel {
   final Repository _repository;

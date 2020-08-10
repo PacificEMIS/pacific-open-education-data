@@ -32,7 +32,7 @@ dependencies:
   arch:
     git:
       url: https://github.com/scrinoman/arch.git
-      ref: master
+      ref: v0.0.3
 
 dev_dependencies:
   flutter_test:
