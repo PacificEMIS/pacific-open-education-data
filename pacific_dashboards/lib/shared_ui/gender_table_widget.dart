@@ -106,7 +106,7 @@ class GenderTableWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: it.index % 2 == 0
                                   ? Colors.transparent
-                                  : AppColors.kAthensGray,
+                                  : AppColors.kGrayLight,
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,

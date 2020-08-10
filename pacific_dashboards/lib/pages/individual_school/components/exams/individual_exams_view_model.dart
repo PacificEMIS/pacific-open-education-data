@@ -16,10 +16,16 @@ class IndividualExamsViewModel extends BaseViewModel {
   final ShortSchool _school;
 
   final Subject<ExamReportsFilteredData> _filterDataSubject = BehaviorSubject();
+  final Subject<List<ExamReportsHistoryByYearData>> _historyRowsSubject =
+      BehaviorSubject.seeded([]);
   final Subject<IndividualExamsFiltersData> _filterViewDataSubject =
       BehaviorSubject();
   final Subject<bool> _isFilteredDataLoadingSubject =
       BehaviorSubject.seeded(true);
+  final Subject<bool> _isHistoryDataLoadingSubject =
+      BehaviorSubject.seeded(true);
+  final Subject<bool> _haveDataSubject =
+      BehaviorSubject.seeded(false);
 
   _PreparedViewModelData _preparedViewModelData;
 
@@ -42,6 +48,9 @@ class IndividualExamsViewModel extends BaseViewModel {
     _filterDataSubject.disposeWith(disposeBag);
     _isFilteredDataLoadingSubject.disposeWith(disposeBag);
     _filterViewDataSubject.disposeWith(disposeBag);
+    _historyRowsSubject.disposeWith(disposeBag);
+    _isHistoryDataLoadingSubject.disposeWith(disposeBag);
+    _haveDataSubject.disposeWith(disposeBag);
     _loadExamReports();
   }
 
@@ -53,6 +62,14 @@ class IndividualExamsViewModel extends BaseViewModel {
 
   Stream<bool> get filteredDataLoadingStream =>
       _isFilteredDataLoadingSubject.stream;
+
+  Stream<bool> get historyDataLoadingStream =>
+      _isHistoryDataLoadingSubject.stream;
+
+  Stream<bool> get haveDataStream => _haveDataSubject.stream;
+
+  Stream<List<ExamReportsHistoryByYearData>> get historyRowsStream =>
+      _historyRowsSubject.stream;
 
   void _notifyFilterViewDataChanged() {
     final year = _preparedViewModelData.sortedYears[_yearIndexForFilter];
@@ -150,8 +167,26 @@ class IndividualExamsViewModel extends BaseViewModel {
 
       notifyHaveProgress(false);
 
-      _notifyFilterViewDataChanged();
-      _applyFilters();
+      _haveDataSubject.add(reports.isNotEmpty);
+
+      if (reports.isNotEmpty) {
+        _notifyFilterViewDataChanged();
+        _createHistoryByYears();
+        _applyFilters();
+      }
+    });
+  }
+
+  void _createHistoryByYears() {
+    launchHandled(() async {
+      _isHistoryDataLoadingSubject.add(true);
+
+      _historyRowsSubject.add(await compute(
+        _generateHistoryData,
+        _preparedViewModelData,
+      ));
+
+      _isHistoryDataLoadingSubject.add(false);
     });
   }
 
@@ -328,4 +363,34 @@ int _getTotalFemaleCandidates(List<SchoolExamReport> list) {
   return list
       .map((it) => it.femaleCandidates)
       .fold(0, (previousValue, element) => previousValue + element);
+}
+
+List<ExamReportsHistoryByYearData> _generateHistoryData(
+    _PreparedViewModelData data) {
+  return data.sortedYears.map((year) {
+    final dataByExamCode = data.reportsByYearAndExamCode[year];
+    final sortedExamCodes = data.sortedExamCodesByYear[year];
+
+    final List<ExamReportsHistoryRowData> rows = [];
+    sortedExamCodes.forEach((examCode) {
+      final reports = dataByExamCode[examCode];
+      var maleCandidates = 0;
+      var femaleCandidates = 0;
+      reports.forEach((report) {
+        maleCandidates += report.maleCandidates;
+        femaleCandidates += report.femaleCandidates;
+      });
+      rows.add(ExamReportsHistoryRowData(
+        examCode: examCode,
+        examName: reports.head?.examName ?? '-',
+        male: maleCandidates,
+        female: femaleCandidates,
+      ));
+    });
+
+    return ExamReportsHistoryByYearData(
+      year: year,
+      rows: rows,
+    );
+  }).toList();
 }

@@ -206,7 +206,7 @@ class _Row extends StatelessWidget {
     return Container(
       color: ((_rowData.index % 2 == 0)
           ? Colors.transparent
-          : AppColors.kAthensGray),
+          : AppColors.kGrayLight),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

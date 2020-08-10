@@ -9,7 +9,7 @@ class AppColors {
   static const Color kTextMinor = const Color.fromARGB(255, 99, 105, 109);
   static const Color kCoolGray = const Color.fromARGB(255, 196, 203, 206);
   static const Color kGeyser = const Color.fromARGB(255, 219, 224, 228);
-  static const Color kAthensGray = const Color.fromARGB(255, 245, 246, 248);
+  static const Color kGrayLight = const Color.fromARGB(255, 245, 246, 248);
   static const Color kTuna = const Color.fromARGB(255, 51, 55, 61);
   static const Color kRacingGreen = const Color.fromARGB(255, 17, 35, 19);
   static const Color kSpace = const Color.fromARGB(255, 239, 243, 248);

@@ -218,7 +218,7 @@ class _SchoolRow extends StatelessWidget {
     return Container(
       height: 36.0,
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      color: _isEven ? AppColors.kAthensGray : Colors.transparent,
+      color: _isEven ? AppColors.kGrayLight : Colors.transparent,
       child: Material(
         color: Colors.transparent,
         child: InkWell(

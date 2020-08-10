@@ -187,6 +187,9 @@ class _StandardChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
       height: 32,
       child: FutureBuilder(
         future: _seriesList,

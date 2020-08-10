@@ -31,6 +31,7 @@ class Strings {
       'labelMale': 'Male',
       'labelFemale': 'Female',
       'labelNational': 'National',
+      'labelNoData': 'No data',
       'error_unknown': 'Unknown error occurred',
       'error_server_unavailable': 'You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
 
@@ -135,6 +136,8 @@ class Strings {
       'individualSchoolExamsHistoryTitle': 'Achievement Table History',
       'individualSchoolExamsFilterYear': 'Exam Year',
       'individualSchoolExamsFilterType': 'Exam Type',
+      'individualSchoolExamsHistoryYear': ' Exam Year',
+      'individualSchoolExamsHistoryTableCode': 'Exam Code',
     },
   };
 

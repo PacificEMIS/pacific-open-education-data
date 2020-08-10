@@ -11,5 +11,5 @@ class NoNewDataRemoteException extends RemoteException {
 }
 
 class NoDataException extends AppException {
-  const NoDataException() : super(message: 'No Data');
+  const NoDataException() : super(message: 'labelNoData');
 }

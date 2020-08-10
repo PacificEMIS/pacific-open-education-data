@@ -71,3 +71,34 @@ class ExamReportsGenderData {
     @required this.female,
   });
 }
+
+class ExamReportsHistoryByYearData {
+  int year;
+  List<ExamReportsHistoryRowData> rows;
+
+  ExamReportsHistoryByYearData({
+    @required this.year,
+    @required this.rows,
+  });
+}
+
+class ExamReportsHistoryRowData {
+  String examCode;
+  String examName;
+  int male;
+  int female;
+  int total;
+  int malePercent;
+  int femalePercent;
+
+  ExamReportsHistoryRowData({
+    @required this.examCode,
+    @required this.examName,
+    @required this.male,
+    @required this.female,
+  }) {
+    total = male + female;
+    malePercent = (male / total * 100).round();
+    femalePercent = (female / total * 100).round();
+  }
+}

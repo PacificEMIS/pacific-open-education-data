@@ -138,4 +138,20 @@ extension TextThemeExt on TextTheme {
       this.individualDashboardsExamSubtitle.copyWith(
             fontWeight: FontWeight.normal,
           );
+
+  TextStyle get individualDashboardsExamHistoryTableHeader =>
+      this.subtitle2.copyWith(
+            color: AppColors.kTextMinor,
+          );
+
+  TextStyle get individualDashboardsExamHistoryTableYearHeader =>
+      this.subtitle2.copyWith(
+            fontWeight: FontWeight.bold,
+          );
+
+  TextStyle get individualDashboardsExamHistoryTablePercentage =>
+      this.overline.copyWith(
+        fontSize: 10.0,
+        fontWeight: FontWeight.bold,
+      );
 }
