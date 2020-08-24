@@ -24,6 +24,13 @@ class HiveClassLevelLookup {
         yearOfEducation: yearOfEducation,
       );
 
+  ClassLevelLookup toFinancialLookup() => ClassLevelLookup(
+        name: name,
+        code: code,
+        l: l,
+        yearOfEducation: yearOfEducation,
+      );
+
   static HiveClassLevelLookup from(ClassLevelLookup lookup) {
     return HiveClassLevelLookup()
       ..code = lookup.code

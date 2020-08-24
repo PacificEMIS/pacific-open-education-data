@@ -1,5 +1,7 @@
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
@@ -17,7 +19,11 @@ abstract class Repository {
 
   Stream<RepositoryResponse<AccreditationChunk>> fetchAllAccreditations();
 
+  Stream<RepositoryResponse<List<Budget>>> fetchAllBudgets();
+
   Stream<Lookups> get lookups;
+
+  Stream<FinancialLookups> get financialLookups;
 
   Stream<RepositoryResponse<List<ShortSchool>>> fetchSchoolsList();
 

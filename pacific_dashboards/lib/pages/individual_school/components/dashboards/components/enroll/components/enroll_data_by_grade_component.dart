@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
-import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
 
 class EnrollDataByGradeComponent extends StatelessWidget {
   final List<EnrollDataByGrade> _data;
@@ -19,11 +18,13 @@ class EnrollDataByGradeComponent extends StatelessWidget {
       future: _transformToTableData(),
       builder: (ctx, snapshot) {
         if (snapshot.hasData) {
-          return GenderTableWidget(
+          return MultiTableWidget(
             data: snapshot.data,
-            firstColumnName:
-                'individualSchoolDashboardEnrollByGradeLevelGenderGrade'
-                    .localized(context),
+            columnNames: [
+              'individualSchoolDashboardEnrollByGradeLevelGenderGrade',
+              'labelMale',
+              'labelFemale',
+              'labelTotal']
           );
         } else {
           return Container();

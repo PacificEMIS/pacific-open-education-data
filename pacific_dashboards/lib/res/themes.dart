@@ -151,7 +151,7 @@ extension TextThemeExt on TextTheme {
 
   TextStyle get individualDashboardsExamHistoryTablePercentage =>
       this.overline.copyWith(
-        fontSize: 10.0,
-        fontWeight: FontWeight.bold,
-      );
+            fontSize: 10.0,
+            fontWeight: FontWeight.bold,
+          );
 }

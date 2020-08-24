@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
 
@@ -22,7 +21,7 @@ class AccreditationData {
   final MultitableData performanceByStandard;
 }
 
-class MultitableData extends Equatable {
+class MultitableData {
   const MultitableData({
     @required this.evaluatedData,
     @required this.cumulatedData,

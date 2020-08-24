@@ -8,8 +8,10 @@ import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -32,6 +34,13 @@ class RepositoryImpl implements Repository {
   final BehaviorSubject<Lookups> _fedemisLookupsSubject = BehaviorSubject();
   final BehaviorSubject<Lookups> _miemisLookupsSubject = BehaviorSubject();
   final BehaviorSubject<Lookups> _kemisLookupsSubject = BehaviorSubject();
+
+  final BehaviorSubject<FinancialLookups> _fedemisFinancialLookupsSubject =
+      BehaviorSubject();
+  final BehaviorSubject<FinancialLookups> _miemisFinancialLookupsSubject =
+      BehaviorSubject();
+  final BehaviorSubject<FinancialLookups> _kemisFinancialLookupsSubject =
+      BehaviorSubject();
 
   RepositoryImpl(
       this._remoteDataSource, this._localDataSource, this._globalSettings);
@@ -153,6 +162,15 @@ class RepositoryImpl implements Repository {
       getLocal: _localDataSource.fetchExams,
       getRemote: _remoteDataSource.fetchExams,
       updateLocal: _localDataSource.saveExams,
+    );
+  }
+
+  @override
+  Stream<RepositoryResponse<List<Budget>>> fetchAllBudgets() async* {
+    yield* _fetchWithEtag(
+      getLocal: _localDataSource.fetchBudgets,
+      getRemote: _remoteDataSource.fetchBudgets,
+      updateLocal: _localDataSource.saveBudgets,
     );
   }
 
@@ -361,5 +379,47 @@ class RepositoryImpl implements Repository {
         reports,
       ),
     );
+  }
+
+  @override
+  Stream<FinancialLookups> get financialLookups {
+    return _globalSettings.currentEmis
+        .then((emis) {
+          switch (emis) {
+            case Emis.miemis:
+              return _miemisFinancialLookupsSubject;
+            case Emis.fedemis:
+              return _fedemisFinancialLookupsSubject;
+            case Emis.kemis:
+              return _kemisFinancialLookupsSubject;
+          }
+          throw FallThroughError();
+        })
+        .asStream()
+        .flatMap((subject) {
+          if (!subject.hasValue) {
+            final pushSavedToSubject = () async {
+              final localLookups =
+                  await _localDataSource.fetchFinancialLookupsModel();
+              if (localLookups.v2 == null) {
+                return;
+              }
+              subject.add(localLookups.v2);
+            };
+
+            Connectivity().checkConnectivity().then((status) {
+              if (status == ConnectivityResult.none) {
+                return Future.value();
+              } else {
+                return _remoteDataSource.fetchFinancialLookupsModel().then(
+                    (remote) =>
+                        _localDataSource.saveFinancialLookupsModel(remote));
+              }
+            }).then((_) => pushSavedToSubject(),
+                onError: (er) => pushSavedToSubject());
+          }
+
+          return subject;
+        });
   }
 }

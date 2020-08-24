@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 
 class Strings {
-
   static Emis emis = Emis.fedemis;
-  
+
   final Locale locale;
-  
+
   Strings(this.locale);
 
   static Strings of(BuildContext context) {
     return Localizations.of<Strings>(context, Strings);
   }
-  
+
   static Map<Emis, Map<String, Map<String, String>>> _stringsForEmis = {
-    Emis.fedemis : _localizedValuesFedEmis,
-    Emis.miemis : _localizedValuesMiEmis,
-    Emis.kemis : _localizedValuesKiEmis,
+    Emis.fedemis: _localizedValuesFedEmis,
+    Emis.miemis: _localizedValuesMiEmis,
+    Emis.kemis: _localizedValuesKiEmis,
   };
 
   /// This one should contain ALL stings, since it is used as fallback
@@ -33,13 +32,12 @@ class Strings {
       'labelNational': 'National',
       'labelNoData': 'No data',
       'error_unknown': 'Unknown error occurred',
-      'error_server_unavailable': 'You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
-
+      'error_server_unavailable':
+          'You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
       'miemisTitle': 'Marshall Islands',
       'fedemisTitle': 'Federated States of Micronesia',
       'fedemisTitleMultiline': 'Federated States \nof Micronesia',
       'kiemisTitle': 'Republic of Kiribati',
-
       'homeChangeCountryButton': 'Change country',
       'homeChangeCountryTitle': 'Change country',
       'homeSectionSchoolsDashboards': 'Schools',
@@ -49,7 +47,7 @@ class Strings {
       'homeSectionIndicators': 'Indicators',
       'homeSectionBudgets': 'Budgets',
       'homeSectionIndividualSchools': 'Individual Schools',
-
+      'homeSectionSpecialEducation': 'Special Education',
       'filtersTitle': 'Filter',
       'filtersByYear': 'Filter by year',
       'filtersByState': 'Filter by state',
@@ -60,63 +58,71 @@ class Strings {
       'filtersDisplayAllAuthority': 'Display All Authority',
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
-
       'schoolsDashboardsTitle': 'Schools',
       'schoolsDashboardsMeasureEnroll': 'Schools Enrollment',
       'schoolsDashboardsEnrollByStateTitle': 'Schools Enrollment by State',
-      'schoolsDashboardsEnrollByAuthorityTitle': 'Schools Enrollment by Authority',
-      'schoolsDashboardsEnrollByGovernmentTitle': 'Schools Enrollment Govt / \nNon-govt',
-      'schoolsDashboardsEnrollByAgeLevelGenderTitle': 'Schools Enrollment by Age, Education \nLevel and Gender',
-      'schoolsDashboardsEnrollByLevelStateGenderTitle': 'Schools Enrollment by School Levels, \nState and Gender',
+      'schoolsDashboardsEnrollByAuthorityTitle':
+          'Schools Enrollment by Authority',
+      'schoolsDashboardsEnrollByGovernmentTitle':
+          'Schools Enrollment Govt / \nNon-govt',
+      'schoolsDashboardsEnrollByAgeLevelGenderTitle':
+          'Schools Enrollment by Age, Education \nLevel and Gender',
+      'schoolsDashboardsEnrollByLevelStateGenderTitle':
+          'Schools Enrollment by School Levels, \nState and Gender',
       'schoolsDashboardsPrivacyDomain': 'Public/Private',
       'schoolsDashboardsStateDomain': 'State',
       'schoolsDashboardsAuthorityDomain': 'Authority',
       'schoolsDashboardsAgeDomain': 'Age',
       'schoolsDashboardsSchoolLevelDomain': 'School \nLevels',
-
       'teachersDashboardsTitle': 'Teachers',
       'teachersDashboardsEnrollByAuthorityTitle': 'Teachers by Authority',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by State',
-      'teachersDashboardsEnrollByLevelStateGenderTitle': 'Teachers by School Levels, \nState and Gender',
-      'teachersDashboardsEnrollByGovernmentTitle': 'Teachers by Govt / \nNon-govt',
+      'teachersDashboardsEnrollByLevelStateGenderTitle':
+          'Teachers by School Levels, \nState and Gender',
+      'teachersDashboardsEnrollByGovernmentTitle':
+          'Teachers by Govt / \nNon-govt',
       'teachersDashboardsEnrollDomain': 'Teachers',
       'teachersDashboardsPrivacyDomain': 'Public/Private',
       'teachersDashboardsStateDomain': 'State',
       'teachersDashboardsAuthorityDomain': 'Authority',
       'teachersDashboardsSchoolLevelDomain': 'School \nLevels',
-
       'examsDashboardsTitle': 'Exams',
       'examsDashboardsFilterExam': 'Exam',
       'examsDashboardsFilterView': 'View',
       'examsDashboardsFilterStandard': 'Filter by standard',
       'examsDashboardsViewByBenchmarkAndGender': 'By Benchmarks and Gender',
-      'examsDashboardsViewByStandardAndGender': 'By Standards and Gender for Last 3 Years',
+      'examsDashboardsViewByStandardAndGender':
+          'By Standards and Gender for Last 3 Years',
       'examsDashboardsViewByStandardAndState': 'By Standards and State',
-
       'schoolsAccreditationDashboardsTitle': 'School Accreditations',
       'schoolsAccreditationDashboardsProgressTitle': 'Accreditation Progress',
       'schoolsAccreditationDashboardsDistrictTitle': 'District Status',
-      'schoolsAccreditationDashboardsStatusByStateTitle': 'Accreditation Status by State',
-      'schoolsAccreditationDashboardsPerformanceByStandardTitle': 'Performance by Standard',
+      'schoolsAccreditationDashboardsStatusByStateTitle':
+          'Accreditation Status by State',
+      'schoolsAccreditationDashboardsPerformanceByStandardTitle':
+          'Performance by Standard',
       'schoolsAccreditationDashboardsStateDomain': 'State',
       'schoolsAccreditationDashboardsStandardDomain': 'Standard',
-
       'schoolsListTitle': 'Individual Schools',
       'schoolsListSearchHint': 'Search',
-
       'individualSchoolDashboardsTitle': 'DASHBOARDS',
       'individualSchoolExamsTitle': 'EXAMS',
       'individualSchoolDashboardEnrollTitle': 'Enrollment',
       'individualSchoolDashboardRatesTitle': 'Rates',
-      'individualSchoolDashboardEnrollByGradeLevelGenderTitle': 'By Grade Level and Gender',
-      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle': 'By Grade Level and Gender History',
-      'individualSchoolDashboardEnrollByGenderHistoryTitle': 'Enrollment by Gender History',
+      'individualSchoolDashboardEnrollByGradeLevelGenderTitle':
+          'By Grade Level and Gender',
+      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle':
+          'By Grade Level and Gender History',
+      'individualSchoolDashboardEnrollByGenderHistoryTitle':
+          'Enrollment by Gender History',
       'individualSchoolDashboardEnrollFemalePartTitle': 'Female Part',
       'individualSchoolDashboardEnrollByGradeLevelGenderChart': 'Chart',
       'individualSchoolDashboardEnrollByGradeLevelGenderTable': 'Table',
       'individualSchoolDashboardEnrollByGradeLevelGenderGrade': 'Grade',
-      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryStacked': 'Stacked',
-      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryUnstacked': 'Unstacked',
+      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryStacked':
+          'Stacked',
+      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryUnstacked':
+          'Unstacked',
       'individualSchoolDashboardEnrollFemalePartDetailed': ' in details',
       'individualSchoolDashboardEnrollFemalePartHistory': 'Full History',
       'individualSchoolDashboardRatesDropoutTitle': 'Dropout Rate',
@@ -127,7 +133,8 @@ class Strings {
       'individualSchoolDashboardRatesHistoryChart': 'History (chart)',
       'individualSchoolDashboardRatesHistoryTable': 'History (table)',
       'individualSchoolDashboardRatesHistoryTableDomain': 'GR',
-      'individualSchoolExamsByBenchmarkTitle': 'Achievement Results by Benchmark',
+      'individualSchoolExamsByBenchmarkTitle':
+          'Achievement Results by Benchmark',
       'individualSchoolExamsByBenchmarkWellBelowLevel': 'Well below',
       'individualSchoolExamsByBenchmarkApproachingLevel': 'Approaching',
       'individualSchoolExamsByBenchmarkMinimallyLevel': 'Minimally',
@@ -138,31 +145,57 @@ class Strings {
       'individualSchoolExamsFilterType': 'Exam Type',
       'individualSchoolExamsHistoryYear': ' Exam Year',
       'individualSchoolExamsHistoryTableCode': 'Exam Code',
+      'budgetsDashboardsTitle': 'Budgets',
+      'budgetsEducationFinancing': 'Education Financing: Dashboard',
+      'budgetsGnpAndGovernmentSpendingActualExpense':
+          'GNP and Government Spending Actual Expense',
+      'budgetsGnpAndGovernmentSpendingBudgetedExpense':
+          'GNP and Government Spending Budgeted Expense',
+      'budgetsGnpAndGovernmentSpending': 'GNP and Government Spending',
+      'budgetsSpendingBySector': 'Spending By Sector',
+      'budgetsDashboardComponent': 'Dashboard Component',
+      'year': 'Year',
+      'govtExpense': 'Govt Expense',
+      'govtExpenditure': 'Govt Expenditure',
+      'edExpense': 'Ed Expense',
+      'gNP': 'GNP',
+      'edGovtPercentage': 'Ed/Govt %',
+      'edGNPPercentage': 'Ed/GNP %',
+      'eCE': 'ECE',
+      'primaryEducation': 'Primary Education',
+      'secondaryEducation': 'Secondary Education',
+      'actualExpenditure': 'Actual Expenditure',
+      'budget': 'Budget',
+      'actualRecurrentExpenditure': 'Actual Recurrent Expenditure',
+      'budgetRecurrent': 'Budget Recurrent',
+      'actualExpPerHead': 'Actual Exp per Head',
+      'budgetExpPerHead': 'Budget Exp per Head',
+      'enrollment': 'Enrollemnt'
     },
   };
 
   // region Specific strings
   static Map<String, Map<String, String>> _localizedValuesFedEmis = {
-    'en': {
-    },
+    'en': {},
   };
 
   static Map<String, Map<String, String>> _localizedValuesMiEmis = {
     'en': {
-      'schoolsDashboardsEnrollByStateTitle': 'Schools Enrollment by Atolls and Islands',
-      'schoolsDashboardsEnrollByLevelStateGenderTitle': 'Schools Enrollment by School Levels, \nAtolls and Islands and Gender',
+      'schoolsDashboardsEnrollByStateTitle':
+          'Schools Enrollment by Atolls and Islands',
+      'schoolsDashboardsEnrollByLevelStateGenderTitle':
+          'Schools Enrollment by School Levels, \nAtolls and Islands and Gender',
       'schoolsDashboardsStateDomain': 'Atolls and Islands',
-
       'filtersDisplayAllStates': 'Display All Atolls and Islands',
       'filtersByState': 'Filter by atolls and islands',
-
       'teachersDashboardsEnrollByStateTitle': 'Teachers by Atolls and Islands',
       'teachersDashboardsStateDomain': 'Atolls and Islands',
-      'teachersDashboardsEnrollByLevelStateGenderTitle': 'Teachers by School Levels, \nAtolls and Islands and Gender',
-
-      'examsDashboardsViewByStandardAndState': 'By Standards and Atolls and Islands',
-
-      'schoolsAccreditationDashboardsStatusByStateTitle': 'Accreditation Status by Atolls and Islands',
+      'teachersDashboardsEnrollByLevelStateGenderTitle':
+          'Teachers by School Levels, \nAtolls and Islands and Gender',
+      'examsDashboardsViewByStandardAndState':
+          'By Standards and Atolls and Islands',
+      'schoolsAccreditationDashboardsStatusByStateTitle':
+          'Accreditation Status by Atolls and Islands',
       'schoolsAccreditationDashboardsStateDomain': 'Atolls and Islands',
     },
   };
@@ -170,26 +203,26 @@ class Strings {
   static Map<String, Map<String, String>> _localizedValuesKiEmis = {
     'en': {
       'homeSectionExamsDashboards': 'National Tests',
-
       'filtersDisplayAllStates': 'Display All Districts',
       'filtersByState': 'Filter by District',
-
-      'schoolsDashboardsEnrollByLevelStateGenderTitle': 'Schools Enrollment by School Levels, \nDistrict and Gender',
+      'schoolsDashboardsEnrollByLevelStateGenderTitle':
+          'Schools Enrollment by School Levels, \nDistrict and Gender',
       'schoolsDashboardsEnrollByStateTitle': 'Schools Enrollment by District',
       'schoolsDashboardsStateDomain': 'District',
-
-      'teachersDashboardsEnrollByLevelStateGenderTitle': 'Teachers by School Levels, \nDistrict and Gender',
+      'teachersDashboardsEnrollByLevelStateGenderTitle':
+          'Teachers by School Levels, \nDistrict and Gender',
       'teachersDashboardsStateDomain': 'District',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by District',
-
       'examsDashboardsTitle': 'National Tests',
       'examsDashboardsViewByBenchmarkAndGender': 'By Outcomes and Gender',
-      'examsDashboardsViewByStandardAndGender': 'By Tests and Gender for Last 3 Years',
+      'examsDashboardsViewByStandardAndGender':
+          'By Tests and Gender for Last 3 Years',
       'examsDashboardsViewByStandardAndState': 'By Tests and State',
       'examsDashboardsFilterStandard': 'Filter by Test',
-
-      'schoolsAccreditationDashboardsStatusByStateTitle': 'Accreditation Status by District',
-      'schoolsAccreditationDashboardsPerformanceByStandardTitle': 'Performance by Test',
+      'schoolsAccreditationDashboardsStatusByStateTitle':
+          'Accreditation Status by District',
+      'schoolsAccreditationDashboardsPerformanceByStandardTitle':
+          'Performance by Test',
       'schoolsAccreditationDashboardsStateDomain': 'District',
       'schoolsAccreditationDashboardsStandardDomain': 'Test',
     },

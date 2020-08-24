@@ -8,8 +8,10 @@ import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
 import 'package:pacific_dashboards/data/data_source/remote/rest_client.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
@@ -155,6 +157,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
+  Future<List<Budget>> fetchBudgets() {
+    return _withHandlers((client) => client.getBudgets());
+  }
+
+  @override
   Future<List<SchoolEnroll>> fetchIndividualDistrictEnroll(
     String districtCode,
   ) {
@@ -176,6 +183,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<Lookups> fetchLookupsModel() {
     return _withHandlers((client) => client.getLookups());
+  }
+
+  @override
+  Future<FinancialLookups> fetchFinancialLookupsModel() {
+    return _withHandlers((client) => client.getFinanceLookups());
   }
 
   @override
@@ -217,7 +229,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<List<SchoolExamReport>> fetchSchoolExamReports(String schoolId) {
     return _withHandlers((client) => client.getSchoolExamReports(schoolId));
   }
-
 }
 
 extension Urls on Emis {

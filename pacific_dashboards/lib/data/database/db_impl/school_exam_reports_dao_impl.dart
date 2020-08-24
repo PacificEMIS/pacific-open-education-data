@@ -1,10 +1,8 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/school_exam_report/hive_school_exam_report.dart';
-import 'package:pacific_dashboards/data/database/model/school_flow/hive_school_flow.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
-import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 
 class HiveSchoolExamsReportDao extends SchoolExamReportsDao {
   static const _kKey = 'HiveSchoolExamsReportDao';

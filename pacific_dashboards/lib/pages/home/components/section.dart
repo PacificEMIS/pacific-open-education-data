@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/pages/budgets/budgets_page.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
@@ -13,7 +14,8 @@ enum Section {
   schoolAccreditations,
   indicators,
   budgets,
-  individualSchools
+  individualSchools,
+  specialEducation
 }
 
 extension UI on Section {
@@ -32,6 +34,8 @@ extension UI on Section {
       case Section.budgets:
         return "images/budgets.svg";
       case Section.individualSchools:
+        return "images/budgets.svg"; // TODO: waiting for icon
+      case Section.specialEducation:
         return "images/budgets.svg"; // TODO: waiting for icon
     }
     throw FallThroughError();
@@ -53,6 +57,8 @@ extension UI on Section {
         return 'homeSectionExamsDashboards'.localized(context);
       case Section.individualSchools:
         return 'homeSectionIndividualSchools'.localized(context);
+      case Section.specialEducation:
+        return 'homeSectionSpecialEducation'.localized(context);
     }
 
     throw FallThroughError();
@@ -71,9 +77,12 @@ extension UI on Section {
       case Section.indicators:
         return "/Indicators";
       case Section.budgets:
-        return "/Budgets";
+        return BudgetsPage.kRoute;
       case Section.individualSchools:
         return SchoolsListPage.kRoute;
+      case Section.specialEducation:
+        return "/Special Education";
+        break;
     }
 
     throw FallThroughError();

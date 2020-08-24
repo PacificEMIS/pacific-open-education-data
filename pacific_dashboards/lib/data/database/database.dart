@@ -1,6 +1,8 @@
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -12,10 +14,12 @@ import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class Database {
   LookupsDao get lookups;
+  FinancialLookupsDao get financialLookups;
   StringsDao get strings;
   SchoolsDao get schools;
   TeachersDao get teachers;
   ExamsDao get exams;
+  BudgetsDao get budgets;
   AccreditationsDao get accreditations;
   SchoolEnrollDao get schoolEnroll;
   DistrictEnrollDao get districtEnroll;
@@ -28,6 +32,11 @@ abstract class Database {
 abstract class LookupsDao {
   Future<void> save(Lookups lookups, Emis emis);
   Future<Pair<bool, Lookups>> get(Emis emis);
+}
+
+abstract class FinancialLookupsDao {
+  Future<void> save(FinancialLookups lookups, Emis emis);
+  Future<Pair<bool, FinancialLookups>> get(Emis emis);
 }
 
 abstract class StringsDao {
@@ -48,6 +57,11 @@ abstract class TeachersDao {
 abstract class ExamsDao {
   Future<void> save(List<Exam> exams, Emis emis);
   Future<Pair<bool, List<Exam>>> get(Emis emis);
+}
+
+abstract class BudgetsDao {
+  Future<void> save(List<Budget> budgets, Emis emis);
+  Future<List<Budget>> get(Emis emis);
 }
 
 abstract class AccreditationsDao {

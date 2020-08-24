@@ -1,5 +1,7 @@
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -14,11 +16,15 @@ abstract class LocalDataSource {
 
   Future<List<School>> fetchSchools();
 
+  Future<List<Budget>> fetchBudgets();
+
   Future<Pair<bool, List<Exam>>> fetchExams();
 
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk();
 
   Future<Pair<bool, Lookups>> fetchLookupsModel();
+
+  Future<Pair<bool, FinancialLookups>> fetchFinancialLookupsModel();
 
   Future<void> saveExams(List<Exam> exams);
 
@@ -29,6 +35,10 @@ abstract class LocalDataSource {
   Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk);
 
   Future<void> saveLookupsModel(Lookups model);
+
+  Future<void> saveFinancialLookupsModel(FinancialLookups model);
+
+  Future<void> saveBudgets(List<Budget> budgets);
 
   Future<List<SchoolEnroll>> fetchIndividualSchoolEnroll(String schoolId);
 

@@ -2,8 +2,10 @@ import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/local/local_data_source.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -44,6 +46,14 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.lookups.get(await _emis);
 
   @override
+  Future<Pair<bool, FinancialLookups>> fetchFinancialLookupsModel() async =>
+      await _database.financialLookups.get(await _emis);
+
+  @override
+  Future<List<Budget>> fetchBudgets() async =>
+      await _database.budgets.get(await _emis);
+
+  @override
   Future<void> saveSchools(List<School> schools) async =>
       await _database.schools.save(schools, await _emis);
 
@@ -62,6 +72,14 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<void> saveLookupsModel(Lookups model) async =>
       await _database.lookups.save(model, await _emis);
+
+  @override
+  Future<void> saveFinancialLookupsModel(FinancialLookups model) async =>
+      await _database.financialLookups.save(model, await _emis);
+
+  @override
+  Future<void> saveBudgets(List<Budget> budgets) async =>
+      await _database.budgets.save(budgets, await _emis);
 
   @override
   Future<List<SchoolEnroll>> fetchIndividualSchoolEnroll(

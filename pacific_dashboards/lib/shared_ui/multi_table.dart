@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
+
+import 'multi_table_widget.dart';
 
 class MultiTable extends StatelessWidget {
   const MultiTable({
     Key key,
     @required String title,
-    @required String firstColumnName,
-    @required Map<String, Map<String, GenderTableData>> data,
+    @required List<String> columnNames,
+    @required List<int> columnFlex,
+    @required Map<String, Map<String, dynamic>> data,
     KeySortFunc keySortFunc,
   })  : assert(title != null),
-        assert(firstColumnName != null),
+        assert(columnNames != null),
+        assert(columnFlex != null),
         assert(data != null),
         _title = title,
-        _firstColumnName = firstColumnName,
+        _columnNames = columnNames,
+        _columnFlex = columnFlex,
         _data = data,
         _keySortFunc = keySortFunc,
         super(key: key);
 
   final String _title;
-  final String _firstColumnName;
-  final Map<String, Map<String, GenderTableData>> _data;
+  final List<String> _columnNames;
+  final List<int> _columnFlex;
+  final Map<String, Map<String, dynamic>> _data;
   final KeySortFunc _keySortFunc;
 
   @override
@@ -35,10 +40,11 @@ class MultiTable extends StatelessWidget {
         children: _data.keys.map((key) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: GenderTableWidget(
+            child: MultiTableWidget(
               data: _data[key],
+              columnNames: _columnNames,
+              columnFlex: _columnFlex,
               title: key,
-              firstColumnName: _firstColumnName,
               keySortFunc: _keySortFunc,
             ),
           );

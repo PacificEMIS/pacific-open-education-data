@@ -4,9 +4,6 @@ import 'package:pacific_dashboards/pages/individual_school/components/exams/indi
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class HistoryComponent extends StatelessWidget {
   final Stream<bool> _loadingStream;
@@ -96,7 +93,10 @@ class _HistoryTable extends StatelessWidget {
               children: <Widget>[
                 _YearCell(year: byYearData.year),
                 ...byYearData.rows.mapIndexed((index, item) {
-                  return _DataRow(data: item, haveBackground: index % 2 == 1,);
+                  return _DataRow(
+                    data: item,
+                    haveBackground: index % 2 == 1,
+                  );
                 }),
               ],
             )
@@ -296,11 +296,20 @@ class _Row extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(child: _measure),
           const SizedBox(width: 8),
-          Container(width: 60, child: _male,),
+          Container(
+            width: 60,
+            child: _male,
+          ),
           const SizedBox(width: 8),
-          Container(width: 60, child: _female,),
+          Container(
+            width: 60,
+            child: _female,
+          ),
           const SizedBox(width: 8),
-          Container(width: 40, child: _total,),
+          Container(
+            width: 40,
+            child: _total,
+          ),
           const SizedBox(width: 8),
         ],
       ),

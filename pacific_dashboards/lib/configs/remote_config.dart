@@ -1,10 +1,13 @@
 import 'dart:convert';
 
-import 'package:firebase_remote_config/firebase_remote_config.dart' as fireConfig;
+import 'package:firebase_remote_config/firebase_remote_config.dart'
+    as fireConfig;
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
+
+import '../models/emis_config/module_config.dart';
 
 abstract class RemoteConfig {
   Future<EmisesConfig> get emises;
@@ -45,6 +48,8 @@ EmisesConfig _defaultConfig = EmisesConfig(
         ModuleConfig(id: 'teachers'),
         ModuleConfig(id: 'exams'),
         ModuleConfig(id: 's_accreditation'),
+        ModuleConfig(id: 'budgets'),
+        ModuleConfig(id: 'individual_schools')
       ],
     ),
     EmisConfig(
@@ -54,6 +59,8 @@ EmisesConfig _defaultConfig = EmisesConfig(
         ModuleConfig(id: 'teachers'),
         ModuleConfig(id: 'exams'),
         ModuleConfig(id: 's_accreditation'),
+        ModuleConfig(id: 'budgets'),
+        ModuleConfig(id: 'individual_schools')
       ],
     ),
     EmisConfig(
@@ -62,6 +69,8 @@ EmisesConfig _defaultConfig = EmisesConfig(
         ModuleConfig(id: 'schools'),
         ModuleConfig(id: 'teachers'),
         ModuleConfig(id: 'exams'),
+        ModuleConfig(id: 'budgets'),
+        ModuleConfig(id: 'individual_schools')
       ],
     ),
   ],

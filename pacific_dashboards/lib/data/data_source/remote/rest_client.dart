@@ -3,7 +3,9 @@ import 'package:pacific_dashboards/data/data_source/remote/entities/schools_list
 import 'package:pacific_dashboards/data/data_source/remote/entities/token/token_response_body.dart';
 import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
@@ -11,6 +13,7 @@ import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:retrofit/retrofit.dart';
+import '../../../models/lookups/lookups.dart';
 
 part 'rest_client.g.dart';
 
@@ -35,6 +38,9 @@ abstract class RestClient {
 
   @GET('lookups/collection/core')
   Future<Lookups> getLookups();
+
+  @GET('lookups/collection/findata')
+  Future<FinancialLookups> getFinanceLookups();
 
   @GET('warehouse/enrol/school/{schoolId}?report')
   Future<List<SchoolEnroll>> getIndividualSchoolEnroll(
@@ -70,4 +76,7 @@ abstract class RestClient {
   Future<List<SchoolExamReport>> getSchoolExamReports(
     @Path('schoolId') String schoolId,
   );
+
+  @GET('warehouse/finance')
+  Future<List<Budget>> getBudgets();
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
@@ -12,6 +13,8 @@ import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
 import 'package:pacific_dashboards/service_locator.dart';
+
+import 'models/short_school/short_school.dart';
 
 class ViewModelFactory {
   static ViewModelFactory _instance;
@@ -120,6 +123,15 @@ class ViewModelFactory {
       ctx,
       repository: serviceLocator.repository,
       school: school,
+    );
+  }
+
+  BudgetViewModel createBudgetsViewModel(BuildContext ctx) {
+    return BudgetViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      remoteConfig: serviceLocator.remoteConfig,
+      globalSettings: serviceLocator.globalSettings,
     );
   }
 }

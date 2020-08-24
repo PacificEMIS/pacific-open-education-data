@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
 
 class SchoolsPageData {
   SchoolsPageData({

@@ -108,8 +108,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             snapshot.data.teachersBySchoolLevelStateAndGender),
                         title: 'teachersDashboardsEnrollByLevelStateGenderTitle'
                             .localized(context),
-                        firstColumnName: 'teachersDashboardsSchoolLevelDomain'
-                            .localized(context),
+                        columnNames: ['teachersDashboardsSchoolLevelDomain', 'labelMale', 'labelFemale', 'labelTotal'],
                         data: snapshot.data.teachersBySchoolLevelStateAndGender,
                         keySortFunc: (lv, rv) => lv.compareTo(rv),
                       ),

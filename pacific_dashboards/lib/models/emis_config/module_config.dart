@@ -38,6 +38,8 @@ class ModuleConfig {
         return Section.budgets;
       case 'individual_schools':
         return Section.individualSchools;
+      case 'special_education':
+        return Section.specialEducation;
     }
     return null;
   }

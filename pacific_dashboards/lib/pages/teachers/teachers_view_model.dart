@@ -11,7 +11,7 @@ import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
-import 'package:pacific_dashboards/shared_ui/gender_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TeachersViewModel extends BaseViewModel {
