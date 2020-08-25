@@ -15,7 +15,8 @@ enum Section {
   indicators,
   budgets,
   individualSchools,
-  specialEducation
+  specialEducation,
+  wash
 }
 
 extension UI on Section {
@@ -34,9 +35,11 @@ extension UI on Section {
       case Section.budgets:
         return "images/budgets.svg";
       case Section.individualSchools:
-        return "images/budgets.svg"; // TODO: waiting for icon
+        return "images/individual_schools.svg";
       case Section.specialEducation:
-        return "images/budgets.svg"; // TODO: waiting for icon
+        return "images/special_education.svg";
+      case Section.wash:
+        return "images/wash.svg";
     }
     throw FallThroughError();
   }
@@ -59,6 +62,8 @@ extension UI on Section {
         return 'homeSectionIndividualSchools'.localized(context);
       case Section.specialEducation:
         return 'homeSectionSpecialEducation'.localized(context);
+      case Section.wash:
+        return 'homeSectionWash'.localized(context);
     }
 
     throw FallThroughError();
@@ -82,6 +87,8 @@ extension UI on Section {
         return SchoolsListPage.kRoute;
       case Section.specialEducation:
         return "/Special Education";
+      case Section.wash:
+        return "/Wash";
         break;
     }
 
