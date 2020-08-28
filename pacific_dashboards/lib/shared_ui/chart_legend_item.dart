@@ -21,12 +21,15 @@ class ChartLegendItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Container(
-          height: 8,
-          width: 8,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(1),
-            color: _color,
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Container(
+            height: 8,
+            width: 8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(1),
+              color: _color,
+            ),
           ),
         ),
         SizedBox(

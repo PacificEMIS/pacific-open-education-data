@@ -65,6 +65,9 @@ flutter:
     - images/filter.svg
     - images/ic_search.svg
     - images/ic_search_close.svg
+    - images/wash.svg
+    - images/individual_schools.svg
+    - images/special_education.svg 
 
   fonts:
     - family: NotoSans

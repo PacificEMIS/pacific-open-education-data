@@ -7,8 +7,9 @@ import 'package:pacific_dashboards/utils/hex_color.dart';
 class BarChartWidget extends StatefulWidget {
   final Map<String, int> data;
   final String title;
+  final charts.BarGroupingType type;
 
-  BarChartWidget({Key key, this.title, this.data}) : super(key: key);
+  BarChartWidget({Key key, this.title, this.data, this.type}) : super(key: key);
 
   @override
   BarChartWidgetState createState() => BarChartWidgetState();
@@ -42,6 +43,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
         return charts.BarChart(
           snapshot.data,
           animate: false,
+          barGroupingType: widget.type,
           primaryMeasureAxis: charts.NumericAxisSpec(
             renderSpec: charts.GridlineRendererSpec(
               labelStyle: charts.TextStyleSpec(

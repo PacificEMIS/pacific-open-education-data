@@ -4,23 +4,24 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
 
-class BarChartWidget extends StatefulWidget {
+class BarChartStackedWidget extends StatefulWidget {
   final Map<String, Map<String, int>> data;
   final String title;
   final charts.BarGroupingType type;
 
-  BarChartWidget({Key key, this.title, this.data, this.type}) : super(key: key);
+  BarChartStackedWidget({Key key, this.title, this.data, this.type})
+      : super(key: key);
 
   @override
-  BarChartWidgetState createState() => BarChartWidgetState();
+  BarChartStackedWidgetState createState() => BarChartStackedWidgetState();
 }
 
-class BarChartWidgetState extends State<BarChartWidget> {
+class BarChartStackedWidgetState extends State<BarChartStackedWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Future.microtask(() {
-        Map<String, List<BarChartData>> data;
+        Map<String, List<BarChartData>> data = Map();
         widget.data.forEach((k, v) {
           List<BarChartData> chartData = new List();
           v.forEach((key, value) {
@@ -28,17 +29,20 @@ class BarChartWidgetState extends State<BarChartWidget> {
           });
           data[k] = chartData;
         });
-
+        List<BarChartData> seriesWidgets = [];
+        data.forEach((key, value) {
+          seriesWidgets.addAll(value);
+        });
+        List<BarChartData> test = [];
+        test.add(seriesWidgets.first);
         return [
-          data.forEach((key, value) {
-            charts.Series(
-                domainFn: (BarChartData chartData, _) => chartData.domain,
-                measureFn: (BarChartData chartData, _) => chartData.measure,
-                colorFn: (BarChartData chartData, _) =>
-                    chartData.color.chartsColor,
-                id: widget.title,
-                data: value);
-          })
+          charts.Series(
+            domainFn: (BarChartData chartData, _) => chartData.domain,
+            measureFn: (BarChartData chartData, _) => chartData.measure,
+            colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+            id: 'test',
+            data: test,
+          )
         ];
       }),
       builder: (context, snapshot) {
@@ -49,7 +53,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
         return charts.BarChart(
           snapshot.data,
           animate: false,
-          barGroupingType: widget.type,
+          barGroupingType: charts.BarGroupingType.stacked,
           primaryMeasureAxis: charts.NumericAxisSpec(
             renderSpec: charts.GridlineRendererSpec(
               labelStyle: charts.TextStyleSpec(

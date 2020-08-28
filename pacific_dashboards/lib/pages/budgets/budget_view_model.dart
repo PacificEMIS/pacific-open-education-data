@@ -126,33 +126,207 @@ class _BudgetModel {
 Future<BudgetData> _transformBudgetModel(
   _BudgetModel _budgetModel,
 ) async {
-  final groupedByYear = _budgetModel.budget.groupBy((it) => it.surveyYear);
   final filteredBudget =
       await _budgetModel.budget.applyFilters(_budgetModel.filters);
+  final groupedByYear = _budgetModel.budget.groupBy((it) => it.surveyYear);
   final dataByGnpAndGovernmentSpending =
       _generateSpendingByYearData(groupedByYear);
+
+  //Actual data
   final dataByGnpAndGovernmentSpendingActual =
       dataByGnpAndGovernmentSpending[0];
+  //Budgeted data
   final dataByGnpAndGovernmentSpendingBudgeted =
       dataByGnpAndGovernmentSpending[1];
+  //Spending data
+  final dataBySpendingBySector = _generateYearAndSectorData(
+      filteredBudget.groupBy((it) => it.districtCode));
 
-  // final budgetByYear =
-  //     _budgetModel.budget.groupBy((it) => it.surveyYear).entries;
-  // final budgetBySector =
-  //     _budgetModel.budget.groupBy((it) => it.districtCode).entries;
-  // final translates = _budgetModel.lookups;
+  final dataSpendingBySectorAndYear =
+      _generateSpendingBySectorData(groupedByYear);
+  final dataSpendingByDistrict = _generateSpendinDistrictData(groupedByYear);
 
   return BudgetData(
       dataByGnpAndGovernmentSpendingActual:
           dataByGnpAndGovernmentSpendingActual,
       dataByGnpAndGovernmentSpendingBudgeted:
-          dataByGnpAndGovernmentSpendingBudgeted);
+          dataByGnpAndGovernmentSpendingBudgeted,
+      dataSpendingBySector: dataBySpendingBySector,
+      dataSpendingBySectorAndYear: dataSpendingBySectorAndYear,
+      dataSpendingByDistrict: dataSpendingByDistrict);
+}
+
+Map<String, List<DataSpendingByYear>> _generateSpendingBySectorData(
+    Map<int, List<Budget>> budgetDataGroupedByYear) {
+  List<DataSpendingByYear> resultDataActualExpenditureByYear = [];
+  List<DataSpendingByYear> resultDataActualCurrentExpenditureByYear = [];
+  List<DataSpendingByYear> resultDataActualExpPerHeadExpenditureByYear = [];
+
+  List<DataSpendingByYear> resultDataBudgetExpenditureByYear = [];
+  List<DataSpendingByYear> resultDataBudgetCurrentExpenditureByYear = [];
+  List<DataSpendingByYear> resultDataBudgetExpPerHeadExpenditureByYear = [];
+
+  List<DataSpendingByYear> resultDataEnrollmentExpenditureByYear = [];
+
+  Map<String, List<DataSpendingByYear>> spendingChartData = new Map();
+  budgetDataGroupedByYear.forEach((year, spendings) {
+    double edExpAEce = 0.0;
+    double edExpBEce = 0.0;
+
+    double edRecurrentExpAEce = 0.0;
+    double edRecurrentExpBEce = 0.0;
+
+    double enrolmentEce = 0.0;
+
+    double edExpAPrimary = 0.0;
+    double edExpBPrimary = 0.0;
+
+    double edRecurrentExpAPrimary = 0.0;
+    double edRecurrentExpBPrimary = 0.0;
+
+    double enrolmentPrimary = 0.0;
+
+    double edExpASecondary = 0.0;
+    double edExpBSecondary = 0.0;
+
+    double edRecurrentExpASecondary = 0.0;
+    double edRecurrentExpBSecondary = 0.0;
+
+    double enrolmentSecondary = 0.0;
+
+    for (var value in spendings) {
+      if (value.sectorCode == 'ECE') {
+        edExpAEce += value.edExpA;
+        edExpBEce += value.edExpB;
+        edRecurrentExpAEce += value.edRecurrentExpA;
+        edRecurrentExpBEce += value.edRecurrentExpB;
+        enrolmentEce += value.enrolment;
+      } else if (value.sectorCode == 'PRI') {
+        edExpAPrimary += value.edExpA;
+        edExpBPrimary += value.edExpB;
+        edRecurrentExpAPrimary += value.edRecurrentExpA;
+        edRecurrentExpBPrimary += value.edRecurrentExpB;
+        enrolmentPrimary += value.enrolment;
+      } else if (value.sectorCode == 'SEC') {
+        edExpASecondary += value.edExpA;
+        edExpBSecondary += value.edExpB;
+        edRecurrentExpASecondary += value.edRecurrentExpA;
+        edRecurrentExpBSecondary += value.edRecurrentExpB;
+        enrolmentSecondary += value.enrolment;
+      }
+    }
+    //Actual
+    resultDataActualCurrentExpenditureByYear.add(DataSpendingByYear(
+        year: year.toString(),
+        ece: edRecurrentExpAEce.round(),
+        primary: edRecurrentExpAPrimary.round(),
+        secondary: edRecurrentExpASecondary.round()));
+    resultDataActualExpenditureByYear.add(DataSpendingByYear(
+        year: year.toString(),
+        ece: edExpAEce.round(),
+        primary: edExpAPrimary.round(),
+        secondary: edExpASecondary.round()));
+    resultDataActualExpPerHeadExpenditureByYear.add(DataSpendingByYear(
+        year: year.toString(),
+        ece: edExpAEce != 0 ? (edExpAEce / enrolmentEce).round() : 0,
+        primary:
+            edExpAPrimary != 0 ? (edExpAPrimary / enrolmentPrimary).round() : 0,
+        secondary: edExpASecondary != 0
+            ? (edExpASecondary / enrolmentSecondary).round()
+            : 0));
+    //Budget5
+    resultDataBudgetCurrentExpenditureByYear.add(DataSpendingByYear(
+        year: year.toString(),
+        ece: edRecurrentExpBEce.round(),
+        primary: edRecurrentExpBPrimary.round(),
+        secondary: edRecurrentExpBSecondary.round()));
+    resultDataBudgetExpenditureByYear.add(DataSpendingByYear(
+        year: year.toString(),
+        ece: edExpBEce.round(),
+        primary: edExpBPrimary.round(),
+        secondary: edExpBSecondary.round()));
+    resultDataBudgetExpPerHeadExpenditureByYear.add(DataSpendingByYear(
+        year: year.toString(),
+        ece: edExpBEce != 0 ? (edExpBEce / enrolmentEce).round() : 0,
+        primary:
+            edExpBPrimary != 0 ? (edExpBPrimary / enrolmentPrimary).round() : 0,
+        secondary: edExpBSecondary != 0
+            ? (edExpBSecondary / enrolmentSecondary).round()
+            : 0));
+    //Enrollment
+    resultDataEnrollmentExpenditureByYear.add(DataSpendingByYear(
+        year: year.toString(),
+        ece: enrolmentEce.round(),
+        primary: enrolmentPrimary.round(),
+        secondary: enrolmentSecondary.round()));
+  });
+  spendingChartData.addAll({
+    'actualExpenditure': resultDataActualExpenditureByYear
+        .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
+    'budgetExpenditure': resultDataBudgetExpenditureByYear
+        .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
+    'actualRecurrentExpenditure': resultDataActualCurrentExpenditureByYear
+        .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
+    'budgetRecurrentExpenditure': resultDataBudgetCurrentExpenditureByYear
+        .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
+    'actualExpPerHead': resultDataActualExpPerHeadExpenditureByYear
+        .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
+    'budgetExpPerHead': resultDataBudgetExpPerHeadExpenditureByYear
+        .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
+    'enrollment': resultDataEnrollmentExpenditureByYear
+  });
+  return spendingChartData;
+}
+
+List<DataSpendingByDistrict> _generateSpendinDistrictData(
+    Map<int, List<Budget>> budgetDataGroupedByYear) {
+  List<DataSpendingByDistrict> dataSpendingByDistrict = new List();
+  budgetDataGroupedByYear.forEach((year, spendings) {
+    var groupedByDistrict =
+        spendings.groupBy((element) => element.districtCode);
+
+    groupedByDistrict.forEach((district, values) {
+      if (district != null && year != null) {
+        double districtEdExpA = 0;
+        double districtEdExpB = 0;
+        double districtEdRecurrentExpA = 0;
+        double districtEdRecurrentExpB = 0;
+        double districtEnrolment = 0;
+
+        values.forEach((element) {
+          districtEdExpA += element.edExpA;
+          districtEdExpB += element.edExpB;
+          districtEdRecurrentExpA += element.edRecurrentExpA;
+          districtEdRecurrentExpB += element.edRecurrentExpB;
+          districtEnrolment += element.enrolment;
+        });
+        dataSpendingByDistrict.add(DataSpendingByDistrict(
+            year: year.toString(),
+            district: values[0].districtCode,
+            edExpA: districtEdExpA.round(),
+            edExpAPerHead: districtEdExpA != 0 && districtEnrolment != 0
+                ? (districtEdExpA / districtEnrolment)
+                : 0,
+            edExpB: districtEdExpB.round(),
+            edExpBPerHead: districtEdExpB != 0 && districtEnrolment != 0
+                ? (districtEdExpB / districtEnrolment).round()
+                : 0,
+            edRecurrentExpA: districtEdRecurrentExpA.round(),
+            edRecurrentExpB: districtEdRecurrentExpB.round(),
+            enrolment: districtEnrolment.round()));
+      }
+    });
+  });
+
+  return dataSpendingByDistrict
+      .chainSort((rv, lv) => rv.year.compareTo(lv.year));
 }
 
 List _generateSpendingByYearData(
     Map<int, List<Budget>> budgetDataGroupedByYear) {
   final List<DataByGnpAndGovernmentSpending> actualData = [];
   final List<DataByGnpAndGovernmentSpending> budgetedData = [];
+
   budgetDataGroupedByYear.forEach((year, values) {
     double govtExpenseA = 0;
     double govtExpenseB = 0;
@@ -175,6 +349,7 @@ List _generateSpendingByYearData(
 
     percentageEdGovtA = edExpenseA / govtExpenseA;
     percentageEdGovtB = edExpenseB / govtExpenseB;
+
     percentageEdGnpA = edExpenseA / gNP;
     percentageEdGnpB = edExpenseB / gNP;
 
@@ -210,22 +385,82 @@ List _generateSpendingByYearData(
   ];
 }
 
-List _generateYearAndSectorData(
-    Map<int, List<Budget>> budgetDataGroupedByYear) {
-  final List<EnrollDataByYearAndSector> actualData = [];
-  final List<EnrollDataByYearAndSector> budgetedData = [];
-  final List<EnrollDataByYearAndSector> actualDataPerHead = [];
-  final List<EnrollDataByYearAndSector> budgetedDataPerHead = [];
+List<DataSpendingBySector> _generateYearAndSectorData(
+    Map<String, List<Budget>> budgetDataGroupedByDistrict) {
+  final List<DataSpendingBySector> dataSpendingBySector = [];
 
-  budgetDataGroupedByYear.forEach((year, values) {
-    double ece = 0;
-    double primary = 0;
-    double secondary = 0;
+  double eceTotalActual = 0;
+  double primaryTotalActual = 0;
+  double secondaryTotalActual = 0;
+
+  double eceTotalBudgeted = 0;
+  double primaryTotalBudgeted = 0;
+  double secondaryTotalBudgeted = 0;
+
+  budgetDataGroupedByDistrict.forEach((sector, values) {
+    String districtCode = '';
+    double eceActual = 0;
+    double eceBudget = 0;
+    double primaryActual = 0;
+    double primaryBudget = 0;
+    double secondaryActual = 0;
+    double secondaryBudget = 0;
+    double totalActual = 0;
+    double totalBudget = 0;
 
     for (var data in values) {
-      if (data.sectorCode == 'ECE') ece += data.edExpA;
-      if (data.sectorCode == 'PRI') primary += data.edExpA;
-      if (data.sectorCode == 'SEC') secondary += data.edExpA;
+      if (data.sectorCode != null ?? data.districtCode != null) {
+        if (data.sectorCode == 'ECE') {
+          eceActual += data.edExpA;
+          eceBudget += data.edExpB;
+
+          eceTotalActual += data.edExpA;
+          eceTotalBudgeted += data.edExpB;
+        } else if (data.sectorCode == 'PRI') {
+          primaryActual += data.edExpA;
+          primaryBudget += data.edExpB;
+
+          primaryTotalActual += data.edExpA;
+          primaryTotalBudgeted += data.edExpB;
+        } else if (data.sectorCode == 'SEC') {
+          secondaryActual += data.edExpA;
+          secondaryBudget += data.edExpB;
+
+          secondaryTotalActual += data.edExpA;
+          secondaryTotalBudgeted += data.edExpB;
+        }
+
+        totalActual = eceActual + primaryActual + secondaryActual;
+        totalBudget = eceBudget + primaryBudget + secondaryBudget;
+      }
+    }
+
+    if (sector != null && districtCode != null) {
+      districtCode = sector;
+      dataSpendingBySector.add(DataSpendingBySector(
+          districtCode: districtCode,
+          eceActual: eceActual,
+          eceBudget: eceBudget,
+          primaryActual: primaryActual,
+          primaryBudget: primaryBudget,
+          secondaryActual: secondaryActual,
+          secondaryBudget: secondaryBudget,
+          totalActual: totalActual,
+          totalBudget: totalBudget));
     }
   });
+  dataSpendingBySector
+      .chainSort((lv, rv) => rv.districtCode.compareTo(lv.districtCode));
+  dataSpendingBySector.add(DataSpendingBySector(
+      districtCode: 'labelTotal',
+      eceActual: eceTotalActual,
+      eceBudget: eceTotalBudgeted,
+      primaryActual: primaryTotalActual,
+      primaryBudget: primaryTotalBudgeted,
+      secondaryActual: secondaryTotalActual,
+      secondaryBudget: secondaryTotalBudgeted,
+      totalActual: eceTotalActual + primaryTotalActual + secondaryTotalActual,
+      totalBudget:
+          eceTotalBudgeted + primaryTotalBudgeted + secondaryTotalBudgeted));
+  return dataSpendingBySector;
 }

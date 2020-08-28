@@ -31,6 +31,9 @@ class Strings {
       'labelFemale': 'Female',
       'labelNational': 'National',
       'labelNoData': 'No data',
+      'labelEce': 'ECE',
+      'labelPrimary': 'Primary',
+      'labelSec': 'Secondary',
       'error_unknown': 'Unknown error occurred',
       'error_server_unavailable':
           'You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
@@ -165,9 +168,10 @@ class Strings {
       'primaryEducation': 'Primary Education',
       'secondaryEducation': 'Secondary Education',
       'actualExpenditure': 'Actual Expenditure',
+      'budgetExpenditure': 'Budget Expenditure',
       'budget': 'Budget',
       'actualRecurrentExpenditure': 'Actual Recurrent Expenditure',
-      'budgetRecurrent': 'Budget Recurrent',
+      'budgetRecurrentExpenditure': 'Budget Recurrent Expenditure',
       'actualExpPerHead': 'Actual Exp per Head',
       'budgetExpPerHead': 'Budget Exp per Head',
       'enrollment': 'Enrollemnt'

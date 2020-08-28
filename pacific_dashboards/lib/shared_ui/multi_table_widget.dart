@@ -112,7 +112,12 @@ class MultiTableWidget<T> extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: generateColumnCells(_columnNames, it),
+                              children: generateColumnCells(
+                                  _columnNames,
+                                  it,
+                                  (it.index - 1) == snapshot.data.length
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
                             ),
                           ))
                       .toList(),
@@ -134,7 +139,8 @@ class MultiTableWidget<T> extends StatelessWidget {
     return list;
   }
 
-  List<Widget> generateColumnCells(List<String> strings, _CellData cellData) {
+  List<Widget> generateColumnCells(
+      List<String> strings, _CellData cellData, FontWeight fontWeight) {
     var numberFormat = new NumberFormat('###,###,###', 'eu');
     List<Widget> list = new List<Widget>();
     print(cellData.measure.toString());
@@ -159,7 +165,39 @@ class MultiTableWidget<T> extends StatelessWidget {
           value: numberFormat.format(cellData.measure.edExpense)));
       list.add(_Cell(
           flex: _columnFlex[3],
-          value: cellData.measure.percentageEdGnp.toStringAsFixed(0)));
+          value: cellData.measure.percentageEdGnp.toStringAsFixed(1)));
+    } else if (_type == 'ECE') {
+      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[1],
+          value: numberFormat.format(cellData.measure.eceActual)));
+      list.add(_Cell(
+          flex: _columnFlex[2],
+          value: numberFormat.format(cellData.measure.eceBudget)));
+    } else if (_type == 'Primary') {
+      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[1],
+          value: numberFormat.format(cellData.measure.primaryActual)));
+      list.add(_Cell(
+          flex: _columnFlex[2],
+          value: numberFormat.format(cellData.measure.primaryBudget)));
+    } else if (_type == 'Secondary') {
+      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[1],
+          value: numberFormat.format(cellData.measure.secondaryActual)));
+      list.add(_Cell(
+          flex: _columnFlex[2],
+          value: numberFormat.format(cellData.measure.secondaryBudget)));
+    } else if (_type == 'Total') {
+      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[1],
+          value: numberFormat.format(cellData.measure.totalActual)));
+      list.add(_Cell(
+          flex: _columnFlex[2],
+          value: numberFormat.format(cellData.measure.totalBudget)));
     } else {
       list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
       list.add(_Cell(
@@ -176,13 +214,16 @@ class MultiTableWidget<T> extends StatelessWidget {
 }
 
 class _Cell extends StatelessWidget {
-  const _Cell({Key key, @required String value, int flex})
+  const _Cell(
+      {Key key, @required String value, int flex, FontWeight fontWeight})
       : _value = value,
         _flex = flex,
+        _fontWeight = fontWeight,
         super(key: key);
 
   final String _value;
   final int _flex;
+  final FontWeight _fontWeight;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -194,7 +235,10 @@ class _Cell extends StatelessWidget {
           children: <Widget>[
             Text(
               _value.localized(context),
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  .copyWith(fontWeight: _fontWeight),
             ),
           ],
         ),

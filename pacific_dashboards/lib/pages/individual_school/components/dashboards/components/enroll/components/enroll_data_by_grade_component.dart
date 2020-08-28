@@ -24,7 +24,9 @@ class EnrollDataByGradeComponent extends StatelessWidget {
               'individualSchoolDashboardEnrollByGradeLevelGenderGrade',
               'labelMale',
               'labelFemale',
-              'labelTotal']
+              'labelTotal'
+            ],
+            columnFlex: [3, 3, 3, 3],
           );
         } else {
           return Container();

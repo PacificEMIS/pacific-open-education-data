@@ -6,11 +6,13 @@ import 'package:pacific_dashboards/pages/budgets/budget_data.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/bar_chart_stacked_widget.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
-
 import 'components/enroll_data_by_gnp_government_component.dart';
+import 'components/spending_by_district_component.dart';
+import 'components/spending_by_sector_component.dart';
 
 class BudgetsPage extends MvvmStatefulWidget {
   static String kRoute = '/Budgets';
@@ -66,26 +68,32 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                   } else {
                     var list = <Widget>[
                       _titleWidget(context, 'budgetsEducationFinancing', true),
+                      //GNP and Government Spending Actual
                       _titleWidget(
                           context,
                           'budgetsGnpAndGovernmentSpendingActualExpense',
                           false),
-                      gNpAndGovernmentSpendingActualExpense(context, snapshot),
+                      gNpAndGovernmentSpendingActualExpense(context,
+                          snapshot.data.dataByGnpAndGovernmentSpendingActual),
+                      //-- GNP and Government Spending Budgeted
                       _titleWidget(
                           context,
                           'budgetsGnpAndGovernmentSpendingBudgetedExpense',
                           false),
-                      gNPandGovernmentSpendingActualExpense(context, snapshot),
+                      gNpAndGovernmentSpendingActualExpense(context,
+                          snapshot.data.dataByGnpAndGovernmentSpendingBudgeted),
+                      //-- Spending By Sector
                       _titleWidget(context, 'budgetsSpendingBySector', false),
-                      gNPandGovernmentSpendingBudgetedExpense(
-                          context, snapshot),
+                      spendingBySector(
+                          context, snapshot.data.dataSpendingBySector),
+                      //-- Spending By Sector
                       _titleWidget(context, 'budgetsSpendingBySector', false),
-                      gNpAndGovernmentSpendingActualExpenseGrid(
-                          context, snapshot),
+                      SpendngBySectorComponent(
+                          data: snapshot.data.dataSpendingBySectorAndYear),
                       _titleWidget(
                           context, 'budgetsGnpAndGovernmentSpending', false),
-                      gNpAndGovernmentSpendingActualExpenseGrid(
-                          context, snapshot),
+                      SpendngByDistrictComponent(
+                          data: snapshot.data.dataSpendingByDistrict)
                     ];
                     var budgetWidgetList = list;
                     return Column(
@@ -99,21 +107,49 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
         ),
       ),
     );
-    // );
   }
 
-  MiniTabLayout gNPandGovernmentSpendingBudgetedExpense(
-      BuildContext context, AsyncSnapshot<BudgetData> snapshot) {
+  MiniTabLayout gNpAndGovernmentSpendingActualExpense(
+      BuildContext context, List<DataByGnpAndGovernmentSpending> data) {
+    return MiniTabLayout(
+      tabs: _GovtTab.values,
+      tabNameBuilder: (tab) {
+        switch (tab) {
+          case _GovtTab.govtExpenditure:
+            return 'govtExpenditure'.localized(context);
+          case _GovtTab.gNP:
+            return 'gNP'.localized(context);
+        }
+        throw FallThroughError();
+      },
+      builder: (ctx, tab) {
+        switch (tab) {
+          case _GovtTab.gNP:
+            return EnrollDataByGnpAndGovernmentSpendingComponent(
+                type: 'GNP', data: data);
+          case _GovtTab.govtExpenditure:
+            return EnrollDataByGnpAndGovernmentSpendingComponent(
+                type: 'Govt', data: data);
+        }
+        throw FallThroughError();
+      },
+    );
+  }
+
+  MiniTabLayout spendingBySector(
+      BuildContext context, List<DataSpendingBySector> data) {
     return MiniTabLayout(
       tabs: _SpendingTab.values,
       tabNameBuilder: (tab) {
         switch (tab) {
           case _SpendingTab.eCE:
             return 'eCE'.localized(context);
-          case _SpendingTab.primaryEducation:
+          case _SpendingTab.primary:
             return 'primaryEducation'.localized(context);
-          case _SpendingTab.secondaryEducation:
+          case _SpendingTab.secondary:
             return 'secondaryEducation'.localized(context);
+          case _SpendingTab.total:
+            return 'labelTotal'.localized(context);
         }
         throw FallThroughError();
       },
@@ -121,133 +157,16 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
         switch (tab) {
           case _SpendingTab.eCE:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'ECE',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingBudgeted);
-          case _SpendingTab.primaryEducation:
+                type: 'ECE', data: data);
+          case _SpendingTab.primary:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'PrimaryEducation',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingBudgeted);
-          case _SpendingTab.secondaryEducation:
+                type: 'Primary', data: data);
+          case _SpendingTab.secondary:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'SecondaryEducation',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingBudgeted);
-        }
-        throw FallThroughError();
-      },
-    );
-  }
-
-  MiniTabLayout gNPandGovernmentSpendingActualExpense(
-      BuildContext context, AsyncSnapshot<BudgetData> snapshot) {
-    return MiniTabLayout(
-      tabs: _GovtTab.values,
-      tabNameBuilder: (tab) {
-        switch (tab) {
-          case _GovtTab.govtExpenditure:
-            return 'govtExpenditure'.localized(context);
-          case _GovtTab.gNP:
-            return 'gNP'.localized(context);
-        }
-        throw FallThroughError();
-      },
-      builder: (ctx, tab) {
-        switch (tab) {
-          case _GovtTab.gNP:
+                type: 'Secondary', data: data);
+          case _SpendingTab.total:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'GNP',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingBudgeted);
-          case _GovtTab.govtExpenditure:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'Govt',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingBudgeted);
-        }
-        throw FallThroughError();
-      },
-    );
-  }
-
-  MiniTabLayout gNpAndGovernmentSpendingActualExpense(
-      BuildContext context, AsyncSnapshot<BudgetData> snapshot) {
-    return MiniTabLayout(
-      tabs: _GovtTab.values,
-      tabNameBuilder: (tab) {
-        switch (tab) {
-          case _GovtTab.govtExpenditure:
-            return 'govtExpenditure'.localized(context);
-          case _GovtTab.gNP:
-            return 'gNP'.localized(context);
-        }
-        throw FallThroughError();
-      },
-      builder: (ctx, tab) {
-        switch (tab) {
-          case _GovtTab.gNP:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'GNP',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-          case _GovtTab.govtExpenditure:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'Govt',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-        }
-        throw FallThroughError();
-      },
-    );
-  }
-
-  MiniTabLayout gNpAndGovernmentSpendingActualExpenseGrid(
-      BuildContext context, AsyncSnapshot<BudgetData> snapshot) {
-    return MiniTabLayout(
-      tabs: _DashboardTab.values,
-      tabNameBuilder: (tab) {
-        switch (tab) {
-          case _DashboardTab.actualExpPerHead:
-            return 'actualExpenditure'.localized(context);
-          case _DashboardTab.actualExpenditure:
-            return 'budget'.localized(context);
-          case _DashboardTab.actualRecurrentExpenditure:
-            return 'actualRecurrentExpenditure'.localized(context);
-          case _DashboardTab.budget:
-            return 'budgetRecurrent'.localized(context);
-          case _DashboardTab.budgetExpPerHead:
-            return 'actualExpPerHead'.localized(context);
-          case _DashboardTab.budgetRecurrent:
-            return 'budgetExpPerHead'.localized(context);
-          case _DashboardTab.enrolment:
-            return 'enrollment'.localized(context);
-        }
-        throw FallThroughError();
-      },
-      builder: (ctx, tab) {
-        switch (tab) {
-          case _DashboardTab.actualExpPerHead:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'actualExpenditure',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-          case _DashboardTab.actualExpenditure:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'budget',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-          case _DashboardTab.actualRecurrentExpenditure:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'actualRecurrentExpenditure',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-          case _DashboardTab.budget:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'budgetRecurrent',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-          case _DashboardTab.budgetExpPerHead:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'actualExpPerHead',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-          case _DashboardTab.budgetRecurrent:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'budgetExpPerHead',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
-          case _DashboardTab.enrolment:
-            return EnrollDataByGnpAndGovernmentSpendingComponent(
-                type: 'enrollment',
-                data: snapshot.data.dataByGnpAndGovernmentSpendingActual);
+                type: 'Total', data: data);
         }
         throw FallThroughError();
       },
@@ -294,13 +213,4 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
 }
 
 enum _GovtTab { govtExpenditure, gNP }
-enum _SpendingTab { eCE, primaryEducation, secondaryEducation }
-enum _DashboardTab {
-  actualExpenditure,
-  budget,
-  actualRecurrentExpenditure,
-  budgetRecurrent,
-  actualExpPerHead,
-  budgetExpPerHead,
-  enrolment
-}
+enum _SpendingTab { eCE, primary, secondary, total }

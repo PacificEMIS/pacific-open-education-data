@@ -104,7 +104,13 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                         key: ValueKey(snapshot.data.enrolByAgeAndEducation),
                         title: 'schoolsDashboardsEnrollByAgeLevelGenderTitle'
                             .localized(context),
-                        columnNames: ['schoolsDashboardsAgeDomain', 'labelMale', 'labelFemale', 'labelTotal'],
+                        columnNames: [
+                          'schoolsDashboardsAgeDomain',
+                          'labelMale',
+                          'labelFemale',
+                          'labelTotal'
+                        ],
+                        columnFlex: [3, 3, 3, 3],
                         data: snapshot.data.enrolByAgeAndEducation,
                         keySortFunc: _compareEnrollmentByAgeAndEducation,
                       ),
@@ -113,7 +119,13 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                             snapshot.data.enrolBySchoolLevelAndDistrict),
                         title: 'schoolsDashboardsEnrollByLevelStateGenderTitle'
                             .localized(context),
-                        columnNames: ['schoolsDashboardsSchoolLevelDomain', 'labelMale', 'labelFemale', 'labelTotal'],
+                        columnNames: [
+                          'schoolsDashboardsSchoolLevelDomain',
+                          'labelMale',
+                          'labelFemale',
+                          'labelTotal'
+                        ],
+                        columnFlex: [3, 3, 3, 3],
                         data: snapshot.data.enrolBySchoolLevelAndDistrict,
                         keySortFunc: _compareEnrollmentBySchoolLevelAndState,
                       ),
