@@ -141,7 +141,7 @@ Future<BudgetData> _transformBudgetModel(
   //Spending data
   final dataBySpendingBySector = _generateYearAndSectorData(
       filteredBudget.groupBy((it) => it.districtCode));
-
+  //Spending by sector and year
   final dataSpendingBySectorAndYear =
       _generateSpendingBySectorData(groupedByYear);
   final dataSpendingByDistrict = _generateSpendinDistrictData(groupedByYear);
@@ -273,7 +273,7 @@ Map<String, List<DataSpendingByYear>> _generateSpendingBySectorData(
         .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
     'budgetExpPerHead': resultDataBudgetExpPerHeadExpenditureByYear
         .chainSort((rv, lv) => rv.year.compareTo(lv.year)),
-    'enrollment': resultDataEnrollmentExpenditureByYear
+    'enrolment': resultDataEnrollmentExpenditureByYear
   });
   return spendingChartData;
 }
@@ -299,13 +299,14 @@ List<DataSpendingByDistrict> _generateSpendinDistrictData(
           districtEdRecurrentExpA += element.edRecurrentExpA;
           districtEdRecurrentExpB += element.edRecurrentExpB;
           districtEnrolment += element.enrolment;
+          districtEnrolment += element.enrolmentNation;
         });
         dataSpendingByDistrict.add(DataSpendingByDistrict(
             year: year.toString(),
             district: values[0].districtCode,
             edExpA: districtEdExpA.round(),
             edExpAPerHead: districtEdExpA != 0 && districtEnrolment != 0
-                ? (districtEdExpA / districtEnrolment)
+                ? (districtEdExpA / districtEnrolment).round()
                 : 0,
             edExpB: districtEdExpB.round(),
             edExpBPerHead: districtEdExpB != 0 && districtEnrolment != 0

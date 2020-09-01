@@ -75,6 +75,9 @@ class HiveBudget extends HiveObject with Expirable {
   @HiveField(22)
   double edRecurrentExpB;
 
+  @HiveField(23)
+  int enrolmentNation;
+
   Budget toBudget() => Budget(
       surveyYear,
       districtCode,
@@ -98,7 +101,8 @@ class HiveBudget extends HiveObject with Expirable {
       enrolment,
       sectorCode,
       edRecurrentExpA,
-      edRecurrentExpB);
+      edRecurrentExpB,
+      enrolmentNation);
 
   static HiveBudget from(Budget budget) => HiveBudget()
     ..surveyYear = budget.surveyYear
@@ -121,5 +125,6 @@ class HiveBudget extends HiveObject with Expirable {
     ..enrolment = budget.enrolment
     ..sectorCode = budget.sectorCode
     ..edRecurrentExpA = budget.edRecurrentExpA
-    ..edRecurrentExpB = budget.edRecurrentExpB;
+    ..edRecurrentExpB = budget.edRecurrentExpB
+    ..enrolmentNation = budget.enrolmentNation;
 }

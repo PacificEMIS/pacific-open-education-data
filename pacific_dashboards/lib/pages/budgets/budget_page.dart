@@ -6,7 +6,6 @@ import 'package:pacific_dashboards/pages/budgets/budget_data.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_stacked_widget.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -90,8 +89,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                       _titleWidget(context, 'budgetsSpendingBySector', false),
                       SpendngBySectorComponent(
                           data: snapshot.data.dataSpendingBySectorAndYear),
-                      _titleWidget(
-                          context, 'budgetsGnpAndGovernmentSpending', false),
+                      _titleWidget(context, 'budgetsSpendingByDistrict', false),
                       SpendngByDistrictComponent(
                           data: snapshot.data.dataSpendingByDistrict)
                     ];

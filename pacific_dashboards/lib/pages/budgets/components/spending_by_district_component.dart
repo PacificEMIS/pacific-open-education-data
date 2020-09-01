@@ -36,10 +36,10 @@ class _SpendngByDistrictComponentState
           tabs: _DashboardTab.values,
           tabNameBuilder: (tab) {
             switch (tab) {
-              case _DashboardTab.actualExpPerHead:
-                return 'actualExpPerHead'.localized(context);
               case _DashboardTab.actualExpenditure:
                 return 'actualExpenditure'.localized(context);
+              case _DashboardTab.actualExpPerHead:
+                return 'actualExpPerHead'.localized(context);
               case _DashboardTab.actualRecurrent:
                 return 'actualRecurrentExpenditure'.localized(context);
               case _DashboardTab.budget:
@@ -49,7 +49,7 @@ class _SpendngByDistrictComponentState
               case _DashboardTab.budgetRecurrent:
                 return 'budgetRecurrentExpenditure'.localized(context);
               case _DashboardTab.enrolment:
-                return 'enrollment'.localized(context);
+                return 'enrolment'.localized(context);
             }
             throw FallThroughError();
           },
@@ -78,12 +78,12 @@ class _SpendngByDistrictComponentState
               case _DashboardTab.actualExpPerHead:
                 return _Chart(
                     data: widget.data,
-                    groupingType: charts.BarGroupingType.grouped,
+                    groupingType: charts.BarGroupingType.stacked,
                     tab: tab);
               case _DashboardTab.budgetExpPerHead:
                 return _Chart(
                     data: widget.data,
-                    groupingType: charts.BarGroupingType.grouped,
+                    groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.enrolment:
                 return _Chart(
@@ -191,7 +191,6 @@ class _Chart extends StatelessWidget {
     return Future.microtask(() {
       final data = List<BarChartData>();
       data.addAll(_data.map((it) {
-        print(it);
         switch (_tab) {
           case _DashboardTab.actualExpPerHead:
             return BarChartData(
@@ -211,6 +210,7 @@ class _Chart extends StatelessWidget {
               it.edRecurrentExpA,
               HexColor.fromStringHash(it.district),
             );
+          //Budget
           case _DashboardTab.budget:
             return BarChartData(
               it.year,

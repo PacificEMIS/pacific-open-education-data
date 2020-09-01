@@ -10,7 +10,7 @@ class Budget {
   @JsonKey(name: 'SurveyYear') //Year
   final int surveyYear;
 
-  @JsonKey(name: "DistrictCode") //DistrictCode
+  @JsonKey(name: "DistrictCode", defaultValue: '') //DistrictCode
   final String districtCode;
 
   @JsonKey(name: 'GNP', defaultValue: 0) //GNP
@@ -76,6 +76,9 @@ class Budget {
   @JsonKey(name: 'EdRecurrentExpB', defaultValue: 0)
   final double edRecurrentExpB;
 
+  @JsonKey(name: "EnrolmentNation", defaultValue: 0)
+  final int enrolmentNation;
+
   const Budget(
       this.surveyYear,
       this.districtCode,
@@ -99,7 +102,8 @@ class Budget {
       this.enrolment,
       this.sectorCode,
       this.edRecurrentExpA,
-      this.edRecurrentExpB);
+      this.edRecurrentExpB,
+      this.enrolmentNation);
 
   factory Budget.fromJson(Map<String, dynamic> json) => _$BudgetFromJson(json);
 

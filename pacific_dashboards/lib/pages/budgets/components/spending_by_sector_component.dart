@@ -47,7 +47,7 @@ class _SpendngBySectorComponentState extends State<SpendngBySectorComponent> {
               case _DashboardTab.budgetRecurrent:
                 return 'budgetRecurrentExpenditure'.localized(context);
               case _DashboardTab.enrolment:
-                return 'enrollment'.localized(context);
+                return 'enrolment'.localized(context);
             }
             throw FallThroughError();
           },

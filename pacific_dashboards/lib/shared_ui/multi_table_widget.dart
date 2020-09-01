@@ -143,7 +143,6 @@ class MultiTableWidget<T> extends StatelessWidget {
       List<String> strings, _CellData cellData, FontWeight fontWeight) {
     var numberFormat = new NumberFormat('###,###,###', 'eu');
     List<Widget> list = new List<Widget>();
-    print(cellData.measure.toString());
     if (_type == 'Govt') {
       list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
       list.add(_Cell(

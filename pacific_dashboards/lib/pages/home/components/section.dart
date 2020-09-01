@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/pages/budgets/budgets_page.dart';
+import 'package:pacific_dashboards/pages/budgets/budget_page.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
