@@ -144,7 +144,7 @@ Future<BudgetData> _transformBudgetModel(
   //Spending by sector and year
   final dataSpendingBySectorAndYear =
       _generateSpendingBySectorData(groupedByYear);
-  final dataSpendingByDistrict = _generateSpendinDistrictData(groupedByYear);
+  final dataSpendingByDistrict = _generateSpendingDistrictData(groupedByYear);
 
   return BudgetData(
       dataByGnpAndGovernmentSpendingActual:
@@ -278,7 +278,7 @@ Map<String, List<DataSpendingByYear>> _generateSpendingBySectorData(
   return spendingChartData;
 }
 
-List<DataSpendingByDistrict> _generateSpendinDistrictData(
+List<DataSpendingByDistrict> _generateSpendingDistrictData(
     Map<int, List<Budget>> budgetDataGroupedByYear) {
   List<DataSpendingByDistrict> dataSpendingByDistrict = new List();
   budgetDataGroupedByYear.forEach((year, spendings) {

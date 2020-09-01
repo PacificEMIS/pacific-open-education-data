@@ -142,22 +142,22 @@ Future<SpecialEducationData> _specialEducationModel(
   var dataByEnglishLearner =
       _generateDataByTitle(filteredData.groupBy((it) => it.englishLearner));
 
-  dataByState['environment'] =
-      _generateDataByYear(specialEducationData.groupBy((it) => it.environment));
+  dataByState['environment'] = _generateDataByState(
+      specialEducationData.groupBy((it) => it.environment));
   dataByState['disability'] =
-      _generateDataByYear(specialEducationData.groupBy((it) => it.disability));
-  dataByState['ethnicity'] = _generateDataByYear(
+      _generateDataByState(specialEducationData.groupBy((it) => it.disability));
+  dataByState['ethnicity'] = _generateDataByState(
       specialEducationData.groupBy((it) => it.ethnicityCode));
-  dataByState['englishLearner'] = _generateDataByYear(
+  dataByState['englishLearner'] = _generateDataByState(
       specialEducationData.groupBy((it) => it.englishLearner));
 
-  dataByYear['environment'] = _generateDataByState(
-      specialEducationData.groupBy((it) => it.environment));
+  dataByYear['environment'] =
+      _generateDataByYear(specialEducationData.groupBy((it) => it.environment));
   dataByYear['disability'] =
-      _generateDataByState(specialEducationData.groupBy((it) => it.disability));
-  dataByYear['ethnicity'] = _generateDataByState(
+      _generateDataByYear(specialEducationData.groupBy((it) => it.disability));
+  dataByYear['ethnicity'] = _generateDataByYear(
       specialEducationData.groupBy((it) => it.ethnicityCode));
-  dataByYear['englishLearner'] = _generateDataByState(
+  dataByYear['englishLearner'] = _generateDataByYear(
       specialEducationData.groupBy((it) => it.englishLearner));
 
   return SpecialEducationData(
