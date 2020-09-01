@@ -10,6 +10,7 @@ import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class Database {
@@ -27,6 +28,7 @@ abstract class Database {
   ShortSchoolDao get shortSchool;
   SchoolFlowDao get schoolFlow;
   SchoolExamReportsDao get schoolExamReports;
+  SpecialEducationDao get specialEducation;
 }
 
 abstract class LookupsDao {
@@ -62,6 +64,11 @@ abstract class ExamsDao {
 abstract class BudgetsDao {
   Future<void> save(List<Budget> budgets, Emis emis);
   Future<List<Budget>> get(Emis emis);
+}
+
+abstract class SpecialEducationDao {
+  Future<void> save(List<SpecialEducation> budgets, Emis emis);
+  Future<List<SpecialEducation>> get(Emis emis);
 }
 
 abstract class AccreditationsDao {

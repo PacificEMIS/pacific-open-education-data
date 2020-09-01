@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 
 abstract class RemoteDataSource {
@@ -18,6 +19,8 @@ abstract class RemoteDataSource {
   Future<List<Exam>> fetchExams();
 
   Future<List<Budget>> fetchBudgets();
+
+  Future<List<SpecialEducation>> fetchSpecialEducation();
 
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk();
 

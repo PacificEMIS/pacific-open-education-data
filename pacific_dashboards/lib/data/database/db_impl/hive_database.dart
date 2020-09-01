@@ -12,6 +12,7 @@ import 'package:pacific_dashboards/data/database/db_impl/school_exam_reports_dao
 import 'package:pacific_dashboards/data/database/db_impl/school_flow_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/schools_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/short_school_dao_impl.dart';
+import 'package:pacific_dashboards/data/database/db_impl/special_education_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/strings_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/teachers_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_district_accreditation.dart';
@@ -29,11 +30,12 @@ import 'package:pacific_dashboards/data/database/model/school_enroll/hive_school
 import 'package:pacific_dashboards/data/database/model/school_exam_report/hive_school_exam_report.dart';
 import 'package:pacific_dashboards/data/database/model/school_flow/hive_school_flow.dart';
 import 'package:pacific_dashboards/data/database/model/short_school/hive_short_school.dart';
+import 'package:pacific_dashboards/data/database/model/special_education/hive_special_education.dart';
 import 'package:pacific_dashboards/data/database/model/teacher/hive_teacher.dart';
 
 import 'budgets_dao_impl.dart';
 
-// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}
 class HiveDatabase extends Database {
   LookupsDao _lookupsDao;
   StringsDao _stringsDao;
@@ -49,6 +51,7 @@ class HiveDatabase extends Database {
   SchoolExamReportsDao _schoolExamReportsDao;
   BudgetsDao _budgetsDao;
   FinancialLookupsDao _financialLookupsDao;
+  SpecialEducationDao _specialEducationDao;
 
   Future<void> init() async {
     await Hive.initFlutter();
@@ -68,7 +71,7 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveSchoolExamReportAdapter())
       ..registerAdapter(HiveBudgetAdapter())
       ..registerAdapter(HiveFinancialLookupAdapter())
-      ..registerAdapter(HiveFinancialLookupsAdapter());
+      ..registerAdapter(HiveSpecialEducationAdapter());
 
     _lookupsDao = HiveLookupsDao();
     _financialLookupsDao = HiveFinancialLookupsDao();
@@ -88,6 +91,7 @@ class HiveDatabase extends Database {
     _schoolFlowDao = HiveSchoolFlowDao();
     _schoolExamReportsDao = HiveSchoolExamsReportDao();
     _budgetsDao = HiveBudgetsDao();
+    _specialEducationDao = HiveSpecialEducationDao();
   }
 
   @override
@@ -131,4 +135,7 @@ class HiveDatabase extends Database {
 
   @override
   FinancialLookupsDao get financialLookups => _financialLookupsDao;
+
+  @override
+  SpecialEducationDao get specialEducation => _specialEducationDao;
 }

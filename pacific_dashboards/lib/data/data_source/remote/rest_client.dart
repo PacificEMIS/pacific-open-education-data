@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
+import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../../models/lookups/lookups.dart';
@@ -79,4 +80,7 @@ abstract class RestClient {
 
   @GET('warehouse/finance')
   Future<List<Budget>> getBudgets();
+
+  @GET('warehouse/specialeducation')
+  Future<List<SpecialEducation>> getSpecialEducation();
 }

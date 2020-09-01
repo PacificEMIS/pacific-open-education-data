@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pacific_dashboards/pages/budgets/budgets_page.dart';
+import 'package:pacific_dashboards/pages/budgets/budget_page.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
@@ -38,7 +39,7 @@ class App extends StatelessWidget {
         IndividualSchoolPage.kRoute: (context) => IndividualSchoolPage(),
         BudgetsPage.kRoute: (context) => BudgetsPage(),
         "/Indicators": (context) => _NotImplementedPage(),
-        "/Special Education": (context) => _NotImplementedPage()
+        "/Special Education": (context) => SpecialEducationPage()
       },
     );
   }

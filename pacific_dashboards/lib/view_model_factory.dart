@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/pages/individual_school/individual_school_vie
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_view_model.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
 import 'package:pacific_dashboards/service_locator.dart';
 
@@ -128,6 +129,15 @@ class ViewModelFactory {
 
   BudgetViewModel createBudgetsViewModel(BuildContext ctx) {
     return BudgetViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      remoteConfig: serviceLocator.remoteConfig,
+      globalSettings: serviceLocator.globalSettings,
+    );
+  }
+
+  SpecialEducationViewModel createSpecialEducationViewModel(BuildContext ctx) {
+    return SpecialEducationViewModel(
       ctx,
       repository: serviceLocator.repository,
       remoteConfig: serviceLocator.remoteConfig,

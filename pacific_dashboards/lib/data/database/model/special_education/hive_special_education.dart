@@ -1,125 +1,118 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
-import 'package:pacific_dashboards/models/budget/budget.dart';
+import 'package:pacific_dashboards/models/special_education/special_education.dart';
 
-part 'hive_budget.g.dart';
+part 'hive_special_education.g.dart';
 
-@HiveType(typeId: 13)
-class HiveBudget extends HiveObject with Expirable {
+@HiveType(typeId: 18)
+class HiveSpecialEducation extends HiveObject with Expirable {
   @HiveField(0)
   int surveyYear;
 
   @HiveField(1)
-  String districtCode;
+  String edLevelCode;
 
   @HiveField(2)
-  double gNP;
+  String edLevel;
 
   @HiveField(3)
-  double gNPCapita;
+  String ethnicityCode;
 
   @HiveField(4)
-  String gNPCurrency;
+  String genderCode;
 
   @HiveField(5)
-  double gNPLocal;
+  String gender;
 
   @HiveField(6)
-  double gNPCapitaLocal;
+  int age;
 
   @HiveField(7)
-  double govtExpA;
+  String authorityCode;
 
   @HiveField(8)
-  double govtExpB;
+  String authority;
 
   @HiveField(9)
-  double govtExpBGNPPerc;
+  String districtCode;
 
   @HiveField(10)
-  double edExpA;
+  String district;
 
   @HiveField(11)
-  double edExpB;
+  String authorityGovtCode;
 
   @HiveField(12)
-  double edGovtExpBPerc;
+  String authorityGovt;
 
   @HiveField(13)
-  double edExpAGNPPerc;
+  String schoolTypeCode;
 
   @HiveField(14)
-  double edExpBGNPPerc;
+  String schoolType;
 
   @HiveField(15)
-  double edExpAPerHead;
+  String regionCode;
 
   @HiveField(16)
-  double edExpBPerHead;
+  String region;
 
   @HiveField(17)
-  double edExpAPerHeadGNPCapitaPerc;
+  int number;
 
   @HiveField(18)
-  double edExpBPerHeadGNPCapitaPerc;
+  String disability;
 
   @HiveField(19)
-  double enrolment;
+  String environment;
 
   @HiveField(20)
-  String sectorCode;
+  String englishLearner;
 
-  @HiveField(21)
-  double edRecurrentExpA;
-
-  @HiveField(22)
-  double edRecurrentExpB;
-
-  Budget toBudget() => Budget(
+  SpecialEducation toSpecialEducation() => SpecialEducation(
       surveyYear,
+      edLevelCode,
+      edLevel,
+      ethnicityCode,
+      genderCode,
+      gender,
+      age,
+      authorityCode,
+      authority,
       districtCode,
-      gNP,
-      gNPCapita,
-      gNPCurrency,
-      gNPLocal,
-      gNPCapitaLocal,
-      govtExpA,
-      govtExpB,
-      govtExpBGNPPerc,
-      edExpA,
-      edExpB,
-      edGovtExpBPerc,
-      edExpAGNPPerc,
-      edExpBGNPPerc,
-      edExpAPerHead,
-      edExpBPerHead,
-      edExpAPerHeadGNPCapitaPerc,
-      edExpBPerHeadGNPCapitaPerc,
-      enrolment,
-      sectorCode,
-      edRecurrentExpA,
-      edRecurrentExpB);
+      district,
+      authorityGovtCode,
+      authorityGovt,
+      schoolTypeCode,
+      schoolType,
+      regionCode,
+      region,
+      number,
+      disability,
+      environment,
+      englishLearner);
 
-  static HiveBudget from(Budget budget) => HiveBudget()
-    ..surveyYear = budget.surveyYear
-    ..gNP = budget.gNP
-    ..gNPCapita = budget.gNPCapita
-    ..gNPCurrency = budget.gNPCurrency
-    ..gNPLocal = budget.gNPLocal
-    ..gNPCapitaLocal = budget.gNPCapitaLocal
-    ..govtExpA = budget.govtExpA
-    ..govtExpB = budget.govtExpB
-    ..edExpA = budget.edExpA
-    ..edExpB = budget.edExpB
-    ..edGovtExpBPerc = budget.edGovtExpBPerc
-    ..edExpAGNPPerc = budget.edExpAGNPPerc
-    ..edExpBGNPPerc = budget.edExpBGNPPerc
-    ..edExpAPerHead = budget.edExpAPerHead
-    ..edExpBPerHead = budget.edExpBPerHead
-    ..edExpAPerHeadGNPCapitaPerc = budget.edExpAPerHeadGNPCapitaPerc
-    ..edExpBPerHeadGNPCapitaPerc = budget.edExpBPerHeadGNPCapitaPerc
-    ..enrolment = budget.enrolment
-    ..sectorCode = budget.sectorCode
-    ..edRecurrentExpA = budget.edRecurrentExpA
-    ..edRecurrentExpB = budget.edRecurrentExpB;
+  static HiveSpecialEducation from(SpecialEducation specialEducation) =>
+      HiveSpecialEducation()
+        ..surveyYear = specialEducation.surveyYear
+        ..edLevelCode = specialEducation.edLevelCode
+        ..edLevel = specialEducation.edLevel
+        ..ethnicityCode = specialEducation.ethnicityCode
+        ..genderCode = specialEducation.genderCode
+        ..gender = specialEducation.gender
+        ..age = specialEducation.age
+        ..authorityCode = specialEducation.authorityCode
+        ..authority = specialEducation.authority
+        ..districtCode = specialEducation.districtCode
+        ..district = specialEducation.district
+        ..authorityGovtCode = specialEducation.authorityGovtCode
+        ..authorityGovt = specialEducation.authorityGovt
+        ..schoolTypeCode = specialEducation.schoolTypeCode
+        ..schoolType = specialEducation.schoolType
+        ..regionCode = specialEducation.regionCode
+        ..region = specialEducation.region
+        ..number = specialEducation.number
+        ..disability = specialEducation.disability
+        ..environment = specialEducation.environment
+        ..englishLearner = specialEducation.englishLearner;
 }
