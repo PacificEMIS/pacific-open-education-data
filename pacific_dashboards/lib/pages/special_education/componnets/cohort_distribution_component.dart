@@ -72,11 +72,6 @@ class _CohortDistributionComponentState
             throw FallThroughError();
           },
         ),
-        Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: getColumnTitles(widget.data['environment'])),
       ],
     );
   }
@@ -157,6 +152,11 @@ class _Chart extends StatelessWidget {
             },
           ),
         ),
+        Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: getColumnTitles(_data))
       ],
     );
   }
