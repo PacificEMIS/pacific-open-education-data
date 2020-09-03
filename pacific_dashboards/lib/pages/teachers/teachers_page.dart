@@ -114,11 +114,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                           'labelFemale',
                           'labelTotal'
                         ],
-                        columnFlex: [
-                          3,
-                          3,
-                          3,
-                        ],
+                        columnFlex: [3, 3, 3, 3],
                         data: snapshot.data.teachersBySchoolLevelStateAndGender,
                         keySortFunc: (lv, rv) => lv.compareTo(rv),
                       ),
