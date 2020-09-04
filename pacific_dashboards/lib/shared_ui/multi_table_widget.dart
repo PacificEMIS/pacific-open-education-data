@@ -112,12 +112,7 @@ class MultiTableWidget<T> extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: generateColumnCells(
-                                  _columnNames,
-                                  it,
-                                  (it.index - 1) == snapshot.data.length
-                                      ? FontWeight.bold
-                                      : FontWeight.normal),
+                              children: generateColumnCells(_columnNames, it),
                             ),
                           ))
                       .toList(),
@@ -139,73 +134,115 @@ class MultiTableWidget<T> extends StatelessWidget {
     return list;
   }
 
-  List<Widget> generateColumnCells(
-      List<String> strings, _CellData cellData, FontWeight fontWeight) {
+  List<Widget> generateColumnCells(List<String> strings, _CellData cellData) {
     var numberFormat = new NumberFormat('###,###,###', 'eu');
     List<Widget> list = new List<Widget>();
+    FontWeight _fontWeight = cellData.domain.toString() == 'labelTotal'
+        ? FontWeight.bold
+        : FontWeight.normal;
     if (_type == 'Govt') {
-      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[0],
+          value: cellData.domain.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.govtExpense)));
+          value: numberFormat.format(cellData.measure.govtExpense),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.edExpense)));
+          value: numberFormat.format(cellData.measure.edExpense),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[3],
-          value: cellData.measure.percentageEdGovt.toStringAsFixed(1)));
+          value: cellData.measure.percentageEdGovt.toStringAsFixed(1),
+          fontWeight: _fontWeight));
     } else if (_type == 'GNP') {
-      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[0],
+          value: cellData.domain.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.gNP)));
+          value: numberFormat.format(cellData.measure.gNP),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.edExpense)));
+          value: numberFormat.format(cellData.measure.edExpense),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[3],
-          value: cellData.measure.percentageEdGnp.toStringAsFixed(1)));
+          value: cellData.measure.percentageEdGnp.toStringAsFixed(1),
+          fontWeight: _fontWeight));
     } else if (_type == 'ECE') {
-      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[0],
+          value: cellData.domain.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.eceActual)));
+          value: numberFormat.format(cellData.measure.eceActual),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.eceBudget)));
+          value: numberFormat.format(cellData.measure.eceBudget),
+          fontWeight: _fontWeight));
     } else if (_type == 'Primary') {
-      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[0],
+          value: cellData.domain.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.primaryActual)));
+          value: numberFormat.format(cellData.measure.primaryActual),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.primaryBudget)));
+          value: numberFormat.format(cellData.measure.primaryBudget),
+          fontWeight: _fontWeight));
     } else if (_type == 'Secondary') {
-      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[0],
+          value: cellData.domain.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.secondaryActual)));
+          value: numberFormat.format(cellData.measure.secondaryActual),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.secondaryBudget)));
+          value: numberFormat.format(cellData.measure.secondaryBudget),
+          fontWeight: _fontWeight));
     } else if (_type == 'Total') {
-      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
+      list.add(_Cell(
+          flex: _columnFlex[0],
+          value: cellData.domain.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.totalActual)));
+          value: numberFormat.format(cellData.measure.totalActual),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.totalBudget)));
+          value: numberFormat.format(cellData.measure.totalBudget),
+          fontWeight: _fontWeight));
     } else {
-      list.add(_Cell(flex: _columnFlex[0], value: cellData.domain.toString()));
       list.add(_Cell(
-          flex: _columnFlex[1], value: cellData.measure.maleAmount.toString()));
+          flex: _columnFlex[0],
+          value: cellData.domain.toString(),
+          fontWeight: _fontWeight));
+      list.add(_Cell(
+          flex: _columnFlex[1],
+          value: cellData.measure.maleAmount.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[2],
-          value: cellData.measure.femaleAmount.toString()));
+          value: cellData.measure.femaleAmount.toString(),
+          fontWeight: _fontWeight));
       list.add(_Cell(
-          flex: _columnFlex[3], value: cellData.measure.total.toString()));
+          flex: _columnFlex[3],
+          value: cellData.measure.total.toString(),
+          fontWeight: _fontWeight));
     }
 
     return list;
