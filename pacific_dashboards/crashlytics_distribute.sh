@@ -4,15 +4,15 @@ set -e
 # debug log
 set -x
 
-flutter channel stable
-flutter doctor
+./flutterw channel stable
+./flutterw doctor
 
-flutter pub get
+./flutterw pub get
 
 # Build android
-flutter -v build apk --release --target-platform=android-arm
+./flutterw -v build apk --release --target-platform=android-arm
 # Build ios
-# flutter -v build ios --release --no-codesign
+# ./flutterw -v build ios --release --no-codesign
 
 cd android
 bundle install --path vendor/bundle
