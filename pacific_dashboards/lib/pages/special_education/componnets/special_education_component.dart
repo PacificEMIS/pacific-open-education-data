@@ -61,7 +61,7 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
                   tableKeyName:
                       'teachersDashboardsAuthorityDomain'.localized(context),
                   tableValueName:
-                      'teachersDashboardsEnrollDomain'.localized(context),
+                      'individualSchoolDashboardEnrollTitle'.localized(context),
                 );
             }
             throw FallThroughError();
