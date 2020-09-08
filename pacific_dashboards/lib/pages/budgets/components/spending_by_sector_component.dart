@@ -79,7 +79,7 @@ class _SpendngBySectorComponentState extends State<SpendngBySectorComponent> {
                     groupingType: charts.BarGroupingType.grouped);
               case _DashboardTab.enrolment:
                 return _Chart(
-                    data: widget.data['enrollment'],
+                    data: widget.data['enrolment'],
                     groupingType: charts.BarGroupingType.stacked);
             }
             throw FallThroughError();
