@@ -177,8 +177,8 @@ List<DataByGroup> _generateDataByTitle(
     var female = 0;
 
     for (var data in values) {
-      male += data.gender == 'Male' ? 0 : 1;
-      female += data.gender == 'Female' ? 0 : 1;
+      male += data.gender == 'Male' ? 0 : data.number;
+      female += data.gender == 'Female' ? 0 : data.number;
     }
     dataByGender.add(DataByGroup(
         title: disability == "" ? 'na' : disability,
