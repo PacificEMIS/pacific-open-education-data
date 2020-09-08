@@ -106,6 +106,7 @@ class HiveBudget extends HiveObject with Expirable {
 
   static HiveBudget from(Budget budget) => HiveBudget()
     ..surveyYear = budget.surveyYear
+    ..districtCode = budget.districtCode
     ..gNP = budget.gNP
     ..gNPCapita = budget.gNPCapita
     ..gNPCurrency = budget.gNPCurrency
