@@ -50,6 +50,7 @@ class HomeViewModel extends ViewModel {
   }
 
   void onEmisChanged(Emis emis) {
+    _globalSettings.setCurrentEmis(emis);
     launchHandled(() async {
       _configureLanguageChanges(emis);
       _selectedEmisSubject.add(emis);

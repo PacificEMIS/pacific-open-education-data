@@ -32,6 +32,18 @@ class ChartWithTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (_title.isEmpty) return Column(
+      children: <Widget>[
+        ChartFactory.createChart(_chartType, _data),
+        const SizedBox(height: 16),
+        ChartInfoTableWidget(
+          _data,
+          _tableKeyName,
+          _tableValueName,
+        ),
+      ],
+    );
+
     return TileWidget(
       title: Text(
         _title,
