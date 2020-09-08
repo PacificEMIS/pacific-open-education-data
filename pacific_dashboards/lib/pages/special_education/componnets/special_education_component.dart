@@ -157,9 +157,8 @@ class _Chart extends StatelessWidget {
                 ChartLegendItem(
                   color: AppColors.kBlue,
                   value: 'labelFemale'.localized(context),
-                ),
-              ],
-            )
+                )
+            ])
         ]);
   }
 
@@ -168,17 +167,19 @@ class _Chart extends StatelessWidget {
       final barChartData = List<BarChartData>();
       if (_tab.index == 0) {
         barChartData.addAll(_data.map((it) {
+          var title = it.title.length > 17 ? it.title.substring(0, 17) + '..' : it.title;
           return BarChartData(
-            it.title,
+            title,
             it.firstValue,
-            AppColors.kOrange,
+            AppColors.kBlue,
           );
         }).toList());
         barChartData.addAll(_data.map((it) {
+          var title = it.title.length > 17 ? it.title.substring(0, 17)  + '..': it.title;
           return BarChartData(
-            it.title,
+            title,
             it.secondValue,
-            AppColors.kBlue,
+            AppColors.kOrange,
           );
         }).toList());
       } else {
