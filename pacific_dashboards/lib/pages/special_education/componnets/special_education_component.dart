@@ -53,8 +53,7 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
               case _Tab.diagram:
                 return ChartWithTable(
                   key: ObjectKey(widget.data),
-                  title: 'teachersDashboardsEnrollByAuthorityTitle'
-                      .localized(context),
+                  title: '',
                   data: Map.fromIterable(widget.data,
                       key: (v) => v.title, value: (v) => v.total),
                   chartType: ChartType.pie,

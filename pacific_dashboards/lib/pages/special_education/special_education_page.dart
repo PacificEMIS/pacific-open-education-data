@@ -13,7 +13,7 @@ import 'package:pacific_dashboards/view_model_factory.dart';
 import 'special_education_data.dart';
 
 class SpecialEducationPage extends MvvmStatefulWidget {
-  static String kRoute = '/SpecialEducations';
+  static String kRoute = "/Special Education";
 
   SpecialEducationPage({
     Key key,
