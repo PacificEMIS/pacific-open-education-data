@@ -30,6 +30,8 @@ class ChartFactory {
         return createBarChartViewByData(data, null);
       case ChartType.stackedBar:
         return createBarChartViewByData(data, charts.BarGroupingType.stacked);
+      case ChartType.horizontalStackedBar:
+        return createBarChartViewByData(data, charts.BarGroupingType.groupedStacked);
       case ChartType.pie:
         return createPieChartViewByData(data);
     }
@@ -50,4 +52,4 @@ class ChartFactory {
   }
 }
 
-enum ChartType { bar, stackedBar, pie }
+enum ChartType { bar, stackedBar, horizontalStackedBar, pie }

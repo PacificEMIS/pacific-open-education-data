@@ -40,6 +40,8 @@ class ModuleConfig {
         return Section.individualSchools;
       case 'special_education':
         return Section.specialEducation;
+      case 'wash':
+        return Section.wash;
     }
     return null;
   }

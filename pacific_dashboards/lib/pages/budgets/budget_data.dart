@@ -6,15 +6,19 @@ class BudgetData {
   final List<DataByGnpAndGovernmentSpending>
       dataByGnpAndGovernmentSpendingBudgeted;
   final List<DataSpendingBySector> dataSpendingBySector;
-  final Map<String, List<DataSpendingByYear>> dataSpendingBySectorAndYear;
+  final List<DataSpendingByDistrict> dataSpendingBySectorAndYear;
+  final List<DataSpendingByDistrict> dataSpendingBySectorAndYearFiltered;
   final List<DataSpendingByDistrict> dataSpendingByDistrict;
+  final List<DataSpendingByDistrict> dataSpendingByDistrictFiltered;
 
   BudgetData(
       {@required this.dataByGnpAndGovernmentSpendingActual,
       @required this.dataByGnpAndGovernmentSpendingBudgeted,
       @required this.dataSpendingBySector,
       @required this.dataSpendingBySectorAndYear,
-      @required this.dataSpendingByDistrict});
+        @required this.dataSpendingBySectorAndYearFiltered,
+      @required this.dataSpendingByDistrict,
+      @required this.dataSpendingByDistrictFiltered});
 }
 
 class DataByGnpAndGovernmentSpending {
@@ -36,6 +40,7 @@ class DataByGnpAndGovernmentSpending {
 
 class DataSpendingBySector {
   final String districtCode;
+  final String sectorCode;
   final double eceActual;
   final double eceBudget;
   final double primaryActual;
@@ -47,6 +52,7 @@ class DataSpendingBySector {
 
   DataSpendingBySector(
       {@required this.districtCode,
+      @required this.sectorCode,
       @required this.eceActual,
       @required this.eceBudget,
       @required this.primaryActual,
@@ -55,19 +61,6 @@ class DataSpendingBySector {
       @required this.secondaryBudget,
       @required this.totalActual,
       @required this.totalBudget});
-}
-
-class DataSpendingByYear {
-  final String year;
-  final int ece;
-  final int primary;
-  final int secondary;
-
-  DataSpendingByYear(
-      {@required this.year,
-      @required this.ece,
-      @required this.primary,
-      @required this.secondary});
 }
 
 class DataSpendingByDistrict {
