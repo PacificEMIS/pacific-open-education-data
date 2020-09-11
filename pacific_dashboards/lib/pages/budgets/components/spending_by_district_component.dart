@@ -14,12 +14,10 @@ import '../budget_data.dart';
 class SpendingByDistrictComponent extends StatefulWidget {
   final List<DataSpendingByDistrict> data;
   final List<DataSpendingByDistrict> dataFiltered;
-  final String year;
 
   const SpendingByDistrictComponent(
       {Key key, @required this.data,
         @required this.dataFiltered,
-        @required this.year
       })
       : assert(data != null && dataFiltered != null),
         super(key: key);

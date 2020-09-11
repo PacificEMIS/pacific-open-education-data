@@ -21,7 +21,6 @@ import 'package:pacific_dashboards/data/database/model/accreditation/hive_accred
 import 'package:pacific_dashboards/data/database/model/budget/hive_budget.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
 import 'package:pacific_dashboards/data/database/model/financial_lookup/hive_financial_lookup.dart';
-import 'package:pacific_dashboards/data/database/model/financial_lookup/hive_financial_lookups.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';

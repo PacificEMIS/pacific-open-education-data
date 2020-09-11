@@ -100,7 +100,6 @@ enum _Tab { environment, disability, ethnicity, englishLearner }
 class _Chart extends StatelessWidget {
   final Map<String, List<DataByGroup>> _data;
   final charts.BarGroupingType _groupingType;
-  final _Tab _tab;
   const _Chart(
       {Key key,
       @required Map<String, List<DataByGroup>> data,
@@ -109,7 +108,6 @@ class _Chart extends StatelessWidget {
       : assert(data != null),
         _data = data,
         _groupingType = groupingType,
-        _tab = tab,
         super(key: key);
 
   @override

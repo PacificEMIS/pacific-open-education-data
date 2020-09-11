@@ -40,7 +40,6 @@ class DataByGnpAndGovernmentSpending {
 
 class DataSpendingBySector {
   final String districtCode;
-  final String sectorCode;
   final double eceActual;
   final double eceBudget;
   final double primaryActual;
@@ -52,7 +51,6 @@ class DataSpendingBySector {
 
   DataSpendingBySector(
       {@required this.districtCode,
-      @required this.sectorCode,
       @required this.eceActual,
       @required this.eceBudget,
       @required this.primaryActual,

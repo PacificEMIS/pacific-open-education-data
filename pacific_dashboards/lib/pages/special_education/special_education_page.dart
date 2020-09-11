@@ -141,6 +141,3 @@ class _SpecialEducationPageState
     viewModel.onFiltersChanged(filters);
   }
 }
-
-enum _GovtTab { govtExpenditure, gNP }
-enum _SpendingTab { eCE, primary, secondary, total }
