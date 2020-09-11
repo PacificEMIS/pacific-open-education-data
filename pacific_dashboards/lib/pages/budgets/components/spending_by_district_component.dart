@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:arch/arch.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/chart_info_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
@@ -10,22 +11,26 @@ import 'package:pacific_dashboards/utils/hex_color.dart';
 
 import '../budget_data.dart';
 
-class SpendngByDistrictComponent extends StatefulWidget {
+class SpendingByDistrictComponent extends StatefulWidget {
   final List<DataSpendingByDistrict> data;
+  final List<DataSpendingByDistrict> dataFiltered;
+  final String year;
 
-  const SpendngByDistrictComponent({
-    Key key,
-    @required this.data,
-  })  : assert(data != null),
+  const SpendingByDistrictComponent(
+      {Key key, @required this.data,
+        @required this.dataFiltered,
+        @required this.year
+      })
+      : assert(data != null && dataFiltered != null),
         super(key: key);
 
   @override
-  _SpendngByDistrictComponentState createState() =>
-      _SpendngByDistrictComponentState();
+  _SpendingByDistrictComponentState createState() =>
+      _SpendingByDistrictComponentState();
 }
 
-class _SpendngByDistrictComponentState
-    extends State<SpendngByDistrictComponent> {
+class _SpendingByDistrictComponentState
+    extends State<SpendingByDistrictComponent> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,39 +61,21 @@ class _SpendngByDistrictComponentState
           builder: (ctx, tab) {
             switch (tab) {
               case _DashboardTab.actualExpenditure:
-                return _Chart(
-                    data: widget.data,
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
               case _DashboardTab.budget:
-                return _Chart(
-                    data: widget.data,
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
               case _DashboardTab.actualRecurrent:
-                return _Chart(
-                    data: widget.data,
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
               case _DashboardTab.budgetRecurrent:
-                return _Chart(
-                    data: widget.data,
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
               case _DashboardTab.actualExpPerHead:
+              case _DashboardTab.enrolment:
                 return _Chart(
                     data: widget.data,
+                    dataFiltered: widget.dataFiltered,
                     groupingType: charts.BarGroupingType.stacked,
                     tab: tab);
               case _DashboardTab.budgetExpPerHead:
                 return _Chart(
                     data: widget.data,
+                    dataFiltered: widget.dataFiltered,
                     groupingType: charts.BarGroupingType.groupedStacked,
-                    tab: tab);
-              case _DashboardTab.enrolment:
-                return _Chart(
-                    data: widget.data,
-                    groupingType: charts.BarGroupingType.stacked,
                     tab: tab);
             }
             throw FallThroughError();
@@ -111,15 +98,19 @@ enum _DashboardTab {
 
 class _Chart extends StatelessWidget {
   final List<DataSpendingByDistrict> _data;
+  final List<DataSpendingByDistrict> _dataFiltered;
   final charts.BarGroupingType _groupingType;
   final _DashboardTab _tab;
+
   const _Chart(
       {Key key,
       @required List<DataSpendingByDistrict> data,
+      @required List<DataSpendingByDistrict> dataFiltered,
       @required charts.BarGroupingType groupingType,
       @required _DashboardTab tab})
       : assert(data != null),
         _data = data,
+        _dataFiltered = dataFiltered,
         _groupingType = groupingType,
         _tab = tab,
         super(key: key);
@@ -143,6 +134,7 @@ class _Chart extends StatelessWidget {
                 snapshot.data,
                 animate: false,
                 barGroupingType: _groupingType,
+                vertical: false,
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickProviderSpec: charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
@@ -163,28 +155,38 @@ class _Chart extends StatelessWidget {
             },
           ),
         ),
-        Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: getColumnTitles(_data)),
+        generateTitleTable(context)
       ],
     );
   }
 
-  List<Widget> getColumnTitles(List<DataSpendingByDistrict> data) {
-    List<Widget> list = new List<Widget>();
-    List<String> titles = new List<String>();
-    for (var i = 0; i < data.length; i++) {
-      titles.add(data[i].district);
-    }
-    titles = titles.toSet().toList();
-    titles.forEach((it) {
-      list.add(
-        ChartLegendItem(color: HexColor.fromStringHash(it), value: it),
-      );
+  ChartInfoTableWidget generateTitleTable(BuildContext context) {
+    Map<String, int> districts = new Map();
+    final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
+    dataSortedByDistrict.forEach((key, value) {
+      var spending = 0;
+      value.forEach((it) {
+        if (_tab == _DashboardTab.actualExpenditure)
+          spending += it.edExpA;
+        else if (_tab == _DashboardTab.actualExpPerHead)
+          spending += it.edExpAPerHead;
+        else if (_tab == _DashboardTab.actualRecurrent)
+          spending += it.edRecurrentExpA;
+        else if (_tab == _DashboardTab.budget)
+          spending += it.edExpB;
+        else if (_tab == _DashboardTab.budgetExpPerHead)
+          spending += it.edExpBPerHead;
+        else if (_tab == _DashboardTab.budgetRecurrent)
+          spending += it.edRecurrentExpB;
+        else if (_tab == _DashboardTab.enrolment)
+          spending += it.enrolment;
+      });
+      districts[key] = spending;
     });
-    return list;
+    return ChartInfoTableWidget(
+        districts,
+        'schoolsAccreditationDashboardsStateDomain'.localized(context),
+        'enrolment'.localized(context));
   }
 
   Future<List<charts.Series<BarChartData, String>>> get _series {

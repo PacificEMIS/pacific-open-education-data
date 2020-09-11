@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
@@ -14,9 +15,9 @@ enum Section {
   schoolAccreditations,
   indicators,
   budgets,
+  wash,
   individualSchools,
   specialEducation,
-  wash
 }
 
 extension UI on Section {
@@ -81,14 +82,14 @@ extension UI on Section {
         return ExamsPage.kRoute;
       case Section.indicators:
         return "/Indicators";
+      case Section.wash:
+        return "/Wash";
       case Section.budgets:
         return BudgetsPage.kRoute;
       case Section.individualSchools:
         return SchoolsListPage.kRoute;
       case Section.specialEducation:
-        return "/Special Education";
-      case Section.wash:
-        return "/Wash";
+        return SpecialEducationPage.kRoute;
         break;
     }
 

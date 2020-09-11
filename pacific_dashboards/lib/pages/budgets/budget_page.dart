@@ -6,12 +6,12 @@ import 'package:pacific_dashboards/pages/budgets/budget_data.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/chart_info_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 import 'components/enroll_data_by_gnp_government_component.dart';
 import 'components/spending_by_district_component.dart';
-import 'components/spending_by_sector_component.dart';
 
 class BudgetsPage extends MvvmStatefulWidget {
   static String kRoute = '/Budgets';
@@ -87,11 +87,15 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           context, snapshot.data.dataSpendingBySector),
                       //-- Spending By Sector
                       _titleWidget(context, 'budgetsSpendingBySector', false),
-                      SpendngBySectorComponent(
-                          data: snapshot.data.dataSpendingBySectorAndYear),
+                      SpendingByDistrictComponent(
+                          data: snapshot.data.dataSpendingBySectorAndYear,
+                          dataFiltered:
+                              snapshot.data.dataSpendingBySectorAndYearFiltered),
                       _titleWidget(context, 'budgetsSpendingByDistrict', false),
-                      SpendngByDistrictComponent(
-                          data: snapshot.data.dataSpendingByDistrict)
+                      SpendingByDistrictComponent(
+                          data: snapshot.data.dataSpendingByDistrict,
+                          dataFiltered:
+                              snapshot.data.dataSpendingByDistrictFiltered),
                     ];
                     var budgetWidgetList = list;
                     return Column(

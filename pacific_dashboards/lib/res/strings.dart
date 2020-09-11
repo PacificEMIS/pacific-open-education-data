@@ -194,6 +194,7 @@ class Strings {
       'diagram': 'Diagram',
       'environment': 'Environment',
       'englishLearner': 'English Learner',
+      'district': 'District'
     },
   };
 

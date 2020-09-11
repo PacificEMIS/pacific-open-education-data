@@ -45,9 +45,8 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
               _type == 'Total') {
             return generateMultiTableActualBudgeted(snapshot);
           }
-        } else {
-          return Container();
         }
+        return Container();
       },
     );
   }
