@@ -96,6 +96,8 @@ List<EnrollDataByGradeHistory> _generateGradeDataHistory(
 
   groupedByYear.forEach((year, enrollList) {
     final groupedByGrade = enrollList.groupBy((it) => it.classLevel);
+    groupedByGrade.removeWhere((key, value) => key == null);
+
     final List<EnrollDataByGrade> enrollInYear = [];
 
     groupedByGrade.forEach((grade, enrollList) {
@@ -122,6 +124,7 @@ List<EnrollDataByYear> _generateGenderDataHistory(
 ) {
   final List<EnrollDataByYear> results = [];
   final groupedByYear = schoolData.groupBy((it) => it.year);
+  groupedByYear.removeWhere((key, value) => key == null);
 
   groupedByYear.forEach((year, enrollList) {
     int femaleByYear = 0;
@@ -145,15 +148,20 @@ List<EnrollDataByYear> _generateGenderDataHistory(
 EnrollDataByFemalePartOnLastYear _generateFemaleDataOnLastYear(
   SchoolEnrollChunk chunk,
 ) {
-  final groupedByYearSchool = chunk.schoolData.groupBy((it) => it.year);
+  var groupedByYearSchool = chunk.schoolData.groupBy((it) => it.year);
+  groupedByYearSchool.removeWhere((key, value) => key == null);
   final groupedByYearDistrict = chunk.districtData.groupBy((it) => it.year);
   final groupedByYearNation = chunk.nationalData.groupBy((it) => it.year);
   final lastSchoolYear =
       groupedByYearSchool.keys.chainSort((lv, rv) => rv.compareTo(lv)).first;
 
-  final schoolDataOnLastYear = groupedByYearSchool[lastSchoolYear];
-  final districtDataOnLastYear = groupedByYearDistrict[lastSchoolYear] ?? [];
-  final nationDataOnLastYear = groupedByYearNation[lastSchoolYear] ?? [];
+  var schoolDataOnLastYear = groupedByYearSchool[lastSchoolYear];
+  var districtDataOnLastYear = groupedByYearDistrict[lastSchoolYear] ?? [];
+  var nationDataOnLastYear = groupedByYearNation[lastSchoolYear] ?? [];
+
+  schoolDataOnLastYear.removeWhere((it) => it.classLevel == null);
+  districtDataOnLastYear.removeWhere((it) => it.classLevel == null);
+  nationDataOnLastYear.removeWhere((it) => it.classLevel == null);
 
   final schoolDataOnLastYearByGrade =
       schoolDataOnLastYear.groupBy((it) => it.classLevel);
@@ -179,7 +187,6 @@ EnrollDataByFemalePartOnLastYear _generateFemaleDataOnLastYear(
           .fold(0, (prev, newValue) => prev + newValue),
     ));
   });
-
   return EnrollDataByFemalePartOnLastYear(year: lastSchoolYear, data: data);
 }
 
@@ -191,7 +198,7 @@ List<EnrollDataByFemalePartHistory> _generateFemalePartHistory(
   final groupedByYearNation = chunk.nationalData.groupBy((it) => it.year);
 
   final List<EnrollDataByFemalePartHistory> result = [];
-
+  groupedByYearSchool.removeWhere((key, value) => key == null);
   groupedByYearSchool.forEach((year, enrollData) {
     final districtEnrollData = groupedByYearDistrict[year] ?? [];
     final nationEnrollData = groupedByYearNation[year] ?? [];

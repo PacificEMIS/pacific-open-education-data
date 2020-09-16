@@ -142,6 +142,7 @@ class IndividualExamsViewModel extends BaseViewModel {
   void _onExamReportsLoaded(List<SchoolExamReport> reports) {
     launchHandled(() async {
       final groupedByYear = reports.groupBy((it) => it.year);
+      groupedByYear.removeWhere((k, v) => k == null);
       final sortedYears =
           groupedByYear.keys.chainSort((lv, rv) => rv.compareTo(lv)).toList();
       final reportsByYearAndExamCode = sortedYears.asMap().map(

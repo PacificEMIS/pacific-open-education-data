@@ -75,10 +75,10 @@ class RatesViewModel extends BaseViewModel {
 }
 
 class _FlowsLookuped {
-  final List<SchoolFlow> flows;
-  final Lookups lookups;
+  List<SchoolFlow> flows;
+  Lookups lookups;
 
-  const _FlowsLookuped(this.flows, this.lookups);
+  _FlowsLookuped(this.flows, this.lookups);
 }
 
 LastYearRatesData _generateLastYearData(
@@ -87,6 +87,8 @@ LastYearRatesData _generateLastYearData(
   if (flowsLookuped.flows.isEmpty) {
     return LastYearRatesData(year: DateTime.now().year, data: []);
   }
+  flowsLookuped.flows.removeWhere(
+      (value) => value.yearOfEducation == null || value.year == null);
   final lastYear = flowsLookuped.flows
       .chainSort((lv, rv) => rv.year.compareTo(lv.year))
       .first
@@ -121,6 +123,7 @@ List<YearByClassLevelRateData> _generateHistoricalData(
 
   final flowsByYearOfEducation =
       flowsLookuped.flows.groupBy((it) => it.yearOfEducation);
+  flowsByYearOfEducation.removeWhere((key, value) => key == null);
   final sortedYearOfEducationList = flowsByYearOfEducation.keys
       .chainSort((lv, rv) => lv.compareTo(rv))
       .toList();
@@ -131,15 +134,18 @@ List<YearByClassLevelRateData> _generateHistoricalData(
       classLevel: yearOfEducation.educationLevelCodeFrom(
         flowsLookuped.lookups,
       ),
-      data: flowsByYearOfEducation[yearOfEducation].map((it) {
-        return YearRateData(
-          year: it.year,
-          dropoutRate: it.dropoutRate,
-          promoteRate: it.promoteRate,
-          repeatRate: it.repeatRate,
-          survivalRate: it.survivalRate,
-        );
-      }).toList().chainSort((lv, rv) => lv.year.compareTo(rv.year)),
+      data: flowsByYearOfEducation[yearOfEducation]
+          .map((it) {
+            return YearRateData(
+              year: it.year,
+              dropoutRate: it.dropoutRate,
+              promoteRate: it.promoteRate,
+              repeatRate: it.repeatRate,
+              survivalRate: it.survivalRate,
+            );
+          })
+          .toList()
+          .chainSort((lv, rv) => lv.year.compareTo(rv.year)),
     ));
   }
 
