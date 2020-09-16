@@ -38,44 +38,44 @@ class _RatesComponentState extends MvvmState<RatesViewModel, RatesComponent> {
           return StreamBuilder<RatesData>(
             stream: viewModel.dataStream,
             builder: (ctx, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    RateSliceComponent(
-                      title: 'individualSchoolDashboardRatesDropoutTitle'
-                          .localized(context),
-                      ratesData: snapshot.data,
-                      classLevelRateAccessor: (data) => data.dropoutRate,
-                      yearRateAccessor: (data) => data.dropoutRate,
-                    ),
-                    RateSliceComponent(
-                      title: 'individualSchoolDashboardRatesPromoteTitle'
-                          .localized(context),
-                      ratesData: snapshot.data,
-                      classLevelRateAccessor: (data) => data.promoteRate,
-                      yearRateAccessor: (data) => data.promoteRate,
-                    ),
-                    RateSliceComponent(
-                      title: 'individualSchoolDashboardRatesRepeatTitle'
-                          .localized(context),
-                      ratesData: snapshot.data,
-                      classLevelRateAccessor: (data) => data.repeatRate,
-                      yearRateAccessor: (data) => data.repeatRate,
-                    ),
-                    RateSliceComponent(
-                      title: 'individualSchoolDashboardRatesSurvivalTitle'
-                          .localized(context),
-                      ratesData: snapshot.data,
-                      classLevelRateAccessor: (data) => data.survivalRate,
-                      yearRateAccessor: (data) => data.survivalRate,
-                    ),
-                  ],
-                );
-              } else {
+              if (!snapshot.hasData) {
                 return Container();
               }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  RateSliceComponent(
+                    title: 'individualSchoolDashboardRatesDropoutTitle'
+                        .localized(context),
+                    ratesData: snapshot.data,
+                    classLevelRateAccessor: (data) => data.dropoutRate,
+                    yearRateAccessor: (data) => data.dropoutRate,
+                  ),
+                  RateSliceComponent(
+                    title: 'individualSchoolDashboardRatesPromoteTitle'
+                        .localized(context),
+                    ratesData: snapshot.data,
+                    classLevelRateAccessor: (data) => data.promoteRate,
+                    yearRateAccessor: (data) => data.promoteRate,
+                  ),
+                  RateSliceComponent(
+                    title: 'individualSchoolDashboardRatesRepeatTitle'
+                        .localized(context),
+                    ratesData: snapshot.data,
+                    classLevelRateAccessor: (data) => data.repeatRate,
+                    yearRateAccessor: (data) => data.repeatRate,
+                  ),
+                  RateSliceComponent(
+                    title: 'individualSchoolDashboardRatesSurvivalTitle'
+                        .localized(context),
+                    ratesData: snapshot.data,
+                    classLevelRateAccessor: (data) => data.survivalRate,
+                    yearRateAccessor: (data) => data.survivalRate,
+                  ),
+                ],
+              );
             },
           );
         }
