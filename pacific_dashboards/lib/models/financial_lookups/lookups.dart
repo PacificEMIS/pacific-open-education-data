@@ -6,7 +6,7 @@ part 'lookups.g.dart';
 
 @JsonSerializable()
 class Lookups {
-  @JsonKey(name: 'authorityGovt')
+  @JsonKey(name: 'authorityGovts')
   final List<Lookup> authorityGovt;
 
   @JsonKey(name: 'schoolTypes')
