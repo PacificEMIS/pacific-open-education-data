@@ -16,8 +16,7 @@ class HiveSchoolsDao extends SchoolsDao {
 
   @override
   Future<List<School>> get(Emis emis) async {
-    final storedSchools =
-        await _withBox((box) async => box.get(emis.id));
+    final storedSchools = await _withBox((box) async => box.get(emis.id));
     if (storedSchools == null) {
       return null;
     }

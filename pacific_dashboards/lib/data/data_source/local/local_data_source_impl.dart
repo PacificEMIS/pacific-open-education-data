@@ -15,6 +15,7 @@ import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
 const _kAccessTokenKey = '_kAccessTokenKey';
 
@@ -41,6 +42,9 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async =>
       await _database.accreditations.get(await _emis);
+
+  Future<WashChunk> fetchWashChunk() async =>
+      await _database.wash.get(await _emis);
 
   @override
   Future<Pair<bool, Lookups>> fetchLookupsModel() async =>
@@ -73,6 +77,10 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk) async =>
       await _database.accreditations.save(chunk, await _emis);
+
+  @override
+  Future<void> saveWashChunk(WashChunk chunk) async =>
+      await _database.wash.save(chunk, await _emis);
 
   @override
   Future<void> saveLookupsModel(Lookups model) async =>

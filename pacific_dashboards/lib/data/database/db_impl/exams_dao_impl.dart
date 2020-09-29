@@ -17,8 +17,7 @@ class HiveExamsDao extends ExamsDao {
 
   @override
   Future<Pair<bool, List<Exam>>> get(Emis emis) async {
-    final storedExams =
-    await _withBox((box) async => box.get(emis.id));
+    final storedExams = await _withBox((box) async => box.get(emis.id));
     if (storedExams == null) {
       return Pair(false, null);
     }
@@ -36,7 +35,7 @@ class HiveExamsDao extends ExamsDao {
   Future<void> save(List<Exam> exams, Emis emis) async {
     final hiveExams = exams
         .map((it) => HiveExam.from(it)
-      ..timestamp = DateTime.now().millisecondsSinceEpoch)
+          ..timestamp = DateTime.now().millisecondsSinceEpoch)
         .toList();
 
     await _withBox((box) async => box.put(emis.id, hiveExams));

@@ -13,6 +13,9 @@ import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/toilets.dart';
+import 'package:pacific_dashboards/models/wash/wash.dart';
+import 'package:pacific_dashboards/models/wash/water.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../../models/lookups/lookups.dart';
 
@@ -83,4 +86,13 @@ abstract class RestClient {
 
   @GET('warehouse/specialeducation')
   Future<List<SpecialEducation>> getSpecialEducation();
+
+  @GET('warehouse/wash')
+  Future<List<Wash>> getWash();
+
+  @GET('warehouse/wash/toilets')
+  Future<List<Toilets>> getToilets();
+
+  @GET('warehouse/wash/water')
+  Future<List<Water>> getWater();
 }

@@ -31,7 +31,8 @@ class ChartFactory {
       case ChartType.stackedBar:
         return createBarChartViewByData(data, charts.BarGroupingType.stacked);
       case ChartType.horizontalStackedBar:
-        return createBarChartViewByData(data, charts.BarGroupingType.groupedStacked);
+        return createBarChartViewByData(
+            data, charts.BarGroupingType.groupedStacked);
       case ChartType.pie:
         return createPieChartViewByData(data);
     }

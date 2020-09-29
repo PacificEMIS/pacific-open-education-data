@@ -11,8 +11,9 @@ class ChartInfoTableWidget extends StatefulWidget {
   final Map<String, int> _data;
   final String _titleName;
   final String _titleValue;
-
-  ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
+  final bool scrollable;
+  ChartInfoTableWidget(this._data, this._titleName, this._titleValue,
+      {this.scrollable = false});
 
   @override
   _ChartInfoTableWidgetState createState() => _ChartInfoTableWidgetState();
@@ -24,53 +25,73 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      foregroundDecoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
-        border: Border.all(
-          width: _kBorderWidth,
-          color: _kBorderColor,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _SortingTitle(
-                title: widget._titleName,
-                icon: _sortType.iconFor(ValueType.domain),
-                onTap: () => _onSortTap(ValueType.domain),
-              ),
-              _SortingTitle(
-                title: widget._titleValue,
-                icon: _sortType.iconFor(ValueType.measure),
-                onTap: () => _onSortTap(ValueType.measure),
-              )
-            ],
+        foregroundDecoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+          border: Border.all(
+            width: _kBorderWidth,
+            color: _kBorderColor,
           ),
-          FutureBuilder(
-              future: _sortedRowDatas,
-              builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
-                if (!snapshot.hasData) {
-                  return Container();
-                }
+        ),
+        // height: (widget._data.length * 58).roundToDouble(),
+        child: Scrollbar(
+          child: table_selector(),
+        ));
+  }
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: _kBorderWidth,
-                      color: _kBorderColor,
-                    ),
-                    ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
-                  ],
-                );
-              })
-        ],
-      ),
+  Widget table_selector() {
+    return !widget.scrollable
+        ? buildColumns()
+        : Container(
+            height: 250,
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: buildColumns(),
+              ),
+            ),
+          );
+  }
+
+  Column buildColumns() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _SortingTitle(
+              title: widget._titleName,
+              icon: _sortType.iconFor(ValueType.domain),
+              onTap: () => _onSortTap(ValueType.domain),
+            ),
+            _SortingTitle(
+              title: widget._titleValue,
+              icon: _sortType.iconFor(ValueType.measure),
+              onTap: () => _onSortTap(ValueType.measure),
+            )
+          ],
+        ),
+        FutureBuilder(
+            future: _sortedRowDatas,
+            builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: _kBorderWidth,
+                    color: _kBorderColor,
+                  ),
+                  ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
+                ],
+              );
+            })
+      ],
     );
   }
 

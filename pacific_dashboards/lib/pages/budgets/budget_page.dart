@@ -88,8 +88,8 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                       _titleWidget(context, 'budgetsSpendingBySector', false),
                       SpendingByDistrictComponent(
                           data: snapshot.data.dataSpendingBySectorAndYear,
-                          dataFiltered:
-                              snapshot.data.dataSpendingBySectorAndYearFiltered),
+                          dataFiltered: snapshot
+                              .data.dataSpendingBySectorAndYearFiltered),
                       _titleWidget(context, 'budgetsSpendingByDistrict', false),
                       SpendingByDistrictComponent(
                           data: snapshot.data.dataSpendingByDistrict,

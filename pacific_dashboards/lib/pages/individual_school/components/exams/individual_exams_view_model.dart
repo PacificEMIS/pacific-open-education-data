@@ -24,8 +24,7 @@ class IndividualExamsViewModel extends BaseViewModel {
       BehaviorSubject.seeded(true);
   final Subject<bool> _isHistoryDataLoadingSubject =
       BehaviorSubject.seeded(true);
-  final Subject<bool> _haveDataSubject =
-      BehaviorSubject.seeded(false);
+  final Subject<bool> _haveDataSubject = BehaviorSubject.seeded(false);
 
   _PreparedViewModelData _preparedViewModelData;
 

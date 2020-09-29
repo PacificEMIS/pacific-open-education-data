@@ -194,7 +194,19 @@ class Strings {
       'diagram': 'Diagram',
       'environment': 'Environment',
       'englishLearner': 'English Learner',
-      'district': 'District'
+      'district': 'District',
+      'districtTotals': 'District Totals',
+      'toilets': 'Toilets',
+      'waterSources': 'Water Sources',
+      'washDashboardsTitle': 'Reviews And Inspections: Dashboard',
+      'washCumulative': 'Cumulative',
+      'washEvaluated': 'Evaluated',
+      'wastToiletsTotal': 'Toilets (Total)',
+      'washUsableToilets': 'UsableToilets',
+      'washUsablePercentage': '% Usable',
+      'washPupilsToilets': '% Usable (gender)',
+      'washPupilsToilet': 'Pupils / toilet',
+      'numbers': 'Numbers'
     },
   };
 

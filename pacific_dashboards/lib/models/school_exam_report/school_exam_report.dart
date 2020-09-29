@@ -4,7 +4,6 @@ part 'school_exam_report.g.dart';
 
 @JsonSerializable()
 class SchoolExamReport {
-
   @JsonKey(name: 'examCode')
   String examCode;
 
@@ -40,5 +39,4 @@ class SchoolExamReport {
       _$SchoolExamReportFromJson(json);
 
   Map<String, dynamic> toJson() => _$SchoolExamReportToJson(this);
-
 }

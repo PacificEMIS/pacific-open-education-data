@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 
 abstract class BaseViewModel extends ViewModel {
-
   BaseViewModel(BuildContext ctx) : super(ctx);
-
 
   @override
   @protected
@@ -45,5 +43,4 @@ abstract class BaseViewModel extends ViewModel {
       handleThrows(ex);
     }
   }
-
 }

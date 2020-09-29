@@ -243,7 +243,8 @@ class _GenderChart extends StatelessWidget {
                 desiredTickCount: 11,
               ),
               tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
-                (number) => '${_needToShowMeasureAxis ? number.round().abs() : ''}',
+                (number) =>
+                    '${_needToShowMeasureAxis ? number.round().abs() : ''}',
               ),
               viewport: charts.NumericExtents(-_maxFemale, _maxMale),
             ),

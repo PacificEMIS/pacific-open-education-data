@@ -18,11 +18,11 @@ class HiveShortSchool {
   String districtName;
 
   ShortSchool toShortSchool() => ShortSchool(
-    id: id,
-    name: name,
-    districtCode: districtCode,
-    districtName: districtName,
-  );
+        id: id,
+        name: name,
+        districtCode: districtCode,
+        districtName: districtName,
+      );
 
   static HiveShortSchool from(ShortSchool school) => HiveShortSchool()
     ..id = school.id

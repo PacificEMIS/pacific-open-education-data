@@ -76,7 +76,8 @@ class Teacher {
     @required this.certQualF,
   });
 
-  factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
+  factory Teacher.fromJson(Map<String, dynamic> json) =>
+      _$TeacherFromJson(json);
 
   Map<String, dynamic> toJson() => _$TeacherToJson(this);
 

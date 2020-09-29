@@ -13,5 +13,4 @@ class TokenResponseBody {
       _$TokenResponseBodyFromJson(json);
 
   Map<String, dynamic> toJson() => _$TokenResponseBodyToJson(this);
-
 }

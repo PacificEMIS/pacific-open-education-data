@@ -10,6 +10,7 @@ import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
 abstract class RemoteDataSource {
   Future<List<Teacher>> fetchTeachers();
@@ -23,6 +24,8 @@ abstract class RemoteDataSource {
   Future<List<SpecialEducation>> fetchSpecialEducation();
 
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk();
+
+  Future<WashChunk> fetchWashChunk();
 
   Future<Lookups> fetchLookupsModel();
 

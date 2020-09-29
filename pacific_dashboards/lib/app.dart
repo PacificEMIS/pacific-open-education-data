@@ -9,6 +9,7 @@ import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
 import 'package:pacific_dashboards/pages/special_education/special_education_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
+import 'package:pacific_dashboards/pages/wash/wash_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
@@ -38,6 +39,7 @@ class App extends StatelessWidget {
         SchoolsListPage.kRoute: (context) => SchoolsListPage(),
         IndividualSchoolPage.kRoute: (context) => IndividualSchoolPage(),
         BudgetsPage.kRoute: (context) => BudgetsPage(),
+        WashPage.kRoute: (context) => WashPage(),
         "/Indicators": (context) => _NotImplementedPage(),
         "/Special Education": (context) => SpecialEducationPage()
       },

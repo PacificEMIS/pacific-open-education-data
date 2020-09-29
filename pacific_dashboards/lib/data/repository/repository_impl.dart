@@ -22,6 +22,10 @@ import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/toilets.dart';
+import 'package:pacific_dashboards/models/wash/wash.dart';
+import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
+import 'package:pacific_dashboards/models/wash/water.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -192,6 +196,15 @@ class RepositoryImpl implements Repository {
       getLocal: _localDataSource.fetchSchoolAccreditationsChunk,
       getRemote: _remoteDataSource.fetchSchoolAccreditationsChunk,
       updateLocal: _localDataSource.saveSchoolAccreditationsChunk,
+    );
+  }
+
+  @override
+  Stream<RepositoryResponse<WashChunk>> fetchAllWashChunk() async* {
+    yield* _fetchWithEtag(
+      getLocal: _localDataSource.fetchWashChunk,
+      getRemote: _remoteDataSource.fetchWashChunk,
+      updateLocal: _localDataSource.saveWashChunk,
     );
   }
 

@@ -57,7 +57,8 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 
-  List<Widget> _createFilterSections(BuildContext context, List<Filter> filters) {
+  List<Widget> _createFilterSections(
+      BuildContext context, List<Filter> filters) {
     final List<Widget> sections = [];
 
     filters.forEachIndexed((filterIndex, filter) {

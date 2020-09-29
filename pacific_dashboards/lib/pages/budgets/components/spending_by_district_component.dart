@@ -15,11 +15,11 @@ class SpendingByDistrictComponent extends StatefulWidget {
   final List<DataSpendingByDistrict> data;
   final List<DataSpendingByDistrict> dataFiltered;
 
-  const SpendingByDistrictComponent(
-      {Key key, @required this.data,
-        @required this.dataFiltered,
-      })
-      : assert(data != null && dataFiltered != null),
+  const SpendingByDistrictComponent({
+    Key key,
+    @required this.data,
+    @required this.dataFiltered,
+  })  : assert(data != null && dataFiltered != null),
         super(key: key);
 
   @override
@@ -176,8 +176,7 @@ class _Chart extends StatelessWidget {
           spending += it.edExpBPerHead;
         else if (_tab == _DashboardTab.budgetRecurrent)
           spending += it.edRecurrentExpB;
-        else if (_tab == _DashboardTab.enrolment)
-          spending += it.enrolment;
+        else if (_tab == _DashboardTab.enrolment) spending += it.enrolment;
       });
       districts[key] = spending;
     });

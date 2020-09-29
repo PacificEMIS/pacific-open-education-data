@@ -20,7 +20,7 @@ class HiveAccreditationChunk extends HiveObject with Expirable {
 
   AccreditationChunk toAccreditationChunk() => AccreditationChunk(
         byDistrict: byDistrict.map((it) => it.toAccreditation()).toList(),
-          byStandard: byStandard.map((it) => it.toAccreditation()).toList(),
+        byStandard: byStandard.map((it) => it.toAccreditation()).toList(),
       );
 
   static HiveAccreditationChunk from(AccreditationChunk accreditationChunk) =>
