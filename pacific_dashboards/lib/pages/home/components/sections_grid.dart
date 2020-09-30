@@ -3,12 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 
 class SectionsGrid extends StatelessWidget {
-  SectionsGrid({@required List<Section> sections})
-      : assert(sections != null),
-        _sections = sections;
+  SectionsGrid({@required List<Section> sections, @required bool useMobileLayout})
+      : assert(sections != null, useMobileLayout != null),
+        _sections = sections, _useMobileLayout = useMobileLayout;
+
 
   final List<Section> _sections;
-
+  final bool _useMobileLayout;
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -21,9 +22,9 @@ class SectionsGrid extends StatelessWidget {
         // childAspectRatio: 1.0,
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2),
+            crossAxisCount: _useMobileLayout ? 2 : 3),
         itemBuilder: (BuildContext context, int index) {
-          return menu_tab(section: _sections[index]); //just for testing, will fill with image later
+          return menu_tab(section: _sections[index], useMobileLayout: _useMobileLayout); //just for testing, will fill with image later
         });
   }
 }
@@ -31,13 +32,14 @@ class SectionsGrid extends StatelessWidget {
 class menu_tab extends StatelessWidget {
   const menu_tab({
     Key key,
-    @required Section section,
+    @required Section section, @required useMobileLayout,
   }) : _section = section, super(key: key);
 
   final Section _section;
 
   @override
   Widget build(BuildContext context) {
+    var useMobileLayout = MediaQuery.of(context).size.shortestSide < 720;
     return Container(
       margin: const EdgeInsets.only(left: 5.0),
       decoration: BoxDecoration(
@@ -82,7 +84,7 @@ class menu_tab extends StatelessWidget {
                       _section.getName(context),
                       textAlign: TextAlign.center,
                       softWrap: true,
-                      style: Theme.of(context).textTheme.headline5,
+                      style:  useMobileLayout ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline4, textScaleFactor: 1.2
                     ),
                   ),
                 ),
