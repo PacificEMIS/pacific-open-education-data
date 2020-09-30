@@ -55,6 +55,8 @@ extension Filters on WashChunk {
   // ignore: unused_field
   static const _kGovtFilterId = 3;
 
+  static const _kDisplayAllFilterId = 4;
+
   List<Filter> generateDefaultFilters(Lookups lookups) {
     final allItems = List<BaseWash>.of(this.total)
       ..addAll(this.toilets)
@@ -92,6 +94,17 @@ extension Filters on WashChunk {
         ],
         selectedIndex: 0,
       ),
+      Filter(
+        id: _kDisplayAllFilterId,
+        title: 'filtersByData',
+        items: [
+          FilterItem(null, 'filtersDisplayAllData'),
+          ...allItems
+              .uniques((it) => it.authorityCode)
+              .map((it) => FilterItem(it, it.from(lookups.authorities))),
+        ],
+        selectedIndex: 0,
+      ),
     ]);
   }
 
@@ -105,6 +118,8 @@ extension Filters on WashChunk {
 
       final authorityFilter =
           filters.firstWhere((it) => it.id == _kAuthorityFilterId);
+      final allDataFilter =
+        filters.firstWhere((it) => it.id == _kDisplayAllFilterId);
 
       FilterApplier<Iterable<BaseWash>> apply = (input) {
         var sorted = input
@@ -127,7 +142,6 @@ extension Filters on WashChunk {
           }).toList();
         return sorted;
       };
-
 
       return WashChunk(
         total: apply(this.total),

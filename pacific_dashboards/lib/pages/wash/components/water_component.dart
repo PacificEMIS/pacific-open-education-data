@@ -12,20 +12,20 @@ import 'package:pacific_dashboards/utils/hex_color.dart';
 
 import '../wash_data.dart';
 
-class TotalComponent extends StatefulWidget {
+class WaterComponent extends StatefulWidget {
   final List<ListData> data;
 
-  const TotalComponent({
+  const WaterComponent({
     Key key,
     @required this.data,
   })  : assert(data != null),
         super(key: key);
 
   @override
-  _TotalComponentState createState() => _TotalComponentState();
+  _WaterComponent createState() => _WaterComponent();
 }
 
-class _TotalComponentState extends State<TotalComponent> {
+class _WaterComponent extends State<WaterComponent> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,9 +37,9 @@ class _TotalComponentState extends State<TotalComponent> {
           tabNameBuilder: (tab) {
             switch (tab) {
               case _DashboardTab.cumulative:
-                return 'washCumulative'.localized(context);
+                return 'washUsedForDrinking'.localized(context);
               case _DashboardTab.evaluated:
-                return 'washEvaluated'.localized(context);
+                return 'washCurrentlyAvailable'.localized(context);
             }
             throw FallThroughError();
           },
@@ -93,41 +93,51 @@ class _Chart extends StatelessWidget {
       children: <Widget>[
         Container(
           height: ((_data.length * 50) ?? 1).roundToDouble(),
-          child: FutureBuilder(
-            future: _series,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: FutureBuilder(
+                future: _series,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
 
-              return Container(
-                height: ((_data.length * 50) ?? 1).toDouble(),
-                child: charts.BarChart(
-                  snapshot.data,
-                  animate: false,
-                  barGroupingType: _groupingType,
-                  vertical: false,
-                  primaryMeasureAxis: charts.NumericAxisSpec(
-                    tickProviderSpec: charts.BasicNumericTickProviderSpec(
-                      desiredMinTickCount: 7,
-                      desiredMaxTickCount: 13,
-                    ),
-                    renderSpec: charts.GridlineRendererSpec(
-                      labelStyle: chartAxisTextStyle,
-                      lineStyle: chartAxisLineStyle,
-                    ),
-                  ),
-                  domainAxis: charts.OrdinalAxisSpec(
-                    renderSpec: charts.SmallTickRendererSpec(
-                      labelStyle: chartAxisTextStyle,
-                      lineStyle: chartAxisLineStyle,
-                    ),
-                  ),
-                ),
-              );
-            },
+                  return Container(
+                      height: ((_data.length * 50) ?? 1).toDouble(),
+                      child: charts.BarChart(snapshot.data,
+                          animate: false,
+                          barGroupingType: _groupingType,
+                          vertical: false,
+                          primaryMeasureAxis: charts.NumericAxisSpec(
+                            tickProviderSpec:
+                                charts.BasicNumericTickProviderSpec(
+                              desiredMinTickCount: 7,
+                              desiredMaxTickCount: 13,
+                            ),
+                            renderSpec: charts.GridlineRendererSpec(
+                              labelStyle: chartAxisTextStyle,
+                              lineStyle: chartAxisLineStyle,
+                            ),
+                          ),
+                          domainAxis: charts.OrdinalAxisSpec(
+                            renderSpec: charts.SmallTickRendererSpec(
+                              labelStyle: chartAxisTextStyle,
+                              lineStyle: chartAxisLineStyle,
+                            ),
+                          ),
+                          defaultRenderer: charts.BarRendererConfig(
+                            stackHorizontalSeparator: 0,
+                            minBarLengthPx: 30,
+                            groupingType: charts.BarGroupingType.stacked,
+                            strokeWidthPx: 10,
+                          )));
+                },
+              ),
+            ),
           ),
         ),
+        SizedBox(height: 30), //delimiter
         generateTitleTable(context)
       ],
     );
@@ -145,7 +155,7 @@ class _Chart extends StatelessWidget {
       });
       districts[key] = spending;
     });
-    return ChartInfoTableWidget(districts, 'district'.localized(context),
+    return ChartInfoTableWidget(districts, 'washSchNo'.localized(context),
         'labelTotal'.localized(context));
   }
 

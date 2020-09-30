@@ -11,9 +11,8 @@ class ChartInfoTableWidget extends StatefulWidget {
   final Map<String, int> _data;
   final String _titleName;
   final String _titleValue;
-  final bool scrollable;
-  ChartInfoTableWidget(this._data, this._titleName, this._titleValue,
-      {this.scrollable = false});
+  // final bool scrollable;
+  ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
 
   @override
   _ChartInfoTableWidgetState createState() => _ChartInfoTableWidgetState();
@@ -32,27 +31,13 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
             color: _kBorderColor,
           ),
         ),
-        // height: (widget._data.length * 58).roundToDouble(),
-        child: Scrollbar(
-          child: table_selector(),
-        ));
-  }
-
-  Widget table_selector() {
-    return !widget.scrollable
-        ? buildColumns()
-        : Container(
-            height: 250,
-            child: Scrollbar(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: buildColumns(),
-              ),
-            ),
-          );
+          child: buildColumns(),
+        );
   }
 
   Column buildColumns() {
+    final scrollableAreaSize = 130.0;
+    final minRowHieght = 42;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -72,25 +57,17 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
             )
           ],
         ),
-        FutureBuilder(
-            future: _sortedRowDatas,
-            builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
-
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    height: _kBorderWidth,
-                    color: _kBorderColor,
+        Container(
+          height: widget._data.length > 10 ? scrollableAreaSize : (widget._data.length * minRowHieght).roundToDouble(),
+          child: widget._data.length > 10
+              ? (Scrollbar(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: columnFutureBuilder(sortedRowDatas: _sortedRowDatas),
                   ),
-                  ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
-                ],
-              );
-            })
+                ))
+              : columnFutureBuilder(sortedRowDatas: _sortedRowDatas),
+        ),
       ],
     );
   }
@@ -176,6 +153,39 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
 
       throw FallThroughError();
     });
+  }
+}
+
+class columnFutureBuilder extends StatelessWidget {
+  const columnFutureBuilder({
+    Key key,
+    @required Future<List<_RowData>> sortedRowDatas,
+  })  : _sortedRowDatas = sortedRowDatas,
+        super(key: key);
+
+  final Future<List<_RowData>> _sortedRowDatas;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _sortedRowDatas,
+      builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: _kBorderWidth,
+              color: _kBorderColor,
+            ),
+            ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
+          ],
+        );
+      },
+    );
   }
 }
 

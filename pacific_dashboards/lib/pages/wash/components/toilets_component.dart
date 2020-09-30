@@ -91,12 +91,12 @@ class _Chart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Container(
-          height: 250,
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: FutureBuilder(
+        // Container(
+        //   height: 250,
+        //   child: Scrollbar(
+        //     child: SingleChildScrollView(
+        //       scrollDirection: Axis.vertical,
+              FutureBuilder(
                 future: _series,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -134,9 +134,9 @@ class _Chart extends StatelessWidget {
                           )));
                 },
               ),
-            ),
-          ),
-        ),
+            // ),
+          // ),
+        // ),
         SizedBox(height: 30),//delimiter
         generateTitleTable(context)
       ],
@@ -157,9 +157,8 @@ class _Chart extends StatelessWidget {
     });
     return ChartInfoTableWidget(
         districts,
-        'schoolsAccreditationDashboardsStateDomain'.localized(context),
-        'enrolment'.localized(context),
-        scrollable: true);
+        'washSchNo'.localized(context),
+        'labelTotal'.localized(context));
   }
 
   Future<List<charts.Series<BarChartData, String>>> get _series {

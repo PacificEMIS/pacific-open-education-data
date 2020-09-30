@@ -34,6 +34,7 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).primaryColor,
         body: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             Container(
               height: 80,

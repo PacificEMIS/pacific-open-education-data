@@ -11,6 +11,8 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
+import 'components/water_component.dart';
+
 class WashPage extends MvvmStatefulWidget {
   static String kRoute = '/Wash';
 
@@ -70,6 +72,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       _titleWidget(context, 'toilets', false),
                       ToiletsComponent(data: snapshot.data.toiletsModelList),
                       _titleWidget(context, 'waterSources', false),
+                      WaterComponent(data: snapshot.data.washModelList),
                     ];
                     var washWidgetList = list;
                     return Column(

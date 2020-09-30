@@ -206,6 +206,9 @@ class Strings {
       'washUsablePercentage': '% Usable',
       'washPupilsToilets': '% Usable (gender)',
       'washPupilsToilet': 'Pupils / toilet',
+      'washUsedForDrinking': 'Used for Drinking',
+      'washCurrentlyAvailable': 'Currently Available',
+      'washSchNo': 'SchNo',
       'numbers': 'Numbers'
     },
   };
