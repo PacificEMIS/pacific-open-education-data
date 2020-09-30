@@ -52,6 +52,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
+        physics: const AlwaysScrollableScrollPhysics (),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,

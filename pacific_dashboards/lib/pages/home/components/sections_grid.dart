@@ -11,26 +11,30 @@ class SectionsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      crossAxisSpacing: 24,
-      mainAxisSpacing: 24,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-      childAspectRatio: 1.0,
-      shrinkWrap: true,
-      children: _sections.map((section) => _Section(section: section)).toList(),
-    );
+    return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: _sections.length,
+        // crossAxisCount: 2,
+        // crossAxisSpacing: 24,
+        // mainAxisSpacing: 24,
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+        // childAspectRatio: 1.0,
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2),
+        itemBuilder: (BuildContext context, int index) {
+          return menu_tab(section: _sections[index]); //just for testing, will fill with image later
+        });
   }
 }
 
-class _Section extends StatelessWidget {
-  final Section _section;
+class menu_tab extends StatelessWidget {
+  const menu_tab({
+    Key key,
+    @required Section section,
+  }) : _section = section, super(key: key);
 
-  const _Section({Key key, @required Section section})
-      : assert(section != null),
-        _section = section,
-        super(key: key);
+  final Section _section;
 
   @override
   Widget build(BuildContext context) {
