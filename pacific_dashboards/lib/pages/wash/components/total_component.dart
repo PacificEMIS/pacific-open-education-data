@@ -14,11 +14,17 @@ import '../wash_data.dart';
 
 class TotalComponent extends StatefulWidget {
   final List<ListData> data;
+  final String year;
+  final bool showAllData;
 
   const TotalComponent({
     Key key,
     @required this.data,
+    @required this.year,
+    @required this.showAllData,
   })  : assert(data != null),
+        assert(year != null),
+        assert(showAllData != null),
         super(key: key);
 
   @override

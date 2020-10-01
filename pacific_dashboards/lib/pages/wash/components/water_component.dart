@@ -14,18 +14,23 @@ import '../wash_data.dart';
 
 class WaterComponent extends StatefulWidget {
   final List<ListData> data;
+  final String year;
+  final bool showAllData;
 
   const WaterComponent({
     Key key,
     @required this.data,
+    @required this.year,
+    @required this.showAllData,
   })  : assert(data != null),
+        assert(year != null),
+        assert(showAllData != null),
         super(key: key);
 
   @override
-  _WaterComponent createState() => _WaterComponent();
+  _WaterComponentState createState() => _WaterComponentState();
 }
-
-class _WaterComponent extends State<WaterComponent> {
+class _WaterComponentState extends State<WaterComponent> {
   @override
   Widget build(BuildContext context) {
     return Column(

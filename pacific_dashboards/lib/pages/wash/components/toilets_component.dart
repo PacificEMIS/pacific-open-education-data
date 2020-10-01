@@ -14,18 +14,24 @@ import '../wash_data.dart';
 
 class ToiletsComponent extends StatefulWidget {
   final List<ListData> data;
+  final String year;
+  final bool showAllData;
 
   const ToiletsComponent({
     Key key,
     @required this.data,
+    @required this.year,
+    @required this.showAllData,
   })  : assert(data != null),
+        assert(year != null),
+        assert(showAllData != null),
         super(key: key);
 
   @override
-  _ToiletsComponent createState() => _ToiletsComponent();
+  _ToiletsComponentState createState() => _ToiletsComponentState();
 }
 
-class _ToiletsComponent extends State<ToiletsComponent> {
+class _ToiletsComponentState extends State<ToiletsComponent> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,11 +53,15 @@ class _ToiletsComponent extends State<ToiletsComponent> {
             switch (tab) {
               case _DashboardTab.cumulative:
                 return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.evaluated:
                 return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
@@ -70,16 +80,22 @@ enum _DashboardTab {
 }
 
 class _Chart extends StatelessWidget {
+  final String _year;
+  final bool _showAllData;
   final List<ListData> _data;
   final charts.BarGroupingType _groupingType;
   final _DashboardTab _tab;
 
   const _Chart(
       {Key key,
+      @required String year,
+      @required bool showAllData,
       @required List<ListData> data,
       @required charts.BarGroupingType groupingType,
       @required _DashboardTab tab})
       : assert(data != null),
+        _year = year,
+        _showAllData = showAllData,
         _data = data,
         _groupingType = groupingType,
         _tab = tab,
@@ -91,53 +107,54 @@ class _Chart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        // Container(
-        //   height: 250,
-        //   child: Scrollbar(
-        //     child: SingleChildScrollView(
-        //       scrollDirection: Axis.vertical,
-              FutureBuilder(
-                future: _series,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Container();
-                  }
+        FutureBuilder(
+          future: _series,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
 
-                  return Container(
-                      height: (_data.length * 30).toDouble(),
-                      child: charts.BarChart(snapshot.data,
-                          animate: false,
-                          barGroupingType: _groupingType,
-                          vertical: false,
-                          primaryMeasureAxis: charts.NumericAxisSpec(
-                            tickProviderSpec:
-                                charts.BasicNumericTickProviderSpec(
-                              desiredMinTickCount: 7,
-                              desiredMaxTickCount: 13,
-                            ),
-                            renderSpec: charts.GridlineRendererSpec(
-                              labelStyle: chartAxisTextStyle,
-                              lineStyle: chartAxisLineStyle,
-                            ),
-                          ),
-                          domainAxis: charts.OrdinalAxisSpec(
-                            renderSpec: charts.SmallTickRendererSpec(
-                              labelStyle: chartAxisTextStyle,
-                              lineStyle: chartAxisLineStyle,
-                            ),
-                          ),
-                          defaultRenderer: charts.BarRendererConfig(
-                            stackHorizontalSeparator: 0,
-                            minBarLengthPx: 30,
-                            groupingType: charts.BarGroupingType.stacked,
-                            strokeWidthPx: 10,
-                          )));
-                },
+            return Container(
+              height: ((snapshot.data[0].data as List).length > 5 ? 200.0 : ((snapshot.data as List).length * 120).toDouble()),
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: ((snapshot.data[0].data as List).length * 60).toDouble(),
+                    child: charts.BarChart(
+                      snapshot.data,
+                      animate: false,
+                      barGroupingType: _groupingType,
+                      vertical: false,
+                      primaryMeasureAxis: charts.NumericAxisSpec(
+                        tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                          desiredMinTickCount: 7,
+                          desiredMaxTickCount: 13,
+                        ),
+                        renderSpec: charts.GridlineRendererSpec(
+                          labelStyle: chartAxisTextStyle,
+                          lineStyle: chartAxisLineStyle,
+                        ),
+                      ),
+                      domainAxis: charts.OrdinalAxisSpec(
+                        renderSpec: charts.SmallTickRendererSpec(
+                          labelStyle: chartAxisTextStyle,
+                          lineStyle: chartAxisLineStyle,
+                        ),
+                      ),
+                      defaultRenderer: charts.BarRendererConfig(
+                        stackHorizontalSeparator: 0,
+                        minBarLengthPx: 30,
+                        groupingType: charts.BarGroupingType.stacked,
+                        strokeWidthPx: 10,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            // ),
-          // ),
-        // ),
-        SizedBox(height: 30),//delimiter
+            );
+          },
+        ),
+        SizedBox(height: 30), //delimiter
         generateTitleTable(context)
       ],
     );
@@ -153,11 +170,10 @@ class _Chart extends StatelessWidget {
           spending += it.values[0];
         else if (_tab == _DashboardTab.evaluated) spending += it.values[1];
       });
-      districts[key] = spending;
+      if (_showAllData || !_showAllData && spending != 0)
+        districts[key] = spending;
     });
-    return ChartInfoTableWidget(
-        districts,
-        'washSchNo'.localized(context),
+    return ChartInfoTableWidget(districts, 'washSchNo'.localized(context),
         'labelTotal'.localized(context));
   }
 
@@ -180,6 +196,7 @@ class _Chart extends StatelessWidget {
             );
         }
       }).toList());
+      if (!_showAllData) data.removeWhere((it) => it.measure == 0);
       return [
         charts.Series(
           domainFn: (BarChartData chartData, _) => chartData.domain,

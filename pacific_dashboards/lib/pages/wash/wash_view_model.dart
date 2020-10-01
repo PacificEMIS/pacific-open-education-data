@@ -136,9 +136,19 @@ Future<WashData> _calculateData(
 
   final lookups = model.lookups;
  return WashData(
+      year: _year(filters).toString(),
+      showAllData: _showAllData(filters),
       washModelList: _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)),
       toiletsModelList: _generateWashToilets(filteredChunk.toilets.groupBy((it) => it.schNo)),
       waterModelList: _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)));
+}
+
+bool _showAllData(List<Filter> filters) {
+  return filters.firstWhere((it) => it.id == 0).intValue == 1;
+}
+
+int _year(List<Filter> filters) {
+  return filters.firstWhere((it) => it.id == 1).intValue;
 }
 
 List<ListData> _generateWashTotal(

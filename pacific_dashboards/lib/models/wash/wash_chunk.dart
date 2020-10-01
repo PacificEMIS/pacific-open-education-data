@@ -44,24 +44,33 @@ class WashChunkJsonParts {
 
 extension Filters on WashChunk {
   // ignore: unused_field
-  static const _kYearFilterId = 0;
+  static const _kDisplayAllFilterId = 0;
+  // ignore: unused_field
+  static const _kYearFilterId = 1;
 
   // ignore: unused_field
-  static const _kDistrictFilterId = 1;
+  static const _kDistrictFilterId = 2;
 
   // ignore: unused_field
-  static const _kAuthorityFilterId = 2;
+  static const _kAuthorityFilterId = 3;
 
   // ignore: unused_field
-  static const _kGovtFilterId = 3;
-
-  static const _kDisplayAllFilterId = 4;
+  static const _kGovtFilterId = 4;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
     final allItems = List<BaseWash>.of(this.total)
       ..addAll(this.toilets)
       ..addAll(this.water);
     return List.of([
+      Filter(
+        id: _kDisplayAllFilterId,
+        title: 'filtersByData',
+        items: [
+          FilterItem(0, 'Non-empty values'),
+          FilterItem(1, 'All data'),
+        ],
+        selectedIndex: 1,
+      ),
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
@@ -94,17 +103,6 @@ extension Filters on WashChunk {
         ],
         selectedIndex: 0,
       ),
-      Filter(
-        id: _kDisplayAllFilterId,
-        title: 'filtersByData',
-        items: [
-          FilterItem(null, 'filtersDisplayAllData'),
-          ...allItems
-              .uniques((it) => it.authorityCode)
-              .map((it) => FilterItem(it, it.from(lookups.authorities))),
-        ],
-        selectedIndex: 0,
-      ),
     ]);
   }
 
@@ -119,27 +117,26 @@ extension Filters on WashChunk {
       final authorityFilter =
           filters.firstWhere((it) => it.id == _kAuthorityFilterId);
       final allDataFilter =
-        filters.firstWhere((it) => it.id == _kDisplayAllFilterId);
+          filters.firstWhere((it) => it.id == _kDisplayAllFilterId);
 
       FilterApplier<Iterable<BaseWash>> apply = (input) {
-        var sorted = input
-          .where((it) {
-            if (it.surveyYear != selectedYear) {
-              return false;
-            }
+        var sorted = input.where((it) {
+          if (it.surveyYear != selectedYear) {
+            return false;
+          }
 
-            if (!districtFilter.isDefault &&
-                it.districtCode != districtFilter.stringValue) {
-              return false;
-            }
+          if (!districtFilter.isDefault &&
+              it.districtCode != districtFilter.stringValue) {
+            return false;
+          }
 
-            if (!authorityFilter.isDefault &&
-                it.authorityCode != authorityFilter.stringValue) {
-              return false;
-            }
+          if (!authorityFilter.isDefault &&
+              it.authorityCode != authorityFilter.stringValue) {
+            return false;
+          }
 
-            return true;
-          }).toList();
+          return true;
+        }).toList();
         return sorted;
       };
 
