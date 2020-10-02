@@ -128,19 +128,22 @@ class _WashModel {
 }
 
 Future<WashData> _calculateData(
-    _WashModel model,
+  _WashModel model,
 ) async {
   final chunk = model.chunk;
   final filters = model.filters;
   final filteredChunk = await chunk.applyFilters(filters);
 
   final lookups = model.lookups;
- return WashData(
+  return WashData(
       year: _year(filters).toString(),
       showAllData: _showAllData(filters),
-      washModelList: _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)),
-      toiletsModelList: _generateWashToilets(filteredChunk.toilets.groupBy((it) => it.schNo)),
-      waterModelList: _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)));
+      washModelList:
+          _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)),
+      toiletsModelList:
+          _generateWashToilets(filteredChunk.toilets.groupBy((it) => it.schNo)),
+      waterModelList:
+          _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)));
 }
 
 bool _showAllData(List<Filter> filters) {

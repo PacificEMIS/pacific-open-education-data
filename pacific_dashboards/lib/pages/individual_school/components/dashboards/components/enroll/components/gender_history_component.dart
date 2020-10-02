@@ -10,11 +10,14 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class GenderHistoryComponent extends StatefulWidget {
   final List<EnrollDataByYear> data;
+  final int year;
 
   const GenderHistoryComponent({
     Key key,
+    @required this.year,
     @required this.data,
-  })  : assert(data != null),
+  })  : assert(year != null),
+        assert(data != null),
         super(key: key);
 
   @override
@@ -32,9 +35,8 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'individualSchoolDashboardEnrollByGenderHistoryTitle'
-                .localized(context),
-            style: textTheme.individualDashboardsSubtitle,
+            '${'individualSchoolDashboardEnrollByGenderHistoryTitle'.localized(context)} (${widget.year})',
+            style: textTheme.headline4,
           ),
         ),
         MiniTabLayout(

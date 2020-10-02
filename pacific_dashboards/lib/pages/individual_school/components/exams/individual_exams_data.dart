@@ -98,7 +98,8 @@ class ExamReportsHistoryRowData {
     @required this.female,
   }) {
     total = male + female;
-    malePercent = (male / total * 100).round();
-    femalePercent = (female / total * 100).round();
+    if (total == 0) { malePercent = 0; femalePercent = 0;}
+    else {malePercent = (male / total * 100).round();
+    femalePercent = (female / total * 100).round();}
   }
 }

@@ -46,7 +46,7 @@ class RateSliceComponent extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             _title,
-            style: textTheme.individualDashboardsSubtitle,
+            style: textTheme.headline4,
           ),
         ),
         MiniTabLayout(
@@ -92,9 +92,9 @@ class RateSliceComponent extends StatelessWidget {
 }
 
 enum _Tab {
-  lastYearDetailed,
-  historyChart,
   historyTable,
+  historyChart,
+  lastYearDetailed,
 }
 
 class _DetailedChart extends StatelessWidget {

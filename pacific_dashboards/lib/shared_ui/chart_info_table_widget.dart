@@ -24,20 +24,21 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        foregroundDecoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
-          border: Border.all(
-            width: _kBorderWidth,
-            color: _kBorderColor,
-          ),
+      foregroundDecoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        border: Border.all(
+          width: _kBorderWidth,
+          color: _kBorderColor,
         ),
-          child: buildColumns(),
-        );
+      ),
+      child: buildColumns(),
+    );
   }
 
   Column buildColumns() {
     final scrollableAreaSize = 130.0;
     final minRowHieght = 42;
+    final scrollController = ScrollController(initialScrollOffset: 1.0, keepScrollOffset: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -58,9 +59,13 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
           ],
         ),
         Container(
-          height: widget._data.length > 10 ? scrollableAreaSize : (widget._data.length * minRowHieght).roundToDouble(),
+          height: widget._data.length > 10
+              ? scrollableAreaSize
+              : (widget._data.length * minRowHieght).roundToDouble(),
           child: widget._data.length > 10
               ? (Scrollbar(
+                  isAlwaysShown: true,
+                  controller: scrollController,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: columnFutureBuilder(sortedRowDatas: _sortedRowDatas),

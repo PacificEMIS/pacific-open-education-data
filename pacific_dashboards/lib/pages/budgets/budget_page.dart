@@ -183,11 +183,11 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
         text.localized(context),
         style: isTitle == true
             ? Theme.of(context).textTheme.headline3.copyWith(
-                  color: Color.fromRGBO(19, 40, 38, 100),
+                  color: Colors.black87,
                   fontWeight: FontWeight.bold,
                 )
             : Theme.of(context).textTheme.headline4.copyWith(
-                  color: Color.fromRGBO(19, 40, 38, 100),
+                  color: Colors.black87,
                   fontWeight: FontWeight.bold,
                 ),
       ),

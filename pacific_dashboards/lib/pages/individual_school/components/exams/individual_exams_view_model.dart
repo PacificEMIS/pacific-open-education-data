@@ -181,10 +181,16 @@ class IndividualExamsViewModel extends BaseViewModel {
     launchHandled(() async {
       _isHistoryDataLoadingSubject.add(true);
 
-      _historyRowsSubject.add(await compute(
-        _generateHistoryData,
-        _preparedViewModelData,
-      ));
+      final viewModelData = _preparedViewModelData;
+      final historyData = _generateHistoryData(viewModelData);
+      _historyRowsSubject.add(historyData);
+
+      //Removed compute - NAN issue(compute available types - null, num, bool, double, String)
+      //
+      // _historyRowsSubject.add(await compute(
+      //       //   _generateHistoryData,
+      //       //   viewModelData,
+      //       // ));
 
       _isHistoryDataLoadingSubject.add(false);
     });
@@ -380,9 +386,11 @@ List<ExamReportsHistoryByYearData> _generateHistoryData(
         maleCandidates += report.maleCandidates;
         femaleCandidates += report.femaleCandidates;
       });
+      print('examCode');
+      // print(reports.head.examName);
       rows.add(ExamReportsHistoryRowData(
-        examCode: examCode,
-        examName: reports.head?.examName ?? '-',
+        examCode: examCode ?? '-',
+        examName: reports.head.examName,
         male: maleCandidates,
         female: femaleCandidates,
       ));

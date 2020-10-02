@@ -125,14 +125,14 @@ class _SpecialEducationModel {
 }
 
 Future<SpecialEducationData> _specialEducationModel(
-  _SpecialEducationModel _specialEducationModel,
+  _SpecialEducationModel model,
 ) async {
   Map<String, Map<String, List<DataByGroup>>> dataByState = new Map();
   Map<String, Map<String, List<DataByGroup>>> dataByYear = new Map();
-
-  final specialEducationData = _specialEducationModel.specialEducation;
+  final lookups = model.lookups;
+  final specialEducationData = model.specialEducation;
   final filteredData =
-      await specialEducationData.applyFilters(_specialEducationModel.filters);
+      await specialEducationData.applyFilters(model.filters);
   var dataByGender =
       _generateDataByTitle(filteredData.groupBy((it) => it.disability));
   var dataByEthnicity =
@@ -211,11 +211,11 @@ Map<String, List<DataByGroup>> _generateDataByYear(
 }
 
 Map<String, List<DataByGroup>> _generateDataByState(
-    Map<String, List<SpecialEducation>> dataGroupedByEnvironment) {
-  Map<String, List<DataByGroup>> dataByYearEnvironment =
+    Map<String, List<SpecialEducation>> dataGroupedByState) {
+  Map<String, List<DataByGroup>> dataByState =
       Map<String, List<DataByGroup>>();
 
-  dataGroupedByEnvironment.forEach((environment, values) {
+  dataGroupedByState.forEach((state, values) {
     Map<String, List<SpecialEducation>> groupedByYear =
         values.groupBy((it) => it.districtCode);
     List<DataByGroup> dataByEnvironment = [];
@@ -227,7 +227,7 @@ Map<String, List<DataByGroup>> _generateDataByState(
       dataByEnvironment.add(DataByGroup(
           title: key.toString(), firstValue: number, secondValue: 0));
     });
-    dataByYearEnvironment[environment] = dataByEnvironment ?? [];
+    dataByState[state] = dataByEnvironment ?? [];
   });
-  return dataByYearEnvironment;
+  return dataByState;
 }

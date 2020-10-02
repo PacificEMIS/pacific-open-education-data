@@ -10,7 +10,7 @@ class SchoolExamReport {
   @JsonKey(name: 'examYear')
   int year;
 
-  @JsonKey(name: 'examName')
+  @JsonKey(name: 'examName', defaultValue: '-')
   String examName;
 
   @JsonKey(name: 'benchmarkCode')

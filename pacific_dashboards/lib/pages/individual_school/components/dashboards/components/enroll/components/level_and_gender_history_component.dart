@@ -7,9 +7,11 @@ import 'package:pacific_dashboards/res/themes.dart';
 
 class LevelAndGenderHistoryComponent extends StatefulWidget {
   final List<EnrollDataByGradeHistory> data;
+  final int year;
 
   const LevelAndGenderHistoryComponent({
     Key key,
+    @required this.year,
     @required this.data,
   })  : assert(data != null),
         super(key: key);
@@ -31,9 +33,8 @@ class _LevelAndGenderHistoryComponentState
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle'
-                .localized(context),
-            style: textTheme.individualDashboardsSubtitle,
+           '${'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle'.localized(context)} (${widget.year})',
+            style: textTheme.headline4,
           ),
         ),
         MiniTabLayout(

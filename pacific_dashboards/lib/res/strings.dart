@@ -65,7 +65,7 @@ class Strings {
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
       'schoolsDashboardsTitle': 'Schools',
-      'schoolsDashboardsMeasureEnroll': 'Schools Enrollment',
+      'schoolsDashboardsMeasureEnroll': 'Enrollment',
       'schoolsDashboardsEnrollByStateTitle': 'Schools Enrollment by State',
       'schoolsDashboardsEnrollByAuthorityTitle':
           'Schools Enrollment by Authority',
@@ -153,7 +153,7 @@ class Strings {
       'individualSchoolExamsHistoryYear': ' Exam Year',
       'individualSchoolExamsHistoryTableCode': 'Exam Code',
       'budgetsDashboardsTitle': 'Budgets',
-      'budgetsEducationFinancing': 'Education Financing: Dashboard',
+      'budgetsEducationFinancing': 'Education Financing : Dashboard',
       'budgetsGnpAndGovernmentSpendingActualExpense':
           'GNP and Government Spending Actual Expense',
       'budgetsGnpAndGovernmentSpendingBudgetedExpense':
