@@ -11,7 +11,6 @@ class ChartInfoTableWidget extends StatefulWidget {
   final Map<String, int> _data;
   final String _titleName;
   final String _titleValue;
-  // final bool scrollable;
   ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
 
   @override
@@ -36,9 +35,6 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   }
 
   Column buildColumns() {
-    final scrollableAreaSize = 130.0;
-    final minRowHieght = 42;
-    final scrollController = ScrollController(initialScrollOffset: 1.0, keepScrollOffset: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -58,21 +54,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
             )
           ],
         ),
-        Container(
-          height: widget._data.length > 10
-              ? scrollableAreaSize
-              : (widget._data.length * minRowHieght).roundToDouble(),
-          child: widget._data.length > 10
-              ? (Scrollbar(
-                  isAlwaysShown: true,
-                  controller: scrollController,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: columnFutureBuilder(sortedRowDatas: _sortedRowDatas),
-                  ),
-                ))
-              : columnFutureBuilder(sortedRowDatas: _sortedRowDatas),
-        ),
+               columnFutureBuilder(sortedRowDatas: _sortedRowDatas),
       ],
     );
   }
@@ -178,6 +160,7 @@ class columnFutureBuilder extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container();
         }
+        
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,

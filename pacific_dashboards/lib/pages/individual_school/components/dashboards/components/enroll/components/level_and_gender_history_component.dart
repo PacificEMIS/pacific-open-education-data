@@ -33,7 +33,7 @@ class _LevelAndGenderHistoryComponentState
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-           '${'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle'.localized(context)} (${widget.year})',
+           '${'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle'.localized(context)}',
             style: textTheme.headline4,
           ),
         ),

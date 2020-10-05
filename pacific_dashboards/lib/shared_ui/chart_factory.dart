@@ -49,8 +49,8 @@ class ChartFactory {
               data: chartData,
               colorFunc: colorFunc,
             ),
-          );
-  }
+  );
+}
 }
 
 enum ChartType { bar, stackedBar, horizontalStackedBar, pie }

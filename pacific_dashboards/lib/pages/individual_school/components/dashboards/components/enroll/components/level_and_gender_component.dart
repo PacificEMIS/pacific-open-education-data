@@ -34,7 +34,7 @@ class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${'individualSchoolDashboardEnrollByGradeLevelGenderTitle'.localized(context)} (${widget.data.year})',
+            '${'individualSchoolDashboardEnrollByGradeLevelGenderTitle'.localized(context)} ${widget.data.year}',
             style: textTheme.headline4,
           ),
         ),

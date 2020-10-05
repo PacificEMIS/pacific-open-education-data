@@ -9,12 +9,12 @@ class MiniTabLayout<T> extends StatefulWidget {
   final List<T> tabs;
   final TabbedWidgetBuilder<T> builder;
   final TabNameBuilder<T> tabNameBuilder;
-
+  final double padding;
   const MiniTabLayout({
     Key key,
     @required this.tabs,
     @required this.tabNameBuilder,
-    @required this.builder,
+    @required this.builder, this.padding,
   })  : assert(tabs != null),
         assert(tabNameBuilder != null),
         assert(builder != null),
@@ -26,6 +26,7 @@ class MiniTabLayout<T> extends StatefulWidget {
 
 class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
   T _selectedTab;
+  double _padding;
 
   @override
   void initState() {
@@ -36,8 +37,9 @@ class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final defaultPadding = widget.padding ?? 16.0;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: defaultPadding),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

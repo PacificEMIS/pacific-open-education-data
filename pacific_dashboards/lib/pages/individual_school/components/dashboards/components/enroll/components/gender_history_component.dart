@@ -35,7 +35,7 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${'individualSchoolDashboardEnrollByGenderHistoryTitle'.localized(context)} (${widget.year})',
+            '${'individualSchoolDashboardEnrollByGenderHistoryTitle'.localized(context)}',
             style: textTheme.headline4,
           ),
         ),

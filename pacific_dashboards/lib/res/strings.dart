@@ -209,7 +209,12 @@ class Strings {
       'washUsedForDrinking': 'Used for Drinking',
       'washCurrentlyAvailable': 'Currently Available',
       'washSchNo': 'SchNo',
-      'numbers': 'Numbers'
+      'numbers': 'Numbers',
+      'schoolsEnrollment': 'Schools Enrollment',
+      'schoolsByState': 'By State',
+      'schoolsByAuthotity': 'By Authotity',
+      'schoolsByGovtNonGovt': 'By Govt / Non-govt',
+      'schoolsCertifiedQualified': 'Certified and Qualified '
     },
   };
 

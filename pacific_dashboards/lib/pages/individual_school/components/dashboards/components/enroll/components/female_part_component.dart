@@ -40,7 +40,7 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${'individualSchoolDashboardEnrollFemalePartTitle'.localized(context)} (${widget.year})',
+            '${'individualSchoolDashboardEnrollFemalePartTitle'.localized(context)} ${widget.year}',
             style: textTheme.headline4,
           ),
         ),
