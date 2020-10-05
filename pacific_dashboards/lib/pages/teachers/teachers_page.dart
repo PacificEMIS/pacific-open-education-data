@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
+import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
@@ -69,40 +70,108 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                   );
                 } else {
                   return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      ChartWithTable(
-                        key: ObjectKey(snapshot.data.teachersByAuthority),
-                        title: 'teachersDashboardsEnrollByAuthorityTitle'
-                            .localized(context),
-                        data: snapshot.data.teachersByAuthority,
-                        chartType: ChartType.pie,
-                        tableKeyName: 'teachersDashboardsAuthorityDomain'
-                            .localized(context),
-                        tableValueName:
-                            'teachersDashboardsEnrollDomain'.localized(context),
+                      Text('teachersCharts'.localized(context),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3
+                              .copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16)),
+                      MiniTabLayout(
+                        tabs: _DashboardsTab.values,
+                        padding: 0.0,
+                        tabNameBuilder: (tab) {
+                          switch (tab) {
+                            case _DashboardsTab.byState:
+                              return 'schoolsByState'.localized(context);
+                            case _DashboardsTab.byAuthority:
+                              return 'schoolsByAuthotity'.localized(context);
+                            case _DashboardsTab.byGovtNonGovt:
+                              return 'schoolsByGovtNonGovt'
+                                  .localized(context);
+                          }
+                          throw FallThroughError();
+                        },
+                        builder: (ctx, tab) {
+                          switch (tab) {
+                            case _DashboardsTab.byState:
+                              return ChartWithTable(
+                                key: ValueKey(snapshot.data.teachersByAuthority),
+                                title: '',
+                                data: snapshot.data.teachersByAuthority,
+                                chartType: ChartType.pie,
+                                tableKeyName: 'schoolsDashboardsStateDomain'
+                                    .localized(context),
+                                tableValueName:
+                                'schoolsDashboardsMeasureEnroll'
+                                    .localized(context),
+                              );
+                            case _DashboardsTab.byAuthority:
+                              return ChartWithTable(
+                                key: ValueKey(snapshot.data.teachersByPrivacy),
+                                title: '',
+                                data: snapshot.data.teachersByPrivacy,
+                                chartType: ChartType.pie,
+                                tableKeyName:
+                                'schoolsDashboardsAuthorityDomain'
+                                    .localized(context),
+                                tableValueName:
+                                'schoolsDashboardsMeasureEnroll'
+                                    .localized(context),
+                              );
+                            case _DashboardsTab.byGovtNonGovt:
+                              return ChartWithTable(
+                                key: ValueKey(snapshot.data.teachersByDistrict),
+                                title: '',
+                                data: snapshot.data.teachersByDistrict,
+                                chartType: ChartType.pie,
+                                tableKeyName: 'schoolsDashboardsPrivacyDomain'
+                                    .localized(context),
+                                tableValueName:
+                                'schoolsDashboardsMeasureEnroll'
+                                    .localized(context),
+                              );
+                          }
+                          throw FallThroughError();
+                        },
                       ),
-                      ChartWithTable(
-                        key: ObjectKey(snapshot.data.teachersByPrivacy),
-                        title: 'teachersDashboardsEnrollByGovernmentTitle'
-                            .localized(context),
-                        data: snapshot.data.teachersByPrivacy,
-                        chartType: ChartType.pie,
-                        tableKeyName: 'teachersDashboardsPrivacyDomain'
-                            .localized(context),
-                        tableValueName:
-                            'teachersDashboardsEnrollDomain'.localized(context),
-                      ),
-                      ChartWithTable(
-                        key: ObjectKey(snapshot.data.teachersByDistrict),
-                        title: 'teachersDashboardsEnrollByStateTitle'
-                            .localized(context),
-                        data: snapshot.data.teachersByDistrict,
-                        chartType: ChartType.bar,
-                        tableKeyName:
-                            'teachersDashboardsStateDomain'.localized(context),
-                        tableValueName:
-                            'teachersDashboardsEnrollDomain'.localized(context),
-                      ),
+                      // ChartWithTable(
+                      //   key: ObjectKey(snapshot.data.teachersByAuthority),
+                      //   title: 'teachersDashboardsEnrollByAuthorityTitle'
+                      //       .localized(context),
+                      //   data: snapshot.data.teachersByAuthority,
+                      //   chartType: ChartType.pie,
+                      //   tableKeyName: 'teachersDashboardsAuthorityDomain'
+                      //       .localized(context),
+                      //   tableValueName:
+                      //       'teachersDashboardsEnrollDomain'.localized(context),
+                      // ),
+                      // ChartWithTable(
+                      //   key: ObjectKey(snapshot.data.teachersByPrivacy),
+                      //   title: 'teachersDashboardsEnrollByGovernmentTitle'
+                      //       .localized(context),
+                      //   data: snapshot.data.teachersByPrivacy,
+                      //   chartType: ChartType.pie,
+                      //   tableKeyName: 'teachersDashboardsPrivacyDomain'
+                      //       .localized(context),
+                      //   tableValueName:
+                      //       'teachersDashboardsEnrollDomain'.localized(context),
+                      // ),
+                      // ChartWithTable(
+                      //   key: ObjectKey(snapshot.data.teachersByDistrict),
+                      //   title: 'teachersDashboardsEnrollByStateTitle'
+                      //       .localized(context),
+                      //   data: snapshot.data.teachersByDistrict,
+                      //   chartType: ChartType.bar,
+                      //   tableKeyName:
+                      //       'teachersDashboardsStateDomain'.localized(context),
+                      //   tableValueName:
+                      //       'teachersDashboardsEnrollDomain'.localized(context),
+                      // ),
                       MultiTable(
                         key: ObjectKey(
                             snapshot.data.teachersBySchoolLevelStateAndGender),
@@ -147,3 +216,5 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
     viewModel.onFiltersChanged(filters);
   }
 }
+
+enum _DashboardsTab { byState, byAuthority, byGovtNonGovt }

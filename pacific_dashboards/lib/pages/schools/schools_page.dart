@@ -93,9 +93,6 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                               case _DashboardsTab.byGovtNonGovt:
                               return 'schoolsByGovtNonGovt'
                                   .localized(context);
-                              case _DashboardsTab.byCertified:
-                                return 'schoolsCertifiedQualified'
-                                    .localized(context);
                             }
                             throw FallThroughError();
                           },
@@ -254,4 +251,4 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
   }
 }
 
-enum _DashboardsTab { byState, byAuthority, byGovtNonGovt, byCertified }
+enum _DashboardsTab { byState, byAuthority, byGovtNonGovt }

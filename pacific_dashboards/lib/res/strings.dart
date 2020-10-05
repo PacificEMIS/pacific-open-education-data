@@ -214,7 +214,8 @@ class Strings {
       'schoolsByState': 'By State',
       'schoolsByAuthotity': 'By Authotity',
       'schoolsByGovtNonGovt': 'By Govt / Non-govt',
-      'schoolsCertifiedQualified': 'Certified and Qualified '
+      'schoolsCertifiedQualified': 'Certified and Qualified ',
+      'teachersCharts': 'Teachers Charts'
     },
   };
 
