@@ -33,6 +33,15 @@ class WaterComponent extends StatefulWidget {
 class _WaterComponentState extends State<WaterComponent> {
   @override
   Widget build(BuildContext context) {
+    if (widget.data.length == 0) {
+      return Center(
+        child: Text(
+          'labelNoData'.localized(context),
+          style: Theme.of(context).textTheme.headline5,
+        ),
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,

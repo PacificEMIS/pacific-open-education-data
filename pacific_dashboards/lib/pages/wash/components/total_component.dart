@@ -34,6 +34,15 @@ class TotalComponent extends StatefulWidget {
 class _TotalComponentState extends State<TotalComponent> {
   @override
   Widget build(BuildContext context) {
+    if (widget.data.length == 0) {
+      return Center(
+        child: Text(
+          'labelNoData'.localized(context),
+          style: Theme.of(context).textTheme.headline5,
+        ),
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
