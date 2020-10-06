@@ -86,10 +86,10 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                         padding: 0.0,
                         tabNameBuilder: (tab) {
                           switch (tab) {
-                            case _DashboardsTab.byState:
-                              return 'schoolsByState'.localized(context);
                             case _DashboardsTab.byAuthority:
                               return 'schoolsByAuthotity'.localized(context);
+                            case _DashboardsTab.byState:
+                              return 'schoolsByState'.localized(context);
                             case _DashboardsTab.byGovtNonGovt:
                               return 'schoolsByGovtNonGovt'
                                   .localized(context);
@@ -110,7 +110,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 'schoolsDashboardsMeasureEnroll'
                                     .localized(context),
                               );
-                            case _DashboardsTab.byAuthority:
+                            case _DashboardsTab.byGovtNonGovt:
                               return ChartWithTable(
                                 key: ValueKey(snapshot.data.teachersByPrivacy),
                                 title: '',
@@ -123,7 +123,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 'schoolsDashboardsMeasureEnroll'
                                     .localized(context),
                               );
-                            case _DashboardsTab.byGovtNonGovt:
+                            case _DashboardsTab.byAuthority:
                               return ChartWithTable(
                                 key: ValueKey(snapshot.data.teachersByDistrict),
                                 title: '',
@@ -217,4 +217,4 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
   }
 }
 
-enum _DashboardsTab { byState, byAuthority, byGovtNonGovt }
+enum _DashboardsTab { byAuthority, byGovtNonGovt, byState }

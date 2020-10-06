@@ -60,7 +60,8 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
                 ),
               ),
             ),
-            CurrentEmisWidget(viewModel: viewModel, useMobileLayout: useMobileLayout),
+            CurrentEmisWidget(
+                viewModel: viewModel, useMobileLayout: useMobileLayout),
             StreamBuilder<List<Section>>(
               stream: viewModel.sectionStream,
               builder: (ctx, snapshot) {

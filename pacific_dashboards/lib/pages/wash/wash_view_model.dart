@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/wash/toilets.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
+import 'package:pacific_dashboards/models/wash/water.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:rxdart/rxdart.dart';
@@ -143,7 +144,7 @@ Future<WashData> _calculateData(
       toiletsModelList:
           _generateWashToilets(filteredChunk.toilets.groupBy((it) => it.schNo)),
       waterModelList:
-          _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)));
+        _generateWashWater(filteredChunk.water.groupBy((it) => it.schNo)));
 }
 
 bool _showAllData(List<Filter> filters) {
@@ -234,4 +235,62 @@ List<ListData> _generateWashToilets(
     ]));
   });
   return toiletsData;
+}
+
+_generateWashWater(Map<String, List<Water>> washGroupedBySchNo) {
+  List<ListData> waterData = [];
+
+  washGroupedBySchNo.forEach((schNo, values) {
+    int pipedWaterSupplyCurrentlyAvailable = 0;
+    int pipedWaterSupplyUsedForDrinking = 0;
+    int protectedWellCurrentlyAvailable = 0;
+    int protectedWellUsedForDrinking = 0;
+    int unprotectedWellSpringCurrentlyAvailable = 0;
+    int unprotectedWellSpringUsedForDrinking = 0;
+    int rainwaterUsedForDrinking = 0;
+    int bottledWaterCurrentlyAvailable = 0;
+    int bottledWaterUsedForDrinking = 0;
+
+    int tankerTruckCartCurrentlyAvailable = 0;
+    int tankerTruckCartUsedForDrinking = 0;
+    int surfacedWaterCurrentlyAvailable = 0;
+    int surfacedWaterUsedForDrinking = 0;
+
+    for (var data in values) {
+      pipedWaterSupplyCurrentlyAvailable +=
+          data.pipedWaterSupplyCurrentlyAvailable == 'YES' ? 1 : 0;
+      pipedWaterSupplyUsedForDrinking += data.pipedWaterSupplyUsedForDrinking == 'YES' ? 1 : 0;
+      protectedWellCurrentlyAvailable += data.protectedWellCurrentlyAvailable == 'YES' ? 1 : 0;
+      protectedWellUsedForDrinking += data.protectedWellUsedForDrinking == 'YES' ? 1 : 0;
+      unprotectedWellSpringCurrentlyAvailable +=
+          data.unprotectedWellSpringCurrentlyAvailable == 'YES' ? 1 : 0;
+      unprotectedWellSpringUsedForDrinking +=
+          data.unprotectedWellSpringUsedForDrinking == 'YES' ? 1 : 0;
+      rainwaterUsedForDrinking += data.rainwaterUsedForDrinking == 'YES' ? 1 : 0;
+      bottledWaterCurrentlyAvailable += data.bottledWaterCurrentlyAvailable == 'YES' ? 1 : 0;
+      bottledWaterUsedForDrinking += data.bottledWaterUsedForDrinking == 'YES' ? 1 : 0;
+      tankerTruckCartCurrentlyAvailable +=
+          data.tankerTruckCartCurrentlyAvailable == 'YES' ? 1 : 0;
+      tankerTruckCartUsedForDrinking += data.tankerTruckCartUsedForDrinking == 'YES' ? 1 : 0;
+      surfacedWaterCurrentlyAvailable += data.surfacedWaterCurrentlyAvailable == 'YES' ? 1 : 0;
+      surfacedWaterUsedForDrinking += data.surfacedWaterUsedForDrinking == 'YES' ? 1 : 0;
+    }
+
+    waterData.add(new ListData(title: schNo, values: [
+      pipedWaterSupplyCurrentlyAvailable,
+      pipedWaterSupplyUsedForDrinking,
+      protectedWellCurrentlyAvailable,
+      protectedWellUsedForDrinking,
+      unprotectedWellSpringCurrentlyAvailable,
+      unprotectedWellSpringUsedForDrinking,
+      rainwaterUsedForDrinking,
+      bottledWaterCurrentlyAvailable,
+      bottledWaterUsedForDrinking,
+      tankerTruckCartCurrentlyAvailable,
+      tankerTruckCartUsedForDrinking,
+      surfacedWaterCurrentlyAvailable,
+      surfacedWaterUsedForDrinking
+    ]));
+  });
+  return waterData;
 }

@@ -9,6 +9,7 @@ import 'package:pacific_dashboards/pages/school_accreditation/school_accreditati
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
@@ -57,6 +58,7 @@ class SchoolsPageState
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,26 +116,125 @@ class _ContentBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TileWidget(
-          title: Text(
-            'schoolsAccreditationDashboardsProgressTitle'.localized(context),
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          body: ChartFactory.getStackedHorizontalBarChartViewByData(
-            chartData: _data.accreditationProgressData,
-            colorFunc: _levelIndexToColor,
-          ),
+        MiniTabLayout(
+          tabs: _DashboardTab.values,
+          padding: 0.0,
+          tabNameBuilder: (tab) {
+            switch (tab) {
+              case _DashboardTab.accreditationProgres:
+                return 'schoolsAccreditationDashboardsProgressTitle'.localized(context);
+              case _DashboardTab.districtStatus:
+                return 'schoolsAccreditationDashboardsDistrictTitle'.localized(context);
+            }
+            throw FallThroughError();
+          },
+          builder: (ctx, tab) {
+            switch (tab) {
+              case _DashboardTab.accreditationProgres:
+                return   TileWidget(
+                  title: Text(
+                    'schoolsAccreditationDashboardsProgressTitle'.localized(context),
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _data.accreditationProgressData,
+                    colorFunc: _levelIndexToColor,
+                  ),
+                );
+              case _DashboardTab.districtStatus:
+                return  TileWidget(
+                  title: Text(
+                    'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _data.districtStatusData,
+                    colorFunc: _levelIndexToColor,
+                  ),
+                );
+            }
+            throw FallThroughError();
+          },
         ),
-        const SizedBox(height: 16),
-        TileWidget(
-          title: Text(
-            'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          body: ChartFactory.getStackedHorizontalBarChartViewByData(
-            chartData: _data.districtStatusData,
-            colorFunc: _levelIndexToColor,
-          ),
+        MiniTabLayout(
+          tabs: _DashboardTab.values,
+          padding: 0.0,
+          tabNameBuilder: (tab) {
+            switch (tab) {
+              case _DashboardTab.accreditationProgres:
+                return 'schoolsAccreditationDashboardsProgressTitle'.localized(context);
+              case _DashboardTab.districtStatus:
+                return 'schoolsAccreditationDashboardsDistrictTitle'.localized(context);
+            }
+            throw FallThroughError();
+          },
+          builder: (ctx, tab) {
+            switch (tab) {
+              case _DashboardTab.accreditationProgres:
+                return   TileWidget(
+                  title: Text(
+                    'schoolsAccreditationDashboardsProgressTitle'.localized(context),
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _data.accreditationProgressData,
+                    colorFunc: _levelIndexToColor,
+                  ),
+                );
+              case _DashboardTab.districtStatus:
+                return  TileWidget(
+                  title: Text(
+                    'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _data.districtStatusData,
+                    colorFunc: _levelIndexToColor,
+                  ),
+                );
+            }
+            throw FallThroughError();
+          },
+        ),
+        MiniTabLayout(
+          tabs: _DashboardTab.values,
+          padding: 0.0,
+          tabNameBuilder: (tab) {
+            switch (tab) {
+              case _DashboardTab.accreditationProgres:
+                return 'schoolsAccreditationDashboardsProgressTitle'.localized(context);
+              case _DashboardTab.districtStatus:
+                return 'schoolsAccreditationDashboardsDistrictTitle'.localized(context);
+            }
+            throw FallThroughError();
+          },
+          builder: (ctx, tab) {
+            switch (tab) {
+              case _DashboardTab.accreditationProgres:
+                return   TileWidget(
+                  title: Text(
+                    'schoolsAccreditationDashboardsProgressTitle'.localized(context),
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _data.accreditationProgressData,
+                    colorFunc: _levelIndexToColor,
+                  ),
+                );
+              case _DashboardTab.districtStatus:
+                return  TileWidget(
+                  title: Text(
+                    'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
+                    chartData: _data.districtStatusData,
+                    colorFunc: _levelIndexToColor,
+                  ),
+                );
+            }
+            throw FallThroughError();
+          },
         ),
         const SizedBox(height: 16),
         _PerformanceTable(
@@ -186,20 +287,40 @@ class _PerformanceTable extends StatelessWidget {
         _title,
         style: Theme.of(context).textTheme.headline4,
       ),
-      body: Column(
-        children: [
-          AccreditationTableWidget(
-            title: 'Evaluated in $_year',
-            firstColumnName: _firstColumnName,
-            data: _data.evaluatedData,
-          ),
-          AccreditationTableWidget(
-            title: 'Cumulative up to $_year',
-            firstColumnName: _firstColumnName,
-            data: _data.cumulatedData,
-          ),
-        ],
-      ),
-    );
+      body:
+        MiniTabLayout(
+          tabs: _Tab.values,
+          padding: 0.0,
+          tabNameBuilder: (tab) {
+            switch (tab) {
+              case _Tab.evaluated:
+                return 'washEvaluated'.localized(context);
+              case _Tab.cummulative:
+                return 'washCumulative'.localized(context);
+            }
+            throw FallThroughError();
+          },
+          builder: (ctx, tab) {
+            switch (tab) {
+              case _Tab.evaluated:
+                return  AccreditationTableWidget(
+                  title: 'Cumulative up to $_year',
+                  firstColumnName: _firstColumnName,
+                  data: _data.cumulatedData,
+                );
+              case _Tab.cummulative:
+                return  AccreditationTableWidget(
+                  title: 'Evaluated up to $_year',
+                  firstColumnName: _firstColumnName,
+                  data: _data.evaluatedData,
+                );
+            }
+            throw FallThroughError();
+          },
+        ),
+      );
   }
 }
+
+enum _Tab { evaluated, cummulative }
+enum _DashboardTab { accreditationProgres, districtStatus }

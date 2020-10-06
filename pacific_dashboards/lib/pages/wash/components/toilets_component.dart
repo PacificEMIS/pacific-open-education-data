@@ -51,23 +51,95 @@ class _ToiletsComponentState extends State<ToiletsComponent> {
           tabs: _DashboardTab.values,
           tabNameBuilder: (tab) {
             switch (tab) {
-              case _DashboardTab.cumulative:
-                return 'washCumulative'.localized(context);
-              case _DashboardTab.evaluated:
-                return 'washEvaluated'.localized(context);
+              case _DashboardTab.toiletsTotal:
+                return 'wastToiletsTotal'.localized(context);
+              case _DashboardTab.toiletsUsable:
+                return 'washUsableToilets'.localized(context);
+              case _DashboardTab.toiletsUsablePercentage:
+                return 'washUsablePercentage'.localized(context);
+              case _DashboardTab.toiletsUsablePercentageGender:
+                return 'washUsableGenderToilets'.localized(context);
+              case _DashboardTab.toiletsPupils:
+                return 'washPupilsToilet'.localized(context);
+              case _DashboardTab.toiletsPupilsGender:
+                return 'washPupilsToiletGender'.localized(context);
+              case _DashboardTab.toiletsPupilsUsableToilet:
+                return 'washPupilsUsableToilet'.localized(context);
+              case _DashboardTab.toiletsPupilsUsableToiletGender:
+                return 'washPupilsUsableToiletGender'.localized(context);
+              case _DashboardTab.pupils:
+                return 'washPupils'.localized(context);
+              case _DashboardTab.pupilsMirrorFormat:
+                return 'washPupilsMirrorFormat'.localized(context);
             }
             throw FallThroughError();
           },
           builder: (ctx, tab) {
             switch (tab) {
-              case _DashboardTab.cumulative:
+              case _DashboardTab.toiletsTotal:
                 return _Chart(
                     year: widget.year,
                     showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
-              case _DashboardTab.evaluated:
+              case _DashboardTab.toiletsUsable:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.toiletsUsablePercentage:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.toiletsUsablePercentageGender:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.toiletsPupils:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.toiletsPupilsGender:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.toiletsPupilsUsableToilet:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.toiletsPupilsUsableToiletGender:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.pupils:
+                return _Chart(
+                    year: widget.year,
+                    showAllData: widget.showAllData,
+                    data: widget.data,
+                    groupingType: charts.BarGroupingType.groupedStacked,
+                    tab: tab);
+              case _DashboardTab.pupilsMirrorFormat:
                 return _Chart(
                     year: widget.year,
                     showAllData: widget.showAllData,
@@ -84,8 +156,16 @@ class _ToiletsComponentState extends State<ToiletsComponent> {
 }
 
 enum _DashboardTab {
-  cumulative,
-  evaluated,
+  toiletsTotal,
+  toiletsUsable,
+  toiletsUsablePercentage,
+  toiletsUsablePercentageGender,
+  toiletsPupils,
+  toiletsPupilsGender,
+  toiletsPupilsUsableToilet,
+  toiletsPupilsUsableToiletGender,
+  pupils,
+  pupilsMirrorFormat
 }
 
 class _Chart extends StatelessWidget {
@@ -124,16 +204,19 @@ class _Chart extends StatelessWidget {
             }
 
             return Container(
-              height: ((snapshot.data[0].data as List).length > 5 ? 200.0 : ((snapshot.data as List).length * 120).toDouble()),
+              width: 400,
+              height: 300,
               child: Scrollbar(
                 child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Container(
-                    height: ((snapshot.data[0].data as List).length * 60).toDouble(),
+                    height: 300,
+                    width: ((snapshot.data[0].data as List).length * 20).toDouble(),
                     child: charts.BarChart(
                       snapshot.data,
                       animate: false,
                       barGroupingType: _groupingType,
-                      vertical: false,
+                      // vertical: false,
                       primaryMeasureAxis: charts.NumericAxisSpec(
                         tickProviderSpec: charts.BasicNumericTickProviderSpec(
                           desiredMinTickCount: 7,
@@ -141,12 +224,19 @@ class _Chart extends StatelessWidget {
                         ),
                         renderSpec: charts.GridlineRendererSpec(
                           labelStyle: chartAxisTextStyle,
+                          // labelRotation: 90,
                           lineStyle: chartAxisLineStyle,
                         ),
                       ),
                       domainAxis: charts.OrdinalAxisSpec(
                         renderSpec: charts.SmallTickRendererSpec(
                           labelStyle: chartAxisTextStyle,
+                          labelOffsetFromAxisPx: 45,
+                          // labelOffsetFromTickPx: 40,
+                          // labelJustification: charts.TickLabelJustification.inside,
+                          labelAnchor: charts.TickLabelAnchor.after,
+                          // minimumPaddingBetweenLabelsPx: 2,
+                          labelRotation: 270,
                           lineStyle: chartAxisLineStyle,
                         ),
                       ),
@@ -164,26 +254,9 @@ class _Chart extends StatelessWidget {
           },
         ),
         SizedBox(height: 30), //delimiter
-        generateTitleTable(context)
+        // generateTitleTable(context)
       ],
     );
-  }
-
-  ChartInfoTableWidget generateTitleTable(BuildContext context) {
-    Map<String, int> districts = new Map();
-    final dataSortedByDistrict = _data.groupBy((it) => it.title);
-    dataSortedByDistrict.forEach((key, value) {
-      var spending = 0;
-      value.forEach((it) {
-        if (_tab == _DashboardTab.cumulative)
-          spending += it.values[0];
-        else if (_tab == _DashboardTab.evaluated) spending += it.values[1];
-      });
-      if (_showAllData || !_showAllData && spending != 0)
-        districts[key] = spending;
-    });
-    return ChartInfoTableWidget(districts, 'washSchNo'.localized(context),
-        'labelTotal'.localized(context));
   }
 
   Future<List<charts.Series<BarChartData, String>>> get _series {
@@ -191,17 +264,65 @@ class _Chart extends StatelessWidget {
       final data = List<BarChartData>();
       data.addAll(_data.map((it) {
         switch (_tab) {
-          case _DashboardTab.cumulative:
+          case _DashboardTab.toiletsTotal:
             return BarChartData(
               it.title,
-              it.values[0],
-              HexColor.fromStringHash(it.title),
+              it.values[0] > 0 ? it.values[0] : 0.1,
+              it.values[0] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
             );
-          case _DashboardTab.evaluated:
+          case _DashboardTab.toiletsUsable:
             return BarChartData(
               it.title,
-              it.values[1],
-              HexColor.fromStringHash(it.title),
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.toiletsUsablePercentage:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.toiletsUsablePercentageGender:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.toiletsPupils:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.toiletsPupilsGender:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.toiletsPupilsUsableToilet:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.toiletsPupilsUsableToiletGender:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.pupils:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+            );
+          case _DashboardTab.pupilsMirrorFormat:
+            return BarChartData(
+              it.title,
+              it.values[1] > 0 ? it.values[1] : 0.1,
+              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
             );
         }
       }).toList());

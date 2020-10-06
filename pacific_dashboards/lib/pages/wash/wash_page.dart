@@ -72,7 +72,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       _titleWidget(context, 'toilets', false),
                       ToiletsComponent(data: snapshot.data.toiletsModelList, year: snapshot.data.year, showAllData: snapshot.data.showAllData),
                       _titleWidget(context, 'waterSources', false),
-                      WaterComponent(data: snapshot.data.washModelList, year: snapshot.data.year, showAllData: snapshot.data.showAllData),
+                      WaterComponent(data: snapshot.data.waterModelList, year: snapshot.data.year, showAllData: snapshot.data.showAllData),
                     ];
                     var washWidgetList = list;
                     return Column(

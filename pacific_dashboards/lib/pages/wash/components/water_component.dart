@@ -105,72 +105,67 @@ class _Chart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Container(
-          height: ((_data.length * 50) ?? 1).roundToDouble(),
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: FutureBuilder(
-                future: _series,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Container();
-                  }
+        FutureBuilder(
+          future: _series,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
 
-                  return Container(
-                      height: ((_data.length * 50) ?? 1).toDouble(),
-                      child: charts.BarChart(snapshot.data,
-                          animate: false,
-                          barGroupingType: _groupingType,
-                          vertical: false,
-                          primaryMeasureAxis: charts.NumericAxisSpec(
-                            tickProviderSpec:
-                                charts.BasicNumericTickProviderSpec(
-                              desiredMinTickCount: 7,
-                              desiredMaxTickCount: 13,
-                            ),
-                            renderSpec: charts.GridlineRendererSpec(
-                              labelStyle: chartAxisTextStyle,
-                              lineStyle: chartAxisLineStyle,
-                            ),
-                          ),
-                          domainAxis: charts.OrdinalAxisSpec(
-                            renderSpec: charts.SmallTickRendererSpec(
-                              labelStyle: chartAxisTextStyle,
-                              lineStyle: chartAxisLineStyle,
-                            ),
-                          ),
-                          defaultRenderer: charts.BarRendererConfig(
-                            stackHorizontalSeparator: 0,
-                            minBarLengthPx: 30,
-                            groupingType: charts.BarGroupingType.stacked,
-                            strokeWidthPx: 10,
-                          )));
-                },
+            return Container(
+              width: 400,
+              height: 300,
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Container(
+                    height: 300,
+                    width: ((snapshot.data[0].data as List).length * 20).toDouble(),
+                    child: charts.BarChart(
+                      snapshot.data,
+                      animate: false,
+                      barGroupingType: _groupingType,
+                      // vertical: false,
+                      primaryMeasureAxis: charts.NumericAxisSpec(
+                        tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                          desiredMinTickCount: 7,
+                          desiredMaxTickCount: 13,
+                        ),
+                        renderSpec: charts.GridlineRendererSpec(
+                          labelStyle: chartAxisTextStyle,
+                          // labelRotation: 90,
+                          lineStyle: chartAxisLineStyle,
+                        ),
+                      ),
+                      domainAxis: charts.OrdinalAxisSpec(
+                        renderSpec: charts.SmallTickRendererSpec(
+                          labelStyle: chartAxisTextStyle,
+                          labelOffsetFromAxisPx: 45,
+                          // labelOffsetFromTickPx: 40,
+                          // labelJustification: charts.TickLabelJustification.inside,
+                          labelAnchor: charts.TickLabelAnchor.after,
+                          // minimumPaddingBetweenLabelsPx: 2,
+                          labelRotation: 270,
+                          lineStyle: chartAxisLineStyle,
+                        ),
+                      ),
+                      defaultRenderer: charts.BarRendererConfig(
+                        stackHorizontalSeparator: 0,
+                        minBarLengthPx: 30,
+                        groupingType: charts.BarGroupingType.stacked,
+                        strokeWidthPx: 10,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
         SizedBox(height: 30), //delimiter
-        generateTitleTable(context)
+        // generateTitleTable(context)
       ],
     );
-  }
-
-  ChartInfoTableWidget generateTitleTable(BuildContext context) {
-    Map<String, int> districts = new Map();
-    final dataSortedByDistrict = _data.groupBy((it) => it.title);
-    dataSortedByDistrict.forEach((key, value) {
-      var spending = 0;
-      value.forEach((it) {
-        if (_tab == _DashboardTab.cumulative)
-          spending += it.values[0];
-        else if (_tab == _DashboardTab.evaluated) spending += it.values[1];
-      });
-      districts[key] = spending;
-    });
-    return ChartInfoTableWidget(districts, 'washSchNo'.localized(context),
-        'labelTotal'.localized(context));
   }
 
   Future<List<charts.Series<BarChartData, String>>> get _series {

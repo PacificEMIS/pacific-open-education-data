@@ -52,9 +52,9 @@ class _TotalComponentState extends State<TotalComponent> {
           tabNameBuilder: (tab) {
             switch (tab) {
               case _DashboardTab.cumulative:
-                return 'washCumulative'.localized(context);
-              case _DashboardTab.evaluated:
-                return 'washEvaluated'.localized(context);
+                return '${'washCumulative'.localized(context)} to ${widget.year}';
+            case _DashboardTab.evaluated:
+                return '${'washEvaluated'.localized(context)} in ${widget.year}';
             }
             throw FallThroughError();
           },
