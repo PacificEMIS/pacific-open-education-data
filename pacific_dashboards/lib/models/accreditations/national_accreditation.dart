@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation.dart';
 
-part 'district_accreditation.g.dart';
+part 'national_accreditation.g.dart';
 
 @JsonSerializable()
-class DistrictAccreditation implements Accreditation {
+class NationalAccreditation implements Accreditation {
   @JsonKey(name: 'SurveyYear')
   @override
   final int surveyYear;
@@ -14,16 +14,29 @@ class DistrictAccreditation implements Accreditation {
   @override
   final String districtCode;
 
+  @JsonKey(name: 'District')
+  @override
+  final String district;
+
   @JsonKey(name: 'AuthorityCode')
   @override
   final String authorityCode;
 
-  @JsonKey(name: 'AuthorityGovtCode')
+  @JsonKey(name: 'Authority')
   @override
+  final String authority;
+
+  @JsonKey(name: 'AuthorityGovtCode')
   final String authorityGovtCode;
+
+  @JsonKey(name: 'AuthorityGovt')
+  final String authorityGovt;
 
   @JsonKey(name: 'SchoolTypeCode')
   final String schoolTypeCode;
+
+  @JsonKey(name: 'SchoolType')
+  final String schoolType;
 
   @JsonKey(name: 'InspectionResult')
   final String inspectionResult;
@@ -36,21 +49,25 @@ class DistrictAccreditation implements Accreditation {
   @override
   final int numThisYear;
 
-  const DistrictAccreditation({
-    @required this.surveyYear,
-    @required this.districtCode,
-    @required this.authorityCode,
-    @required this.authorityGovtCode,
-    @required this.schoolTypeCode,
-    @required this.inspectionResult,
-    @required this.total,
-    @required this.numThisYear,
+  const NationalAccreditation({
+    this.surveyYear,
+    this.districtCode,
+    this.district,
+    this.authorityCode,
+    this.authority,
+    this.authorityGovtCode,
+    this.authorityGovt,
+    this.schoolTypeCode,
+    this.schoolType,
+    this.inspectionResult,
+    this.total,
+    this.numThisYear,
   });
 
-  factory DistrictAccreditation.fromJson(Map<String, dynamic> json) =>
-      _$DistrictAccreditationFromJson(json);
+  factory NationalAccreditation.fromJson(Map<String, dynamic> json) =>
+      _$NationalAccreditationFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DistrictAccreditationToJson(this);
+  Map<String, dynamic> toJson() => _$NationalAccreditationToJson(this);
 
   @override
   String get result => inspectionResult;

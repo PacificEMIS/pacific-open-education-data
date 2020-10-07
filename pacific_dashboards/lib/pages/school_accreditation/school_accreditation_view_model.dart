@@ -131,8 +131,11 @@ Future<AccreditationData> _calculateData(_AccreditationChunkModel model) async {
   final lookups = model.lookups;
   return AccreditationData(
     year: _selectedYear(filters).toString(),
-    accreditationProgressData: _collectAccreditationProgressData(chunk),
-    districtStatusData: _collectDistrictStatusData(chunk, filters).map(
+    accreditationProgressData: _collectAccreditationProgressData(chunk: chunk, isCumulative: true),
+    accreditationProgressCumulativeData: _collectAccreditationProgressData(chunk: chunk, isCumulative: false),
+    districtStatusData: _collectDistrictStatusData(chunk, filters, true).map(
+        (districtCode, v) => MapEntry(districtCode.from(lookups.districts), v)),
+    districtStatusCumulativeData: _collectDistrictStatusData(chunk, filters, false).map(
         (districtCode, v) => MapEntry(districtCode.from(lookups.districts), v)),
     accreditationStatusByState: _collectAccreditationStatusByState(
       filteredChunk,
@@ -148,18 +151,19 @@ Future<AccreditationData> _calculateData(_AccreditationChunkModel model) async {
 }
 
 Map<String, List<int>> _collectAccreditationProgressData(
-    AccreditationChunk chunk) {
+    {bool isCumulative, AccreditationChunk chunk}) {
   return _generateCumulativeMap(
-      data: chunk.byDistrict.groupBy((it) => it.surveyYear.toString()));
+      data: chunk.byDistrict.groupBy((it) => it.surveyYear.toString()), cumulative: isCumulative);
 }
 
 Map<String, List<int>> _collectDistrictStatusData(
   AccreditationChunk chunk,
-  List<Filter> filters,
+  List<Filter> filters, bool isCumulative
 ) {
   return _generateCumulativeMap(
     data: chunk.byDistrict.groupBy((it) => it.districtCode),
     year: _selectedYear(filters),
+    cumulative: isCumulative,
   );
 }
 
@@ -207,6 +211,7 @@ MultitableData _generateMultitableData(
 Map<String, List<int>> _generateCumulativeMap({
   @required Map<String, List<Accreditation>> data,
   int year,
+  @required bool cumulative,
 }) {
   final result = Map<String, List<int>>();
 
@@ -214,7 +219,7 @@ Map<String, List<int>> _generateCumulativeMap({
     final levels = [0, 0, 0, 0];
 
     value.forEach((accreditation) {
-      final sum = accreditation.total;
+      final sum = cumulative ? accreditation.total : accreditation.numThisYear;
 
       if (year != null && accreditation.surveyYear != year) {
         return;
@@ -245,7 +250,9 @@ Map<String, List<int>> _generateCumulativeMap({
 }
 
 int _selectedYear(List<Filter> filters) {
-  return filters.firstWhere((it) => it.id == 0).intValue;
+  var year = filters.firstWhere((it) => it.id == 0).intValue;
+  print (year);
+  return year;
 }
 
 Map<String, AccreditationTableData> _generateAccreditationTableData(

@@ -211,9 +211,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         (client) => client.getSchoolAccreditationsByDistrict());
     final standardData = await _withHandlers(
         (client) => client.getSchoolAccreditationsByStandard());
+    final nationalData = await _withHandlers(
+        (client) => client.getSchoolAccreditationsByNation());
     return AccreditationChunk(
       byDistrict: districtData,
       byStandard: standardData,
+      byNation: nationalData,
     );
   }
 

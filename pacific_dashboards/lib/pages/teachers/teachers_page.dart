@@ -87,7 +87,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                         tabNameBuilder: (tab) {
                           switch (tab) {
                             case _DashboardsTab.byAuthority:
-                              return 'schoolsByAuthotity'.localized(context);
+                              return 'schoolsByAuthority'.localized(context);
                             case _DashboardsTab.byState:
                               return 'schoolsByState'.localized(context);
                             case _DashboardsTab.byGovtNonGovt:

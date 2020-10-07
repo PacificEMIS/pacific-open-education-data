@@ -39,7 +39,7 @@ import 'package:pacific_dashboards/data/database/model/wash/hive_water.dart';
 
 import 'budgets_dao_impl.dart';
 
-// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20б 21, 22, 23}
+// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20б 21, 22, 23, 24}
 class HiveDatabase extends Database {
   LookupsDao _lookupsDao;
   StringsDao _stringsDao;

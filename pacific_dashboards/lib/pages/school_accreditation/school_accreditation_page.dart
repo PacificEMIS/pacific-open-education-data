@@ -116,126 +116,30 @@ class _ContentBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        MiniTabLayout(
-          tabs: _DashboardTab.values,
-          padding: 0.0,
-          tabNameBuilder: (tab) {
-            switch (tab) {
-              case _DashboardTab.accreditationProgres:
-                return 'schoolsAccreditationDashboardsProgressTitle'.localized(context);
-              case _DashboardTab.districtStatus:
-                return 'schoolsAccreditationDashboardsDistrictTitle'.localized(context);
-            }
-            throw FallThroughError();
-          },
-          builder: (ctx, tab) {
-            switch (tab) {
-              case _DashboardTab.accreditationProgres:
-                return   TileWidget(
-                  title: Text(
-                    'schoolsAccreditationDashboardsProgressTitle'.localized(context),
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _data.accreditationProgressData,
-                    colorFunc: _levelIndexToColor,
-                  ),
-                );
-              case _DashboardTab.districtStatus:
-                return  TileWidget(
-                  title: Text(
-                    'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _data.districtStatusData,
-                    colorFunc: _levelIndexToColor,
-                  ),
-                );
-            }
-            throw FallThroughError();
-          },
+        Text(
+          'schoolsAccreditationDashboardsProgressTitle'.localized(context),
+          style: Theme.of(context).textTheme.headline4,
         ),
-        MiniTabLayout(
-          tabs: _DashboardTab.values,
-          padding: 0.0,
-          tabNameBuilder: (tab) {
-            switch (tab) {
-              case _DashboardTab.accreditationProgres:
-                return 'schoolsAccreditationDashboardsProgressTitle'.localized(context);
-              case _DashboardTab.districtStatus:
-                return 'schoolsAccreditationDashboardsDistrictTitle'.localized(context);
-            }
-            throw FallThroughError();
-          },
-          builder: (ctx, tab) {
-            switch (tab) {
-              case _DashboardTab.accreditationProgres:
-                return   TileWidget(
-                  title: Text(
-                    'schoolsAccreditationDashboardsProgressTitle'.localized(context),
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _data.accreditationProgressData,
-                    colorFunc: _levelIndexToColor,
-                  ),
-                );
-              case _DashboardTab.districtStatus:
-                return  TileWidget(
-                  title: Text(
-                    'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _data.districtStatusData,
-                    colorFunc: _levelIndexToColor,
-                  ),
-                );
-            }
-            throw FallThroughError();
-          },
+        buildMiniTabLayoutAccreditationProgress(context, [
+          _data.accreditationProgressData,
+          _data.accreditationProgressCumulativeData,
+        ]),
+        Text(
+          'schoolsAccreditationDashboardsProgressByStateTitle'.localized(context),
+          style: Theme.of(context).textTheme.headline4,
         ),
-        MiniTabLayout(
-          tabs: _DashboardTab.values,
-          padding: 0.0,
-          tabNameBuilder: (tab) {
-            switch (tab) {
-              case _DashboardTab.accreditationProgres:
-                return 'schoolsAccreditationDashboardsProgressTitle'.localized(context);
-              case _DashboardTab.districtStatus:
-                return 'schoolsAccreditationDashboardsDistrictTitle'.localized(context);
-            }
-            throw FallThroughError();
-          },
-          builder: (ctx, tab) {
-            switch (tab) {
-              case _DashboardTab.accreditationProgres:
-                return   TileWidget(
-                  title: Text(
-                    'schoolsAccreditationDashboardsProgressTitle'.localized(context),
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _data.accreditationProgressData,
-                    colorFunc: _levelIndexToColor,
-                  ),
-                );
-              case _DashboardTab.districtStatus:
-                return  TileWidget(
-                  title: Text(
-                    'schoolsAccreditationDashboardsDistrictTitle'.localized(context),
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  body: ChartFactory.getStackedHorizontalBarChartViewByData(
-                    chartData: _data.districtStatusData,
-                    colorFunc: _levelIndexToColor,
-                  ),
-                );
-            }
-            throw FallThroughError();
-          },
+        buildMiniTabLayoutAccreditationProgress(context, [
+          _data.districtStatusData,
+          _data.districtStatusCumulativeData,
+        ]),
+        Text(
+          'schoolsAccreditationDashboardsProgressNationalTitle'.localized(context),
+          style: Theme.of(context).textTheme.headline4,
         ),
+        buildMiniTabLayoutAccreditationProgress(context, [
+          _data.accreditationProgressData,
+          _data.accreditationProgressCumulativeData,
+        ]),
         const SizedBox(height: 16),
         _PerformanceTable(
           title: 'schoolsAccreditationDashboardsStatusByStateTitle'
@@ -254,6 +158,42 @@ class _ContentBody extends StatelessWidget {
           data: _data.performanceByStandard,
         ),
       ],
+    );
+  }
+
+  dynamic buildMiniTabLayoutAccreditationProgress(
+      BuildContext context, List<Map<String, List<int>>> chartData) {
+    return MiniTabLayout(
+      tabs: _Tab.values,
+      padding: 0.0,
+      tabNameBuilder: (tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            return 'schoolAccreditationCumulative'.localized(context);
+          case _Tab.evaluated:
+            return 'schoolAccreditationEvaluated'.localized(context);
+        }
+        throw FallThroughError();
+      },
+      builder: (ctx, tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            return ChartFactory.getStackedHorizontalBarChartViewByData(
+              chartData: chartData[0],
+              colorFunc: _levelIndexToColor,
+            );
+          case _Tab.evaluated:
+            return ChartFactory.getStackedHorizontalBarChartViewByData(
+              chartData: chartData[1],
+              colorFunc: _levelIndexToColor,
+            );
+          // return ChartFactory.getStackedHorizontalBarChartViewByData(
+          //     chartData: _data.districtStatusData,
+          //     colorFunc: _levelIndexToColor,
+          // );
+        }
+        throw FallThroughError();
+      },
     );
   }
 
@@ -287,40 +227,39 @@ class _PerformanceTable extends StatelessWidget {
         _title,
         style: Theme.of(context).textTheme.headline4,
       ),
-      body:
-        MiniTabLayout(
-          tabs: _Tab.values,
-          padding: 0.0,
-          tabNameBuilder: (tab) {
-            switch (tab) {
-              case _Tab.evaluated:
-                return 'washEvaluated'.localized(context);
-              case _Tab.cummulative:
-                return 'washCumulative'.localized(context);
-            }
-            throw FallThroughError();
-          },
-          builder: (ctx, tab) {
-            switch (tab) {
-              case _Tab.evaluated:
-                return  AccreditationTableWidget(
-                  title: 'Cumulative up to $_year',
-                  firstColumnName: _firstColumnName,
-                  data: _data.cumulatedData,
-                );
-              case _Tab.cummulative:
-                return  AccreditationTableWidget(
-                  title: 'Evaluated up to $_year',
-                  firstColumnName: _firstColumnName,
-                  data: _data.evaluatedData,
-                );
-            }
-            throw FallThroughError();
-          },
-        ),
-      );
+      body: MiniTabLayout(
+        tabs: _Tab.values,
+        padding: 0.0,
+        tabNameBuilder: (tab) {
+          switch (tab) {
+            case _Tab.evaluated:
+              return 'washEvaluated'.localized(context);
+            case _Tab.cumulative:
+              return 'washCumulative'.localized(context);
+          }
+          throw FallThroughError();
+        },
+        builder: (ctx, tab) {
+          switch (tab) {
+            case _Tab.evaluated:
+              return AccreditationTableWidget(
+                title: 'Cumulative up to $_year',
+                firstColumnName: _firstColumnName,
+                data: _data.cumulatedData,
+              );
+            case _Tab.cumulative:
+              return AccreditationTableWidget(
+                title: 'Evaluated up to $_year',
+                firstColumnName: _firstColumnName,
+                data: _data.evaluatedData,
+              );
+          }
+          throw FallThroughError();
+        },
+      ),
+    );
   }
 }
 
-enum _Tab { evaluated, cummulative }
-enum _DashboardTab { accreditationProgres, districtStatus }
+enum _Tab { cumulative, evaluated }
+// enum _Tab { accreditationProgres, districtStatus }

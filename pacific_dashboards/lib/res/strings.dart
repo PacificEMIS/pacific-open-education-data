@@ -101,7 +101,9 @@ class Strings {
           'By Standards and Gender for Last 3 Years',
       'examsDashboardsViewByStandardAndState': 'By Standards and State',
       'schoolsAccreditationDashboardsTitle': 'School Accreditations',
-      'schoolsAccreditationDashboardsProgressTitle': 'Accreditation Progress',
+      'schoolsAccreditationDashboardsProgressTitle': 'Accreditation Progress by Year',
+      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by State',
+      'schoolsAccreditationDashboardsProgressNationalTitle': 'Accreditation Progress National',
       'schoolsAccreditationDashboardsDistrictTitle': 'District Status',
       'schoolsAccreditationDashboardsStatusByStateTitle':
           'Accreditation Status by State',
@@ -217,10 +219,12 @@ class Strings {
       'numbers': 'Numbers',
       'schoolsEnrollment': 'Schools Enrollment',
       'schoolsByState': 'By State',
-      'schoolsByAuthotity': 'By Authotity',
+      'schoolsByAuthority': 'By Authority',
       'schoolsByGovtNonGovt': 'By Govt / Non-govt',
       'schoolsCertifiedQualified': 'Certified and Qualified ',
-      'teachersCharts': 'Teachers Charts'
+      'teachersCharts': 'Teachers Charts',
+      'schoolAccreditationCumulative': 'Cumulative to',
+      'schoolAccreditationEvaluated': 'Evaluated in',
     },
   };
 

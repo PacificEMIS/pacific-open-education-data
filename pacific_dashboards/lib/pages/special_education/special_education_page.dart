@@ -68,24 +68,24 @@ class _SpecialEducationPageState
                     var list = <Widget>[
                       _titleWidget(context, 'specialEducationTitle', true),
                       //GNP and Government Spending Actual
-                      _titleWidget(context, 'disability', false),
+                      _titleWidget(context, 'disability', false, year: snapshot.data.year),
                       SpecialEducationComponent(
                           data: snapshot.data.dataByGender),
-                      _titleWidget(context, 'ethnicity', false),
+                      _titleWidget(context, 'ethnicity', false, year: snapshot.data.year),
                       SpecialEducationComponent(
                           data: snapshot.data.dataByEthnicity),
                       _titleWidget(
-                          context, 'specialEducationEnvironment', false),
+                          context, 'specialEducationEnvironment', false, year: snapshot.data.year),
                       SpecialEducationComponent(
                           data: snapshot.data.dataBySpecialEdEnvironment),
-                      _titleWidget(context, 'englishLearnerStatus', false),
+                      _titleWidget(context, 'englishLearnerStatus', false, year: snapshot.data.year),
                       SpecialEducationComponent(
                           data: snapshot.data.dataByEnglishLearner),
                       _titleWidget(context, 'cohortDistribution', true),
-                      _titleWidget(context, 'byYear', false),
+                      _titleWidget(context, 'byYear', false, year: snapshot.data.year),
                       CohortDistributionComponent(
                           data: snapshot.data.dataByCohortDistributionByYear),
-                      _titleWidget(context, 'byState', false),
+                      _titleWidget(context, 'byState', false, year: snapshot.data.year),
                       CohortDistributionComponent(
                           data: snapshot.data.dataByCohortDistributionByState),
                     ];
@@ -103,13 +103,13 @@ class _SpecialEducationPageState
     );
   }
 
-  Container _titleWidget(BuildContext context, String text, bool isTitle) {
+  Container _titleWidget(BuildContext context, String text, bool isTitle, {String year}) {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(
           left: 16.0, right: 16.0, bottom: 0.0, top: 10.0),
-      child: Text(
-        text.localized(context),
+      child: Text( isTitle ? text.localized(context) :
+        '${text.localized(context)} ${year}',
         style: isTitle == true
             ? Theme.of(context).textTheme.headline3.copyWith(
                   color: Colors.black87,

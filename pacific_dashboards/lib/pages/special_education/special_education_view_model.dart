@@ -129,7 +129,7 @@ Future<SpecialEducationData> _specialEducationModel(
 ) async {
   Map<String, Map<String, List<DataByGroup>>> dataByState = new Map();
   Map<String, Map<String, List<DataByGroup>>> dataByYear = new Map();
-  final lookups = model.lookups;
+
   final specialEducationData = model.specialEducation;
   final filteredData =
       await specialEducationData.applyFilters(model.filters);
@@ -159,14 +159,19 @@ Future<SpecialEducationData> _specialEducationModel(
       specialEducationData.groupBy((it) => it.ethnicityCode));
   dataByYear['englishLearner'] = _generateDataByYear(
       specialEducationData.groupBy((it) => it.englishLearner));
-
+  var year = _selectedYear(model.filters);
   return SpecialEducationData(
+      year: year,
       dataByGender: dataByGender,
       dataByEthnicity: dataByEthnicity,
       dataBySpecialEdEnvironment: dataBySpecialEdEnvironment,
       dataByEnglishLearner: dataByEnglishLearner,
       dataByCohortDistributionByState: dataByState,
       dataByCohortDistributionByYear: dataByYear);
+}
+
+String _selectedYear(List<Filter> filters) {
+  return filters[0].items[0].visibleName;
 }
 
 List<DataByGroup> _generateDataByTitle(

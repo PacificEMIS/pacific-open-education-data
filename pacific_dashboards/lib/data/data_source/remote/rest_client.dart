@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/schools_list/schools_list_response_body.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/token/token_response_body.dart';
 import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
+import 'package:pacific_dashboards/models/accreditations/national_accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
@@ -39,6 +40,9 @@ abstract class RestClient {
 
   @GET('warehouse/accreditations/table?byStandard')
   Future<List<StandardAccreditation>> getSchoolAccreditationsByStandard();
+
+  @GET('warehouse/accreditations/table?result')
+  Future<List<NationalAccreditation>> getSchoolAccreditationsByNation();
 
   @GET('lookups/collection/core')
   Future<Lookups> getLookups();
