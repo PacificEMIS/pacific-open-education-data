@@ -22,12 +22,12 @@ class AccreditationChunk {
   final List<StandardAccreditation> byStandard;
 
   @JsonKey(name: 'byNation')
-  final List<NationalAccreditation> byNation;
+  final List<NationalAccreditation> byNational;
 
   const AccreditationChunk({
     @required this.byDistrict,
     @required this.byStandard,
-    @required this.byNation,
+    @required this.byNational,
   });
 
   factory AccreditationChunk.fromJson(Map<String, dynamic> json) =>
@@ -153,7 +153,7 @@ extension Filters on AccreditationChunk {
       return AccreditationChunk(
         byDistrict: apply(this.byDistrict),
         byStandard: apply(this.byStandard),
-        byNation: apply(this.byNation),
+        byNational: apply(this.byNational),
       );
     });
   }

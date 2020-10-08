@@ -216,7 +216,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return AccreditationChunk(
       byDistrict: districtData,
       byStandard: standardData,
-      byNation: nationalData,
+      byNational: nationalData,
     );
   }
 

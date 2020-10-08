@@ -103,7 +103,7 @@ class _SpecialEducationPageState
     );
   }
 
-  Container _titleWidget(BuildContext context, String text, bool isTitle, {String year}) {
+  Container _titleWidget(BuildContext context, String text, bool isTitle, {int year}) {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(

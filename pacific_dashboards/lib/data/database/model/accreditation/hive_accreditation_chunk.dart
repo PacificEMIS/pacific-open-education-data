@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_district_accreditation.dart';
+import 'package:pacific_dashboards/data/database/model/accreditation/hive_national_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_standard_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
@@ -14,13 +15,17 @@ class HiveAccreditationChunk extends HiveObject with Expirable {
   @HiveField(1)
   List<HiveStandardAccreditation> byStandard;
 
-  @override
   @HiveField(2)
+  List<HiveNationalAccreditation> byNational;
+
+  @override
+  @HiveField(3)
   int timestamp;
 
   AccreditationChunk toAccreditationChunk() => AccreditationChunk(
         byDistrict: byDistrict.map((it) => it.toAccreditation()).toList(),
         byStandard: byStandard.map((it) => it.toAccreditation()).toList(),
+        byNational: byNational.map((it) => it.toAccreditation()).toList(),
       );
 
   static HiveAccreditationChunk from(AccreditationChunk accreditationChunk) =>
@@ -30,5 +35,8 @@ class HiveAccreditationChunk extends HiveObject with Expirable {
             .toList()
         ..byStandard = accreditationChunk.byStandard
             .map((it) => HiveStandardAccreditation.from(it))
+            .toList()
+        ..byNational = accreditationChunk.byNational
+            .map((it) => HiveNationalAccreditation.from(it))
             .toList();
 }

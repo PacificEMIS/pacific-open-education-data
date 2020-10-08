@@ -225,6 +225,7 @@ class Strings {
       'teachersCharts': 'Teachers Charts',
       'schoolAccreditationCumulative': 'Cumulative to',
       'schoolAccreditationEvaluated': 'Evaluated in',
+      'levels': 'Levels',
     },
   };
 

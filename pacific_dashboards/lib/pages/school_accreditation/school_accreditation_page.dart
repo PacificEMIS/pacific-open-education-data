@@ -9,8 +9,10 @@ import 'package:pacific_dashboards/pages/school_accreditation/school_accreditati
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
+import 'package:pacific_dashboards/shared_ui/pie_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -125,7 +127,8 @@ class _ContentBody extends StatelessWidget {
           _data.accreditationProgressCumulativeData,
         ]),
         Text(
-          'schoolsAccreditationDashboardsProgressByStateTitle'.localized(context),
+          'schoolsAccreditationDashboardsProgressByStateTitle'
+              .localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
         buildMiniTabLayoutAccreditationProgress(context, [
@@ -133,12 +136,13 @@ class _ContentBody extends StatelessWidget {
           _data.districtStatusCumulativeData,
         ]),
         Text(
-          'schoolsAccreditationDashboardsProgressNationalTitle'.localized(context),
+          'schoolsAccreditationDashboardsProgressNationalTitle'
+              .localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
-        buildMiniTabLayoutAccreditationProgress(context, [
-          _data.accreditationProgressData,
-          _data.accreditationProgressCumulativeData,
+        buildMiniTabLayoutAccreditationProgressPieChart(context, [
+          _data.accreditationNationalData,
+          _data.accreditationNationalCumulativeData,
         ]),
         const SizedBox(height: 16),
         _PerformanceTable(
@@ -169,9 +173,9 @@ class _ContentBody extends StatelessWidget {
       tabNameBuilder: (tab) {
         switch (tab) {
           case _Tab.cumulative:
-            return 'schoolAccreditationCumulative'.localized(context);
+            return '${'schoolAccreditationCumulative'.localized(context)} to ${_data.year}';
           case _Tab.evaluated:
-            return 'schoolAccreditationEvaluated'.localized(context);
+            return '${'schoolAccreditationEvaluated'.localized(context)} to ${_data.year}';
         }
         throw FallThroughError();
       },
@@ -187,10 +191,62 @@ class _ContentBody extends StatelessWidget {
               chartData: chartData[1],
               colorFunc: _levelIndexToColor,
             );
-          // return ChartFactory.getStackedHorizontalBarChartViewByData(
-          //     chartData: _data.districtStatusData,
-          //     colorFunc: _levelIndexToColor,
-          // );
+        }
+        throw FallThroughError();
+      },
+    );
+  }
+
+  dynamic buildMiniTabLayoutAccreditationProgressPieChart(
+      BuildContext context, List<Map<String, List<int>>> chartData) {
+    return MiniTabLayout(
+      tabs: _Tab.values,
+      padding: 0.0,
+      tabNameBuilder: (tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            return '${'schoolAccreditationCumulative'.localized(context)} to ${_data.year}';
+          case _Tab.evaluated:
+            return '${'schoolAccreditationEvaluated'.localized(context)} in ${_data.year}';
+        }
+        throw FallThroughError();
+      },
+      builder: (ctx, tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            Map<String, int> nationalData = Map();
+            chartData[0].forEach((key, value) {
+              var total = 0;
+              value.forEach((element) {
+                total += element;
+              });
+              nationalData[key] = total;
+            });
+
+            return ChartWithTable(
+                chartType: ChartType.pie,
+                tableKeyName: 'levels'.localized(context),
+                tableValueName: 'schoolsDashboardsTitle'.localized(context),
+                title: '',
+                key: ObjectKey(chartData),
+                data: nationalData);
+          case _Tab.evaluated:
+            Map<String, int> nationalData = Map();
+            chartData[1].forEach((key, value) {
+              var total = 0;
+              value.forEach((element) {
+                total += element;
+              });
+              nationalData[key] = total;
+            });
+
+            return ChartWithTable(
+                chartType: ChartType.pie,
+                tableKeyName: 'levels'.localized(context),
+                tableValueName: 'schoolsDashboardsTitle'.localized(context),
+                title: '',
+                key: ObjectKey(chartData),
+                data: nationalData);
         }
         throw FallThroughError();
       },

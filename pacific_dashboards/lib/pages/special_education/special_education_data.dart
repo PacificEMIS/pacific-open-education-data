@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class SpecialEducationData {
-  final String year;
+  final int year;
   final List<DataByGroup> dataByGender;
   final List<DataByGroup> dataByEthnicity;
   final List<DataByGroup> dataBySpecialEdEnvironment;

@@ -159,19 +159,15 @@ Future<SpecialEducationData> _specialEducationModel(
       specialEducationData.groupBy((it) => it.ethnicityCode));
   dataByYear['englishLearner'] = _generateDataByYear(
       specialEducationData.groupBy((it) => it.englishLearner));
-  var year = _selectedYear(model.filters);
+  var selectedYear = filteredData.first.surveyYear;
   return SpecialEducationData(
-      year: year,
+      year: selectedYear,
       dataByGender: dataByGender,
       dataByEthnicity: dataByEthnicity,
       dataBySpecialEdEnvironment: dataBySpecialEdEnvironment,
       dataByEnglishLearner: dataByEnglishLearner,
       dataByCohortDistributionByState: dataByState,
       dataByCohortDistributionByYear: dataByYear);
-}
-
-String _selectedYear(List<Filter> filters) {
-  return filters[0].items[0].visibleName;
 }
 
 List<DataByGroup> _generateDataByTitle(

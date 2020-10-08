@@ -17,6 +17,7 @@ import 'package:pacific_dashboards/data/database/db_impl/strings_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/teachers_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/wash_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_district_accreditation.dart';
+import 'package:pacific_dashboards/data/database/model/accreditation/hive_national_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_standard_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_accreditation_chunk.dart';
 import 'package:pacific_dashboards/data/database/model/budget/hive_budget.dart';
@@ -80,7 +81,8 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveWashTotalAdapter())
       ..registerAdapter(HiveWashChunkAdapter())
       ..registerAdapter(HiveToiletAdapter())
-      ..registerAdapter(HiveWaterAdapter());
+      ..registerAdapter(HiveWaterAdapter())
+      ..registerAdapter(HiveNationalAccreditationAdapter());
 
     _lookupsDao = HiveLookupsDao();
     _financialLookupsDao = HiveFinancialLookupsDao();
