@@ -1,6 +1,7 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/wash/components/toilets_component.dart';
@@ -68,11 +69,12 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                     var list = <Widget>[
                       _titleWidget(context, 'washDashboardsTitle', true),
                       _titleWidget(context, 'districtTotals', false),
-                      TotalComponent(data: snapshot.data.washModelList, year: snapshot.data.year, showAllData: snapshot.data.showAllData),
+                      TotalComponent(data: snapshot.data.washModelList, year: snapshot.data.year),
+                      Container(height: 50),
                       _titleWidget(context, 'toilets', false),
-                      ToiletsComponent(data: snapshot.data.toiletsModelList, year: snapshot.data.year, showAllData: snapshot.data.showAllData),
+                      ToiletsComponent(data: snapshot.data.toiletsModelList, year: snapshot.data.year),
                       _titleWidget(context, 'waterSources', false),
-                      WaterComponent(data: snapshot.data.waterModelList, year: snapshot.data.year, showAllData: snapshot.data.showAllData),
+                      WaterComponent(data: snapshot.data.waterModelList, year: snapshot.data.year),
                     ];
                     var washWidgetList = list;
                     return Column(

@@ -135,28 +135,23 @@ Future<WashData> _calculateData(
   final filters = model.filters;
   final filteredChunk = await chunk.applyFilters(filters);
 
-  final lookups = model.lookups;
+  var currentYear =  _selectedYear(filters);
   return WashData(
-      year: _year(filters).toString(),
-      showAllData: _showAllData(filters),
+      year: currentYear.toString(),
       washModelList:
-          _generateWashTotal(filteredChunk.total.groupBy((it) => it.district)),
+          _generateWashTotal(filteredChunk.total.groupBy((it) => it.district), currentYear),
       toiletsModelList:
           _generateWashToilets(filteredChunk.toilets.groupBy((it) => it.schNo)),
       waterModelList:
         _generateWashWater(filteredChunk.water.groupBy((it) => it.schNo)));
 }
 
-bool _showAllData(List<Filter> filters) {
-  return filters.firstWhere((it) => it.id == 0).intValue == 1;
-}
-
-int _year(List<Filter> filters) {
-  return filters.firstWhere((it) => it.id == 1).intValue;
+int _selectedYear(List<Filter> filters) {
+  return filters.firstWhere((it) => it.id == 0).intValue;
 }
 
 List<ListData> _generateWashTotal(
-    Map<String, List<Wash>> washGroupedByDistricts) {
+    Map<String, List<Wash>> washGroupedByDistricts, int year) {
   List<ListData> washTotalData = [];
 
   washGroupedByDistricts.forEach((district, values) {
@@ -164,7 +159,9 @@ List<ListData> _generateWashTotal(
     int cumulative = 0;
 
     for (var data in values) {
+      if (data.surveyYear == year)
       evaluated += data.numThisYear;
+      
       cumulative += data.number;
     }
 

@@ -15,16 +15,13 @@ import '../wash_data.dart';
 class WaterComponent extends StatefulWidget {
   final List<ListData> data;
   final String year;
-  final bool showAllData;
 
   const WaterComponent({
     Key key,
     @required this.data,
     @required this.year,
-    @required this.showAllData,
   })  : assert(data != null),
         assert(year != null),
-        assert(showAllData != null),
         super(key: key);
 
   @override
@@ -140,10 +137,11 @@ class _Chart extends StatelessWidget {
                       domainAxis: charts.OrdinalAxisSpec(
                         renderSpec: charts.SmallTickRendererSpec(
                           labelStyle: chartAxisTextStyle,
-                          labelOffsetFromAxisPx: 45,
+                          labelOffsetFromTickPx: -5,
+                          labelOffsetFromAxisPx: 10,
                           // labelOffsetFromTickPx: 40,
                           // labelJustification: charts.TickLabelJustification.inside,
-                          labelAnchor: charts.TickLabelAnchor.after,
+                          labelAnchor: charts.TickLabelAnchor.before,
                           // minimumPaddingBetweenLabelsPx: 2,
                           labelRotation: 270,
                           lineStyle: chartAxisLineStyle,

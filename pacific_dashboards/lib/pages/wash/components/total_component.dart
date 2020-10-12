@@ -15,16 +15,13 @@ import '../wash_data.dart';
 class TotalComponent extends StatefulWidget {
   final List<ListData> data;
   final String year;
-  final bool showAllData;
 
   const TotalComponent({
     Key key,
     @required this.data,
     @required this.year,
-    @required this.showAllData,
   })  : assert(data != null),
         assert(year != null),
-        assert(showAllData != null),
         super(key: key);
 
   @override
@@ -53,7 +50,7 @@ class _TotalComponentState extends State<TotalComponent> {
             switch (tab) {
               case _DashboardTab.cumulative:
                 return '${'washCumulative'.localized(context)} to ${widget.year}';
-            case _DashboardTab.evaluated:
+              case _DashboardTab.evaluated:
                 return '${'washEvaluated'.localized(context)} in ${widget.year}';
             }
             throw FallThroughError();
@@ -121,7 +118,6 @@ class _Chart extends StatelessWidget {
                   snapshot.data,
                   animate: false,
                   barGroupingType: _groupingType,
-                  vertical: false,
                   primaryMeasureAxis: charts.NumericAxisSpec(
                     tickProviderSpec: charts.BasicNumericTickProviderSpec(
                       desiredMinTickCount: 7,
@@ -129,21 +125,32 @@ class _Chart extends StatelessWidget {
                     ),
                     renderSpec: charts.GridlineRendererSpec(
                       labelStyle: chartAxisTextStyle,
+                      // labelRotation: 90,
                       lineStyle: chartAxisLineStyle,
                     ),
                   ),
                   domainAxis: charts.OrdinalAxisSpec(
                     renderSpec: charts.SmallTickRendererSpec(
                       labelStyle: chartAxisTextStyle,
+                      labelOffsetFromAxisPx: 10,
+                      labelOffsetFromTickPx: -5,
+                      labelAnchor: charts.TickLabelAnchor.before,
+                      labelRotation: 270,
                       lineStyle: chartAxisLineStyle,
                     ),
+                  ),
+                  defaultRenderer: charts.BarRendererConfig(
+                    stackHorizontalSeparator: 0,
+                    minBarLengthPx: 30,
+                    groupingType: charts.BarGroupingType.stacked,
+                    strokeWidthPx: 10,
                   ),
                 ),
               );
             },
           ),
         ),
-        generateTitleTable(context)
+        // generateTitleTable(context)
       ],
     );
   }

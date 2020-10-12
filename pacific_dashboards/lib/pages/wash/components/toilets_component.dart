@@ -15,16 +15,13 @@ import '../wash_data.dart';
 class ToiletsComponent extends StatefulWidget {
   final List<ListData> data;
   final String year;
-  final bool showAllData;
 
   const ToiletsComponent({
     Key key,
     @required this.data,
     @required this.year,
-    @required this.showAllData,
   })  : assert(data != null),
         assert(year != null),
-        assert(showAllData != null),
         super(key: key);
 
   @override
@@ -79,70 +76,60 @@ class _ToiletsComponentState extends State<ToiletsComponent> {
               case _DashboardTab.toiletsTotal:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.toiletsUsable:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.toiletsUsablePercentage:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.toiletsUsablePercentageGender:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.toiletsPupils:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.toiletsPupilsGender:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.toiletsPupilsUsableToilet:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.toiletsPupilsUsableToiletGender:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.pupils:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
               case _DashboardTab.pupilsMirrorFormat:
                 return _Chart(
                     year: widget.year,
-                    showAllData: widget.showAllData,
                     data: widget.data,
                     groupingType: charts.BarGroupingType.groupedStacked,
                     tab: tab);
@@ -170,7 +157,6 @@ enum _DashboardTab {
 
 class _Chart extends StatelessWidget {
   final String _year;
-  final bool _showAllData;
   final List<ListData> _data;
   final charts.BarGroupingType _groupingType;
   final _DashboardTab _tab;
@@ -184,7 +170,6 @@ class _Chart extends StatelessWidget {
       @required _DashboardTab tab})
       : assert(data != null),
         _year = year,
-        _showAllData = showAllData,
         _data = data,
         _groupingType = groupingType,
         _tab = tab,
@@ -231,11 +216,9 @@ class _Chart extends StatelessWidget {
                       domainAxis: charts.OrdinalAxisSpec(
                         renderSpec: charts.SmallTickRendererSpec(
                           labelStyle: chartAxisTextStyle,
-                          labelOffsetFromAxisPx: 45,
-                          // labelOffsetFromTickPx: 40,
-                          // labelJustification: charts.TickLabelJustification.inside,
-                          labelAnchor: charts.TickLabelAnchor.after,
-                          // minimumPaddingBetweenLabelsPx: 2,
+                          labelOffsetFromAxisPx: 10,
+                          labelOffsetFromTickPx: -5,
+                          labelAnchor: charts.TickLabelAnchor.before,
                           labelRotation: 270,
                           lineStyle: chartAxisLineStyle,
                         ),
@@ -326,7 +309,7 @@ class _Chart extends StatelessWidget {
             );
         }
       }).toList());
-      if (!_showAllData) data.removeWhere((it) => it.measure == 0);
+
       return [
         charts.Series(
           domainFn: (BarChartData chartData, _) => chartData.domain,
