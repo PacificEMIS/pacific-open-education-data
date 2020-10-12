@@ -73,7 +73,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text('schoolsEnrollment'.localized(context),
+                        Text('enrolment'.localized(context),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline3
@@ -87,12 +87,11 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           tabNameBuilder: (tab) {
                             switch (tab) {
                               case _DashboardsTab.byState:
-                                return 'schoolsByState'.localized(context);
+                                return '${'schoolsByState'.localized(context)} ${snapshot.data.year}';
                               case _DashboardsTab.byAuthority:
-                                return 'schoolsByAuthority'.localized(context);
+                                return '${'schoolsByAuthority'.localized(context)} ${snapshot.data.year}';
                               case _DashboardsTab.byGovtNonGovt:
-                              return 'schoolsByGovtNonGovt'
-                                  .localized(context);
+                              return '${'schoolsByGovtNonGovt'.localized(context)} ${snapshot.data.year}';
                             }
                             throw FallThroughError();
                           },
@@ -178,34 +177,6 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
       ),
     );
   }
-  //
-  //
-  // MultiTable buildMultiTable(
-  //     AsyncSnapshot<SchoolsPageData> snapshot, BuildContext context) {
-  //   var values = snapshot.data.enrolBySchoolLevelAndDistrict;
-  //   MiniTabLayout(
-  //     tabs: values.to,
-  //     tabNameBuilder: (key) {
-  //       return '$key';
-  //     },
-  //     builder: (ctx, key) {
-  //       return MultiTable(
-  //         key: ValueKey(snapshot.data.enrolBySchoolLevelAndDistrict),
-  //         title:
-  //             'schoolsDashboardsEnrollByLevelStateGenderTitle'.localized(context),
-  //         columnNames: [
-  //           'schoolsDashboardsSchoolLevelDomain',
-  //           'labelMale',
-  //           'labelFemale',
-  //           'labelTotal'
-  //         ],
-  //         columnFlex: [3, 3, 3, 3],
-  //         data: snapshot.data.enrolBySchoolLevelAndDistrict,
-  //         keySortFunc: _compareEnrollmentBySchoolLevelAndState,
-  //       );
-  //     },
-  //   );
-  // }
 
   int _compareEnrollmentBySchoolLevelAndState(String lv, String rv) {
     return lv.compareTo(rv);

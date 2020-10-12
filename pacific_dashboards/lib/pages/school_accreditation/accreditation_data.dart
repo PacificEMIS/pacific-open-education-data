@@ -12,23 +12,23 @@ class AccreditationData {
     @required this.accreditationNationalCumulativeData,
     @required this.accreditationStatusByState,
     @required this.performanceByStandard,
-  })  : assert(accreditationProgressData != null),
+  })  : assert(year != null),
+        assert(accreditationProgressData != null),
         assert(accreditationProgressCumulativeData != null),
         assert(districtStatusData != null),
         assert(districtStatusCumulativeData != null),
         assert(accreditationNationalData != null),
         assert(accreditationNationalCumulativeData != null),
-        assert(year != null),
         assert(accreditationStatusByState != null),
         assert(performanceByStandard != null);
 
+  final String year;
   final Map<String, List<int>> accreditationProgressData;
   final Map<String, List<int>> accreditationProgressCumulativeData;
   final Map<String, List<int>> districtStatusData;
   final Map<String, List<int>> districtStatusCumulativeData;
   final Map<String, List<int>> accreditationNationalData;
   final Map<String, List<int>> accreditationNationalCumulativeData;
-  final String year;
   final MultitableData accreditationStatusByState;
   final MultitableData performanceByStandard;
 }

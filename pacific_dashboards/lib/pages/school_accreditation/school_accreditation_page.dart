@@ -289,9 +289,9 @@ class _PerformanceTable extends StatelessWidget {
         tabNameBuilder: (tab) {
           switch (tab) {
             case _Tab.evaluated:
-              return 'washEvaluated'.localized(context);
-            case _Tab.cumulative:
               return 'washCumulative'.localized(context);
+            case _Tab.cumulative:
+              return 'washEvaluated'.localized(context);
           }
           throw FallThroughError();
         },

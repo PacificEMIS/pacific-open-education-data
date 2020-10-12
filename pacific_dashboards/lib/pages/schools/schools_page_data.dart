@@ -3,17 +3,20 @@ import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
 
 class SchoolsPageData {
   SchoolsPageData({
+    @required this.year,
     @required this.enrolByDistrict,
     @required this.enrolByAuthority,
     @required this.enrolByPrivacy,
     @required this.enrolByAgeAndEducation,
     @required this.enrolBySchoolLevelAndDistrict,
-  })  : assert(enrolByDistrict != null),
+  })  : assert(year != null),
+        assert(enrolByDistrict != null),
         assert(enrolByAuthority != null),
         assert(enrolByPrivacy != null),
         assert(enrolByAgeAndEducation != null),
         assert(enrolBySchoolLevelAndDistrict != null);
 
+  final String year;
   final Map<String, int> enrolByDistrict;
   final Map<String, int> enrolByAuthority;
   final Map<String, int> enrolByPrivacy;
