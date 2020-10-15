@@ -28,11 +28,11 @@ class DistrictAccreditation implements Accreditation {
   @JsonKey(name: 'InspectionResult')
   final String inspectionResult;
 
-  @JsonKey(name: 'Num')
+  @JsonKey(name: 'Num', defaultValue: 0)
   @override
   final int total;
 
-  @JsonKey(name: 'NumThisYear')
+  @JsonKey(name: 'NumThisYear', defaultValue: 0)
   @override
   final int numThisYear;
 

@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class RatesComponent extends MvvmStatefulWidget {
+
   RatesComponent({Key key, @required ShortSchool school})
       : assert(school != null),
         super(
@@ -47,29 +48,29 @@ class _RatesComponentState extends MvvmState<RatesViewModel, RatesComponent> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   RateSliceComponent(
-                    title: 'individualSchoolDashboardRatesDropoutTitle'
-                        .localized(context),
+                    title: '${'individualSchoolDashboardRatesDropoutTitle'
+                  .localized(context)}',
                     ratesData: snapshot.data,
                     classLevelRateAccessor: (data) => data.dropoutRate,
                     yearRateAccessor: (data) => data.dropoutRate,
                   ),
                   RateSliceComponent(
-                    title: 'individualSchoolDashboardRatesPromoteTitle'
-                        .localized(context),
+                    title: '${'individualSchoolDashboardRatesPromoteTitle'
+                      .localized(context)}',
                     ratesData: snapshot.data,
                     classLevelRateAccessor: (data) => data.promoteRate,
                     yearRateAccessor: (data) => data.promoteRate,
                   ),
                   RateSliceComponent(
-                    title: 'individualSchoolDashboardRatesRepeatTitle'
-                        .localized(context),
+                    title: '${'individualSchoolDashboardRatesRepeatTitle'
+            .localized(context)}',
                     ratesData: snapshot.data,
                     classLevelRateAccessor: (data) => data.repeatRate,
                     yearRateAccessor: (data) => data.repeatRate,
                   ),
                   RateSliceComponent(
-                    title: 'individualSchoolDashboardRatesSurvivalTitle'
-                        .localized(context),
+                    title: '${'individualSchoolDashboardRatesSurvivalTitle'
+                        .localized(context)}',
                     ratesData: snapshot.data,
                     classLevelRateAccessor: (data) => data.survivalRate,
                     yearRateAccessor: (data) => data.survivalRate,

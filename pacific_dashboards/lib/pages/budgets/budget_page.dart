@@ -60,9 +60,12 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                 stream: viewModel.dataStream,
                 builder: (ctx, snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(
-                      child: PlatformProgressIndicator(),
-                    );
+                                        return Container(
+                      height: MediaQuery.of(context).size.height / 1.3,
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        child: PlatformProgressIndicator(),
+                      ),);
                   } else {
                     var list = <Widget>[
                       _titleWidget(context, 'budgetsEducationFinancing', true),
@@ -88,8 +91,8 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                       _titleWidget(context, 'budgetsSpendingBySector', false),
                       SpendingByDistrictComponent(
                           data: snapshot.data.dataSpendingBySectorAndYear,
-                          dataFiltered:
-                              snapshot.data.dataSpendingBySectorAndYearFiltered),
+                          dataFiltered: snapshot
+                              .data.dataSpendingBySectorAndYearFiltered),
                       _titleWidget(context, 'budgetsSpendingByDistrict', false),
                       SpendingByDistrictComponent(
                           data: snapshot.data.dataSpendingByDistrict,
@@ -183,11 +186,11 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
         text.localized(context),
         style: isTitle == true
             ? Theme.of(context).textTheme.headline3.copyWith(
-                  color: Color.fromRGBO(19, 40, 38, 100),
+                  color: Colors.black87,
                   fontWeight: FontWeight.bold,
                 )
             : Theme.of(context).textTheme.headline4.copyWith(
-                  color: Color.fromRGBO(19, 40, 38, 100),
+                  color: Colors.black87,
                   fontWeight: FontWeight.bold,
                 ),
       ),

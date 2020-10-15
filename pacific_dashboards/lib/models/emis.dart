@@ -7,7 +7,6 @@ Emis emisFromString(String string) =>
     Emis.values.firstWhere((it) => it.toString() == string, orElse: () => null);
 
 extension UI on Emis {
-
   String getName(BuildContext context) {
     switch (this) {
       case Emis.miemis:
@@ -31,7 +30,6 @@ extension UI on Emis {
     }
     throw FallThroughError();
   }
-
 }
 
 extension Id on Emis {

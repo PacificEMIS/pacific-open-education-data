@@ -19,7 +19,8 @@ class ClassLevelLookup extends Lookup {
     @required this.yearOfEducation,
   }) : super(code: code, name: name);
 
-  factory ClassLevelLookup.fromJson(Map<String, dynamic> json) => _$ClassLevelLookupFromJson(json);
+  factory ClassLevelLookup.fromJson(Map<String, dynamic> json) =>
+      _$ClassLevelLookupFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$ClassLevelLookupToJson(this);

@@ -109,7 +109,8 @@ class MultiTableWidget<T> extends StatelessWidget {
                                   ? Colors.transparent
                                   : AppColors.kGrayLight,
                             ),
-                            child: Row(
+                            child:
+                            Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: generateColumnCells(_columnNames, it),

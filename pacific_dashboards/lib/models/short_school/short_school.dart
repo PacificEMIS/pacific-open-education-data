@@ -24,8 +24,8 @@ class ShortSchool {
     @required this.districtName,
   });
 
-  factory ShortSchool.fromJson(Map<String, dynamic> json) => _$ShortSchoolFromJson(json);
+  factory ShortSchool.fromJson(Map<String, dynamic> json) =>
+      _$ShortSchoolFromJson(json);
 
   Map<String, dynamic> toJson() => _$ShortSchoolToJson(this);
-
 }

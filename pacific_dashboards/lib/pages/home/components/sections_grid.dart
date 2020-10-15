@@ -3,37 +3,43 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 
 class SectionsGrid extends StatelessWidget {
-  SectionsGrid({@required List<Section> sections})
-      : assert(sections != null),
-        _sections = sections;
+  SectionsGrid({@required List<Section> sections, @required bool useMobileLayout})
+      : assert(sections != null, useMobileLayout != null),
+        _sections = sections, _useMobileLayout = useMobileLayout;
+
 
   final List<Section> _sections;
-
+  final bool _useMobileLayout;
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      crossAxisSpacing: 24,
-      mainAxisSpacing: 24,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-      childAspectRatio: 1.0,
-      shrinkWrap: true,
-      children: _sections.map((section) => _Section(section: section)).toList(),
-    );
+    return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: _sections.length,
+        // crossAxisCount: 2,
+        // crossAxisSpacing: 24,
+        // mainAxisSpacing: 24,
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+        // childAspectRatio: 1.0,
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: _useMobileLayout ? 2 : 3),
+        itemBuilder: (BuildContext context, int index) {
+          return menu_tab(section: _sections[index], useMobileLayout: _useMobileLayout); //just for testing, will fill with image later
+        });
   }
 }
 
-class _Section extends StatelessWidget {
-  final Section _section;
+class menu_tab extends StatelessWidget {
+  const menu_tab({
+    Key key,
+    @required Section section, @required useMobileLayout,
+  }) : _section = section, super(key: key);
 
-  const _Section({Key key, @required Section section})
-      : assert(section != null),
-        _section = section,
-        super(key: key);
+  final Section _section;
 
   @override
   Widget build(BuildContext context) {
+    var useMobileLayout = MediaQuery.of(context).size.shortestSide < 720;
     return Container(
       margin: const EdgeInsets.only(left: 5.0),
       decoration: BoxDecoration(
@@ -78,7 +84,7 @@ class _Section extends StatelessWidget {
                       _section.getName(context),
                       textAlign: TextAlign.center,
                       softWrap: true,
-                      style: Theme.of(context).textTheme.headline5,
+                      style:  useMobileLayout ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.headline4, textScaleFactor: 1.2
                     ),
                   ),
                 ),

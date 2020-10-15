@@ -47,7 +47,8 @@ class _DashboardComponentState
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       'individualSchoolDashboardEnrollTitle'.localized(context),
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headline3.copyWith(
+                        color: Colors.black87),
                     ),
                   ),
                   EnrollComponent(
@@ -61,7 +62,8 @@ class _DashboardComponentState
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       'individualSchoolDashboardRatesTitle'.localized(context),
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headline3.copyWith(
+                          color: Colors.black87),
                     ),
                   ),
                   RatesComponent(

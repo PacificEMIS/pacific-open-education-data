@@ -20,6 +20,7 @@ import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
@@ -42,7 +43,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings {
     _dio = Dio(BaseOptions(
       connectTimeout: Duration(seconds: 10).inMilliseconds,
-      receiveTimeout: Duration(minutes: 1).inMilliseconds,
+      receiveTimeout: Duration(minutes: 5).inMilliseconds,
       headers: {
         'Accept-Encoding': 'gzip, deflate',
       },
@@ -168,6 +169,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
+  Future<WashChunk> fetchWashChunk() async {
+    final totalData = await _withHandlers((client) => client.getWash());
+    final toiletsData = await _withHandlers((client) => client.getToilets());
+    final waterData = await _withHandlers((client) => client.getWater());
+    return WashChunk(total: totalData, toilets: toiletsData, water: waterData);
+  }
+
+  @override
   Future<List<SchoolEnroll>> fetchIndividualDistrictEnroll(
     String districtCode,
   ) {
@@ -202,9 +211,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         (client) => client.getSchoolAccreditationsByDistrict());
     final standardData = await _withHandlers(
         (client) => client.getSchoolAccreditationsByStandard());
+    final nationalData = await _withHandlers(
+        (client) => client.getSchoolAccreditationsByNation());
     return AccreditationChunk(
       byDistrict: districtData,
       byStandard: standardData,
+      byNational: nationalData,
     );
   }
 

@@ -16,7 +16,7 @@ class BudgetData {
       @required this.dataByGnpAndGovernmentSpendingBudgeted,
       @required this.dataSpendingBySector,
       @required this.dataSpendingBySectorAndYear,
-        @required this.dataSpendingBySectorAndYearFiltered,
+      @required this.dataSpendingBySectorAndYearFiltered,
       @required this.dataSpendingByDistrict,
       @required this.dataSpendingByDistrictFiltered});
 }

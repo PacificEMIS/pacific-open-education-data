@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/schools_list/schools_list_response_body.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/token/token_response_body.dart';
 import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
+import 'package:pacific_dashboards/models/accreditations/national_accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
@@ -13,6 +14,9 @@ import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/toilets.dart';
+import 'package:pacific_dashboards/models/wash/wash.dart';
+import 'package:pacific_dashboards/models/wash/water.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../../models/lookups/lookups.dart';
 
@@ -36,6 +40,9 @@ abstract class RestClient {
 
   @GET('warehouse/accreditations/table?byStandard')
   Future<List<StandardAccreditation>> getSchoolAccreditationsByStandard();
+
+  @GET('warehouse/accreditations/table?result')
+  Future<List<NationalAccreditation>> getSchoolAccreditationsByNation();
 
   @GET('lookups/collection/core')
   Future<Lookups> getLookups();
@@ -83,4 +90,13 @@ abstract class RestClient {
 
   @GET('warehouse/specialeducation')
   Future<List<SpecialEducation>> getSpecialEducation();
+
+  @GET('warehouse/wash')
+  Future<List<Wash>> getWash();
+
+  @GET('warehouse/wash/toilets')
+  Future<List<Toilets>> getToilets();
+
+  @GET('warehouse/wash/water')
+  Future<List<Water>> getWater();
 }

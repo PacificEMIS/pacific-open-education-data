@@ -11,7 +11,6 @@ class ChartInfoTableWidget extends StatefulWidget {
   final Map<String, int> _data;
   final String _titleName;
   final String _titleValue;
-
   ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
 
   @override
@@ -31,46 +30,32 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
           color: _kBorderColor,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _SortingTitle(
-                title: widget._titleName,
-                icon: _sortType.iconFor(ValueType.domain),
-                onTap: () => _onSortTap(ValueType.domain),
-              ),
-              _SortingTitle(
-                title: widget._titleValue,
-                icon: _sortType.iconFor(ValueType.measure),
-                onTap: () => _onSortTap(ValueType.measure),
-              )
-            ],
-          ),
-          FutureBuilder(
-              future: _sortedRowDatas,
-              builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
-                if (!snapshot.hasData) {
-                  return Container();
-                }
+      child: buildColumns(),
+    );
+  }
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: _kBorderWidth,
-                      color: _kBorderColor,
-                    ),
-                    ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
-                  ],
-                );
-              })
-        ],
-      ),
+  Column buildColumns() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _SortingTitle(
+              title: widget._titleName,
+              icon: _sortType.iconFor(ValueType.domain),
+              onTap: () => _onSortTap(ValueType.domain),
+            ),
+            _SortingTitle(
+              title: widget._titleValue,
+              icon: _sortType.iconFor(ValueType.measure),
+              onTap: () => _onSortTap(ValueType.measure),
+            )
+          ],
+        ),
+               columnFutureBuilder(sortedRowDatas: _sortedRowDatas),
+      ],
     );
   }
 
@@ -155,6 +140,40 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
 
       throw FallThroughError();
     });
+  }
+}
+
+class columnFutureBuilder extends StatelessWidget {
+  const columnFutureBuilder({
+    Key key,
+    @required Future<List<_RowData>> sortedRowDatas,
+  })  : _sortedRowDatas = sortedRowDatas,
+        super(key: key);
+
+  final Future<List<_RowData>> _sortedRowDatas;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _sortedRowDatas,
+      builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+        
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: _kBorderWidth,
+              color: _kBorderColor,
+            ),
+            ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
+          ],
+        );
+      },
+    );
   }
 }
 

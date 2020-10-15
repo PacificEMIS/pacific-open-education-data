@@ -26,6 +26,7 @@ class HomePage extends MvvmStatefulWidget {
 class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
   @override
   Widget buildWidget(BuildContext context) {
+    var useMobileLayout = MediaQuery.of(context).size.shortestSide < 720;
     return StreamListenerWidget(
       stream: viewModel.activityIndicatorStream,
       predicate: (isLoading) => isLoading,
@@ -34,9 +35,10 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).primaryColor,
         body: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             Container(
-              height: 80,
+              // height: 80,
               alignment: Alignment.centerRight,
               child: FlatButton(
                 padding: EdgeInsets.all(8.0),
@@ -58,7 +60,8 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
                 ),
               ),
             ),
-            CurrentEmisWidget(viewModel: viewModel),
+            CurrentEmisWidget(
+                viewModel: viewModel, useMobileLayout: useMobileLayout),
             StreamBuilder<List<Section>>(
               stream: viewModel.sectionStream,
               builder: (ctx, snapshot) {
@@ -67,6 +70,7 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
                     alignment: Alignment.center,
                     child: SectionsGrid(
                       sections: snapshot.data,
+                      useMobileLayout: useMobileLayout,
                     ),
                   );
                 } else {

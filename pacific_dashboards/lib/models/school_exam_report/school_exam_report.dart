@@ -4,14 +4,13 @@ part 'school_exam_report.g.dart';
 
 @JsonSerializable()
 class SchoolExamReport {
-
   @JsonKey(name: 'examCode')
   String examCode;
 
   @JsonKey(name: 'examYear')
   int year;
 
-  @JsonKey(name: 'examName')
+  @JsonKey(name: 'examName', defaultValue: '-')
   String examName;
 
   @JsonKey(name: 'benchmarkCode')
@@ -40,5 +39,4 @@ class SchoolExamReport {
       _$SchoolExamReportFromJson(json);
 
   Map<String, dynamic> toJson() => _$SchoolExamReportToJson(this);
-
 }

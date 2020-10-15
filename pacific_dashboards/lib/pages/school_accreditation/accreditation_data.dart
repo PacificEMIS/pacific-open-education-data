@@ -5,18 +5,30 @@ class AccreditationData {
   const AccreditationData({
     @required this.year,
     @required this.accreditationProgressData,
+    @required this.accreditationProgressCumulativeData,
     @required this.districtStatusData,
+    @required this.districtStatusCumulativeData,
+    @required this.accreditationNationalData,
+    @required this.accreditationNationalCumulativeData,
     @required this.accreditationStatusByState,
     @required this.performanceByStandard,
-  })  : assert(accreditationProgressData != null),
+  })  : assert(year != null),
+        assert(accreditationProgressData != null),
+        assert(accreditationProgressCumulativeData != null),
         assert(districtStatusData != null),
-        assert(year != null),
+        assert(districtStatusCumulativeData != null),
+        assert(accreditationNationalData != null),
+        assert(accreditationNationalCumulativeData != null),
         assert(accreditationStatusByState != null),
         assert(performanceByStandard != null);
 
-  final Map<String, List<int>> accreditationProgressData;
-  final Map<String, List<int>> districtStatusData;
   final String year;
+  final Map<String, List<int>> accreditationProgressData;
+  final Map<String, List<int>> accreditationProgressCumulativeData;
+  final Map<String, List<int>> districtStatusData;
+  final Map<String, List<int>> districtStatusCumulativeData;
+  final Map<String, List<int>> accreditationNationalData;
+  final Map<String, List<int>> accreditationNationalCumulativeData;
   final MultitableData accreditationStatusByState;
   final MultitableData performanceByStandard;
 }

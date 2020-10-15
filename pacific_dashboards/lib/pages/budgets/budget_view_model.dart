@@ -143,7 +143,7 @@ Future<BudgetData> _transformBudgetModel(
       filteredBudget.groupBy((it) => it.districtCode), budgetLookups);
   //Spending by sector and year
   final dataSpendingBySectorAndYear =
-    _generateSpendingSectorData(groupedByYear, _budgetModel.lookups);
+      _generateSpendingSectorData(groupedByYear, _budgetModel.lookups);
   final dataSpendingByDistrict =
       _generateSpendingDistrictData(groupedByYear, _budgetModel.lookups);
   final dataSpendingByDistrictFiltered = _generateSpendingDistrictData(
@@ -211,8 +211,7 @@ List<DataSpendingByDistrict> _generateSpendingSectorData(
     Map<int, List<Budget>> budgetDataGroupedByYear, Lookups lookups) {
   List<DataSpendingByDistrict> dataSpendingByDistrict = new List();
   budgetDataGroupedByYear.forEach((year, spendings) {
-    var groupedByDistrict =
-    spendings.groupBy((element) => element.sectorCode);
+    var groupedByDistrict = spendings.groupBy((element) => element.sectorCode);
 
     groupedByDistrict.forEach((district, values) {
       if (district != null && year != null) {

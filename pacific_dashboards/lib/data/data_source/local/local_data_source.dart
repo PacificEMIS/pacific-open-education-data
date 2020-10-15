@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
 abstract class LocalDataSource {
   Future<Pair<bool, List<Teacher>>> fetchTeachers();
@@ -25,6 +26,8 @@ abstract class LocalDataSource {
 
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk();
 
+  Future<WashChunk> fetchWashChunk();
+
   Future<Pair<bool, Lookups>> fetchLookupsModel();
 
   Future<Pair<bool, FinancialLookups>> fetchFinancialLookupsModel();
@@ -36,6 +39,8 @@ abstract class LocalDataSource {
   Future<void> saveSchools(List<School> schools);
 
   Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk);
+
+  Future<void> saveWashChunk(WashChunk chunk);
 
   Future<void> saveLookupsModel(Lookups model);
 

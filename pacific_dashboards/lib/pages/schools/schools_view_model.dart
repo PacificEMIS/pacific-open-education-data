@@ -135,6 +135,7 @@ Future<SchoolsPageData> _transformSchoolsModel(
   final schoolsByGovt = filteredSchools.groupBy((it) => it.authorityGovt);
   final translates = _schoolsModel.lookups;
   return SchoolsPageData(
+    year: _selectedYear(_schoolsModel.filters).toString(),
     enrolByDistrict: _calculatePeopleCount(schoolsByDistrict).map((key, v) {
       return MapEntry(key.from(translates.districts), v);
     }),
@@ -154,6 +155,11 @@ Future<SchoolsPageData> _transformSchoolsModel(
     ),
   );
 }
+
+int _selectedYear(List<Filter> filters) {
+  return filters.firstWhere((it) => it.id == 0).intValue;
+}
+
 
 Map<String, int> _calculatePeopleCount(
         Map<String, List<School>> groupedSchools) =>

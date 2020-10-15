@@ -32,12 +32,13 @@ class StandardAccreditation implements Accreditation {
   @override
   final String result;
 
-  @JsonKey(name: 'Num')
+  @JsonKey(name: 'Num', defaultValue: 0)
   @override
   final int total;
 
-  @JsonKey(name: 'NumInYear')
-  final int numInYear;
+  @JsonKey(name: 'NumInYear', defaultValue: 0)
+  @override
+  final int numThisYear;
 
   const StandardAccreditation({
     @required this.surveyYear,
@@ -48,16 +49,13 @@ class StandardAccreditation implements Accreditation {
     @required this.standard,
     @required this.result,
     @required this.total,
-    @required this.numInYear,
+    @required this.numThisYear,
   });
 
   factory StandardAccreditation.fromJson(Map<String, dynamic> json) =>
       _$StandardAccreditationFromJson(json);
 
   Map<String, dynamic> toJson() => _$StandardAccreditationToJson(this);
-
-  @override
-  int get numThisYear => numInYear;
 
   @override
   Comparable get sortField => standard ?? "";

@@ -32,15 +32,23 @@ class ChartWithTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_title.isEmpty) return
-      ChartColumn(chartType: _chartType, data: _data, tableKeyName: _tableKeyName, tableValueName: _tableValueName);
+    if (_title.isEmpty)
+      return ChartColumn(
+          chartType: _chartType,
+          data: _data,
+          tableKeyName: _tableKeyName,
+          tableValueName: _tableValueName);
 
     return TileWidget(
       title: Text(
         _title,
         style: Theme.of(context).textTheme.headline4,
       ),
-      body: ChartColumn(chartType: _chartType, data: _data, tableKeyName: _tableKeyName, tableValueName: _tableValueName),
+      body: ChartColumn(
+          chartType: _chartType,
+          data: _data,
+          tableKeyName: _tableKeyName,
+          tableValueName: _tableValueName),
     );
   }
 }
@@ -52,7 +60,11 @@ class ChartColumn extends StatelessWidget {
     @required Map<String, int> data,
     @required String tableKeyName,
     @required String tableValueName,
-  }) : _chartType = chartType, _data = data, _tableKeyName = tableKeyName, _tableValueName = tableValueName, super(key: key);
+  })  : _chartType = chartType,
+        _data = data,
+        _tableKeyName = tableKeyName,
+        _tableValueName = tableValueName,
+        super(key: key);
 
   final ChartType _chartType;
   final Map<String, int> _data;
@@ -62,15 +74,15 @@ class ChartColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-    children: <Widget>[
-      ChartFactory.createChart(_chartType, _data),
-      const SizedBox(height: 16),
-      ChartInfoTableWidget(
-        _data,
-        _tableKeyName,
-        _tableValueName,
-      ),
-    ],
+      children: <Widget>[
+        ChartFactory.createChart(_chartType, _data),
+        const SizedBox(height: 16),
+        ChartInfoTableWidget(
+          _data,
+          _tableKeyName,
+          _tableValueName,
+        ),
+      ],
     );
   }
 }

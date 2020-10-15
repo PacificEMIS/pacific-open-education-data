@@ -22,10 +22,11 @@ class SchoolEnrollChunk {
   }
 
   static List<SchoolEnroll> _collapseEnrollByYearAndClassLevel(
-      List<SchoolEnroll> data,) {
+    List<SchoolEnroll> data,
+  ) {
     final schoolDataGroupedByYear = data.groupBy((it) => it.year);
     final Map<int, Map<String, List<SchoolEnroll>>>
-    schoolDataGroupedByYearGroupedByClassLevel = {};
+        schoolDataGroupedByYearGroupedByClassLevel = {};
     schoolDataGroupedByYear.forEach((key, value) {
       final groupedByClassLevel = value.groupBy((it) => it.classLevel);
       schoolDataGroupedByYearGroupedByClassLevel[key] = groupedByClassLevel;

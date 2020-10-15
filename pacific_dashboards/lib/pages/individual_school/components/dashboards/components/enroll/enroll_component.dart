@@ -57,11 +57,14 @@ class _EnrollComponentState
                       data: snapshot.data.gradeDataOnLastYear,
                     ),
                     LevelAndGenderHistoryComponent(
+                      year:snapshot.data.gradeDataOnLastYear.year,
                       data: snapshot.data.gradeDataHistory,
                     ),
                     GenderHistoryComponent(
+                        year:snapshot.data.gradeDataOnLastYear.year,
                         data: snapshot.data.genderDataHistory),
                     FemalePartComponent(
+                      year:snapshot.data.gradeDataOnLastYear.year,
                       data: snapshot.data,
                       schoolId: widget.school.id,
                       district: widget.school.districtName,

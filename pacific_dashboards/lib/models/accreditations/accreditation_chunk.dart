@@ -7,6 +7,8 @@ import 'package:pacific_dashboards/models/accreditations/standard_accreditation.
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
+import 'national_accreditation.dart';
+
 part 'accreditation_chunk.g.dart';
 
 typedef FilterApplier<T> = T Function(T a);
@@ -19,9 +21,13 @@ class AccreditationChunk {
   @JsonKey(name: 'byStandard')
   final List<StandardAccreditation> byStandard;
 
+  @JsonKey(name: 'byNation')
+  final List<NationalAccreditation> byNational;
+
   const AccreditationChunk({
     @required this.byDistrict,
     @required this.byStandard,
+    @required this.byNational,
   });
 
   factory AccreditationChunk.fromJson(Map<String, dynamic> json) =>
@@ -33,10 +39,12 @@ class AccreditationChunk {
 class AccreditationChunkJsonParts {
   final List<dynamic> byDistrictJson;
   final List<dynamic> byStandardJson;
+  final List<dynamic> byNationJson;
 
   const AccreditationChunkJsonParts({
     this.byDistrictJson,
     this.byStandardJson,
+    this.byNationJson,
   });
 }
 
@@ -145,6 +153,7 @@ extension Filters on AccreditationChunk {
       return AccreditationChunk(
         byDistrict: apply(this.byDistrict),
         byStandard: apply(this.byStandard),
+        byNational: apply(this.byNational),
       );
     });
   }

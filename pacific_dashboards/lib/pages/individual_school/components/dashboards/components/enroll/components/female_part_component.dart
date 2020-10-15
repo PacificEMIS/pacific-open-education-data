@@ -10,11 +10,13 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class FemalePartComponent extends StatefulWidget {
   final EnrollData data;
+  final int year;
   final String schoolId;
   final String district;
 
   const FemalePartComponent({
     Key key,
+    @required this.year,
     @required this.data,
     @required this.schoolId,
     @required this.district,
@@ -38,8 +40,8 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'individualSchoolDashboardEnrollFemalePartTitle'.localized(context),
-            style: textTheme.individualDashboardsSubtitle,
+            '${'individualSchoolDashboardEnrollFemalePartTitle'.localized(context)} ${widget.year}',
+            style: textTheme.headline4,
           ),
         ),
         MiniTabLayout(

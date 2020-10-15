@@ -20,7 +20,6 @@ abstract class ServiceLocator {
 }
 
 class GetItServiceLocator extends ServiceLocator {
-
   final _getIt = GetIt.instance;
 
   @override
@@ -55,5 +54,4 @@ class GetItServiceLocator extends ServiceLocator {
 
   @override
   Repository get repository => _getIt.get<Repository>();
-
 }

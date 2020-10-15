@@ -12,6 +12,7 @@ import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
 abstract class Database {
   LookupsDao get lookups;
@@ -29,6 +30,7 @@ abstract class Database {
   SchoolFlowDao get schoolFlow;
   SchoolExamReportsDao get schoolExamReports;
   SpecialEducationDao get specialEducation;
+  WashDao get wash;
 }
 
 abstract class LookupsDao {
@@ -104,4 +106,9 @@ abstract class SchoolFlowDao {
 abstract class SchoolExamReportsDao {
   Future<void> save(String schoolId, List<SchoolExamReport> reports, Emis emis);
   Future<List<SchoolExamReport>> get(String schoolId, Emis emis);
+}
+
+abstract class WashDao {
+  Future<void> save(WashChunk wash, Emis emis);
+  Future<WashChunk> get(Emis emis);
 }

@@ -13,6 +13,7 @@ import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
 import 'package:pacific_dashboards/pages/special_education/special_education_view_model.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
+import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
 import 'package:pacific_dashboards/service_locator.dart';
 
 import 'models/short_school/short_school.dart';
@@ -138,6 +139,15 @@ class ViewModelFactory {
 
   SpecialEducationViewModel createSpecialEducationViewModel(BuildContext ctx) {
     return SpecialEducationViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      remoteConfig: serviceLocator.remoteConfig,
+      globalSettings: serviceLocator.globalSettings,
+    );
+  }
+
+  WashViewModel createWashViewModel(BuildContext ctx) {
+    return WashViewModel(
       ctx,
       repository: serviceLocator.repository,
       remoteConfig: serviceLocator.remoteConfig,

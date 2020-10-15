@@ -41,7 +41,7 @@ class HiveStandardAccreditation extends HiveObject {
         standard: standard,
         result: result,
         total: total,
-        numInYear: numInYear,
+        numThisYear: numInYear,
       );
 
   static HiveStandardAccreditation from(StandardAccreditation accreditation) =>
@@ -54,5 +54,5 @@ class HiveStandardAccreditation extends HiveObject {
         ..standard = accreditation.standard
         ..result = accreditation.result
         ..total = accreditation.total
-        ..numInYear = accreditation.numInYear;
+        ..numInYear = accreditation.numThisYear;
 }
