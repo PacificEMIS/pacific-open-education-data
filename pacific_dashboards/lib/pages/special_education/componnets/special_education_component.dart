@@ -98,7 +98,7 @@ class _Chart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           AspectRatio(
-            aspectRatio: 328 / 248,
+            aspectRatio: 328 / 400,
             child: FutureBuilder(
               future: _series,
               builder: (context, snapshot) {
@@ -128,12 +128,16 @@ class _Chart extends StatelessWidget {
                       renderSpec: charts.GridlineRendererSpec(
                         labelStyle: chartAxisTextStyle,
                         lineStyle: chartAxisLineStyle,
+                        labelOffsetFromAxisPx: 5,
+                        minimumPaddingBetweenLabelsPx: 30,
                       ),
                     ),
                     domainAxis: charts.OrdinalAxisSpec(
                       renderSpec: charts.SmallTickRendererSpec(
                         labelStyle: chartAxisTextStyle,
                         lineStyle: chartAxisLineStyle,
+                        labelOffsetFromTickPx: 30,
+                        labelOffsetFromAxisPx: 5,
                       ),
                     ),
                   );
@@ -167,7 +171,7 @@ class _Chart extends StatelessWidget {
       final barChartData = List<BarChartData>();
       if (_tab.index == 0) {
         barChartData.addAll(_data.map((it) {
-          var title = it.title.length > 17 ? it.title.substring(0, 17) + '..' : it.title;
+          var title = it.title.replaceFirst(RegExp(' '), '\n');
           return BarChartData(
             title,
             it.firstValue,
@@ -175,7 +179,7 @@ class _Chart extends StatelessWidget {
           );
         }).toList());
         barChartData.addAll(_data.map((it) {
-          var title = it.title.length > 17 ? it.title.substring(0, 17)  + '..': it.title;
+          var title = it.title.replaceFirst(RegExp(' '), '\n');// it.title.length > 25 ? it.title.substring(0, 25)  + '\n' + it.title.substring(25) : it.title;
           return BarChartData(
             title,
             it.secondValue,
