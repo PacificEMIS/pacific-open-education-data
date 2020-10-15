@@ -136,7 +136,7 @@ class MultiTableWidget<T> extends StatelessWidget {
   }
 
   List<Widget> generateColumnCells(List<String> strings, _CellData cellData) {
-    var numberFormat = new NumberFormat('###,###,###', 'eu');
+    var numberFormat = new NumberFormat('###,###,###', 'en');
     List<Widget> list = new List<Widget>();
     FontWeight _fontWeight = cellData.domain.toString() == 'labelTotal'
         ? FontWeight.bold

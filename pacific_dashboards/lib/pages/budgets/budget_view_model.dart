@@ -170,7 +170,7 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
         spendings.groupBy((element) => element.districtCode);
 
     groupedByDistrict.forEach((district, values) {
-      if (district != null && year != null) {
+      if (district != null && year > 2014) {
         double districtEdExpA = 0;
         double districtEdExpB = 0;
         double districtEdRecurrentExpA = 0;
@@ -185,20 +185,26 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
           districtEnrolment += element.enrolment;
           districtEnrolment += element.enrolmentNation;
         });
-        dataSpendingByDistrict.add(DataSpendingByDistrict(
-            year: year.toString(),
-            district: values[0].districtCode.from(lookups.districts),
-            edExpA: districtEdExpA.round(),
-            edExpAPerHead: districtEdExpA != 0 && districtEnrolment != 0
-                ? (districtEdExpA / districtEnrolment).round()
-                : 0,
-            edExpB: districtEdExpB.round(),
-            edExpBPerHead: districtEdExpB != 0 && districtEnrolment != 0
-                ? (districtEdExpB / districtEnrolment).round()
-                : 0,
-            edRecurrentExpA: districtEdRecurrentExpA.round(),
-            edRecurrentExpB: districtEdRecurrentExpB.round(),
-            enrolment: districtEnrolment.round()));
+        if (districtEdExpA > 0 ||
+            districtEdExpB > 0 ||
+            districtEdRecurrentExpA > 0 ||
+            districtEdRecurrentExpB > 0 ||
+            districtEnrolment > 0) {
+          dataSpendingByDistrict.add(DataSpendingByDistrict(
+              year: year.toString(),
+              district: values[0].districtCode.from(lookups.districts),
+              edExpA: districtEdExpA.round(),
+              edExpAPerHead: districtEdExpA != 0 && districtEnrolment != 0
+                  ? (districtEdExpA / districtEnrolment).round()
+                  : 0,
+              edExpB: districtEdExpB.round(),
+              edExpBPerHead: districtEdExpB != 0 && districtEnrolment != 0
+                  ? (districtEdExpB / districtEnrolment).round()
+                  : 0,
+              edRecurrentExpA: districtEdRecurrentExpA.round(),
+              edRecurrentExpB: districtEdRecurrentExpB.round(),
+              enrolment: districtEnrolment.round()));
+        }
       }
     });
   });
@@ -214,7 +220,7 @@ List<DataSpendingByDistrict> _generateSpendingSectorData(
     var groupedByDistrict = spendings.groupBy((element) => element.sectorCode);
 
     groupedByDistrict.forEach((district, values) {
-      if (district != null && year != null) {
+      if (district != null && year > 2014) {
         double districtEdExpA = 0;
         double districtEdExpB = 0;
         double districtEdRecurrentExpA = 0;
@@ -257,56 +263,60 @@ List _generateSpendingByYearData(
   final List<DataByGnpAndGovernmentSpending> budgetedData = [];
 
   budgetDataGroupedByYear.forEach((year, values) {
-    double govtExpenseA = 0;
-    double govtExpenseB = 0;
-    double gNP = 0;
-    double edExpenseA = 0;
-    double edExpenseB = 0;
-    double percentageEdGovtA = 0;
-    double percentageEdGovtB = 0;
-    double percentageEdGnpA = 0;
-    double percentageEdGnpB = 0;
+    if (year > 2014) {
+      double govtExpenseA = 0;
+      double govtExpenseB = 0;
+      double gNP = 0;
+      double edExpenseA = 0;
+      double edExpenseB = 0;
+      double percentageEdGovtA = 0;
+      double percentageEdGovtB = 0;
+      double percentageEdGnpA = 0;
+      double percentageEdGnpB = 0;
 
-    for (var data in values) {
-      gNP += data.gNP;
-      govtExpenseA += data.govtExpA;
-      edExpenseA += data.edExpA;
+      for (var data in values) {
+        gNP += data.gNP;
+        govtExpenseA += data.govtExpA;
+        edExpenseA += data.edExpA;
 
-      edExpenseB += data.edExpB;
-      govtExpenseB += data.govtExpB;
+        edExpenseB += data.edExpB;
+        govtExpenseB += data.govtExpB;
+      }
+
+      percentageEdGovtA = edExpenseA / govtExpenseA;
+      percentageEdGovtB = edExpenseB / govtExpenseB;
+
+      percentageEdGnpA = edExpenseA / gNP;
+      percentageEdGnpB = edExpenseB / gNP;
+
+      actualData.add(DataByGnpAndGovernmentSpending(
+          year: year,
+          gNP: gNP,
+          edExpense: edExpenseA,
+          govtExpense: govtExpenseA,
+          percentageEdGovt:
+              (percentageEdGovtA.isInfinite || percentageEdGovtA.isNaN)
+                  ? 0
+                  : (percentageEdGovtA * 100),
+          percentageEdGnp:
+              (percentageEdGnpA.isInfinite || percentageEdGnpA.isNaN)
+                  ? 0
+                  : (percentageEdGnpA * 100)));
+
+      budgetedData.add(DataByGnpAndGovernmentSpending(
+          year: year,
+          gNP: gNP,
+          edExpense: edExpenseB,
+          govtExpense: govtExpenseB,
+          percentageEdGovt:
+              (percentageEdGovtB.isInfinite || percentageEdGovtB.isNaN)
+                  ? 0
+                  : (percentageEdGovtB * 100),
+          percentageEdGnp:
+              (percentageEdGnpB.isInfinite || percentageEdGnpB.isNaN)
+                  ? 0
+                  : (percentageEdGnpB * 100)));
     }
-
-    percentageEdGovtA = edExpenseA / govtExpenseA;
-    percentageEdGovtB = edExpenseB / govtExpenseB;
-
-    percentageEdGnpA = edExpenseA / gNP;
-    percentageEdGnpB = edExpenseB / gNP;
-
-    actualData.add(DataByGnpAndGovernmentSpending(
-        year: year,
-        gNP: gNP,
-        edExpense: edExpenseA,
-        govtExpense: govtExpenseA,
-        percentageEdGovt:
-            (percentageEdGovtA.isInfinite || percentageEdGovtA.isNaN)
-                ? 0
-                : (percentageEdGovtA * 100),
-        percentageEdGnp: (percentageEdGnpA.isInfinite || percentageEdGnpA.isNaN)
-            ? 0
-            : (percentageEdGnpA * 100)));
-
-    budgetedData.add(DataByGnpAndGovernmentSpending(
-        year: year,
-        gNP: gNP,
-        edExpense: edExpenseB,
-        govtExpense: govtExpenseB,
-        percentageEdGovt:
-            (percentageEdGovtB.isInfinite || percentageEdGovtB.isNaN)
-                ? 0
-                : (percentageEdGovtB * 100),
-        percentageEdGnp: (percentageEdGnpB.isInfinite || percentageEdGnpB.isNaN)
-            ? 0
-            : (percentageEdGnpB * 100)));
   });
   return [
     actualData.chainSort((lv, rv) => rv.year.compareTo(lv.year)),
@@ -366,21 +376,35 @@ List<DataSpendingBySector> _generateYearAndSectorData(
 
     if (sector != null && districtCode != null) {
       districtCode = sector.from(lookups.districts);
-      dataSpendingBySector.add(DataSpendingBySector(
-          districtCode: districtCode,
-          eceActual: eceActual,
-          eceBudget: eceBudget,
-          primaryActual: primaryActual,
-          primaryBudget: primaryBudget,
-          secondaryActual: secondaryActual,
-          secondaryBudget: secondaryBudget,
-          totalActual: totalActual,
-          totalBudget: totalBudget));
+      if (eceActual > 0 ||
+          eceBudget > 0 ||
+          primaryActual > 0 ||
+          primaryBudget > 0 ||
+          secondaryActual > 0 ||
+          secondaryBudget > 0 ||
+          totalActual > 0 ||
+          totalBudget > 0)
+        dataSpendingBySector.add(DataSpendingBySector(
+            districtCode: districtCode,
+            eceActual: eceActual,
+            eceBudget: eceBudget,
+            primaryActual: primaryActual,
+            primaryBudget: primaryBudget,
+            secondaryActual: secondaryActual,
+            secondaryBudget: secondaryBudget,
+            totalActual: totalActual,
+            totalBudget: totalBudget));
     }
   });
   dataSpendingBySector
       .chainSort((lv, rv) => rv.districtCode.compareTo(lv.districtCode));
   //Adding total
+  if (eceTotalActual > 0 ||
+      eceTotalBudgeted > 0 ||
+      primaryTotalActual > 0 ||
+      primaryTotalBudgeted > 0 ||
+      secondaryTotalActual > 0 ||
+      secondaryTotalBudgeted > 0)
   dataSpendingBySector.add(DataSpendingBySector(
       districtCode: 'labelTotal',
       eceActual: eceTotalActual,

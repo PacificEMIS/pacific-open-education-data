@@ -158,7 +158,7 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  ChartInfoTableWidget generateTitleTable(BuildContext context) {
+  Widget generateTitleTable(BuildContext context) {
     Map<String, int> districts = new Map();
     final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
     dataSortedByDistrict.forEach((key, value) {
@@ -178,8 +178,10 @@ class _Chart extends StatelessWidget {
           spending += it.edRecurrentExpB;
         else if (_tab == _DashboardTab.enrolment) spending += it.enrolment;
       });
+      if (spending != 0)
       districts[key] = spending;
     });
+    if (districts.length == 0) return Container();
     return ChartInfoTableWidget(
         districts,
         'schoolsAccreditationDashboardsStateDomain'.localized(context),

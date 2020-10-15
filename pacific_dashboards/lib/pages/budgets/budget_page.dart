@@ -68,7 +68,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                       ),);
                   } else {
                     var list = <Widget>[
-                      _titleWidget(context, 'budgetsEducationFinancing', true),
+                      // _titleWidget(context, 'budgetsEducationFinancing', true),
                       //GNP and Government Spending Actual
                       _titleWidget(
                           context,
@@ -140,8 +140,15 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
     );
   }
 
-  MiniTabLayout spendingBySector(
+  Widget spendingBySector(
       BuildContext context, List<DataSpendingBySector> data) {
+    if (data.length == 0) return Center(
+        child: Text(
+          'labelNoData'.localized(context),
+          style: Theme.of(context).textTheme.headline5,
+        ),
+    );
+
     return MiniTabLayout(
       tabs: _SpendingTab.values,
       tabNameBuilder: (tab) {
