@@ -6,7 +6,9 @@ import 'package:pacific_dashboards/pages/budgets/budget_data.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
+import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 import 'components/enroll_data_by_gnp_government_component.dart';
@@ -50,63 +52,69 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              StreamBuilder<BudgetData>(
-                stream: viewModel.dataStream,
-                builder: (ctx, snapshot) {
-                  if (!snapshot.hasData) {
-                                        return Container(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        child: PlatformProgressIndicator(),
-                      ),);
-                  } else {
-                    var list = <Widget>[
-                      _titleWidget(context, 'budgetsEducationFinancing', true),
-                      //GNP and Government Spending Actual
-                      _titleWidget(
-                          context,
-                          'budgetsGnpAndGovernmentSpendingActualExpense',
-                          false),
-                      gNpAndGovernmentSpendingActualExpense(context,
-                          snapshot.data.dataByGnpAndGovernmentSpendingActual),
-                      //-- GNP and Government Spending Budgeted
-                      _titleWidget(
-                          context,
-                          'budgetsGnpAndGovernmentSpendingBudgetedExpense',
-                          false),
-                      gNpAndGovernmentSpendingActualExpense(context,
-                          snapshot.data.dataByGnpAndGovernmentSpendingBudgeted),
-                      //-- Spending By Sector
-                      _titleWidget(context, 'budgetsSpendingBySector', false),
-                      spendingBySector(
-                          context, snapshot.data.dataSpendingBySector),
-                      //-- Spending By Sector
-                      _titleWidget(context, 'budgetsSpendingBySector', false),
-                      SpendingByDistrictComponent(
-                          data: snapshot.data.dataSpendingBySectorAndYear,
-                          dataFiltered: snapshot
-                              .data.dataSpendingBySectorAndYearFiltered),
-                      _titleWidget(context, 'budgetsSpendingByDistrict', false),
-                      SpendingByDistrictComponent(
-                          data: snapshot.data.dataSpendingByDistrict,
-                          dataFiltered:
-                              snapshot.data.dataSpendingByDistrictFiltered),
-                    ];
-                    var budgetWidgetList = list;
-                    return Column(
-                      children: budgetWidgetList,
-                    );
-                  }
-                },
-              ),
-            ],
+      body: LoadingStack(
+        loadingStateStream: viewModel.activityIndicatorStream,
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: PageNoteWidget(noteStream: viewModel.noteStream),
+                ),
+                StreamBuilder<BudgetData>(
+                  stream: viewModel.dataStream,
+                  builder: (ctx, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    } else {
+                      var list = <Widget>[
+                        _titleWidget(
+                            context, 'budgetsEducationFinancing', true),
+                        //GNP and Government Spending Actual
+                        _titleWidget(
+                            context,
+                            'budgetsGnpAndGovernmentSpendingActualExpense',
+                            false),
+                        gNpAndGovernmentSpendingActualExpense(context,
+                            snapshot.data.dataByGnpAndGovernmentSpendingActual),
+                        //-- GNP and Government Spending Budgeted
+                        _titleWidget(
+                            context,
+                            'budgetsGnpAndGovernmentSpendingBudgetedExpense',
+                            false),
+                        gNpAndGovernmentSpendingActualExpense(
+                            context,
+                            snapshot
+                                .data.dataByGnpAndGovernmentSpendingBudgeted),
+                        //-- Spending By Sector
+                        _titleWidget(context, 'budgetsSpendingBySector', false),
+                        spendingBySector(
+                            context, snapshot.data.dataSpendingBySector),
+                        //-- Spending By Sector
+                        _titleWidget(context, 'budgetsSpendingBySector', false),
+                        SpendingByDistrictComponent(
+                            data: snapshot.data.dataSpendingBySectorAndYear,
+                            dataFiltered: snapshot
+                                .data.dataSpendingBySectorAndYearFiltered),
+                        _titleWidget(
+                            context, 'budgetsSpendingByDistrict', false),
+                        SpendingByDistrictComponent(
+                            data: snapshot.data.dataSpendingByDistrict,
+                            dataFiltered:
+                                snapshot.data.dataSpendingByDistrictFiltered),
+                      ];
+                      var budgetWidgetList = list;
+                      return Column(
+                        children: budgetWidgetList,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

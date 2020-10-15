@@ -9,6 +9,8 @@ import 'package:pacific_dashboards/pages/wash/components/total_component.dart';
 import 'package:pacific_dashboards/pages/wash/wash_data.dart';
 import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
+import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
@@ -52,48 +54,49 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              StreamBuilder<WashData>(
-                stream: viewModel.dataStream,
-                builder: (ctx, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        child: PlatformProgressIndicator(),
-                      ),
-                    );
-                  } else {
-                    var list = <Widget>[
-                      _titleWidget(context, 'washDashboardsTitle', true),
-                      _titleWidget(context, 'districtTotals', false),
-                      TotalComponent(
-                          data: snapshot.data.washModelList,
-                          year: snapshot.data.year),
-                      Container(height: 50),
-                      _titleWidget(context, 'toilets', false),
-                      ToiletsComponent(
-                          data: snapshot.data.toiletsModelList,
-                          year: snapshot.data.year),
-                      _titleWidget(context, 'waterSources', false),
-                      WaterComponent(
-                          year: snapshot.data.year,
-                          data: snapshot.data.waterModelList),
-                    ];
-                    var washWidgetList = list;
-                    return Column(
-                      children: washWidgetList,
-                    );
-                  }
-                },
-              ),
-            ],
+      body: LoadingStack(
+        loadingStateStream: viewModel.activityIndicatorStream,
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: PageNoteWidget(noteStream: viewModel.noteStream),
+                ),
+                StreamBuilder<WashData>(
+                  stream: viewModel.dataStream,
+                  builder: (ctx, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    } else {
+                      var list = <Widget>[
+                        _titleWidget(context, 'washDashboardsTitle', true),
+                        _titleWidget(context, 'districtTotals', false),
+                        TotalComponent(
+                            data: snapshot.data.washModelList,
+                            year: snapshot.data.year),
+                        Container(height: 50),
+                        _titleWidget(context, 'toilets', false),
+                        ToiletsComponent(
+                            data: snapshot.data.toiletsModelList,
+                            year: snapshot.data.year),
+                        _titleWidget(context, 'waterSources', false),
+                        WaterComponent(
+                            year: snapshot.data.year,
+                            data: snapshot.data.waterModelList),
+                      ];
+                      var washWidgetList = list;
+                      return Column(
+                        children: washWidgetList,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

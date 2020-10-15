@@ -35,19 +35,16 @@ class EnrollViewModel extends BaseViewModel {
   }
 
   void _loadEnrollData() {
-    handleRepositoryFetch(
-      fetch: () => _repository.fetchIndividualSchoolEnroll(
-        _school.id,
-        _school.districtCode,
+    listenHandled(
+      handleRepositoryFetch(
+        fetch: () => _repository.fetchIndividualSchoolEnroll(
+          _school.id,
+          _school.districtCode,
+        ),
       ),
-    )
-        .doOnListen(() => notifyHaveProgress(true))
-        .listen(
-          _onEnrollLoaded,
-          onError: (t) => handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+      _onEnrollLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onEnrollLoaded(SchoolEnrollChunk chunk) {

@@ -57,19 +57,15 @@ class SchoolAccreditationViewModel extends BaseViewModel {
           ?.moduleConfigFor(Section.schoolAccreditations)
           ?.note;
       _pageNoteSubject.add(note);
-    }, notifyProgress: true);
+    });
   }
 
   void _loadData() {
-    handleRepositoryFetch(fetch: () => _repository.fetchAllAccreditations())
-        .doOnListen(() => notifyHaveProgress(true))
-        .doOnDone(() => notifyHaveProgress(false))
-        .listen(
-          _onDataLoaded,
-          onError: handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(fetch: () => _repository.fetchAllAccreditations()),
+      _onDataLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onDataLoaded(AccreditationChunk accreditationChunk) {

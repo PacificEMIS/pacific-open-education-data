@@ -57,19 +57,15 @@ class SchoolsViewModel extends BaseViewModel {
           ?.moduleConfigFor(Section.schools)
           ?.note;
       _pageNoteSubject.add(note);
-    }, notifyProgress: true);
+    });
   }
 
   void _loadData() {
-    handleRepositoryFetch(fetch: () => _repository.fetchAllSchools())
-        .doOnListen(() => notifyHaveProgress(true))
-        .doOnDone(() => notifyHaveProgress(false))
-        .listen(
-          _onDataLoaded,
-          onError: handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(fetch: () => _repository.fetchAllSchools()),
+      _onDataLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onDataLoaded(List<School> schools) {
@@ -159,7 +155,6 @@ Future<SchoolsPageData> _transformSchoolsModel(
 int _selectedYear(List<Filter> filters) {
   return filters.firstWhere((it) => it.id == 0).intValue;
 }
-
 
 Map<String, int> _calculatePeopleCount(
         Map<String, List<School>> groupedSchools) =>

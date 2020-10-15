@@ -8,11 +8,11 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
+import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
-import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class SchoolsPage extends MvvmStatefulWidget {
@@ -52,27 +52,23 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            PageNoteWidget(noteStream: viewModel.noteStream),
-            StreamBuilder<SchoolsPageData>(
-              stream: viewModel.dataStream,
-              builder: (ctx, snapshot) {
-                if (!snapshot.hasData) {
-                                      return Container(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        child: PlatformProgressIndicator(),
-                      ),);
-                } else {
-                  // return buildMultiTable(snapshot, context);
-                  return Column(
+      body: LoadingStack(
+        loadingStateStream: viewModel.activityIndicatorStream,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              PageNoteWidget(noteStream: viewModel.noteStream),
+              StreamBuilder<SchoolsPageData>(
+                stream: viewModel.dataStream,
+                builder: (ctx, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  } else {
+                    return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -94,7 +90,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                               case _DashboardsTab.byAuthority:
                                 return '${'schoolsByAuthority'.localized(context)} ${snapshot.data.year}';
                               case _DashboardsTab.byGovtNonGovt:
-                              return '${'schoolsByGovtNonGovt'.localized(context)} ${snapshot.data.year}';
+                                return '${'schoolsByGovtNonGovt'.localized(context)} ${snapshot.data.year}';
                             }
                             throw FallThroughError();
                           },
@@ -158,8 +154,9 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                         MultiTable(
                           key: ValueKey(
                               snapshot.data.enrolBySchoolLevelAndDistrict),
-                          title: 'schoolsDashboardsEnrollByLevelStateGenderTitle'
-                              .localized(context),
+                          title:
+                              'schoolsDashboardsEnrollByLevelStateGenderTitle'
+                                  .localized(context),
                           columnNames: [
                             'schoolsDashboardsSchoolLevelDomain',
                             'labelMale',
@@ -171,11 +168,12 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           keySortFunc: _compareEnrollmentBySchoolLevelAndState,
                         ),
                       ],
-                  );
-                }
-              },
-            ),
-          ],
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

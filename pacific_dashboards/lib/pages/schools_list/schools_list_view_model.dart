@@ -30,11 +30,11 @@ class SchoolsListViewModel extends BaseViewModel {
   }
 
   void _loadData() {
-    handleRepositoryFetch(fetch: _repository.fetchSchoolsList)
-        .doOnListen(() => notifyHaveProgress(true))
-        .doOnEach((_) => notifyHaveProgress(false))
-        .listen(_onDataLoaded, onError: handleThrows, cancelOnError: false)
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(fetch: _repository.fetchSchoolsList),
+      _onDataLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onDataLoaded(List<ShortSchool> schools) {

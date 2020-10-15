@@ -1,6 +1,5 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/utils/hex_color.dart';
 
@@ -103,32 +102,32 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
     return Future.microtask(() {
       final convertToRowData = (int index, Pair<String, int> pair) => _RowData(
             index: index,
-            domain: pair.v1,
-            measure: pair.v2,
+            domain: pair.first,
+            measure: pair.second,
           );
       switch (_sortType) {
         case SortType.measureInc:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => lv.v2.compareTo(rv.v2))
+              .chainSort((lv, rv) => lv.second.compareTo(rv.second))
               .mapIndexed(convertToRowData)
               .toList();
         case SortType.measureDec:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => rv.v2.compareTo(lv.v2))
+              .chainSort((lv, rv) => rv.second.compareTo(lv.second))
               .mapIndexed(convertToRowData)
               .toList();
         case SortType.domainInc:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => lv.v1.compareTo(rv.v1))
+              .chainSort((lv, rv) => lv.first.compareTo(rv.first))
               .mapIndexed(convertToRowData)
               .toList();
         case SortType.domainDec:
           return widget._data
               .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => rv.v1.compareTo(lv.v1))
+              .chainSort((lv, rv) => rv.first.compareTo(lv.first))
               .mapIndexed(convertToRowData)
               .toList();
         case SortType.none:

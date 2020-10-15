@@ -7,6 +7,14 @@ final ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: AppColors.kBlue,
   accentColor: AppColors.kPeacockBlue,
+  dialogTheme: DialogTheme(
+    titleTextStyle: const TextStyle(
+      color: AppColors.kTextMain,
+      fontSize: 18.0,
+      fontWeight: FontWeight.normal,
+      fontStyle: FontStyle.normal,
+    ),
+  ),
   fontFamily: 'NotoSans',
   iconTheme: const IconThemeData(color: Colors.white),
   splashColor: AppColors.kRipple,

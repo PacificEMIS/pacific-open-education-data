@@ -35,16 +35,13 @@ class RatesViewModel extends BaseViewModel {
   }
 
   void _loadFlowData() {
-    handleRepositoryFetch(
-      fetch: () => _repository.fetchIndividualSchoolFlow(_school.id),
-    )
-        .doOnListen(() => notifyHaveProgress(true))
-        .listen(
-          _onFlowLoaded,
-          onError: (t) => handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(
+        fetch: () => _repository.fetchIndividualSchoolFlow(_school.id),
+      ),
+      _onFlowLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onFlowLoaded(List<SchoolFlow> flows) {

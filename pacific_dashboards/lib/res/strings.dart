@@ -34,6 +34,7 @@ class Strings {
       'labelEce': 'ECE',
       'labelPrimary': 'Primary',
       'labelSec': 'Secondary',
+      'errorTitle': 'Error',
       'error_unknown': 'Unknown error occurred',
       'error_server_unavailable':
           'You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',

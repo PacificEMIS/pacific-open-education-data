@@ -23,7 +23,7 @@ dependencies:
   firebase_core: ^0.4.5
   flutter_launcher_icons: ^0.7.5
   firebase_remote_config: ^0.3.1
-  connectivity: ^0.4.9
+  connectivity: ^0.4.9+5
   json_annotation: ^3.0.1
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
@@ -32,7 +32,7 @@ dependencies:
   arch:
     git:
       url: https://github.com/scrinoman/arch.git
-      ref: v0.0.3
+      ref: v0.0.7
 
 dev_dependencies:
   flutter_test:

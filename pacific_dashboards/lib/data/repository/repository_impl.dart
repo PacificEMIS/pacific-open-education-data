@@ -13,7 +13,6 @@ import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/pair.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
@@ -62,8 +61,8 @@ class RepositoryImpl implements Repository {
     Future<void> updateLocal(T remote),
   }) async* {
     final local = await getLocal();
-    var result = local.v2;
-    final isLocalExpired = local.v1;
+    var result = local.second;
+    final isLocalExpired = local.first;
 
     if (!isLocalExpired && result != null) {
       yield SuccessRepositoryResponse(RepositoryType.local, result);
@@ -227,10 +226,10 @@ class RepositoryImpl implements Repository {
           if (!subject.hasValue) {
             final pushSavedToSubject = () async {
               final localLookups = await _localDataSource.fetchLookupsModel();
-              if (localLookups.v2 == null) {
+              if (localLookups.second == null) {
                 return;
               }
-              subject.add(localLookups.v2);
+              subject.add(localLookups.second);
             };
 
             Connectivity().checkConnectivity().then((status) {
@@ -266,8 +265,8 @@ class RepositoryImpl implements Repository {
       localDistrictEnroll: localDistrictEnroll,
       localNationEnroll: localNationEnroll,
     );
-    final haveLocalResponse = localHandle.v1;
-    yield localHandle.v2;
+    final haveLocalResponse = localHandle.first;
+    yield localHandle.second;
 
     try {
       final schoolFetchResult = await _fetchRemoteSchoolEnrollData(
@@ -293,9 +292,9 @@ class RepositoryImpl implements Repository {
         getRemote: _remoteDataSource.fetchIndividualNationEnroll,
         updateLocal: _localDataSource.saveIndividualNationEnroll,
       );
-      final haveRemoteChanges = schoolFetchResult.v1 ||
-          districtFetchResult.v1 ||
-          nationFetchResult.v1;
+      final haveRemoteChanges = schoolFetchResult.first ||
+          districtFetchResult.first ||
+          nationFetchResult.first;
 
       if (haveRemoteChanges) {
         yield SuccessRepositoryResponse(
@@ -303,9 +302,9 @@ class RepositoryImpl implements Repository {
           await compute<SchoolEnrollChunk, SchoolEnrollChunk>(
             SchoolEnrollChunk.fromNonCollapsed,
             SchoolEnrollChunk(
-              schoolData: schoolFetchResult.v2,
-              districtData: districtFetchResult.v2,
-              nationalData: nationFetchResult.v2,
+              schoolData: schoolFetchResult.second,
+              districtData: districtFetchResult.second,
+              nationalData: nationFetchResult.second,
             ),
           ),
         );
@@ -425,10 +424,10 @@ class RepositoryImpl implements Repository {
             final pushSavedToSubject = () async {
               final localLookups =
                   await _localDataSource.fetchFinancialLookupsModel();
-              if (localLookups.v2 == null) {
+              if (localLookups.second == null) {
                 return;
               }
-              subject.add(localLookups.v2);
+              subject.add(localLookups.second);
             };
 
             Connectivity().checkConnectivity().then((status) {
