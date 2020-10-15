@@ -135,7 +135,7 @@ class _Chart extends StatelessWidget {
                 vertical: false,
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickProviderSpec: charts.BasicNumericTickProviderSpec(
-                    desiredMinTickCount: 7,
+                    desiredMinTickCount: 5,
                     desiredMaxTickCount: 13,
                   ),
                   renderSpec: charts.GridlineRendererSpec(

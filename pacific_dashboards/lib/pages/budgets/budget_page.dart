@@ -84,7 +84,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                       gNpAndGovernmentSpendingActualExpense(context,
                           snapshot.data.dataByGnpAndGovernmentSpendingBudgeted),
                       //-- Spending By Sector
-                      _titleWidget(context, 'budgetsSpendingBySector', false),
+                      _titleWidget(context, 'budgetsSpendingByDistrict', false),
                       spendingBySector(
                           context, snapshot.data.dataSpendingBySector),
                       //-- Spending By Sector
