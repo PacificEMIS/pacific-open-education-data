@@ -69,7 +69,7 @@ class _SpecialEducationPageState
                       ),);
                   } else {
                     var list = <Widget>[
-                      _titleWidget(context, 'specialEducationTitle', true),
+                      // _titleWidget(context, 'specialEducationTitle', true),
                       //GNP and Government Spending Actual
                       _titleWidget(context, 'disability', false, year: snapshot.data.year),
                       SpecialEducationComponent(
