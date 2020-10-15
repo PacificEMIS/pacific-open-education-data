@@ -128,7 +128,7 @@ class _Chart extends StatelessWidget {
                 return Container();
               }
 
-              return charts.BarChart(
+                return charts.BarChart(
                 snapshot.data,
                 animate: false,
                 barGroupingType: _groupingType,

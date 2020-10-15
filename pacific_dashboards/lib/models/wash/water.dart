@@ -8,12 +8,12 @@ part 'water.g.dart';
 
 @JsonSerializable()
 class Water implements BaseWash {
-  @JsonKey(name: 'schNo') //Year
+  @JsonKey(name: 'schNo', defaultValue: '')
   final String schNo;
   @override
-  @JsonKey(name: "SurveyYear") //DistrictCode
+  @JsonKey(name: "SurveyYear")
   final int surveyYear;
-  @JsonKey(name: 'District', defaultValue: 0) //GNP
+  @JsonKey(name: 'District', defaultValue: 0)
   final String district;
   @override
   @JsonKey(name: 'DistrictCode', defaultValue: '')

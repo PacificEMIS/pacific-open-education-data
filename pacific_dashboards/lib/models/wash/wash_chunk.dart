@@ -22,6 +22,7 @@ class WashChunk {
 
   @JsonKey(name: 'water')
   final List<Water> water;
+
   const WashChunk({
     @required this.total,
     @required this.toilets,

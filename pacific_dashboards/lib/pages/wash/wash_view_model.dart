@@ -135,15 +135,15 @@ Future<WashData> _calculateData(
   final filters = model.filters;
   final filteredChunk = await chunk.applyFilters(filters);
 
-  var currentYear =  _selectedYear(filters);
+  var currentYear = _selectedYear(filters);
   return WashData(
       year: currentYear.toString(),
-      washModelList:
-          _generateWashTotal(filteredChunk.total.groupBy((it) => it.district), currentYear),
+      washModelList: _generateWashTotal(
+          filteredChunk.total.groupBy((it) => it.district), currentYear),
       toiletsModelList:
           _generateWashToilets(filteredChunk.toilets.groupBy((it) => it.schNo)),
       waterModelList:
-        _generateWashWater(filteredChunk.water.groupBy((it) => it.schNo)));
+          _generateWashWater(filteredChunk.water.groupBy((it) => it.schNo)));
 }
 
 int _selectedYear(List<Filter> filters) {
@@ -159,9 +159,8 @@ List<ListData> _generateWashTotal(
     int cumulative = 0;
 
     for (var data in values) {
-      if (data.surveyYear == year)
-      evaluated += data.numThisYear;
-      
+      if (data.surveyYear == year) evaluated += data.numThisYear;
+
       cumulative += data.number;
     }
 
@@ -177,13 +176,14 @@ List<ListData> _generateWashToilets(
 
   washGroupedByDistricts.forEach((district, values) {
     int toiletsTotal = 0;
+
     int toiletsTotalF = 0;
     int toiletsTotalM = 0;
 
-    int usableToilets = 0;
     int usableToiletsF = 0;
     int usableToiletsM = 0;
     int usablePercentage = 0;
+
     int usableFPercentage = 0;
     int usableMPercentage = 0;
     int enrolF = 0;
@@ -198,10 +198,11 @@ List<ListData> _generateWashToilets(
       //ToiletsTotal
       toiletsTotalF += data.totalF;
       toiletsTotalM += data.totalM;
+
       //UsableToilets
       usableToiletsF += data.usableF;
       usableToiletsM += data.usableM;
-      usableToilets += data.usable;
+
       //Enroll
       enrolF += data.enrolF;
       enrolM += data.enrolM;
@@ -211,17 +212,12 @@ List<ListData> _generateWashToilets(
     toiletsTotal += toiletsTotalF + toiletsTotalM;
     if (pupilsUsableToilet != 0)
       usablePercentage = (pupilsUsableToilet * 100).toInt();
-    // usableFPercentage =
-    //     pupilsUsableToilet != 0 ? (pupilsUsableToilet * 100).ceil : 0;
-    // usableMPercentage =
-    //     pupilsUsableToilet != 0 ? (pupilsUsableToilet * 100).ceil : 0;
 
     toiletsData.add(new ListData(title: district, values: [
       toiletsTotalF,
       toiletsTotalM,
       usableToiletsF,
       usableToiletsM,
-      usableToilets,
       usablePercentage,
       pupilsToilet,
       pupilsToiletGender,
@@ -235,7 +231,12 @@ List<ListData> _generateWashToilets(
 }
 
 _generateWashWater(Map<String, List<Water>> washGroupedBySchNo) {
-  List<ListData> waterData = [];
+  List<WaterData> waterDataUsedForDrinking = new List();
+  List<WaterData> waterDataCurrentlyAvailable = new List();
+
+  Map<String, int> usedForDrinking = new Map();
+  Map<String, int> currentlyAvailable = new Map();
+  Map<String, List<WaterData>> waterModelList = new Map();
 
   washGroupedBySchNo.forEach((schNo, values) {
     int pipedWaterSupplyCurrentlyAvailable = 0;
@@ -244,6 +245,7 @@ _generateWashWater(Map<String, List<Water>> washGroupedBySchNo) {
     int protectedWellUsedForDrinking = 0;
     int unprotectedWellSpringCurrentlyAvailable = 0;
     int unprotectedWellSpringUsedForDrinking = 0;
+    int rainwaterCurrentlyAvailable = 0;
     int rainwaterUsedForDrinking = 0;
     int bottledWaterCurrentlyAvailable = 0;
     int bottledWaterUsedForDrinking = 0;
@@ -254,40 +256,66 @@ _generateWashWater(Map<String, List<Water>> washGroupedBySchNo) {
     int surfacedWaterUsedForDrinking = 0;
 
     for (var data in values) {
-      pipedWaterSupplyCurrentlyAvailable +=
-          data.pipedWaterSupplyCurrentlyAvailable == 'YES' ? 1 : 0;
-      pipedWaterSupplyUsedForDrinking += data.pipedWaterSupplyUsedForDrinking == 'YES' ? 1 : 0;
-      protectedWellCurrentlyAvailable += data.protectedWellCurrentlyAvailable == 'YES' ? 1 : 0;
-      protectedWellUsedForDrinking += data.protectedWellUsedForDrinking == 'YES' ? 1 : 0;
-      unprotectedWellSpringCurrentlyAvailable +=
-          data.unprotectedWellSpringCurrentlyAvailable == 'YES' ? 1 : 0;
-      unprotectedWellSpringUsedForDrinking +=
-          data.unprotectedWellSpringUsedForDrinking == 'YES' ? 1 : 0;
-      rainwaterUsedForDrinking += data.rainwaterUsedForDrinking == 'YES' ? 1 : 0;
-      bottledWaterCurrentlyAvailable += data.bottledWaterCurrentlyAvailable == 'YES' ? 1 : 0;
-      bottledWaterUsedForDrinking += data.bottledWaterUsedForDrinking == 'YES' ? 1 : 0;
-      tankerTruckCartCurrentlyAvailable +=
-          data.tankerTruckCartCurrentlyAvailable == 'YES' ? 1 : 0;
-      tankerTruckCartUsedForDrinking += data.tankerTruckCartUsedForDrinking == 'YES' ? 1 : 0;
-      surfacedWaterCurrentlyAvailable += data.surfacedWaterCurrentlyAvailable == 'YES' ? 1 : 0;
-      surfacedWaterUsedForDrinking += data.surfacedWaterUsedForDrinking == 'YES' ? 1 : 0;
+      if (data.pipedWaterSupplyCurrentlyAvailable.compareTo('Yes') == 0)
+        pipedWaterSupplyCurrentlyAvailable += 1;
+      if (data.pipedWaterSupplyUsedForDrinking.compareTo('Yes') == 0)
+      pipedWaterSupplyUsedForDrinking += 1;
+      if (data.protectedWellCurrentlyAvailable.compareTo('Yes') == 0)
+      protectedWellCurrentlyAvailable += 1;
+      if (data.protectedWellUsedForDrinking.compareTo('Yes') == 0)
+      protectedWellUsedForDrinking += 1;
+      if (data.unprotectedWellSpringCurrentlyAvailable.compareTo('Yes') == 0)
+      unprotectedWellSpringCurrentlyAvailable += 1;
+      if (data.unprotectedWellSpringUsedForDrinking.compareTo('Yes') == 0)
+      unprotectedWellSpringUsedForDrinking += 1;
+      if (data.rainwaterCurrentlyAvailable.compareTo('Yes') == 0)
+      rainwaterCurrentlyAvailable += 1;
+      if (data.rainwaterUsedForDrinking.compareTo('Yes') == 0)
+      rainwaterUsedForDrinking += 1;
+      if (data.bottledWaterCurrentlyAvailable.compareTo('Yes') == 0)
+      bottledWaterCurrentlyAvailable += 1;
+      if (data.bottledWaterUsedForDrinking.compareTo('Yes') == 0)
+      bottledWaterUsedForDrinking += 1;
+      if (data.tankerTruckCartUsedForDrinking.compareTo('Yes') == 0)
+      tankerTruckCartCurrentlyAvailable += 1;
+      if (data.tankerTruckCartUsedForDrinking.compareTo('Yes') == 0)
+      tankerTruckCartUsedForDrinking += 1;
+      if (data.surfacedWaterCurrentlyAvailable.compareTo('Yes') == 0)
+      surfacedWaterCurrentlyAvailable += 1;
+      if (data.surfacedWaterUsedForDrinking.compareTo('Yes') == 0)
+      surfacedWaterUsedForDrinking += 1;
     }
 
-    waterData.add(new ListData(title: schNo, values: [
-      pipedWaterSupplyCurrentlyAvailable,
-      pipedWaterSupplyUsedForDrinking,
-      protectedWellCurrentlyAvailable,
-      protectedWellUsedForDrinking,
-      unprotectedWellSpringCurrentlyAvailable,
-      unprotectedWellSpringUsedForDrinking,
-      rainwaterUsedForDrinking,
-      bottledWaterCurrentlyAvailable,
-      bottledWaterUsedForDrinking,
-      tankerTruckCartCurrentlyAvailable,
-      tankerTruckCartUsedForDrinking,
-      surfacedWaterCurrentlyAvailable,
-      surfacedWaterUsedForDrinking
-    ]));
+    usedForDrinking['Piped Water Supply'] = pipedWaterSupplyUsedForDrinking;
+    usedForDrinking['Protected Well'] = protectedWellUsedForDrinking;
+    usedForDrinking['Unprotected Well Spring'] =
+        unprotectedWellSpringUsedForDrinking;
+    usedForDrinking['Rainwater'] = rainwaterUsedForDrinking;
+    usedForDrinking['Bottled Water'] = bottledWaterUsedForDrinking;
+    usedForDrinking['Tanker/Truck or Cart'] = tankerTruckCartUsedForDrinking;
+    usedForDrinking['Surfaced Water (Lake, River, Stream)'] =
+        surfacedWaterUsedForDrinking;
+
+    currentlyAvailable['Piped Water Supply'] =
+        pipedWaterSupplyCurrentlyAvailable;
+    currentlyAvailable['Protected Well'] = protectedWellCurrentlyAvailable;
+    currentlyAvailable['Unprotected Well Spring'] =
+        unprotectedWellSpringCurrentlyAvailable;
+    currentlyAvailable['Rainwater'] = rainwaterCurrentlyAvailable;
+    currentlyAvailable['Bottled Water'] = bottledWaterCurrentlyAvailable;
+    currentlyAvailable['Tanker/Truck or Cart'] =
+        tankerTruckCartCurrentlyAvailable;
+    currentlyAvailable['Surfaced Water (Lake, River, Stream)'] =
+        surfacedWaterCurrentlyAvailable;
+
+    waterDataUsedForDrinking
+        .add(WaterData(title: schNo, values: usedForDrinking));
+    waterDataCurrentlyAvailable
+        .add(WaterData(title: schNo, values: currentlyAvailable));
   });
-  return waterData;
+
+  waterModelList['Used For Drinking'] = waterDataUsedForDrinking;
+  waterModelList['Currently Available'] = waterDataCurrentlyAvailable;
+
+  return waterModelList;
 }

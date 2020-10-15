@@ -70,8 +70,12 @@ class SchoolsPageState
               stream: viewModel.dataStream,
               builder: (ctx, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
-                    child: PlatformProgressIndicator(),
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 1.3,
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      child: PlatformProgressIndicator(),
+                    ),
                   );
                 } else {
                   return _ContentBody(data: snapshot.data);
@@ -173,9 +177,9 @@ class _ContentBody extends StatelessWidget {
       tabNameBuilder: (tab) {
         switch (tab) {
           case _Tab.cumulative:
-            return '${'schoolAccreditationCumulative'.localized(context)} to ${_data.year}';
+            return '${'schoolAccreditationCumulative'.localized(context)} ${_data.year}';
           case _Tab.evaluated:
-            return '${'schoolAccreditationEvaluated'.localized(context)} to ${_data.year}';
+            return '${'schoolAccreditationEvaluated'.localized(context)} ${_data.year}';
         }
         throw FallThroughError();
       },
@@ -205,9 +209,9 @@ class _ContentBody extends StatelessWidget {
       tabNameBuilder: (tab) {
         switch (tab) {
           case _Tab.cumulative:
-            return '${'schoolAccreditationCumulative'.localized(context)} to ${_data.year}';
+            return '${'schoolAccreditationCumulative'.localized(context)} ${_data.year}';
           case _Tab.evaluated:
-            return '${'schoolAccreditationEvaluated'.localized(context)} in ${_data.year}';
+            return '${'schoolAccreditationEvaluated'.localized(context)} ${_data.year}';
         }
         throw FallThroughError();
       },
@@ -305,7 +309,7 @@ class _PerformanceTable extends StatelessWidget {
               );
             case _Tab.cumulative:
               return AccreditationTableWidget(
-                title: 'Evaluated up to $_year',
+                title: 'Evaluated in $_year',
                 firstColumnName: _firstColumnName,
                 data: _data.evaluatedData,
               );

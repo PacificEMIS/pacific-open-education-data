@@ -61,9 +61,12 @@ class _SpecialEducationPageState
                 stream: viewModel.dataStream,
                 builder: (ctx, snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(
-                      child: PlatformProgressIndicator(),
-                    );
+                                        return Container(
+                      height: MediaQuery.of(context).size.height / 1.3,
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        child: PlatformProgressIndicator(),
+                      ),);
                   } else {
                     var list = <Widget>[
                       _titleWidget(context, 'specialEducationTitle', true),

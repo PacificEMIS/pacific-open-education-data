@@ -104,7 +104,7 @@ class _Chart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Container(
-          height: ((_data.length * 50) ?? 1).roundToDouble(),
+          height: 300,
           child: FutureBuilder(
             future: _series,
             builder: (context, snapshot) {
@@ -113,7 +113,6 @@ class _Chart extends StatelessWidget {
               }
 
               return Container(
-                height: ((_data.length * 50) ?? 1).toDouble(),
                 child: charts.BarChart(
                   snapshot.data,
                   animate: false,

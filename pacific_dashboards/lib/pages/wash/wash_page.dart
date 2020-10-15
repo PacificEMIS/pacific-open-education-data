@@ -62,19 +62,29 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                 stream: viewModel.dataStream,
                 builder: (ctx, snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(
-                      child: PlatformProgressIndicator(),
+                    return Container(
+                      height: MediaQuery.of(context).size.height / 1.3,
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        child: PlatformProgressIndicator(),
+                      ),
                     );
                   } else {
                     var list = <Widget>[
                       _titleWidget(context, 'washDashboardsTitle', true),
                       _titleWidget(context, 'districtTotals', false),
-                      TotalComponent(data: snapshot.data.washModelList, year: snapshot.data.year),
+                      TotalComponent(
+                          data: snapshot.data.washModelList,
+                          year: snapshot.data.year),
                       Container(height: 50),
                       _titleWidget(context, 'toilets', false),
-                      ToiletsComponent(data: snapshot.data.toiletsModelList, year: snapshot.data.year),
+                      ToiletsComponent(
+                          data: snapshot.data.toiletsModelList,
+                          year: snapshot.data.year),
                       _titleWidget(context, 'waterSources', false),
-                      WaterComponent(data: snapshot.data.waterModelList, year: snapshot.data.year),
+                      WaterComponent(
+                          year: snapshot.data.year,
+                          data: snapshot.data.waterModelList),
                     ];
                     var washWidgetList = list;
                     return Column(
@@ -122,12 +132,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
   }
 
   void _applyFilters(BuildContext context, List<Filter> filters) {
-    if (filters == null) {
-      return;
-    }
+    if (filters == null) return;
     viewModel.onFiltersChanged(filters);
   }
 }
-
-enum _GovtTab { govtExpenditure, gNP }
-enum _SpendingTab { eCE, primary, secondary, total }

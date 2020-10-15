@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:pacific_dashboards/models/wash/water.dart';
 
 class WashData {
   final String year;
   final List<ListData> washModelList;
   final List<ListData> toiletsModelList;
-  final List<ListData> waterModelList;
+  final Map<String, List<WaterData>> waterModelList;
 
-  const WashData({
-      @required this.year,
+  const WashData(
+      {@required this.year,
       @required this.washModelList,
       @required this.toiletsModelList,
       @required this.waterModelList})
@@ -25,4 +26,13 @@ class ListData {
   ListData({@required this.title, @required this.values}) {
     total = values.reduce((a, b) => a + b);
   }
+}
+
+class WaterData {
+  final String title;
+  final Map<String, int> values;
+
+  const WaterData({@required this.title, @required this.values})
+      : assert(title != null),
+        assert(values != null);
 }

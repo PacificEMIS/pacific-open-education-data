@@ -59,7 +59,7 @@ class Strings {
       'filtersByGovernment': 'Selected Govt / Non-govt',
       'filtersByClassLevel': 'Selected School Levels',
       'filtersByGovt': 'Selected  Govt / Non-govt',
-      'filtersBySchoolLevels': 'Selected  Govt / Non-govt',
+      'filtersBySchoolLevels': 'Selected  School Levels',
       'filtersDisplayAllStates': 'Display All States',
       'filtersDisplayAllAuthority': 'Display All Authority',
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
@@ -157,10 +157,10 @@ class Strings {
       'budgetsDashboardsTitle': 'Budgets',
       'budgetsEducationFinancing': 'Education Financing : Dashboard',
       'budgetsGnpAndGovernmentSpendingActualExpense':
-          'GNP and Government Spending Actual Expense',
+          'GNI (aka. GNP) and Government Spending Actual Expense',
       'budgetsGnpAndGovernmentSpendingBudgetedExpense':
-          'GNP and Government Spending Budgeted Expense',
-      'budgetsGnpAndGovernmentSpending': 'GNP and Government Spending',
+          'GNI (aka. GNP) and Government Spending Budgeted Expense',
+      'budgetsGnpAndGovernmentSpending': 'GNI (aka. GNP) and Government Spending',
       'budgetsSpendingBySector': 'Spending By Sector',
       'budgetsSpendingByDistrict': 'Spending By District',
       'budgetsDashboardComponent': 'Dashboard Component',
@@ -175,10 +175,10 @@ class Strings {
       'primaryEducation': 'Primary Education',
       'secondaryEducation': 'Secondary Education',
       'actualExpenditure': 'Actual Expenditure',
-      'budgetExpenditure': 'Budget Expenditure',
+      'budgetExpenditure': 'Budgeted Expenditure',
       'budget': 'Budget',
       'actualRecurrentExpenditure': 'Actual Recurrent Expenditure',
-      'budgetRecurrentExpenditure': 'Budget Recurrent Expenditure',
+      'budgetRecurrentExpenditure': 'Budgeted Recurrent Expenditure',
       'actualExpPerHead': 'Actual Exp per Head',
       'budgetExpPerHead': 'Budget Exp per Head',
       'enrolment': 'Enrollment',
@@ -242,7 +242,6 @@ class Strings {
           'Enrollment by School Levels, \nAtolls and Islands and Gender',
       'schoolsDashboardsStateDomain': 'Atolls and Islands',
       'filtersDisplayAllStates': 'Display All Atolls and Islands',
-      'filtersByState': 'Selected atolls and islands',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by Atolls and Islands',
       'teachersDashboardsStateDomain': 'Atolls and Islands',
       'teachersDashboardsEnrollByLevelStateGenderTitle':
@@ -252,6 +251,23 @@ class Strings {
       'schoolsAccreditationDashboardsStatusByStateTitle':
           'Accreditation Status by Atolls and Islands',
       'schoolsAccreditationDashboardsStateDomain': 'Atolls and Islands',
+      'byState': 'By Atoll / Islands',
+      'schoolsByState': 'By Atoll / Islands',
+      'schoolsByAuthority': 'By Authority',
+      'schoolsByGovtNonGovt': 'By School Type',
+      'schoolsCertifiedQualified': 'Certified and Qualified ',
+      'filtersTitle': 'Filter',
+      'filtersByYear': 'Selected Year',
+      'filtersByState': 'Selected Atolls / Islands',
+      'filtersByAuthority': 'Selected Authority',
+      'filtersByGovernment': 'Selected School Type',
+      'filtersByClassLevel': 'Selected School Levels',
+      'filtersByGovt': 'Selected  School Type',
+      'filtersBySchoolLevels': 'Selected  School Type',
+      'filtersDisplayAllAuthority': 'Display All Authority',
+      'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
+      'filtersDisplayAllLevelFilters': 'Display all Level filters',
+      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by Atoll / Island ',
     },
   };
 
@@ -261,8 +277,8 @@ class Strings {
       'filtersDisplayAllStates': 'Display All Districts',
       'filtersByState': 'Selected District',
       'schoolsDashboardsEnrollByLevelStateGenderTitle':
-          'Enrollment by School Levels, \nDistrict and Gender',
-      'schoolsDashboardsEnrollByStateTitle': 'Enrollment by District',
+          'Enrollment by Age, \nEducation Level and Gender',
+      'schoolsDashboardsEnrollByStateTitle': 'Enrollment by Atoll / Island ',
       'schoolsDashboardsStateDomain': 'District',
       'teachersDashboardsEnrollByLevelStateGenderTitle':
           'Teachers by School Levels, \nDistrict and Gender',
@@ -280,6 +296,12 @@ class Strings {
           'Performance by Test',
       'schoolsAccreditationDashboardsStateDomain': 'District',
       'schoolsAccreditationDashboardsStandardDomain': 'Test',
+      'schoolsDashboardsEnrollByAuthorityTitle':
+      'Enrollment by Authority',
+      'schoolsDashboardsEnrollByGovernmentTitle':
+      'Enrollment by School Type',
+      'schoolsDashboardsEnrollByAgeLevelGenderTitle':
+      'Enrollment by Age, Education \nLevel and Gender',
     },
   };
   // endregion

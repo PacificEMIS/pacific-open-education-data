@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:arch/arch.dart';
-import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/chart_info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
@@ -13,60 +13,36 @@ import 'package:pacific_dashboards/utils/hex_color.dart';
 import '../wash_data.dart';
 
 class WaterComponent extends StatefulWidget {
-  final List<ListData> data;
   final String year;
+  final Map<String, List<WaterData>> data;
 
   const WaterComponent({
     Key key,
-    @required this.data,
     @required this.year,
+    @required this.data,
   })  : assert(data != null),
-        assert(year != null),
         super(key: key);
 
   @override
   _WaterComponentState createState() => _WaterComponentState();
 }
+
 class _WaterComponentState extends State<WaterComponent> {
   @override
   Widget build(BuildContext context) {
-    if (widget.data.length == 0) {
-      return Center(
-        child: Text(
-          'labelNoData'.localized(context),
-          style: Theme.of(context).textTheme.headline5,
-        ),
-      );
-    }
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         MiniTabLayout(
-          tabs: _DashboardTab.values,
+          tabs: ['Used for drinking', 'Currently Available'],
           tabNameBuilder: (tab) {
-            switch (tab) {
-              case _DashboardTab.cumulative:
-                return 'washUsedForDrinking'.localized(context);
-              case _DashboardTab.evaluated:
-                return 'washCurrentlyAvailable'.localized(context);
-            }
-            throw FallThroughError();
+            return '$tab';
           },
           builder: (ctx, tab) {
-            switch (tab) {
-              case _DashboardTab.cumulative:
-                return _Chart(
-                    data: widget.data,
-                    groupingType: charts.BarGroupingType.groupedStacked,
-                    tab: tab);
-              case _DashboardTab.evaluated:
-                return _Chart(
-                    data: widget.data,
-                    groupingType: charts.BarGroupingType.groupedStacked,
-                    tab: tab);
-            }
+            return _Chart(
+                data: widget.data,
+                groupingType: charts.BarGroupingType.stacked);
             throw FallThroughError();
           },
         ),
@@ -75,25 +51,17 @@ class _WaterComponentState extends State<WaterComponent> {
   }
 }
 
-enum _DashboardTab {
-  cumulative,
-  evaluated,
-}
-
 class _Chart extends StatelessWidget {
-  final List<ListData> _data;
+  final Map<String, List<WaterData>> _data;
   final charts.BarGroupingType _groupingType;
-  final _DashboardTab _tab;
 
   const _Chart(
       {Key key,
-      @required List<ListData> data,
-      @required charts.BarGroupingType groupingType,
-      @required _DashboardTab tab})
+      @required Map<String, List<WaterData>> data,
+      @required charts.BarGroupingType groupingType})
       : assert(data != null),
         _data = data,
         _groupingType = groupingType,
-        _tab = tab,
         super(key: key);
 
   @override
@@ -102,27 +70,27 @@ class _Chart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        FutureBuilder(
-          future: _series,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Container();
-            }
+        Container(
+          height: 300,
+          width: 400,
+          child: FutureBuilder(
+            future: _series,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              }
 
-            return Container(
-              width: 400,
-              height: 300,
-              child: Scrollbar(
+              return Scrollbar(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.all(30),
                   child: Container(
-                    height: 300,
-                    width: ((snapshot.data[0].data as List).length * 20).toDouble(),
+                    width: ((snapshot.data[0].data as List).length * 2)
+                        .toDouble(),
                     child: charts.BarChart(
                       snapshot.data,
                       animate: false,
                       barGroupingType: _groupingType,
-                      // vertical: false,
                       primaryMeasureAxis: charts.NumericAxisSpec(
                         tickProviderSpec: charts.BasicNumericTickProviderSpec(
                           desiredMinTickCount: 7,
@@ -130,7 +98,6 @@ class _Chart extends StatelessWidget {
                         ),
                         renderSpec: charts.GridlineRendererSpec(
                           labelStyle: chartAxisTextStyle,
-                          // labelRotation: 90,
                           lineStyle: chartAxisLineStyle,
                         ),
                       ),
@@ -139,8 +106,6 @@ class _Chart extends StatelessWidget {
                           labelStyle: chartAxisTextStyle,
                           labelOffsetFromTickPx: -5,
                           labelOffsetFromAxisPx: 10,
-                          // labelOffsetFromTickPx: 40,
-                          // labelJustification: charts.TickLabelJustification.inside,
                           labelAnchor: charts.TickLabelAnchor.before,
                           // minimumPaddingBetweenLabelsPx: 2,
                           labelRotation: 270,
@@ -156,35 +121,51 @@ class _Chart extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-        SizedBox(height: 30), //delimiter
-        // generateTitleTable(context)
+        Container(height: 50),
+        Wrap(
+            spacing: 8.0, // gap between adjacent chips
+            runSpacing: 4.0, // gap between lines
+            children: getColumnTitles(_data)),
       ],
     );
+  }
+
+  List<Widget> getColumnTitles(Map<String, List<WaterData>> data) {
+    List<Widget> list = new List<Widget>();
+    List<String> titles = new List<String>();
+    data.forEach((key, value) {
+      titles.addAll(value[0].values.keys);
+    });
+    titles = titles.toSet().toList();
+    if (titles.length > 0) {
+      titles.forEach((it) {
+        list.add(
+          ChartLegendItem(
+              color: HexColor.fromStringHash(it), value: it == null ? 'na' : it),
+        );
+      });
+    }
+    return list;
   }
 
   Future<List<charts.Series<BarChartData, String>>> get _series {
     return Future.microtask(() {
       final data = List<BarChartData>();
-      data.addAll(_data.map((it) {
-        switch (_tab) {
-          case _DashboardTab.cumulative:
-            return BarChartData(
-              it.title,
-              it.values[0],
-              HexColor.fromStringHash(it.title),
-            );
-          case _DashboardTab.evaluated:
-            return BarChartData(
-              it.title,
-              it.values[1],
-              HexColor.fromStringHash(it.title),
-            );
-        }
-      }).toList());
+      var dataLength = _data.length;
+      _data.forEach((key, value) {
+        value.forEach((element) {
+          element.values.forEach((key, value) {
+            data.add(BarChartData(element.title, value,
+                HexColor.fromStringHash(key)));
+          });
+        });
+      });
+
+      debugPrint(data[0].domain.toString());
       return [
         charts.Series(
           domainFn: (BarChartData chartData, _) => chartData.domain,
@@ -195,5 +176,10 @@ class _Chart extends StatelessWidget {
         )
       ];
     });
+  }
+
+  T enumFromString<T>(Iterable<T> values, String value) {
+    return values.firstWhere((type) => type.toString().split(".").last == value,
+        orElse: () => null);
   }
 }

@@ -114,5 +114,23 @@ class HiveWater extends HiveObject with Expirable {
     ..authority = water.authority
     ..authorityCode = water.authorityCode
     ..authorityGovt = water.authorityGovt
-    ..authorityGovtCode = water.authorityGovtCode;
+    ..authorityGovtCode = water.authorityGovtCode
+    ..pipedWaterSupplyCurrentlyAvailable =
+        water.pipedWaterSupplyCurrentlyAvailable
+    ..pipedWaterSupplyUsedForDrinking = water.pipedWaterSupplyUsedForDrinking
+    ..protectedWellCurrentlyAvailable = water.protectedWellCurrentlyAvailable
+    ..protectedWellUsedForDrinking = water.protectedWellUsedForDrinking
+    ..unprotectedWellSpringCurrentlyAvailable =
+        water.unprotectedWellSpringCurrentlyAvailable
+    ..unprotectedWellSpringUsedForDrinking =
+        water.unprotectedWellSpringUsedForDrinking
+    ..rainwaterCurrentlyAvailable = water.rainwaterCurrentlyAvailable
+    ..rainwaterUsedForDrinking = water.rainwaterUsedForDrinking
+    ..bottledWaterCurrentlyAvailable = water.bottledWaterCurrentlyAvailable
+    ..bottledWaterUsedForDrinking = water.bottledWaterUsedForDrinking
+    ..tankerTruckCartCurrentlyAvailable =
+        water.tankerTruckCartCurrentlyAvailable
+    ..tankerTruckCartUsedForDrinking = water.tankerTruckCartUsedForDrinking
+    ..surfacedWaterCurrentlyAvailable = water.surfacedWaterCurrentlyAvailable
+    ..surfacedWaterUsedForDrinking = water.surfacedWaterUsedForDrinking;
 }

@@ -174,70 +174,68 @@ class _Chart extends StatelessWidget {
         _groupingType = groupingType,
         _tab = tab,
         super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        FutureBuilder(
-          future: _series,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Container();
-            }
+        Container(
+          height: 300,
+          width: 400,
+          child: FutureBuilder(
+            future: _series,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              }
 
-            return Container(
-              width: 400,
-              height: 300,
-              child: Scrollbar(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    height: 300,
-                    width: ((snapshot.data[0].data as List).length * 20).toDouble(),
-                    child: charts.BarChart(
-                      snapshot.data,
-                      animate: false,
-                      barGroupingType: _groupingType,
-                      // vertical: false,
-                      primaryMeasureAxis: charts.NumericAxisSpec(
-                        tickProviderSpec: charts.BasicNumericTickProviderSpec(
-                          desiredMinTickCount: 7,
-                          desiredMaxTickCount: 13,
+              return Scrollbar(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.all(30),
+                    child: Container(
+                      width: ((snapshot.data[0].data as List).length * 30)
+                          .toDouble(),
+                      child: charts.BarChart(
+                        snapshot.data,
+                        animate: false,
+                        barGroupingType: _groupingType,
+                        primaryMeasureAxis: charts.NumericAxisSpec(
+                          tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                            desiredMinTickCount: 7,
+                            desiredMaxTickCount: 13,
+                          ),
+                          renderSpec: charts.GridlineRendererSpec(
+                            labelStyle: chartAxisTextStyle,
+                            // labelRotation: 90,
+                            lineStyle: chartAxisLineStyle,
+                          ),
                         ),
-                        renderSpec: charts.GridlineRendererSpec(
-                          labelStyle: chartAxisTextStyle,
-                          // labelRotation: 90,
-                          lineStyle: chartAxisLineStyle,
+                        domainAxis: charts.OrdinalAxisSpec(
+                          renderSpec: charts.SmallTickRendererSpec(
+                            labelStyle: chartAxisTextStyle,
+                            labelOffsetFromTickPx: -5,
+                            labelOffsetFromAxisPx: 10,
+                            labelAnchor: charts.TickLabelAnchor.before,
+                            // minimumPaddingBetweenLabelsPx: 2,
+                            labelRotation: 270,
+                            lineStyle: chartAxisLineStyle,
+                          ),
                         ),
-                      ),
-                      domainAxis: charts.OrdinalAxisSpec(
-                        renderSpec: charts.SmallTickRendererSpec(
-                          labelStyle: chartAxisTextStyle,
-                          labelOffsetFromAxisPx: 10,
-                          labelOffsetFromTickPx: -5,
-                          labelAnchor: charts.TickLabelAnchor.before,
-                          labelRotation: 270,
-                          lineStyle: chartAxisLineStyle,
+                        defaultRenderer: charts.BarRendererConfig(
+                          stackHorizontalSeparator: 0,
+                          minBarLengthPx: 30,
+                          groupingType: charts.BarGroupingType.stacked,
+                          strokeWidthPx: 10,
                         ),
-                      ),
-                      defaultRenderer: charts.BarRendererConfig(
-                        stackHorizontalSeparator: 0,
-                        minBarLengthPx: 30,
-                        groupingType: charts.BarGroupingType.stacked,
-                        strokeWidthPx: 10,
                       ),
                     ),
                   ),
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-        SizedBox(height: 30), //delimiter
-        // generateTitleTable(context)
       ],
     );
   }
@@ -251,61 +249,81 @@ class _Chart extends StatelessWidget {
             return BarChartData(
               it.title,
               it.values[0] > 0 ? it.values[0] : 0.1,
-              it.values[0] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[0] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.toiletsUsable:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.toiletsUsablePercentage:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.toiletsUsablePercentageGender:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.toiletsPupils:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.toiletsPupilsGender:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.toiletsPupilsUsableToilet:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.toiletsPupilsUsableToiletGender:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.pupils:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
           case _DashboardTab.pupilsMirrorFormat:
             return BarChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
-              it.values[1] > 0 ? HexColor.fromStringHash(it.title) : Colors.blue,
+              it.values[1] > 0
+                  ? HexColor.fromStringHash(it.title)
+                  : Colors.blue,
             );
         }
       }).toList());

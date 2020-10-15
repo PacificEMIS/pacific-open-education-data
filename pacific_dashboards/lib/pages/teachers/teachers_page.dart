@@ -65,9 +65,12 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
               stream: viewModel.dataStream,
               builder: (ctx, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
-                    child: PlatformProgressIndicator(),
-                  );
+                                      return Container(
+                      height: MediaQuery.of(context).size.height / 1.3,
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        child: PlatformProgressIndicator(),
+                      ),);
                 } else {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
@@ -98,7 +101,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                         },
                         builder: (ctx, tab) {
                           switch (tab) {
-                            case _DashboardsTab.byState:
+                            case _DashboardsTab.byAuthority:
                               return ChartWithTable(
                                 key: ValueKey(snapshot.data.teachersByAuthority),
                                 title: '',
@@ -123,7 +126,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 'schoolsDashboardsMeasureEnroll'
                                     .localized(context),
                               );
-                            case _DashboardsTab.byAuthority:
+                            case _DashboardsTab.byState:
                               return ChartWithTable(
                                 key: ValueKey(snapshot.data.teachersByDistrict),
                                 title: '',
