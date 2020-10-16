@@ -26,6 +26,17 @@ class AppColors {
     const Color.fromRGBO(13, 211, 92, 1),
   ];
 
+  static const List<Color> kCertification = [
+    const Color.fromRGBO(248, 84, 84, 1),
+    const Color.fromRGBO(255, 220, 38, 1),
+    const Color.fromRGBO(148, 220, 57, 1),
+    const Color.fromRGBO(13, 211, 92, 1),
+    const Color.fromRGBO(248, 84, 84, 1),
+    const Color.fromRGBO(255, 220, 38, 1),
+    const Color.fromRGBO(148, 220, 57, 1),
+    const Color.fromRGBO(13, 211, 92, 1),
+  ];
+
   static const List<Color> kDistricts = [
     const Color.fromRGBO(26, 115, 232, 1),
     const Color.fromRGBO(32, 209, 103, 1),

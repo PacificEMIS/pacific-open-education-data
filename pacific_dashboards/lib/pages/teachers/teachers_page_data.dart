@@ -8,14 +8,17 @@ class TeachersPageData {
     @required this.teachersByAuthority,
     @required this.teachersByPrivacy,
     @required this.teachersBySchoolLevelStateAndGender,
+    @required this.teachersByCertification,
   })  : assert(teachersByDistrict != null),
         assert(teachersByAuthority != null),
         assert(teachersByPrivacy != null),
-        assert(teachersBySchoolLevelStateAndGender != null);
+        assert(teachersBySchoolLevelStateAndGender != null),
+        assert(teachersByCertification != null);
 
   final List<ChartData> teachersByDistrict;
   final List<ChartData> teachersByAuthority;
   final List<ChartData> teachersByPrivacy;
   final Map<String, Map<String, GenderTableData>>
       teachersBySchoolLevelStateAndGender;
+  final Map<String, List<int>> teachersByCertification;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class BudgetData {
+  final int year;
   final List<DataByGnpAndGovernmentSpending>
       dataByGnpAndGovernmentSpendingActual;
   final List<DataByGnpAndGovernmentSpending>
@@ -12,7 +13,8 @@ class BudgetData {
   final List<DataSpendingByDistrict> dataSpendingByDistrictFiltered;
 
   BudgetData(
-      {@required this.dataByGnpAndGovernmentSpendingActual,
+      {@required this.year,
+      @required this.dataByGnpAndGovernmentSpendingActual,
       @required this.dataByGnpAndGovernmentSpendingBudgeted,
       @required this.dataSpendingBySector,
       @required this.dataSpendingBySectorAndYear,

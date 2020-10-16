@@ -163,15 +163,15 @@ class Strings {
           'GNI (aka. GNP) and Government Spending Budgeted Expense',
       'budgetsGnpAndGovernmentSpending': 'GNI (aka. GNP) and Government Spending',
       'budgetsSpendingBySector': 'Spending By Sector',
-      'budgetsSpendingByDistrict': 'Spending By District',
+      'budgetsSpendingByDistrict': 'Spending By States',
       'budgetsDashboardComponent': 'Dashboard Component',
       'year': 'Year',
       'govtExpense': 'Govt Expense',
       'govtExpenditure': 'Govt Expenditure',
       'edExpense': 'Ed Expense',
-      'gNP': 'GNP',
+      'gNP': 'GNI',
       'edGovtPercentage': 'Ed/Govt %',
-      'edGNPPercentage': 'Ed/GNP %',
+      'edGNPPercentage': 'Ed/GNI %',
       'eCE': 'ECE',
       'primaryEducation': 'Primary Education',
       'secondaryEducation': 'Secondary Education',
@@ -227,6 +227,8 @@ class Strings {
       'schoolAccreditationCumulative': 'Cumulative to',
       'schoolAccreditationEvaluated': 'Evaluated in',
       'levels': 'Levels',
+      'sectors': 'Sectors',
+      'certifiedAndQualified': 'Certified and Qualified '
     },
   };
 
@@ -269,6 +271,7 @@ class Strings {
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
       'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by Atoll / Island ',
+      'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
     },
   };
 

@@ -222,9 +222,9 @@ Map<String, List<DataByGroup>> _generateDataByState(
         number += element.number;
       });
       dataByEnvironment.add(DataByGroup(
-          title: key.toString(), firstValue: number, secondValue: 0));
+          title: key.toString() == "" ? 'na' : key.toString(), firstValue: number, secondValue: 0));
     });
-    dataByState[state] = dataByEnvironment ?? [];
+    dataByState[state  == "" ? 'na' : state] = dataByEnvironment ?? [];
   });
   return dataByState;
 }
