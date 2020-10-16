@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 
 class SchoolsPageData {
   SchoolsPageData({
@@ -17,9 +18,9 @@ class SchoolsPageData {
         assert(enrolBySchoolLevelAndDistrict != null);
 
   final String year;
-  final Map<String, int> enrolByDistrict;
-  final Map<String, int> enrolByAuthority;
-  final Map<String, int> enrolByPrivacy;
+  final List<ChartData> enrolByDistrict;
+  final List<ChartData> enrolByAuthority;
+  final List<ChartData> enrolByPrivacy;
   final Map<String, Map<String, GenderTableData>> enrolByAgeAndEducation;
   final Map<String, Map<String, GenderTableData>> enrolBySchoolLevelAndDistrict;
 }

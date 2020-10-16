@@ -4,8 +4,8 @@ import 'package:pacific_dashboards/pages/individual_school/components/exams/indi
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class FilteredResultsByBenchmarkComponent extends StatelessWidget {
@@ -238,25 +238,25 @@ class _StandardChart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _seriesList {
+  Future<List<charts.Series<ChartData, String>>> get _seriesList {
     return Future.microtask(() {
       final data = [
-        BarChartData(
+        ChartData(
           _data.benchmarkCode,
           -_data.approachingCount,
           AppColors.kLevels[1],
         ),
-        BarChartData(
+        ChartData(
           _data.benchmarkCode,
           -_data.minimallyCount,
           AppColors.kLevels[0],
         ),
-        BarChartData(
+        ChartData(
           _data.benchmarkCode,
           _data.minimallyCount,
           AppColors.kLevels[2],
         ),
-        BarChartData(
+        ChartData(
           _data.benchmarkCode,
           _data.competentCount,
           AppColors.kLevels[3],
@@ -266,9 +266,9 @@ class _StandardChart extends StatelessWidget {
       return [
         charts.Series(
           id: '${_data.benchmarkCode}_data',
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           data: data,
         ),
       ];

@@ -6,11 +6,11 @@ import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/shared_ui/multi_table.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -75,10 +75,13 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Text('teachersCharts'.localized(context),
-                            style: Theme.of(context).textTheme.headline3.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3
+                                .copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16)),
                         MiniTabLayout(
                           tabs: _DashboardsTab.values,
                           padding: 0.0,
@@ -89,7 +92,8 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                               case _DashboardsTab.byState:
                                 return 'schoolsByState'.localized(context);
                               case _DashboardsTab.byGovtNonGovt:
-                                return 'schoolsByGovtNonGovt'.localized(context);
+                                return 'schoolsByGovtNonGovt'
+                                    .localized(context);
                             }
                             throw FallThroughError();
                           },
@@ -97,37 +101,46 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             switch (tab) {
                               case _DashboardsTab.byAuthority:
                                 return ChartWithTable(
-                                  key:
-                                  ValueKey(snapshot.data.teachersByAuthority),
+                                  key: ObjectKey(
+                                    snapshot.data.teachersByAuthority,
+                                  ),
                                   title: '',
                                   data: snapshot.data.teachersByAuthority,
                                   chartType: ChartType.pie,
                                   tableKeyName: 'schoolsDashboardsStateDomain'
                                       .localized(context),
-                                  tableValueName: 'schoolsDashboardsMeasureEnroll'
-                                      .localized(context),
+                                  tableValueName:
+                                      'schoolsDashboardsMeasureEnroll'
+                                          .localized(context),
                                 );
                               case _DashboardsTab.byGovtNonGovt:
                                 return ChartWithTable(
-                                  key: ValueKey(snapshot.data.teachersByPrivacy),
+                                  key: ObjectKey(
+                                    snapshot.data.teachersByPrivacy,
+                                  ),
                                   title: '',
                                   data: snapshot.data.teachersByPrivacy,
                                   chartType: ChartType.pie,
-                                  tableKeyName: 'schoolsDashboardsAuthorityDomain'
-                                      .localized(context),
-                                  tableValueName: 'schoolsDashboardsMeasureEnroll'
-                                      .localized(context),
+                                  tableKeyName:
+                                      'schoolsDashboardsAuthorityDomain'
+                                          .localized(context),
+                                  tableValueName:
+                                      'schoolsDashboardsMeasureEnroll'
+                                          .localized(context),
                                 );
                               case _DashboardsTab.byState:
                                 return ChartWithTable(
-                                  key: ValueKey(snapshot.data.teachersByDistrict),
+                                  key: ObjectKey(
+                                    snapshot.data.teachersByDistrict,
+                                  ),
                                   title: '',
                                   data: snapshot.data.teachersByDistrict,
                                   chartType: ChartType.pie,
                                   tableKeyName: 'schoolsDashboardsPrivacyDomain'
                                       .localized(context),
-                                  tableValueName: 'schoolsDashboardsMeasureEnroll'
-                                      .localized(context),
+                                  tableValueName:
+                                      'schoolsDashboardsMeasureEnroll'
+                                          .localized(context),
                                 );
                             }
                             throw FallThroughError();
@@ -168,9 +181,11 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                         // ),
                         MultiTable(
                           key: ObjectKey(
-                              snapshot.data.teachersBySchoolLevelStateAndGender),
-                          title: 'teachersDashboardsEnrollByLevelStateGenderTitle'
-                              .localized(context),
+                            snapshot.data.teachersBySchoolLevelStateAndGender,
+                          ),
+                          title:
+                              'teachersDashboardsEnrollByLevelStateGenderTitle'
+                                  .localized(context),
                           columnNames: [
                             'teachersDashboardsSchoolLevelDomain',
                             'labelMale',
@@ -178,7 +193,8 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             'labelTotal'
                           ],
                           columnFlex: [3, 3, 3, 3],
-                          data: snapshot.data.teachersBySchoolLevelStateAndGender,
+                          data:
+                              snapshot.data.teachersBySchoolLevelStateAndGender,
                           keySortFunc: (lv, rv) => lv.compareTo(rv),
                         ),
                       ],

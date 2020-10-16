@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/utils/hex_color.dart';
 import '../special_education_data.dart';
 
 class SpecialEducationComponent extends StatefulWidget {
@@ -54,8 +53,15 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
                 return ChartWithTable(
                   key: ObjectKey(widget.data),
                   title: '',
-                  data: Map.fromIterable(widget.data,
-                      key: (v) => v.title, value: (v) => v.total),
+                  data: widget.data
+                      .map(
+                        (it) => ChartData(
+                          it.title,
+                          it.total,
+                          HexColor.fromStringHash(it.title),
+                        ),
+                      )
+                      .toList(),
                   chartType: ChartType.pie,
                   tableKeyName:
                       'teachersDashboardsAuthorityDomain'.localized(context),
@@ -80,6 +86,7 @@ class _Chart extends StatelessWidget {
   final List<DataByGroup> _data;
   final charts.BarGroupingType _groupingType;
   final _Tab _tab;
+
   const _Chart(
       {Key key,
       @required List<DataByGroup> data,
@@ -143,40 +150,44 @@ class _Chart extends StatelessWidget {
           ),
           if (_tab == _Tab.schedule)
             Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                ChartLegendItem(
-                  color: AppColors.kOrange,
-                  value: 'labelMale'.localized(context),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                ChartLegendItem(
-                  color: AppColors.kBlue,
-                  value: 'labelFemale'.localized(context),
-                )
-            ])
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ChartLegendItem(
+                    color: AppColors.kOrange,
+                    value: 'labelMale'.localized(context),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  ChartLegendItem(
+                    color: AppColors.kBlue,
+                    value: 'labelFemale'.localized(context),
+                  )
+                ])
         ]);
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
-      final barChartData = List<BarChartData>();
+      final barChartData = List<ChartData>();
       if (_tab.index == 0) {
         barChartData.addAll(_data.map((it) {
-          var title = it.title.length > 17 ? it.title.substring(0, 17) + '..' : it.title;
-          return BarChartData(
+          var title = it.title.length > 17
+              ? it.title.substring(0, 17) + '..'
+              : it.title;
+          return ChartData(
             title,
             it.firstValue,
             AppColors.kBlue,
           );
         }).toList());
         barChartData.addAll(_data.map((it) {
-          var title = it.title.length > 17 ? it.title.substring(0, 17)  + '..': it.title;
-          return BarChartData(
+          var title = it.title.length > 17
+              ? it.title.substring(0, 17) + '..'
+              : it.title;
+          return ChartData(
             title,
             it.secondValue,
             AppColors.kOrange,
@@ -184,7 +195,7 @@ class _Chart extends StatelessWidget {
         }).toList());
       } else {
         barChartData.addAll(_data.map((it) {
-          return BarChartData(
+          return ChartData(
             it.title,
             it.firstValue,
             HexColor.fromStringHash(it.title),
@@ -193,9 +204,9 @@ class _Chart extends StatelessWidget {
       }
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'special_education_Data',
           data: barChartData,
         )

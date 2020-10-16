@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 
 import '../budget_data.dart';
 

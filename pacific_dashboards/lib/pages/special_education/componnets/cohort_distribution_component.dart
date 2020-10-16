@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/utils/hex_color.dart';
 import '../special_education_data.dart';
 
 class CohortDistributionComponent extends StatefulWidget {
@@ -159,12 +158,12 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
-      final barChartData = List<BarChartData>();
+      final barChartData = List<ChartData>();
       _data.forEach((key, value) {
         barChartData.addAll(value.map((it) {
-          return BarChartData(
+          return ChartData(
             it.title,
             it.firstValue,
             HexColor.fromStringHash(key),
@@ -173,9 +172,9 @@ class _Chart extends StatelessWidget {
       });
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'cohort_distribution_Data',
           data: barChartData,
         )

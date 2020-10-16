@@ -3,12 +3,11 @@ import 'package:arch/arch.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/tables/chart_info_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/utils/hex_color.dart';
 
 import '../wash_data.dart';
 
@@ -240,13 +239,13 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
-      final data = List<BarChartData>();
+      final data = List<ChartData>();
       data.addAll(_data.map((it) {
         switch (_tab) {
           case _DashboardTab.toiletsTotal:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[0] > 0 ? it.values[0] : 0.1,
               it.values[0] > 0
@@ -254,7 +253,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.toiletsUsable:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -262,7 +261,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.toiletsUsablePercentage:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -270,7 +269,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.toiletsUsablePercentageGender:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -278,7 +277,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.toiletsPupils:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -286,7 +285,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.toiletsPupilsGender:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -294,7 +293,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.toiletsPupilsUsableToilet:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -302,7 +301,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.toiletsPupilsUsableToiletGender:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -310,7 +309,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.pupils:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -318,7 +317,7 @@ class _Chart extends StatelessWidget {
                   : Colors.blue,
             );
           case _DashboardTab.pupilsMirrorFormat:
-            return BarChartData(
+            return ChartData(
               it.title,
               it.values[1] > 0 ? it.values[1] : 0.1,
               it.values[1] > 0
@@ -330,9 +329,9 @@ class _Chart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'spending_Data',
           data: data,
         )

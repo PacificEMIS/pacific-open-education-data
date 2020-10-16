@@ -4,11 +4,10 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:pacific_dashboards/utils/hex_color.dart';
 
 typedef ClassLevelRateAccessor = double Function(ClassLevelRatesData data);
 typedef YearRateAccessor = double Function(YearRateData data);
@@ -148,10 +147,10 @@ class _DetailedChart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
       final data = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           it.classLevel,
           _classLevelRateAccessor.call(it),
           AppColors.kBlue,
@@ -160,9 +159,9 @@ class _DetailedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'data',
           data: data,
         ),
@@ -231,11 +230,11 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
       final gradesData = _data.map((data) {
         return data.data.map((item) {
-          return BarChartData(
+          return ChartData(
             '${item.year}',
             _yearRateAccessor.call(item),
             HexColor.fromStringHash(data.classLevel),
@@ -245,10 +244,10 @@ class _Chart extends StatelessWidget {
 
       return gradesData.mapIndexed((index, data) {
         return charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'data[$index]',
           data: data,

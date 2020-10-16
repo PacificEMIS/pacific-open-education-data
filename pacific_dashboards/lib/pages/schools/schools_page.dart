@@ -4,13 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
 import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/shared_ui/multi_table.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -72,14 +73,13 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text('enrolment'.localized(context),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3
-                                .copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
+                        Text(
+                          'enrolment'.localized(context),
+                          style: Theme.of(context).textTheme.headline3.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
                         MiniTabLayout(
                           tabs: _DashboardsTab.values,
                           padding: 0.0,
@@ -98,7 +98,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                             switch (tab) {
                               case _DashboardsTab.byState:
                                 return ChartWithTable(
-                                  key: ValueKey(snapshot.data.enrolByDistrict),
+                                  key: ObjectKey(snapshot.data.enrolByDistrict),
                                   title: '',
                                   data: snapshot.data.enrolByDistrict,
                                   chartType: ChartType.pie,
@@ -110,7 +110,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                                 );
                               case _DashboardsTab.byAuthority:
                                 return ChartWithTable(
-                                  key: ValueKey(snapshot.data.enrolByAuthority),
+                                  key: ObjectKey(snapshot.data.enrolByAuthority),
                                   title: '',
                                   data: snapshot.data.enrolByAuthority,
                                   chartType: ChartType.pie,
@@ -123,7 +123,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                                 );
                               case _DashboardsTab.byGovtNonGovt:
                                 return ChartWithTable(
-                                  key: ValueKey(snapshot.data.enrolByPrivacy),
+                                  key: ObjectKey(snapshot.data.enrolByPrivacy),
                                   title: '',
                                   data: snapshot.data.enrolByPrivacy,
                                   chartType: ChartType.pie,

@@ -1,15 +1,16 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/utils/hex_color.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 
 const double _kBorderWidth = 1.0;
 const Color _kBorderColor = AppColors.kGeyser;
 
 class ChartInfoTableWidget extends StatefulWidget {
-  final Map<String, int> _data;
+  final List<ChartData> _data;
   final String _titleName;
   final String _titleValue;
+
   ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
 
   @override
@@ -29,11 +30,11 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
           color: _kBorderColor,
         ),
       ),
-      child: buildColumns(),
+      child: _buildColumns(),
     );
   }
 
-  Column buildColumns() {
+  Column _buildColumns() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -53,7 +54,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
             )
           ],
         ),
-               columnFutureBuilder(sortedRowDatas: _sortedRowDatas),
+        _ColumnFutureBuilder(sortedRowDatas: _sortedRowDatas),
       ],
     );
   }
@@ -98,42 +99,39 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
     });
   }
 
+  _RowData _convertToRowData(int index, ChartData chartData) => _RowData(
+        index: index,
+        domain: chartData.domain,
+        measure: chartData.measure,
+        color: chartData.color,
+      );
+
   Future<List<_RowData>> get _sortedRowDatas {
     return Future.microtask(() {
-      final convertToRowData = (int index, Pair<String, int> pair) => _RowData(
-            index: index,
-            domain: pair.first,
-            measure: pair.second,
-          );
       switch (_sortType) {
         case SortType.measureInc:
           return widget._data
-              .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => lv.second.compareTo(rv.second))
-              .mapIndexed(convertToRowData)
+              .chainSort((lv, rv) => lv.measure.compareTo(rv.measure))
+              .mapIndexed(_convertToRowData)
               .toList();
         case SortType.measureDec:
           return widget._data
-              .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => rv.second.compareTo(lv.second))
-              .mapIndexed(convertToRowData)
+              .chainSort((lv, rv) => rv.measure.compareTo(lv.measure))
+              .mapIndexed(_convertToRowData)
               .toList();
         case SortType.domainInc:
           return widget._data
-              .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => lv.first.compareTo(rv.first))
-              .mapIndexed(convertToRowData)
+              .chainSort((lv, rv) => lv.domain.compareTo(rv.domain))
+              .mapIndexed(_convertToRowData)
               .toList();
         case SortType.domainDec:
           return widget._data
-              .mapToList((domain, measure) => Pair(domain, measure))
-              .chainSort((lv, rv) => rv.first.compareTo(lv.first))
-              .mapIndexed(convertToRowData)
+              .chainSort((lv, rv) => rv.domain.compareTo(lv.domain))
+              .mapIndexed(_convertToRowData)
               .toList();
         case SortType.none:
           return widget._data
-              .mapToList((domain, measure) => Pair(domain, measure))
-              .mapIndexed(convertToRowData)
+              .mapIndexed(_convertToRowData)
               .toList();
       }
 
@@ -142,8 +140,8 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   }
 }
 
-class columnFutureBuilder extends StatelessWidget {
-  const columnFutureBuilder({
+class _ColumnFutureBuilder extends StatelessWidget {
+  const _ColumnFutureBuilder({
     Key key,
     @required Future<List<_RowData>> sortedRowDatas,
   })  : _sortedRowDatas = sortedRowDatas,
@@ -159,7 +157,7 @@ class columnFutureBuilder extends StatelessWidget {
         if (!snapshot.hasData) {
           return Container();
         }
-        
+
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -232,7 +230,7 @@ class _Row extends StatelessWidget {
             flex: 2,
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0,),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -242,7 +240,7 @@ class _Row extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(const Radius.circular(1.0)),
-                        color: HexColor.fromStringHash(_rowData.domain),
+                        color: _rowData.color,
                       ),
                       height: 8.0,
                       width: 8.0,
@@ -289,11 +287,13 @@ class _RowData {
   final String domain;
   final int measure;
   final int index;
+  final Color color;
 
   _RowData({
     @required this.domain,
     @required this.measure,
     @required this.index,
+    @required this.color,
   });
 }
 

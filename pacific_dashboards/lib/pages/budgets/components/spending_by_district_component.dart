@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:arch/arch.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/tables/chart_info_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/utils/hex_color.dart';
 
 import '../budget_data.dart';
 
@@ -128,7 +127,7 @@ class _Chart extends StatelessWidget {
                 return Container();
               }
 
-                return charts.BarChart(
+              return charts.BarChart(
                 snapshot.data,
                 animate: false,
                 barGroupingType: _groupingType,
@@ -180,56 +179,69 @@ class _Chart extends StatelessWidget {
       });
       districts[key] = spending;
     });
+    final chartData = districts.mapToList((domain, measure) {
+      final domains = districts.keys.toList();
+      final index = domains.indexOf(domain);
+      final color = index < AppColors.kDistricts.length
+          ? AppColors.kDistricts[index]
+          : HexColor.fromStringHash(domain);
+      return ChartData(
+        domain,
+        measure,
+        color,
+      );
+    });
     return ChartInfoTableWidget(
-        districts,
-        'schoolsAccreditationDashboardsStateDomain'.localized(context),
-        'enrolment'.localized(context));
+      chartData,
+      'schoolsAccreditationDashboardsStateDomain'.localized(context),
+      'enrolment'.localized(context),
+    );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
-      final data = List<BarChartData>();
+      final data = List<ChartData>();
       data.addAll(_data.map((it) {
         switch (_tab) {
           case _DashboardTab.actualExpPerHead:
-            return BarChartData(
+            return ChartData(
               it.year,
               it.edExpAPerHead,
               HexColor.fromStringHash(it.district),
             );
           case _DashboardTab.actualExpenditure:
-            return BarChartData(
+            return ChartData(
               it.year,
               it.edExpA,
               HexColor.fromStringHash(it.district),
             );
           case _DashboardTab.actualRecurrent:
-            return BarChartData(
+            return ChartData(
               it.year,
               it.edRecurrentExpA,
               HexColor.fromStringHash(it.district),
             );
           //Budget
           case _DashboardTab.budget:
-            return BarChartData(
+            return ChartData(
               it.year,
               it.edExpB,
               HexColor.fromStringHash(it.district),
             );
           case _DashboardTab.budgetExpPerHead:
-            return BarChartData(
+            return ChartData(
               it.year,
               it.edExpBPerHead,
               HexColor.fromStringHash(it.district),
             );
           case _DashboardTab.budgetRecurrent:
-            return BarChartData(
+            return ChartData(
               it.year,
               it.edRecurrentExpB,
               HexColor.fromStringHash(it.district),
             );
           case _DashboardTab.enrolment:
-            return BarChartData(
+            return ChartData(
               it.year,
               it.enrolment,
               HexColor.fromStringHash(it.district),
@@ -238,9 +250,9 @@ class _Chart extends StatelessWidget {
       }).toList());
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'spending_Data',
           data: data,
         )

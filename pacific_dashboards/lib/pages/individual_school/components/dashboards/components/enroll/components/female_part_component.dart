@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -166,10 +166,10 @@ class _DetailedChart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
       final schoolData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           it.grade,
           it.school,
           AppColors.kPeacockBlue,
@@ -177,7 +177,7 @@ class _DetailedChart extends StatelessWidget {
       }).toList();
 
       final districtData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           it.grade,
           it.district,
           AppColors.kGreen,
@@ -185,7 +185,7 @@ class _DetailedChart extends StatelessWidget {
       }).toList();
 
       final nationData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           it.grade,
           it.nation,
           AppColors.kOrange,
@@ -194,23 +194,23 @@ class _DetailedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'school',
           data: schoolData,
         ),
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'district',
           data: districtData,
         ),
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           id: 'nation',
           data: nationData,
         ),
@@ -303,10 +303,10 @@ class _HistoryChart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
       final schoolData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.school,
           AppColors.kPeacockBlue,
@@ -314,7 +314,7 @@ class _HistoryChart extends StatelessWidget {
       }).toList();
 
       final districtData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.district,
           AppColors.kGreen,
@@ -322,7 +322,7 @@ class _HistoryChart extends StatelessWidget {
       }).toList();
 
       final nationData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.nation,
           AppColors.kOrange,
@@ -331,28 +331,28 @@ class _HistoryChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'school',
           data: schoolData,
         ),
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'district',
           data: districtData,
         ),
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'nation',
           data: nationData,
