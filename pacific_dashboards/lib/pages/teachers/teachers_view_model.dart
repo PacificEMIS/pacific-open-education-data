@@ -251,15 +251,15 @@ Map<String, List<int>> _generateCertificationData(
   data.forEach((key, value) {
     final certification = [0, 0, 0, 0, 0, 0, 0, 0];
     value.forEach((it) {
-      certification[0] = -it.certQualF;
-      certification[1] = -it.qualifiedF;
-      certification[2] = -it.certifiedF;
-      certification[3] = -it.numTeachersF + (it.certQualF + it.qualifiedF + it.certifiedF);
+      certification[0] -= it.certQualF;
+      certification[1] -= it.qualifiedF;
+      certification[2] -= it.certifiedF;
+      certification[3] -= it.numTeachersF - (it.certQualF + it.qualifiedF + it.certifiedF);
 
-      certification[4] = it.certQualM;
-      certification[5] = it.qualifiedM;
-      certification[6] = it.certifiedM;
-      certification[7] = it.numTeachersM + (it.certQualM + it.qualifiedM + it.certifiedM);
+      certification[4] += it.certQualM;
+      certification[5] += it.qualifiedM;
+      certification[6] += it.certifiedM;
+      certification[7] += it.numTeachersM + (it.certQualM + it.qualifiedM + it.certifiedM);
     });
     if (key != null) result[key] = certification;
   });

@@ -5,9 +5,11 @@ import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
+import 'package:pacific_dashboards/shared_ui/charts/stacked_horizontal_bar_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
@@ -146,39 +148,15 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             throw FallThroughError();
                           },
                         ),
-                        // ChartWithTable(
-                        //   key: ObjectKey(snapshot.data.teachersByAuthority),
-                        //   title: 'teachersDashboardsEnrollByAuthorityTitle'
-                        //       .localized(context),
-                        //   data: snapshot.data.teachersByAuthority,
-                        //   chartType: ChartType.pie,
-                        //   tableKeyName: 'teachersDashboardsAuthorityDomain'
-                        //       .localized(context),
-                        //   tableValueName:
-                        //       'teachersDashboardsEnrollDomain'.localized(context),
-                        // ),
-                        // ChartWithTable(
-                        //   key: ObjectKey(snapshot.data.teachersByPrivacy),
-                        //   title: 'teachersDashboardsEnrollByGovernmentTitle'
-                        //       .localized(context),
-                        //   data: snapshot.data.teachersByPrivacy,
-                        //   chartType: ChartType.pie,
-                        //   tableKeyName: 'teachersDashboardsPrivacyDomain'
-                        //       .localized(context),
-                        //   tableValueName:
-                        //       'teachersDashboardsEnrollDomain'.localized(context),
-                        // ),
-                        // ChartWithTable(
-                        //   key: ObjectKey(snapshot.data.teachersByDistrict),
-                        //   title: 'teachersDashboardsEnrollByStateTitle'
-                        //       .localized(context),
-                        //   data: snapshot.data.teachersByDistrict,
-                        //   chartType: ChartType.bar,
-                        //   tableKeyName:
-                        //       'teachersDashboardsStateDomain'.localized(context),
-                        //   tableValueName:
-                        //       'teachersDashboardsEnrollDomain'.localized(context),
-                        // ),
+                        Text('certifiedAndQualified'.localized(context),
+                            style: Theme.of(context).textTheme.headline3.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16)),
+                        ChartFactory.createStackedHorizontalBarChartViewByData(
+                          chartData:  snapshot.data.teachersByCertification, //past data here
+                          colorFunc: _levelIndexToColor,
+                        ),
                         MultiTable(
                           key: ObjectKey(
                             snapshot.data.teachersBySchoolLevelStateAndGender,
@@ -207,6 +185,10 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
         ),
       ),
     );
+  }
+
+  Color _levelIndexToColor(int index) {
+    return AppColors.kCertification[index];
   }
 
   void _openFilters(List<Filter> filters) {
