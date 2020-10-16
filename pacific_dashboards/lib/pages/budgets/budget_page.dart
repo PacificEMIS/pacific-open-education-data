@@ -104,7 +104,8 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                         SpendingByDistrictComponent(
                             data: snapshot.data.dataSpendingBySectorAndYear,
                             dataFiltered: snapshot
-                                .data.dataSpendingBySectorAndYearFiltered),
+                                .data.dataSpendingBySectorAndYearFiltered,
+                        domain: 'sectors'),
                         _titleWidget(
                             context,
                             '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
@@ -112,7 +113,8 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                         SpendingByDistrictComponent(
                             data: snapshot.data.dataSpendingByDistrict,
                             dataFiltered:
-                                snapshot.data.dataSpendingByDistrictFiltered),
+                                snapshot.data.dataSpendingByDistrictFiltered,
+                            domain: 'schoolsAccreditationDashboardsStateDomain'),
                       ];
                       var budgetWidgetList = list;
                       return Column(

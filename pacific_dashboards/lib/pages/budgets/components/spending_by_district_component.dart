@@ -13,11 +13,13 @@ import '../budget_data.dart';
 class SpendingByDistrictComponent extends StatefulWidget {
   final List<DataSpendingByDistrict> data;
   final List<DataSpendingByDistrict> dataFiltered;
+  final String domain;
 
   const SpendingByDistrictComponent({
     Key key,
     @required this.data,
     @required this.dataFiltered,
+    @required this.domain
   })  : assert(data != null && dataFiltered != null),
         super(key: key);
 
@@ -82,18 +84,20 @@ class _Chart extends StatelessWidget {
   final List<DataSpendingByDistrict> _dataFiltered;
   final charts.BarGroupingType _groupingType;
   final _Tab _tab;
-
+  final String _domain;
   const _Chart(
       {Key key,
       @required List<DataSpendingByDistrict> data,
       @required List<DataSpendingByDistrict> dataFiltered,
       @required charts.BarGroupingType groupingType,
-      @required _Tab tab})
+      @required _Tab tab,
+      @required String domain})
       : assert(data != null),
         _data = data,
         _dataFiltered = dataFiltered,
         _groupingType = groupingType,
         _tab = tab,
+        _domain = domain,
         super(key: key);
 
   @override
@@ -136,12 +140,12 @@ class _Chart extends StatelessWidget {
             },
           ),
         ),
-        generateTitleTable(context)
+        generateTitleTable(context,_domain),
       ],
     );
   }
 
-  Widget generateTitleTable(BuildContext context) {
+  Widget generateTitleTable(BuildContext context, String domain) {
     Map<String, int> districts = new Map();
     final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
     dataSortedByDistrict.forEach((key, value) {
@@ -181,8 +185,8 @@ class _Chart extends StatelessWidget {
     });
     return ChartInfoTableWidget(
       chartData,
-      'schoolsAccreditationDashboardsStateDomain'.localized(context),
-      'enrolment'.localized(context),
+        domain.localized(context),
+       _tab.toString().substring(5).localized(context),
     );
   }
 
