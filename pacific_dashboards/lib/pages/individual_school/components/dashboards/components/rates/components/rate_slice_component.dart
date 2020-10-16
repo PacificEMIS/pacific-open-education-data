@@ -173,8 +173,9 @@ class _DetailedChart extends StatelessWidget {
 class _Chart extends StatelessWidget {
   final List<YearByClassLevelRateData> _data;
   final YearRateAccessor _yearRateAccessor;
+  Map<String, Color> _colorScheme;
 
-  const _Chart({
+  _Chart({
     Key key,
     @required List<YearByClassLevelRateData> data,
     @required YearRateAccessor yearRateAccessor,
@@ -182,7 +183,9 @@ class _Chart extends StatelessWidget {
         assert(yearRateAccessor != null),
         _data = data,
         _yearRateAccessor = yearRateAccessor,
-        super(key: key);
+        super(key: key) {
+    _colorScheme = _generateColorScheme();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,47 +228,98 @@ class _Chart extends StatelessWidget {
         ),
         _LongLegend(
           items: _data.map((it) => it.classLevel).toList(),
+          colorFn: (item) => _colorScheme[item],
         ),
       ],
     );
   }
 
+  Map<String, Color> _generateColorScheme() {
+    final colorScheme = Map<String, Color>();
+    var colorIndex = 0;
+    _data.forEach((it) {
+      final domain = it.classLevel;
+      if (!colorScheme.containsKey(domain)) {
+        if (colorIndex >= AppColors.kDistricts.length) {
+          colorScheme[domain] = HexColor.fromStringHash(domain);
+        } else {
+          colorScheme[domain] = AppColors.kDistricts[colorIndex];
+          colorIndex++;
+        }
+      }
+    });
+    return colorScheme;
+  }
+
   Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
+      int maxYear;
+      int minYear;
       final gradesData = _data.map((data) {
         return data.data.map((item) {
+          if (maxYear == null || maxYear < item.year) {
+            maxYear = item.year;
+          }
+          if (minYear == null || minYear > item.year) {
+            minYear = item.year;
+          }
+
           return ChartData(
             '${item.year}',
             _yearRateAccessor.call(item),
-            HexColor.fromStringHash(data.classLevel),
+            _colorScheme[data.classLevel],
           );
         }).toList();
       }).toList();
 
-      return gradesData.mapIndexed((index, data) {
-        return charts.Series(
+      // gradesData.forEach((gradeData) {
+      //   gradeData.sort((lv, rv) => lv.year.compareTo(rv.year));
+      //   for (var i = minYear; i <= maxYear; i++) {
+      //
+      //   }
+      // });
+
+      return [
+        charts.Series(
           domainFn: (ChartData chartData, _) => chartData.domain,
           measureFn: (ChartData chartData, _) => chartData.measure,
           colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
-          id: 'data[$index]',
-          data: data,
-        );
-      }).toList();
+          areaColorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          id: 'data[-1]',
+          data: List.generate(
+            maxYear - minYear,
+            (index) => ChartData('${minYear + index}', null, null),
+          ),
+        ),
+        ...gradesData.mapIndexed((index, data) {
+          return charts.Series(
+            domainFn: (ChartData chartData, _) => chartData.domain,
+            measureFn: (ChartData chartData, _) => chartData.measure,
+            colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+            areaColorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+            id: 'data[$index]',
+            data: data,
+          );
+        }).toList(),
+      ];
     });
   }
 }
 
 // ignore: must_be_immutable
 class _LongLegend extends StatelessWidget {
-  static const _kMaxItemsInRow = 6;
+  static const _kMaxItemsInRow = 5;
+
+  final Color Function(String) _colorFn;
   List<List<String>> _items;
 
   _LongLegend({
     Key key,
     @required List<String> items,
+    @required Color Function(String) colorFn,
   })  : assert(items != null),
+        assert(colorFn != null),
+        _colorFn = colorFn,
         super(key: key) {
     _items = _splitItems(items);
   }
@@ -285,12 +339,9 @@ class _LongLegend extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                if (index > 0)
-                  SizedBox(
-                    width: 16,
-                  ),
+                if (index > 0) SizedBox(width: 16),
                 ChartLegendItem(
-                  color: HexColor.fromStringHash(item),
+                  color: _colorFn.call(item),
                   value: item,
                 ),
               ],
@@ -494,3 +545,15 @@ class _Cell extends StatelessWidget {
 }
 
 enum _CellType { header, domain, measure }
+
+class _GradeData {
+  final int year;
+  final num value;
+  final Color color;
+
+  const _GradeData({
+    @required this.year,
+    @required this.value,
+    @required this.color,
+  });
+}

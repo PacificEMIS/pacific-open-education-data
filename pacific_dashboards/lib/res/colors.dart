@@ -69,6 +69,9 @@ class AppColors {
       const Color.fromRGBO(26, 115, 232, 1);
   static const Color kNonGovernmentChartColor =
       const Color.fromRGBO(2, 185, 243, 1);
+
+  static const Color kMale = const Color.fromRGBO(26, 115, 232, 1);
+  static const Color kFemale = const Color.fromRGBO(248, 84, 84, 1);
 }
 
 extension ChartColor on Color {
