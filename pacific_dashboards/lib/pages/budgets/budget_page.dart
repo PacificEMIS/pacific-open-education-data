@@ -34,7 +34,6 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: PlatformAppBar(
-        title: Text('homeSectionBudgets'.localized(context)),
         actions: <Widget>[
           StreamBuilder<List<Filter>>(
             stream: viewModel.filtersStream,
