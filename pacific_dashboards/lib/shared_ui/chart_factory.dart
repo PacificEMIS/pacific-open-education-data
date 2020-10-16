@@ -40,7 +40,7 @@ class ChartFactory {
   }
 
   static Widget getStackedHorizontalBarChartViewByData(
-      {Map<String, List<int>> chartData, ColorFunc colorFunc}) {
+      {Map<String, List<int>>chartData, ColorFunc colorFunc}) {
     return (chartData.length == 0)
         ? Container()
         : Container(

@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
@@ -65,22 +66,20 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
               stream: viewModel.dataStream,
               builder: (ctx, snapshot) {
                 if (!snapshot.hasData) {
-                                      return Container(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        child: PlatformProgressIndicator(),
-                      ),);
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 1.3,
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      child: PlatformProgressIndicator(),
+                    ),
+                  );
                 } else {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Text('teachersCharts'.localized(context),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline3
-                              .copyWith(
+                          style: Theme.of(context).textTheme.headline3.copyWith(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 16)),
@@ -94,8 +93,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             case _DashboardsTab.byState:
                               return 'schoolsByState'.localized(context);
                             case _DashboardsTab.byGovtNonGovt:
-                              return 'schoolsByGovtNonGovt'
-                                  .localized(context);
+                              return 'schoolsByGovtNonGovt'.localized(context);
                           }
                           throw FallThroughError();
                         },
@@ -103,14 +101,14 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                           switch (tab) {
                             case _DashboardsTab.byAuthority:
                               return ChartWithTable(
-                                key: ValueKey(snapshot.data.teachersByAuthority),
+                                key:
+                                    ValueKey(snapshot.data.teachersByAuthority),
                                 title: '',
                                 data: snapshot.data.teachersByAuthority,
                                 chartType: ChartType.pie,
                                 tableKeyName: 'schoolsDashboardsStateDomain'
                                     .localized(context),
-                                tableValueName:
-                                'schoolsDashboardsMeasureEnroll'
+                                tableValueName: 'schoolsDashboardsMeasureEnroll'
                                     .localized(context),
                               );
                             case _DashboardsTab.byGovtNonGovt:
@@ -119,11 +117,9 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 title: '',
                                 data: snapshot.data.teachersByPrivacy,
                                 chartType: ChartType.pie,
-                                tableKeyName:
-                                'schoolsDashboardsAuthorityDomain'
+                                tableKeyName: 'schoolsDashboardsAuthorityDomain'
                                     .localized(context),
-                                tableValueName:
-                                'schoolsDashboardsMeasureEnroll'
+                                tableValueName: 'schoolsDashboardsMeasureEnroll'
                                     .localized(context),
                               );
                             case _DashboardsTab.byState:
@@ -134,47 +130,22 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 chartType: ChartType.pie,
                                 tableKeyName: 'schoolsDashboardsPrivacyDomain'
                                     .localized(context),
-                                tableValueName:
-                                'schoolsDashboardsMeasureEnroll'
+                                tableValueName: 'schoolsDashboardsMeasureEnroll'
                                     .localized(context),
                               );
                           }
                           throw FallThroughError();
                         },
                       ),
-                      // ChartWithTable(
-                      //   key: ObjectKey(snapshot.data.teachersByAuthority),
-                      //   title: 'teachersDashboardsEnrollByAuthorityTitle'
-                      //       .localized(context),
-                      //   data: snapshot.data.teachersByAuthority,
-                      //   chartType: ChartType.pie,
-                      //   tableKeyName: 'teachersDashboardsAuthorityDomain'
-                      //       .localized(context),
-                      //   tableValueName:
-                      //       'teachersDashboardsEnrollDomain'.localized(context),
-                      // ),
-                      // ChartWithTable(
-                      //   key: ObjectKey(snapshot.data.teachersByPrivacy),
-                      //   title: 'teachersDashboardsEnrollByGovernmentTitle'
-                      //       .localized(context),
-                      //   data: snapshot.data.teachersByPrivacy,
-                      //   chartType: ChartType.pie,
-                      //   tableKeyName: 'teachersDashboardsPrivacyDomain'
-                      //       .localized(context),
-                      //   tableValueName:
-                      //       'teachersDashboardsEnrollDomain'.localized(context),
-                      // ),
-                      // ChartWithTable(
-                      //   key: ObjectKey(snapshot.data.teachersByDistrict),
-                      //   title: 'teachersDashboardsEnrollByStateTitle'
-                      //       .localized(context),
-                      //   data: snapshot.data.teachersByDistrict,
-                      //   chartType: ChartType.bar,
-                      //   tableKeyName:
-                      //       'teachersDashboardsStateDomain'.localized(context),
-                      //   tableValueName:
-                      //       'teachersDashboardsEnrollDomain'.localized(context),
-                      // ),
+                      Text('certifiedAndQualified'.localized(context),
+                          style: Theme.of(context).textTheme.headline3.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16)),
+                      ChartFactory.getStackedHorizontalBarChartViewByData(
+                      chartData:  snapshot.data.teachersByCertification, //past data here
+                      colorFunc: _levelIndexToColor,
+                      ),
                       MultiTable(
                         key: ObjectKey(
                             snapshot.data.teachersBySchoolLevelStateAndGender),
@@ -199,6 +170,10 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
         ),
       ),
     );
+  }
+
+  Color _levelIndexToColor(int index) {
+    return AppColors.kCertification[index];
   }
 
   void _openFilters(List<Filter> filters) {

@@ -24,6 +24,17 @@ class AppColors {
     kLightGreen,
     kGreen,
   ];
+
+  static const List<Color> kCertification = [
+    kRed,
+    kYellow,
+    kLightGreen,
+    kGreen,
+    kRed,
+    kYellow,
+    kLightGreen,
+    kGreen,
+  ];
 }
 
 extension ChartColor on Color {

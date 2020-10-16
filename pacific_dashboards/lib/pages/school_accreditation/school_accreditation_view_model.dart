@@ -242,11 +242,6 @@ Map<String, List<int>> _generateCumulativeMap({
 
       switch (accreditation.level) {
         case AccreditationLevel.level1:
-          if (key.contains('Level')) {
-            print('Level');
-          } else {
-            print('Not Level');
-          }
           key.contains('Level') ? levels[0] += sum : levels[0] -= sum;
           break;
         case AccreditationLevel.level2:
