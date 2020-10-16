@@ -151,6 +151,7 @@ Future<BudgetData> _transformBudgetModel(
   final dataSpendingBySectorAndYearFiltered = _generateSpendingSectorData(
       filteredBudget.groupBy((it) => it.surveyYear), _budgetModel.lookups);
   return BudgetData(
+      year: _selectedYear(_budgetModel.filters),
       dataByGnpAndGovernmentSpendingActual:
           dataByGnpAndGovernmentSpendingActual,
       dataByGnpAndGovernmentSpendingBudgeted:
@@ -160,6 +161,10 @@ Future<BudgetData> _transformBudgetModel(
       dataSpendingByDistrict: dataSpendingByDistrict,
       dataSpendingByDistrictFiltered: dataSpendingByDistrictFiltered,
       dataSpendingBySectorAndYearFiltered: dataSpendingBySectorAndYearFiltered);
+}
+
+int _selectedYear(List<Filter> filters) {
+  return filters.firstWhere((it) => it.id == 0).intValue;
 }
 
 List<DataSpendingByDistrict> _generateSpendingDistrictData(

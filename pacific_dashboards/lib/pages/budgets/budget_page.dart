@@ -60,40 +60,49 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                 stream: viewModel.dataStream,
                 builder: (ctx, snapshot) {
                   if (!snapshot.hasData) {
-                                        return Container(
+                    return Container(
                       height: MediaQuery.of(context).size.height / 1.3,
                       alignment: Alignment.center,
                       child: SizedBox(
                         child: PlatformProgressIndicator(),
-                      ),);
+                      ),
+                    );
                   } else {
                     var list = <Widget>[
-                      // _titleWidget(context, 'budgetsEducationFinancing', true),
                       //GNP and Government Spending Actual
                       _titleWidget(
                           context,
-                          'budgetsGnpAndGovernmentSpendingActualExpense',
+                          '${'budgetsGnpAndGovernmentSpendingActualExpense'.localized(context)} ${snapshot.data.year}',
                           false),
                       gNpAndGovernmentSpendingActualExpense(context,
                           snapshot.data.dataByGnpAndGovernmentSpendingActual),
                       //-- GNP and Government Spending Budgeted
                       _titleWidget(
                           context,
-                          'budgetsGnpAndGovernmentSpendingBudgetedExpense',
+                          '${'budgetsGnpAndGovernmentSpendingBudgetedExpense'.localized(context)} ${snapshot.data.year}',
                           false),
                       gNpAndGovernmentSpendingActualExpense(context,
                           snapshot.data.dataByGnpAndGovernmentSpendingBudgeted),
                       //-- Spending By Sector
-                      _titleWidget(context, 'budgetsSpendingByDistrict', false),
+                      _titleWidget(
+                          context,
+                          '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
+                          false),
                       spendingBySector(
                           context, snapshot.data.dataSpendingBySector),
                       //-- Spending By Sector
-                      _titleWidget(context, 'budgetsSpendingBySector', false),
+                      _titleWidget(
+                          context,
+                          '${'budgetsSpendingBySector'.localized(context)} ${snapshot.data.year}',
+                          false),
                       SpendingByDistrictComponent(
                           data: snapshot.data.dataSpendingBySectorAndYear,
                           dataFiltered: snapshot
                               .data.dataSpendingBySectorAndYearFiltered),
-                      _titleWidget(context, 'budgetsSpendingByDistrict', false),
+                      _titleWidget(
+                          context,
+                          '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
+                          false),
                       SpendingByDistrictComponent(
                           data: snapshot.data.dataSpendingByDistrict,
                           dataFiltered:
@@ -142,12 +151,13 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
 
   Widget spendingBySector(
       BuildContext context, List<DataSpendingBySector> data) {
-    if (data.length == 0) return Center(
+    if (data.length == 0)
+      return Center(
         child: Text(
           'labelNoData'.localized(context),
           style: Theme.of(context).textTheme.headline5,
         ),
-    );
+      );
 
     return MiniTabLayout(
       tabs: _SpendingTab.values,
@@ -190,7 +200,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
       padding: const EdgeInsets.only(
           left: 16.0, right: 16.0, bottom: 0.0, top: 10.0),
       child: Text(
-        text.localized(context),
+        text,
         style: isTitle == true
             ? Theme.of(context).textTheme.headline3.copyWith(
                   color: Colors.black87,

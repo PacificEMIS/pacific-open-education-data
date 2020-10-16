@@ -226,6 +226,7 @@ class Strings {
       'schoolAccreditationCumulative': 'Cumulative to',
       'schoolAccreditationEvaluated': 'Evaluated in',
       'levels': 'Levels',
+      'sectors': 'Sectors'
     },
   };
 
