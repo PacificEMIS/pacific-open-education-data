@@ -7,6 +7,8 @@ import 'package:pacific_dashboards/pages/special_education/componnets/cohort_dis
 import 'package:pacific_dashboards/pages/special_education/componnets/special_education_component.dart';
 import 'package:pacific_dashboards/pages/special_education/special_education_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
+import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
@@ -51,68 +53,80 @@ class _SpecialEducationPageState
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              StreamBuilder<SpecialEducationData>(
-                stream: viewModel.dataStream,
-                builder: (ctx, snapshot) {
-                  if (!snapshot.hasData) {
-                                        return Container(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        child: PlatformProgressIndicator(),
-                      ),);
-                  } else {
-                    var list = <Widget>[
-                      // _titleWidget(context, 'specialEducationTitle', true),
-                      //GNP and Government Spending Actual
-                      _titleWidget(context, 'disability', false, year: snapshot.data.year),
-                      SpecialEducationComponent(
-                          data: snapshot.data.dataByGender),
-                      _titleWidget(context, 'ethnicity', false, year: snapshot.data.year),
-                      SpecialEducationComponent(
-                          data: snapshot.data.dataByEthnicity),
-                      _titleWidget(
-                          context, 'specialEducationEnvironment', false, year: snapshot.data.year),
-                      SpecialEducationComponent(
-                          data: snapshot.data.dataBySpecialEdEnvironment),
-                      _titleWidget(context, 'englishLearnerStatus', false, year: snapshot.data.year),
-                      SpecialEducationComponent(
-                          data: snapshot.data.dataByEnglishLearner),
-                      _titleWidget(context, 'cohortDistribution', true),
-                      _titleWidget(context, 'byYear', false, year: snapshot.data.year),
-                      CohortDistributionComponent(
-                          data: snapshot.data.dataByCohortDistributionByYear),
-                      _titleWidget(context, 'byState', false, year: snapshot.data.year),
-                      CohortDistributionComponent(
-                          data: snapshot.data.dataByCohortDistributionByState),
-                    ];
-                    var budgetWidgetList = list;
-                    return Column(
-                      children: budgetWidgetList,
-                    );
-                  }
-                },
-              ),
-            ],
+      body: LoadingStack(
+        loadingStateStream: viewModel.activityIndicatorStream,
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: PageNoteWidget(noteStream: viewModel.noteStream),
+                ),
+                StreamBuilder<SpecialEducationData>(
+                  stream: viewModel.dataStream,
+                  builder: (ctx, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    } else {
+                      var list = <Widget>[
+                        _titleWidget(context, 'specialEducationTitle', true),
+                        //GNP and Government Spending Actual
+                        _titleWidget(context, 'disability', false,
+                            year: snapshot.data.year),
+                        SpecialEducationComponent(
+                            data: snapshot.data.dataByGender),
+                        _titleWidget(context, 'ethnicity', false,
+                            year: snapshot.data.year),
+                        SpecialEducationComponent(
+                            data: snapshot.data.dataByEthnicity),
+                        _titleWidget(
+                            context, 'specialEducationEnvironment', false,
+                            year: snapshot.data.year),
+                        SpecialEducationComponent(
+                            data: snapshot.data.dataBySpecialEdEnvironment),
+                        _titleWidget(context, 'englishLearnerStatus', false,
+                            year: snapshot.data.year),
+                        SpecialEducationComponent(
+                            data: snapshot.data.dataByEnglishLearner),
+                        _titleWidget(context, 'cohortDistribution', true),
+                        _titleWidget(context, 'byYear', false,
+                            year: snapshot.data.year),
+                        CohortDistributionComponent(
+                            data: snapshot.data.dataByCohortDistributionByYear),
+                        _titleWidget(context, 'byState', false,
+                            year: snapshot.data.year),
+                        CohortDistributionComponent(
+                            data:
+                                snapshot.data.dataByCohortDistributionByState),
+                      ];
+                      var budgetWidgetList = list;
+                      return Column(
+                        children: budgetWidgetList,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Container _titleWidget(BuildContext context, String text, bool isTitle, {int year}) {
+  Container _titleWidget(BuildContext context, String text, bool isTitle,
+      {int year}) {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(
           left: 16.0, right: 16.0, bottom: 0.0, top: 10.0),
-      child: Text( isTitle ? text.localized(context) :
-        '${text.localized(context)} ${year}',
+      child: Text(
+        isTitle
+            ? text.localized(context)
+            : '${text.localized(context)} ${year}',
         style: isTitle == true
             ? Theme.of(context).textTheme.headline3.copyWith(
                   color: Colors.black87,

@@ -8,11 +8,12 @@ import 'package:pacific_dashboards/pages/school_accreditation/accreditation_tabl
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
+import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
-import 'package:pacific_dashboards/shared_ui/pie_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -58,31 +59,28 @@ class SchoolsPageState
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            PageNoteWidget(noteStream: viewModel.noteStream),
-            StreamBuilder<AccreditationData>(
-              stream: viewModel.dataStream,
-              builder: (ctx, snapshot) {
-                if (!snapshot.hasData) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height / 1.3,
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      child: PlatformProgressIndicator(),
-                    ),
-                  );
-                } else {
-                  return _ContentBody(data: snapshot.data);
-                }
-              },
-            ),
-          ],
+      body: LoadingStack(
+        loadingStateStream: viewModel.activityIndicatorStream,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              PageNoteWidget(noteStream: viewModel.noteStream),
+              StreamBuilder<AccreditationData>(
+                stream: viewModel.dataStream,
+                builder: (ctx, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  } else {
+                    return _ContentBody(data: snapshot.data);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -126,7 +124,7 @@ class _ContentBody extends StatelessWidget {
           'schoolsAccreditationDashboardsProgressTitle'.localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
-        buildMiniTabLayoutAccreditationProgress(context, [
+        _buildMiniTabLayoutAccreditationProgress(context, [
           _data.accreditationProgressData,
           _data.accreditationProgressCumulativeData,
         ]),
@@ -135,7 +133,7 @@ class _ContentBody extends StatelessWidget {
               .localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
-        buildMiniTabLayoutAccreditationProgress(context, [
+        _buildMiniTabLayoutAccreditationProgress(context, [
           _data.districtStatusData,
           _data.districtStatusCumulativeData,
         ]),
@@ -144,10 +142,11 @@ class _ContentBody extends StatelessWidget {
               .localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
-        buildMiniTabLayoutAccreditationProgressPieChart(context, [
-          _data.accreditationNationalData,
+        _buildMiniTabLayoutAccreditationProgressPieChart(
+          context,
           _data.accreditationNationalCumulativeData,
-        ]),
+          _data.accreditationNationalEvaluatedData,
+        ),
         const SizedBox(height: 16),
         _PerformanceTable(
           title: 'schoolsAccreditationDashboardsStatusByStateTitle'
@@ -169,8 +168,10 @@ class _ContentBody extends StatelessWidget {
     );
   }
 
-  dynamic buildMiniTabLayoutAccreditationProgress(
-      BuildContext context, List<Map<String, List<int>>> chartData) {
+  Widget _buildMiniTabLayoutAccreditationProgress(
+    BuildContext context,
+    List<Map<String, List<int>>> chartData,
+  ) {
     return MiniTabLayout(
       tabs: _Tab.values,
       padding: 0.0,
@@ -186,12 +187,12 @@ class _ContentBody extends StatelessWidget {
       builder: (ctx, tab) {
         switch (tab) {
           case _Tab.cumulative:
-            return ChartFactory.getStackedHorizontalBarChartViewByData(
+            return ChartFactory.createStackedHorizontalBarChartViewByData(
               chartData: chartData[0],
               colorFunc: _levelIndexToColor,
             );
           case _Tab.evaluated:
-            return ChartFactory.getStackedHorizontalBarChartViewByData(
+            return ChartFactory.createStackedHorizontalBarChartViewByData(
               chartData: chartData[1],
               colorFunc: _levelIndexToColor,
             );
@@ -201,8 +202,11 @@ class _ContentBody extends StatelessWidget {
     );
   }
 
-  dynamic buildMiniTabLayoutAccreditationProgressPieChart(
-      BuildContext context, List<Map<String, List<int>>> chartData) {
+  Widget _buildMiniTabLayoutAccreditationProgressPieChart(
+    BuildContext context,
+    List<ChartData> cumulativeData,
+    List<ChartData> evaluatedData,
+  ) {
     return MiniTabLayout(
       tabs: _Tab.values,
       padding: 0.0,
@@ -218,39 +222,23 @@ class _ContentBody extends StatelessWidget {
       builder: (ctx, tab) {
         switch (tab) {
           case _Tab.cumulative:
-            Map<String, int> nationalData = Map();
-            chartData[0].forEach((key, value) {
-              var total = 0;
-              value.forEach((element) {
-                total += element;
-              });
-              nationalData[key] = total;
-            });
-
             return ChartWithTable(
-                chartType: ChartType.pie,
-                tableKeyName: 'levels'.localized(context),
-                tableValueName: 'schoolsDashboardsTitle'.localized(context),
-                title: '',
-                key: ObjectKey(chartData),
-                data: nationalData);
+              key: ObjectKey(cumulativeData),
+              chartType: ChartType.pie,
+              tableKeyName: 'levels'.localized(context),
+              tableValueName: 'schoolsDashboardsTitle'.localized(context),
+              title: '',
+              data: cumulativeData,
+            );
           case _Tab.evaluated:
-            Map<String, int> nationalData = Map();
-            chartData[1].forEach((key, value) {
-              var total = 0;
-              value.forEach((element) {
-                total += element;
-              });
-              nationalData[key] = total;
-            });
-
             return ChartWithTable(
-                chartType: ChartType.pie,
-                tableKeyName: 'levels'.localized(context),
-                tableValueName: 'schoolsDashboardsTitle'.localized(context),
-                title: '',
-                key: ObjectKey(chartData),
-                data: nationalData);
+              key: ObjectKey(evaluatedData),
+              chartType: ChartType.pie,
+              tableKeyName: 'levels'.localized(context),
+              tableValueName: 'schoolsDashboardsTitle'.localized(context),
+              title: '',
+              data: evaluatedData,
+            );
         }
         throw FallThroughError();
       },

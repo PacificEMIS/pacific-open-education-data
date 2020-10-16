@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 
 class AccreditationData {
   const AccreditationData({
@@ -8,8 +9,8 @@ class AccreditationData {
     @required this.accreditationProgressCumulativeData,
     @required this.districtStatusData,
     @required this.districtStatusCumulativeData,
-    @required this.accreditationNationalData,
     @required this.accreditationNationalCumulativeData,
+    @required this.accreditationNationalEvaluatedData,
     @required this.accreditationStatusByState,
     @required this.performanceByStandard,
   })  : assert(year != null),
@@ -17,7 +18,7 @@ class AccreditationData {
         assert(accreditationProgressCumulativeData != null),
         assert(districtStatusData != null),
         assert(districtStatusCumulativeData != null),
-        assert(accreditationNationalData != null),
+        assert(accreditationNationalEvaluatedData != null),
         assert(accreditationNationalCumulativeData != null),
         assert(accreditationStatusByState != null),
         assert(performanceByStandard != null);
@@ -27,8 +28,8 @@ class AccreditationData {
   final Map<String, List<int>> accreditationProgressCumulativeData;
   final Map<String, List<int>> districtStatusData;
   final Map<String, List<int>> districtStatusCumulativeData;
-  final Map<String, List<int>> accreditationNationalData;
-  final Map<String, List<int>> accreditationNationalCumulativeData;
+  final List<ChartData> accreditationNationalCumulativeData;
+  final List<ChartData> accreditationNationalEvaluatedData;
   final MultitableData accreditationStatusByState;
   final MultitableData performanceByStandard;
 }
@@ -42,10 +43,4 @@ class MultitableData {
 
   final Map<String, AccreditationTableData> evaluatedData;
   final Map<String, AccreditationTableData> cumulatedData;
-
-  @override
-  List<Object> get props => [
-        evaluatedData,
-        cumulatedData,
-      ];
 }

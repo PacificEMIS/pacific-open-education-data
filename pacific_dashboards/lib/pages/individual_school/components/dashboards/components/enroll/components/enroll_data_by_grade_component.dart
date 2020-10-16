@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
-import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 
 class EnrollDataByGradeComponent extends StatelessWidget {
   final List<EnrollDataByGrade> _data;

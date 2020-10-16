@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/utils/hex_color.dart';
 
 typedef Color ColorFunc(int index);
 

@@ -41,7 +41,7 @@ class App extends StatelessWidget {
         BudgetsPage.kRoute: (context) => BudgetsPage(),
         WashPage.kRoute: (context) => WashPage(),
         "/Indicators": (context) => _NotImplementedPage(),
-        "/Special Education": (context) => SpecialEducationPage()
+        SpecialEducationPage.kRoute: (context) => SpecialEducationPage()
       },
     );
   }

@@ -1,9 +1,9 @@
+import 'package:arch/arch.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/financial_lookup/hive_financial_lookups.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
-import 'package:pacific_dashboards/models/pair.dart';
 
 class HiveFinancialLookupsDao extends FinancialLookupsDao {
   static const _kKey = 'financial_lookups';

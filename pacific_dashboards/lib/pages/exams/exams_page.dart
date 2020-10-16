@@ -6,6 +6,7 @@ import 'package:pacific_dashboards/pages/exams/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/components/exams_stacked_horizontal_bar_chart.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -36,29 +37,28 @@ class ExamsPageState extends MvvmState<ExamsViewModel, ExamsPage> {
       appBar: PlatformAppBar(
         title: Text('examsDashboardsTitle'.localized(context)),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 260),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            PageNoteWidget(noteStream: viewModel.noteStream),
-            StreamBuilder<Map<String, Map<String, Exam>>>(
+      body: LoadingStack(
+        loadingStateStream: viewModel.activityIndicatorStream,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 260),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              PageNoteWidget(noteStream: viewModel.noteStream),
+              StreamBuilder<Map<String, Map<String, Exam>>>(
                 stream: viewModel.dataStream,
                 builder: (ctx, snapshot) {
                   if (!snapshot.hasData) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        child: PlatformProgressIndicator(),
-                      ),);
+                    return Container();
                   } else {
                     return _PopulatedContent(
                       examResults: snapshot.data,
                     );
                   }
-                }),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
       bottomSheet: ExamsFiltersWidget(

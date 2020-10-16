@@ -12,6 +12,8 @@ import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
+import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SchoolAccreditationViewModel extends BaseViewModel {
@@ -57,19 +59,15 @@ class SchoolAccreditationViewModel extends BaseViewModel {
           ?.moduleConfigFor(Section.schoolAccreditations)
           ?.note;
       _pageNoteSubject.add(note);
-    }, notifyProgress: true);
+    });
   }
 
   void _loadData() {
-    handleRepositoryFetch(fetch: () => _repository.fetchAllAccreditations())
-        .doOnListen(() => notifyHaveProgress(true))
-        .doOnDone(() => notifyHaveProgress(false))
-        .listen(
-          _onDataLoaded,
-          onError: handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(fetch: () => _repository.fetchAllAccreditations()),
+      _onDataLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onDataLoaded(AccreditationChunk accreditationChunk) {
@@ -139,12 +137,18 @@ Future<AccreditationData> _calculateData(_AccreditationChunkModel model) async {
         (districtCode, v) => MapEntry(districtCode.from(lookups.districts), v)),
     districtStatusCumulativeData:
         _collectDistrictStatusData(chunk, filters, false).map(
-            (districtCode, v) =>
-                MapEntry(districtCode.from(lookups.districts), v)),
-    accreditationNationalData: _collectAccreditationNationalData(
-        chunk: filteredChunk, isCumulative: true, filters: filters),
+      (districtCode, v) => MapEntry(districtCode.from(lookups.districts), v),
+    ),
     accreditationNationalCumulativeData: _collectAccreditationNationalData(
-        chunk: filteredChunk, isCumulative: false, filters: filters),
+      chunk: filteredChunk,
+      isCumulative: true,
+      filters: filters,
+    ).mapToList(_mapAccreditationNationalDataToChartData),
+    accreditationNationalEvaluatedData: _collectAccreditationNationalData(
+      chunk: filteredChunk,
+      isCumulative: false,
+      filters: filters,
+    ).mapToList(_mapAccreditationNationalDataToChartData),
     accreditationStatusByState: _collectAccreditationStatusByState(
       filteredChunk,
       lookups,
@@ -158,6 +162,34 @@ Future<AccreditationData> _calculateData(_AccreditationChunkModel model) async {
   );
 }
 
+ChartData _mapAccreditationNationalDataToChartData(
+  String level,
+  List<int> levelDatas,
+) {
+  Color color;
+  switch (level.toLowerCase()) {
+    case 'level 1':
+      color = AppColors.kLevels[0];
+      break;
+    case 'level 2':
+      color = AppColors.kLevels[1];
+      break;
+    case 'level 3':
+      color = AppColors.kLevels[2];
+      break;
+    case 'level 4':
+      color = AppColors.kLevels[3];
+      break;
+    default:
+      color = HexColor.fromStringHash(level);
+  }
+  return ChartData(
+    level,
+    levelDatas.fold(0, (lv, rv) => lv + rv), /// levelDatas are [0, 0, n, 0] for level 3 for example
+    color,
+  );
+}
+
 Map<String, List<int>> _collectAccreditationProgressData(
     {bool isCumulative, AccreditationChunk chunk}) {
   return _generateCumulativeMap(
@@ -165,12 +197,16 @@ Map<String, List<int>> _collectAccreditationProgressData(
       cumulative: isCumulative);
 }
 
-Map<String, List<int>> _collectAccreditationNationalData(
-    {bool isCumulative, AccreditationChunk chunk, List<Filter> filters}) {
+Map<String, List<int>> _collectAccreditationNationalData({
+  bool isCumulative,
+  AccreditationChunk chunk,
+  List<Filter> filters,
+}) {
   return _generateCumulativeMap(
-      data: chunk.byNational.groupBy((it) => it.inspectionResult.toString()),
-      cumulative: isCumulative,
-      year: _selectedYear(filters));
+    data: chunk.byNational.groupBy((it) => it.inspectionResult.toString()),
+    cumulative: isCumulative,
+    year: _selectedYear(filters),
+  );
 }
 
 Map<String, List<int>> _collectDistrictStatusData(

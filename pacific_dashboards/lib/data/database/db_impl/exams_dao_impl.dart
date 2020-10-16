@@ -1,9 +1,9 @@
+import 'package:arch/arch.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
-import 'package:pacific_dashboards/models/pair.dart';
 
 class HiveExamsDao extends ExamsDao {
   static const _kKey = 'exams';

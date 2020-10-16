@@ -11,7 +11,9 @@ import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
-import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
+import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SchoolsViewModel extends BaseViewModel {
@@ -57,19 +59,15 @@ class SchoolsViewModel extends BaseViewModel {
           ?.moduleConfigFor(Section.schools)
           ?.note;
       _pageNoteSubject.add(note);
-    }, notifyProgress: true);
+    });
   }
 
   void _loadData() {
-    handleRepositoryFetch(fetch: () => _repository.fetchAllSchools())
-        .doOnListen(() => notifyHaveProgress(true))
-        .doOnDone(() => notifyHaveProgress(false))
-        .listen(
-          _onDataLoaded,
-          onError: handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(fetch: () => _repository.fetchAllSchools()),
+      _onDataLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onDataLoaded(List<School> schools) {
@@ -134,16 +132,50 @@ Future<SchoolsPageData> _transformSchoolsModel(
   final schoolsByAuthority = filteredSchools.groupBy((it) => it.authorityCode);
   final schoolsByGovt = filteredSchools.groupBy((it) => it.authorityGovt);
   final translates = _schoolsModel.lookups;
+
+  final enrollByDistrictRaw = _calculatePeopleCount(schoolsByDistrict).map(
+    (key, v) => MapEntry(key.from(translates.districts), v),
+  );
+  final enrolByAuthorityRaw = _calculatePeopleCount(schoolsByAuthority).map(
+    (key, v) => MapEntry(key.from(translates.authorities), v),
+  );
+  final enrolByPrivacyRaw = _calculatePeopleCount(schoolsByGovt).map(
+    (key, v) => MapEntry(key.from(translates.authorityGovt), v),
+  );
   return SchoolsPageData(
     year: _selectedYear(_schoolsModel.filters).toString(),
-    enrolByDistrict: _calculatePeopleCount(schoolsByDistrict).map((key, v) {
-      return MapEntry(key.from(translates.districts), v);
+    enrolByDistrict: enrollByDistrictRaw.mapToList((domain, measure) {
+      final domains = enrollByDistrictRaw.keys.toList();
+      final index = domains.indexOf(domain);
+      final color = index < AppColors.kDistricts.length
+          ? AppColors.kDistricts[index]
+          : HexColor.fromStringHash(domain);
+      return ChartData(
+        domain,
+        measure,
+        color,
+      );
     }),
-    enrolByAuthority: _calculatePeopleCount(schoolsByAuthority).map((key, v) {
-      return MapEntry(key.from(translates.authorities), v);
+    enrolByAuthority: enrolByAuthorityRaw.mapToList((domain, measure) {
+      final domains = enrolByAuthorityRaw.keys.toList();
+      final index = domains.indexOf(domain);
+      final color = index < AppColors.kDistricts.length
+          ? AppColors.kDistricts[index]
+          : HexColor.fromStringHash(domain);
+      return ChartData(
+        domain,
+        measure,
+        color,
+      );
     }),
-    enrolByPrivacy: _calculatePeopleCount(schoolsByGovt).map((key, v) {
-      return MapEntry(key.from(translates.authorityGovt), v);
+    enrolByPrivacy: enrolByPrivacyRaw.mapToList((domain, measure) {
+      return ChartData(
+        domain,
+        measure,
+        domain.toLowerCase().contains('non')
+            ? AppColors.kNonGovernmentChartColor
+            : AppColors.kGovernmentChartColor,
+      );
     }),
     enrolByAgeAndEducation: _calculateEnrollmentByAgeAndEducation(
       schools: filteredSchools,
@@ -159,7 +191,6 @@ Future<SchoolsPageData> _transformSchoolsModel(
 int _selectedYear(List<Filter> filters) {
   return filters.firstWhere((it) => it.id == 0).intValue;
 }
-
 
 Map<String, int> _calculatePeopleCount(
         Map<String, List<School>> groupedSchools) =>

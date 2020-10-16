@@ -55,19 +55,15 @@ class ExamsViewModel extends BaseViewModel {
           ?.moduleConfigFor(Section.exams)
           ?.note;
       _pageNoteSubject.add(note);
-    }, notifyProgress: true);
+    });
   }
 
   void _loadData() {
-    handleRepositoryFetch(fetch: () => _repository.fetchAllExams())
-        .doOnListen(() => notifyHaveProgress(true))
-        .doOnDone(() => notifyHaveProgress(false))
-        .listen(
-          _onDataLoaded,
-          onError: handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(fetch: () => _repository.fetchAllExams()),
+      _onDataLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onDataLoaded(List<Exam> exams) {

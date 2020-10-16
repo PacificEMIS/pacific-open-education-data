@@ -4,8 +4,8 @@ import 'package:pacific_dashboards/pages/individual_school/components/exams/indi
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class FilteredResultsByGenderComponent extends StatelessWidget {
@@ -263,15 +263,15 @@ class _GenderChart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _seriesList {
+  Future<List<charts.Series<ChartData, String>>> get _seriesList {
     return Future.microtask(() {
       final data = [
-        BarChartData(
+        ChartData(
           'domain',
           -_data.female,
           AppColors.kRed,
         ),
-        BarChartData(
+        ChartData(
           'domain',
           _data.male,
           AppColors.kBlue,
@@ -281,9 +281,9 @@ class _GenderChart extends StatelessWidget {
       return [
         charts.Series(
           id: 'gender_data',
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
           data: data,
         ),
       ];

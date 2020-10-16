@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:arch/arch.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
 import 'package:flutter/services.dart';
@@ -114,6 +115,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     List<_ThrowableHandler> additionalHandlers,
   }) async {
     try {
+      final connection = await Connectivity().checkConnectivity();
+      if (connection == ConnectivityResult.none) {
+        throw NoInternetException();
+      }
       final emis = await _settings.currentEmis;
       RestClient client;
       switch (emis) {

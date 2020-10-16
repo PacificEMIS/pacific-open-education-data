@@ -11,7 +11,9 @@ import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
-import 'package:pacific_dashboards/shared_ui/multi_table_widget.dart';
+import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TeachersViewModel extends BaseViewModel {
@@ -57,19 +59,15 @@ class TeachersViewModel extends BaseViewModel {
           ?.moduleConfigFor(Section.teachers)
           ?.note;
       _pageNoteSubject.add(note);
-    }, notifyProgress: true);
+    });
   }
 
   void _loadData() {
-    handleRepositoryFetch(fetch: () => _repository.fetchAllTeachers())
-        .doOnListen(() => notifyHaveProgress(true))
-        .doOnDone(() => notifyHaveProgress(false))
-        .listen(
-          _onDataLoaded,
-          onError: handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(fetch: () => _repository.fetchAllTeachers()),
+      _onDataLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onDataLoaded(List<Teacher> schools) {
@@ -136,16 +134,48 @@ Future<TeachersPageData> _transformTeachersModel(
 
   final translates = _teachersModel.lookups;
 
+  final teachersByDistrictRaw = _calculatePeopleCount(teachersByDistrict).map(
+    (key, v) => MapEntry(key.from(translates.districts), v),
+  );
+  final teachersByAuthorityRaw = _calculatePeopleCount(teachersByAuthority).map(
+    (key, v) => MapEntry(key.from(translates.authorities), v),
+  );
+  final teachersByPrivacyRaw = _calculatePeopleCount(teachersByGovt).map(
+    (key, v) => MapEntry(key.from(translates.authorityGovt), v),
+  );
   return TeachersPageData(
-    teachersByDistrict: _calculatePeopleCount(teachersByDistrict).map((key, v) {
-      return MapEntry(key.from(translates.districts), v);
+    teachersByDistrict: teachersByDistrictRaw.mapToList((domain, measure) {
+      final domains = teachersByDistrictRaw.keys.toList();
+      final index = domains.indexOf(domain);
+      final color = index < AppColors.kDistricts.length
+          ? AppColors.kDistricts[index]
+          : HexColor.fromStringHash(domain);
+      return ChartData(
+        domain,
+        measure,
+        color,
+      );
     }),
-    teachersByAuthority:
-        _calculatePeopleCount(teachersByAuthority).map((key, v) {
-      return MapEntry(key.from(translates.authorities), v);
+    teachersByAuthority: teachersByAuthorityRaw.mapToList((domain, measure) {
+      final domains = teachersByAuthorityRaw.keys.toList();
+      final index = domains.indexOf(domain);
+      final color = index < AppColors.kDistricts.length
+          ? AppColors.kDistricts[index]
+          : HexColor.fromStringHash(domain);
+      return ChartData(
+        domain,
+        measure,
+        color,
+      );
     }),
-    teachersByPrivacy: _calculatePeopleCount(teachersByGovt).map((key, v) {
-      return MapEntry(key.from(translates.authorityGovt), v);
+    teachersByPrivacy: teachersByPrivacyRaw.mapToList((domain, measure) {
+      return ChartData(
+        domain,
+        measure,
+        domain.toLowerCase().contains('non')
+            ? AppColors.kNonGovernmentChartColor
+            : AppColors.kGovernmentChartColor,
+      );
     }),
     teachersBySchoolLevelStateAndGender:
         _calculateEnrolBySchoolLevelAndDistrict(

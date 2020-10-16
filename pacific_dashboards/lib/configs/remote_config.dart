@@ -23,8 +23,12 @@ class FirebaseRemoteConfig extends RemoteConfig {
     final defaultConfig = _defaultConfig.toJson();
     await _remoteConfig.setDefaults({_kConfigName: defaultConfig});
 
-    await _remoteConfig.fetch(expiration: const Duration(hours: 5));
-    await _remoteConfig.activateFetched();
+    try {
+      await _remoteConfig.fetch(expiration: const Duration(hours: 5));
+      await _remoteConfig.activateFetched();
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

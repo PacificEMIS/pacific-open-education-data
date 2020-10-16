@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/shared_ui/bar_chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/res/strings.dart';
@@ -143,17 +143,17 @@ class _StackedChart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
       final maleData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.male,
           AppColors.kBlue,
         );
       }).toList();
       final femaleData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.female,
           AppColors.kRed,
@@ -162,19 +162,19 @@ class _StackedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'femaledata',
           data: femaleData,
         ),
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'maledata',
           data: maleData,
@@ -262,17 +262,17 @@ class _UnstackedChart extends StatelessWidget {
     );
   }
 
-  Future<List<charts.Series<BarChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
       final maleData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.male,
           AppColors.kBlue,
         );
       }).toList();
       final femaleData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.female,
           AppColors.kRed,
@@ -280,7 +280,7 @@ class _UnstackedChart extends StatelessWidget {
       }).toList();
 
       final totalData = _data.map((it) {
-        return BarChartData(
+        return ChartData(
           '${it.year}',
           it.total,
           AppColors.kGreen,
@@ -289,28 +289,28 @@ class _UnstackedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'maledata',
           data: maleData,
         ),
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'femaledata',
           data: femaleData,
         ),
         charts.Series(
-          domainFn: (BarChartData chartData, _) => chartData.domain,
-          measureFn: (BarChartData chartData, _) => chartData.measure,
-          colorFn: (BarChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (BarChartData chartData, _) =>
+          domainFn: (ChartData chartData, _) => chartData.domain,
+          measureFn: (ChartData chartData, _) => chartData.measure,
+          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (ChartData chartData, _) =>
               chartData.color.chartsColor,
           id: 'totaldata',
           data: totalData,

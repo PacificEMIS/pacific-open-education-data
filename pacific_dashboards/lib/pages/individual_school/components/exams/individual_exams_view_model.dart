@@ -126,16 +126,13 @@ class IndividualExamsViewModel extends BaseViewModel {
   }
 
   void _loadExamReports() {
-    handleRepositoryFetch(
-      fetch: () => _repository.fetchIndividualSchoolExams(_school.id),
-    )
-        .doOnListen(() => notifyHaveProgress(true))
-        .listen(
-          _onExamReportsLoaded,
-          onError: (t) => handleThrows,
-          cancelOnError: false,
-        )
-        .disposeWith(disposeBag);
+    listenHandled(
+      handleRepositoryFetch(
+        fetch: () => _repository.fetchIndividualSchoolExams(_school.id),
+      ),
+      _onExamReportsLoaded,
+      notifyProgress: true,
+    );
   }
 
   void _onExamReportsLoaded(List<SchoolExamReport> reports) {
