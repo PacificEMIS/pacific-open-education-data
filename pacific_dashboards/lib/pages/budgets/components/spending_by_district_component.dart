@@ -156,8 +156,8 @@ class _Chart extends StatelessWidget {
       final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
       final districts = dataSortedByDistrict.keys.toList();
       districts.forEachIndexed((index, item) {
-        colorScheme[item] = index < AppColors.kDistricts.length
-            ? AppColors.kDistricts[index]
+        colorScheme[item] = index < AppColors.kDynamicPalette.length
+            ? AppColors.kDynamicPalette[index]
             : HexColor.fromStringHash(item);
       });
       return colorScheme;

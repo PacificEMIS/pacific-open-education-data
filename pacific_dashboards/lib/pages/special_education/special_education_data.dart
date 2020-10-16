@@ -11,14 +11,15 @@ class SpecialEducationData {
   final Map<String, Map<String, List<DataByGroup>>>
       dataByCohortDistributionByState;
 
-  SpecialEducationData(
-      {@required this.year,
-      @required this.dataByGender,
-      @required this.dataByEthnicity,
-      @required this.dataBySpecialEdEnvironment,
-      @required this.dataByEnglishLearner,
-      @required this.dataByCohortDistributionByYear,
-      @required this.dataByCohortDistributionByState});
+  SpecialEducationData({
+    @required this.year,
+    @required this.dataByGender,
+    @required this.dataByEthnicity,
+    @required this.dataBySpecialEdEnvironment,
+    @required this.dataByEnglishLearner,
+    @required this.dataByCohortDistributionByYear,
+    @required this.dataByCohortDistributionByState,
+  });
 }
 
 class DataByGroup {

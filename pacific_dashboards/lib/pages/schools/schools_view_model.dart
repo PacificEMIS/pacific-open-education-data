@@ -147,8 +147,8 @@ Future<SchoolsPageData> _transformSchoolsModel(
     enrolByDistrict: enrollByDistrictRaw.mapToList((domain, measure) {
       final domains = enrollByDistrictRaw.keys.toList();
       final index = domains.indexOf(domain);
-      final color = index < AppColors.kDistricts.length
-          ? AppColors.kDistricts[index]
+      final color = index < AppColors.kDynamicPalette.length
+          ? AppColors.kDynamicPalette[index]
           : HexColor.fromStringHash(domain);
       return ChartData(
         domain,
@@ -159,8 +159,8 @@ Future<SchoolsPageData> _transformSchoolsModel(
     enrolByAuthority: enrolByAuthorityRaw.mapToList((domain, measure) {
       final domains = enrolByAuthorityRaw.keys.toList();
       final index = domains.indexOf(domain);
-      final color = index < AppColors.kDistricts.length
-          ? AppColors.kDistricts[index]
+      final color = index < AppColors.kDynamicPalette.length
+          ? AppColors.kDynamicPalette[index]
           : HexColor.fromStringHash(domain);
       return ChartData(
         domain,

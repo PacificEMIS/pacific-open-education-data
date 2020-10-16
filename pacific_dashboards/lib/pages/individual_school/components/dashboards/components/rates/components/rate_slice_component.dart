@@ -240,10 +240,10 @@ class _Chart extends StatelessWidget {
     _data.forEach((it) {
       final domain = it.classLevel;
       if (!colorScheme.containsKey(domain)) {
-        if (colorIndex >= AppColors.kDistricts.length) {
+        if (colorIndex >= AppColors.kDynamicPalette.length) {
           colorScheme[domain] = HexColor.fromStringHash(domain);
         } else {
-          colorScheme[domain] = AppColors.kDistricts[colorIndex];
+          colorScheme[domain] = AppColors.kDynamicPalette[colorIndex];
           colorIndex++;
         }
       }

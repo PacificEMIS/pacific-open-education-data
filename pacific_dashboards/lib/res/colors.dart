@@ -37,7 +37,7 @@ class AppColors {
     const Color.fromRGBO(13, 211, 92, 1),
   ];
 
-  static const List<Color> kDistricts = [
+  static const List<Color> kDynamicPalette = [
     const Color.fromRGBO(26, 115, 232, 1),
     const Color.fromRGBO(32, 209, 103, 1),
     const Color.fromRGBO(255, 220, 38, 1),
