@@ -13,6 +13,8 @@ import 'package:rxdart/rxdart.dart';
 
 import 'budget_data.dart';
 
+const int _filterBeforeYear = 2014;
+
 class BudgetViewModel extends BaseViewModel {
   final Repository _repository;
   final RemoteConfig _remoteConfig;
@@ -171,7 +173,7 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
         spendings.groupBy((element) => element.districtCode);
 
     groupedByDistrict.forEach((district, values) {
-      if (district != null && year > 2014) {
+      if (district != null && year > _filterBeforeYear) {
         double districtEdExpA = 0;
         double districtEdExpB = 0;
         double districtEdRecurrentExpA = 0;
@@ -221,7 +223,7 @@ List<DataSpendingByDistrict> _generateSpendingSectorData(
     var groupedByDistrict = spendings.groupBy((element) => element.sectorCode);
 
     groupedByDistrict.forEach((district, values) {
-      if (district != null && year > 2014) {
+      if (district != null && year > _filterBeforeYear) {
         double districtEdExpA = 0;
         double districtEdExpB = 0;
         double districtEdRecurrentExpA = 0;
@@ -264,7 +266,7 @@ List _generateSpendingByYearData(
   final List<DataByGnpAndGovernmentSpending> budgetedData = [];
 
   budgetDataGroupedByYear.forEach((year, values) {
-    if (year > 2014) {
+    if (year > _filterBeforeYear) {
       double govtExpenseA = 0;
       double govtExpenseB = 0;
       double gNP = 0;

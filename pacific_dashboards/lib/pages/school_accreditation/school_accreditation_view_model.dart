@@ -293,7 +293,7 @@ Map<String, List<int>> _generateCumulativeMap({
           break;
       }
     });
-    if (key != null) result[key] = levels;
+    if (key != null && key != "null") result[key] = levels;
   });
 
   return result;

@@ -174,9 +174,7 @@ class _Chart extends StatelessWidget {
       final barChartData = List<ChartData>();
       if (_tab.index == 0) {
         barChartData.addAll(_data.map((it) {
-          var title = it.title.length > 17
-              ? it.title.substring(0, 17) + '..'
-              : it.title;
+          var title = it.title.length > 15 ? it.title.replaceFirst(new RegExp(r'\s'), '\n', 15) : it.title;
           return ChartData(
             title,
             it.firstValue,
@@ -184,9 +182,7 @@ class _Chart extends StatelessWidget {
           );
         }).toList());
         barChartData.addAll(_data.map((it) {
-          var title = it.title.length > 17
-              ? it.title.substring(0, 17) + '..'
-              : it.title;
+          var title = it.title.length > 15 ? it.title.replaceFirst(new RegExp(r'\s'), '\n', 15) : it.title;
           return ChartData(
             title,
             it.secondValue,

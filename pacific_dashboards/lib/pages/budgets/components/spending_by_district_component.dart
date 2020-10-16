@@ -35,40 +35,24 @@ class _SpendingByDistrictComponentState
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         MiniTabLayout(
-          tabs: _DashboardTab.values,
+          tabs: _Tab.values,
           tabNameBuilder: (tab) {
-            switch (tab) {
-              case _DashboardTab.actualExpenditure:
-                return 'actualExpenditure'.localized(context);
-              case _DashboardTab.actualExpPerHead:
-                return 'actualExpPerHead'.localized(context);
-              case _DashboardTab.actualRecurrent:
-                return 'actualRecurrentExpenditure'.localized(context);
-              case _DashboardTab.budget:
-                return 'budgetExpenditure'.localized(context);
-              case _DashboardTab.budgetExpPerHead:
-                return 'budgetExpPerHead'.localized(context);
-              case _DashboardTab.budgetRecurrent:
-                return 'budgetRecurrentExpenditure'.localized(context);
-              case _DashboardTab.enrolment:
-                return 'enrolment'.localized(context);
-            }
-            throw FallThroughError();
+            return tab.toString().substring(5).localized(context);
           },
           builder: (ctx, tab) {
             switch (tab) {
-              case _DashboardTab.actualExpenditure:
-              case _DashboardTab.budget:
-              case _DashboardTab.actualRecurrent:
-              case _DashboardTab.budgetRecurrent:
-              case _DashboardTab.actualExpPerHead:
-              case _DashboardTab.enrolment:
+              case _Tab.actualExpenditure:
+              case _Tab.budget:
+              case _Tab.actualRecurrentExpenditure:
+              case _Tab.budgetRecurrentExpenditure:
+              case _Tab.actualExpPerHead:
+              case _Tab.enrolment:
                 return _Chart(
                     data: widget.data,
                     dataFiltered: widget.dataFiltered,
                     groupingType: charts.BarGroupingType.stacked,
                     tab: tab);
-              case _DashboardTab.budgetExpPerHead:
+              case _Tab.budgetExpPerHead:
                 return _Chart(
                     data: widget.data,
                     dataFiltered: widget.dataFiltered,
@@ -83,11 +67,11 @@ class _SpendingByDistrictComponentState
   }
 }
 
-enum _DashboardTab {
+enum _Tab {
   actualExpenditure,
   budget,
-  actualRecurrent,
-  budgetRecurrent,
+  actualRecurrentExpenditure,
+  budgetRecurrentExpenditure,
   actualExpPerHead,
   budgetExpPerHead,
   enrolment
@@ -97,14 +81,14 @@ class _Chart extends StatelessWidget {
   final List<DataSpendingByDistrict> _data;
   final List<DataSpendingByDistrict> _dataFiltered;
   final charts.BarGroupingType _groupingType;
-  final _DashboardTab _tab;
+  final _Tab _tab;
 
   const _Chart(
       {Key key,
       @required List<DataSpendingByDistrict> data,
       @required List<DataSpendingByDistrict> dataFiltered,
       @required charts.BarGroupingType groupingType,
-      @required _DashboardTab tab})
+      @required _Tab tab})
       : assert(data != null),
         _data = data,
         _dataFiltered = dataFiltered,
@@ -134,7 +118,7 @@ class _Chart extends StatelessWidget {
                 vertical: false,
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickProviderSpec: charts.BasicNumericTickProviderSpec(
-                    desiredMinTickCount: 7,
+                    desiredMinTickCount: 5,
                     desiredMaxTickCount: 13,
                   ),
                   renderSpec: charts.GridlineRendererSpec(
@@ -157,28 +141,32 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  ChartInfoTableWidget generateTitleTable(BuildContext context) {
+  Widget generateTitleTable(BuildContext context) {
     Map<String, int> districts = new Map();
     final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
     dataSortedByDistrict.forEach((key, value) {
       var spending = 0;
+      var title = key;
       value.forEach((it) {
-        if (_tab == _DashboardTab.actualExpenditure)
+        if (_tab == _Tab.actualExpenditure)
           spending += it.edExpA;
-        else if (_tab == _DashboardTab.actualExpPerHead)
+        else if (_tab == _Tab.actualExpPerHead)
           spending += it.edExpAPerHead;
-        else if (_tab == _DashboardTab.actualRecurrent)
+        else if (_tab == _Tab.actualRecurrentExpenditure)
           spending += it.edRecurrentExpA;
-        else if (_tab == _DashboardTab.budget)
+        else if (_tab == _Tab.budget)
           spending += it.edExpB;
-        else if (_tab == _DashboardTab.budgetExpPerHead)
+        else if (_tab == _Tab.budgetExpPerHead)
           spending += it.edExpBPerHead;
-        else if (_tab == _DashboardTab.budgetRecurrent)
+        else if (_tab == _Tab.budgetRecurrentExpenditure)
           spending += it.edRecurrentExpB;
-        else if (_tab == _DashboardTab.enrolment) spending += it.enrolment;
+        else if (_tab == _Tab.enrolment) spending += it.enrolment;
       });
-      districts[key] = spending;
+      if (spending != 0) districts[title] = spending;
     });
+
+    if (districts.length == 0) return Container();
+
     final chartData = districts.mapToList((domain, measure) {
       final domains = districts.keys.toList();
       final index = domains.indexOf(domain);
@@ -203,44 +191,44 @@ class _Chart extends StatelessWidget {
       final data = List<ChartData>();
       data.addAll(_data.map((it) {
         switch (_tab) {
-          case _DashboardTab.actualExpPerHead:
+          case _Tab.actualExpPerHead:
             return ChartData(
               it.year,
               it.edExpAPerHead,
               HexColor.fromStringHash(it.district),
             );
-          case _DashboardTab.actualExpenditure:
+          case _Tab.actualExpenditure:
             return ChartData(
               it.year,
               it.edExpA,
               HexColor.fromStringHash(it.district),
             );
-          case _DashboardTab.actualRecurrent:
+          case _Tab.actualRecurrentExpenditure:
             return ChartData(
               it.year,
               it.edRecurrentExpA,
               HexColor.fromStringHash(it.district),
             );
           //Budget
-          case _DashboardTab.budget:
+          case _Tab.budget:
             return ChartData(
               it.year,
               it.edExpB,
               HexColor.fromStringHash(it.district),
             );
-          case _DashboardTab.budgetExpPerHead:
+          case _Tab.budgetExpPerHead:
             return ChartData(
               it.year,
               it.edExpBPerHead,
               HexColor.fromStringHash(it.district),
             );
-          case _DashboardTab.budgetRecurrent:
+          case _Tab.budgetRecurrentExpenditure:
             return ChartData(
               it.year,
               it.edRecurrentExpB,
               HexColor.fromStringHash(it.district),
             );
-          case _DashboardTab.enrolment:
+          case _Tab.enrolment:
             return ChartData(
               it.year,
               it.enrolment,
