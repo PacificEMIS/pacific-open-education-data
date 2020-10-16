@@ -156,7 +156,7 @@ class MultiTableWidget<T> extends StatelessWidget {
           fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[3],
-          value: cellData.measure.percentageEdGovt.toStringAsFixed(1),
+          value: cellData.measure.percentageEdGovt.toInt().toString(),
           fontWeight: _fontWeight));
     } else if (_type == 'GNP') {
       list.add(_Cell(
@@ -173,7 +173,7 @@ class MultiTableWidget<T> extends StatelessWidget {
           fontWeight: _fontWeight));
       list.add(_Cell(
           flex: _columnFlex[3],
-          value: cellData.measure.percentageEdGnp.toStringAsFixed(1),
+          value: cellData.measure.percentageEdGnp.toInt().toString(),
           fontWeight: _fontWeight));
     } else if (_type == 'ECE') {
       list.add(_Cell(
