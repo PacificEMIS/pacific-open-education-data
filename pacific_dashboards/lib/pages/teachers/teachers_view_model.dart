@@ -254,13 +254,15 @@ Map<String, List<int>> _generateCertificationData(
       certification[0] -= it.certQualF;
       certification[1] -= (it.qualifiedF - it.certQualF);
       certification[2] -= (it.certifiedF - it.certQualF);
-      certification[3] -= it.numTeachersF + (certification[0] + certification[1] + certification[2]);
+      certification[3] -= it.numTeachersF;
 
       certification[4] += it.certQualM;
       certification[5] += (it.qualifiedM - it.certQualM);
       certification[6] += (it.certifiedM - it.certQualM);
-      certification[7] += it.numTeachersM - (certification[4] + certification[5] + certification[6]);
+      certification[7] += it.numTeachersM;
     });
+    certification[3] -= (certification[0] + certification[1] + certification[2]);
+    certification[7] -= (certification[4] + certification[5] + certification[6]);
     if (key != null) result[key] = certification;
   });
 
