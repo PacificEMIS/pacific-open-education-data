@@ -72,15 +72,15 @@ class WashViewModel extends BaseViewModel {
     );
   }
 
-  void _onDataLoaded(WashChunk wash) {
-    launchHandled(() async {
-      _lookups = await _repository.lookups.first;
-      _wash = wash;
-      _filters = await _initFilters();
-      _filtersSubject.add(_filters);
-      await _updatePageData();
-    });
-  }
+  Future<void> _onDataLoaded(WashChunk wash) => launchHandled(
+        () async {
+          _lookups = await _repository.lookups.first;
+          _wash = wash;
+          _filters = await _initFilters();
+          _filtersSubject.add(_filters);
+          await _updatePageData();
+        },
+      );
 
   Future<void> _updatePageData() async {
     _dataSubject.add(
@@ -255,31 +255,31 @@ _generateWashWater(Map<String, List<Water>> washGroupedBySchNo) {
       if (data.pipedWaterSupplyCurrentlyAvailable.compareTo('Yes') == 0)
         pipedWaterSupplyCurrentlyAvailable += 1;
       if (data.pipedWaterSupplyUsedForDrinking.compareTo('Yes') == 0)
-      pipedWaterSupplyUsedForDrinking += 1;
+        pipedWaterSupplyUsedForDrinking += 1;
       if (data.protectedWellCurrentlyAvailable.compareTo('Yes') == 0)
-      protectedWellCurrentlyAvailable += 1;
+        protectedWellCurrentlyAvailable += 1;
       if (data.protectedWellUsedForDrinking.compareTo('Yes') == 0)
-      protectedWellUsedForDrinking += 1;
+        protectedWellUsedForDrinking += 1;
       if (data.unprotectedWellSpringCurrentlyAvailable.compareTo('Yes') == 0)
-      unprotectedWellSpringCurrentlyAvailable += 1;
+        unprotectedWellSpringCurrentlyAvailable += 1;
       if (data.unprotectedWellSpringUsedForDrinking.compareTo('Yes') == 0)
-      unprotectedWellSpringUsedForDrinking += 1;
+        unprotectedWellSpringUsedForDrinking += 1;
       if (data.rainwaterCurrentlyAvailable.compareTo('Yes') == 0)
-      rainwaterCurrentlyAvailable += 1;
+        rainwaterCurrentlyAvailable += 1;
       if (data.rainwaterUsedForDrinking.compareTo('Yes') == 0)
-      rainwaterUsedForDrinking += 1;
+        rainwaterUsedForDrinking += 1;
       if (data.bottledWaterCurrentlyAvailable.compareTo('Yes') == 0)
-      bottledWaterCurrentlyAvailable += 1;
+        bottledWaterCurrentlyAvailable += 1;
       if (data.bottledWaterUsedForDrinking.compareTo('Yes') == 0)
-      bottledWaterUsedForDrinking += 1;
+        bottledWaterUsedForDrinking += 1;
       if (data.tankerTruckCartUsedForDrinking.compareTo('Yes') == 0)
-      tankerTruckCartCurrentlyAvailable += 1;
+        tankerTruckCartCurrentlyAvailable += 1;
       if (data.tankerTruckCartUsedForDrinking.compareTo('Yes') == 0)
-      tankerTruckCartUsedForDrinking += 1;
+        tankerTruckCartUsedForDrinking += 1;
       if (data.surfacedWaterCurrentlyAvailable.compareTo('Yes') == 0)
-      surfacedWaterCurrentlyAvailable += 1;
+        surfacedWaterCurrentlyAvailable += 1;
       if (data.surfacedWaterUsedForDrinking.compareTo('Yes') == 0)
-      surfacedWaterUsedForDrinking += 1;
+        surfacedWaterUsedForDrinking += 1;
     }
 
     usedForDrinking['Piped Water Supply'] = pipedWaterSupplyUsedForDrinking;

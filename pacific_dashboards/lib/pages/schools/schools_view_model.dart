@@ -70,15 +70,15 @@ class SchoolsViewModel extends BaseViewModel {
     );
   }
 
-  void _onDataLoaded(List<School> schools) {
-    launchHandled(() async {
-      _lookups = await _repository.lookups.first;
-      _schools = schools;
-      _filters = await _initFilters();
-      _filtersSubject.add(_filters);
-      await _updatePageData();
-    });
-  }
+  Future<void> _onDataLoaded(List<School> schools) => launchHandled(
+        () async {
+          _lookups = await _repository.lookups.first;
+          _schools = schools;
+          _filters = await _initFilters();
+          _filtersSubject.add(_filters);
+          await _updatePageData();
+        },
+      );
 
   Future<void> _updatePageData() async {
     _dataSubject.add(

@@ -47,14 +47,14 @@ class EnrollViewModel extends BaseViewModel {
     );
   }
 
-  void _onEnrollLoaded(SchoolEnrollChunk chunk) {
+  Future<void>  _onEnrollLoaded(SchoolEnrollChunk chunk) {
     _chunk = chunk;
-    _parseData();
+    return _parseData();
   }
 
-  void _parseData() {
-    if (_chunk == null) return;
-    launchHandled(() async {
+  Future<void> _parseData() {
+    if (_chunk == null) return Future.value();
+    return launchHandled(() async {
       final gradeHistory = await compute(
         _generateGradeDataHistory,
         _chunk.schoolData,

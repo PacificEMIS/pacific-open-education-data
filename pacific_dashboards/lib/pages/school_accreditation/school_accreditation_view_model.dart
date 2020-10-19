@@ -70,15 +70,14 @@ class SchoolAccreditationViewModel extends BaseViewModel {
     );
   }
 
-  void _onDataLoaded(AccreditationChunk accreditationChunk) {
-    launchHandled(() async {
-      _lookups = await _repository.lookups.first;
-      _accreditationChunk = accreditationChunk;
-      _filters = await _initFilters();
-      _filtersSubject.add(_filters);
-      await _updatePageData();
-    });
-  }
+  Future<void> _onDataLoaded(AccreditationChunk accreditationChunk) =>
+      launchHandled(() async {
+        _lookups = await _repository.lookups.first;
+        _accreditationChunk = accreditationChunk;
+        _filters = await _initFilters();
+        _filtersSubject.add(_filters);
+        await _updatePageData();
+      });
 
   Future<void> _updatePageData() async {
     _dataSubject.add(
@@ -185,7 +184,9 @@ ChartData _mapAccreditationNationalDataToChartData(
   }
   return ChartData(
     level,
-    levelDatas.fold(0, (lv, rv) => lv + rv), /// levelDatas are [0, 0, n, 0] for level 3 for example
+    levelDatas.fold(0, (lv, rv) => lv + rv),
+
+    /// levelDatas are [0, 0, n, 0] for level 3 for example
     color,
   );
 }

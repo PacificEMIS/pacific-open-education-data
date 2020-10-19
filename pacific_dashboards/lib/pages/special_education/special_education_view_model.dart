@@ -61,21 +61,21 @@ class SpecialEducationViewModel extends BaseViewModel {
 
   void _loadData() {
     listenHandled(
-      handleRepositoryFetch(fetch: () => _repository.fetchAllSpecialEducation()),
+      handleRepositoryFetch(
+          fetch: () => _repository.fetchAllSpecialEducation()),
       _onDataLoaded,
       notifyProgress: true,
     );
   }
 
-  void _onDataLoaded(List<SpecialEducation> specialEducations) {
-    launchHandled(() async {
-      _lookups = await _repository.lookups.first;
-      _specialEducation = specialEducations;
-      _filters = await _initFilters();
-      _filtersSubject.add(_filters);
-      await _updatePageData();
-    });
-  }
+  Future<void> _onDataLoaded(List<SpecialEducation> specialEducations) =>
+      launchHandled(() async {
+        _lookups = await _repository.lookups.first;
+        _specialEducation = specialEducations;
+        _filters = await _initFilters();
+        _filtersSubject.add(_filters);
+        await _updatePageData();
+      });
 
   Future<void> _updatePageData() async {
     _dataSubject.add(
@@ -127,8 +127,7 @@ Future<SpecialEducationData> _specialEducationModel(
   Map<String, Map<String, List<DataByGroup>>> dataByYear = new Map();
 
   final specialEducationData = model.specialEducation;
-  final filteredData =
-      await specialEducationData.applyFilters(model.filters);
+  final filteredData = await specialEducationData.applyFilters(model.filters);
   var dataByGender =
       _generateDataByTitle(filteredData.groupBy((it) => it.disability));
   var dataByEthnicity =
@@ -209,8 +208,7 @@ Map<String, List<DataByGroup>> _generateDataByYear(
 
 Map<String, List<DataByGroup>> _generateDataByState(
     Map<String, List<SpecialEducation>> dataGroupedByState) {
-  Map<String, List<DataByGroup>> dataByState =
-      Map<String, List<DataByGroup>>();
+  Map<String, List<DataByGroup>> dataByState = Map<String, List<DataByGroup>>();
 
   dataGroupedByState.forEach((state, values) {
     Map<String, List<SpecialEducation>> groupedByYear =
@@ -222,9 +220,11 @@ Map<String, List<DataByGroup>> _generateDataByState(
         number += element.number;
       });
       dataByEnvironment.add(DataByGroup(
-          title: key.toString() == "" ? 'na' : key.toString(), firstValue: number, secondValue: 0));
+          title: key.toString() == "" ? 'na' : key.toString(),
+          firstValue: number,
+          secondValue: 0));
     });
-    dataByState[state  == "" ? 'na' : state] = dataByEnvironment ?? [];
+    dataByState[state == "" ? 'na' : state] = dataByEnvironment ?? [];
   });
   return dataByState;
 }

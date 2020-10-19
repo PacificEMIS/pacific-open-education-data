@@ -44,14 +44,14 @@ class RatesViewModel extends BaseViewModel {
     );
   }
 
-  void _onFlowLoaded(List<SchoolFlow> flows) {
+  Future<void>  _onFlowLoaded(List<SchoolFlow> flows) {
     _data = flows;
-    _parseData();
+    return _parseData();
   }
 
-  void _parseData() {
-    if (_data == null) return;
-    launchHandled(() async {
+  Future<void>  _parseData() {
+    if (_data == null) return Future.value();
+    return launchHandled(() async {
       final lookups = await _repository.lookups.first;
       final flowsLookuped = _FlowsLookuped(_data, lookups);
       final dataOnLastYear = await compute(

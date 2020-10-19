@@ -69,15 +69,15 @@ class BudgetViewModel extends BaseViewModel {
     );
   }
 
-  void _onDataLoaded(List<Budget> budgets) {
-    launchHandled(() async {
-      _lookups = await _repository.lookups.first;
-      _budget = budgets;
-      _filters = await _initFilters();
-      _filtersSubject.add(_filters);
-      await _updatePageData();
-    });
-  }
+  Future<void> _onDataLoaded(List<Budget> budgets) => launchHandled(
+        () async {
+          _lookups = await _repository.lookups.first;
+          _budget = budgets;
+          _filters = await _initFilters();
+          _filtersSubject.add(_filters);
+          await _updatePageData();
+        },
+      );
 
   Future<void> _updatePageData() async {
     _dataSubject.add(
@@ -408,16 +408,16 @@ List<DataSpendingBySector> _generateYearAndSectorData(
       primaryTotalBudgeted > 0 ||
       secondaryTotalActual > 0 ||
       secondaryTotalBudgeted > 0)
-  dataSpendingBySector.add(DataSpendingBySector(
-      districtCode: 'labelTotal',
-      eceActual: eceTotalActual,
-      eceBudget: eceTotalBudgeted,
-      primaryActual: primaryTotalActual,
-      primaryBudget: primaryTotalBudgeted,
-      secondaryActual: secondaryTotalActual,
-      secondaryBudget: secondaryTotalBudgeted,
-      totalActual: eceTotalActual + primaryTotalActual + secondaryTotalActual,
-      totalBudget:
-          eceTotalBudgeted + primaryTotalBudgeted + secondaryTotalBudgeted));
+    dataSpendingBySector.add(DataSpendingBySector(
+        districtCode: 'labelTotal',
+        eceActual: eceTotalActual,
+        eceBudget: eceTotalBudgeted,
+        primaryActual: primaryTotalActual,
+        primaryBudget: primaryTotalBudgeted,
+        secondaryActual: secondaryTotalActual,
+        secondaryBudget: secondaryTotalBudgeted,
+        totalActual: eceTotalActual + primaryTotalActual + secondaryTotalActual,
+        totalBudget:
+            eceTotalBudgeted + primaryTotalBudgeted + secondaryTotalBudgeted));
   return dataSpendingBySector;
 }
