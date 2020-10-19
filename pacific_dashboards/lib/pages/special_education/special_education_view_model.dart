@@ -220,11 +220,11 @@ Map<String, List<DataByGroup>> _generateDataByState(
         number += element.number;
       });
       dataByEnvironment.add(DataByGroup(
-          title: key.toString() == "" ? 'na' : key.toString(),
+          title: key.toString() == "" || key == null? 'na' : key.toString(),
           firstValue: number,
           secondValue: 0));
     });
-    dataByState[state == "" ? 'na' : state] = dataByEnvironment ?? [];
+    dataByState[state == "" || state == null ? 'na' : state] = dataByEnvironment ?? [];
   });
   return dataByState;
 }

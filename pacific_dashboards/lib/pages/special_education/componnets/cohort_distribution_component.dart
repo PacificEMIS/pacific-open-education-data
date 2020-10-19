@@ -182,7 +182,7 @@ class _Chart extends StatelessWidget {
       titles.forEach((it) {
         list.add(
           ChartLegendItem(
-              color: colorScheme[it], value: it == null ? 'na' : it),
+              color: colorScheme[it] ?? Colors.bluex, value: it == null || it == '' ? 'na' : it),
         );
       });
     }
@@ -199,7 +199,7 @@ class _Chart extends StatelessWidget {
           return ChartData(
             it.title,
             it.firstValue,
-            colorScheme[key],
+            colorScheme[key ?? 'na'],
           );
         }).toList());
       });
