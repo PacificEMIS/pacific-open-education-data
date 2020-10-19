@@ -15,11 +15,7 @@ class SectionsGrid extends StatelessWidget {
     return GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _sections.length,
-        // crossAxisCount: 2,
-        // crossAxisSpacing: 24,
-        // mainAxisSpacing: 24,
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-        // childAspectRatio: 1.0,
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: _useMobileLayout ? 2 : 3),
@@ -66,18 +62,15 @@ class menu_tab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Expanded(
-                  flex: 5,
+                Center(
                   child: Container(
-                    margin: const EdgeInsets.all(20.0),
                     child: SvgPicture.asset(
                       _section.logoPath,
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 2,
+                Container(
                   child: Container(
                     margin: const EdgeInsets.only(left: 5.0, right: 5.0),
                     child: Text(
