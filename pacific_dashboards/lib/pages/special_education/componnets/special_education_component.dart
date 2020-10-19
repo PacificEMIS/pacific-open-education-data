@@ -70,6 +70,7 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
                       data: widget.data,
                       groupingType: charts.BarGroupingType.stacked,
                       tab: tab,
+                      chartHeight: widget.data.length,
                       colorScheme: colorScheme,
                     );
                   case _Tab.diagram:
@@ -112,19 +113,22 @@ class _Chart extends StatelessWidget {
   final charts.BarGroupingType _groupingType;
   final _Tab _tab;
   final Map<String, Color> _colorScheme;
+  final int _chartHeight;
 
-  const _Chart({
-    Key key,
-    @required List<DataByGroup> data,
-    @required charts.BarGroupingType groupingType,
-    @required _Tab tab,
-    @required Map<String, Color> colorScheme,
-  })  : assert(data != null),
+  const _Chart(
+      {Key key,
+      @required List<DataByGroup> data,
+      @required charts.BarGroupingType groupingType,
+      @required _Tab tab,
+      @required Map<String, Color> colorScheme,
+      @required int chartHeight})
+      : assert(data != null),
         assert(colorScheme != null),
         _colorScheme = colorScheme,
         _data = data,
         _groupingType = groupingType,
         _tab = tab,
+        _chartHeight = chartHeight,
         super(key: key);
 
   @override
@@ -133,25 +137,28 @@ class _Chart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        AspectRatio(
-          aspectRatio: 328 / 248,
-          child: FutureBuilder(
-            future: _createSeries(_colorScheme),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
-              if (_tab == _Tab.diagram) {
-                return charts.PieChart(
+        FutureBuilder(
+          future: _createSeries(_colorScheme),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
+            if (_tab == _Tab.diagram) {
+              return SizedBox(
+                height: _chartHeight * (_chartHeight > 5 ? 40.5 : 80.5),
+                child: charts.PieChart(
                   snapshot.data,
                   animate: false,
                   defaultRenderer: charts.ArcRendererConfig(
                     arcWidth: 100,
                     strokeWidthPx: 0.0,
                   ),
-                );
-              } else {
-                return charts.BarChart(
+                ),
+              );
+            } else {
+              return SizedBox(
+                height: _chartHeight * (_chartHeight > 5 ? 40.5 : 80.5),
+                child: charts.BarChart(
                   snapshot.data,
                   animate: false,
                   barGroupingType: _groupingType,
@@ -173,10 +180,10 @@ class _Chart extends StatelessWidget {
                       lineStyle: chartAxisLineStyle,
                     ),
                   ),
-                );
-              }
-            },
-          ),
+                ),
+              );
+            }
+          },
         ),
         if (_tab == _Tab.schedule)
           Row(

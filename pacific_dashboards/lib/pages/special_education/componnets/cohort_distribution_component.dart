@@ -52,22 +52,23 @@ class _CohortDistributionComponentState
                 return _Chart(
                     data: widget.data['environment'],
                     groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
+                    tab: tab,
+                    chartHeight: widget.data.length);
               case _Tab.disability:
                 return _Chart(
                     data: widget.data['disability'],
                     groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
+                    tab: tab, chartHeight: widget.data.length);
               case _Tab.ethnicity:
                 return _Chart(
                     data: widget.data['ethnicity'],
                     groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
+                    tab: tab, chartHeight: widget.data.length);
               case _Tab.englishLearner:
                 return _Chart(
                     data: widget.data['englishLearner'],
                     groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
+                    tab: tab, chartHeight: widget.data.length);
             }
             throw FallThroughError();
           },
@@ -82,16 +83,19 @@ enum _Tab { environment, disability, ethnicity, englishLearner }
 class _Chart extends StatelessWidget {
   final Map<String, List<DataByGroup>> _data;
   final charts.BarGroupingType _groupingType;
+  final int _chartHeight;
 
   const _Chart({
     Key key,
     @required Map<String, List<DataByGroup>> data,
     @required charts.BarGroupingType groupingType,
     @required _Tab tab,
+    @required int chartHeight
   })  : assert(data != null),
         _data = data,
         _groupingType = groupingType,
-        super(key: key);
+        _chartHeight = chartHeight,
+      super(key: key);
 
   Future<Map<String, Color>> get _colorScheme {
     return Future.microtask(() {
@@ -119,8 +123,7 @@ class _Chart extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            AspectRatio(
-              aspectRatio: 328 / 248,
+            SizedBox(height: _chartHeight * (_chartHeight > 5 ? 40.5 : 80.5),
               child: FutureBuilder(
                 future: _createSeries(colorScheme),
                 builder: (context, snapshot) {
