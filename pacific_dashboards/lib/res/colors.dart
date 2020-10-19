@@ -37,7 +37,7 @@ class AppColors {
     const Color.fromRGBO(201, 201, 201, 1),
   ];
 
-  static const List<Color> kDistricts = [
+  static const List<Color> kDynamicPalette = [
     const Color.fromRGBO(26, 115, 232, 1),
     const Color.fromRGBO(32, 209, 103, 1),
     const Color.fromRGBO(255, 220, 38, 1),
@@ -69,6 +69,9 @@ class AppColors {
       const Color.fromRGBO(26, 115, 232, 1);
   static const Color kNonGovernmentChartColor =
       const Color.fromRGBO(2, 185, 243, 1);
+
+  static const Color kMale = const Color.fromRGBO(26, 115, 232, 1);
+  static const Color kFemale = const Color.fromRGBO(248, 84, 84, 1);
 }
 
 extension ChartColor on Color {

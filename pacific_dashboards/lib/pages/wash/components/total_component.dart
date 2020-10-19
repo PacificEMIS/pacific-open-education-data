@@ -168,8 +168,8 @@ class _Chart extends StatelessWidget {
     final chartData = districts.mapToList((domain, measure) {
       final domains = districts.keys.toList();
       final index = domains.indexOf(domain);
-      final color = index < AppColors.kDistricts.length
-          ? AppColors.kDistricts[index]
+      final color = index < AppColors.kDynamicPalette.length
+          ? AppColors.kDynamicPalette[index]
           : HexColor.fromStringHash(domain);
       return ChartData(
         domain,

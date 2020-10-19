@@ -15,12 +15,12 @@ class SpendingByDistrictComponent extends StatefulWidget {
   final List<DataSpendingByDistrict> dataFiltered;
   final String domain;
 
-  const SpendingByDistrictComponent({
-    Key key,
-    @required this.data,
-    @required this.dataFiltered,
-    @required this.domain
-  })  : assert(data != null && dataFiltered != null),
+  const SpendingByDistrictComponent(
+      {Key key,
+      @required this.data,
+      @required this.dataFiltered,
+      @required this.domain})
+      : assert(data != null && dataFiltered != null),
         super(key: key);
 
   @override
@@ -85,6 +85,7 @@ class _Chart extends StatelessWidget {
   final charts.BarGroupingType _groupingType;
   final _Tab _tab;
   final String _domain;
+
   const _Chart(
       {Key key,
       @required List<DataSpendingByDistrict> data,
@@ -102,50 +103,77 @@ class _Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 328 / 248,
-          child: FutureBuilder(
-            future: _series,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
+    return FutureBuilder<Map<String, Color>>(
+      future: _colorScheme,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+        final colorScheme = snapshot.data;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            AspectRatio(
+              aspectRatio: 328 / 248,
+              child: FutureBuilder(
+                future: _createSeries(colorScheme),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
 
-              return charts.BarChart(
-                snapshot.data,
-                animate: false,
-                barGroupingType: _groupingType,
-                vertical: false,
-                primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
-                    desiredMinTickCount: 5,
-                    desiredMaxTickCount: 13,
-                  ),
-                  renderSpec: charts.GridlineRendererSpec(
-                    labelStyle: chartAxisTextStyle,
-                    lineStyle: chartAxisLineStyle,
-                  ),
-                ),
-                domainAxis: charts.OrdinalAxisSpec(
-                  renderSpec: charts.SmallTickRendererSpec(
-                    labelStyle: chartAxisTextStyle,
-                    lineStyle: chartAxisLineStyle,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        generateTitleTable(context,_domain),
-      ],
+                  return charts.BarChart(
+                    snapshot.data,
+                    animate: false,
+                    barGroupingType: _groupingType,
+                    vertical: false,
+                    primaryMeasureAxis: charts.NumericAxisSpec(
+                      tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                        desiredMinTickCount: 5,
+                        desiredMaxTickCount: 13,
+                      ),
+                      renderSpec: charts.GridlineRendererSpec(
+                        labelStyle: chartAxisTextStyle,
+                        lineStyle: chartAxisLineStyle,
+                      ),
+                    ),
+                    domainAxis: charts.OrdinalAxisSpec(
+                      renderSpec: charts.SmallTickRendererSpec(
+                        labelStyle: chartAxisTextStyle,
+                        lineStyle: chartAxisLineStyle,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            _generateTitleTable(context, colorScheme, _domain),
+          ],
+        );
+      },
     );
   }
 
-  Widget generateTitleTable(BuildContext context, String domain) {
+  Future<Map<String, Color>> get _colorScheme {
+    return Future.microtask(() {
+      final colorScheme = Map<String, Color>();
+      final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
+      final districts = dataSortedByDistrict.keys.toList();
+      districts.forEachIndexed((index, item) {
+        colorScheme[item] = index < AppColors.kDynamicPalette.length
+            ? AppColors.kDynamicPalette[index]
+            : HexColor.fromStringHash(item);
+      });
+      return colorScheme;
+    });
+  }
+
+  Widget _generateTitleTable(
+    BuildContext context,
+    Map<String, Color> colorScheme,
+    String domain,
+  ) {
     Map<String, int> districts = new Map();
     final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
     dataSortedByDistrict.forEach((key, value) {
@@ -172,25 +200,22 @@ class _Chart extends StatelessWidget {
     if (districts.length == 0) return Container();
 
     final chartData = districts.mapToList((domain, measure) {
-      final domains = districts.keys.toList();
-      final index = domains.indexOf(domain);
-      final color = index < AppColors.kDistricts.length
-          ? AppColors.kDistricts[index]
-          : HexColor.fromStringHash(domain);
       return ChartData(
         domain,
         measure,
-        color,
+        colorScheme[domain],
       );
     });
     return ChartInfoTableWidget(
       chartData,
-        domain.localized(context),
-       _tab.toString().substring(5).localized(context),
+      domain.localized(context),
+      _tab.toString().substring(5).localized(context),
     );
   }
 
-  Future<List<charts.Series<ChartData, String>>> get _series {
+  Future<List<charts.Series<ChartData, String>>> _createSeries(
+    Map<String, Color> colorScheme,
+  ) {
     return Future.microtask(() {
       final data = List<ChartData>();
       data.addAll(_data.map((it) {
@@ -199,44 +224,44 @@ class _Chart extends StatelessWidget {
             return ChartData(
               it.year,
               it.edExpAPerHead,
-              HexColor.fromStringHash(it.district),
+              colorScheme[it.district],
             );
           case _Tab.actualExpenditure:
             return ChartData(
               it.year,
               it.edExpA,
-              HexColor.fromStringHash(it.district),
+              colorScheme[it.district],
             );
           case _Tab.actualRecurrentExpenditure:
             return ChartData(
               it.year,
               it.edRecurrentExpA,
-              HexColor.fromStringHash(it.district),
+              colorScheme[it.district],
             );
           //Budget
           case _Tab.budget:
             return ChartData(
               it.year,
               it.edExpB,
-              HexColor.fromStringHash(it.district),
+              colorScheme[it.district],
             );
           case _Tab.budgetExpPerHead:
             return ChartData(
               it.year,
               it.edExpBPerHead,
-              HexColor.fromStringHash(it.district),
+              colorScheme[it.district],
             );
           case _Tab.budgetRecurrentExpenditure:
             return ChartData(
               it.year,
               it.edRecurrentExpB,
-              HexColor.fromStringHash(it.district),
+              colorScheme[it.district],
             );
           case _Tab.enrolment:
             return ChartData(
               it.year,
               it.enrolment,
-              HexColor.fromStringHash(it.district),
+              colorScheme[it.district],
             );
         }
       }).toList());

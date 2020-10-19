@@ -147,8 +147,8 @@ Future<TeachersPageData> _transformTeachersModel(
     teachersByDistrict: teachersByDistrictRaw.mapToList((domain, measure) {
       final domains = teachersByDistrictRaw.keys.toList();
       final index = domains.indexOf(domain);
-      final color = index < AppColors.kDistricts.length
-          ? AppColors.kDistricts[index]
+      final color = index < AppColors.kDynamicPalette.length
+          ? AppColors.kDynamicPalette[index]
           : HexColor.fromStringHash(domain);
       return ChartData(
         domain,
@@ -159,8 +159,8 @@ Future<TeachersPageData> _transformTeachersModel(
     teachersByAuthority: teachersByAuthorityRaw.mapToList((domain, measure) {
       final domains = teachersByAuthorityRaw.keys.toList();
       final index = domains.indexOf(domain);
-      final color = index < AppColors.kDistricts.length
-          ? AppColors.kDistricts[index]
+      final color = index < AppColors.kDynamicPalette.length
+          ? AppColors.kDynamicPalette[index]
           : HexColor.fromStringHash(domain);
       return ChartData(
         domain,

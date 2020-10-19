@@ -7,9 +7,11 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
   final List<T> _data;
   final String _type;
 
-  const EnrollDataByGnpAndGovernmentSpendingComponent(
-      {Key key, String type, @required List<T> data})
-      : assert(data != null),
+  const EnrollDataByGnpAndGovernmentSpendingComponent({
+    Key key,
+    String type,
+    @required List<T> data,
+  })  : assert(data != null),
         _data = data,
         _type = type,
         super(key: key);
@@ -43,7 +45,7 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
               _type == 'Primary' ||
               _type == 'Secondary' ||
               _type == 'Total') {
-            return generateMultiTableActualBudgeted(snapshot);
+            return _generateMultiTableActualBudgeted(snapshot);
           }
         }
         return Container();
@@ -51,7 +53,7 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
     );
   }
 
-  MultiTableWidget generateMultiTableActualBudgeted(
+  MultiTableWidget _generateMultiTableActualBudgeted(
       AsyncSnapshot<Map<String, dynamic>> snapshot) {
     return MultiTableWidget(
       type: _type,

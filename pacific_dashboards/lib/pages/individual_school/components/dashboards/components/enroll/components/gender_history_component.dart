@@ -127,14 +127,14 @@ class _StackedChart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             ChartLegendItem(
-              color: AppColors.kBlue,
+              color: AppColors.kMale,
               value: 'labelMale'.localized(context),
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
-              color: AppColors.kRed,
+              color: AppColors.kFemale,
               value: 'labelFemale'.localized(context),
             ),
           ],

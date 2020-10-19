@@ -34,6 +34,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: PlatformAppBar(
+        title: Text('budgetsDashboardsTitle'.localized(context)),
         actions: <Widget>[
           StreamBuilder<List<Filter>>(
             stream: viewModel.filtersStream,
@@ -71,50 +72,61 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                     } else {
                       var list = <Widget>[
                         _titleWidget(
-                            context, 'budgetsEducationFinancing', true),
+                          context,
+                          'budgetsEducationFinancing'.localized(context),
+                          true,
+                        ),
                         //GNP and Government Spending Actual
                         _titleWidget(
-                            context,
-                            '${'budgetsGnpAndGovernmentSpendingActualExpense'.localized(context)} ${snapshot.data.year}',
-                            false),
-                        gNpAndGovernmentSpendingActualExpense(context,
-                            snapshot.data.dataByGnpAndGovernmentSpendingActual),
+                          context,
+                          '${'budgetsGnpAndGovernmentSpendingActualExpense'.localized(context)} ${snapshot.data.year}',
+                          false,
+                        ),
+                        _gNpAndGovernmentSpendingActualExpense(
+                          context,
+                          snapshot.data.dataByGnpAndGovernmentSpendingActual,
+                        ),
                         //-- GNP and Government Spending Budgeted
                         _titleWidget(
-                            context,
-                            '${'budgetsGnpAndGovernmentSpendingBudgetedExpense'.localized(context)} ${snapshot.data.year}',
-                            false),
-                        gNpAndGovernmentSpendingActualExpense(
-                            context,
-                            snapshot
-                                .data.dataByGnpAndGovernmentSpendingBudgeted),
+                          context,
+                          '${'budgetsGnpAndGovernmentSpendingBudgetedExpense'.localized(context)} ${snapshot.data.year}',
+                          false,
+                        ),
+                        _gNpAndGovernmentSpendingActualExpense(
+                          context,
+                          snapshot.data.dataByGnpAndGovernmentSpendingBudgeted,
+                        ),
                         //-- Spending By Sector
                         _titleWidget(
-                            context,
-                            '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
-                            false),
-
-                        spendingBySector(
-                            context, snapshot.data.dataSpendingBySector),
+                          context,
+                          '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
+                          false,
+                        ),
+                        _spendingBySector(
+                          context,
+                          snapshot.data.dataSpendingBySector,
+                        ),
                         //-- Spending By Sector
                         _titleWidget(
-                            context,
-                            '${'budgetsSpendingBySector'.localized(context)} ${snapshot.data.year}',
-                            false),
+                          context,
+                          '${'budgetsSpendingBySector'.localized(context)} ${snapshot.data.year}',
+                          false,
+                        ),
                         SpendingByDistrictComponent(
-                            data: snapshot.data.dataSpendingBySectorAndYear,
-                            dataFiltered: snapshot
-                                .data.dataSpendingBySectorAndYearFiltered,
-                        domain: 'sectors'),
+                          data: snapshot.data.dataSpendingBySectorAndYear,
+                          dataFiltered:
+                              snapshot.data.dataSpendingBySectorAndYearFiltered, domain: 'sectors'
+                        ),
                         _titleWidget(
-                            context,
-                            '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
-                            false),
+                          context,
+                          '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
+                          false,
+                        ),
                         SpendingByDistrictComponent(
-                            data: snapshot.data.dataSpendingByDistrict,
-                            dataFiltered:
-                                snapshot.data.dataSpendingByDistrictFiltered,
-                            domain: 'schoolsAccreditationDashboardsStateDomain'),
+                          data: snapshot.data.dataSpendingByDistrict,
+                          dataFiltered:
+                              snapshot.data.dataSpendingByDistrictFiltered, domain: 'schoolsAccreditationDashboardsStateDomain'
+                        ),
                       ];
                       var budgetWidgetList = list;
                       return Column(
@@ -131,7 +143,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
     );
   }
 
-  MiniTabLayout gNpAndGovernmentSpendingActualExpense(
+  MiniTabLayout _gNpAndGovernmentSpendingActualExpense(
       BuildContext context, List<DataByGnpAndGovernmentSpending> data) {
     return MiniTabLayout(
       tabs: _GovtTab.values,
@@ -158,14 +170,15 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
     );
   }
 
-  Widget spendingBySector(
+  Widget _spendingBySector(
       BuildContext context, List<DataSpendingBySector> data) {
-    if (data.length == 0) return Center(
-      child: Text(
-        'labelNoData'.localized(context),
-        style: Theme.of(context).textTheme.headline5,
-      ),
-    );
+    if (data.length == 0)
+      return Center(
+        child: Text(
+          'labelNoData'.localized(context),
+          style: Theme.of(context).textTheme.headline5,
+        ),
+      );
 
     return MiniTabLayout(
       tabs: _SpendingTab.values,

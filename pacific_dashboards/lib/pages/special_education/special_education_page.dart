@@ -73,33 +73,65 @@ class _SpecialEducationPageState
                     } else {
                       var list = <Widget>[
                         //GNP and Government Spending Actual
-                        _titleWidget(context, 'disability', false,
-                            year: snapshot.data.year),
-                        SpecialEducationComponent(
-                            data: snapshot.data.dataByGender),
-                        _titleWidget(context, 'ethnicity', false,
-                            year: snapshot.data.year),
-                        SpecialEducationComponent(
-                            data: snapshot.data.dataByEthnicity),
                         _titleWidget(
-                            context, 'specialEducationEnvironment', false,
-                            year: snapshot.data.year),
+                          context,
+                          'disability',
+                          false,
+                          year: snapshot.data.year,
+                        ),
                         SpecialEducationComponent(
-                            data: snapshot.data.dataBySpecialEdEnvironment),
-                        _titleWidget(context, 'englishLearnerStatus', false,
-                            year: snapshot.data.year),
+                          data: snapshot.data.dataByGender,
+                        ),
+                        _titleWidget(
+                          context,
+                          'ethnicity',
+                          false,
+                          year: snapshot.data.year,
+                        ),
                         SpecialEducationComponent(
-                            data: snapshot.data.dataByEnglishLearner),
-                        _titleWidget(context, 'cohortDistribution', true),
-                        _titleWidget(context, 'byYear', false,
-                            year: snapshot.data.year),
+                          data: snapshot.data.dataByEthnicity,
+                        ),
+                        _titleWidget(
+                          context,
+                          'specialEducationEnvironment',
+                          false,
+                          year: snapshot.data.year,
+                        ),
+                        SpecialEducationComponent(
+                          data: snapshot.data.dataBySpecialEdEnvironment,
+                        ),
+                        _titleWidget(
+                          context,
+                          'englishLearnerStatus',
+                          false,
+                          year: snapshot.data.year,
+                        ),
+                        SpecialEducationComponent(
+                          data: snapshot.data.dataByEnglishLearner,
+                        ),
+                        _titleWidget(
+                          context,
+                          'cohortDistribution',
+                          true,
+                        ),
+                        _titleWidget(
+                          context,
+                          'byYear',
+                          false,
+                          year: snapshot.data.year,
+                        ),
                         CohortDistributionComponent(
-                            data: snapshot.data.dataByCohortDistributionByYear),
-                        _titleWidget(context, 'byState', false,
-                            year: snapshot.data.year),
+                          data: snapshot.data.dataByCohortDistributionByYear,
+                        ),
+                        _titleWidget(
+                          context,
+                          'byState',
+                          false,
+                          year: snapshot.data.year,
+                        ),
                         CohortDistributionComponent(
-                            data:
-                                snapshot.data.dataByCohortDistributionByState),
+                          data: snapshot.data.dataByCohortDistributionByState,
+                        ),
                       ];
                       var budgetWidgetList = list;
                       return Column(
