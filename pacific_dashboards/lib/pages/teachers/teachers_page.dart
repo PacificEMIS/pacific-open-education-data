@@ -9,7 +9,7 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
-import 'package:pacific_dashboards/shared_ui/charts/stacked_horizontal_bar_chart_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/stacked_horizontal_bar_chart_widget_extended.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
@@ -149,14 +149,21 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                           },
                         ),
                         Text('certifiedAndQualified'.localized(context),
-                            style: Theme.of(context).textTheme.headline3.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16)),
-                        ChartFactory.createStackedHorizontalBarChartViewByData(
-                          chartData:  snapshot.data.teachersByCertification, //past data here
-                          colorFunc: _levelIndexToColor,
-                        ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3
+                                .copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16)),
+                        (snapshot.data.teachersByCertification.length == 0)
+                            ? Container()
+                            : Container(
+                                height: 300.0,
+                                child: StackedHorizontalBarChartWidgetExtended(
+                                  data: snapshot.data.teachersByCertification,
+                                  colorFunc: _levelIndexToColor,
+                                )),
                         MultiTable(
                           key: ObjectKey(
                             snapshot.data.teachersBySchoolLevelStateAndGender,

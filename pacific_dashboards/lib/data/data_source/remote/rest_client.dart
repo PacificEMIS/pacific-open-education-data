@@ -29,7 +29,7 @@ abstract class RestClient {
   @GET('warehouse/tableenrol')
   Future<List<School>> getSchools();
 
-  @GET('warehouse/teachercount')
+  @GET('warehouse/teachers?report')
   Future<List<Teacher>> getTeachers();
 
   @GET('warehouse/examsdistrictresults')
