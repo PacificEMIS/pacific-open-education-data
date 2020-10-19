@@ -135,44 +135,43 @@ class IndividualExamsViewModel extends BaseViewModel {
     );
   }
 
-  void _onExamReportsLoaded(List<SchoolExamReport> reports) {
-    launchHandled(() async {
-      final groupedByYear = reports.groupBy((it) => it.year);
-      groupedByYear.removeWhere((k, v) => k == null);
-      final sortedYears =
-          groupedByYear.keys.chainSort((lv, rv) => rv.compareTo(lv)).toList();
-      final reportsByYearAndExamCode = sortedYears.asMap().map(
-            (key, value) => MapEntry(
-              value,
-              groupedByYear[value].groupBy((it) => it.examCode),
-            ),
-          );
-      final sortedExamCodesByYear = reportsByYearAndExamCode.map(
-        (year, reportsByExamCode) => MapEntry(
-          year,
-          reportsByExamCode.keys
-              .chainSort((lv, rv) => lv.compareTo(rv))
-              .toList(),
-        ),
-      );
+  Future<void> _onExamReportsLoaded(List<SchoolExamReport> reports) =>
+      launchHandled(() async {
+        final groupedByYear = reports.groupBy((it) => it.year);
+        groupedByYear.removeWhere((k, v) => k == null);
+        final sortedYears =
+            groupedByYear.keys.chainSort((lv, rv) => rv.compareTo(lv)).toList();
+        final reportsByYearAndExamCode = sortedYears.asMap().map(
+              (key, value) => MapEntry(
+                value,
+                groupedByYear[value].groupBy((it) => it.examCode),
+              ),
+            );
+        final sortedExamCodesByYear = reportsByYearAndExamCode.map(
+          (year, reportsByExamCode) => MapEntry(
+            year,
+            reportsByExamCode.keys
+                .chainSort((lv, rv) => lv.compareTo(rv))
+                .toList(),
+          ),
+        );
 
-      _preparedViewModelData = _PreparedViewModelData(
-        sortedYears: sortedYears,
-        sortedExamCodesByYear: sortedExamCodesByYear,
-        reportsByYearAndExamCode: reportsByYearAndExamCode,
-      );
+        _preparedViewModelData = _PreparedViewModelData(
+          sortedYears: sortedYears,
+          sortedExamCodesByYear: sortedExamCodesByYear,
+          reportsByYearAndExamCode: reportsByYearAndExamCode,
+        );
 
-      notifyHaveProgress(false);
+        notifyHaveProgress(false);
 
-      _haveDataSubject.add(reports.isNotEmpty);
+        _haveDataSubject.add(reports.isNotEmpty);
 
-      if (reports.isNotEmpty) {
-        _notifyFilterViewDataChanged();
-        _createHistoryByYears();
-        _applyFilters();
-      }
-    });
-  }
+        if (reports.isNotEmpty) {
+          _notifyFilterViewDataChanged();
+          _createHistoryByYears();
+          _applyFilters();
+        }
+      });
 
   void _createHistoryByYears() {
     launchHandled(() async {

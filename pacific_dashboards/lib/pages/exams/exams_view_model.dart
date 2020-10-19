@@ -66,13 +66,13 @@ class ExamsViewModel extends BaseViewModel {
     );
   }
 
-  void _onDataLoaded(List<Exam> exams) {
-    launchHandled(() async {
-      _lookups = await _repository.lookups.first;
-      _navigator = ExamsNavigator(exams);
-      _updatePageData();
-    });
-  }
+  Future<void> _onDataLoaded(List<Exam> exams) => launchHandled(
+        () async {
+          _lookups = await _repository.lookups.first;
+          _navigator = ExamsNavigator(exams);
+          _updatePageData();
+        },
+      );
 
   void _updatePageData() {
     launchHandled(() {

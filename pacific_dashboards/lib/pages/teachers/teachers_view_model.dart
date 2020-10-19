@@ -70,15 +70,15 @@ class TeachersViewModel extends BaseViewModel {
     );
   }
 
-  void _onDataLoaded(List<Teacher> schools) {
-    launchHandled(() async {
-      _lookups = await _repository.lookups.first;
-      _teachers = schools;
-      _filters = await _initFilters();
-      _filtersSubject.add(_filters);
-      await _updatePageData();
-    });
-  }
+  Future<void> _onDataLoaded(List<Teacher> schools) => launchHandled(
+        () async {
+          _lookups = await _repository.lookups.first;
+          _teachers = schools;
+          _filters = await _initFilters();
+          _filtersSubject.add(_filters);
+          await _updatePageData();
+        },
+      );
 
   Future<void> _updatePageData() async {
     _dataSubject.add(
@@ -144,46 +144,46 @@ Future<TeachersPageData> _transformTeachersModel(
     (key, v) => MapEntry(key.from(translates.authorityGovt), v),
   );
   return TeachersPageData(
-    teachersByDistrict: teachersByDistrictRaw.mapToList((domain, measure) {
-      final domains = teachersByDistrictRaw.keys.toList();
-      final index = domains.indexOf(domain);
-      final color = index < AppColors.kDynamicPalette.length
-          ? AppColors.kDynamicPalette[index]
-          : HexColor.fromStringHash(domain);
-      return ChartData(
-        domain,
-        measure,
-        color,
-      );
-    }),
-    teachersByAuthority: teachersByAuthorityRaw.mapToList((domain, measure) {
-      final domains = teachersByAuthorityRaw.keys.toList();
-      final index = domains.indexOf(domain);
-      final color = index < AppColors.kDynamicPalette.length
-          ? AppColors.kDynamicPalette[index]
-          : HexColor.fromStringHash(domain);
-      return ChartData(
-        domain,
-        measure,
-        color,
-      );
-    }),
-    teachersByPrivacy: teachersByPrivacyRaw.mapToList((domain, measure) {
-      return ChartData(
-        domain,
-        measure,
-        domain.toLowerCase().contains('non')
-            ? AppColors.kNonGovernmentChartColor
-            : AppColors.kGovernmentChartColor,
-      );
-    }),
-    teachersBySchoolLevelStateAndGender:
-        _calculateEnrolBySchoolLevelAndDistrict(
-      teachers: filteredTeachers,
-      lookups: translates,
-    ),
-    teachersByCertification: _generateCertificationData(filteredTeachers.groupBy((it) => it.ageGroup))
-  );
+      teachersByDistrict: teachersByDistrictRaw.mapToList((domain, measure) {
+        final domains = teachersByDistrictRaw.keys.toList();
+        final index = domains.indexOf(domain);
+        final color = index < AppColors.kDynamicPalette.length
+            ? AppColors.kDynamicPalette[index]
+            : HexColor.fromStringHash(domain);
+        return ChartData(
+          domain,
+          measure,
+          color,
+        );
+      }),
+      teachersByAuthority: teachersByAuthorityRaw.mapToList((domain, measure) {
+        final domains = teachersByAuthorityRaw.keys.toList();
+        final index = domains.indexOf(domain);
+        final color = index < AppColors.kDynamicPalette.length
+            ? AppColors.kDynamicPalette[index]
+            : HexColor.fromStringHash(domain);
+        return ChartData(
+          domain,
+          measure,
+          color,
+        );
+      }),
+      teachersByPrivacy: teachersByPrivacyRaw.mapToList((domain, measure) {
+        return ChartData(
+          domain,
+          measure,
+          domain.toLowerCase().contains('non')
+              ? AppColors.kNonGovernmentChartColor
+              : AppColors.kGovernmentChartColor,
+        );
+      }),
+      teachersBySchoolLevelStateAndGender:
+          _calculateEnrolBySchoolLevelAndDistrict(
+        teachers: filteredTeachers,
+        lookups: translates,
+      ),
+      teachersByCertification: _generateCertificationData(
+          filteredTeachers.groupBy((it) => it.ageGroup)));
 }
 
 Map<String, int> _calculatePeopleCount(
@@ -261,8 +261,10 @@ Map<String, List<int>> _generateCertificationData(
       certification[6] += (it.certifiedM - it.certQualM);
       certification[7] += it.numTeachersM;
     });
-    certification[3] -= (certification[0] + certification[1] + certification[2]);
-    certification[7] -= (certification[4] + certification[5] + certification[6]);
+    certification[3] -=
+        (certification[0] + certification[1] + certification[2]);
+    certification[7] -=
+        (certification[4] + certification[5] + certification[6]);
     if (key != null) result[key] = certification;
   });
 
