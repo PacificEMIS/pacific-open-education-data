@@ -53,13 +53,13 @@ class _SpendingByDistrictComponentState
                     data: widget.data,
                     dataFiltered: widget.dataFiltered,
                     groupingType: charts.BarGroupingType.stacked,
-                    tab: tab);
+                    tab: tab, domain: widget.domain,);
               case _Tab.budgetExpPerHead:
                 return _Chart(
                     data: widget.data,
                     dataFiltered: widget.dataFiltered,
                     groupingType: charts.BarGroupingType.groupedStacked,
-                    tab: tab);
+                    tab: tab, domain: widget.domain,);
             }
             throw FallThroughError();
           },
@@ -209,7 +209,7 @@ class _Chart extends StatelessWidget {
     return ChartInfoTableWidget(
       chartData,
       domain.localized(context),
-      _tab.toString().substring(5).localized(context),
+      _tab.toString().substring(5).localized(context)
     );
   }
 
