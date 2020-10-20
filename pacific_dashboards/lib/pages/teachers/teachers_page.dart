@@ -1,6 +1,7 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
@@ -156,14 +157,19 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16)),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                10.0, 10.0, 10.0, 0.0),
+                            child: Text('Female  Male',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.headline5)),
                         (snapshot.data.teachersByCertification.length == 0)
                             ? Container()
-                            : Container(
-                                height: 300.0,
-                                child: StackedHorizontalBarChartWidgetExtended(
-                                  data: snapshot.data.teachersByCertification,
-                                  colorFunc: _levelIndexToColor,
-                                )),
+                            : StackedHorizontalBarChartWidgetExtended(
+                                data: snapshot.data.teachersByCertification,
+                                colorFunc: _levelIndexToColor,
+                              ),
+                        SizedBox(height: 10.0),
                         MultiTable(
                           key: ObjectKey(
                             snapshot.data.teachersBySchoolLevelStateAndGender,

@@ -4,6 +4,8 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
+import 'chart_legend_item.dart';
+
 typedef Color ColorFunc(int index);
 
 class StackedHorizontalBarChartWidgetExtended extends StatefulWidget {
@@ -25,45 +27,68 @@ class StackedHorizontalBarChartWidgetExtendedState
     extends State<StackedHorizontalBarChartWidgetExtended> {
   @override
   Widget build(BuildContext context) {
-    return charts.BarChart(
-      _createSeries(widget.data),
-      animate: false,
-      barGroupingType: charts.BarGroupingType.stacked,
-      vertical: false,
-      defaultInteractions: false,
-      primaryMeasureAxis: charts.NumericAxisSpec(
-        showAxisLine: false,
-        renderSpec: charts.GridlineRendererSpec(
-          labelStyle: chartAxisTextStyle,
-          lineStyle: chartAxisLineStyle,
-        ),
-        tickProviderSpec: const charts.BasicNumericTickProviderSpec(
-          dataIsInWholeNumbers: true,
-          desiredTickCount: 5,
-        ),
-        tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
-              (number) =>
-          number.round().abs().toString(),
-        ),
-        // viewport: charts.NumericExtents(-400, 400),
-      ),
-      domainAxis: charts.OrdinalAxisSpec(
-        renderSpec: charts.SmallTickRendererSpec(
-          labelStyle: charts.TextStyleSpec(
-            fontSize: 10,
-            color: charts.MaterialPalette.gray.shadeDefault,
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Container(
+            height: 300,
+            width: 400,
+            child: charts.BarChart(
+              _createSeries(widget.data),
+              animate: false,
+              barGroupingType: charts.BarGroupingType.stacked,
+              vertical: false,
+              defaultInteractions: false,
+              primaryMeasureAxis: charts.NumericAxisSpec(
+                showAxisLine: false,
+                renderSpec: charts.GridlineRendererSpec(
+                  labelStyle: chartAxisTextStyle,
+                  lineStyle: chartAxisLineStyle,
+                ),
+                tickProviderSpec: const charts.BasicNumericTickProviderSpec(
+                  dataIsInWholeNumbers: true,
+                  desiredTickCount: 5,
+                ),
+                tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
+                  (number) => number.round().abs().toString(),
+                ),
+                // viewport: charts.NumericExtents(-400, 400),
+              ),
+              domainAxis: charts.OrdinalAxisSpec(
+                renderSpec: charts.SmallTickRendererSpec(
+                  labelStyle: charts.TextStyleSpec(
+                    fontSize: 10,
+                    color: charts.MaterialPalette.gray.shadeDefault,
+                  ),
+                  lineStyle: charts.LineStyleSpec(
+                    color: AppColors.kCoolGray.chartsColor,
+                  ),
+                ),
+              ),
+              defaultRenderer: charts.BarRendererConfig(
+                stackHorizontalSeparator: 0,
+                groupingType: charts.BarGroupingType.stacked,
+                strokeWidthPx: 1,
+              ),
+            ),
           ),
-          lineStyle: charts.LineStyleSpec(
-            color: AppColors.kCoolGray.chartsColor,
-          ),
-        ),
-      ),
-      defaultRenderer: charts.BarRendererConfig(
-        stackHorizontalSeparator: 0,
-        groupingType: charts.BarGroupingType.stacked,
-        strokeWidthPx: 1,
-      ),
-    );
+          Wrap(
+              spacing: 8.0, // gap between adjacent chips
+              runSpacing: 4.0, // gap between lines
+              children: getColumnTitles(widget.data))
+        ]);
+  }
+
+  List<Widget> getColumnTitles(Map<String, List<int>> data) {
+    List<Widget> widgetList = new List<Widget>();
+    List<String> _titles = ['Certified and Qualified', 'Qualified (not certified)', 'Certified', 'Other'];
+    for (var i = 0; i < 4; i++) {
+      widgetList.add(
+        ChartLegendItem(color: widget.colorFunc(i), value: _titles[i]),
+      );
+    }
+    return widgetList;
   }
 
   List<charts.Series<_Data, String>> _createSeries(
