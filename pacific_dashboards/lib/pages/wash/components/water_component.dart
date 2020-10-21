@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:arch/arch.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/tables/chart_info_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -34,14 +31,15 @@ class _WaterComponentState extends State<WaterComponent> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         MiniTabLayout(
-          tabs: ['Used for drinking', 'Currently Available'],
+          tabs: widget.data.keys.toList(),
           tabNameBuilder: (tab) {
             return '$tab';
           },
           builder: (ctx, tab) {
             return _Chart(
                 data: widget.data,
-                groupingType: charts.BarGroupingType.stacked);
+                groupingType: charts.BarGroupingType.stacked,
+                tab: tab,);
             throw FallThroughError();
           },
         ),
@@ -53,14 +51,17 @@ class _WaterComponentState extends State<WaterComponent> {
 class _Chart extends StatelessWidget {
   final Map<String, List<WaterData>> _data;
   final charts.BarGroupingType _groupingType;
+  final String _tab;
 
   const _Chart(
       {Key key,
       @required Map<String, List<WaterData>> data,
-      @required charts.BarGroupingType groupingType})
+      @required charts.BarGroupingType groupingType,
+      @required String tab})
       : assert(data != null),
         _data = data,
         _groupingType = groupingType,
+        _tab = tab,
         super(key: key);
 
   @override
@@ -84,8 +85,7 @@ class _Chart extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.all(30),
                   child: Container(
-                    width: ((snapshot.data[0].data as List).length * 2)
-                        .toDouble(),
+                    width: (_data.values.toList()[_data.keys.toList().indexOf(_tab)].toList().length * 20).toDouble(),
                     child: charts.BarChart(
                       snapshot.data,
                       animate: false,
@@ -128,16 +128,16 @@ class _Chart extends StatelessWidget {
         Wrap(
             spacing: 8.0, // gap between adjacent chips
             runSpacing: 4.0, // gap between lines
-            children: getColumnTitles(_data)),
+            children: getColumnTitles(_data, _data.keys.toList().indexOf(_tab)))
       ],
     );
   }
 
-  List<Widget> getColumnTitles(Map<String, List<WaterData>> data) {
+  List<Widget> getColumnTitles(Map<String, List<WaterData>> data, int listId) {
     List<Widget> list = new List<Widget>();
     List<String> titles = new List<String>();
     data.forEach((key, value) {
-      titles.addAll(value[0].values.keys);
+      titles.addAll(value[listId].values.keys);
     });
     titles = titles.toSet().toList();
     if (titles.length > 0) {
@@ -154,17 +154,13 @@ class _Chart extends StatelessWidget {
   Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {
       final data = List<ChartData>();
-      var dataLength = _data.length;
-      _data.forEach((key, value) {
-        value.forEach((element) {
+        _data.values.toList()[ _data.keys.toList().indexOf(_tab)].forEach((element) {
           element.values.forEach((key, value) {
             data.add(ChartData(element.title, value,
                 HexColor.fromStringHash(key)));
           });
-        });
       });
 
-      debugPrint(data[0].domain.toString());
       return [
         charts.Series(
           domainFn: (ChartData chartData, _) => chartData.domain,

@@ -170,23 +170,41 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 colorFunc: _levelIndexToColor,
                               ),
                         SizedBox(height: 10.0),
-                        MultiTable(
-                          key: ObjectKey(
-                            snapshot.data.teachersBySchoolLevelStateAndGender,
-                          ),
-                          title:
-                              'teachersDashboardsEnrollByLevelStateGenderTitle'
-                                  .localized(context),
-                          columnNames: [
-                            'teachersDashboardsSchoolLevelDomain',
-                            'labelMale',
-                            'labelFemale',
-                            'labelTotal'
-                          ],
-                          columnFlex: [3, 3, 3, 3],
-                          data:
-                              snapshot.data.teachersBySchoolLevelStateAndGender,
-                          keySortFunc: (lv, rv) => lv.compareTo(rv),
+                        Text('teachersDashboardsEnrollByLevelStateGenderTitle'.localized(context),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3
+                                .copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16)),
+                        MiniTabLayout(
+                          tabs: _TeachersTab.values,
+                          padding: 0,
+                          tabNameBuilder: (tab) {
+                            return tab
+                                .toString()
+                                .substring(13)
+                                .localized(context);
+                          },
+                          builder: (ctx, tab) {
+                            return MultiTable(
+                              key: ObjectKey(snapshot
+                                      .data.teachersBySchoolLevelStateAndGender[
+                                  tab.toString().substring(13)]),
+                              columnNames: [
+                                'teachersDashboardsSchoolLevelDomain',
+                                'labelMale',
+                                'labelFemale',
+                                'labelTotal'
+                              ],
+                              columnFlex: [3, 3, 3, 3],
+                              data: snapshot
+                                      .data.teachersBySchoolLevelStateAndGender[
+                                  tab.toString().substring(13)],
+                              keySortFunc: (lv, rv) => lv.compareTo(rv),
+                            );
+                          },
                         ),
                       ],
                     );
@@ -224,3 +242,9 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
 }
 
 enum _DashboardsTab { byAuthority, byGovtNonGovt, byState }
+enum _TeachersTab {
+  all,
+  qualified,
+  certified,
+  qualifiedAndCertified,
+}

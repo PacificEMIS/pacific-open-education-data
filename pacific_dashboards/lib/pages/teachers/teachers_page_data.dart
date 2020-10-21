@@ -18,7 +18,7 @@ class TeachersPageData {
   final List<ChartData> teachersByDistrict;
   final List<ChartData> teachersByAuthority;
   final List<ChartData> teachersByPrivacy;
-  final Map<String, Map<String, GenderTableData>>
+  final Map<String, Map<String, Map<String, GenderTableData>>>
       teachersBySchoolLevelStateAndGender;
   final Map<String, List<int>> teachersByCertification;
 }

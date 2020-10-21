@@ -7,12 +7,12 @@ import 'multi_table_widget.dart';
 class MultiTable extends StatelessWidget {
   const MultiTable({
     Key key,
-    @required String title,
+    String title,
     @required List<String> columnNames,
     @required List<int> columnFlex,
     @required Map<String, Map<String, dynamic>> data,
     KeySortFunc keySortFunc,
-  })  : assert(title != null),
+  })  :
         assert(columnNames != null),
         assert(columnFlex != null),
         assert(data != null),
@@ -32,7 +32,7 @@ class MultiTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TileWidget(
-      title: Text(
+      title: _title == null ? Container() : Text(
         _title,
         style: Theme.of(context).textTheme.headline4,
       ),

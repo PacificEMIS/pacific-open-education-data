@@ -38,7 +38,6 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             Container(
-              // height: 80,
               alignment: Alignment.centerRight,
               child: FlatButton(
                 padding: EdgeInsets.all(8.0),

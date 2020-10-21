@@ -228,7 +228,11 @@ class Strings {
       'schoolAccreditationEvaluated': 'Evaluated in',
       'levels': 'Levels',
       'sectors': 'Sectors',
-      'certifiedAndQualified': 'Certified and Qualified '
+      'certifiedAndQualified': 'Certified and Qualified ',
+      'all': 'Total',
+      'qualified': 'Qualified',
+      'certified': 'Certified',
+      'qualifiedAndCertified':'Qualified and Certified'
     },
   };
 

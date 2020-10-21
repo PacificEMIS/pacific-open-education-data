@@ -1,4 +1,5 @@
 import 'package:arch/arch.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
@@ -8,6 +9,7 @@ import 'package:pacific_dashboards/pages/wash/components/toilets_component.dart'
 import 'package:pacific_dashboards/pages/wash/components/total_component.dart';
 import 'package:pacific_dashboards/pages/wash/wash_data.dart';
 import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
@@ -74,6 +76,71 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                     } else {
                       var list = <Widget>[
                         _titleWidget(context, 'washDashboardsTitle', true),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 16, right: 16, top: 10, bottom: 10),
+                          child: Material(
+                            color: AppColors.kCoolGray,
+                            child: ClipRect(
+                              clipBehavior: Clip.hardEdge,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 7,
+                                    child: Text(
+                                        'SW.S.21: Describe the container for napkin disposal?',
+                                        textAlign: TextAlign.center,
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                        textScaleFactor: 1.2),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // child: InkWell(
+                            //   onTap: () {
+                            //     _openFilters([]);
+                            //   },
+                            //   child: Padding(
+                            //     padding: EdgeInsets.only(
+                            //         left: 16, top: 8, bottom: 8),
+                            //     child: Row(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.spaceBetween,
+                            //       children: <Widget>[
+                            //         Container(
+                            //           width: 280,
+                            //           child: Text(
+                            //             'CW.H.2: Are both soap and water currently available at the handwashing facilities?',
+                            //             style:
+                            //                 Theme.of(context).textTheme.caption.copyWith(color: CupertinoColors.activeBlue  ),
+                            //             overflow: TextOverflow.ellipsis,
+                            //             maxLines: 2,
+                            //           ),
+                            //         ),
+                            //         Padding(padding: EdgeInsets.only(right: 30),
+                            //         child: Icon(
+                            //           Icons.arrow_forward,
+                            //           color: Colors.blueAccent,
+                            //         ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )
+                          ),
+                        ),
                         _titleWidget(context, 'districtTotals', false),
                         TotalComponent(
                             data: snapshot.data.washModelList,
