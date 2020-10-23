@@ -30,6 +30,9 @@ class Lookups {
   @JsonKey(name: 'schoolCodes')
   final List<Lookup> schoolCodes;
 
+  @JsonKey(name: 'question')
+  final List<Lookup> question;
+
   const Lookups({
     this.authorityGovt,
     this.schoolTypes,
@@ -39,6 +42,7 @@ class Lookups {
     this.accreditationTerms,
     this.educationLevels,
     this.schoolCodes,
+    this.question,
   });
 
   factory Lookups.fromJson(Map<String, dynamic> json) =>
@@ -52,6 +56,7 @@ class Lookups {
       districts.isEmpty &&
       authorities.isEmpty &&
       levels.isEmpty &&
+      question.isEmpty &&
       accreditationTerms.isEmpty;
 }
 

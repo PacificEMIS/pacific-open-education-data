@@ -80,70 +80,53 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                           padding: EdgeInsets.only(
                               left: 16, right: 16, top: 10, bottom: 10),
                           child: Material(
-                            color: AppColors.kCoolGray,
+                            color: AppColors.kGrayLight,
                             child: ClipRect(
                               clipBehavior: Clip.hardEdge,
                               child: Row(
                                 children: <Widget>[
                                   Expanded(
-                                    flex: 7,
-                                    child: Text(
-                                        'SW.S.21: Describe the container for napkin disposal?',
-                                        textAlign: TextAlign.center,
-                                        softWrap: true,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4,
-                                        textScaleFactor: 1.2),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Icon(
-                                      Icons.arrow_forward,
-                                      color: Colors.blueAccent,
+                                    flex: 8,
+                                    child: InkWell(
+                                      onTap: () {
+                                        _openFilters(snapshot.data.questions);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 16, top: 8, bottom: 8),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Container(
+                                              width: 280,
+                                              child: Text(
+                                                'CW.H.2: Are both soap and water currently available at the hand washing facilities?',
+                                                style:
+                                                    Theme.of(context).textTheme.caption.copyWith(color: CupertinoColors.activeBlue),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                              ),
+                                            ),
+                                            Padding(padding: EdgeInsets.only(right: 30),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Colors.blueAccent,
+                                            ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            // child: InkWell(
-                            //   onTap: () {
-                            //     _openFilters([]);
-                            //   },
-                            //   child: Padding(
-                            //     padding: EdgeInsets.only(
-                            //         left: 16, top: 8, bottom: 8),
-                            //     child: Row(
-                            //       mainAxisAlignment:
-                            //           MainAxisAlignment.spaceBetween,
-                            //       children: <Widget>[
-                            //         Container(
-                            //           width: 280,
-                            //           child: Text(
-                            //             'CW.H.2: Are both soap and water currently available at the handwashing facilities?',
-                            //             style:
-                            //                 Theme.of(context).textTheme.caption.copyWith(color: CupertinoColors.activeBlue  ),
-                            //             overflow: TextOverflow.ellipsis,
-                            //             maxLines: 2,
-                            //           ),
-                            //         ),
-                            //         Padding(padding: EdgeInsets.only(right: 30),
-                            //         child: Icon(
-                            //           Icons.arrow_forward,
-                            //           color: Colors.blueAccent,
-                            //         ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // )
                           ),
                         ),
                         _titleWidget(context, 'districtTotals', false),
                         TotalComponent(
-                            data: snapshot.data.washModelList,
+                            data: [], //snapshot.data.washModelList,
                             year: snapshot.data.year),
                         Container(height: 50),
                         _titleWidget(context, 'toilets', false),

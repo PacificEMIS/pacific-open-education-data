@@ -403,46 +403,4 @@ class RepositoryImpl implements Repository {
       ),
     );
   }
-
-  @override
-  Stream<FinancialLookups> get financialLookups {
-    return _globalSettings.currentEmis
-        .then((emis) {
-          switch (emis) {
-            case Emis.miemis:
-              return _miemisFinancialLookupsSubject;
-            case Emis.fedemis:
-              return _fedemisFinancialLookupsSubject;
-            case Emis.kemis:
-              return _kemisFinancialLookupsSubject;
-          }
-          throw FallThroughError();
-        })
-        .asStream()
-        .flatMap((subject) {
-          if (!subject.hasValue) {
-            final pushSavedToSubject = () async {
-              final localLookups =
-                  await _localDataSource.fetchFinancialLookupsModel();
-              if (localLookups.second == null) {
-                return;
-              }
-              subject.add(localLookups.second);
-            };
-
-            Connectivity().checkConnectivity().then((status) {
-              if (status == ConnectivityResult.none) {
-                return Future.value();
-              } else {
-                return _remoteDataSource.fetchFinancialLookupsModel().then(
-                    (remote) =>
-                        _localDataSource.saveFinancialLookupsModel(remote));
-              }
-            }).then((_) => pushSavedToSubject(),
-                onError: (er) => pushSavedToSubject());
-          }
-
-          return subject;
-        });
-  }
 }

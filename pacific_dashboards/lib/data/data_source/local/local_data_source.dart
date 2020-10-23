@@ -30,8 +30,6 @@ abstract class LocalDataSource {
 
   Future<Pair<bool, Lookups>> fetchLookupsModel();
 
-  Future<Pair<bool, FinancialLookups>> fetchFinancialLookupsModel();
-
   Future<void> saveExams(List<Exam> exams);
 
   Future<void> saveTeachers(List<Teacher> teachers);
@@ -43,8 +41,6 @@ abstract class LocalDataSource {
   Future<void> saveWashChunk(WashChunk chunk);
 
   Future<void> saveLookupsModel(Lookups model);
-
-  Future<void> saveFinancialLookupsModel(FinancialLookups model);
 
   Future<void> saveBudgets(List<Budget> budgets);
 

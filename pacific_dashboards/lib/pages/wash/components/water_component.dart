@@ -40,7 +40,6 @@ class _WaterComponentState extends State<WaterComponent> {
                 data: widget.data,
                 groupingType: charts.BarGroupingType.stacked,
                 tab: tab,);
-            throw FallThroughError();
           },
         ),
       ],
@@ -106,7 +105,6 @@ class _Chart extends StatelessWidget {
                           labelOffsetFromTickPx: -5,
                           labelOffsetFromAxisPx: 10,
                           labelAnchor: charts.TickLabelAnchor.before,
-                          // minimumPaddingBetweenLabelsPx: 2,
                           labelRotation: 270,
                           lineStyle: chartAxisLineStyle,
                         ),

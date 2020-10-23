@@ -16,7 +16,6 @@ import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
 abstract class Database {
   LookupsDao get lookups;
-  FinancialLookupsDao get financialLookups;
   StringsDao get strings;
   SchoolsDao get schools;
   TeachersDao get teachers;
