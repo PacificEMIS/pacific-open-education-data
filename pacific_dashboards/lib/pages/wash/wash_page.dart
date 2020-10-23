@@ -89,7 +89,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                                     flex: 8,
                                     child: InkWell(
                                       onTap: () {
-                                        _openFilters(snapshot.data.questions);
+                                        _openFilters([]);
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.only(

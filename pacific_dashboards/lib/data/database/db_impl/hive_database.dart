@@ -24,7 +24,6 @@ import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';
-import 'package:pacific_dashboards/data/database/model/lookup/hive_question_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/school/hive_school.dart';
 import 'package:pacific_dashboards/data/database/model/school_enroll/hive_school_enroll.dart';
 import 'package:pacific_dashboards/data/database/model/school_exam_report/hive_school_exam_report.dart';
@@ -80,8 +79,7 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveWashChunkAdapter())
       ..registerAdapter(HiveToiletAdapter())
       ..registerAdapter(HiveWaterAdapter())
-      ..registerAdapter(HiveNationalAccreditationAdapter())
-      ..registerAdapter(HiveQuestionLookupAdapter());
+      ..registerAdapter(HiveNationalAccreditationAdapter());
 
     _lookupsDao = HiveLookupsDao();
 

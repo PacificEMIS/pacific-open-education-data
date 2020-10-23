@@ -130,7 +130,6 @@ Future<WashData> _calculateData(
   final chunk = model.chunk;
   final filters = model.filters;
   final filteredChunk = await chunk.applyFilters(filters);
-  final questions = generateQuestionFilters(model.lookups, model.chunk.total);
   var currentYear = _selectedYear(filters);
   return WashData(
       year: currentYear.toString(),
@@ -139,8 +138,7 @@ Future<WashData> _calculateData(
       toiletsModelList: _generateWashToilets(
           filteredChunk.toilets.groupBy((it) => it.schNo), currentYear),
       waterModelList: _generateWashWater(
-          filteredChunk.water.groupBy((it) => it.schNo), currentYear),
-      questions: questions);
+          filteredChunk.water.groupBy((it) => it.schNo), currentYear));
 
 }
 
