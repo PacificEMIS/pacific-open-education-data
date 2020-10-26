@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:arch/arch.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/app.dart';
@@ -11,6 +12,8 @@ import 'package:pacific_dashboards/shared_ui/error_listener.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
+
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.transparent,
     statusBarColor: Colors.transparent,
@@ -20,8 +23,8 @@ void main() async {
     Zone.current.handleUncaughtError(details.exception, details.stack);
   };
 
-  Crashlytics.instance.enableInDevMode = false;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   await serviceLocator.prepare();
 
