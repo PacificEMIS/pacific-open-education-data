@@ -133,6 +133,7 @@ Future<WashData> _calculateData(
   var currentYear = _selectedYear(filters);
   return WashData(
       year: currentYear.toString(),
+      questions: _generateQuestionFilters(model.lookups, filteredChunk.total),
       washModelList: _generateWashTotal(
           filteredChunk.total.groupBy((it) => it.district), currentYear),
       toiletsModelList: _generateWashToilets(
@@ -146,13 +147,12 @@ int _selectedYear(List<Filter> filters) {
   return filters.firstWhere((it) => it.id == 0).intValue;
 }
 
-List<Filter> generateQuestionFilters(Lookups lookups, List<Wash> wash) {
+List<Filter> _generateQuestionFilters(Lookups lookups, List<Wash> wash) {
   return List.of([
     Filter(
       id: 0,
       title: '',
       items: [
-        FilterItem(null, 'filtersDisplayAllAuthority'),
         ...wash
             .uniques((it) => it.question)
             .map((it) => FilterItem(it, it.from(lookups.authorities))),
@@ -401,8 +401,8 @@ _generateWashWater(Map<String, List<Water>> washGroupedBySchNo, int year) {
         .add(WaterData(title: schNo, values: currentlyAvailable));
   });
 
-  waterModelList['Used For Drinking'] = waterDataCurrentlyAvailable;
-  waterModelList['Currently Available'] = waterDataUsedForDrinking;
+  waterModelList['Used For Drinking'] = waterDataUsedForDrinking;
+  waterModelList['Currently Available'] = waterDataCurrentlyAvailable;
 
   return waterModelList;
 }

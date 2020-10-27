@@ -48,7 +48,7 @@ abstract class RestClient {
   Future<Lookups> getLookups();
 
   @GET('warehouse/wash/questions')
-  Future<Lookups> getQuestionLookups();
+  Future<Lookups> getQuestion();
 
   @GET('lookups/collection/findata')
   Future<FinancialLookups> getFinanceLookups();

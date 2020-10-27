@@ -198,7 +198,7 @@ class Strings {
       'environment': 'Environment',
       'englishLearner': 'English Learner',
       'district': 'District',
-      'districtTotals': 'District Totals',
+      'districtTotals': 'Question Totals by District',
       'toilets': 'Toilets',
       'waterSources': 'Water Sources',
       'washDashboardsTitle': 'Reviews And Inspections: Dashboard',
@@ -232,7 +232,8 @@ class Strings {
       'all': 'Total',
       'qualified': 'Qualified',
       'certified': 'Certified',
-      'qualifiedAndCertified':'Qualified and Certified'
+      'qualifiedAndCertified':'Qualified and Certified',
+      'labelNoQuestionSelected': 'No question selected',
     },
   };
 

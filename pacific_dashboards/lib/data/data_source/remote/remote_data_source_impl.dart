@@ -178,6 +178,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     final totalData = await _withHandlers((client) => client.getWash());
     final toiletsData = await _withHandlers((client) => client.getToilets());
     final waterData = await _withHandlers((client) => client.getWater());
+    final questionData = await _withHandlers((client) => client.getQuestion());
     return WashChunk(total: totalData, toilets: toiletsData, water: waterData);
   }
 

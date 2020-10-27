@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/wash/base_wash.dart';
+import 'package:pacific_dashboards/models/wash/question.dart';
 import 'package:pacific_dashboards/models/wash/toilets.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/models/wash/water.dart';
@@ -23,10 +24,14 @@ class WashChunk {
   @JsonKey(name: 'water')
   final List<Water> water;
 
+  @JsonKey(name: 'question')
+  final List<Question> question;
+
   const WashChunk({
     @required this.total,
     @required this.toilets,
     @required this.water,
+    @required this.question,
   });
 
   factory WashChunk.fromJson(Map<String, dynamic> json) =>
@@ -39,8 +44,9 @@ class WashChunkJsonParts {
   final List<dynamic> total;
   final List<dynamic> toilets;
   final List<dynamic> water;
+  final List<dynamic> question;
 
-  const WashChunkJsonParts({this.total, this.toilets, this.water});
+  const WashChunkJsonParts({this.total, this.toilets, this.water, this.question});
 }
 
 extension Filters on WashChunk {
@@ -132,6 +138,7 @@ extension Filters on WashChunk {
         total: apply(this.total),
         toilets: apply(this.toilets),
         water: apply(this.water),
+        question: this.question
       );
     });
   }

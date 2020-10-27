@@ -71,11 +71,6 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                       return Container();
                     } else {
                       var list = <Widget>[
-                        _titleWidget(
-                          context,
-                          'budgetsEducationFinancing'.localized(context),
-                          true,
-                        ),
                         //GNP and Government Spending Actual
                         _titleWidget(
                           context,

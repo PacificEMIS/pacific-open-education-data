@@ -75,7 +75,6 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       return Container();
                     } else {
                       var list = <Widget>[
-                        _titleWidget(context, 'washDashboardsTitle', true),
                         Padding(
                           padding: EdgeInsets.only(
                               left: 16, right: 16, top: 10, bottom: 10),
@@ -89,7 +88,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                                     flex: 8,
                                     child: InkWell(
                                       onTap: () {
-                                        _openFilters([]);
+                                        _openFilters(snapshot.data.questions);
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.only(
@@ -126,7 +125,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                         ),
                         _titleWidget(context, 'districtTotals', false),
                         TotalComponent(
-                            data: [], //snapshot.data.washModelList,
+                            data: snapshot.data.washModelList,
                             year: snapshot.data.year),
                         Container(height: 50),
                         _titleWidget(context, 'toilets', false),
