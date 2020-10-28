@@ -202,7 +202,7 @@ class _Chart extends StatelessWidget {
     final chartData = districts.mapToList((domain, measure) {
       return ChartData(
         domain,
-        measure,
+        measure ?? 0,
         colorScheme[domain],
       );
     });
