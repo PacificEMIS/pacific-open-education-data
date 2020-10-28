@@ -62,7 +62,6 @@ class AppColors {
     const Color.fromRGBO(1, 122, 160, 1),
     const Color.fromRGBO(0, 115, 46, 1),
     const Color.fromRGBO(168, 98, 16, 1),
-    const Color.fromRGBO(196, 203, 206, 1),
   ];
 
   static const Color kGovernmentChartColor =

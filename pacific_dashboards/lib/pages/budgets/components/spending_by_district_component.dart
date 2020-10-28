@@ -10,17 +10,50 @@ import 'package:pacific_dashboards/res/themes.dart';
 
 import '../budget_data.dart';
 
+enum _Tab {
+  actualExpenditure,
+  budget,
+  actualRecurrentExpenditure,
+  budgetRecurrentExpenditure,
+  actualExpPerHead,
+  budgetExpPerHead,
+  enrolment
+}
+
+extension _TabStringExt on _Tab {
+  String getLocalizedName(BuildContext context) {
+    switch (this) {
+      case _Tab.actualExpenditure:
+        return 'budgetsActualExpenditureTab'.localized(context);
+      case _Tab.budget:
+        return 'budgetsBudgetTab'.localized(context);
+      case _Tab.actualRecurrentExpenditure:
+        return 'budgetsActualRecurrentExpenditureTab'.localized(context);
+      case _Tab.budgetRecurrentExpenditure:
+        return 'budgetsBudgetedRecurrentExpenditureTab'.localized(context);
+      case _Tab.actualExpPerHead:
+        return 'budgetsActualExpPerHeadTab'.localized(context);
+      case _Tab.budgetExpPerHead:
+        return 'budgetsBudgetExpPerHeadTab'.localized(context);
+      case _Tab.enrolment:
+        return 'budgetsEnrollmentTab'.localized(context);
+    }
+    throw FallThroughError();
+  }
+}
+
 class SpendingByDistrictComponent extends StatefulWidget {
   final List<DataSpendingByDistrict> data;
   final List<DataSpendingByDistrict> dataFiltered;
   final String domain;
 
-  const SpendingByDistrictComponent(
-      {Key key,
-      @required this.data,
-      @required this.dataFiltered,
-      @required this.domain})
-      : assert(data != null && dataFiltered != null),
+  const SpendingByDistrictComponent({
+    Key key,
+    @required this.data,
+    @required this.dataFiltered,
+    @required this.domain,
+  })  : assert(data != null),
+        assert(dataFiltered != null),
         super(key: key);
 
   @override
@@ -39,44 +72,36 @@ class _SpendingByDistrictComponentState
         MiniTabLayout(
           tabs: _Tab.values,
           tabNameBuilder: (tab) {
-            return tab.toString().substring(5).localized(context);
+            return (tab as _Tab).getLocalizedName(context);
           },
-          builder: (ctx, tab) {
-            switch (tab) {
-              case _Tab.actualExpenditure:
-              case _Tab.budget:
-              case _Tab.actualRecurrentExpenditure:
-              case _Tab.budgetRecurrentExpenditure:
-              case _Tab.actualExpPerHead:
-              case _Tab.enrolment:
-                return _Chart(
-                    data: widget.data,
-                    dataFiltered: widget.dataFiltered,
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab, domain: widget.domain,);
-              case _Tab.budgetExpPerHead:
-                return _Chart(
-                    data: widget.data,
-                    dataFiltered: widget.dataFiltered,
-                    groupingType: charts.BarGroupingType.groupedStacked,
-                    tab: tab, domain: widget.domain,);
-            }
-            throw FallThroughError();
+          builder: (context, tab) {
+            return _Chart(
+              data: widget.data,
+              dataFiltered: widget.dataFiltered,
+              groupingType: _getBarGroupingType(tab),
+              tab: tab,
+              domain: widget.domain,
+            );
           },
         ),
       ],
     );
   }
-}
 
-enum _Tab {
-  actualExpenditure,
-  budget,
-  actualRecurrentExpenditure,
-  budgetRecurrentExpenditure,
-  actualExpPerHead,
-  budgetExpPerHead,
-  enrolment
+  charts.BarGroupingType _getBarGroupingType(_Tab tab) {
+    switch (tab) {
+      case _Tab.actualExpenditure:
+      case _Tab.budget:
+      case _Tab.actualRecurrentExpenditure:
+      case _Tab.budgetRecurrentExpenditure:
+      case _Tab.actualExpPerHead:
+      case _Tab.enrolment:
+        return charts.BarGroupingType.stacked;
+      case _Tab.budgetExpPerHead:
+        return charts.BarGroupingType.groupedStacked;
+    }
+    throw FallThroughError();
+  }
 }
 
 class _Chart extends StatelessWidget {
@@ -86,14 +111,14 @@ class _Chart extends StatelessWidget {
   final _Tab _tab;
   final String _domain;
 
-  const _Chart(
-      {Key key,
-      @required List<DataSpendingByDistrict> data,
-      @required List<DataSpendingByDistrict> dataFiltered,
-      @required charts.BarGroupingType groupingType,
-      @required _Tab tab,
-      @required String domain})
-      : assert(data != null),
+  const _Chart({
+    Key key,
+    @required List<DataSpendingByDistrict> data,
+    @required List<DataSpendingByDistrict> dataFiltered,
+    @required charts.BarGroupingType groupingType,
+    @required _Tab tab,
+    @required String domain,
+  })  : assert(data != null),
         _data = data,
         _dataFiltered = dataFiltered,
         _groupingType = groupingType,
@@ -158,7 +183,7 @@ class _Chart extends StatelessWidget {
   Future<Map<String, Color>> get _colorScheme {
     return Future.microtask(() {
       final colorScheme = Map<String, Color>();
-      final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
+      final dataSortedByDistrict = _data.groupBy((it) => it.district);
       final districts = dataSortedByDistrict.keys.toList();
       districts.forEachIndexed((index, item) {
         colorScheme[item] = index < AppColors.kDynamicPalette.length
@@ -174,27 +199,35 @@ class _Chart extends StatelessWidget {
     Map<String, Color> colorScheme,
     String domain,
   ) {
-    Map<String, int> districts = new Map();
-    final dataSortedByDistrict = _dataFiltered.groupBy((it) => it.district);
-    dataSortedByDistrict.forEach((key, value) {
+    final districts = Map<String, int>();
+    _dataFiltered.groupBy((it) => it.district).forEach((district, value) {
       var spending = 0;
-      var title = key;
       value.forEach((it) {
-        if (_tab == _Tab.actualExpenditure)
-          spending += it.edExpA;
-        else if (_tab == _Tab.actualExpPerHead)
-          spending += it.edExpAPerHead;
-        else if (_tab == _Tab.actualRecurrentExpenditure)
-          spending += it.edRecurrentExpA;
-        else if (_tab == _Tab.budget)
-          spending += it.edExpB;
-        else if (_tab == _Tab.budgetExpPerHead)
-          spending += it.edExpBPerHead;
-        else if (_tab == _Tab.budgetRecurrentExpenditure)
-          spending += it.edRecurrentExpB;
-        else if (_tab == _Tab.enrolment) spending += it.enrolment;
+        switch (_tab) {
+          case _Tab.actualExpenditure:
+            spending += it.edExpA;
+            break;
+          case _Tab.budget:
+            spending += it.edExpB;
+            break;
+          case _Tab.actualRecurrentExpenditure:
+            spending += it.edRecurrentExpA;
+            break;
+          case _Tab.budgetRecurrentExpenditure:
+            spending += it.edRecurrentExpB;
+            break;
+          case _Tab.actualExpPerHead:
+            spending += it.edExpAPerHead;
+            break;
+          case _Tab.budgetExpPerHead:
+            spending += it.edExpBPerHead;
+            break;
+          case _Tab.enrolment:
+            spending += it.enrolment;
+            break;
+        }
       });
-      if (spending != 0) districts[title] = spending;
+      districts[district] = spending;
     });
 
     if (districts.length == 0) return Container();
@@ -202,14 +235,14 @@ class _Chart extends StatelessWidget {
     final chartData = districts.mapToList((domain, measure) {
       return ChartData(
         domain,
-        measure ?? 0,
+        measure,
         colorScheme[domain],
       );
     });
     return ChartInfoTableWidget(
       chartData,
       domain.localized(context),
-      _tab.toString().substring(5).localized(context)
+      _tab.getLocalizedName(context),
     );
   }
 
@@ -217,54 +250,33 @@ class _Chart extends StatelessWidget {
     Map<String, Color> colorScheme,
   ) {
     return Future.microtask(() {
-      final data = List<ChartData>();
-      data.addAll(_data.map((it) {
-        switch (_tab) {
-          case _Tab.actualExpPerHead:
-            return ChartData(
-              it.year,
-              it.edExpAPerHead,
-              colorScheme[it.district],
-            );
+      num Function(DataSpendingByDistrict, _Tab) extractMeasure =
+          (data, tab) {
+        switch (tab) {
           case _Tab.actualExpenditure:
-            return ChartData(
-              it.year,
-              it.edExpA,
-              colorScheme[it.district],
-            );
-          case _Tab.actualRecurrentExpenditure:
-            return ChartData(
-              it.year,
-              it.edRecurrentExpA,
-              colorScheme[it.district],
-            );
-          //Budget
+            return data.edExpA;
           case _Tab.budget:
-            return ChartData(
-              it.year,
-              it.edExpB,
-              colorScheme[it.district],
-            );
-          case _Tab.budgetExpPerHead:
-            return ChartData(
-              it.year,
-              it.edExpBPerHead,
-              colorScheme[it.district],
-            );
+            return data.edExpB;
+          case _Tab.actualRecurrentExpenditure:
+            return data.edRecurrentExpA;
           case _Tab.budgetRecurrentExpenditure:
-            return ChartData(
-              it.year,
-              it.edRecurrentExpB,
-              colorScheme[it.district],
-            );
+            return data.edRecurrentExpB;
+          case _Tab.actualExpPerHead:
+            return data.edExpAPerHead;
+          case _Tab.budgetExpPerHead:
+            return data.edExpBPerHead;
           case _Tab.enrolment:
-            return ChartData(
-              it.year,
-              it.enrolment,
-              colorScheme[it.district],
-            );
+            return data.enrolment;
         }
-      }).toList());
+        throw FallThroughError();
+      };
+      final data = _data.map((it) {
+        return ChartData(
+          it.year,
+          extractMeasure(it, _tab),
+          colorScheme[it.district],
+        );
+      }).toList();
       return [
         charts.Series(
           domainFn: (ChartData chartData, _) => chartData.domain,

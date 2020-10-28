@@ -40,17 +40,19 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             _SortingTitle(
               title: widget._titleName,
               icon: _sortType.iconFor(ValueType.domain),
               onTap: () => _onSortTap(ValueType.domain),
             ),
-            _SortingTitle(
-              title: widget._titleValue,
-              icon: _sortType.iconFor(ValueType.measure),
-              onTap: () => _onSortTap(ValueType.measure),
+            Expanded(
+              child: _SortingDomain(
+                title: widget._titleValue,
+                icon: _sortType.iconFor(ValueType.measure),
+                onTap: () => _onSortTap(ValueType.measure),
+              ),
             )
           ],
         ),
@@ -194,6 +196,7 @@ class _SortingTitle extends StatelessWidget {
     return FlatButton(
       onPressed: _onTap,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
             _title,
@@ -203,6 +206,48 @@ class _SortingTitle extends StatelessWidget {
                 .copyWith(color: AppColors.kTextMinor),
           ),
           _icon,
+        ],
+      ),
+    );
+  }
+}
+
+class _SortingDomain extends StatelessWidget {
+  const _SortingDomain({
+    Key key,
+    @required String title,
+    @required Icon icon,
+    @required GestureTapCallback onTap,
+  })  : _title = title,
+        _icon = icon,
+        _onTap = onTap,
+        super(key: key);
+
+  final String _title;
+  final Icon _icon;
+  final GestureTapCallback _onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: _onTap,
+      child: Row(
+        textDirection: TextDirection.rtl,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          _icon,
+          Expanded(
+            child: Text(
+              _title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: AppColors.kTextMinor),
+            ),
+          ),
         ],
       ),
     );

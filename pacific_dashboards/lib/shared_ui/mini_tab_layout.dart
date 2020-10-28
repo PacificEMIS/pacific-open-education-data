@@ -11,11 +11,13 @@ class MiniTabLayout<T> extends StatefulWidget {
   final TabbedWidgetBuilder<T> builder;
   final TabNameBuilder<T> tabNameBuilder;
   final double padding;
+
   const MiniTabLayout({
     Key key,
     @required this.tabs,
     @required this.tabNameBuilder,
-    @required this.builder, this.padding,
+    @required this.builder,
+    this.padding,
   })  : assert(tabs != null),
         assert(tabNameBuilder != null),
         assert(builder != null),

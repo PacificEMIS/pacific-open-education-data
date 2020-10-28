@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
+import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
@@ -87,6 +88,7 @@ class BudgetViewModel extends BaseViewModel {
           _budget,
           _lookups,
           _filters,
+          await _globalSettings.currentEmis,
         ),
       ),
     );
@@ -117,22 +119,24 @@ class _BudgetModel {
   final List<Budget> budget;
   final Lookups lookups;
   final List<Filter> filters;
+  final Emis emis;
 
-  const _BudgetModel(this.budget, this.lookups, this.filters);
+  const _BudgetModel(this.budget, this.lookups, this.filters, this.emis);
 }
 
 Future<BudgetData> _transformBudgetModel(
-  _BudgetModel _budgetModel,
+  _BudgetModel budgetModel,
 ) async {
-  final year = _selectedYear(_budgetModel.filters);
+  final emis = budgetModel.emis;
+  final year = _selectedYear(budgetModel.filters);
 
   final filteredBudget =
-      await _budgetModel.budget.applyFilters(_budgetModel.filters);
-  final groupedByYear = _budgetModel.budget.groupBy((it) => it.surveyYear);
+      await budgetModel.budget.applyFilters(budgetModel.filters);
+  final groupedByYear = budgetModel.budget.groupBy((it) => it.surveyYear);
   final dataByGnpAndGovernmentSpending =
       _generateSpendingByYearData(groupedByYear, year);
 
-  final budgetLookups = _budgetModel.lookups;
+  final budgetLookups = budgetModel.lookups;
   //Actual data
   final dataByGnpAndGovernmentSpendingActual =
       dataByGnpAndGovernmentSpending[0];
@@ -141,18 +145,31 @@ Future<BudgetData> _transformBudgetModel(
       dataByGnpAndGovernmentSpending[1];
   //Spending data
   final dataBySpendingBySector = _generateYearAndSectorData(
-      filteredBudget.groupBy((it) => it.districtCode), budgetLookups, year);
+    filteredBudget.groupBy((it) => it.districtCode),
+    budgetLookups,
+    year,
+  );
   //Spending by sector and year
-  final dataSpendingBySectorAndYear =
-      _generateSpendingSectorData(groupedByYear, _budgetModel.lookups);
-  final dataSpendingByDistrict =
-      _generateSpendingDistrictData(groupedByYear, _budgetModel.lookups, year);
+  final dataSpendingBySectorAndYear = _generateSpendingSectorData(
+    groupedByYear,
+    budgetModel.lookups,
+  );
+  final dataSpendingByDistrict = _generateSpendingDistrictData(
+    groupedByYear,
+    budgetModel.lookups,
+    year,
+    emis,
+  );
   final dataSpendingByDistrictFiltered = _generateSpendingDistrictData(
-      filteredBudget.groupBy((it) => it.surveyYear),
-      _budgetModel.lookups,
-      year);
+    filteredBudget.groupBy((it) => it.surveyYear),
+    budgetModel.lookups,
+    year,
+    emis,
+  );
   final dataSpendingBySectorAndYearFiltered = _generateSpendingSectorData(
-      filteredBudget.groupBy((it) => it.surveyYear), _budgetModel.lookups);
+    filteredBudget.groupBy((it) => it.surveyYear),
+    budgetModel.lookups,
+  );
   return BudgetData(
     year: year,
     dataByGnpAndGovernmentSpendingActual: dataByGnpAndGovernmentSpendingActual,
@@ -174,6 +191,7 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
   Map<int, List<Budget>> budgetDataGroupedByYear,
   Lookups lookups,
   int currentYear,
+  Emis emis,
 ) {
   List<DataSpendingByDistrict> dataSpendingByDistrict = new List();
   budgetDataGroupedByYear.forEach((year, spendings) {
@@ -224,7 +242,24 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
     });
   });
 
+  /// https://ytr.omega-r.club/issue/POED-167
+  ///
+  /// " Yes. Only MIEMIS omits the districts since they will not have budgets
+  /// by districts loaded into the system. In FSM however, National has
+  /// a budget and so does each 4 states so yes display them. While currently,
+  /// some states do not have the data loaded they will soon and they
+  /// should be shown in the legend (at least if the data is present like
+  /// in the above screenshot that has Yap state budget) "
+  ///
+  /// Removing all non-National data from MIEMIS
+  if (emis == Emis.miemis) {
+    dataSpendingByDistrict.removeWhere(
+      (it) => !it.district.toLowerCase().contains('nation'),
+    );
+  }
+
   dataSpendingByDistrict.sort((rv, lv) => lv.year.compareTo(rv.year));
+
   return dataSpendingByDistrict;
 }
 

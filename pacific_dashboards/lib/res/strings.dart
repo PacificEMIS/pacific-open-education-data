@@ -194,25 +194,26 @@ class Strings {
       'budgetsSpendingBySector': 'Spending By Sector',
       'budgetsSpendingByDistrict': 'Spending By States',
       'budgetsDashboardComponent': 'Dashboard Component',
+      'budgetsGovtExpenditure': 'Govt Expenditure',
+      'budgetsGnp': 'GNI',
+      'budgetsEce': 'ECE',
+      'budgetsPrimaryEducation': 'Primary Education',
+      'budgetsSecondaryEducation': 'Secondary Education',
+      'budgetsActualExpenditureTab': 'Actual Expenditure',
+      'budgetsBudgetTab': 'Budget',
+      'budgetsActualRecurrentExpenditureTab': 'Actual Recurrent Expenditure',
+      'budgetsBudgetedRecurrentExpenditureTab': 'Budgeted Recurrent Expenditure',
+      'budgetsActualExpPerHeadTab': 'Actual Exp per Head',
+      'budgetsEnrollmentTab': 'Enrollment',
+      'budgetsBudgetExpPerHeadTab': 'Budget Exp per Head',
+      'budgetsSectorsDomain': 'Sectors',
+      'budgetsStatesDomain': 'State',
       'year': 'Year',
       'govtExpense': 'Govt Expense',
-      'govtExpenditure': 'Govt Expenditure',
       'edExpense': 'Ed Expense',
-      'gNP': 'GNI',
       'edGovtPercentage': 'Ed/Govt %',
       'edGNPPercentage': 'Ed/GNI %',
-      'eCE': 'ECE',
-      'primaryEducation': 'Primary Education',
-      'secondaryEducation': 'Secondary Education',
-      'actualExpenditure': 'Actual Expenditure',
       'budgetExpenditure': 'Budgeted Expenditure',
-      'budget': 'Budget',
-      'actualRecurrentExpenditure': 'Actual Recurrent Expenditure',
-      'budgetRecurrentExpenditure': 'Budgeted Recurrent Expenditure',
-      'actualExpPerHead': 'Actual Exp per Head',
-      'budgetExpPerHead': 'Budget Exp per Head',
-      'enrolment': 'Enrollment',
-      'enrollment': 'Enrollment',
       //Special Education
       'specialEducationTitle': 'Special Education: Dashboard',
       'disability': 'Disability',
@@ -256,7 +257,6 @@ class Strings {
       'schoolAccreditationCumulative': 'Cumulative to',
       'schoolAccreditationEvaluated': 'Evaluated in',
       'levels': 'Levels',
-      'sectors': 'Sectors',
       'certifiedAndQualified': 'Certified and Qualified ',
     },
   };
@@ -301,6 +301,7 @@ class Strings {
       'schoolsAccreditationDashboardsProgressByStateTitle':
           'Accreditation Progress by Atoll / Island ',
       'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
+      'budgetsStatesDomain': 'Atolls and Islands',
     },
   };
 
@@ -333,6 +334,7 @@ class Strings {
       'schoolsDashboardsEnrollByGovernmentTitle': 'Enrollment by School Type',
       'schoolsDashboardsEnrollByAgeLevelGenderTitle':
           'Enrollment by Age, Education \nLevel and Gender',
+      'budgetsStatesDomain': 'Districts',
     },
   };
 
