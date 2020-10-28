@@ -10,7 +10,7 @@ class HiveQuestion extends HiveObject with Expirable {
   String qID;
 
   @HiveField(1)
-  int qName;
+  String qName;
 
   Question toQuestion() => Question(
       qID,

@@ -8,7 +8,7 @@ class Question {
   final String qID;
   @override
   @JsonKey(name: "QName") //DistrictCode
-  final int qName;
+  final String qName;
 
 
   const Question(
