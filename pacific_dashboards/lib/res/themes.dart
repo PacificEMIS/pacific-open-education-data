@@ -162,4 +162,14 @@ extension TextThemeExt on TextTheme {
             fontSize: 10.0,
             fontWeight: FontWeight.bold,
           );
+
+  TextStyle get individualAccreditationInspectedBy =>
+      this.headline5.copyWith(
+            fontSize: 12.0,
+          );
+
+  TextStyle get individualAccreditationLevel =>
+      this.overline.copyWith(
+            fontSize: 12.0,
+          );
 }

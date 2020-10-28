@@ -5,6 +5,7 @@ import 'package:pacific_dashboards/data/database/db_impl/accreditations_dao_impl
 import 'package:pacific_dashboards/data/database/db_impl/district_enroll_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/exams_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/financial_lookups_dao_impl.dart';
+import 'package:pacific_dashboards/data/database/db_impl/individual_school_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/lookups_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/nation_enroll_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/school_enroll_dao_impl.dart';
@@ -23,6 +24,8 @@ import 'package:pacific_dashboards/data/database/model/accreditation/hive_accred
 import 'package:pacific_dashboards/data/database/model/budget/hive_budget.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
 import 'package:pacific_dashboards/data/database/model/financial_lookup/hive_financial_lookup.dart';
+import 'package:pacific_dashboards/data/database/model/individual_school/hive_individual_school.dart';
+import 'package:pacific_dashboards/data/database/model/individual_school/hive_individual_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';
@@ -40,7 +43,7 @@ import 'package:pacific_dashboards/data/database/model/wash/hive_water.dart';
 
 import 'budgets_dao_impl.dart';
 
-// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20б 21, 22, 23, 24}
+// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20б 21, 22, 23, 24, 25, 26}
 class HiveDatabase extends Database {
   LookupsDao _lookupsDao;
   StringsDao _stringsDao;
@@ -58,6 +61,7 @@ class HiveDatabase extends Database {
   FinancialLookupsDao _financialLookupsDao;
   SpecialEducationDao _specialEducationDao;
   WashDao _washDao;
+  IndividualSchoolDao _individualSchoolDao;
 
   Future<void> init() async {
     await Hive.initFlutter();
@@ -82,7 +86,9 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveWashChunkAdapter())
       ..registerAdapter(HiveToiletAdapter())
       ..registerAdapter(HiveWaterAdapter())
-      ..registerAdapter(HiveNationalAccreditationAdapter());
+      ..registerAdapter(HiveNationalAccreditationAdapter())
+      ..registerAdapter(HiveIndividualSchoolAdapter())
+      ..registerAdapter(HiveIndividualAccreditationAdapter());
 
     _lookupsDao = HiveLookupsDao();
     _financialLookupsDao = HiveFinancialLookupsDao();
@@ -104,6 +110,7 @@ class HiveDatabase extends Database {
     _budgetsDao = HiveBudgetsDao();
     _specialEducationDao = HiveSpecialEducationDao();
     _washDao = HiveWashDao();
+    _individualSchoolDao = HiveIndividualSchoolDao();
   }
 
   @override
@@ -153,4 +160,9 @@ class HiveDatabase extends Database {
 
   @override
   WashDao get wash => _washDao;
+
+  @override
+  IndividualSchoolDao get individualSchoolDao => _individualSchoolDao;
+
+
 }

@@ -34,6 +34,7 @@ class Strings {
       'labelEce': 'ECE',
       'labelPrimary': 'Primary',
       'labelSec': 'Secondary',
+      'labelNa': 'n/a',
       'errorTitle': 'Error',
       'error_unknown': 'Unknown error occurred',
       'error_server_unavailable':
@@ -68,8 +69,7 @@ class Strings {
       'schoolsDashboardsTitle': 'Schools',
       'schoolsDashboardsMeasureEnroll': 'Enrollment',
       'schoolsDashboardsEnrollByStateTitle': 'Enrollment by State',
-      'schoolsDashboardsEnrollByAuthorityTitle':
-          'Enrollment by Authority',
+      'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
       'schoolsDashboardsEnrollByGovernmentTitle':
           'Enrollment Govt / \nNon-govt',
       'schoolsDashboardsEnrollByAgeLevelGenderTitle':
@@ -102,9 +102,12 @@ class Strings {
           'By Standards and Gender for Last 3 Years',
       'examsDashboardsViewByStandardAndState': 'By Standards and State',
       'schoolsAccreditationDashboardsTitle': 'School Accreditations',
-      'schoolsAccreditationDashboardsProgressTitle': 'Accreditation Progress by Year',
-      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by State',
-      'schoolsAccreditationDashboardsProgressNationalTitle': 'Accreditation Progress National',
+      'schoolsAccreditationDashboardsProgressTitle':
+          'Accreditation Progress by Year',
+      'schoolsAccreditationDashboardsProgressByStateTitle':
+          'Accreditation Progress by State',
+      'schoolsAccreditationDashboardsProgressNationalTitle':
+          'Accreditation Progress National',
       'schoolsAccreditationDashboardsDistrictTitle': 'District Status',
       'schoolsAccreditationDashboardsStatusByStateTitle':
           'Accreditation Status by State',
@@ -117,6 +120,7 @@ class Strings {
       'schoolsListSearchHint': 'Search',
       'individualSchoolDashboardsTitle': 'DASHBOARDS',
       'individualSchoolExamsTitle': 'EXAMS',
+      'individualSchoolAccreditationTitle': 'ACCREDITATION',
       'individualSchoolDashboardEnrollTitle': 'Enrollment',
       'individualSchoolDashboardRatesTitle': 'Rates',
       'individualSchoolDashboardEnrollByGradeLevelGenderTitle':
@@ -155,13 +159,27 @@ class Strings {
       'individualSchoolExamsFilterType': 'Exam Type',
       'individualSchoolExamsHistoryYear': ' Exam Year',
       'individualSchoolExamsHistoryTableCode': 'Exam Code',
+      'individualSchoolAccreditationsSE1': 'SE.1 Leadership',
+      'individualSchoolAccreditationsSE2': 'SE.2 Teacher Performance',
+      'individualSchoolAccreditationsSE3': 'SE.3 Data management',
+      'individualSchoolAccreditationsSE4': 'SE.4 NCSB',
+      'individualSchoolAccreditationsSE5': 'SE.5 Facilities',
+      'individualSchoolAccreditationsSE6': 'SE.6 SIP',
+      'individualSchoolAccreditationsInspectedBy': 'Inspected by: ',
+      'individualSchoolAccreditationsDisclaimer': 'Only a summary of the FORM B'
+          ' school accreditation results will be shown to the schools for '
+          'information purposes. The actual data collection is done through an '
+          'Android app not by the schools themselves but by designated '
+          'inspectors. If you believe some of the results below are not correct'
+          ' you must contact the National Data Management Office.',
       'budgetsDashboardsTitle': 'Budgets',
       'budgetsEducationFinancing': 'Education Financing : Dashboard',
       'budgetsGnpAndGovernmentSpendingActualExpense':
           'GNI (aka. GNP) and Government Spending Actual Expense',
       'budgetsGnpAndGovernmentSpendingBudgetedExpense':
           'GNI (aka. GNP) and Government Spending Budgeted Expense',
-      'budgetsGnpAndGovernmentSpending': 'GNI (aka. GNP) and Government Spending',
+      'budgetsGnpAndGovernmentSpending':
+          'GNI (aka. GNP) and Government Spending',
       'budgetsSpendingBySector': 'Spending By Sector',
       'budgetsSpendingByDistrict': 'Spending By States',
       'budgetsDashboardComponent': 'Dashboard Component',
@@ -228,7 +246,7 @@ class Strings {
       'schoolAccreditationEvaluated': 'Evaluated in',
       'levels': 'Levels',
       'sectors': 'Sectors',
-      'certifiedAndQualified': 'Certified and Qualified '
+      'certifiedAndQualified': 'Certified and Qualified ',
     },
   };
 
@@ -239,8 +257,7 @@ class Strings {
 
   static Map<String, Map<String, String>> _localizedValuesMiEmis = {
     'en': {
-      'schoolsDashboardsEnrollByStateTitle':
-          'Enrollment by Atolls and Islands',
+      'schoolsDashboardsEnrollByStateTitle': 'Enrollment by Atolls and Islands',
       'schoolsDashboardsEnrollByLevelStateGenderTitle':
           'Enrollment by School Levels, \nAtolls and Islands and Gender',
       'schoolsDashboardsStateDomain': 'Atolls and Islands',
@@ -270,7 +287,8 @@ class Strings {
       'filtersDisplayAllAuthority': 'Display All Authority',
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
-      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by Atoll / Island ',
+      'schoolsAccreditationDashboardsProgressByStateTitle':
+          'Accreditation Progress by Atoll / Island ',
       'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
     },
   };
@@ -300,14 +318,13 @@ class Strings {
           'Performance by Test',
       'schoolsAccreditationDashboardsStateDomain': 'District',
       'schoolsAccreditationDashboardsStandardDomain': 'Test',
-      'schoolsDashboardsEnrollByAuthorityTitle':
-      'Enrollment by Authority',
-      'schoolsDashboardsEnrollByGovernmentTitle':
-      'Enrollment by School Type',
+      'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
+      'schoolsDashboardsEnrollByGovernmentTitle': 'Enrollment by School Type',
       'schoolsDashboardsEnrollByAgeLevelGenderTitle':
-      'Enrollment by Age, Education \nLevel and Gender',
+          'Enrollment by Age, Education \nLevel and Gender',
     },
   };
+
   // endregion
 
   String _getLocalizedValue(String code) {

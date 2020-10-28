@@ -2,6 +2,7 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
+import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
@@ -46,6 +47,10 @@ abstract class Repository {
   );
 
   Stream<RepositoryResponse<List<SchoolExamReport>>> fetchIndividualSchoolExams(
+    String schoolId,
+  );
+
+  Stream<RepositoryResponse<IndividualSchool>> fetchIndividualSchool(
     String schoolId,
   );
 }

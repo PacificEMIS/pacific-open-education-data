@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:pacific_dashboards/data/data_source/remote/entities/individual_school/individual_school_response.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/schools_list/schools_list_response_body.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/token/token_response_body.dart';
 import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
@@ -99,4 +100,10 @@ abstract class RestClient {
 
   @GET('warehouse/wash/water')
   Future<List<Water>> getWater();
+
+  @GET('schools/{schoolId}')
+  Future<IndividualSchoolResponse> getIndividualSchool(
+    @Header('Authorization') String bearerToken,
+    @Path('schoolId') String schoolId,
+  );
 }

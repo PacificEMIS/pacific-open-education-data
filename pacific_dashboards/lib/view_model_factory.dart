@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_view_model.dart';
@@ -122,6 +123,17 @@ class ViewModelFactory {
     ShortSchool school,
   ) {
     return IndividualExamsViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      school: school,
+    );
+  }
+
+  IndividualAccreditationViewModel createIndividualAccreditationViewModel(
+      BuildContext ctx,
+      ShortSchool school,
+      ) {
+    return IndividualAccreditationViewModel(
       ctx,
       repository: serviceLocator.repository,
       school: school,
