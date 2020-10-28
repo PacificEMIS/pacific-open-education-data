@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/accreditation/components/accreditation_level_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/components/accreditation_table_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_data.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_view_model.dart';
-import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
@@ -35,13 +35,14 @@ class _IndividualAccreditationComponentState extends MvvmState<
     IndividualAccreditationViewModel, IndividualAccreditationComponent> {
   @override
   Widget buildWidget(BuildContext context) {
-    final accreditationDateFormat = DateFormat('MMM d, yyyy');
     return StreamBuilder<bool>(
       stream: viewModel.activityIndicatorStream,
       initialData: true,
       builder: (context, snapshot) {
         if (snapshot.data) {
-          return Container();
+          return Center(
+            child: PlatformProgressIndicator(),
+          );
         }
         return StreamBuilder<List<IndividualAccreditationData>>(
           stream: viewModel.dataStream,
@@ -71,10 +72,7 @@ class _IndividualAccreditationComponentState extends MvvmState<
                   MiniTabLayout(
                     tabs: data,
                     tabNameBuilder: (accreditationData) =>
-                        accreditationData.dateTime != null
-                            ? accreditationDateFormat
-                                .format(accreditationData.dateTime)
-                            : 'labelNa'.localized(context),
+                        _createTabName(context, accreditationData),
                     builder: (context, accreditationData) =>
                         _AccreditationWidget(
                       data: accreditationData,
@@ -88,9 +86,25 @@ class _IndividualAccreditationComponentState extends MvvmState<
       },
     );
   }
+
+  String _createTabName(
+    BuildContext context,
+    IndividualAccreditationData data,
+  ) {
+    if (data.dateTime == null) {
+      if (data.inspectionYear == null) {
+        return 'labelNa'.localized(context);
+      }
+      return '${data.inspectionYear}';
+    }
+    return DateFormat('MMM d, yyyy').format(data.dateTime);
+  }
 }
 
 class _AccreditationWidget extends StatelessWidget {
+  static const double _kObservationHeight = 40.0;
+  static const List<int> _kObservationFlexes = [11, 2, 2];
+
   final IndividualAccreditationData _data;
 
   const _AccreditationWidget({
@@ -118,7 +132,7 @@ class _AccreditationWidget extends StatelessWidget {
                   .individualAccreditationInspectedBy,
             ),
             Spacer(),
-            _AccreditationLevelWidget(
+            AccreditationLevelComponent(
               level: _data.result,
             ),
           ],
@@ -127,40 +141,47 @@ class _AccreditationWidget extends StatelessWidget {
         AccreditationTableComponent(
           data: _data.standards,
         ),
+        SizedBox(height: 8),
+        Container(
+          height: _kObservationHeight,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                flex: _kObservationFlexes[0],
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Text(
+                    'individualSchoolAccreditationsCO'.localized(context),
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: _kObservationFlexes[1],
+                child: Text(
+                  '${_data.classroomObservation1 ?? '-'}',
+                  textAlign: TextAlign.center,
+                  style:
+                      Theme.of(context).textTheme.individualAccreditationLevel,
+                ),
+              ),
+              Expanded(
+                flex: _kObservationFlexes[2],
+                child: Text(
+                  '${_data.classroomObservation2 ?? '-'}',
+                  textAlign: TextAlign.center,
+                  style:
+                      Theme.of(context).textTheme.individualAccreditationLevel,
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
 
   String _getInspectedBy(BuildContext context) =>
       _data.inspectedBy ?? 'labelNa'.localized(context);
-}
-
-class _AccreditationLevelWidget extends StatelessWidget {
-  final int _level;
-
-  const _AccreditationLevelWidget({
-    Key key,
-    @required int level,
-  })  : _level = level,
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.individualAccreditationLevel;
-    if (_level == null || _level < 1 || _level > 4) {
-      return Text('-', style: textStyle);
-    }
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text('$_level', style: textStyle),
-        Icon(
-          Icons.star,
-          size: 14,
-          color: AppColors.kLevels[_level - 1],
-        ),
-      ],
-    );
-  }
 }

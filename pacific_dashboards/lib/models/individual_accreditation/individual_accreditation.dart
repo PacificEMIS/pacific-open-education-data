@@ -9,6 +9,9 @@ class IndividualAccreditation {
   @JsonKey(name: 'StartDate')
   final DateTime dateTime;
 
+  @JsonKey(name: 'InspectionYear')
+  final int inspectionYear;
+
   @JsonKey(name: 'InspectionResult')
   final String result;
 
@@ -114,6 +117,7 @@ class IndividualAccreditation {
 
   const IndividualAccreditation({
     @required this.dateTime,
+    @required this.inspectionYear,
     @required this.result,
     @required this.se_1,
     @required this.se_1_1,

@@ -63,6 +63,7 @@ class IndividualAccreditationViewModel extends BaseViewModel {
               .map((accreditation) {
                 return IndividualAccreditationData(
                   dateTime: accreditation.dateTime,
+                  inspectionYear: accreditation.inspectionYear,
                   inspectedBy: accreditation.inspectedBy,
                   result: _getAccreditationResult(accreditation),
                   standards: [

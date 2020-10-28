@@ -165,6 +165,17 @@ class Strings {
       'individualSchoolAccreditationsSE4': 'SE.4 NCSB',
       'individualSchoolAccreditationsSE5': 'SE.5 Facilities',
       'individualSchoolAccreditationsSE6': 'SE.6 SIP',
+      'individualSchoolAccreditationsCriteria1Short': 'C1',
+      'individualSchoolAccreditationsCriteria2Short': 'C2',
+      'individualSchoolAccreditationsCriteria3Short': 'C3',
+      'individualSchoolAccreditationsCriteria4Short': 'C4',
+      'individualSchoolAccreditationsCriteria1': 'Criteria 1',
+      'individualSchoolAccreditationsCriteria2': 'Criteria 2',
+      'individualSchoolAccreditationsCriteria3': 'Criteria 3',
+      'individualSchoolAccreditationsCriteria4': 'Criteria 4',
+      'individualSchoolAccreditationsResult': 'Result',
+      'individualSchoolAccreditationsStandard': 'Standard',
+      'individualSchoolAccreditationsCO': 'Classroom Observation',
       'individualSchoolAccreditationsInspectedBy': 'Inspected by: ',
       'individualSchoolAccreditationsDisclaimer': 'Only a summary of the FORM B'
           ' school accreditation results will be shown to the schools for '

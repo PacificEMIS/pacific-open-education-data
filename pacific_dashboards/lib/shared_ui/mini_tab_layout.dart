@@ -1,3 +1,4 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
@@ -25,13 +26,13 @@ class MiniTabLayout<T> extends StatefulWidget {
 }
 
 class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
-  T _selectedTab;
-  double _padding;
+
+  int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    _selectedTab = widget.tabs.first;
+    _selectedIndex = 0;
   }
 
   @override
@@ -53,12 +54,12 @@ class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: widget.tabs.map((tab) {
+              children: widget.tabs.mapIndexed((index, tab) {
                 return InkWell(
                   onTap: () {
-                    if (_selectedTab != tab) {
+                    if (_selectedIndex != index) {
                       setState(() {
-                        _selectedTab = tab;
+                        _selectedIndex = index;
                       });
                     }
                   },
@@ -66,7 +67,7 @@ class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
                     padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
                     child: Text(
                       widget.tabNameBuilder(tab),
-                      style: _selectedTab == tab
+                      style: _selectedIndex == index
                           ? textTheme.miniTabSelected
                           : textTheme.miniTab,
                     ),
@@ -82,12 +83,22 @@ class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
           SizedBox(
             height: 8,
           ),
-          widget.builder(context, _selectedTab),
+          widget.builder(context, _tabCheckingIndexes),
           SizedBox(
             height: 16,
           ),
         ],
       ),
     );
+  }
+
+  T get _tabCheckingIndexes {
+    if (_selectedIndex >= widget.tabs.length) {
+      _selectedIndex = 0;
+      setState(() {
+        _selectedIndex = 0;
+      });
+    }
+    return widget.tabs[_selectedIndex];
   }
 }

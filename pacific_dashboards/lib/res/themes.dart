@@ -163,13 +163,16 @@ extension TextThemeExt on TextTheme {
             fontWeight: FontWeight.bold,
           );
 
-  TextStyle get individualAccreditationInspectedBy =>
-      this.headline5.copyWith(
-            fontSize: 12.0,
-          );
+  TextStyle get individualAccreditationInspectedBy => this.headline5.copyWith(
+        fontSize: 12.0,
+      );
 
-  TextStyle get individualAccreditationLevel =>
-      this.overline.copyWith(
-            fontSize: 12.0,
-          );
+  TextStyle get individualAccreditationLevel => this.overline.copyWith(
+        fontSize: 12.0,
+      );
+
+  TextStyle get individualAccreditationStandard => this.overline.copyWith(
+        color: AppColors.kTextMain,
+        fontWeight: FontWeight.bold,
+      );
 }

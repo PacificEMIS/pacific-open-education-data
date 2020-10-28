@@ -46,23 +46,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/fedemis.png
-    - images/miemis.png
-    - images/kiribati.png
-    - images/splash.png
-    - images/budgets.svg
-    - images/exams.svg
-    - images/indicators.svg
-    - images/school_accreditations.svg
-    - images/schools.svg
-    - images/teachers.svg
-    - images/tune.svg
-    - images/filter.svg
-    - images/ic_search.svg
-    - images/ic_search_close.svg
-    - images/wash.svg
-    - images/individual_schools.svg
-    - images/special_education.svg 
+    - images/
 
   fonts:
     - family: NotoSans

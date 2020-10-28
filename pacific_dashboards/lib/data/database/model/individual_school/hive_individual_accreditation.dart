@@ -111,9 +111,13 @@ class HiveIndividualAccreditation extends HiveObject with Expirable {
   @HiveField(34)
   String inspectedBy;
 
+  @HiveField(35)
+  int inspectionYear;
+
   IndividualAccreditation toIndividualAccreditation() =>
       IndividualAccreditation(
         dateTime: dateTime,
+        inspectionYear: inspectionYear,
         result: result,
         se_1: se_1,
         se_1_1: se_1_1,
@@ -155,6 +159,7 @@ class HiveIndividualAccreditation extends HiveObject with Expirable {
   ) =>
       HiveIndividualAccreditation()
         ..dateTime = accreditation.dateTime
+        ..inspectionYear = accreditation.inspectionYear
         ..result = accreditation.result
         ..se_1 = accreditation.se_1
         ..se_1_1 = accreditation.se_1_1
