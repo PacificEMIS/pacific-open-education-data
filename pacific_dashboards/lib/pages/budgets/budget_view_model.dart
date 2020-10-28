@@ -291,34 +291,38 @@ List _generateSpendingByYearData(
 
       percentageEdGnpA = edExpenseA / gNP;
       percentageEdGnpB = edExpenseB / gNP;
-
-      actualData.add(DataByGnpAndGovernmentSpending(
-          year: year,
-          gNP: gNP,
-          edExpense: edExpenseA,
-          govtExpense: govtExpenseA,
-          percentageEdGovt:
-              (percentageEdGovtA.isInfinite || percentageEdGovtA.isNaN)
-                  ? 0
-                  : (percentageEdGovtA * 100),
-          percentageEdGnp:
-              (percentageEdGnpA.isInfinite || percentageEdGnpA.isNaN)
-                  ? 0
-                  : (percentageEdGnpA * 100)));
-
-      budgetedData.add(DataByGnpAndGovernmentSpending(
-          year: year,
-          gNP: gNP,
-          edExpense: edExpenseB,
-          govtExpense: govtExpenseB,
-          percentageEdGovt:
-              (percentageEdGovtB.isInfinite || percentageEdGovtB.isNaN)
-                  ? 0
-                  : (percentageEdGovtB * 100),
-          percentageEdGnp:
-              (percentageEdGnpB.isInfinite || percentageEdGnpB.isNaN)
-                  ? 0
-                  : (percentageEdGnpB * 100)));
+      if (gNP == 0 && edExpenseA == 0 && govtExpenseA == 0) debugPrint('empty');
+      else {
+        actualData.add(DataByGnpAndGovernmentSpending(
+            year: year,
+            gNP: gNP,
+            edExpense: edExpenseA,
+            govtExpense: govtExpenseA,
+            percentageEdGovt:
+                (percentageEdGovtA.isInfinite || percentageEdGovtA.isNaN)
+                    ? 0
+                    : (percentageEdGovtA * 100),
+            percentageEdGnp:
+                (percentageEdGnpA.isInfinite || percentageEdGnpA.isNaN)
+                    ? 0
+                    : (percentageEdGnpA * 100)));
+      }
+      if (gNP == 0 && edExpenseB == 0 && govtExpenseB == 0) debugPrint('empty');
+      else {
+        budgetedData.add(DataByGnpAndGovernmentSpending(
+            year: year,
+            gNP: gNP,
+            edExpense: edExpenseB,
+            govtExpense: govtExpenseB,
+            percentageEdGovt:
+                (percentageEdGovtB.isInfinite || percentageEdGovtB.isNaN)
+                    ? 0
+                    : (percentageEdGovtB * 100),
+            percentageEdGnp:
+                (percentageEdGnpB.isInfinite || percentageEdGnpB.isNaN)
+                    ? 0
+                    : (percentageEdGnpB * 100)));
+      }
     }
   });
   return [
