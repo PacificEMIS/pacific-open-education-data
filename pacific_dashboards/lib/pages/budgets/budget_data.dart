@@ -12,15 +12,16 @@ class BudgetData {
   final List<DataSpendingByDistrict> dataSpendingByDistrict;
   final List<DataSpendingByDistrict> dataSpendingByDistrictFiltered;
 
-  BudgetData(
-      {@required this.year,
-      @required this.dataByGnpAndGovernmentSpendingActual,
-      @required this.dataByGnpAndGovernmentSpendingBudgeted,
-      @required this.dataSpendingBySector,
-      @required this.dataSpendingBySectorAndYear,
-      @required this.dataSpendingBySectorAndYearFiltered,
-      @required this.dataSpendingByDistrict,
-      @required this.dataSpendingByDistrictFiltered});
+  BudgetData({
+    @required this.year,
+    @required this.dataByGnpAndGovernmentSpendingActual,
+    @required this.dataByGnpAndGovernmentSpendingBudgeted,
+    @required this.dataSpendingBySector,
+    @required this.dataSpendingBySectorAndYear,
+    @required this.dataSpendingBySectorAndYearFiltered,
+    @required this.dataSpendingByDistrict,
+    @required this.dataSpendingByDistrictFiltered,
+  });
 }
 
 class DataByGnpAndGovernmentSpending {
@@ -31,13 +32,14 @@ class DataByGnpAndGovernmentSpending {
   final double percentageEdGovt;
   final double percentageEdGnp;
 
-  DataByGnpAndGovernmentSpending(
-      {@required this.year,
-      @required this.gNP,
-      @required this.govtExpense,
-      @required this.edExpense,
-      @required this.percentageEdGovt,
-      @required this.percentageEdGnp});
+  DataByGnpAndGovernmentSpending({
+    @required this.year,
+    @required this.gNP,
+    @required this.govtExpense,
+    @required this.edExpense,
+    @required this.percentageEdGovt,
+    @required this.percentageEdGnp,
+  });
 }
 
 class DataSpendingBySector {
@@ -51,16 +53,17 @@ class DataSpendingBySector {
   final double totalActual;
   final double totalBudget;
 
-  DataSpendingBySector(
-      {@required this.districtCode,
-      @required this.eceActual,
-      @required this.eceBudget,
-      @required this.primaryActual,
-      @required this.primaryBudget,
-      @required this.secondaryActual,
-      @required this.secondaryBudget,
-      @required this.totalActual,
-      @required this.totalBudget});
+  DataSpendingBySector({
+    @required this.districtCode,
+    @required this.eceActual,
+    @required this.eceBudget,
+    @required this.primaryActual,
+    @required this.primaryBudget,
+    @required this.secondaryActual,
+    @required this.secondaryBudget,
+    @required this.totalActual,
+    @required this.totalBudget,
+  });
 }
 
 class DataSpendingByDistrict {
@@ -74,14 +77,15 @@ class DataSpendingByDistrict {
   final int edExpBPerHead;
   final int enrolment;
 
-  DataSpendingByDistrict(
-      {@required this.year,
-      @required this.district,
-      @required this.edExpA,
-      @required this.edExpB,
-      @required this.edRecurrentExpA,
-      @required this.edRecurrentExpB,
-      @required this.edExpAPerHead,
-      @required this.edExpBPerHead,
-      @required this.enrolment});
+  DataSpendingByDistrict({
+    @required this.year,
+    @required this.district,
+    @required this.edExpA,
+    @required this.edExpB,
+    @required this.edRecurrentExpA,
+    @required this.edRecurrentExpB,
+    @required this.edExpAPerHead,
+    @required this.edExpBPerHead,
+    @required this.enrolment,
+  });
 }

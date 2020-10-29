@@ -34,6 +34,7 @@ class Strings {
       'labelEce': 'ECE',
       'labelPrimary': 'Primary',
       'labelSec': 'Secondary',
+      'labelNa': 'n/a',
       'errorTitle': 'Error',
       'error_unknown': 'Unknown error occurred',
       'error_server_unavailable':
@@ -68,8 +69,7 @@ class Strings {
       'schoolsDashboardsTitle': 'Schools',
       'schoolsDashboardsMeasureEnroll': 'Enrollment',
       'schoolsDashboardsEnrollByStateTitle': 'Enrollment by State',
-      'schoolsDashboardsEnrollByAuthorityTitle':
-          'Enrollment by Authority',
+      'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
       'schoolsDashboardsEnrollByGovernmentTitle':
           'Enrollment Govt / \nNon-govt',
       'schoolsDashboardsEnrollByAgeLevelGenderTitle':
@@ -102,9 +102,12 @@ class Strings {
           'By Standards and Gender for Last 3 Years',
       'examsDashboardsViewByStandardAndState': 'By Standards and State',
       'schoolsAccreditationDashboardsTitle': 'School Accreditations',
-      'schoolsAccreditationDashboardsProgressTitle': 'Accreditation Progress by Year',
-      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by State',
-      'schoolsAccreditationDashboardsProgressNationalTitle': 'Accreditation Progress National',
+      'schoolsAccreditationDashboardsProgressTitle':
+          'Accreditation Progress by Year',
+      'schoolsAccreditationDashboardsProgressByStateTitle':
+          'Accreditation Progress by State',
+      'schoolsAccreditationDashboardsProgressNationalTitle':
+          'Accreditation Progress National',
       'schoolsAccreditationDashboardsDistrictTitle': 'District Status',
       'schoolsAccreditationDashboardsStatusByStateTitle':
           'Accreditation Status by State',
@@ -117,6 +120,7 @@ class Strings {
       'schoolsListSearchHint': 'Search',
       'individualSchoolDashboardsTitle': 'DASHBOARDS',
       'individualSchoolExamsTitle': 'EXAMS',
+      'individualSchoolAccreditationTitle': 'ACCREDITATION',
       'individualSchoolDashboardEnrollTitle': 'Enrollment',
       'individualSchoolDashboardRatesTitle': 'Rates',
       'individualSchoolDashboardEnrollByGradeLevelGenderTitle':
@@ -155,35 +159,61 @@ class Strings {
       'individualSchoolExamsFilterType': 'Exam Type',
       'individualSchoolExamsHistoryYear': ' Exam Year',
       'individualSchoolExamsHistoryTableCode': 'Exam Code',
+      'individualSchoolAccreditationsSE1': 'SE.1 Leadership',
+      'individualSchoolAccreditationsSE2': 'SE.2 Teacher Performance',
+      'individualSchoolAccreditationsSE3': 'SE.3 Data management',
+      'individualSchoolAccreditationsSE4': 'SE.4 NCSB',
+      'individualSchoolAccreditationsSE5': 'SE.5 Facilities',
+      'individualSchoolAccreditationsSE6': 'SE.6 SIP',
+      'individualSchoolAccreditationsCriteria1Short': 'C1',
+      'individualSchoolAccreditationsCriteria2Short': 'C2',
+      'individualSchoolAccreditationsCriteria3Short': 'C3',
+      'individualSchoolAccreditationsCriteria4Short': 'C4',
+      'individualSchoolAccreditationsCriteria1': 'Criteria 1',
+      'individualSchoolAccreditationsCriteria2': 'Criteria 2',
+      'individualSchoolAccreditationsCriteria3': 'Criteria 3',
+      'individualSchoolAccreditationsCriteria4': 'Criteria 4',
+      'individualSchoolAccreditationsResult': 'Result',
+      'individualSchoolAccreditationsStandard': 'Standard',
+      'individualSchoolAccreditationsCO': 'Classroom Observation',
+      'individualSchoolAccreditationsInspectedBy': 'Inspected by: ',
+      'individualSchoolAccreditationsDisclaimer': 'Only a summary of the FORM B'
+          ' school accreditation results will be shown to the schools for '
+          'information purposes. The actual data collection is done through an '
+          'Android app not by the schools themselves but by designated '
+          'inspectors. If you believe some of the results below are not correct'
+          ' you must contact the National Data Management Office.',
       'budgetsDashboardsTitle': 'Budgets',
       'budgetsEducationFinancing': 'Education Financing : Dashboard',
       'budgetsGnpAndGovernmentSpendingActualExpense':
           'GNI (aka. GNP) and Government Spending Actual Expense',
       'budgetsGnpAndGovernmentSpendingBudgetedExpense':
           'GNI (aka. GNP) and Government Spending Budgeted Expense',
-      'budgetsGnpAndGovernmentSpending': 'GNI (aka. GNP) and Government Spending',
+      'budgetsGnpAndGovernmentSpending':
+          'GNI (aka. GNP) and Government Spending',
       'budgetsSpendingBySector': 'Spending By Sector',
       'budgetsSpendingByDistrict': 'Spending By States',
       'budgetsDashboardComponent': 'Dashboard Component',
+      'budgetsGovtExpenditure': 'Govt Expenditure',
+      'budgetsGnp': 'GNI',
+      'budgetsEce': 'ECE',
+      'budgetsPrimaryEducation': 'Primary Education',
+      'budgetsSecondaryEducation': 'Secondary Education',
+      'budgetsActualExpenditureTab': 'Actual Expenditure',
+      'budgetsBudgetTab': 'Budget',
+      'budgetsActualRecurrentExpenditureTab': 'Actual Recurrent Expenditure',
+      'budgetsBudgetedRecurrentExpenditureTab': 'Budgeted Recurrent Expenditure',
+      'budgetsActualExpPerHeadTab': 'Actual Exp per Head',
+      'budgetsEnrollmentTab': 'Enrollment',
+      'budgetsBudgetExpPerHeadTab': 'Budget Exp per Head',
+      'budgetsSectorsDomain': 'Sectors',
+      'budgetsStatesDomain': 'State',
       'year': 'Year',
       'govtExpense': 'Govt Expense',
-      'govtExpenditure': 'Govt Expenditure',
       'edExpense': 'Ed Expense',
-      'gNP': 'GNI',
       'edGovtPercentage': 'Ed/Govt %',
       'edGNPPercentage': 'Ed/GNI %',
-      'eCE': 'ECE',
-      'primaryEducation': 'Primary Education',
-      'secondaryEducation': 'Secondary Education',
-      'actualExpenditure': 'Actual Expenditure',
       'budgetExpenditure': 'Budgeted Expenditure',
-      'budget': 'Budget',
-      'actualRecurrentExpenditure': 'Actual Recurrent Expenditure',
-      'budgetRecurrentExpenditure': 'Budgeted Recurrent Expenditure',
-      'actualExpPerHead': 'Actual Exp per Head',
-      'budgetExpPerHead': 'Budget Exp per Head',
-      'enrolment': 'Enrollment',
-      'enrollment': 'Enrollment',
       //Special Education
       'specialEducationTitle': 'Special Education: Dashboard',
       'disability': 'Disability',
@@ -244,8 +274,7 @@ class Strings {
 
   static Map<String, Map<String, String>> _localizedValuesMiEmis = {
     'en': {
-      'schoolsDashboardsEnrollByStateTitle':
-          'Enrollment by Atolls and Islands',
+      'schoolsDashboardsEnrollByStateTitle': 'Enrollment by Atolls and Islands',
       'schoolsDashboardsEnrollByLevelStateGenderTitle':
           'Enrollment by School Levels, \nAtolls and Islands and Gender',
       'schoolsDashboardsStateDomain': 'Atolls and Islands',
@@ -275,8 +304,10 @@ class Strings {
       'filtersDisplayAllAuthority': 'Display All Authority',
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
-      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by Atoll / Island ',
+      'schoolsAccreditationDashboardsProgressByStateTitle':
+          'Accreditation Progress by Atoll / Island ',
       'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
+      'budgetsStatesDomain': 'Atolls and Islands',
     },
   };
 
@@ -305,14 +336,14 @@ class Strings {
           'Performance by Test',
       'schoolsAccreditationDashboardsStateDomain': 'District',
       'schoolsAccreditationDashboardsStandardDomain': 'Test',
-      'schoolsDashboardsEnrollByAuthorityTitle':
-      'Enrollment by Authority',
-      'schoolsDashboardsEnrollByGovernmentTitle':
-      'Enrollment by School Type',
+      'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
+      'schoolsDashboardsEnrollByGovernmentTitle': 'Enrollment by School Type',
       'schoolsDashboardsEnrollByAgeLevelGenderTitle':
-      'Enrollment by Age, Education \nLevel and Gender',
+          'Enrollment by Age, Education \nLevel and Gender',
+      'budgetsStatesDomain': 'Districts',
     },
   };
+
   // endregion
 
   String _getLocalizedValue(String code) {

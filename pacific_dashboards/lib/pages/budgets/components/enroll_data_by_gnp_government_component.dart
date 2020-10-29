@@ -88,15 +88,16 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
           var dataBySectorSpending = it as DataSpendingBySector;
           result[dataBySectorSpending.districtCode.toString()] =
               DataSpendingBySector(
-                  districtCode: dataBySectorSpending.districtCode,
-                  eceActual: dataBySectorSpending.eceActual,
-                  eceBudget: dataBySectorSpending.eceBudget,
-                  primaryActual: dataBySectorSpending.primaryActual,
-                  primaryBudget: dataBySectorSpending.primaryBudget,
-                  secondaryActual: dataBySectorSpending.secondaryActual,
-                  secondaryBudget: dataBySectorSpending.secondaryBudget,
-                  totalActual: dataBySectorSpending.totalActual,
-                  totalBudget: dataBySectorSpending.totalBudget);
+            districtCode: dataBySectorSpending.districtCode,
+            eceActual: dataBySectorSpending.eceActual,
+            eceBudget: dataBySectorSpending.eceBudget,
+            primaryActual: dataBySectorSpending.primaryActual,
+            primaryBudget: dataBySectorSpending.primaryBudget,
+            secondaryActual: dataBySectorSpending.secondaryActual,
+            secondaryBudget: dataBySectorSpending.secondaryBudget,
+            totalActual: dataBySectorSpending.totalActual,
+            totalBudget: dataBySectorSpending.totalBudget,
+          );
         }
         return result;
       }

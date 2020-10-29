@@ -1,6 +1,7 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/dashboards_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/exams/individual_exams_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_view_model.dart';
@@ -52,12 +53,16 @@ class _IndividualSchoolPageState
               labelStyle: Theme.of(context).textTheme.bigTab,
               labelColor: AppColors.kBlue,
               unselectedLabelColor: AppColors.kTextMinor,
+              labelPadding: const EdgeInsets.symmetric(horizontal: 0),
               tabs: [
                 Tab(
                   text: PageTab.dashboards.getText(context),
                 ),
                 Tab(
                   text: PageTab.exams.getText(context),
+                ),
+                Tab(
+                  text: PageTab.accreditation.getText(context),
                 ),
               ],
             ),
@@ -67,6 +72,7 @@ class _IndividualSchoolPageState
                 children: [
                   DashboardComponent(school: args.school),
                   IndividualsExamsComponent(school: args.school),
+                  IndividualAccreditationComponent(school: args.school),
                 ],
               ),
             ),
@@ -77,7 +83,7 @@ class _IndividualSchoolPageState
   }
 }
 
-enum PageTab { dashboards, exams }
+enum PageTab { dashboards, exams, accreditation }
 
 extension PageTabExt on PageTab {
   String getText(BuildContext context) {
@@ -86,6 +92,8 @@ extension PageTabExt on PageTab {
         return 'individualSchoolDashboardsTitle'.localized(context);
       case PageTab.exams:
         return 'individualSchoolExamsTitle'.localized(context);
+      case PageTab.accreditation:
+        return 'individualSchoolAccreditationTitle'.localized(context);
     }
     throw FallThroughError();
   }

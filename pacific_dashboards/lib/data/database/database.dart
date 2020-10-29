@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
+import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
@@ -30,6 +31,7 @@ abstract class Database {
   SchoolExamReportsDao get schoolExamReports;
   SpecialEducationDao get specialEducation;
   WashDao get wash;
+  IndividualSchoolDao get individualSchoolDao;
 }
 
 abstract class LookupsDao {
@@ -110,4 +112,9 @@ abstract class SchoolExamReportsDao {
 abstract class WashDao {
   Future<void> save(WashChunk wash, Emis emis);
   Future<WashChunk> get(Emis emis);
+}
+
+abstract class IndividualSchoolDao {
+  Future<void> save(String schoolId, IndividualSchool school, Emis emis);
+  Future<IndividualSchool> get(String schoolId, Emis emis);
 }

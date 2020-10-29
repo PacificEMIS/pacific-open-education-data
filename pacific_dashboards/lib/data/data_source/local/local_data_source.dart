@@ -3,6 +3,7 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
+import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
@@ -84,4 +85,8 @@ abstract class LocalDataSource {
     String schoolId,
     List<SchoolExamReport> reports,
   );
+
+  Future<IndividualSchool> fetchIndividualSchool(String schoolId);
+
+  Future<void> saveIndividualSchool(String schoolId, IndividualSchool school);
 }

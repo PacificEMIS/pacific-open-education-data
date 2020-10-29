@@ -2,11 +2,9 @@ import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/wash/components/toilets_component.dart';
-import 'package:pacific_dashboards/pages/wash/components/total_component.dart';
 import 'package:pacific_dashboards/pages/wash/wash_data.dart';
 import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -16,6 +14,7 @@ import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
+import 'components/total_component.dart';
 import 'components/water_component.dart';
 
 class WashPage extends MvvmStatefulWidget {
@@ -101,17 +100,23 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                                               width: 280,
                                               child: Text(
                                                 'CW.H.2: Are both soap and water currently available at the hand washing facilities?',
-                                                style:
-                                                    Theme.of(context).textTheme.caption.copyWith(color: CupertinoColors.activeBlue),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .caption
+                                                    .copyWith(
+                                                        color: CupertinoColors
+                                                            .activeBlue),
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 2,
                                               ),
                                             ),
-                                            Padding(padding: EdgeInsets.only(right: 30),
-                                            child: Icon(
-                                              Icons.arrow_forward,
-                                              color: Colors.blueAccent,
-                                            ),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 30),
+                                              child: Icon(
+                                                Icons.arrow_forward,
+                                                color: Colors.blueAccent,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -125,8 +130,9 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                         ),
                         _titleWidget(context, 'districtTotals', false),
                         TotalComponent(
-                            data: snapshot.data.washModelList,
-                            year: snapshot.data.year),
+                          data: snapshot.data.washModelList,
+                          year: snapshot.data.year,
+                        ),
                         Container(height: 50),
                         _titleWidget(context, 'toilets', false),
                         ToiletsComponent(

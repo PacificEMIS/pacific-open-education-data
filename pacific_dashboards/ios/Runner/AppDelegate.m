@@ -10,7 +10,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     FlutterViewController* controller = (FlutterViewController*)self.window.rootViewController;
     FlutterMethodChannel* apiChannel = [FlutterMethodChannel methodChannelWithName:@"fm.doe.national.pacific_dashboards/api"
-                                                                   binaryMessenger:controller];
+                                                                   binaryMessenger:controller.binaryMessenger];
     
     __weak AppDelegate* weakSelf = self;
     [apiChannel setMethodCallHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
