@@ -4,7 +4,7 @@ import 'package:pacific_dashboards/models/wash/water.dart';
 
 part 'hive_water.g.dart';
 
-@HiveType(typeId: 23)
+@HiveType(typeId: 14)
 class HiveWater extends HiveObject with Expirable {
   @HiveField(0)
   String schNo;

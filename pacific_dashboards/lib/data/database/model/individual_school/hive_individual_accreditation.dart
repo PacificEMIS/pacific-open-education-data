@@ -4,7 +4,7 @@ import 'package:pacific_dashboards/models/individual_accreditation/individual_ac
 
 part 'hive_individual_accreditation.g.dart';
 
-@HiveType(typeId: 25)
+@HiveType(typeId: 16)
 class HiveIndividualAccreditation extends HiveObject with Expirable {
   @HiveField(0)
   DateTime dateTime;

@@ -4,7 +4,7 @@ import 'package:pacific_dashboards/models/accreditations/standard_accreditation.
 
 part 'hive_national_accreditation.g.dart';
 
-@HiveType(typeId: 24)
+@HiveType(typeId: 15)
 class HiveNationalAccreditation extends HiveObject {
   @HiveField(0)
   int surveyYear;

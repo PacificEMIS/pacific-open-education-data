@@ -5,7 +5,7 @@ import 'package:pacific_dashboards/models/individual_school/individual_school.da
 
 part 'hive_individual_school.g.dart';
 
-@HiveType(typeId: 26)
+@HiveType(typeId: 17)
 class HiveIndividualSchool extends HiveObject with Expirable {
   @HiveField(0)
   List<HiveIndividualAccreditation> accreditationList;
