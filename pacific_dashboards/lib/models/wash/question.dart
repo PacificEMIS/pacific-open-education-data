@@ -4,17 +4,13 @@ part 'question.g.dart';
 
 @JsonSerializable()
 class Question {
-  @JsonKey(name: 'QID') //Year
+  @JsonKey(name: 'QID')
   final String qID;
-  @override
-  @JsonKey(name: "QName") //DistrictCode
+
+  @JsonKey(name: "QName")
   final String qName;
 
-
-  const Question(
-      this.qID,
-      this.qName);
-   
+  const Question(this.qID, this.qName);
 
   factory Question.fromJson(Map<String, dynamic> json) =>
       _$QuestionFromJson(json);

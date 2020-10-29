@@ -198,7 +198,8 @@ Map<String, Map<String, Map<String, GenderTableData>>>
   List<Teacher> teachers,
   Lookups lookups,
 }) {
-  Map<String, Map<String, Map<String, GenderTableData>>> enrollBySchoolLevelAndDistrict = new Map();
+  Map<String, Map<String, Map<String, GenderTableData>>>
+      enrollBySchoolLevelAndDistrict = new Map();
   final groupedByDistrictWithTotal = {
     'labelTotal': teachers,
   };
@@ -206,24 +207,28 @@ Map<String, Map<String, Map<String, GenderTableData>>>
     teachers.groupBy((it) => it.districtCode).entries,
   );
 
-  enrollBySchoolLevelAndDistrict['all'] = groupedByDistrictWithTotal.map((districtCode, schools) {
+  enrollBySchoolLevelAndDistrict['all'] =
+      groupedByDistrictWithTotal.map((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
     return MapEntry(districtCode.from(lookups.districts),
         _generateInfoTableData(groupedBySchoolType, 'all'));
-
-  });  enrollBySchoolLevelAndDistrict['qualified'] = groupedByDistrictWithTotal.map((districtCode, schools) {
+  });
+  enrollBySchoolLevelAndDistrict['qualified'] =
+      groupedByDistrictWithTotal.map((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
     return MapEntry(districtCode.from(lookups.districts),
         _generateInfoTableData(groupedBySchoolType, 'qualified'));
   });
 
-  enrollBySchoolLevelAndDistrict['certified'] = groupedByDistrictWithTotal.map((districtCode, schools) {
+  enrollBySchoolLevelAndDistrict['certified'] =
+      groupedByDistrictWithTotal.map((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
     return MapEntry(districtCode.from(lookups.districts),
         _generateInfoTableData(groupedBySchoolType, 'certified'));
   });
 
-  enrollBySchoolLevelAndDistrict['qualifiedAndCertified'] = groupedByDistrictWithTotal.map((districtCode, schools) {
+  enrollBySchoolLevelAndDistrict['qualifiedAndCertified'] =
+      groupedByDistrictWithTotal.map((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
     return MapEntry(districtCode.from(lookups.districts),
         _generateInfoTableData(groupedBySchoolType, 'qualifiedAndCertified'));
@@ -235,7 +240,6 @@ Map<String, Map<String, Map<String, GenderTableData>>>
 Map<String, GenderTableData> _generateInfoTableData(
     Map<String, List<Teacher>> groupedData, String category,
     {String districtCode}) {
-
   final convertedData = Map<String, GenderTableData>();
   final certifiedData = Map<String, GenderTableData>();
   final qualifiedData = Map<String, GenderTableData>();
@@ -284,9 +288,12 @@ Map<String, GenderTableData> _generateInfoTableData(
     });
 
     convertedData[group] = GenderTableData(maleCount, femaleCount);
-    certifiedData[group] = GenderTableData(maleCertifiedCount, femaleCertifiedCount);
-    qualifiedData[group] = GenderTableData(maleQualifiedCount, femaleQualifiedCount);
-    certifiedQualifiedData[group] = GenderTableData(maleCertifiedQualifiedCount, femaleCertifiedQualifiedCount);
+    certifiedData[group] =
+        GenderTableData(maleCertifiedCount, femaleCertifiedCount);
+    qualifiedData[group] =
+        GenderTableData(maleQualifiedCount, femaleQualifiedCount);
+    certifiedQualifiedData[group] = GenderTableData(
+        maleCertifiedQualifiedCount, femaleCertifiedQualifiedCount);
 
     totalMaleCount += maleCount;
     totalFemaleCount += femaleCount;
@@ -307,19 +314,19 @@ Map<String, GenderTableData> _generateInfoTableData(
       GenderTableData(totalMaleCertifiedCount, totalFemaleCertifiedCount);
   qualifiedData['labelTotal'] =
       GenderTableData(totalMaleQualifiedCount, totalFemaleQualifiedCount);
-  certifiedQualifiedData['labelTotal'] =
-      GenderTableData(totalMaleCertifiedQualifiedCount, totalFemaleCertifiedQualifiedCount);
-    switch (category) {
-     case 'all':
-       return convertedData;
-     case 'certified':
-       return certifiedData;
-     case 'qualified':
-       return qualifiedData;
-       case 'qualifiedAndCertified':
-       return certifiedQualifiedData;
-   }
-   throw FallThroughError();
+  certifiedQualifiedData['labelTotal'] = GenderTableData(
+      totalMaleCertifiedQualifiedCount, totalFemaleCertifiedQualifiedCount);
+  switch (category) {
+    case 'all':
+      return convertedData;
+    case 'certified':
+      return certifiedData;
+    case 'qualified':
+      return qualifiedData;
+    case 'qualifiedAndCertified':
+      return certifiedQualifiedData;
+  }
+  throw FallThroughError();
 }
 
 Map<String, List<int>> _generateCertificationData(

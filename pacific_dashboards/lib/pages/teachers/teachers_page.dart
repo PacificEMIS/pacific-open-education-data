@@ -158,11 +158,14 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16)),
                         Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                10.0, 10.0, 10.0, 0.0),
-                            child: Text('Female  Male',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.headline5)),
+                          padding:
+                              const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                          child: Text(
+                            'Female  Male',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                        ),
                         (snapshot.data.teachersByCertification.length == 0)
                             ? Container()
                             : StackedHorizontalBarChartWidgetExtended(
@@ -170,14 +173,15 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 colorFunc: _levelIndexToColor,
                               ),
                         SizedBox(height: 10.0),
-                        Text('teachersDashboardsEnrollByLevelStateGenderTitle'.localized(context),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3
-                                .copyWith(
+                        Text(
+                          'teachersDashboardsEnrollByLevelStateGenderTitle'
+                              .localized(context),
+                          style: Theme.of(context).textTheme.headline3.copyWith(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16)),
+                                fontSize: 16,
+                              ),
+                        ),
                         MiniTabLayout(
                           tabs: _TeachersTab.values,
                           padding: 0,
@@ -189,9 +193,11 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                           },
                           builder: (ctx, tab) {
                             return MultiTable(
-                              key: ObjectKey(snapshot
-                                      .data.teachersBySchoolLevelStateAndGender[
-                                  tab.toString().substring(13)]),
+                              key: ObjectKey(
+                                snapshot.data
+                                        .teachersBySchoolLevelStateAndGender[
+                                    tab.toString().substring(13)],
+                              ),
                               columnNames: [
                                 'teachersDashboardsSchoolLevelDomain',
                                 'labelMale',

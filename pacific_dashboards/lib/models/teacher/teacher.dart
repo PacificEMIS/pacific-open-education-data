@@ -103,7 +103,7 @@ extension Filters on List<Teacher> {
   static const _kDistrictFilterId = 1;
   // ignore: unused_field
   static const _kAuthorityFilterId = 2;
-  // ignore: unused_fieldw
+  // ignore: unused_field
   static const _kGovtFilterId = 3;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {

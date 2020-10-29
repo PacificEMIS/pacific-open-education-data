@@ -1,5 +1,4 @@
 import 'package:arch/arch.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
@@ -9,14 +8,10 @@ abstract class BaseViewModel extends ViewModel {
 
   @override
   @protected
-  Future<void> handleAppException(AppException appException) async {
+  void handleAppException(AppException appException) {
     if (appException is NoInternetException) {
       notifyErrorMessage('error_server_unavailable');
     } else {
-      final connection = await Connectivity().checkConnectivity();
-      if (connection == ConnectivityResult.none)
-        notifyErrorMessage('error_server_unavailable');
-      else
       notifyErrorMessage('error_unknown');
     }
   }
