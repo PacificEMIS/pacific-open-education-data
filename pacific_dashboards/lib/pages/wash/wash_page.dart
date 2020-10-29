@@ -15,7 +15,7 @@ import 'package:pacific_dashboards/view_model_factory.dart';
 import 'components/toilets/toilets_component.dart';
 import 'components/toilets/toilets_data.dart';
 import 'components/total_component.dart';
-import 'components/water_component.dart';
+import 'components/water/water_component.dart';
 
 class WashPage extends MvvmStatefulWidget {
   static String kRoute = '/Wash';

@@ -5,8 +5,8 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/horizontal_stacked_scrollable_bar_chart.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
 
 class ToiletsComponent extends StatelessWidget {
@@ -39,33 +39,33 @@ class ToiletsComponent extends StatelessWidget {
   Widget _buildChartForTab(BuildContext context, _Tabs tab) {
     switch (tab) {
       case _Tabs.totalToilets:
-        return _DistrictDataByToiletTypeChart(data: _data.totalToilets);
+        return _SchoolDataByToiletTypeChart(data: _data.totalToilets);
       case _Tabs.usableToilets:
-        return _DistrictDataByToiletTypeChart(data: _data.usableToilets);
+        return _SchoolDataByToiletTypeChart(data: _data.usableToilets);
       case _Tabs.usablePercent:
-        return _DistrictDataByPercentChart(data: _data.usablePercent);
+        return _SchoolDataByPercentChart(data: _data.usablePercent);
       case _Tabs.usablePercentByGender:
-        return _DistrictDataByGenderPercentChart(
+        return _SchoolDataByGenderPercentChart(
           data: _data.usablePercentByGender,
         );
       case _Tabs.pupilsByToilet:
-        return _DistrictDataByPupilsChart(data: _data.pupilsByToilet);
+        return _SchoolDataByPupilsChart(data: _data.pupilsByToilet);
       case _Tabs.pupilsByToiletByGender:
-        return _DistrictDataByGenderChart(
+        return _SchoolDataByGenderChart(
           data: _data.pupilsByToiletByGender,
           isMirrored: true,
         );
       case _Tabs.pupilsByUsableToilet:
-        return _DistrictDataByPupilsChart(data: _data.pupilsByUsableToilet);
+        return _SchoolDataByPupilsChart(data: _data.pupilsByUsableToilet);
       case _Tabs.pupilsByUsableToiletByGender:
-        return _DistrictDataByGenderChart(
+        return _SchoolDataByGenderChart(
           data: _data.pupilsByUsableToiletByGender,
           isMirrored: true,
         );
       case _Tabs.pupils:
-        return _DistrictDataByGenderChart(data: _data.pupils);
+        return _SchoolDataByGenderChart(data: _data.pupils);
       case _Tabs.pupilsMirrored:
-        return _DistrictDataByGenderChart(
+        return _SchoolDataByGenderChart(
           data: _data.pupils,
           isMirrored: true,
         );
@@ -115,10 +115,11 @@ extension _TabsNameExt on _Tabs {
   }
 }
 
-class _DistrictDataByToiletTypeChart extends _Chart {
+class _SchoolDataByToiletTypeChart
+    extends HorizontalStackedScrollableBarChart {
   final List<SchoolDataByToiletType> _data;
 
-  const _DistrictDataByToiletTypeChart({
+  const _SchoolDataByToiletTypeChart({
     Key key,
     @required List<SchoolDataByToiletType> data,
   })  : assert(data != null),
@@ -159,10 +160,10 @@ class _DistrictDataByToiletTypeChart extends _Chart {
       ];
 }
 
-class _DistrictDataByPercentChart extends _Chart {
+class _SchoolDataByPercentChart extends HorizontalStackedScrollableBarChart {
   final List<SchoolDataByPercent> _data;
 
-  const _DistrictDataByPercentChart({
+  const _SchoolDataByPercentChart({
     Key key,
     @required List<SchoolDataByPercent> data,
   })  : assert(data != null),
@@ -191,10 +192,11 @@ class _DistrictDataByPercentChart extends _Chart {
       ];
 }
 
-class _DistrictDataByGenderPercentChart extends _Chart {
+class _SchoolDataByGenderPercentChart
+    extends HorizontalStackedScrollableBarChart {
   final List<SchoolDataByGenderPercent> _data;
 
-  const _DistrictDataByGenderPercentChart({
+  const _SchoolDataByGenderPercentChart({
     Key key,
     @required List<SchoolDataByGenderPercent> data,
   })  : assert(data != null),
@@ -229,10 +231,10 @@ class _DistrictDataByGenderPercentChart extends _Chart {
       ];
 }
 
-class _DistrictDataByPupilsChart extends _Chart {
+class _SchoolDataByPupilsChart extends HorizontalStackedScrollableBarChart {
   final List<SchoolDataByPupils> _data;
 
-  const _DistrictDataByPupilsChart({
+  const _SchoolDataByPupilsChart({
     Key key,
     @required List<SchoolDataByPupils> data,
   })  : assert(data != null),
@@ -261,11 +263,11 @@ class _DistrictDataByPupilsChart extends _Chart {
       ];
 }
 
-class _DistrictDataByGenderChart extends _Chart {
+class _SchoolDataByGenderChart extends HorizontalStackedScrollableBarChart {
   final List<SchoolDataByGender> _data;
   final bool _isMirrored;
 
-  const _DistrictDataByGenderChart({
+  const _SchoolDataByGenderChart({
     Key key,
     @required List<SchoolDataByGender> data,
     bool isMirrored = false,
@@ -301,109 +303,4 @@ class _DistrictDataByGenderChart extends _Chart {
         Pair('labelMale', AppColors.kMale),
         Pair('labelFemale', AppColors.kFemale),
       ];
-}
-
-abstract class _Chart extends StatelessWidget {
-  const _Chart({
-    Key key,
-  }) : super(key: key);
-
-  @protected
-  List<ChartData> get chartData;
-
-  @protected
-  int get domainLength;
-
-  @protected
-  List<Pair<String, Color>> get legend;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Container(
-          height: 300,
-          child: FutureBuilder(
-            future: _series,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
-
-              return Scrollbar(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(bottom: 32),
-                  child: Container(
-                    width: domainLength * 32.0,
-                    child: charts.BarChart(
-                      snapshot.data,
-                      animate: false,
-                      barGroupingType: charts.BarGroupingType.stacked,
-                      primaryMeasureAxis: charts.NumericAxisSpec(
-                        tickProviderSpec: charts.BasicNumericTickProviderSpec(
-                          desiredMinTickCount: 7,
-                          desiredMaxTickCount: 13,
-                        ),
-                        renderSpec: charts.GridlineRendererSpec(
-                          labelStyle: chartAxisTextStyle,
-                          lineStyle: chartAxisLineStyle,
-                        ),
-                        tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
-                          (number) => number.round().abs().toString(),
-                        ),
-                      ),
-                      domainAxis: charts.OrdinalAxisSpec(
-                        renderSpec: charts.SmallTickRendererSpec(
-                          labelStyle: chartAxisTextStyle,
-                          labelOffsetFromTickPx: -5,
-                          labelOffsetFromAxisPx: 10,
-                          labelAnchor: charts.TickLabelAnchor.before,
-                          labelRotation: 270,
-                          lineStyle: chartAxisLineStyle,
-                        ),
-                      ),
-                      defaultRenderer: charts.BarRendererConfig(
-                        stackHorizontalSeparator: 0,
-                        minBarLengthPx: 30,
-                        groupingType: charts.BarGroupingType.stacked,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        Container(height: 6),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          alignment: WrapAlignment.center,
-          children: legend.map((legendItem) {
-            return ChartLegendItem(
-              color: legendItem.second,
-              value: legendItem.first.localized(context),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Future<List<charts.Series<ChartData, String>>> get _series {
-    return Future.microtask(() {
-      return [
-        charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          id: 'data',
-          data: chartData,
-        )
-      ];
-    });
-  }
 }
