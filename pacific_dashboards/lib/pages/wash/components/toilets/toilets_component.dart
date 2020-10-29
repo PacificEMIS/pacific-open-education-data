@@ -51,17 +51,24 @@ class ToiletsComponent extends StatelessWidget {
       case _Tabs.pupilsByToilet:
         return _DistrictDataByPupilsChart(data: _data.pupilsByToilet);
       case _Tabs.pupilsByToiletByGender:
-        return _DistrictDataByGenderChart(data: _data.pupilsByToiletByGender);
+        return _DistrictDataByGenderChart(
+          data: _data.pupilsByToiletByGender,
+          isMirrored: true,
+        );
       case _Tabs.pupilsByUsableToilet:
         return _DistrictDataByPupilsChart(data: _data.pupilsByUsableToilet);
       case _Tabs.pupilsByUsableToiletByGender:
         return _DistrictDataByGenderChart(
           data: _data.pupilsByUsableToiletByGender,
+          isMirrored: true,
         );
       case _Tabs.pupils:
         return _DistrictDataByGenderChart(data: _data.pupils);
       case _Tabs.pupilsMirrored:
-        return _DistrictDataByGenderChart(data: _data.pupils);
+        return _DistrictDataByGenderChart(
+          data: _data.pupils,
+          isMirrored: true,
+        );
     }
     throw FallThroughError();
   }
@@ -343,6 +350,9 @@ abstract class _Chart extends StatelessWidget {
                         renderSpec: charts.GridlineRendererSpec(
                           labelStyle: chartAxisTextStyle,
                           lineStyle: chartAxisLineStyle,
+                        ),
+                        tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
+                          (number) => number.round().abs().toString(),
                         ),
                       ),
                       domainAxis: charts.OrdinalAxisSpec(
