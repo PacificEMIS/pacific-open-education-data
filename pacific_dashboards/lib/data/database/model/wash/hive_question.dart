@@ -4,7 +4,7 @@ import 'package:pacific_dashboards/models/wash/question.dart';
 
 part 'hive_question.g.dart';
 
-@HiveType(typeId: 21)
+@HiveType(typeId: 22)
 class HiveQuestion extends HiveObject with Expirable {
   @HiveField(0)
   String qID;
