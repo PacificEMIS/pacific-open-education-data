@@ -176,11 +176,22 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<WashChunk> fetchWashChunk() async {
-    final totalData = await _withHandlers((client) => client.getWash());
-    final toiletsData = await _withHandlers((client) => client.getToilets());
-    final waterData = await _withHandlers((client) => client.getWater());
-    final questionData = await _withHandlers((client) => client.getQuestion());
-    return WashChunk(total: totalData, toilets: toiletsData, water: waterData, question: questionData);
+    final totalData = await _withHandlers(
+      (client) => client.getWashGlobalData(),
+    );
+    final toiletsData = await _withHandlers(
+      (client) => client.getWashToilets(),
+    );
+    final waterData = await _withHandlers((client) => client.getWashWater());
+    final questionData = await _withHandlers(
+      (client) => client.getWashQuestions(),
+    );
+    return WashChunk(
+      total: totalData,
+      toilets: toiletsData,
+      water: waterData,
+      questions: questionData,
+    );
   }
 
   @override

@@ -50,7 +50,7 @@ abstract class RestClient {
   Future<Lookups> getLookups();
 
   @GET('warehouse/wash/questions')
-  Future<List<Question>> getQuestion();
+  Future<List<Question>> getWashQuestions();
 
   @GET('lookups/collection/findata')
   Future<FinancialLookups> getFinanceLookups();
@@ -97,13 +97,13 @@ abstract class RestClient {
   Future<List<SpecialEducation>> getSpecialEducation();
 
   @GET('warehouse/wash')
-  Future<List<Wash>> getWash();
+  Future<List<Wash>> getWashGlobalData();
 
   @GET('warehouse/wash/toilets')
-  Future<List<Toilets>> getToilets();
+  Future<List<Toilets>> getWashToilets();
 
   @GET('warehouse/wash/water')
-  Future<List<Water>> getWater();
+  Future<List<Water>> getWashWater();
 
   @GET('schools/{schoolId}')
   Future<IndividualSchoolResponse> getIndividualSchool(

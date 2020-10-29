@@ -71,6 +71,8 @@ class AppColors {
 
   static const Color kMale = const Color.fromRGBO(26, 115, 232, 1);
   static const Color kFemale = const Color.fromRGBO(248, 84, 84, 1);
+  static const Color kPercent = const Color.fromRGBO(198, 57, 50, 1);
+  static const Color kPupil = const Color.fromRGBO(141, 106, 184, 1);
 }
 
 extension ChartColor on Color {

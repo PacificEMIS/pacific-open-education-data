@@ -29,6 +29,7 @@ class Wash implements BaseWash {
 
   @JsonKey(name: 'AuthorityGroup', defaultValue: '')
   final String authorityGroup;
+
   @override
   @JsonKey(name: 'SchoolTypeCode', defaultValue: '')
   final String schoolTypeCode;
@@ -39,13 +40,13 @@ class Wash implements BaseWash {
   @JsonKey(name: 'Question', defaultValue: 0)
   final String question;
 
-  @JsonKey(name: 'Answer', defaultValue: '') //Ed Expense A
+  @JsonKey(name: 'Answer', defaultValue: '')
   final String answer;
 
-  @JsonKey(name: 'Response', defaultValue: '') //Ed Expense A
+  @JsonKey(name: 'Response', defaultValue: '')
   final String response;
 
-  @JsonKey(name: 'Num', defaultValue: 0) //Ed Expense B
+  @JsonKey(name: 'Num', defaultValue: 0)
   final int number;
 
   @JsonKey(name: 'NumThisYear', defaultValue: 0)

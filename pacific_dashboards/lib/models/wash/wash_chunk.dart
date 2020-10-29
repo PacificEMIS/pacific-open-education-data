@@ -9,54 +9,25 @@ import 'package:pacific_dashboards/models/wash/toilets.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/models/wash/water.dart';
 
-part 'wash_chunk.g.dart';
-
 typedef FilterApplier<T> = T Function(T a);
 
-@JsonSerializable()
 class WashChunk {
-  @JsonKey(name: 'total')
   final List<Wash> total;
-
-  @JsonKey(name: 'toilets')
   final List<Toilets> toilets;
-
-  @JsonKey(name: 'water')
   final List<Water> water;
-
-  @JsonKey(name: 'question')
-  final List<Question> question;
+  final List<Question> questions;
 
   const WashChunk({
     @required this.total,
     @required this.toilets,
     @required this.water,
-    @required this.question,
+    @required this.questions,
   });
-
-  factory WashChunk.fromJson(Map<String, dynamic> json) =>
-      _$WashChunkFromJson(json);
-
-  Map<String, dynamic> toJson() => _$WashChunkToJson(this);
-}
-
-class WashChunkJsonParts {
-  final List<dynamic> total;
-  final List<dynamic> toilets;
-  final List<dynamic> water;
-  final List<dynamic> question;
-
-  const WashChunkJsonParts({this.total, this.toilets, this.water, this.question});
 }
 
 extension Filters on WashChunk {
-  // ignore: unused_field
   static const _kYearFilterId = 0;
-
-  // ignore: unused_field
   static const _kDistrictFilterId = 1;
-
-  // ignore: unused_field
   static const _kAuthorityFilterId = 2;
 
   // ignore: unused_field
@@ -138,7 +109,7 @@ extension Filters on WashChunk {
         total: apply(this.total),
         toilets: apply(this.toilets),
         water: apply(this.water),
-        question: this.question
+        questions: this.questions
       );
     });
   }

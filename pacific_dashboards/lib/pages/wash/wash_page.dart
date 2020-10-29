@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
-import 'package:pacific_dashboards/pages/wash/components/toilets_component.dart';
-import 'package:pacific_dashboards/pages/wash/wash_data.dart';
 import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
@@ -14,6 +12,8 @@ import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
+import 'components/toilets/toilets_component.dart';
+import 'components/toilets/toilets_data.dart';
 import 'components/total_component.dart';
 import 'components/water_component.dart';
 
@@ -67,89 +67,104 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: PageNoteWidget(noteStream: viewModel.noteStream),
                 ),
-                StreamBuilder<WashData>(
-                  stream: viewModel.dataStream,
-                  builder: (ctx, snapshot) {
+                StreamBuilder<WashToiletViewData>(
+                  stream: viewModel.toiletsDataStream,
+                  builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Container();
-                    } else {
-                      var list = <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 16, right: 16, top: 10, bottom: 10),
-                          child: Material(
-                            color: AppColors.kGrayLight,
-                            child: ClipRect(
-                              clipBehavior: Clip.hardEdge,
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 8,
-                                    child: InkWell(
-                                      onTap: () {
-                                        _openFilters(snapshot.data.questions);
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 16, top: 8, bottom: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Container(
-                                              width: 280,
-                                              child: Text(
-                                                'CW.H.2: Are both soap and water currently available at the hand washing facilities?',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption
-                                                    .copyWith(
-                                                        color: CupertinoColors
-                                                            .activeBlue),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 30),
-                                              child: Icon(
-                                                Icons.arrow_forward,
-                                                color: Colors.blueAccent,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        _titleWidget(context, 'districtTotals', false),
-                        TotalComponent(
-                          data: snapshot.data.washModelList,
-                          year: snapshot.data.year,
-                        ),
-                        Container(height: 50),
-                        _titleWidget(context, 'toilets', false),
-                        ToiletsComponent(
-                            data: snapshot.data.toiletsModelList,
-                            year: snapshot.data.year),
-                        _titleWidget(context, 'waterSources', false),
-                        WaterComponent(
-                            year: snapshot.data.year,
-                            data: snapshot.data.waterModelList),
-                      ];
-                      var washWidgetList = list;
-                      return Column(
-                        children: washWidgetList,
+                      return Container(
+                        height: 100,
                       );
                     }
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _titleWidget(context, 'toilets', false),
+                        ToiletsComponent(data: snapshot.data,),
+                      ],
+                    );
                   },
                 ),
+
+                // StreamBuilder<WashData>(
+                //   stream: viewModel.dataStream,
+                //   builder: (ctx, snapshot) {
+                //     if (!snapshot.hasData) {
+                //       return Container();
+                //     } else {
+                //       var list = <Widget>[
+                //         Padding(
+                //           padding: EdgeInsets.only(
+                //               left: 16, right: 16, top: 10, bottom: 10),
+                //           child: Material(
+                //             color: AppColors.kGrayLight,
+                //             child: ClipRect(
+                //               clipBehavior: Clip.hardEdge,
+                //               child: Row(
+                //                 children: <Widget>[
+                //                   Expanded(
+                //                     flex: 8,
+                //                     child: InkWell(
+                //                       onTap: () {
+                //                         _openFilters(snapshot.data.questions);
+                //                       },
+                //                       child: Padding(
+                //                         padding: EdgeInsets.only(
+                //                             left: 16, top: 8, bottom: 8),
+                //                         child: Row(
+                //                           mainAxisAlignment:
+                //                               MainAxisAlignment.spaceBetween,
+                //                           children: <Widget>[
+                //                             Container(
+                //                               width: 280,
+                //                               child: Text(
+                //                                 'CW.H.2: Are both soap and water currently available at the hand washing facilities?',
+                //                                 style: Theme.of(context)
+                //                                     .textTheme
+                //                                     .caption
+                //                                     .copyWith(
+                //                                         color: CupertinoColors
+                //                                             .activeBlue),
+                //                                 overflow: TextOverflow.ellipsis,
+                //                                 maxLines: 2,
+                //                               ),
+                //                             ),
+                //                             Padding(
+                //                               padding:
+                //                                   EdgeInsets.only(right: 30),
+                //                               child: Icon(
+                //                                 Icons.arrow_forward,
+                //                                 color: Colors.blueAccent,
+                //                               ),
+                //                             ),
+                //                           ],
+                //                         ),
+                //                       ),
+                //                     ),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //         _titleWidget(context, 'districtTotals', false),
+                //         TotalComponent(
+                //           data: snapshot.data.washModelList,
+                //           year: snapshot.data.year,
+                //         ),
+                //         Container(height: 50),
+                //         _titleWidget(context, 'waterSources', false),
+                //         WaterComponent(
+                //             year: snapshot.data.year,
+                //             data: snapshot.data.waterModelList),
+                //       ];
+                //       var washWidgetList = list;
+                //       return Column(
+                //         children: washWidgetList,
+                //       );
+                //     }
+                //   },
+                // ),
               ],
             ),
           ),
