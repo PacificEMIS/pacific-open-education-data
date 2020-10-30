@@ -1,6 +1,5 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/components/accreditation_level_component.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';

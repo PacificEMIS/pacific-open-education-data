@@ -86,7 +86,6 @@ class ViewModelFactory {
   IndividualSchoolViewModel createIndividualSchoolViewModel(BuildContext ctx) {
     return IndividualSchoolViewModel(
       ctx,
-      repository: serviceLocator.repository,
     );
   }
 

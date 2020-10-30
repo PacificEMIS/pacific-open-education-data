@@ -11,7 +11,6 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
-import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -36,13 +35,6 @@ class RepositoryImpl implements Repository {
   final BehaviorSubject<Lookups> _fedemisLookupsSubject = BehaviorSubject();
   final BehaviorSubject<Lookups> _miemisLookupsSubject = BehaviorSubject();
   final BehaviorSubject<Lookups> _kemisLookupsSubject = BehaviorSubject();
-
-  final BehaviorSubject<FinancialLookups> _fedemisFinancialLookupsSubject =
-      BehaviorSubject();
-  final BehaviorSubject<FinancialLookups> _miemisFinancialLookupsSubject =
-      BehaviorSubject();
-  final BehaviorSubject<FinancialLookups> _kemisFinancialLookupsSubject =
-      BehaviorSubject();
 
   RepositoryImpl(
       this._remoteDataSource, this._localDataSource, this._globalSettings);

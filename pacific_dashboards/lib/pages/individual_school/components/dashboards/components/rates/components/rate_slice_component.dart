@@ -170,6 +170,7 @@ class _DetailedChart extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class _Chart extends StatelessWidget {
   final List<YearByClassLevelRateData> _data;
   final YearRateAccessor _yearRateAccessor;
@@ -271,13 +272,6 @@ class _Chart extends StatelessWidget {
           );
         }).toList();
       }).toList();
-
-      // gradesData.forEach((gradeData) {
-      //   gradeData.sort((lv, rv) => lv.year.compareTo(rv.year));
-      //   for (var i = minYear; i <= maxYear; i++) {
-      //
-      //   }
-      // });
 
       return [
         charts.Series(
@@ -545,15 +539,3 @@ class _Cell extends StatelessWidget {
 }
 
 enum _CellType { header, domain, measure }
-
-class _GradeData {
-  final int year;
-  final num value;
-  final Color color;
-
-  const _GradeData({
-    @required this.year,
-    @required this.value,
-    @required this.color,
-  });
-}

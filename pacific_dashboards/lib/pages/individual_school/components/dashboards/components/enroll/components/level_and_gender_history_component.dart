@@ -3,7 +3,6 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_data.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/res/themes.dart';
 
 class LevelAndGenderHistoryComponent extends StatefulWidget {
   final List<EnrollDataByGradeHistory> data;

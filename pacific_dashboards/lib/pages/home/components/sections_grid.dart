@@ -11,26 +11,28 @@ class SectionsGrid extends StatelessWidget {
 
   final List<Section> _sections;
   final bool _useMobileLayout;
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: _sections.length,
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: _useMobileLayout ? 2 : 3),
-        itemBuilder: (BuildContext context, int index) {
-          return menu_tab(
-              section: _sections[index],
-              useMobileLayout:
-                  _useMobileLayout); //just for testing, will fill with image later
-        });
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: _sections.length,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      shrinkWrap: true,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: _useMobileLayout ? 2 : 3),
+      itemBuilder: (BuildContext context, int index) {
+        return _MenuTab(
+          section: _sections[index],
+          useMobileLayout: _useMobileLayout,
+        );
+      },
+    );
   }
 }
 
-class menu_tab extends StatelessWidget {
-  const menu_tab({
+class _MenuTab extends StatelessWidget {
+  const _MenuTab({
     Key key,
     @required Section section,
     @required useMobileLayout,

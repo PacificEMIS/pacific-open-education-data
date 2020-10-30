@@ -157,7 +157,7 @@ class _SpecialEducationPageState
       child: Text(
         isTitle
             ? text.localized(context)
-            : '${text.localized(context)} ${year}',
+            : '${text.localized(context)} $year',
         style: isTitle == true
             ? Theme.of(context).textTheme.headline3.copyWith(
                   color: Colors.black87,

@@ -330,8 +330,8 @@ Map<String, GenderTableData> _generateInfoTableData(
 }
 
 Map<String, List<int>> _generateCertificationData(
-    Map<String, List<Teacher>> data,
-    {String districtCode}) {
+  Map<String, List<Teacher>> data,
+) {
   final result = Map<String, List<int>>();
   // data.removeWhere((key, value) => key == null);
   data.forEach((key, value) {

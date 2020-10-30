@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/models/accreditations/national_accreditation.dart';
-import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 
 part 'hive_national_accreditation.g.dart';
 

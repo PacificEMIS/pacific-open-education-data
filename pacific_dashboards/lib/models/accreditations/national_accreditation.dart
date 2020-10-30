@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation.dart';
 
@@ -15,7 +14,6 @@ class NationalAccreditation implements Accreditation {
   final String districtCode;
 
   @JsonKey(name: 'District')
-  @override
   final String district;
 
   @JsonKey(name: 'AuthorityCode')
@@ -23,7 +21,6 @@ class NationalAccreditation implements Accreditation {
   final String authorityCode;
 
   @JsonKey(name: 'Authority')
-  @override
   final String authority;
 
   @JsonKey(name: 'AuthorityGovtCode')

@@ -163,10 +163,6 @@ class Water implements BaseWash {
 
 extension Filters on List<Water> {
   static const _kYearFilterId = 0;
-  static const _kDistrictFilterId = 1;
-  static const _kGovtFilterId = 1;
-  static const _kAuthorityFilterId = 1;
-  static const _kSchoolLevelFilterId = 1;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
     return [

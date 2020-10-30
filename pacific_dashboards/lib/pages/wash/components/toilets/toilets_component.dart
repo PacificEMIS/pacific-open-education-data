@@ -4,10 +4,8 @@ import 'package:pacific_dashboards/pages/wash/components/toilets/toilets_data.da
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/charts/horizontal_stacked_scrollable_bar_chart.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/res/themes.dart';
 
 class ToiletsComponent extends StatelessWidget {
   final WashToiletViewData _data;

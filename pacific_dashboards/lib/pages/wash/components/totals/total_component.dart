@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:arch/arch.dart';
-import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/pages/wash/components/totals/totals_view_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/charts/horizontal_stacked_scrollable_bar_chart.dart';
-import 'package:pacific_dashboards/shared_ui/tables/chart_info_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
 
 class TotalsComponent extends StatelessWidget {

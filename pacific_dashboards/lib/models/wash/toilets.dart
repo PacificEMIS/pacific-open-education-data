@@ -96,10 +96,6 @@ class Toilets implements BaseWash {
 
 extension Filters on List<Toilets> {
   static const _kYearFilterId = 0;
-  static const _kDistrictFilterId = 1;
-  static const _kGovtFilterId = 1;
-  static const _kAuthorityFilterId = 1;
-  static const _kSchoolLevelFilterId = 1;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
     return [
@@ -120,20 +116,10 @@ extension Filters on List<Toilets> {
     return Future(() {
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
-//
-//      final districtFilter =
-//          filters.firstWhere((it) => it.id == _kDistrictFilterId);
-
       return this.where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }
-
-//        if (!districtFilter.isDefault &&
-//            it.districtCode != districtFilter.stringValue) {
-//          return false;
-//        }
-
         return true;
       }).toList();
     });

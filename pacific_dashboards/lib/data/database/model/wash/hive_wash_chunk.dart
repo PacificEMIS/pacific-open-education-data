@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/data/database/model/wash/hive_question.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 

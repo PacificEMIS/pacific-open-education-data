@@ -1,6 +1,4 @@
-import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/wash/question.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
