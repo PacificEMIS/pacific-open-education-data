@@ -258,7 +258,7 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
     );
   }
 
-  dataSpendingByDistrict.sort((rv, lv) => lv.year.compareTo(rv.year));
+  dataSpendingByDistrict.sort((rv, lv) => rv.year.compareTo(lv.year));
   return dataSpendingByDistrict;
 }
 
@@ -301,7 +301,7 @@ List<DataSpendingByDistrict> _generateSpendingSectorData(
       }
     });
   });
-  dataSpendingByDistrict.sort((rv, lv) => lv.year.compareTo(rv.year));
+  dataSpendingByDistrict.sort((rv, lv) => rv.year.compareTo(lv.year));
   return dataSpendingByDistrict;
 }
 
@@ -380,8 +380,8 @@ List _generateSpendingByYearData(
       }
     }
   });
-  actualData.sort((rv, lv) => lv.year.compareTo(rv.year));
-  budgetedData.sort((rv, lv) => lv.year.compareTo(rv.year));
+  actualData.sort((rv, lv) => rv.year.compareTo(lv.year));
+  budgetedData.sort((rv, lv) => rv.year.compareTo(lv.year));
 
   return [
     actualData,
