@@ -131,7 +131,12 @@ class WashViewModel extends BaseViewModel {
     _totalsDataSubject.add(
       await compute<_TotalsModel, WashTotalsViewData>(
         _calculateTotalsData,
-        _TotalsModel(filteredChunk.total, questionsLookups, _selectedQuestion),
+        _TotalsModel(
+          filteredChunk.total,
+          questionsLookups,
+          _selectedQuestion,
+          _selectedYear(_filters),
+        ),
       ),
     );
   }
@@ -150,21 +155,23 @@ class WashViewModel extends BaseViewModel {
     });
   }
 
-  Future<void> onQuestionSelectorPressed() async {
-    final newSelectedQuestion = await navigator.push<Question>(
-      MaterialPageRoute(builder: (context) {
-        return TotalsQuestionSelectorPage(
-          questions: _washChunk.questions
-              .where((element) => !element.id.contains('BS'))
-              .toList(),
-          initiallySelectedQuestion: _selectedQuestion,
-        );
-      }),
-    );
-    if (newSelectedQuestion != _selectedQuestion) {
-      _selectedQuestion = newSelectedQuestion;
-      _updateQuestionTotals();
-    }
+  void onQuestionSelectorPressed() {
+    launchHandled(() async {
+      final newSelectedQuestion = await navigator.push<Question>(
+        MaterialPageRoute(builder: (context) {
+          return TotalsQuestionSelectorPage(
+            questions: _washChunk.questions
+                .where((element) => !element.id.contains('BS'))
+                .toList(),
+            initiallySelectedQuestion: _selectedQuestion,
+          );
+        }),
+      );
+      if (newSelectedQuestion != _selectedQuestion) {
+        _selectedQuestion = newSelectedQuestion;
+        _updateQuestionTotals();
+      }
+    });
   }
 }
 
@@ -179,8 +186,14 @@ class _TotalsModel {
   final List<Wash> washData;
   final List<Question> lookups;
   final Question selectedQuestion;
+  final int year;
 
-  const _TotalsModel(this.washData, this.lookups, this.selectedQuestion);
+  const _TotalsModel(
+    this.washData,
+    this.lookups,
+    this.selectedQuestion,
+    this.year,
+  );
 }
 
 int _selectedYear(List<Filter> filters) {
@@ -305,7 +318,48 @@ Future<WashWaterViewData> _calculateWaterData(
 Future<WashTotalsViewData> _calculateTotalsData(
   _TotalsModel model,
 ) async {
+  if (model.selectedQuestion == null) {
+    return WashTotalsViewData(
+      selectedQuestion: null,
+      data: null,
+      year: model.year,
+    );
+  }
+
+  final data = <WashTotalsViewDataByDistrict>[];
+
+  model.washData
+      .where((element) => element.question == model.selectedQuestion.id)
+      .groupBy((element) => element.district)
+      .forEach((district, washDataEntries) {
+    final dataByAnswers = <WashTotalsViewDataByAnswer>[];
+    washDataEntries
+        .groupBy((element) => element.result)
+        .forEach((answer, washDataEntries) {
+      var evaluated = 0;
+      var accumulated = 0;
+
+      washDataEntries.forEach((it) {
+        evaluated += it.numThisYear;
+        accumulated += it.number;
+      });
+
+      dataByAnswers.add(WashTotalsViewDataByAnswer(
+        answer: answer,
+        accumulated: accumulated,
+        evaluated: evaluated,
+      ));
+    });
+
+    data.add(WashTotalsViewDataByDistrict(
+      district: district,
+      answerDataList: dataByAnswers,
+    ));
+  });
+
   return WashTotalsViewData(
     selectedQuestion: model.selectedQuestion,
+    data: data,
+    year: model.year,
   );
 }

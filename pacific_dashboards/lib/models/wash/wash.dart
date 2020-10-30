@@ -1,7 +1,5 @@
-import 'package:arch/arch.dart';
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/wash/base_wash.dart';
 
 part 'wash.g.dart';
@@ -9,14 +7,16 @@ part 'wash.g.dart';
 @JsonSerializable()
 class Wash implements BaseWash {
   @override
-  @JsonKey(name: 'SurveyYear') //Year
+  @JsonKey(name: 'SurveyYear')
   final int surveyYear;
+
   @override
-  @JsonKey(name: "DistrictCode") //DistrictCode
+  @JsonKey(name: "DistrictCode") 
   final String districtCode;
 
-  @JsonKey(name: 'District', defaultValue: '') //GNP
+  @JsonKey(name: 'District', defaultValue: '')
   final String district;
+
   @override
   @JsonKey(name: 'AuthorityCode', defaultValue: '')
   final String authorityCode;
@@ -40,11 +40,14 @@ class Wash implements BaseWash {
   @JsonKey(name: 'Question', defaultValue: 0)
   final String question;
 
-  @JsonKey(name: 'Answer', defaultValue: '')
+  @JsonKey(name: 'Answer')
   final String answer;
 
-  @JsonKey(name: 'Response', defaultValue: '')
+  @JsonKey(name: 'Response')
   final String response;
+
+  @JsonKey(name: 'Item')
+  final String item;
 
   @JsonKey(name: 'Num', defaultValue: 0)
   final int number;
@@ -52,22 +55,25 @@ class Wash implements BaseWash {
   @JsonKey(name: 'NumThisYear', defaultValue: 0)
   final int numThisYear;
 
-  const Wash(
-    this.surveyYear,
-    this.districtCode,
-    this.district,
-    this.authorityCode,
-    this.authority,
-    this.authorityGroupCode,
-    this.authorityGroup,
-    this.schoolTypeCode,
-    this.schoolType,
-    this.question,
-    this.answer,
-    this.response,
-    this.number,
-    this.numThisYear,
-  );
+  String get result => answer ?? response ?? item ?? '';
+
+  const Wash({
+    @required this.surveyYear,
+    @required this.districtCode,
+    @required this.district,
+    @required this.authorityCode,
+    @required this.authority,
+    @required this.authorityGroupCode,
+    @required this.authorityGroup,
+    @required this.schoolTypeCode,
+    @required this.schoolType,
+    @required this.question,
+    @required this.answer,
+    @required this.response,
+    @required this.item,
+    @required this.number,
+    @required this.numThisYear,
+  });
 
   factory Wash.fromJson(Map<String, dynamic> json) => _$WashFromJson(json);
 

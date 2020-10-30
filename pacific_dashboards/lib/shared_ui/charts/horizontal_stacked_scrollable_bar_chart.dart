@@ -1,3 +1,5 @@
+import 'dart:math' show max;
+
 import 'package:arch/arch.dart' show Pair;
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -21,6 +23,9 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
   @protected
   List<Pair<String, Color>> get legend;
 
+  @protected
+  double get bottomPadding => 32;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,47 +41,55 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
                 return Container();
               }
 
-              return Scrollbar(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(bottom: 32),
-                  child: Container(
-                    width: domainLength * 32.0,
-                    child: charts.BarChart(
-                      snapshot.data,
-                      animate: false,
-                      barGroupingType: charts.BarGroupingType.stacked,
-                      primaryMeasureAxis: charts.NumericAxisSpec(
-                        tickProviderSpec: charts.BasicNumericTickProviderSpec(
-                          desiredMinTickCount: 7,
-                          desiredMaxTickCount: 13,
-                        ),
-                        renderSpec: charts.GridlineRendererSpec(
-                          labelStyle: chartAxisTextStyle,
-                          lineStyle: chartAxisLineStyle,
-                        ),
-                        tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final minimalChartWidth = domainLength * 32.0;
+                  final availableScreenWidth = constraints.maxWidth;
+                  return Scrollbar(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.only(bottom: bottomPadding),
+                      child: Container(
+                        width: max(minimalChartWidth, availableScreenWidth),
+                        child: charts.BarChart(
+                          snapshot.data,
+                          animate: false,
+                          barGroupingType: charts.BarGroupingType.stacked,
+                          primaryMeasureAxis: charts.NumericAxisSpec(
+                            tickProviderSpec:
+                                charts.BasicNumericTickProviderSpec(
+                              desiredMinTickCount: 7,
+                              desiredMaxTickCount: 13,
+                            ),
+                            renderSpec: charts.GridlineRendererSpec(
+                              labelStyle: chartAxisTextStyle,
+                              lineStyle: chartAxisLineStyle,
+                            ),
+                            tickFormatterSpec:
+                                charts.BasicNumericTickFormatterSpec(
                               (number) => number.round().abs().toString(),
+                            ),
+                          ),
+                          domainAxis: charts.OrdinalAxisSpec(
+                            renderSpec: charts.SmallTickRendererSpec(
+                              labelStyle: chartAxisTextStyle,
+                              labelOffsetFromTickPx: -5,
+                              labelOffsetFromAxisPx: 10,
+                              labelAnchor: charts.TickLabelAnchor.before,
+                              labelRotation: 270,
+                              lineStyle: chartAxisLineStyle,
+                            ),
+                          ),
+                          defaultRenderer: charts.BarRendererConfig(
+                            stackHorizontalSeparator: 0,
+                            minBarLengthPx: 30,
+                            groupingType: charts.BarGroupingType.stacked,
+                          ),
                         ),
-                      ),
-                      domainAxis: charts.OrdinalAxisSpec(
-                        renderSpec: charts.SmallTickRendererSpec(
-                          labelStyle: chartAxisTextStyle,
-                          labelOffsetFromTickPx: -5,
-                          labelOffsetFromAxisPx: 10,
-                          labelAnchor: charts.TickLabelAnchor.before,
-                          labelRotation: 270,
-                          lineStyle: chartAxisLineStyle,
-                        ),
-                      ),
-                      defaultRenderer: charts.BarRendererConfig(
-                        stackHorizontalSeparator: 0,
-                        minBarLengthPx: 30,
-                        groupingType: charts.BarGroupingType.stacked,
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               );
             },
           ),

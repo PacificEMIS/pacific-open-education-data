@@ -47,22 +47,27 @@ class HiveWashTotal extends HiveObject {
   @HiveField(13)
   int numThisYear;
 
+  @HiveField(14)
+  String item;
+
   Wash toWash() => Wash(
-        surveyYear,
-        districtCode,
-        district,
-        authorityCode,
-        authority,
-        authorityGroupCode,
-        authorityGroup,
-        schoolTypeCode,
-        schoolType,
-        question,
-        answer,
-        response,
-        number,
-        numThisYear,
+        surveyYear: surveyYear,
+        districtCode: districtCode,
+        district: district,
+        authorityCode: authorityCode,
+        authority: authority,
+        authorityGroupCode: authorityGroupCode,
+        authorityGroup: authorityGroup,
+        schoolTypeCode: schoolTypeCode,
+        schoolType: schoolType,
+        question: question,
+        answer: answer,
+        response: response,
+        item: item,
+        number: number,
+        numThisYear: numThisYear,
       );
+
 
   static HiveWashTotal from(Wash wash) => HiveWashTotal()
     ..surveyYear = wash.surveyYear
@@ -77,6 +82,7 @@ class HiveWashTotal extends HiveObject {
     ..question = wash.question
     ..answer = wash.answer
     ..response = wash.response
+    ..item = wash.item
     ..number = wash.number
     ..numThisYear = wash.numThisYear;
 }

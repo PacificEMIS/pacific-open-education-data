@@ -260,6 +260,8 @@ class Strings {
       'washDistrictTotalsTitle': 'Question Totals by District',
       'washDistrictTotalsQuestionSelectorTitle': 'Question',
       'washDistrictTotalsNoQuestionSelectedLabel': 'No question selected',
+      'washDistrictTotalsAccumulatedTab': 'Cumulative to ',
+      'washDistrictTotalsEvaluatedTab': 'Evaluated in ',
       'washSchNo': 'SchNo',
       'numbers': 'Numbers',
       'schoolsEnrollment': 'Enrollment',
