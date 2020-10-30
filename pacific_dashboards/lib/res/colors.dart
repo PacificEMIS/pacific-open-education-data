@@ -3,6 +3,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class AppColors {
   static const Color kBlue = const Color.fromARGB(255, 26, 115, 232);
+  static const Color kBlueDark = const Color.fromRGBO(0, 92, 157, 1);
   static const Color kRipple = const Color.fromARGB(50, 26, 115, 232);
   static const Color kPeacockBlue = const Color.fromARGB(255, 0, 92, 157);
   static const Color kTextMain = const Color.fromARGB(255, 19, 40, 38);

@@ -16,6 +16,6 @@ class HiveQuestion extends HiveObject {
       qName);
 
   static HiveQuestion from(Question question) => HiveQuestion()
-    ..qID = question.qID
-    ..qName = question.qName;
+    ..qID = question.id
+    ..qName = question.name;
 }

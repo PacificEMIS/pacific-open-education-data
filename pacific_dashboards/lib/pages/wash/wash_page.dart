@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
+import 'package:pacific_dashboards/pages/wash/components/totals/totals_view_data.dart';
 import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
@@ -14,7 +15,7 @@ import 'package:pacific_dashboards/view_model_factory.dart';
 
 import 'components/toilets/toilets_component.dart';
 import 'components/toilets/toilets_data.dart';
-import 'components/total_component.dart';
+import 'components/totals/total_component.dart';
 import 'components/water/water_component.dart';
 import 'components/water/water_data.dart';
 
@@ -68,6 +69,27 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: PageNoteWidget(noteStream: viewModel.noteStream),
                 ),
+                StreamBuilder<WashTotalsViewData>(
+                  stream: viewModel.totalsDataStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container(
+                        height: 100,
+                      );
+                    }
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _TitleWidget(text: 'washDistrictTotalsTitle'),
+                        TotalsComponent(
+                          data: snapshot.data,
+                          onQuestionSelectorPressed: viewModel.onQuestionSelectorPressed,
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 StreamBuilder<WashToiletViewData>(
                   stream: viewModel.toiletsDataStream,
                   builder: (context, snapshot) {
@@ -80,7 +102,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _titleWidget(context, 'washToiletsTitle', false),
+                        _TitleWidget(text: 'washToiletsTitle'),
                         ToiletsComponent(
                           data: snapshot.data,
                         ),
@@ -100,7 +122,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _titleWidget(context, 'washWaterSourcesTitle', false),
+                        _TitleWidget(text: 'washWaterSourcesTitle'),
                         WaterComponent(
                           data: snapshot.data,
                         ),
@@ -108,110 +130,10 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                     );
                   },
                 ),
-
-                // StreamBuilder<WashData>(
-                //   stream: viewModel.dataStream,
-                //   builder: (ctx, snapshot) {
-                //     if (!snapshot.hasData) {
-                //       return Container();
-                //     } else {
-                //       var list = <Widget>[
-                //         Padding(
-                //           padding: EdgeInsets.only(
-                //               left: 16, right: 16, top: 10, bottom: 10),
-                //           child: Material(
-                //             color: AppColors.kGrayLight,
-                //             child: ClipRect(
-                //               clipBehavior: Clip.hardEdge,
-                //               child: Row(
-                //                 children: <Widget>[
-                //                   Expanded(
-                //                     flex: 8,
-                //                     child: InkWell(
-                //                       onTap: () {
-                //                         _openFilters(snapshot.data.questions);
-                //                       },
-                //                       child: Padding(
-                //                         padding: EdgeInsets.only(
-                //                             left: 16, top: 8, bottom: 8),
-                //                         child: Row(
-                //                           mainAxisAlignment:
-                //                               MainAxisAlignment.spaceBetween,
-                //                           children: <Widget>[
-                //                             Container(
-                //                               width: 280,
-                //                               child: Text(
-                //                                 'CW.H.2: Are both soap and water currently available at the hand washing facilities?',
-                //                                 style: Theme.of(context)
-                //                                     .textTheme
-                //                                     .caption
-                //                                     .copyWith(
-                //                                         color: CupertinoColors
-                //                                             .activeBlue),
-                //                                 overflow: TextOverflow.ellipsis,
-                //                                 maxLines: 2,
-                //                               ),
-                //                             ),
-                //                             Padding(
-                //                               padding:
-                //                                   EdgeInsets.only(right: 30),
-                //                               child: Icon(
-                //                                 Icons.arrow_forward,
-                //                                 color: Colors.blueAccent,
-                //                               ),
-                //                             ),
-                //                           ],
-                //                         ),
-                //                       ),
-                //                     ),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         _titleWidget(context, 'districtTotals', false),
-                //         TotalComponent(
-                //           data: snapshot.data.washModelList,
-                //           year: snapshot.data.year,
-                //         ),
-                //         Container(height: 50),
-                //         _titleWidget(context, 'waterSources', false),
-                //         WaterComponent(
-                //             year: snapshot.data.year,
-                //             data: snapshot.data.waterModelList),
-                //       ];
-                //       var washWidgetList = list;
-                //       return Column(
-                //         children: washWidgetList,
-                //       );
-                //     }
-                //   },
-                // ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Container _titleWidget(BuildContext context, String text, bool isTitle) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.only(
-          left: 16.0, right: 16.0, bottom: 0.0, top: 10.0),
-      child: Text(
-        text.localized(context),
-        style: isTitle == true
-            ? Theme.of(context).textTheme.headline3.copyWith(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                )
-            : Theme.of(context).textTheme.headline4.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
       ),
     );
   }
@@ -230,5 +152,33 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
   void _applyFilters(BuildContext context, List<Filter> filters) {
     if (filters == null) return;
     viewModel.onFiltersChanged(filters);
+  }
+}
+
+class _TitleWidget extends StatelessWidget {
+  final String _text;
+
+  const _TitleWidget({
+    Key key,
+    @required String text,
+  })  : assert(text != null),
+        _text = text,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        bottom: 0.0,
+        top: 10.0,
+      ),
+      child: Text(
+        _text.localized(context),
+        style: Theme.of(context).textTheme.headline4,
+      ),
+    );
   }
 }

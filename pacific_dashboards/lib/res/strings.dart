@@ -228,7 +228,6 @@ class Strings {
       'environment': 'Environment',
       'englishLearner': 'English Learner',
       'district': 'District',
-      'districtTotals': 'Question Totals by District',
       'washToiletsTitle': 'Toilets',
       'washWaterSourcesTitle': 'Water Sources',
       'washDashboardsTitle': 'Reviews And Inspections: Dashboard',
@@ -258,6 +257,9 @@ class Strings {
       'washWaterLegendBottledWater': 'Bottled Water',
       'washWaterLegendTanker': 'Tanker/Truck or Cart',
       'washWaterLegendSurfacedWater': 'Surfaced Water (Lake, River, Stream)',
+      'washDistrictTotalsTitle': 'Question Totals by District',
+      'washDistrictTotalsQuestionSelectorTitle': 'Question',
+      'washDistrictTotalsNoQuestionSelectedLabel': 'No question selected',
       'washSchNo': 'SchNo',
       'numbers': 'Numbers',
       'schoolsEnrollment': 'Enrollment',
@@ -275,7 +277,6 @@ class Strings {
       'qualified': 'Qualified',
       'certified': 'Certified',
       'qualifiedAndCertified':'Qualified and Certified',
-      'labelNoQuestionSelected': 'No question selected',
     },
   };
 
@@ -320,6 +321,7 @@ class Strings {
           'Accreditation Progress by Atoll / Island ',
       'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
       'budgetsStatesDomain': 'Atolls and Islands',
+      'washDistrictTotalsTitle': 'Question Totals by Atolls and Islands',
     },
   };
 

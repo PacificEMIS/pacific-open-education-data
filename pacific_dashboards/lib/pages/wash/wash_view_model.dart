@@ -8,15 +8,16 @@ import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/wash/toilets.dart';
+import 'package:pacific_dashboards/models/wash/question.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
-import 'package:pacific_dashboards/models/wash/water.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
+import 'package:pacific_dashboards/pages/wash/components/totals/totals_view_data.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'components/toilets/toilets_data.dart';
+import 'components/totals/totals_question_selector_page.dart';
 import 'components/water/water_data.dart';
 
 class WashViewModel extends BaseViewModel {
@@ -27,11 +28,13 @@ class WashViewModel extends BaseViewModel {
   final Subject<String> _pageNoteSubject = BehaviorSubject();
   final Subject<WashToiletViewData> _toiletsDataSubject = BehaviorSubject();
   final Subject<WashWaterViewData> _waterDataSubject = BehaviorSubject();
+  final Subject<WashTotalsViewData> _totalsDataSubject = BehaviorSubject();
   final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
   WashChunk _washChunk;
   List<Filter> _filters;
   Lookups _lookups;
+  Question _selectedQuestion;
 
   WashViewModel(
     BuildContext ctx, {
@@ -51,6 +54,8 @@ class WashViewModel extends BaseViewModel {
 
   Stream<WashWaterViewData> get waterDataStream => _waterDataSubject.stream;
 
+  Stream<WashTotalsViewData> get totalsDataStream => _totalsDataSubject.stream;
+
   Stream<String> get noteStream => _pageNoteSubject.stream;
 
   Stream<List<Filter>> get filtersStream => _filtersSubject.stream;
@@ -62,6 +67,7 @@ class WashViewModel extends BaseViewModel {
     _toiletsDataSubject.disposeWith(disposeBag);
     _filtersSubject.disposeWith(disposeBag);
     _waterDataSubject.disposeWith(disposeBag);
+    _totalsDataSubject.disposeWith(disposeBag);
     _loadNote();
     _loadData();
   }
@@ -95,6 +101,8 @@ class WashViewModel extends BaseViewModel {
       );
 
   Future<void> _updatePageData() async {
+    await _updateQuestionTotals();
+
     final filteredChunk = await _washChunk.applyFilters(_filters);
     final washModel = _WashModel(
       filteredChunk,
@@ -103,12 +111,27 @@ class WashViewModel extends BaseViewModel {
 
     _toiletsDataSubject.add(
       await compute<_WashModel, WashToiletViewData>(
-          _calculateToiletsData, washModel),
+        _calculateToiletsData,
+        washModel,
+      ),
     );
+
     _waterDataSubject.add(
       await compute<_WashModel, WashWaterViewData>(
         _calculateWaterData,
         washModel,
+      ),
+    );
+  }
+
+  Future<void> _updateQuestionTotals() async {
+    final filteredChunk = await _washChunk.applyFilters(_filters);
+    final questionsLookups = filteredChunk.questions;
+
+    _totalsDataSubject.add(
+      await compute<_TotalsModel, WashTotalsViewData>(
+        _calculateTotalsData,
+        _TotalsModel(filteredChunk.total, questionsLookups, _selectedQuestion),
       ),
     );
   }
@@ -126,6 +149,23 @@ class WashViewModel extends BaseViewModel {
       await _updatePageData();
     });
   }
+
+  Future<void> onQuestionSelectorPressed() async {
+    final newSelectedQuestion = await navigator.push<Question>(
+      MaterialPageRoute(builder: (context) {
+        return TotalsQuestionSelectorPage(
+          questions: _washChunk.questions
+              .where((element) => !element.id.contains('BS'))
+              .toList(),
+          initiallySelectedQuestion: _selectedQuestion,
+        );
+      }),
+    );
+    if (newSelectedQuestion != _selectedQuestion) {
+      _selectedQuestion = newSelectedQuestion;
+      _updateQuestionTotals();
+    }
+  }
 }
 
 class _WashModel {
@@ -133,6 +173,14 @@ class _WashModel {
   final Lookups lookups;
 
   const _WashModel(this.chunk, this.lookups);
+}
+
+class _TotalsModel {
+  final List<Wash> washData;
+  final List<Question> lookups;
+  final Question selectedQuestion;
+
+  const _TotalsModel(this.washData, this.lookups, this.selectedQuestion);
 }
 
 int _selectedYear(List<Filter> filters) {
@@ -229,7 +277,8 @@ Future<WashWaterViewData> _calculateWaterData(
       school: school,
       pipedWaterSupply: it.isPipedWaterSupplyCurrentlyAvailable ? 1 : 0,
       protectedWell: it.isProtectedWellCurrentlyAvailable ? 1 : 0,
-      unprotectedWellSpring: it.isUnprotectedWellSpringCurrentlyAvailable ? 1 : 0,
+      unprotectedWellSpring:
+          it.isUnprotectedWellSpringCurrentlyAvailable ? 1 : 0,
       rainwater: it.isRainwaterCurrentlyAvailable ? 1 : 0,
       bottled: it.isBottledWaterCurrentlyAvailable ? 1 : 0,
       tanker: it.isTankerTruckCartCurrentlyAvailable ? 1 : 0,
@@ -250,5 +299,13 @@ Future<WashWaterViewData> _calculateWaterData(
   return WashWaterViewData(
     available: available,
     usedForDrinking: usedForDrinking,
+  );
+}
+
+Future<WashTotalsViewData> _calculateTotalsData(
+  _TotalsModel model,
+) async {
+  return WashTotalsViewData(
+    selectedQuestion: model.selectedQuestion,
   );
 }

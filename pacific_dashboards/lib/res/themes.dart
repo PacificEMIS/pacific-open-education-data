@@ -175,4 +175,8 @@ extension TextThemeExt on TextTheme {
         color: AppColors.kTextMain,
         fontWeight: FontWeight.bold,
       );
+
+  TextStyle get washSelectedQuestion => this.subtitle2.copyWith(
+        color: AppColors.kBlueDark,
+      );
 }
