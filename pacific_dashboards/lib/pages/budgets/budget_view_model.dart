@@ -199,7 +199,7 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
         spendings.groupBy((element) => element.districtCode);
 
     groupedByDistrict.forEach((district, values) {
-      if (district != null && year > _filterBeforeYear) {
+      if (district != null && district.isNotEmpty && year > _filterBeforeYear) {
         double districtEdExpA = 0;
         double districtEdExpB = 0;
         double districtEdRecurrentExpA = 0;
@@ -263,13 +263,18 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
 }
 
 List<DataSpendingByDistrict> _generateSpendingSectorData(
-    Map<int, List<Budget>> budgetDataGroupedByYear, Lookups lookups) {
+  Map<int, List<Budget>> budgetDataGroupedByYear,
+  Lookups lookups,
+) {
   List<DataSpendingByDistrict> dataSpendingByDistrict = new List();
   budgetDataGroupedByYear.forEach((year, spendings) {
-    var groupedByDistrict = spendings.groupBy((element) => element.sectorCode);
+    final groupedBySectorCode =
+        spendings.groupBy((element) => element.sectorCode);
 
-    groupedByDistrict.forEach((district, values) {
-      if (district != null && year > _filterBeforeYear) {
+    groupedBySectorCode.forEach((sectorCode, values) {
+      if (sectorCode != null &&
+          sectorCode.isNotEmpty &&
+          year > _filterBeforeYear) {
         double districtEdExpA = 0;
         double districtEdExpB = 0;
         double districtEdRecurrentExpA = 0;
@@ -284,7 +289,8 @@ List<DataSpendingByDistrict> _generateSpendingSectorData(
           districtEnrolment += element.enrolment;
           districtEnrolment += element.enrolmentNation;
         });
-        dataSpendingByDistrict.add(DataSpendingByDistrict(
+        dataSpendingByDistrict.add(
+          DataSpendingByDistrict(
             year: year.toString(),
             district: values[0].sectorCode,
             edExpA: districtEdExpA.round(),
@@ -297,7 +303,9 @@ List<DataSpendingByDistrict> _generateSpendingSectorData(
                 : 0,
             edRecurrentExpA: districtEdRecurrentExpA.round(),
             edRecurrentExpB: districtEdRecurrentExpB.round(),
-            enrolment: districtEnrolment.round()));
+            enrolment: districtEnrolment.round(),
+          ),
+        );
       }
     });
   });
@@ -344,7 +352,8 @@ List _generateSpendingByYearData(
           year != currentYear)
         debugPrint('empty');
       else {
-        actualData.add(DataByGnpAndGovernmentSpending(
+        actualData.add(
+          DataByGnpAndGovernmentSpending(
             year: year,
             gNP: gNP,
             edExpense: edExpenseA,
@@ -356,7 +365,9 @@ List _generateSpendingByYearData(
             percentageEdGnp:
                 (percentageEdGnpA.isInfinite || percentageEdGnpA.isNaN)
                     ? 0
-                    : (percentageEdGnpA * 100)));
+                    : (percentageEdGnpA * 100),
+          ),
+        );
       }
       if (gNP == 0 &&
           edExpenseB == 0 &&
@@ -364,7 +375,8 @@ List _generateSpendingByYearData(
           year != currentYear)
         debugPrint('empty');
       else {
-        budgetedData.add(DataByGnpAndGovernmentSpending(
+        budgetedData.add(
+          DataByGnpAndGovernmentSpending(
             year: year,
             gNP: gNP,
             edExpense: edExpenseB,
@@ -376,7 +388,9 @@ List _generateSpendingByYearData(
             percentageEdGnp:
                 (percentageEdGnpB.isInfinite || percentageEdGnpB.isNaN)
                     ? 0
-                    : (percentageEdGnpB * 100)));
+                    : (percentageEdGnpB * 100),
+          ),
+        );
       }
     }
   });
@@ -416,7 +430,9 @@ List<DataSpendingBySector> _generateYearAndSectorData(
     double totalBudget = 0;
 
     for (var data in values) {
-      if (data.sectorCode != null ?? data.districtCode != null) {
+      if (data.sectorCode != null &&
+          data.sectorCode.isNotEmpty &&
+          data.districtCode != null) {
         if (data.sectorCode == 'ECE') {
           eceActual += data.edExpA;
           eceBudget += data.edExpB;
@@ -452,7 +468,8 @@ List<DataSpendingBySector> _generateYearAndSectorData(
           secondaryBudget > 0 ||
           totalActual > 0 ||
           totalBudget > 0)
-        dataSpendingBySector.add(DataSpendingBySector(
+        dataSpendingBySector.add(
+          DataSpendingBySector(
             districtCode: districtCode,
             eceActual: eceActual,
             eceBudget: eceBudget,
@@ -461,7 +478,9 @@ List<DataSpendingBySector> _generateYearAndSectorData(
             secondaryActual: secondaryActual,
             secondaryBudget: secondaryBudget,
             totalActual: totalActual,
-            totalBudget: totalBudget));
+            totalBudget: totalBudget,
+          ),
+        );
     }
   });
 
@@ -472,7 +491,8 @@ List<DataSpendingBySector> _generateYearAndSectorData(
       primaryTotalBudgeted > 0 ||
       secondaryTotalActual > 0 ||
       secondaryTotalBudgeted > 0)
-    dataSpendingBySector.add(DataSpendingBySector(
+    dataSpendingBySector.add(
+      DataSpendingBySector(
         districtCode: 'labelTotal',
         eceActual: eceTotalActual,
         eceBudget: eceTotalBudgeted,
@@ -482,6 +502,8 @@ List<DataSpendingBySector> _generateYearAndSectorData(
         secondaryBudget: secondaryTotalBudgeted,
         totalActual: eceTotalActual + primaryTotalActual + secondaryTotalActual,
         totalBudget:
-            eceTotalBudgeted + primaryTotalBudgeted + secondaryTotalBudgeted));
+            eceTotalBudgeted + primaryTotalBudgeted + secondaryTotalBudgeted,
+      ),
+    );
   return dataSpendingBySector;
 }
