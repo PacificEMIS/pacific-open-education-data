@@ -1,178 +1,131 @@
+import 'package:arch/arch.dart' show Pair;
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
+import 'package:pacific_dashboards/shared_ui/charts/horizontal_stacked_scrollable_bar_chart.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:pacific_dashboards/res/themes.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
-// import 'toilets/wash_data.dart';
+import 'water_data.dart';
 
-// class WaterComponent extends StatefulWidget {
-//   final String year;
-//   final Map<String, List<WaterData>> data;
-//
-//   const WaterComponent({
-//     Key key,
-//     @required this.year,
-//     @required this.data,
-//   })  : assert(data != null),
-//         super(key: key);
-//
-//   @override
-//   _WaterComponentState createState() => _WaterComponentState();
-// }
-//
-// class _WaterComponentState extends State<WaterComponent> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       mainAxisSize: MainAxisSize.min,
-//       crossAxisAlignment: CrossAxisAlignment.stretch,
-//       children: <Widget>[
-//         MiniTabLayout(
-//           tabs: widget.data.keys.toList(),
-//           tabNameBuilder: (tab) {
-//             return '$tab';
-//           },
-//           builder: (ctx, tab) {
-//             return _Chart(
-//                 data: widget.data,
-//                 groupingType: charts.BarGroupingType.stacked,
-//                 tab: tab,);
-//           },
-//         ),
-//       ],
-//     );
-//   }
-// }
-//
-// class _Chart extends StatelessWidget {
-//   final Map<String, List<WaterData>> _data;
-//   final charts.BarGroupingType _groupingType;
-//   final String _tab;
-//
-//   const _Chart(
-//       {Key key,
-//       @required Map<String, List<WaterData>> data,
-//       @required charts.BarGroupingType groupingType,
-//       @required String tab})
-//       : assert(data != null),
-//         _data = data,
-//         _groupingType = groupingType,
-//         _tab = tab,
-//         super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       mainAxisSize: MainAxisSize.min,
-//       crossAxisAlignment: CrossAxisAlignment.stretch,
-//       children: <Widget>[
-//         Container(
-//           height: 300,
-//           width: 400,
-//           child: FutureBuilder(
-//             future: _series,
-//             builder: (context, snapshot) {
-//               if (!snapshot.hasData) {
-//                 return Container();
-//               }
-//
-//               return Scrollbar(
-//                 child: SingleChildScrollView(
-//                   scrollDirection: Axis.horizontal,
-//                   padding: EdgeInsets.all(30),
-//                   child: Container(
-//                     width: (_data.values.toList()[_data.keys.toList().indexOf(_tab)].toList().length * 20).toDouble(),
-//                     child: charts.BarChart(
-//                       snapshot.data,
-//                       animate: false,
-//                       barGroupingType: _groupingType,
-//                       primaryMeasureAxis: charts.NumericAxisSpec(
-//                         tickProviderSpec: charts.BasicNumericTickProviderSpec(
-//                           desiredMinTickCount: 7,
-//                           desiredMaxTickCount: 13,
-//                         ),
-//                         renderSpec: charts.GridlineRendererSpec(
-//                           labelStyle: chartAxisTextStyle,
-//                           lineStyle: chartAxisLineStyle,
-//                         ),
-//                       ),
-//                       domainAxis: charts.OrdinalAxisSpec(
-//                         renderSpec: charts.SmallTickRendererSpec(
-//                           labelStyle: chartAxisTextStyle,
-//                           labelOffsetFromTickPx: -5,
-//                           labelOffsetFromAxisPx: 10,
-//                           labelAnchor: charts.TickLabelAnchor.before,
-//                           labelRotation: 270,
-//                           lineStyle: chartAxisLineStyle,
-//                         ),
-//                       ),
-//                       defaultRenderer: charts.BarRendererConfig(
-//                         stackHorizontalSeparator: 0,
-//                         minBarLengthPx: 30,
-//                         groupingType: charts.BarGroupingType.stacked,
-//                         strokeWidthPx: 10,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//         Container(height: 50),
-//         Wrap(
-//             spacing: 8.0, // gap between adjacent chips
-//             runSpacing: 4.0, // gap between lines
-//             children: getColumnTitles(_data, _data.keys.toList().indexOf(_tab)))
-//       ],
-//     );
-//   }
-//
-//   List<Widget> getColumnTitles(Map<String, List<WaterData>> data, int listId) {
-//     List<Widget> list = new List<Widget>();
-//     List<String> titles = new List<String>();
-//     data.forEach((key, value) {
-//       titles.addAll(value[listId].values.keys);
-//     });
-//     titles = titles.toSet().toList();
-//     if (titles.length > 0) {
-//       titles.forEach((it) {
-//         list.add(
-//           ChartLegendItem(
-//               color: HexColor.fromStringHash(it), value: it == null ? 'na' : it),
-//         );
-//       });
-//     }
-//     return list;
-//   }
-//
-//   Future<List<charts.Series<ChartData, String>>> get _series {
-//     return Future.microtask(() {
-//       final data = List<ChartData>();
-//         _data.values.toList()[ _data.keys.toList().indexOf(_tab)].forEach((element) {
-//           element.values.forEach((key, value) {
-//             data.add(ChartData(element.title, value,
-//                 HexColor.fromStringHash(key)));
-//           });
-//       });
-//
-//       return [
-//         charts.Series(
-//           domainFn: (ChartData chartData, _) => chartData.domain,
-//           measureFn: (ChartData chartData, _) => chartData.measure,
-//           colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-//           id: 'spending_Data',
-//           data: data,
-//         )
-//       ];
-//     });
-//   }
-//
-//   T enumFromString<T>(Iterable<T> values, String value) {
-//     return values.firstWhere((type) => type.toString().split(".").last == value,
-//         orElse: () => null);
-//   }
-// }
+class WaterComponent extends StatelessWidget {
+  final WashWaterViewData _data;
+
+  const WaterComponent({
+    Key key,
+    @required WashWaterViewData data,
+  })  : assert(data != null),
+        _data = data,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        MiniTabLayout(
+          tabs: _Tab.values,
+          tabNameBuilder: (tab) {
+            return _getTabName(context, tab);
+          },
+          builder: (context, tab) {
+            return _Chart(
+              data: _getChartDataForTab(tab),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  String _getTabName(BuildContext context, _Tab tab) {
+    switch (tab) {
+      case _Tab.currentlyAvailable:
+        return 'washWaterCurrentlyAvailableTab'.localized(context);
+      case _Tab.usedForDrinking:
+        return 'washWaterUsedForDrinkingTab'.localized(context);
+    }
+    throw FallThroughError();
+  }
+
+  List<WaterViewDataBySchool> _getChartDataForTab(_Tab tab) {
+    switch (tab) {
+      case _Tab.currentlyAvailable:
+        return _data.available;
+      case _Tab.usedForDrinking:
+        return _data.usedForDrinking;
+    }
+    throw FallThroughError();
+  }
+}
+
+enum _Tab {
+  currentlyAvailable,
+  usedForDrinking,
+}
+
+class _Chart extends HorizontalStackedScrollableBarChart {
+  final List<WaterViewDataBySchool> _data;
+
+  const _Chart({
+    Key key,
+    @required List<WaterViewDataBySchool> data,
+  })  : assert(data != null),
+        _data = data,
+        super(key: key);
+
+  @override
+  List<ChartData> get chartData => _data.expand((schoolData) => [
+        ChartData(
+          schoolData.school,
+          schoolData.pipedWaterSupply,
+          AppColors.kDynamicPalette[0],
+        ),
+        ChartData(
+          schoolData.school,
+          schoolData.protectedWell,
+          AppColors.kDynamicPalette[1],
+        ),
+        ChartData(
+          schoolData.school,
+          schoolData.unprotectedWellSpring,
+          AppColors.kDynamicPalette[2],
+        ),
+        ChartData(
+          schoolData.school,
+          schoolData.rainwater,
+          AppColors.kDynamicPalette[3],
+        ),
+        ChartData(
+          schoolData.school,
+          schoolData.bottled,
+          AppColors.kDynamicPalette[4],
+        ),
+        ChartData(
+          schoolData.school,
+          schoolData.tanker,
+          AppColors.kDynamicPalette[5],
+        ),
+        ChartData(
+          schoolData.school,
+          schoolData.surfaced,
+          AppColors.kDynamicPalette[6],
+        ),
+      ]).toList();
+
+  @override
+  int get domainLength => _data.length;
+
+  @override
+  List<Pair<String, Color>> get legend => [
+        Pair('washWaterLegendPipedWaterSupply', AppColors.kDynamicPalette[0]),
+        Pair('washWaterLegendProtectedWell', AppColors.kDynamicPalette[1]),
+        Pair('washWaterLegendUnprotectedWellSpring',
+            AppColors.kDynamicPalette[2]),
+        Pair('washWaterLegendRainwater', AppColors.kDynamicPalette[3]),
+        Pair('washWaterLegendBottledWater', AppColors.kDynamicPalette[4]),
+        Pair('washWaterLegendTanker', AppColors.kDynamicPalette[5]),
+        Pair('washWaterLegendSurfacedWater', AppColors.kDynamicPalette[6]),
+      ];
+}

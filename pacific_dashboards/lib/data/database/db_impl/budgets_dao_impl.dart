@@ -5,7 +5,7 @@ import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 
 class HiveBudgetsDao extends BudgetsDao {
-  static const _kKey = 'budgets';
+  static const _kKey = 'HiveBudgetsDao';
 
   static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
     final Box<List> box = await Hive.openBox(_kKey);
@@ -31,8 +31,7 @@ class HiveBudgetsDao extends BudgetsDao {
   @override
   Future<void> save(List<Budget> budgets, Emis emis) async {
     final hiveBudgets = budgets
-        .map((it) => HiveBudget.from(it)
-          ..timestamp = DateTime.now().millisecondsSinceEpoch)
+        .map((it) => HiveBudget.from(it))
         .toList();
 
     await _withBox((box) async => box.put(emis.id, hiveBudgets));

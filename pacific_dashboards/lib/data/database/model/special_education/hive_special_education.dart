@@ -1,11 +1,10 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 
 part 'hive_special_education.g.dart';
 
 @HiveType(typeId: 18)
-class HiveSpecialEducation extends HiveObject with Expirable {
+class HiveSpecialEducation extends HiveObject {
   @HiveField(0)
   int surveyYear;
 

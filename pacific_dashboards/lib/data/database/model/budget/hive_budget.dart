@@ -1,11 +1,10 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 
 part 'hive_budget.g.dart';
 
 @HiveType(typeId: 13)
-class HiveBudget extends HiveObject with Expirable {
+class HiveBudget extends HiveObject {
   @HiveField(0)
   int surveyYear;
 

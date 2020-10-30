@@ -1,11 +1,10 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/wash/water.dart';
 
 part 'hive_water.g.dart';
 
 @HiveType(typeId: 14)
-class HiveWater extends HiveObject with Expirable {
+class HiveWater extends HiveObject {
   @HiveField(0)
   String schNo;
 
@@ -79,30 +78,31 @@ class HiveWater extends HiveObject with Expirable {
   String surfacedWaterUsedForDrinking;
 
   Water toWater() => Water(
-      schNo,
-      surveyYear,
-      district,
-      districtCode,
-      schoolType,
-      schoolTypeCode,
-      authority,
-      authorityCode,
-      authorityGovt,
-      authorityGovtCode,
-      pipedWaterSupplyCurrentlyAvailable,
-      pipedWaterSupplyUsedForDrinking,
-      protectedWellCurrentlyAvailable,
-      protectedWellUsedForDrinking,
-      unprotectedWellSpringCurrentlyAvailable,
-      unprotectedWellSpringUsedForDrinking,
-      rainwaterCurrentlyAvailable,
-      rainwaterUsedForDrinking,
-      bottledWaterCurrentlyAvailable,
-      bottledWaterUsedForDrinking,
-      tankerTruckCartCurrentlyAvailable,
-      tankerTruckCartUsedForDrinking,
-      surfacedWaterCurrentlyAvailable,
-      surfacedWaterUsedForDrinking);
+        schNo: schNo,
+        surveyYear: surveyYear,
+        district: district,
+        districtCode: districtCode,
+        schoolType: schoolType,
+        schoolTypeCode: schoolTypeCode,
+        authority: authority,
+        authorityCode: authorityCode,
+        authorityGovt: authorityGovt,
+        authorityGovtCode: authorityGovtCode,
+        pipedWaterSupplyCurrentlyAvailable: pipedWaterSupplyCurrentlyAvailable,
+        pipedWaterSupplyUsedForDrinking: pipedWaterSupplyUsedForDrinking,
+        protectedWellCurrentlyAvailable: protectedWellCurrentlyAvailable,
+        protectedWellUsedForDrinking: protectedWellUsedForDrinking,
+        unprotectedWellSpringCurrentlyAvailable: unprotectedWellSpringCurrentlyAvailable,
+        unprotectedWellSpringUsedForDrinking: unprotectedWellSpringUsedForDrinking,
+        rainwaterCurrentlyAvailable: rainwaterCurrentlyAvailable,
+        rainwaterUsedForDrinking: rainwaterUsedForDrinking,
+        bottledWaterCurrentlyAvailable: bottledWaterCurrentlyAvailable,
+        bottledWaterUsedForDrinking: bottledWaterUsedForDrinking,
+        tankerTruckCartCurrentlyAvailable: tankerTruckCartCurrentlyAvailable,
+        tankerTruckCartUsedForDrinking: tankerTruckCartUsedForDrinking,
+        surfacedWaterCurrentlyAvailable: surfacedWaterCurrentlyAvailable,
+        surfacedWaterUsedForDrinking: surfacedWaterUsedForDrinking,
+      );
 
   static HiveWater from(Water water) => HiveWater()
     ..schNo = water.schNo

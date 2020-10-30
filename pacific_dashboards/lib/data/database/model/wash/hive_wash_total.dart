@@ -1,11 +1,10 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 
 part 'hive_wash_total.g.dart';
 
 @HiveType(typeId: 19)
-class HiveWashTotal extends HiveObject with Expirable {
+class HiveWashTotal extends HiveObject {
   @HiveField(0)
   int surveyYear;
 

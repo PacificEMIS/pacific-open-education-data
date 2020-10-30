@@ -17,6 +17,7 @@ import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'components/toilets/toilets_data.dart';
+import 'components/water/water_data.dart';
 
 class WashViewModel extends BaseViewModel {
   final Repository _repository;
@@ -25,6 +26,7 @@ class WashViewModel extends BaseViewModel {
 
   final Subject<String> _pageNoteSubject = BehaviorSubject();
   final Subject<WashToiletViewData> _toiletsDataSubject = BehaviorSubject();
+  final Subject<WashWaterViewData> _waterDataSubject = BehaviorSubject();
   final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
   WashChunk _washChunk;
@@ -47,6 +49,8 @@ class WashViewModel extends BaseViewModel {
   Stream<WashToiletViewData> get toiletsDataStream =>
       _toiletsDataSubject.stream;
 
+  Stream<WashWaterViewData> get waterDataStream => _waterDataSubject.stream;
+
   Stream<String> get noteStream => _pageNoteSubject.stream;
 
   Stream<List<Filter>> get filtersStream => _filtersSubject.stream;
@@ -57,6 +61,7 @@ class WashViewModel extends BaseViewModel {
     _pageNoteSubject.disposeWith(disposeBag);
     _toiletsDataSubject.disposeWith(disposeBag);
     _filtersSubject.disposeWith(disposeBag);
+    _waterDataSubject.disposeWith(disposeBag);
     _loadNote();
     _loadData();
   }
@@ -90,14 +95,20 @@ class WashViewModel extends BaseViewModel {
       );
 
   Future<void> _updatePageData() async {
+    final filteredChunk = await _washChunk.applyFilters(_filters);
+    final washModel = _WashModel(
+      filteredChunk,
+      _lookups,
+    );
+
     _toiletsDataSubject.add(
       await compute<_WashModel, WashToiletViewData>(
-        _calculateToiletsData,
-        _WashModel(
-          _washChunk,
-          _lookups,
-          _filters,
-        ),
+          _calculateToiletsData, washModel),
+    );
+    _waterDataSubject.add(
+      await compute<_WashModel, WashWaterViewData>(
+        _calculateWaterData,
+        washModel,
       ),
     );
   }
@@ -120,21 +131,18 @@ class WashViewModel extends BaseViewModel {
 class _WashModel {
   final WashChunk chunk;
   final Lookups lookups;
-  final List<Filter> filters;
 
-  const _WashModel(this.chunk, this.lookups, this.filters);
+  const _WashModel(this.chunk, this.lookups);
+}
+
+int _selectedYear(List<Filter> filters) {
+  return filters.firstWhere((it) => it.id == 0).intValue;
 }
 
 Future<WashToiletViewData> _calculateToiletsData(
   _WashModel model,
 ) async {
-  final chunk = model.chunk;
-  final filters = model.filters;
-  final filteredChunk = await chunk.applyFilters(filters);
-  final currentYear = _selectedYear(filters);
-  final toiletsDataOnCurrentYear = filteredChunk.toilets
-      .where((it) => it.surveyYear == currentYear)
-      .toList();
+  final toiletsData = model.chunk.toilets;
 
   final totalToilets = <SchoolDataByToiletType>[];
   final usableToilets = <SchoolDataByToiletType>[];
@@ -146,7 +154,7 @@ Future<WashToiletViewData> _calculateToiletsData(
   final pupilsByUsableToiletByGender = <SchoolDataByGender>[];
   final pupils = <SchoolDataByGender>[];
 
-  for (var it in toiletsDataOnCurrentYear) {
+  for (var it in toiletsData) {
     final school = it.schNo;
     totalToilets.add(SchoolDataByToiletType(
       school: school,
@@ -207,113 +215,40 @@ Future<WashToiletViewData> _calculateToiletsData(
   );
 }
 
-int _selectedYear(List<Filter> filters) {
-  return filters.firstWhere((it) => it.id == 0).intValue;
+Future<WashWaterViewData> _calculateWaterData(
+  _WashModel model,
+) async {
+  final waterData = model.chunk.water;
+
+  final available = <WaterViewDataBySchool>[];
+  final usedForDrinking = <WaterViewDataBySchool>[];
+
+  for (var it in waterData) {
+    final school = it.schNo;
+    available.add(WaterViewDataBySchool(
+      school: school,
+      pipedWaterSupply: it.isPipedWaterSupplyCurrentlyAvailable ? 1 : 0,
+      protectedWell: it.isProtectedWellCurrentlyAvailable ? 1 : 0,
+      unprotectedWellSpring: it.isUnprotectedWellSpringCurrentlyAvailable ? 1 : 0,
+      rainwater: it.isRainwaterCurrentlyAvailable ? 1 : 0,
+      bottled: it.isBottledWaterCurrentlyAvailable ? 1 : 0,
+      tanker: it.isTankerTruckCartCurrentlyAvailable ? 1 : 0,
+      surfaced: it.isSurfacedWaterCurrentlyAvailable ? 1 : 0,
+    ));
+    usedForDrinking.add(WaterViewDataBySchool(
+      school: school,
+      pipedWaterSupply: it.isPipedWaterSupplyUsedForDrinking ? 1 : 0,
+      protectedWell: it.isProtectedWellUsedForDrinking ? 1 : 0,
+      unprotectedWellSpring: it.isUnprotectedWellSpringUsedForDrinking ? 1 : 0,
+      rainwater: it.isRainwaterUsedForDrinking ? 1 : 0,
+      bottled: it.isBottledWaterUsedForDrinking ? 1 : 0,
+      tanker: it.isTankerTruckCartUsedForDrinking ? 1 : 0,
+      surfaced: it.isSurfacedWaterUsedForDrinking ? 1 : 0,
+    ));
+  }
+
+  return WashWaterViewData(
+    available: available,
+    usedForDrinking: usedForDrinking,
+  );
 }
-
-// List<Filter> _generateQuestionFilters(Lookups lookups, List<Wash> wash) {
-//   return List.of([
-//     Filter(
-//       id: 0,
-//       title: '',
-//       items: [
-//         ...wash
-//             .uniques((it) => it.question)
-//             .map((it) => FilterItem(it, it.from(lookups.authorities))),
-//       ],
-//       selectedIndex: 0,
-//     ),
-//   ]);
-// }
-
-// List<ListData> _generateWashTotal(
-//     Map<String, List<Wash>> washGroupedByDistricts, int year) {
-//   List<ListData> washTotalData = [];
-//
-//   washGroupedByDistricts.forEach((district, values) {
-//     int evaluated = 0;
-//     int cumulative = 0;
-//
-//     for (var data in values) {
-//       if (data.surveyYear == year) evaluated += data.numThisYear;
-//
-//       cumulative += data.number;
-//     }
-//
-//     washTotalData
-//         .add(new ListData(title: district, values: [evaluated, cumulative]));
-//   });
-//   return washTotalData.chainSort((lv, rv) => rv.title.compareTo(lv.title));
-// }
-//
-// _generateWashWater(Map<String, List<Water>> washGroupedBySchNo, int year) {
-//   List<WaterData> waterDataUsedForDrinking = new List();
-//   List<WaterData> waterDataCurrentlyAvailable = new List();
-//
-//   Map<String, List<WaterData>> waterModelList = new Map();
-//
-//   washGroupedBySchNo.forEach((schNo, values) {
-//     Map<String, int> usedForDrinking = new Map();
-//     Map<String, int> currentlyAvailable = new Map();
-//
-//     currentlyAvailable['Piped Water Supply'] = 0;
-//     usedForDrinking['Piped Water Supply'] = 0;
-//     currentlyAvailable['Protected Well'] = 0;
-//     usedForDrinking['Protected Well'] = 0;
-//     currentlyAvailable['Unprotected Well Spring'] = 0;
-//     usedForDrinking['Unprotected Well Spring'] = 0;
-//     currentlyAvailable['Rainwater'] = 0;
-//     usedForDrinking['Rainwater'] = 0;
-//     currentlyAvailable['Bottled Water'] = 0;
-//     usedForDrinking['Bottled Water'] = 0;
-//
-//     currentlyAvailable['Tanker/Truck or Cart'] = 0;
-//     usedForDrinking['Tanker/Truck or Cart'] = 0;
-//     currentlyAvailable['Surfaced Water (Lake, River, Stream)'] = 0;
-//     usedForDrinking['Surfaced Water (Lake, River, Stream)'] = 0;
-//
-//     for (var data in values) {
-//       if (data.surveyYear == year) {
-//         if (data.pipedWaterSupplyCurrentlyAvailable.compareTo('Yes') == 0)
-//           currentlyAvailable['Piped Water Supply'] += 1;
-//         if (data.pipedWaterSupplyUsedForDrinking.compareTo('Yes') == 0)
-//           usedForDrinking['Piped Water Supply'] += 1;
-//         if (data.protectedWellCurrentlyAvailable.compareTo('Yes') == 0)
-//           currentlyAvailable['Protected Well'] += 1;
-//         if (data.protectedWellUsedForDrinking.compareTo('Yes') == 0)
-//           usedForDrinking['Protected Well'] += 1;
-//         if (data.unprotectedWellSpringCurrentlyAvailable.compareTo('Yes') == 0)
-//           currentlyAvailable['Unprotected Well Spring'] += 1;
-//         if (data.unprotectedWellSpringUsedForDrinking.compareTo('Yes') == 0)
-//           usedForDrinking['Unprotected Well Spring'] += 1;
-//         if (data.rainwaterCurrentlyAvailable.compareTo('Yes') == 0)
-//           currentlyAvailable['Rainwater'] += 1;
-//         if (data.rainwaterUsedForDrinking.compareTo('Yes') == 0)
-//           usedForDrinking['Rainwater'] += 1;
-//         if (data.bottledWaterCurrentlyAvailable.compareTo('Yes') == 0)
-//           currentlyAvailable['Bottled Water'] += 1;
-//         if (data.bottledWaterUsedForDrinking.compareTo('Yes') == 0)
-//           usedForDrinking['Bottled Water'] += 1;
-//         if (data.tankerTruckCartCurrentlyAvailable.compareTo('Yes') == 0)
-//           currentlyAvailable['Tanker/Truck or Cart'] += 1;
-//         if (data.tankerTruckCartUsedForDrinking.compareTo('Yes') == 0)
-//           usedForDrinking['Tanker/Truck or Cart'] += 1;
-//         if (data.surfacedWaterCurrentlyAvailable.compareTo('Yes') == 0)
-//           currentlyAvailable['Surfaced Water (Lake, River, Stream)'] += 1;
-//         if (data.surfacedWaterUsedForDrinking.compareTo('Yes') == 0)
-//           usedForDrinking['Surfaced Water (Lake, River, Stream)'] += 1;
-//       }
-//     }
-//
-//     waterDataUsedForDrinking
-//         .add(WaterData(title: schNo, values: usedForDrinking));
-//
-//     waterDataCurrentlyAvailable
-//         .add(WaterData(title: schNo, values: currentlyAvailable));
-//   });
-//
-//   waterModelList['Used For Drinking'] = waterDataUsedForDrinking;
-//   waterModelList['Currently Available'] = waterDataCurrentlyAvailable;
-//
-//   return waterModelList;
-// }

@@ -16,6 +16,7 @@ import 'components/toilets/toilets_component.dart';
 import 'components/toilets/toilets_data.dart';
 import 'components/total_component.dart';
 import 'components/water/water_component.dart';
+import 'components/water/water_data.dart';
 
 class WashPage extends MvvmStatefulWidget {
   static String kRoute = '/Wash';
@@ -79,8 +80,30 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _titleWidget(context, 'toilets', false),
-                        ToiletsComponent(data: snapshot.data,),
+                        _titleWidget(context, 'washToiletsTitle', false),
+                        ToiletsComponent(
+                          data: snapshot.data,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                StreamBuilder<WashWaterViewData>(
+                  stream: viewModel.waterDataStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container(
+                        height: 100,
+                      );
+                    }
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _titleWidget(context, 'washWaterSourcesTitle', false),
+                        WaterComponent(
+                          data: snapshot.data,
+                        ),
                       ],
                     );
                   },

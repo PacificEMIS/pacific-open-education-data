@@ -1,11 +1,10 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/wash/toilets.dart';
 
 part 'hive_toilet.g.dart';
 
 @HiveType(typeId: 21)
-class HiveToilet extends HiveObject with Expirable {
+class HiveToilet extends HiveObject {
   @HiveField(0)
   String schNo;
 

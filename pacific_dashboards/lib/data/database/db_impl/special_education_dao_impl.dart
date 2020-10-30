@@ -5,7 +5,7 @@ import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 
 class HiveSpecialEducationDao extends SpecialEducationDao {
-  static const _kKey = 'special_education';
+  static const _kKey = 'HiveSpecialEducationDao';
 
   static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
     final Box<List> box = await Hive.openBox(_kKey);
@@ -32,8 +32,7 @@ class HiveSpecialEducationDao extends SpecialEducationDao {
   @override
   Future<void> save(List<SpecialEducation> specialEducation, Emis emis) async {
     final hiveSpecialEducation = specialEducation
-        .map((it) => HiveSpecialEducation.from(it)
-          ..timestamp = DateTime.now().millisecondsSinceEpoch)
+        .map((it) => HiveSpecialEducation.from(it))
         .toList();
 
     await _withBox((box) async => box.put(emis.id, hiveSpecialEducation));
