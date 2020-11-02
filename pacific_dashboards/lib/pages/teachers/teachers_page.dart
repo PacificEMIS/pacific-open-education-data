@@ -169,6 +169,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             ? Container()
                             : StackedHorizontalBarChartWidgetExtended(
                                 data: snapshot.data.teachersByCertification,
+                                legend: ['schoolsCertifiedQualified', 'qualifiedNotCertified', 'certified'],
                                 colorFunc: _levelIndexToColor,
                               ),
                         SizedBox(height: 10.0),

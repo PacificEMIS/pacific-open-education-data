@@ -279,6 +279,8 @@ class Strings {
       'qualified': 'Qualified',
       'certified': 'Certified',
       'qualifiedAndCertified':'Qualified and Certified',
+      'qualifiedNotCertified':'Qualified (not certified)',
+      'other': 'Other'
     },
   };
 
