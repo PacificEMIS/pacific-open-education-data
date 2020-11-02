@@ -92,7 +92,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   void _handleErrors(DioError error) {
     final response = error.response;
-    if (response == null) {
+    if (response == null || response.statusCode == null) {
       if (error.message.contains('Connection closed') || error.message.contains('abort') )
         throw NoInternetException();
       else if (error.message == '')
