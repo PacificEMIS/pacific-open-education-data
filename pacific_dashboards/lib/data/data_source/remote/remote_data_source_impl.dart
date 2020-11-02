@@ -90,13 +90,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     _kemisClient = RestClient(_dio, baseUrl: _kKiribatiUrl);
   }
 
-  void _handleErrors(DioError error) {
+  Future<void> _handleErrors(DioError error) async {
     final response = error.response;
     if (response == null || response.statusCode == null) {
-      if (error.message.contains('Connection closed') ||
-          error.message.contains('abort'))
+      if (error.message.contains('closed') ||
+          error.message.contains('abort') ||
+          error.message.contains('no address'))
         throw NoInternetException();
-      else if (error.message == '') checkConnection();
+      else await checkConnection();
 
       throw UnknownRemoteException(url: '');
     }
