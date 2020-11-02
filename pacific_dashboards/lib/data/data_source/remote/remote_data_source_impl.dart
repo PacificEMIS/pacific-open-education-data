@@ -93,10 +93,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   void _handleErrors(DioError error) {
     final response = error.response;
     if (response == null) {
-      throw UnknownRemoteException(url: '');
+      if (error.message.contains('Connection closed') || error.message.contains('abort') )
+        throw NoInternetException();
+      else if (error.message == '')
+        checkConnection();
+      else
+        throw UnknownRemoteException(url: '');
     }
     final code = response.statusCode;
     final url = response.requestUrl;
+
     switch (code) {
       case 401:
         throw UnauthorizedRemoteException(
@@ -116,10 +122,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     List<_ThrowableHandler> additionalHandlers,
   }) async {
     try {
-      final connection = await Connectivity().checkConnectivity();
-      if (connection == ConnectivityResult.none) {
-        throw NoInternetException();
-      }
+      await checkConnection();
+
       final emis = await _settings.currentEmis;
       RestClient client;
       switch (emis) {
@@ -144,6 +148,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         _handleErrors(e);
       }
       rethrow;
+    }
+  }
+
+  Future checkConnection() async {
+    final connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) {
+      throw NoInternetException();
     }
   }
 
