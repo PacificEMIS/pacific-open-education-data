@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 import 'chart_legend_item.dart';
 
@@ -9,11 +10,13 @@ typedef Color ColorFunc(int index);
 
 class StackedHorizontalBarChartWidgetExtended extends StatefulWidget {
   final Map<String, List<int>> data;
+  final List<String> legend;
   final ColorFunc colorFunc;
 
   StackedHorizontalBarChartWidgetExtended({
     Key key,
     @required this.data,
+    @required this.legend,
     this.colorFunc,
   }) : super(key: key);
 
@@ -52,7 +55,6 @@ class StackedHorizontalBarChartWidgetExtendedState
                 tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
                   (number) => number.round().abs().toString(),
                 ),
-                // viewport: charts.NumericExtents(-400, 400),
               ),
               domainAxis: charts.OrdinalAxisSpec(
                 renderSpec: charts.SmallTickRendererSpec(
@@ -75,16 +77,15 @@ class StackedHorizontalBarChartWidgetExtendedState
           Wrap(
               spacing: 8.0, // gap between adjacent chips
               runSpacing: 4.0, // gap between lines
-              children: getColumnTitles(widget.data))
+              children: getColumnTitles(widget.data, widget.legend))
         ]);
   }
 
-  List<Widget> getColumnTitles(Map<String, List<int>> data) {
+  List<Widget> getColumnTitles(Map<String, List<int>> data, List<String> legend) {
     List<Widget> widgetList = new List<Widget>();
-    List<String> _titles = ['Certified and Qualified', 'Qualified (not certified)', 'Certified', 'Other'];
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < legend.length; i++) {
       widgetList.add(
-        ChartLegendItem(color: widget.colorFunc(i), value: _titles[i]),
+        ChartLegendItem(color: widget.colorFunc(i), value: legend[i].localized(context))
       );
     }
     return widgetList;
