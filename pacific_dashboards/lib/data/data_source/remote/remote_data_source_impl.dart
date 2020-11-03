@@ -97,7 +97,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
           error.message.contains('abort') ||
           error.message.contains('no address'))
         throw NoInternetException();
-      else await checkConnection();
+      else
+        await checkConnection();
 
       throw UnknownRemoteException(url: '');
     }
@@ -146,13 +147,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         }
       }
       if (e is DioError) {
-        _handleErrors(e);
+        await _handleErrors(e);
       }
       rethrow;
     }
   }
 
-  Future checkConnection() async {
+  Future<void> checkConnection() async {
     final connection = await Connectivity().checkConnectivity();
     if (connection == ConnectivityResult.none) {
       throw NoInternetException();
