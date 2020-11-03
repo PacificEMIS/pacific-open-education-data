@@ -9,7 +9,7 @@ import 'chart_legend_item.dart';
 typedef Color ColorFunc(int index);
 
 class StackedHorizontalBarChartWidgetExtended extends StatefulWidget {
-  final Map<String, List<int>> data;
+  final Map<String, Map<String, int>> data;
   final List<String> legend;
   final ColorFunc colorFunc;
 
@@ -77,27 +77,25 @@ class StackedHorizontalBarChartWidgetExtendedState
           Wrap(
               spacing: 8.0, // gap between adjacent chips
               runSpacing: 4.0, // gap between lines
-              children: getColumnTitles(widget.data, widget.legend))
+              children: getColumnTitles(widget.legend))
         ]);
   }
 
-  List<Widget> getColumnTitles(Map<String, List<int>> data, List<String> legend) {
+  List<Widget> getColumnTitles(List<String> legend) {
     List<Widget> widgetList = new List<Widget>();
     for (var i = 0; i < legend.length; i++) {
-      widgetList.add(
-        ChartLegendItem(color: widget.colorFunc(i), value: legend[i].localized(context))
-      );
+      widgetList.add(ChartLegendItem(
+          color: widget.colorFunc(i), value: legend[i].localized(context)));
     }
     return widgetList;
   }
 
   List<charts.Series<_Data, String>> _createSeries(
-    Map<String, List<int>> data,
+    Map<String, Map<String, int>> data,
   ) {
-    final length = _getDataLengthWithChecks(data);
     final series = List<charts.Series<_Data, String>>();
 
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < data.length; i++) {
       final chunk = List<_Data>();
       data.forEach((key, values) {
         chunk.add(_Data(

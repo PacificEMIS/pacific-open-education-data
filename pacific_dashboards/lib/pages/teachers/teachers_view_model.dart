@@ -329,28 +329,42 @@ Map<String, GenderTableData> _generateInfoTableData(
   throw FallThroughError();
 }
 
-Map<String, List<int>> _generateCertificationData(
+Map<String, Map<String, int>> _generateCertificationData(
   Map<String, List<Teacher>> data,
 ) {
-  final result = Map<String, List<int>>();
-  // data.removeWhere((key, value) => key == null);
-  data.forEach((key, value) {
-    final certification = [0, 0, 0, 0, 0, 0, 0, 0];
-    value.forEach((it) {
-      certification[0] -= it.certQualF;
-      certification[1] -= (it.qualifiedF - it.certQualF);
-      certification[2] -= (it.certifiedF - it.certQualF);
-      certification[3] -= it.numTeachersF;
+  final result = Map<String, Map<String, int>>();
 
-      certification[4] += it.certQualM;
-      certification[5] += (it.qualifiedM - it.certQualM);
-      certification[6] += (it.certifiedM - it.certQualM);
-      certification[7] += it.numTeachersM;
+  data.forEach((key, value) {
+    final certification = new Map<String, int>();
+    certification['certifiedAndQualifiedFemale'] = 0;
+    certification['qualifiedFemale'] = 0;
+    certification['certifiedFemale'] = 0;
+    certification['numberTeachersFemale'] = 0;
+
+    certification['certifiedAndQualifiedMale'] = 0;
+    certification['qualifiedMale'] = 0;
+    certification['certifiedMale'] = 0;
+    certification['numberTeachersMale'] = 0;
+
+    value.forEach((it) {
+      certification['certifiedAndQualifiedFemale'] -= it.certQualF;
+      certification['qualifiedFemale'] -= (it.qualifiedF - it.certQualF);
+      certification['certifiedFemale'] -= (it.certifiedF - it.certQualF);
+      certification['numberTeachersFemale'] -= it.numTeachersF;
+
+      certification['certifiedAndQualifiedMale'] += it.certQualM;
+      certification['qualifiedMale'] += (it.qualifiedM - it.certQualM);
+      certification['certifiedMale'] += (it.certifiedM - it.certQualM);
+      certification['numberTeachersMale'] += it.numTeachersM;
     });
-    certification[3] -=
-        (certification[0] + certification[1] + certification[2]);
-    certification[7] -=
-        (certification[4] + certification[5] + certification[6]);
+    certification['numberTeachersFemale'] -=
+        (certification['certifiedAndQualifiedFemale'] +
+            certification['qualifiedFemale'] +
+            certification['certifiedFemale']);
+    certification['numberTeachersMale'] -=
+        (certification['certifiedAndQualifiedMale'] +
+            certification['qualifiedMale'] +
+            certification['certifiedMale']);
     if (key != null) result[key] = certification;
   });
 
