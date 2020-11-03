@@ -90,13 +90,21 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     _kemisClient = RestClient(_dio, baseUrl: _kKiribatiUrl);
   }
 
-  void _handleErrors(DioError error) {
+  Future<void> _handleErrors(DioError error) async {
     final response = error.response;
-    if (response == null) {
+    if (response == null || response.statusCode == null) {
+      if (error.message.contains('closed') ||
+          error.message.contains('abort') ||
+          error.message.contains('no address'))
+        throw NoInternetException();
+      else
+        await checkConnection();
+
       throw UnknownRemoteException(url: '');
     }
     final code = response.statusCode;
     final url = response.requestUrl;
+
     switch (code) {
       case 401:
         throw UnauthorizedRemoteException(
@@ -116,10 +124,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     List<_ThrowableHandler> additionalHandlers,
   }) async {
     try {
-      final connection = await Connectivity().checkConnectivity();
-      if (connection == ConnectivityResult.none) {
-        throw NoInternetException();
-      }
+      await checkConnection();
+
       final emis = await _settings.currentEmis;
       RestClient client;
       switch (emis) {
@@ -141,9 +147,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         }
       }
       if (e is DioError) {
-        _handleErrors(e);
+        await _handleErrors(e);
       }
       rethrow;
+    }
+  }
+
+  Future<void> checkConnection() async {
+    final connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) {
+      throw NoInternetException();
     }
   }
 
