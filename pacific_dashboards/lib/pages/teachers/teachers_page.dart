@@ -15,6 +15,7 @@ import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class TeachersPage extends MvvmStatefulWidget {
@@ -213,6 +214,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                       .data.teachersBySchoolLevelStateAndGender[
                                   tab.toString().substring(13)],
                               keySortFunc: (lv, rv) => lv.compareTo(rv),
+                              domainValueBuilder: GenderTableData.sDomainValueBuilder,
                             );
                           },
                         ),

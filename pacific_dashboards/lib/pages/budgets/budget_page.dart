@@ -201,7 +201,7 @@ class _GnpAndGovernmentSpendingActualExpense extends StatelessWidget {
           case _GovtTab.govtExpenditure:
             return 'budgetsGovtExpenditure'.localized(context);
           case _GovtTab.gnp:
-            return 'budgetsGnp'.localized(context);
+            return 'budgetsGnpColumn'.localized(context);
         }
         throw FallThroughError();
       },
@@ -209,12 +209,12 @@ class _GnpAndGovernmentSpendingActualExpense extends StatelessWidget {
         switch (tab) {
           case _GovtTab.gnp:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-              type: 'GNP',
+              type: SpendingComponentType.gnp,
               data: _data,
             );
           case _GovtTab.govtExpenditure:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-              type: 'Govt',
+              type: SpendingComponentType.govt,
               data: _data,
             );
         }
@@ -266,22 +266,22 @@ class _SpendingBySector extends StatelessWidget {
         switch (tab) {
           case _SpendingTab.ece:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-              type: 'ECE',
+              type: SpendingComponentType.sectorEce,
               data: _data,
             );
           case _SpendingTab.primary:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-              type: 'Primary',
+              type: SpendingComponentType.sectorPrimary,
               data: _data,
             );
           case _SpendingTab.secondary:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-              type: 'Secondary',
+              type: SpendingComponentType.sectorSecondary,
               data: _data,
             );
           case _SpendingTab.total:
             return EnrollDataByGnpAndGovernmentSpendingComponent(
-              type: 'Total',
+              type: SpendingComponentType.sectorsTotal,
               data: _data,
             );
         }
