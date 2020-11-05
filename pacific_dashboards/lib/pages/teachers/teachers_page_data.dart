@@ -7,18 +7,33 @@ class TeachersPageData {
     @required this.teachersByDistrict,
     @required this.teachersByAuthority,
     @required this.teachersByPrivacy,
-    @required this.teachersBySchoolLevelStateAndGender,
+    @required this.enrollTeachersBySchoolLevelStateAndGender,
     @required this.teachersByCertification,
   })  : assert(teachersByDistrict != null),
         assert(teachersByAuthority != null),
         assert(teachersByPrivacy != null),
-        assert(teachersBySchoolLevelStateAndGender != null),
-        assert(teachersByCertification != null);
+        assert(teachersByCertification != null),
+        assert(enrollTeachersBySchoolLevelStateAndGender != null);
 
   final List<ChartData> teachersByDistrict;
   final List<ChartData> teachersByAuthority;
   final List<ChartData> teachersByPrivacy;
-  final Map<String, Map<String, Map<String, GenderTableData>>>
-      teachersBySchoolLevelStateAndGender;
+
+  final EnrollTeachersBySchoolLevelStateAndGender enrollTeachersBySchoolLevelStateAndGender;
+
   final Map<String, Map<String, int>> teachersByCertification;
+}
+
+class EnrollTeachersBySchoolLevelStateAndGender {
+  final Map<String, Map<String, GenderTableData>> all;
+  final Map<String, Map<String, GenderTableData>> qualified;
+  final Map<String, Map<String, GenderTableData>> certified;
+  final Map<String, Map<String, GenderTableData>> allQualifiedAndCertified;
+
+  EnrollTeachersBySchoolLevelStateAndGender({
+    @required this.all,
+    @required this.qualified,
+    @required this.certified,
+    @required this.allQualifiedAndCertified,
+  });
 }
