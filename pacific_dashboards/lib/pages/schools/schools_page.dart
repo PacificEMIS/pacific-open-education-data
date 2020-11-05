@@ -73,7 +73,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Text(
-                          'enrolment'.localized(context),
+                          'schoolsEnrollment'.localized(context),
                           style: Theme.of(context).textTheme.headline3.copyWith(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
