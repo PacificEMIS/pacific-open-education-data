@@ -172,7 +172,11 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             ? Container()
                             : StackedHorizontalBarChartWidgetExtended(
                                 data: snapshot.data.teachersByCertification,
-                                legend: ['schoolsCertifiedQualified', 'qualifiedNotCertified', 'certified'],
+                                legend: [
+                                  'schoolsCertifiedQualified',
+                                  'qualifiedNotCertified',
+                                  'certified'
+                                ],
                                 colorFunc: _levelIndexToColor,
                               ),
                         SizedBox(height: 10.0),
@@ -195,18 +199,30 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 .localized(context);
                           },
                           builder: (ctx, tab) {
-                           var selectedTabData = Map();
-                           var selectedTabName = tab.toString().substring(13);
-                            if (selectedTabName == 'all')
-                         selectedTabData =  snapshot.data.enrollTeachersBySchoolLevelStateAndGender.all;
-                           if (selectedTabName == 'qualified')
-                             selectedTabData =  snapshot.data.enrollTeachersBySchoolLevelStateAndGender.qualified;
-                           if (selectedTabName == 'certified')
-                             selectedTabData =  snapshot.data.enrollTeachersBySchoolLevelStateAndGender.certified;
-                           if (selectedTabName == 'qualifiedAndCertified')
-                             selectedTabData =  snapshot.data.enrollTeachersBySchoolLevelStateAndGender.allQualifiedAndCertified;
+                            var selectedTabData = List();
+                            var selectedTabName = tab;
+                            if (selectedTabName == _TeachersTab.all)
+                              selectedTabData = snapshot
+                                  .data
+                                  .enrollTeachersBySchoolLevelStateAndGender
+                                  .all;
+                            if (selectedTabName == _TeachersTab.qualified)
+                              selectedTabData = snapshot
+                                  .data
+                                  .enrollTeachersBySchoolLevelStateAndGender
+                                  .qualified;
+                            if (selectedTabName == _TeachersTab.certified)
+                              selectedTabData = snapshot
+                                  .data
+                                  .enrollTeachersBySchoolLevelStateAndGender
+                                  .certified;
+                            if (selectedTabName == _TeachersTab.qualifiedAndCertified)
+                              selectedTabData = snapshot
+                                  .data
+                                  .enrollTeachersBySchoolLevelStateAndGender
+                                  .allQualifiedAndCertified;
 
-                           return TeachersMultiTable(
+                            return TeachersMultiTable(
                               key: ObjectKey(snapshot.data
                                   .enrollTeachersBySchoolLevelStateAndGender),
                               columnNames: [

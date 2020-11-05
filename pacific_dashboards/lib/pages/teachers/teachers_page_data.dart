@@ -25,15 +25,25 @@ class TeachersPageData {
 }
 
 class EnrollTeachersBySchoolLevelStateAndGender {
-  final Map<String, Map<String, GenderTableData>> all;
-  final Map<String, Map<String, GenderTableData>> qualified;
-  final Map<String, Map<String, GenderTableData>> certified;
-  final Map<String, Map<String, GenderTableData>> allQualifiedAndCertified;
+  final List<TeachersBySchoolLevelStateAndGender> all;
+  final List<TeachersBySchoolLevelStateAndGender> qualified;
+  final List<TeachersBySchoolLevelStateAndGender> certified;
+  final List<TeachersBySchoolLevelStateAndGender> allQualifiedAndCertified;
 
   EnrollTeachersBySchoolLevelStateAndGender({
     @required this.all,
     @required this.qualified,
     @required this.certified,
     @required this.allQualifiedAndCertified,
+  });
+}
+
+class TeachersBySchoolLevelStateAndGender {
+  final String state;
+  final Map<String, GenderTableData> teachers;
+
+  TeachersBySchoolLevelStateAndGender({
+    @required this.state,
+    @required this.teachers,
   });
 }

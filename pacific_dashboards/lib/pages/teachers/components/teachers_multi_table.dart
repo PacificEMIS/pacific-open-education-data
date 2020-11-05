@@ -10,7 +10,7 @@ class TeachersMultiTable extends StatelessWidget {
     String title,
     @required List<String> columnNames,
     @required List<int> columnFlex,
-    @required  Map<String, Map<String, GenderTableData>> data,
+    @required  List<TeachersBySchoolLevelStateAndGender> data,
     KeySortFunc keySortFunc,
   })  :
         assert(columnNames != null),
@@ -26,7 +26,7 @@ class TeachersMultiTable extends StatelessWidget {
   final String _title;
   final List<String> _columnNames;
   final List<int> _columnFlex;
-  final  Map<String, Map<String, GenderTableData>> _data;
+  final List<TeachersBySchoolLevelStateAndGender> _data;
   final KeySortFunc _keySortFunc;
 
   @override
@@ -36,21 +36,21 @@ class TeachersMultiTable extends StatelessWidget {
         _title,
         style: Theme.of(context).textTheme.headline4,
       ),
-      body: Column(
-         children: _data.keys.map((key) {
-           return Padding(
-             padding: const EdgeInsets.only(bottom: 8),
-             child:
-             MultiTableWidget(
-               data: _data[key],
-               columnNames: _columnNames,
-               columnFlex: _columnFlex,
-               title: key,
-             keySortFunc: _keySortFunc,
-             ),
-           );
-         }).toList(),
-       ),
+      // body: Column(
+      //    children: _data.keys.map((key) {
+      //      return Padding(
+      //        padding: const EdgeInsets.only(bottom: 8),
+      //        child:
+      //        MultiTableWidget(
+      //          data: _data[key],
+      //          columnNames: _columnNames,
+      //          columnFlex: _columnFlex,
+      //          title: key,
+      //        keySortFunc: _keySortFunc,
+      //        ),
+      //      );
+      //    }).toList(),
+      //  ),
     );
   }
 }
