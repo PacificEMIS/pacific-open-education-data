@@ -16,6 +16,7 @@ import 'package:pacific_dashboards/shared_ui/tables/gender_table_widget.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 import 'components/teachers_multi_table.dart';
@@ -79,14 +80,14 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text('teachersCharts'.localized(context),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3
-                                .copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
+                        Text(
+                          'teachersDashboardsChartTitle'.localized(context),
+                          style: Theme.of(context).textTheme.headline3.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                        ),
                         MiniTabLayout(
                           tabs: _DashboardsTab.values,
                           padding: 0.0,
@@ -234,6 +235,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                               columnFlex: [3, 3, 3, 3],
                               data: selectedTabData,
                               keySortFunc: (lv, rv) => lv.compareTo(rv),
+                              domainValueBuilder: GenderTableData.sDomainValueBuilder,
                             );
                           },
                         ),

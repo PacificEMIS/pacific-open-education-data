@@ -82,6 +82,7 @@ class Strings {
       'schoolsDashboardsAgeDomain': 'Age',
       'schoolsDashboardsSchoolLevelDomain': 'School \nLevels',
       'teachersDashboardsTitle': 'Teachers',
+      'teachersDashboardsChartTitle': 'Teachers (Number of)',
       'teachersDashboardsEnrollByAuthorityTitle': 'Teachers by Authority',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by State',
       'teachersDashboardsEnrollByLevelStateGenderTitle':
@@ -108,7 +109,7 @@ class Strings {
           'Accreditation Progress by State',
       'schoolsAccreditationDashboardsProgressNationalTitle':
           'Accreditation Progress National',
-      'schoolsAccreditationDashboardsDistrictTitle': 'District Status',
+      'schoolsAccreditationDashboardsDistrictTitle': 'State Status',
       'schoolsAccreditationDashboardsStatusByStateTitle':
           'Accreditation Status by State',
       'schoolsAccreditationDashboardsPerformanceByStandardTitle':
@@ -195,8 +196,13 @@ class Strings {
       'budgetsSpendingByDistrict': 'Spending By States',
       'budgetsDashboardComponent': 'Dashboard Component',
       'budgetsGovtExpenditure': 'Govt Expenditure',
-      'budgetsGnp': 'GNI',
       'budgetsEce': 'ECE',
+      'budgetsYearColumn': 'Year',
+      'budgetsGnpColumn': 'GNI',
+      'budgetsEdExpenseColumn': 'Ed Expense',
+      'budgetsEdGNPPercentageColumn': 'Ed/GNI %',
+      'budgetsGovtExpenseColumn': 'Govt Expense',
+      'budgetsEdGovtPercentageColumn': 'Ed/Govt %',
       'budgetsPrimaryEducation': 'Primary Education',
       'budgetsSecondaryEducation': 'Secondary Education',
       'budgetsActualExpenditureTab': 'Actual Expenditure',
@@ -208,12 +214,10 @@ class Strings {
       'budgetsBudgetExpPerHeadTab': 'Budget Exp per Head',
       'budgetsSectorsDomain': 'Sectors',
       'budgetsStatesDomain': 'State',
-      'year': 'Year',
-      'govtExpense': 'Govt Expense',
-      'edExpense': 'Ed Expense',
-      'edGovtPercentage': 'Ed/Govt %',
-      'edGNPPercentage': 'Ed/GNI %',
       'budgetExpenditure': 'Budgeted Expenditure',
+      'budgetsDistrictColumn': 'State',
+      'budgetsActualColumn': 'Actual',
+      'budgetsBudgetedColumn': 'Budgeted',
       //Special Education
       'specialEducationTitle': 'Special Education: Dashboard',
       'disability': 'Disability',
@@ -227,7 +231,6 @@ class Strings {
       'diagram': 'Pie chart',
       'environment': 'Environment',
       'englishLearner': 'English Learner',
-      'district': 'District',
       'washToiletsTitle': 'Toilets',
       'washWaterSourcesTitle': 'Water Sources',
       'washDashboardsTitle': 'Reviews And Inspections: Dashboard',
@@ -257,7 +260,7 @@ class Strings {
       'washWaterLegendBottledWater': 'Bottled Water',
       'washWaterLegendTanker': 'Tanker/Truck or Cart',
       'washWaterLegendSurfacedWater': 'Surfaced Water (Lake, River, Stream)',
-      'washDistrictTotalsTitle': 'Question Totals by District',
+      'washDistrictTotalsTitle': 'Question Totals by State',
       'washDistrictTotalsQuestionSelectorTitle': 'Question',
       'washDistrictTotalsNoQuestionSelectedLabel': 'No question selected',
       'washDistrictTotalsAccumulatedTab': 'Cumulative to ',
@@ -269,7 +272,6 @@ class Strings {
       'schoolsByAuthority': 'By Authority',
       'schoolsByGovtNonGovt': 'By Govt / Non-govt',
       'schoolsCertifiedQualified': 'Certified and Qualified ',
-      'teachersCharts': 'Teachers Charts',
       'schoolAccreditationCumulative': 'Cumulative to',
       'schoolAccreditationEvaluated': 'Evaluated in',
       'levels': 'Levels',
@@ -321,10 +323,11 @@ class Strings {
       'filtersDisplayAllAuthority': 'Display All Authority',
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
-      'schoolsAccreditationDashboardsProgressByStateTitle':
-          'Accreditation Progress by Atoll / Island ',
+      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by Atoll / Island ',
+      'schoolsAccreditationDashboardsDistrictTitle': 'Atoll / Island Status',
       'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
       'budgetsStatesDomain': 'Atolls and Islands',
+      'budgetsDistrictColumn': 'Atoll / Island',
       'washDistrictTotalsTitle': 'Question Totals by Atolls and Islands',
     },
   };
@@ -336,7 +339,7 @@ class Strings {
       'filtersByState': 'Selected District',
       'schoolsDashboardsEnrollByLevelStateGenderTitle':
           'Enrollment by Age, \nEducation Level and Gender',
-      'schoolsDashboardsEnrollByStateTitle': 'Enrollment by Atoll / Island ',
+      'schoolsDashboardsEnrollByStateTitle': 'Enrollment by District ',
       'schoolsDashboardsStateDomain': 'District',
       'teachersDashboardsEnrollByLevelStateGenderTitle':
           'Teachers by School Levels, \nDistrict and Gender',
@@ -354,11 +357,14 @@ class Strings {
           'Performance by Test',
       'schoolsAccreditationDashboardsStateDomain': 'District',
       'schoolsAccreditationDashboardsStandardDomain': 'Test',
+      'schoolsAccreditationDashboardsDistrictTitle': 'District Status',
       'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
       'schoolsDashboardsEnrollByGovernmentTitle': 'Enrollment by School Type',
       'schoolsDashboardsEnrollByAgeLevelGenderTitle':
           'Enrollment by Age, Education \nLevel and Gender',
       'budgetsStatesDomain': 'Districts',
+      'budgetsDistrictColumn': 'District',
+      'washDistrictTotalsTitle': 'Question Totals by District',
     },
   };
 
