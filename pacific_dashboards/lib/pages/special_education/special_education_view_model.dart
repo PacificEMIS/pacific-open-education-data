@@ -123,18 +123,18 @@ class _SpecialEducationModel {
 Future<SpecialEducationData> _specialEducationModel(
   _SpecialEducationModel model,
 ) async {
-  Map<String, Map<String, List<DataByGroup>>> dataByState = new Map();
-  Map<String, Map<String, List<DataByGroup>>> dataByYear = new Map();
+  final dataByState = Map<String, Map<String, List<DataByGroup>>>();
+  final dataByYear = Map<String, Map<String, List<DataByGroup>>>();
 
   final specialEducationData = model.specialEducation;
   final filteredData = await specialEducationData.applyFilters(model.filters);
-  var dataByGender =
+  final dataByGender =
       _generateDataByTitle(filteredData.groupBy((it) => it.disability));
-  var dataByEthnicity =
+  final dataByEthnicity =
       _generateDataByTitle(filteredData.groupBy((it) => it.ethnicityCode));
-  var dataBySpecialEdEnvironment =
+  final dataBySpecialEdEnvironment =
       _generateDataByTitle(filteredData.groupBy((it) => it.environment));
-  var dataByEnglishLearner =
+  final dataByEnglishLearner =
       _generateDataByTitle(filteredData.groupBy((it) => it.englishLearner));
 
   dataByState['environment'] = _generateDataByState(
@@ -154,7 +154,9 @@ Future<SpecialEducationData> _specialEducationModel(
       specialEducationData.groupBy((it) => it.ethnicityCode));
   dataByYear['englishLearner'] = _generateDataByYear(
       specialEducationData.groupBy((it) => it.englishLearner));
-  var selectedYear = filteredData.first.surveyYear;
+
+  final selectedYear = model.filters.firstWhere((it) => it.id == 0).intValue;
+
   return SpecialEducationData(
       year: selectedYear,
       dataByGender: dataByGender,
@@ -185,7 +187,8 @@ List<DataByGroup> _generateDataByTitle(
 }
 
 Map<String, List<DataByGroup>> _generateDataByYear(
-    Map<String, List<SpecialEducation>> dataGroupedByEnvironment) {
+  Map<String, List<SpecialEducation>> dataGroupedByEnvironment,
+) {
   Map<String, List<DataByGroup>> dataByYearEnvironment =
       Map<String, List<DataByGroup>>();
 
@@ -220,11 +223,12 @@ Map<String, List<DataByGroup>> _generateDataByState(
         number += element.number;
       });
       dataByEnvironment.add(DataByGroup(
-          title: key.toString() == "" || key == null? 'na' : key.toString(),
+          title: key.toString() == "" || key == null ? 'na' : key.toString(),
           firstValue: number,
           secondValue: 0));
     });
-    dataByState[state == "" || state == null ? 'na' : state] = dataByEnvironment ?? [];
+    dataByState[state == "" || state == null ? 'na' : state] =
+        dataByEnvironment ?? [];
   });
   return dataByState;
 }

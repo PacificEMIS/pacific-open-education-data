@@ -73,60 +73,46 @@ class _SpecialEducationPageState
                     } else {
                       var list = <Widget>[
                         //GNP and Government Spending Actual
-                        _titleWidget(
-                          context,
-                          'disability',
-                          false,
+                        _Title(
+                          text: 'specialEducationTitleDisability',
                           year: snapshot.data.year,
                         ),
                         SpecialEducationComponent(
                           data: snapshot.data.dataByGender,
                         ),
-                        _titleWidget(
-                          context,
-                          'ethnicity',
-                          false,
+                        _Title(
+                          text: 'specialEducationTitleEthnicity',
                           year: snapshot.data.year,
                         ),
                         SpecialEducationComponent(
                           data: snapshot.data.dataByEthnicity,
                         ),
-                        _titleWidget(
-                          context,
-                          'specialEducationEnvironment',
-                          false,
+                        _Title(
+                          text: 'specialEducationTitleEnvironment',
                           year: snapshot.data.year,
                         ),
                         SpecialEducationComponent(
                           data: snapshot.data.dataBySpecialEdEnvironment,
                         ),
-                        _titleWidget(
-                          context,
-                          'englishLearnerStatus',
-                          false,
+                        _Title(
+                          text: 'specialEducationTitleEnglishLearnerStatus',
                           year: snapshot.data.year,
                         ),
                         SpecialEducationComponent(
                           data: snapshot.data.dataByEnglishLearner,
                         ),
-                        _titleWidget(
-                          context,
-                          'cohortDistribution',
-                          true,
+                        _Title(
+                          text: 'specialEducationTitleCohortDistribution',
                         ),
-                        _titleWidget(
-                          context,
-                          'byYear',
-                          false,
+                        _Title(
+                          text: 'specialEducationTitleByYear',
                           year: snapshot.data.year,
                         ),
                         CohortDistributionComponent(
                           data: snapshot.data.dataByCohortDistributionByYear,
                         ),
-                        _titleWidget(
-                          context,
-                          'byState',
-                          false,
+                        _Title(
+                          text: 'specialEducationTitleByState',
                           year: snapshot.data.year,
                         ),
                         CohortDistributionComponent(
@@ -148,29 +134,6 @@ class _SpecialEducationPageState
     );
   }
 
-  Container _titleWidget(BuildContext context, String text, bool isTitle,
-      {int year}) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.only(
-          left: 16.0, right: 16.0, bottom: 0.0, top: 10.0),
-      child: Text(
-        isTitle
-            ? text.localized(context)
-            : '${text.localized(context)} $year',
-        style: isTitle == true
-            ? Theme.of(context).textTheme.headline3.copyWith(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                )
-            : Theme.of(context).textTheme.headline4.copyWith(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                ),
-      ),
-    );
-  }
-
   void _openFilters(List<Filter> filters) {
     Navigator.push<List<Filter>>(
       context,
@@ -187,5 +150,44 @@ class _SpecialEducationPageState
       return;
     }
     viewModel.onFiltersChanged(filters);
+  }
+}
+
+class _Title extends StatelessWidget {
+  final String _text;
+  final int _year;
+
+  const _Title({
+    Key key,
+    @required String text,
+    int year,
+  })  : assert(text != null),
+        _text = text,
+        _year = year,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        bottom: 0.0,
+        top: 10.0,
+      ),
+      child: Text(
+        '${_text.localized(context)}' + (_year == null ? '' : ' $_year'),
+        style: _year == null
+            ? Theme.of(context).textTheme.headline3.copyWith(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                )
+            : Theme.of(context).textTheme.headline4.copyWith(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
+      ),
+    );
   }
 }

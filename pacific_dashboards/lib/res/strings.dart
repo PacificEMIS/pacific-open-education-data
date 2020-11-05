@@ -220,13 +220,13 @@ class Strings {
       'budgetsBudgetedColumn': 'Budgeted',
       //Special Education
       'specialEducationTitle': 'Special Education: Dashboard',
-      'disability': 'Disability',
-      'ethnicity': 'Ethnicity',
-      'specialEducationEnvironment': 'Special Education Environment',
-      'englishLearnerStatus': 'English Learner Status',
-      'cohortDistribution': 'Cohort Distribution',
-      'byState': 'By State',
-      'byYear': 'By Year',
+      'specialEducationTitleDisability': 'Disability',
+      'specialEducationTitleEthnicity': 'Ethnicity',
+      'specialEducationTitleEnvironment': 'Special Education Environment',
+      'specialEducationTitleEnglishLearnerStatus': 'English Learner Status',
+      'specialEducationTitleCohortDistribution': 'Cohort Distribution',
+      'specialEducationTitleByState': 'By State',
+      'specialEducationTitleByYear': 'By Year',
       'schedule': 'Bar chart',
       'diagram': 'Pie chart',
       'environment': 'Environment',
@@ -307,7 +307,6 @@ class Strings {
       'schoolsAccreditationDashboardsStatusByStateTitle':
           'Accreditation Status by Atolls and Islands',
       'schoolsAccreditationDashboardsStateDomain': 'Atolls and Islands',
-      'byState': 'By Atoll / Islands',
       'schoolsByState': 'By Atoll / Islands',
       'schoolsByAuthority': 'By Authority',
       'schoolsByGovtNonGovt': 'By School Type',
@@ -329,6 +328,7 @@ class Strings {
       'budgetsStatesDomain': 'Atolls and Islands',
       'budgetsDistrictColumn': 'Atoll / Island',
       'washDistrictTotalsTitle': 'Question Totals by Atolls and Islands',
+      'specialEducationTitleByState': 'By Atoll / Islands',
     },
   };
 
@@ -365,6 +365,7 @@ class Strings {
       'budgetsStatesDomain': 'Districts',
       'budgetsDistrictColumn': 'District',
       'washDistrictTotalsTitle': 'Question Totals by District',
+      'specialEducationTitleByState': 'By District',
     },
   };
 
