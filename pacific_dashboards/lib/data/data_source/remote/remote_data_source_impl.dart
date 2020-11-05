@@ -4,6 +4,7 @@ import 'package:arch/arch.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
@@ -24,6 +25,7 @@ import 'package:pacific_dashboards/models/special_education/special_education.da
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
 const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis/api/";
@@ -78,10 +80,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             return error;
           },
         ),
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-        ),
+        if (kDebugMode)
+          PrettyDioLogger(
+            requestHeader: true,
+            requestBody: true,
+            responseBody: true,
+            responseHeader: true,
+            error: true,
+            compact: true,
+            maxWidth: 100,
+          ),
       ])
       ..transformer = FlutterTransformer();
 
