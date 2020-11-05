@@ -13,6 +13,7 @@ import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class SchoolsPage extends MvvmStatefulWidget {
@@ -109,7 +110,8 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                                 );
                               case _DashboardsTab.byAuthority:
                                 return ChartWithTable(
-                                  key: ObjectKey(snapshot.data.enrolByAuthority),
+                                  key:
+                                      ObjectKey(snapshot.data.enrolByAuthority),
                                   title: '',
                                   data: snapshot.data.enrolByAuthority,
                                   chartType: ChartType.pie,
@@ -149,6 +151,8 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           columnFlex: [3, 3, 3, 3],
                           data: snapshot.data.enrolByAgeAndEducation,
                           keySortFunc: _compareEnrollmentByAgeAndEducation,
+                          domainValueBuilder:
+                              GenderTableData.sDomainValueBuilder,
                         ),
                         MultiTable(
                           key: ValueKey(
@@ -165,6 +169,8 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           columnFlex: [3, 3, 3, 3],
                           data: snapshot.data.enrolBySchoolLevelAndDistrict,
                           keySortFunc: _compareEnrollmentBySchoolLevelAndState,
+                          domainValueBuilder:
+                              GenderTableData.sDomainValueBuilder,
                         ),
                       ],
                     );

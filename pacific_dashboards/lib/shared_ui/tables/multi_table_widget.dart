@@ -2,38 +2,40 @@ import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import "package:intl/intl.dart";
 
 typedef int KeySortFunc(String lv, String rv);
+typedef String DomainValueBuilder<T>(int index, _CellData<T> data);
 
 const Color _kBorderColor = AppColors.kGeyser;
 const double _kBorderWidth = 1.0;
 
 class MultiTableWidget<T> extends StatelessWidget {
+  final Map<String, T> _data;
+  final KeySortFunc _keySortFunc;
+  final String _title;
+  final List<String> _columnNames;
+  final List<int> _columnFlex;
+  final DomainValueBuilder _domainValueBuilder;
+
   MultiTableWidget({
     Key key,
     @required Map<String, T> data,
     @required List<String> columnNames,
     @required List<int> columnFlex,
+    @required DomainValueBuilder<T> domainValueBuilder,
     String title,
-    String type,
     KeySortFunc keySortFunc,
   })  : assert(data != null),
         assert(columnNames != null),
+        assert(domainValueBuilder != null),
+        assert(columnNames.length == columnFlex.length),
         _data = data,
         _title = title,
-        _type = type,
         _columnNames = columnNames,
         _columnFlex = columnFlex,
         _keySortFunc = keySortFunc,
+        _domainValueBuilder = domainValueBuilder,
         super(key: key);
-
-  final Map<String, T> _data;
-  final KeySortFunc _keySortFunc;
-  final String _title;
-  final String _type;
-  final List<String> _columnNames;
-  final List<int> _columnFlex;
 
   bool get _haveTitle => _title != null && _title.isNotEmpty;
 
@@ -57,7 +59,9 @@ class MultiTableWidget<T> extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 13.0, vertical: 13.0),
+                    horizontal: 13.0,
+                    vertical: 13.0,
+                  ),
                   child: Text(
                     _title?.localized(context) ?? 'null',
                     style: Theme.of(context).textTheme.bodyText1,
@@ -71,9 +75,15 @@ class MultiTableWidget<T> extends StatelessWidget {
               color: _kBorderColor,
             ),
           Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: getColumnTitles(_columnNames, _columnFlex, context)),
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: _columnNames.mapIndexed((i, columnName) {
+              return _SubTitleCell(
+                flex: _columnFlex[i],
+                name: columnName.localized(context),
+              );
+            }).toList(),
+          ),
           FutureBuilder(
             future: Future.microtask(() {
               final keys = _data.keys.toList();
@@ -103,19 +113,29 @@ class MultiTableWidget<T> extends StatelessWidget {
                     color: _kBorderColor,
                   ),
                   ...snapshot.data
-                      .map((it) => Container(
-                            decoration: BoxDecoration(
-                              color: it.index % 2 == 0
-                                  ? Colors.transparent
-                                  : AppColors.kGrayLight,
-                            ),
-                            child:
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: generateColumnCells(_columnNames, it),
-                            ),
-                          ))
+                      .map(
+                        (it) => Container(
+                          decoration: BoxDecoration(
+                            color: it.index % 2 == 0
+                                ? Colors.transparent
+                                : AppColors.kGrayLight,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: _columnNames.mapIndexed(
+                              (index, columnName) {
+                                return _Cell(
+                                  flex: _columnFlex[index],
+                                  value: _domainValueBuilder(index, it),
+                                  fontWeight: _getFontWeight(it.domain)
+                                );
+                              },
+                            ).toList(),
+                            //_generateColumnCells(_columnNames, it),
+                          ),
+                        ),
+                      )
                       .toList(),
                 ],
               );
@@ -126,134 +146,18 @@ class MultiTableWidget<T> extends StatelessWidget {
     );
   }
 
-  List<Widget> getColumnTitles(List<String> titles, List<int> flex, context) {
-    List<Widget> list = new List<Widget>();
-    for (var i = 0; i < titles.length; i++) {
-      list.add(
-          new _SubTitleCell(flex: flex[i], name: titles[i].localized(context)));
-    }
-    return list;
-  }
-
-  List<Widget> generateColumnCells(List<String> strings, _CellData cellData) {
-    var numberFormat = new NumberFormat('###,###,###', 'en');
-    List<Widget> list = new List<Widget>();
-    FontWeight _fontWeight = cellData.domain.toString() == 'labelTotal'
-        ? FontWeight.bold
-        : FontWeight.normal;
-    if (_type == 'Govt') {
-      list.add(_Cell(
-          flex: _columnFlex[0],
-          value: cellData.domain.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.govtExpense),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.edExpense),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[3],
-          value: cellData.measure.percentageEdGovt.toInt().toString(),
-          fontWeight: _fontWeight));
-    } else if (_type == 'GNP') {
-      list.add(_Cell(
-          flex: _columnFlex[0],
-          value: cellData.domain.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.gNP),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.edExpense),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[3],
-          value: cellData.measure.percentageEdGnp.toInt().toString(),
-          fontWeight: _fontWeight));
-    } else if (_type == 'ECE') {
-      list.add(_Cell(
-          flex: _columnFlex[0],
-          value: cellData.domain.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.eceActual),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.eceBudget),
-          fontWeight: _fontWeight));
-    } else if (_type == 'Primary') {
-      list.add(_Cell(
-          flex: _columnFlex[0],
-          value: cellData.domain.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.primaryActual),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.primaryBudget),
-          fontWeight: _fontWeight));
-    } else if (_type == 'Secondary') {
-      list.add(_Cell(
-          flex: _columnFlex[0],
-          value: cellData.domain.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.secondaryActual),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.secondaryBudget),
-          fontWeight: _fontWeight));
-    } else if (_type == 'Total') {
-      list.add(_Cell(
-          flex: _columnFlex[0],
-          value: cellData.domain.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[1],
-          value: numberFormat.format(cellData.measure.totalActual),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[2],
-          value: numberFormat.format(cellData.measure.totalBudget),
-          fontWeight: _fontWeight));
-    } else {
-      list.add(_Cell(
-          flex: _columnFlex[0],
-          value: cellData.domain.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[1],
-          value: cellData.measure.maleAmount.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[2],
-          value: cellData.measure.femaleAmount.toString(),
-          fontWeight: _fontWeight));
-      list.add(_Cell(
-          flex: _columnFlex[3],
-          value: cellData.measure.total.toString(),
-          fontWeight: _fontWeight));
-    }
-
-    return list;
+  FontWeight _getFontWeight(String domainValue) {
+    return domainValue == 'labelTotal' ? FontWeight.bold : FontWeight.normal;
   }
 }
 
 class _Cell extends StatelessWidget {
-  const _Cell(
-      {Key key, @required String value, int flex, FontWeight fontWeight})
-      : _value = value,
+  const _Cell({
+    Key key,
+    @required String value,
+    int flex,
+    FontWeight fontWeight,
+  })  : _value = value,
         _flex = flex,
         _fontWeight = fontWeight,
         super(key: key);
@@ -316,6 +220,20 @@ class _SubTitleCell extends StatelessWidget {
 }
 
 class GenderTableData {
+  static DomainValueBuilder sDomainValueBuilder = (index, data) {
+    switch (index) {
+      case 0:
+        return data.domain;
+      case 1:
+        return data.measure.maleAmount.toString();
+      case 2:
+        return data.measure.femaleAmount.toString();
+      case 3:
+        return data.measure.total.toString();
+    }
+    throw FallThroughError();
+  };
+  
   static const String _kZeroSymbol = "-";
 
   final int _maleAmount;
