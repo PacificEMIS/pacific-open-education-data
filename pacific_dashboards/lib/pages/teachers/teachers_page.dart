@@ -76,14 +76,14 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text('teachersCharts'.localized(context),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3
-                                .copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
+                        Text(
+                          'teachersDashboardsChartTitle'.localized(context),
+                          style: Theme.of(context).textTheme.headline3.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                        ),
                         MiniTabLayout(
                           tabs: _DashboardsTab.values,
                           padding: 0.0,
@@ -169,7 +169,11 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             ? Container()
                             : StackedHorizontalBarChartWidgetExtended(
                                 data: snapshot.data.teachersByCertification,
-                                legend: ['schoolsCertifiedQualified', 'qualifiedNotCertified', 'certified'],
+                                legend: [
+                                  'schoolsCertifiedQualified',
+                                  'qualifiedNotCertified',
+                                  'certified'
+                                ],
                                 colorFunc: _levelIndexToColor,
                               ),
                         SizedBox(height: 10.0),

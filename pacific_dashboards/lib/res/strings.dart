@@ -82,6 +82,7 @@ class Strings {
       'schoolsDashboardsAgeDomain': 'Age',
       'schoolsDashboardsSchoolLevelDomain': 'School \nLevels',
       'teachersDashboardsTitle': 'Teachers',
+      'teachersDashboardsChartTitle': 'Teachers (Number of)',
       'teachersDashboardsEnrollByAuthorityTitle': 'Teachers by Authority',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by State',
       'teachersDashboardsEnrollByLevelStateGenderTitle':
@@ -268,7 +269,6 @@ class Strings {
       'schoolsByAuthority': 'By Authority',
       'schoolsByGovtNonGovt': 'By Govt / Non-govt',
       'schoolsCertifiedQualified': 'Certified and Qualified ',
-      'teachersCharts': 'Teachers Charts',
       'schoolAccreditationCumulative': 'Cumulative to',
       'schoolAccreditationEvaluated': 'Evaluated in',
       'levels': 'Levels',
