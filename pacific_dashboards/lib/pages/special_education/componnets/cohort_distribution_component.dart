@@ -10,7 +10,7 @@ import 'package:pacific_dashboards/res/themes.dart';
 import '../special_education_data.dart';
 
 class CohortDistributionComponent extends StatefulWidget {
-  final Map<String, Map<String, List<DataByGroup>>> data;
+  final DataByCohortDistribution data;
 
   const CohortDistributionComponent({
     Key key,
@@ -36,13 +36,14 @@ class _CohortDistributionComponentState
           tabNameBuilder: (tab) {
             switch (tab) {
               case _Tab.environment:
-                return 'environment'.localized(context);
+                return 'specialEducationTabNameEnvironment'.localized(context);
               case _Tab.disability:
-                return 'disability'.localized(context);
+                return 'specialEducationTabNameDisability'.localized(context);
               case _Tab.ethnicity:
-                return 'ethnicity'.localized(context);
+                return 'specialEducationTabNameEthnicity'.localized(context);
               case _Tab.englishLearner:
-                return 'englishLearner'.localized(context);
+                return 'specialEducationTabNameEnglishLearner'
+                    .localized(context);
             }
             throw FallThroughError();
           },
@@ -50,25 +51,20 @@ class _CohortDistributionComponentState
             switch (tab) {
               case _Tab.environment:
                 return _Chart(
-                    data: widget.data['environment'],
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab,
-                    chartHeight: widget.data.length);
+                  data: widget.data.environment,
+                );
               case _Tab.disability:
                 return _Chart(
-                    data: widget.data['disability'],
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab, chartHeight: widget.data.length);
+                  data: widget.data.disability,
+                );
               case _Tab.ethnicity:
                 return _Chart(
-                    data: widget.data['ethnicity'],
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab, chartHeight: widget.data.length);
+                  data: widget.data.etnicity,
+                );
               case _Tab.englishLearner:
                 return _Chart(
-                    data: widget.data['englishLearner'],
-                    groupingType: charts.BarGroupingType.stacked,
-                    tab: tab, chartHeight: widget.data.length);
+                  data: widget.data.englishLearner,
+                );
             }
             throw FallThroughError();
           },
@@ -81,27 +77,20 @@ class _CohortDistributionComponentState
 enum _Tab { environment, disability, ethnicity, englishLearner }
 
 class _Chart extends StatelessWidget {
-  final Map<String, List<DataByGroup>> _data;
-  final charts.BarGroupingType _groupingType;
-  final int _chartHeight;
+  final List<DataByCohort> _data;
 
   const _Chart({
     Key key,
-    @required Map<String, List<DataByGroup>> data,
-    @required charts.BarGroupingType groupingType,
-    @required _Tab tab,
-    @required int chartHeight
+    @required List<DataByCohort> data,
   })  : assert(data != null),
         _data = data,
-        _groupingType = groupingType,
-        _chartHeight = chartHeight,
-      super(key: key);
+        super(key: key);
 
   Future<Map<String, Color>> get _colorScheme {
     return Future.microtask(() {
       final colorScheme = Map<String, Color>();
-      final domains = _data.keys.toList();
-      domains.forEachIndexed((index, item) {
+      final legends = _data.map((e) => e.cohortName);
+      legends.forEachIndexed((index, item) {
         colorScheme[item] = index < AppColors.kDynamicPalette.length
             ? AppColors.kDynamicPalette[index]
             : HexColor.fromStringHash(item);
@@ -119,13 +108,19 @@ class _Chart extends StatelessWidget {
           return Container();
         }
         final colorScheme = snapshot.data;
+        final uniqueDomainsCount = _data
+            .expand((e) => e.groupDataList)
+            .uniques((it) => it.title)
+            .length;
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(height: _chartHeight * (_chartHeight > 5 ? 40.5 : 80.5),
+            SizedBox(
+              height:
+                  uniqueDomainsCount * (uniqueDomainsCount > 5 ? 40.5 : 80.5),
               child: FutureBuilder(
-                future: _createSeries(colorScheme),
+                future: _createSeries(context, colorScheme),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Container();
@@ -135,7 +130,7 @@ class _Chart extends StatelessWidget {
                     snapshot.data,
                     animate: false,
                     vertical: false,
-                    barGroupingType: _groupingType,
+                    barGroupingType: charts.BarGroupingType.stacked,
                     primaryMeasureAxis: charts.NumericAxisSpec(
                       tickProviderSpec: charts.BasicNumericTickProviderSpec(
                         desiredMinTickCount: 7,
@@ -160,7 +155,12 @@ class _Chart extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _getColumnTitles(_data, colorScheme),
+              children: colorScheme.mapToList((legendItem, color) {
+                return ChartLegendItem(
+                  color: color,
+                  value: legendItem.localized(context),
+                );
+              }),
             )
           ],
         );
@@ -168,40 +168,22 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  List<Widget> _getColumnTitles(
-    Map<String, List<DataByGroup>> data,
-    Map<String, Color> colorScheme,
-  ) {
-    List<Widget> list = new List<Widget>();
-    List<String> titles = new List<String>();
-    data.forEach((key, value) {
-      titles.add(key);
-    });
-    titles = titles.toSet().toList();
-    if (titles.length > 0) {
-      titles.forEach((it) {
-        list.add(
-          ChartLegendItem(
-              color: colorScheme[it] ?? Colors.blue, value: it == null || it == '' ? 'na' : it),
-        );
-      });
-    }
-    return list;
-  }
-
   Future<List<charts.Series<ChartData, String>>> _createSeries(
+    BuildContext context,
     Map<String, Color> colorScheme,
   ) {
     return Future.microtask(() {
       final barChartData = List<ChartData>();
-      _data.forEach((key, value) {
-        barChartData.addAll(value.map((it) {
-          return ChartData(
-            it.title,
-            it.firstValue,
-            colorScheme[key ?? 'na'],
-          );
-        }).toList());
+      _data.forEach((cohortData) {
+        barChartData.addAll(
+          cohortData.groupDataList.map((it) {
+            return ChartData(
+              it.title.localized(context),
+              it.firstValue,
+              colorScheme[cohortData.cohortName],
+            );
+          }).toList(),
+        );
       });
       return [
         charts.Series(

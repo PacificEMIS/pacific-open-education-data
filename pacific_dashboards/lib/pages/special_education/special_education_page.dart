@@ -2,10 +2,10 @@ import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/special_education/componnets/cohort_distribution_component.dart';
 import 'package:pacific_dashboards/pages/special_education/componnets/special_education_component.dart';
 import 'package:pacific_dashboards/pages/special_education/special_education_view_model.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
@@ -45,7 +45,7 @@ class _SpecialEducationPageState
                 child: IconButton(
                   icon: SvgPicture.asset('images/filter.svg'),
                   onPressed: () {
-                    _openFilters(snapshot.data);
+                    viewModel.onFiltersPressed();
                   },
                 ),
               );
@@ -71,57 +71,55 @@ class _SpecialEducationPageState
                     if (!snapshot.hasData) {
                       return Container();
                     } else {
-                      var list = <Widget>[
-                        //GNP and Government Spending Actual
-                        _Title(
-                          text: 'specialEducationTitleDisability',
-                          year: snapshot.data.year,
-                        ),
-                        SpecialEducationComponent(
-                          data: snapshot.data.dataByGender,
-                        ),
-                        _Title(
-                          text: 'specialEducationTitleEthnicity',
-                          year: snapshot.data.year,
-                        ),
-                        SpecialEducationComponent(
-                          data: snapshot.data.dataByEthnicity,
-                        ),
-                        _Title(
-                          text: 'specialEducationTitleEnvironment',
-                          year: snapshot.data.year,
-                        ),
-                        SpecialEducationComponent(
-                          data: snapshot.data.dataBySpecialEdEnvironment,
-                        ),
-                        _Title(
-                          text: 'specialEducationTitleEnglishLearnerStatus',
-                          year: snapshot.data.year,
-                        ),
-                        SpecialEducationComponent(
-                          data: snapshot.data.dataByEnglishLearner,
-                        ),
-                        _Title(
-                          text: 'specialEducationTitleCohortDistribution',
-                        ),
-                        _Title(
-                          text: 'specialEducationTitleByYear',
-                          year: snapshot.data.year,
-                        ),
-                        CohortDistributionComponent(
-                          data: snapshot.data.dataByCohortDistributionByYear,
-                        ),
-                        _Title(
-                          text: 'specialEducationTitleByState',
-                          year: snapshot.data.year,
-                        ),
-                        CohortDistributionComponent(
-                          data: snapshot.data.dataByCohortDistributionByState,
-                        ),
-                      ];
-                      var budgetWidgetList = list;
+                      final year = snapshot.data.year;
                       return Column(
-                        children: budgetWidgetList,
+                        children: [
+                          _Title(
+                            text: 'specialEducationTitleDisability',
+                            year: year,
+                          ),
+                          SpecialEducationComponent(
+                            data: snapshot.data.dataByGender,
+                          ),
+                          _Title(
+                            text: 'specialEducationTitleEthnicity',
+                            year: year,
+                          ),
+                          SpecialEducationComponent(
+                            data: snapshot.data.dataByEthnicity,
+                          ),
+                          _Title(
+                            text: 'specialEducationTitleEnvironment',
+                            year: year,
+                          ),
+                          SpecialEducationComponent(
+                            data: snapshot.data.dataBySpecialEdEnvironment,
+                          ),
+                          _Title(
+                            text: 'specialEducationTitleEnglishLearnerStatus',
+                            year: year,
+                          ),
+                          SpecialEducationComponent(
+                            data: snapshot.data.dataByEnglishLearner,
+                          ),
+                          _Title(
+                            text: 'specialEducationTitleCohortDistribution',
+                          ),
+                          _Title(
+                            text: 'specialEducationTitleByYear',
+                            year: year,
+                          ),
+                          CohortDistributionComponent(
+                            data: snapshot.data.dataByCohortDistributionByYear,
+                          ),
+                          _Title(
+                            text: 'specialEducationTitleByState',
+                            year: year,
+                          ),
+                          CohortDistributionComponent(
+                            data: snapshot.data.dataByCohortDistributionByDistrict,
+                          ),
+                        ],
                       );
                     }
                   },
@@ -132,24 +130,6 @@ class _SpecialEducationPageState
         ),
       ),
     );
-  }
-
-  void _openFilters(List<Filter> filters) {
-    Navigator.push<List<Filter>>(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return FilterPage(
-          filters: filters,
-        );
-      }),
-    ).then((filters) => _applyFilters(context, filters));
-  }
-
-  void _applyFilters(BuildContext context, List<Filter> filters) {
-    if (filters == null) {
-      return;
-    }
-    viewModel.onFiltersChanged(filters);
   }
 }
 
@@ -180,13 +160,9 @@ class _Title extends StatelessWidget {
         '${_text.localized(context)}' + (_year == null ? '' : ' $_year'),
         style: _year == null
             ? Theme.of(context).textTheme.headline3.copyWith(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
+                  color: AppColors.kTextMain,
                 )
-            : Theme.of(context).textTheme.headline4.copyWith(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                ),
+            : Theme.of(context).textTheme.headline4,
       ),
     );
   }

@@ -64,7 +64,7 @@ class SpecialEducation {
   @JsonKey(name: 'Disability', defaultValue: '')
   final String disability;
 
-  @JsonKey(name: 'Environment', defaultValue: 'na')
+  @JsonKey(name: 'Environment', defaultValue: '')
   final String environment;
 
   @JsonKey(name: 'EnglishLearner', defaultValue: '')
@@ -102,9 +102,9 @@ class SpecialEducation {
 extension Filters on List<SpecialEducation> {
   static const _kYearFilterId = 0;
   static const _kDistrictFilterId = 1;
-  static const _kGovtFilterId = 1;
-  static const _kAuthorityFilterId = 1;
-  static const _kSchoolLevelFilterId = 1;
+  static const _kGovtFilterId = 2;
+  static const _kAuthorityFilterId = 3;
+  static const _kSchoolLevelFilterId = 4;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
     return [
@@ -124,7 +124,7 @@ extension Filters on List<SpecialEducation> {
         items: [
           FilterItem(null, 'filtersDisplayAllStates'),
           ...this
-              .uniques((it) => it.district)
+              .uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,
@@ -173,6 +173,15 @@ extension Filters on List<SpecialEducation> {
       final districtFilter =
           filters.firstWhere((it) => it.id == _kDistrictFilterId);
 
+      final govtFilter =
+          filters.firstWhere((it) => it.id == _kGovtFilterId);
+
+      final authorityFilter =
+          filters.firstWhere((it) => it.id == _kAuthorityFilterId);
+
+      final schoolLevelFilter =
+          filters.firstWhere((it) => it.id == _kSchoolLevelFilterId);
+
       return this.where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
@@ -180,6 +189,21 @@ extension Filters on List<SpecialEducation> {
 
         if (!districtFilter.isDefault &&
             it.districtCode != districtFilter.stringValue) {
+          return false;
+        }
+
+        if (!govtFilter.isDefault &&
+            it.authorityGovtCode != govtFilter.stringValue) {
+          return false;
+        }
+        
+        if (!authorityFilter.isDefault &&
+            it.authorityCode != authorityFilter.stringValue) {
+          return false;
+        }
+
+        if (!schoolLevelFilter.isDefault &&
+            it.schoolType != schoolLevelFilter.stringValue) {
           return false;
         }
 
