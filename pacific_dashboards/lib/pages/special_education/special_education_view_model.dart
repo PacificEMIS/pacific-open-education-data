@@ -8,7 +8,9 @@ import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
+import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
+import 'package:pacific_dashboards/utils/string_ext.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'special_education_data.dart';
@@ -80,7 +82,7 @@ class SpecialEducationViewModel extends BaseViewModel {
   Future<void> _updatePageData() async {
     _dataSubject.add(
       await compute<_SpecialEducationModel, SpecialEducationData>(
-        _specialEducationModel,
+        _generateSpecialEducationData,
         _SpecialEducationModel(
           _specialEducation,
           _lookups,
@@ -103,10 +105,23 @@ class SpecialEducationViewModel extends BaseViewModel {
 
   Stream<List<Filter>> get filtersStream => _filtersSubject.stream;
 
-  void onFiltersChanged(List<Filter> filters) {
-    launchHandled(() async {
-      _filters = filters;
-      await _updatePageData();
+  void onFiltersPressed() {
+    navigator.push(
+      MaterialPageRoute(
+        builder: (context) {
+          return FilterPage(
+            filters: _filters,
+          );
+        },
+      ),
+    ).then((newFilters) {
+      if (newFilters == null) {
+        return;
+      }
+      launchHandled(() async {
+        _filters = newFilters;
+        await _updatePageData();
+      });
     });
   }
 }
@@ -117,58 +132,66 @@ class _SpecialEducationModel {
   final List<Filter> filters;
 
   const _SpecialEducationModel(
-      this.specialEducation, this.lookups, this.filters);
+    this.specialEducation,
+    this.lookups,
+    this.filters,
+  );
 }
 
-Future<SpecialEducationData> _specialEducationModel(
+Future<SpecialEducationData> _generateSpecialEducationData(
   _SpecialEducationModel model,
 ) async {
-  Map<String, Map<String, List<DataByGroup>>> dataByState = new Map();
-  Map<String, Map<String, List<DataByGroup>>> dataByYear = new Map();
-
   final specialEducationData = model.specialEducation;
   final filteredData = await specialEducationData.applyFilters(model.filters);
-  var dataByGender =
+  final dataByGender =
       _generateDataByTitle(filteredData.groupBy((it) => it.disability));
-  var dataByEthnicity =
+  final dataByEthnicity =
       _generateDataByTitle(filteredData.groupBy((it) => it.ethnicityCode));
-  var dataBySpecialEdEnvironment =
+  final dataBySpecialEdEnvironment =
       _generateDataByTitle(filteredData.groupBy((it) => it.environment));
-  var dataByEnglishLearner =
+  final dataByEnglishLearner =
       _generateDataByTitle(filteredData.groupBy((it) => it.englishLearner));
 
-  dataByState['environment'] = _generateDataByState(
-      specialEducationData.groupBy((it) => it.environment));
-  dataByState['disability'] =
-      _generateDataByState(specialEducationData.groupBy((it) => it.disability));
-  dataByState['ethnicity'] = _generateDataByState(
-      specialEducationData.groupBy((it) => it.ethnicityCode));
-  dataByState['englishLearner'] = _generateDataByState(
-      specialEducationData.groupBy((it) => it.englishLearner));
+  final dataGroupedByEnvironment =
+      specialEducationData.groupBy((it) => it.environment);
+  final dataGroupedByDisablility =
+      specialEducationData.groupBy((it) => it.disability);
+  final dataGroupedByEtnicity =
+      specialEducationData.groupBy((it) => it.ethnicityCode);
+  final dataGroupedByEnglishLearner =
+      specialEducationData.groupBy((it) => it.englishLearner);
 
-  dataByYear['environment'] =
-      _generateDataByYear(specialEducationData.groupBy((it) => it.environment));
-  dataByYear['disability'] =
-      _generateDataByYear(specialEducationData.groupBy((it) => it.disability));
-  dataByYear['ethnicity'] = _generateDataByYear(
-      specialEducationData.groupBy((it) => it.ethnicityCode));
-  dataByYear['englishLearner'] = _generateDataByYear(
-      specialEducationData.groupBy((it) => it.englishLearner));
-  var selectedYear = filteredData.first.surveyYear;
+  final cohortDataByDistrict = DataByCohortDistribution(
+    environment: _generateDataByDistrict(dataGroupedByEnvironment),
+    disability: _generateDataByDistrict(dataGroupedByDisablility),
+    etnicity: _generateDataByDistrict(dataGroupedByEtnicity),
+    englishLearner: _generateDataByDistrict(dataGroupedByEnglishLearner),
+  );
+
+  final cohortDataByYear = DataByCohortDistribution(
+    environment: _generateDataByYear(dataGroupedByEnvironment),
+    disability: _generateDataByYear(dataGroupedByDisablility),
+    etnicity: _generateDataByYear(dataGroupedByEtnicity),
+    englishLearner: _generateDataByYear(dataGroupedByEnglishLearner),
+  );
+
+  final selectedYear = model.filters.firstWhere((it) => it.id == 0).intValue;
+
   return SpecialEducationData(
-      year: selectedYear,
-      dataByGender: dataByGender,
-      dataByEthnicity: dataByEthnicity,
-      dataBySpecialEdEnvironment: dataBySpecialEdEnvironment,
-      dataByEnglishLearner: dataByEnglishLearner,
-      dataByCohortDistributionByState: dataByState,
-      dataByCohortDistributionByYear: dataByYear);
+    year: selectedYear,
+    dataByGender: dataByGender,
+    dataByEthnicity: dataByEthnicity,
+    dataBySpecialEdEnvironment: dataBySpecialEdEnvironment,
+    dataByEnglishLearner: dataByEnglishLearner,
+    dataByCohortDistributionByDistrict: cohortDataByDistrict,
+    dataByCohortDistributionByYear: cohortDataByYear,
+  );
 }
 
 List<DataByGroup> _generateDataByTitle(
-    Map<String, List<SpecialEducation>> dataGroupedByDisability) {
-  List<DataByGroup> dataByGender = new List<DataByGroup>();
-  dataGroupedByDisability.forEach((disability, values) {
+  Map<String, List<SpecialEducation>> dataGroupedByDisability,
+) {
+  return dataGroupedByDisability.mapToList((disability, values) {
     var male = 0;
     var female = 0;
 
@@ -176,55 +199,39 @@ List<DataByGroup> _generateDataByTitle(
       male += data.gender == 'Male' ? 0 : data.number;
       female += data.gender == 'Female' ? 0 : data.number;
     }
-    dataByGender.add(DataByGroup(
-        title: disability == "" ? 'na' : disability,
-        firstValue: male,
-        secondValue: female));
+    return DataByGroup(
+      title: disability.ifEmpty('labelNa'),
+      firstValue: male,
+      secondValue: female,
+    );
   });
-  return dataByGender;
 }
 
-Map<String, List<DataByGroup>> _generateDataByYear(
-    Map<String, List<SpecialEducation>> dataGroupedByEnvironment) {
-  Map<String, List<DataByGroup>> dataByYearEnvironment =
-      Map<String, List<DataByGroup>>();
-
-  dataGroupedByEnvironment.forEach((environment, values) {
-    Map<int, List<SpecialEducation>> groupedByYear =
-        values.groupBy((it) => it.surveyYear);
-    List<DataByGroup> dataByEnvironment = [];
-    groupedByYear.forEach((key, value) {
-      int number = 0;
-      value.forEach((element) {
-        number += element.number;
-      });
-      dataByEnvironment.add(DataByGroup(
-          title: key.toString(), firstValue: number, secondValue: 0));
+List<DataByCohort> _generateDataByDistrict(
+  Map<String, List<SpecialEducation>> cohortData,
+) {
+  return cohortData.mapToList((cohortName, dataList) {
+    final groupedByDistrict = dataList.groupBy((it) => it.districtCode);
+    final groupDataList = groupedByDistrict.mapToList((districtCode, dataList) {
+      final count = dataList.map((e) => e.number).fold(0, (p, n) => p + n);
+      return DataByGroup(title: districtCode.ifEmpty('labelNa'), firstValue: count);
     });
-    dataByYearEnvironment[environment] = dataByEnvironment ?? [];
+    return DataByCohort(
+        cohortName: cohortName.ifEmpty('labelNa'), groupDataList: groupDataList);
   });
-  return dataByYearEnvironment;
 }
 
-Map<String, List<DataByGroup>> _generateDataByState(
-    Map<String, List<SpecialEducation>> dataGroupedByState) {
-  Map<String, List<DataByGroup>> dataByState = Map<String, List<DataByGroup>>();
-
-  dataGroupedByState.forEach((state, values) {
-    Map<String, List<SpecialEducation>> groupedByYear =
-        values.groupBy((it) => it.districtCode);
-    List<DataByGroup> dataByEnvironment = [];
-    groupedByYear.forEach((key, value) {
-      int number = 0;
-      value.forEach((element) {
-        number += element.number;
-      });
-      dataByEnvironment.add(DataByGroup(
-          title: key.toString() == "" || key == null? 'na' : key.toString(),
-          firstValue: number,
-          secondValue: 0));
+List<DataByCohort> _generateDataByYear(
+  Map<String, List<SpecialEducation>> cohortData,
+) {
+  return cohortData.mapToList((cohortName, dataList) {
+    final groupedByYear = dataList.groupBy((it) => it.surveyYear);
+    final groupDataList = groupedByYear.mapToList((year, dataList) {
+      final count = dataList.map((e) => e.number).fold(0, (p, n) => p + n);
+      return DataByGroup(
+          title: year.toString(), firstValue: count);
     });
-    dataByState[state == "" || state == null ? 'na' : state] = dataByEnvironment ?? [];
+    return DataByCohort(
+        cohortName: cohortName.ifEmpty('labelNa'), groupDataList: groupDataList);
   });
-  return dataByState;
 }

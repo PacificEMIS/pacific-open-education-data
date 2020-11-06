@@ -6,10 +6,8 @@ class SpecialEducationData {
   final List<DataByGroup> dataByEthnicity;
   final List<DataByGroup> dataBySpecialEdEnvironment;
   final List<DataByGroup> dataByEnglishLearner;
-  final Map<String, Map<String, List<DataByGroup>>>
-      dataByCohortDistributionByYear;
-  final Map<String, Map<String, List<DataByGroup>>>
-      dataByCohortDistributionByState;
+  final DataByCohortDistribution dataByCohortDistributionByYear;
+  final DataByCohortDistribution dataByCohortDistributionByDistrict;
 
   SpecialEducationData({
     @required this.year,
@@ -18,7 +16,7 @@ class SpecialEducationData {
     @required this.dataBySpecialEdEnvironment,
     @required this.dataByEnglishLearner,
     @required this.dataByCohortDistributionByYear,
-    @required this.dataByCohortDistributionByState,
+    @required this.dataByCohortDistributionByDistrict,
   });
 }
 
@@ -31,8 +29,31 @@ class DataByGroup {
   DataByGroup({
     @required this.title,
     @required this.firstValue,
-    @required this.secondValue,
+    this.secondValue = 0,
   }) {
     total = firstValue + secondValue;
   }
+}
+
+class DataByCohortDistribution {
+  final List<DataByCohort> environment;
+  final List<DataByCohort> disability;
+  final List<DataByCohort> etnicity;
+  final List<DataByCohort> englishLearner;
+
+  const DataByCohortDistribution({
+    @required this.environment,
+    @required this.disability,
+    @required this.etnicity,
+    @required this.englishLearner,
+  });
+}
+
+class DataByCohort {
+  final String cohortName;
+  final List<DataByGroup> groupDataList;
+  const DataByCohort({
+    @required this.cohortName,
+    @required this.groupDataList,
+  });
 }
