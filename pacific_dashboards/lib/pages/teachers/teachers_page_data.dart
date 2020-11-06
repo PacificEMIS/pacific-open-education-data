@@ -22,7 +22,7 @@ class TeachersPageData {
   final EnrollTeachersBySchoolLevelStateAndGender
       enrollTeachersBySchoolLevelStateAndGender;
 
-  final Map<String, Map<String, int>> teachersByCertification;
+  final Map<String, TeachersByCertification> teachersByCertification;
 }
 
 class EnrollTeachersBySchoolLevelStateAndGender {
@@ -46,5 +46,29 @@ class TeachersBySchoolLevelStateAndGender {
   TeachersBySchoolLevelStateAndGender({
     @required this.state,
     @required this.total,
+  });
+}
+
+class TeachersByCertification {
+  int certifiedAndQualifiedFemale;
+  int qualifiedFemale;
+  int certifiedFemale;
+  int numberTeachersFemale;
+
+  int certifiedAndQualifiedMale;
+  int qualifiedMale;
+  int certifiedMale;
+  int numberTeachersMale;
+
+  TeachersByCertification({
+    @required this.certifiedAndQualifiedFemale,
+    @required this.qualifiedFemale,
+    @required this.certifiedFemale,
+    @required this.numberTeachersFemale,
+
+    @required this.certifiedAndQualifiedMale,
+    @required this.qualifiedMale,
+    @required this.certifiedMale,
+    @required this.numberTeachersMale,
   });
 }

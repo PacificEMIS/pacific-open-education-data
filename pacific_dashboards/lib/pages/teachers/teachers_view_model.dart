@@ -209,42 +209,46 @@ EnrollTeachersBySchoolLevelStateAndGender
   final all = List<TeachersBySchoolLevelStateAndGender>();
   groupedByDistrictWithTotal.forEach((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    all.add(TeachersBySchoolLevelStateAndGender(state: districtCode.from(lookups.districts),
-        total:  _generateInfoTableData(groupedBySchoolType, 'all')));
+    all.add(TeachersBySchoolLevelStateAndGender(
+        state: districtCode.from(lookups.districts),
+        total: _generateInfoTableData(groupedBySchoolType, 'all')));
   });
 
   final qualified = List<TeachersBySchoolLevelStateAndGender>();
   groupedByDistrictWithTotal.forEach((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    qualified.add(TeachersBySchoolLevelStateAndGender(state: districtCode.from(lookups.districts),
-        total:  _generateInfoTableData(groupedBySchoolType, 'qualified')));
+    qualified.add(TeachersBySchoolLevelStateAndGender(
+        state: districtCode.from(lookups.districts),
+        total: _generateInfoTableData(groupedBySchoolType, 'qualified')));
   });
 
   final qualifiedAndCertified = List<TeachersBySchoolLevelStateAndGender>();
   groupedByDistrictWithTotal.forEach((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    qualifiedAndCertified.add(TeachersBySchoolLevelStateAndGender(state: districtCode.from(lookups.districts),
-        total:  _generateInfoTableData(groupedBySchoolType, 'certified')));
+    qualifiedAndCertified.add(TeachersBySchoolLevelStateAndGender(
+        state: districtCode.from(lookups.districts),
+        total: _generateInfoTableData(groupedBySchoolType, 'certified')));
   });
 
   final certified = List<TeachersBySchoolLevelStateAndGender>();
-      groupedByDistrictWithTotal.forEach((districtCode, schools) {
-        final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-        certified.add(TeachersBySchoolLevelStateAndGender(state: districtCode.from(lookups.districts),
-       total:  _generateInfoTableData(groupedBySchoolType, 'qualifiedAndCertified')));
+  groupedByDistrictWithTotal.forEach((districtCode, schools) {
+    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+    certified.add(TeachersBySchoolLevelStateAndGender(
+        state: districtCode.from(lookups.districts),
+        total: _generateInfoTableData(
+            groupedBySchoolType, 'qualifiedAndCertified')));
   });
   return EnrollTeachersBySchoolLevelStateAndGender(
       all: all,
       qualified: qualified,
       certified: certified,
-      allQualifiedAndCertified:
-      qualifiedAndCertified);
+      allQualifiedAndCertified: qualifiedAndCertified);
 }
 
 Map<String, GenderTableData> _generateInfoTableData(
     Map<String, List<Teacher>> groupedData, String category,
     {String districtCode}) {
-  Map<String, GenderTableData> allData  = new Map();
+  Map<String, GenderTableData> allData = new Map();
   Map<String, GenderTableData> certifiedData = new Map();
   Map<String, GenderTableData> qualifiedData = new Map();
   Map<String, GenderTableData> certifiedQualifiedData = new Map();
@@ -292,9 +296,14 @@ Map<String, GenderTableData> _generateInfoTableData(
     });
 
     allData[group] = GenderTableData(maleCount, femaleCount);
-    certifiedData[group] = GenderTableData(maleCertifiedCount - maleCertifiedQualifiedCount, femaleCertifiedCount - femaleCertifiedQualifiedCount);
-    qualifiedData[group] = GenderTableData(maleQualifiedCount - maleCertifiedQualifiedCount, femaleQualifiedCount - femaleCertifiedQualifiedCount);
-    certifiedQualifiedData[group] = GenderTableData(maleCertifiedQualifiedCount, femaleCertifiedQualifiedCount);
+    certifiedData[group] = GenderTableData(
+        maleCertifiedCount - maleCertifiedQualifiedCount,
+        femaleCertifiedCount - femaleCertifiedQualifiedCount);
+    qualifiedData[group] = GenderTableData(
+        maleQualifiedCount - maleCertifiedQualifiedCount,
+        femaleQualifiedCount - femaleCertifiedQualifiedCount);
+    certifiedQualifiedData[group] = GenderTableData(
+        maleCertifiedQualifiedCount, femaleCertifiedQualifiedCount);
 
     totalMaleCount += maleCount;
     totalFemaleCount += femaleCount;
@@ -310,9 +319,12 @@ Map<String, GenderTableData> _generateInfoTableData(
   });
 
   allData['labelTotal'] = GenderTableData(totalMaleCount, totalFemaleCount);
-  certifiedData['labelTotal'] = GenderTableData(totalMaleCertifiedCount, totalFemaleCertifiedCount);
-  qualifiedData['labelTotal'] = GenderTableData(totalMaleQualifiedCount, totalFemaleQualifiedCount);
-  certifiedQualifiedData['labelTotal'] = GenderTableData(totalMaleCertifiedQualifiedCount, totalFemaleCertifiedQualifiedCount);
+  certifiedData['labelTotal'] =
+      GenderTableData(totalMaleCertifiedCount, totalFemaleCertifiedCount);
+  qualifiedData['labelTotal'] =
+      GenderTableData(totalMaleQualifiedCount, totalFemaleQualifiedCount);
+  certifiedQualifiedData['labelTotal'] = GenderTableData(
+      totalMaleCertifiedQualifiedCount, totalFemaleCertifiedQualifiedCount);
 
   switch (category) {
     case 'all':
@@ -327,42 +339,40 @@ Map<String, GenderTableData> _generateInfoTableData(
   throw FallThroughError();
 }
 
-Map<String, Map<String, int>> _generateCertificationData(
+Map<String, TeachersByCertification> _generateCertificationData(
   Map<String, List<Teacher>> data,
 ) {
-  final result = Map<String, Map<String, int>>();
-
+  final result = Map<String, TeachersByCertification>();
   data.forEach((key, value) {
-    final certification = new Map<String, int>();
-    certification['certifiedAndQualifiedFemale'] = 0;
-    certification['qualifiedFemale'] = 0;
-    certification['certifiedFemale'] = 0;
-    certification['numberTeachersFemale'] = 0;
-
-    certification['certifiedAndQualifiedMale'] = 0;
-    certification['qualifiedMale'] = 0;
-    certification['certifiedMale'] = 0;
-    certification['numberTeachersMale'] = 0;
+    TeachersByCertification certification = TeachersByCertification(
+        certifiedAndQualifiedFemale: 0,
+        qualifiedFemale: 0,
+        certifiedFemale: 0,
+        numberTeachersFemale: 0,
+        certifiedAndQualifiedMale: 0,
+        qualifiedMale: 0,
+        certifiedMale: 0,
+        numberTeachersMale: 0);
 
     value.forEach((it) {
-      certification['certifiedAndQualifiedFemale'] -= it.certQualF;
-      certification['qualifiedFemale'] -= (it.qualifiedF - it.certQualF);
-      certification['certifiedFemale'] -= (it.certifiedF - it.certQualF);
-      certification['numberTeachersFemale'] -= it.numTeachersF;
+      certification.certifiedAndQualifiedFemale -= it.certQualF;
+      certification.qualifiedFemale -= (it.qualifiedF - it.certQualF);
+      certification.certifiedFemale -= (it.certifiedF - it.certQualF);
+      certification.numberTeachersFemale -= it.numTeachersF;
 
-      certification['certifiedAndQualifiedMale'] += it.certQualM;
-      certification['qualifiedMale'] += (it.qualifiedM - it.certQualM);
-      certification['certifiedMale'] += (it.certifiedM - it.certQualM);
-      certification['numberTeachersMale'] += it.numTeachersM;
+      certification.certifiedAndQualifiedMale += it.certQualM;
+      certification.qualifiedMale += (it.qualifiedM - it.certQualM);
+      certification.certifiedMale += (it.certifiedM - it.certQualM);
+      certification.numberTeachersMale += it.numTeachersM;
     });
-    certification['numberTeachersFemale'] -=
-        (certification['certifiedAndQualifiedFemale'] +
-            certification['qualifiedFemale'] +
-            certification['certifiedFemale']);
-    certification['numberTeachersMale'] -=
-        (certification['certifiedAndQualifiedMale'] +
-            certification['qualifiedMale'] +
-            certification['certifiedMale']);
+    certification.numberTeachersFemale -=
+        (certification.certifiedAndQualifiedFemale +
+            certification.qualifiedFemale +
+            certification.certifiedFemale);
+    certification.numberTeachersMale -=
+        (certification.certifiedAndQualifiedMale +
+            certification.qualifiedMale +
+            certification.certifiedMale);
     if (key != null) result[key] = certification;
   });
 
