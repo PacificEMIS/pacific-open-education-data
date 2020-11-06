@@ -162,10 +162,22 @@ Future<SpecialEducationData> _generateSpecialEducationData(
       specialEducationData.groupBy((it) => it.englishLearner);
 
   final cohortDataByDistrict = DataByCohortDistribution(
-    environment: _generateDataByDistrict(dataGroupedByEnvironment),
-    disability: _generateDataByDistrict(dataGroupedByDisablility),
-    etnicity: _generateDataByDistrict(dataGroupedByEtnicity),
-    englishLearner: _generateDataByDistrict(dataGroupedByEnglishLearner),
+    environment: _generateDataByDistrict(
+      model.lookups,
+      dataGroupedByEnvironment,
+    ),
+    disability: _generateDataByDistrict(
+      model.lookups,
+      dataGroupedByDisablility,
+    ),
+    etnicity: _generateDataByDistrict(
+      model.lookups,
+      dataGroupedByEtnicity,
+    ),
+    englishLearner: _generateDataByDistrict(
+      model.lookups,
+      dataGroupedByEnglishLearner,
+    ),
   );
 
   final cohortDataByYear = DataByCohortDistribution(
@@ -208,16 +220,24 @@ List<DataByGroup> _generateDataByTitle(
 }
 
 List<DataByCohort> _generateDataByDistrict(
+  Lookups lookups,
   Map<String, List<SpecialEducation>> cohortData,
 ) {
   return cohortData.mapToList((cohortName, dataList) {
     final groupedByDistrict = dataList.groupBy((it) => it.districtCode);
     final groupDataList = groupedByDistrict.mapToList((districtCode, dataList) {
       final count = dataList.map((e) => e.number).fold(0, (p, n) => p + n);
-      return DataByGroup(title: districtCode.ifEmpty('labelNa'), firstValue: count);
+      return DataByGroup(
+        title: districtCode.isEmpty
+            ? 'labelNa'
+            : districtCode.from(lookups.districts),
+        firstValue: count,
+      );
     });
     return DataByCohort(
-        cohortName: cohortName.ifEmpty('labelNa'), groupDataList: groupDataList);
+      cohortName: cohortName.ifEmpty('labelNa'),
+      groupDataList: groupDataList,
+    );
   });
 }
 
@@ -228,10 +248,11 @@ List<DataByCohort> _generateDataByYear(
     final groupedByYear = dataList.groupBy((it) => it.surveyYear);
     final groupDataList = groupedByYear.mapToList((year, dataList) {
       final count = dataList.map((e) => e.number).fold(0, (p, n) => p + n);
-      return DataByGroup(
-          title: year.toString(), firstValue: count);
+      return DataByGroup(title: year.toString(), firstValue: count);
     });
     return DataByCohort(
-        cohortName: cohortName.ifEmpty('labelNa'), groupDataList: groupDataList);
+      cohortName: cohortName.ifEmpty('labelNa'),
+      groupDataList: groupDataList,
+    );
   });
 }
