@@ -67,7 +67,7 @@ class Strings {
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
       'schoolsDashboardsTitle': 'Schools',
-      'schoolsDashboardsMeasureEnroll': 'Enrollment',
+      'schoolsDashboardsMeasureEnroll': 'Total',
       'schoolsDashboardsEnrollByStateTitle': 'Enrollment by State',
       'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
       'schoolsDashboardsEnrollByGovernmentTitle':
