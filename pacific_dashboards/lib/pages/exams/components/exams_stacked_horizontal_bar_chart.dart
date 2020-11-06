@@ -59,7 +59,6 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
                 ),
               ),
               defaultRenderer: charts.BarRendererConfig(
-                stackHorizontalSeparator: 0,
                 groupingType: charts.BarGroupingType.stacked,
                 strokeWidthPx: 1,
               ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/individual_school/individual_school_response.dart';
 import 'package:pacific_dashboards/data/data_source/remote/entities/schools_list/schools_list_response_body.dart';
@@ -8,6 +9,7 @@ import 'package:pacific_dashboards/models/accreditations/standard_accreditation.
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
@@ -36,6 +38,11 @@ abstract class RestClient {
 
   @GET('warehouse/examsdistrictresults')
   Future<List<Exam>> getExams();
+
+  @GET('indicators/{districtCode}?format=xml')
+  Future<IndicatorsContainer> getIndicators(
+    @Path('districtCode') String districtCode,
+  );
 
   @GET('warehouse/accreditations/table?byState')
   Future<List<DistrictAccreditation>> getSchoolAccreditationsByDistrict();

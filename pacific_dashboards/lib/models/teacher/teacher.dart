@@ -113,6 +113,7 @@ extension Filters on List<Teacher> {
         title: 'filtersByYear',
         items: this
             .uniques((it) => it.surveyYear)
+            .where((it) => it != null)
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -125,6 +126,7 @@ extension Filters on List<Teacher> {
           FilterItem(null, 'filtersDisplayAllStates'),
           ...this
               .uniques((it) => it.districtCode)
+              .where((it) => it != null)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,
@@ -136,6 +138,7 @@ extension Filters on List<Teacher> {
           FilterItem(null, 'filtersDisplayAllAuthority'),
           ...this
               .uniques((it) => it.authorityCode)
+              .where((it) => it != null)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
         ],
         selectedIndex: 0,
@@ -147,6 +150,7 @@ extension Filters on List<Teacher> {
           FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
           ...this
               .uniques((it) => it.authorityGovt)
+              .where((it) => (it != null && it.isNotEmpty &&  it != "" && it.length > 0))
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
         ],
         selectedIndex: 0,

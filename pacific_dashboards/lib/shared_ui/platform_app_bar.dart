@@ -10,6 +10,7 @@ class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
     this.iconTheme,
     this.backgroundColor,
     this.actions,
+    this.automaticallyImplyLeading = true,
   });
 
   final Widget leading;
@@ -17,6 +18,7 @@ class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
   final IconThemeData iconTheme;
   final Color backgroundColor;
   final List<Widget> actions;
+  final bool automaticallyImplyLeading;
 
   @override
   Size get preferredSize => Size.fromHeight(56);
@@ -24,6 +26,7 @@ class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
   @override
   AppBar createAndroidWidget(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: automaticallyImplyLeading,
       leading: leading,
       title: title,
       iconTheme: iconTheme,

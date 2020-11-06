@@ -39,7 +39,12 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
           children: <Widget>[
             Container(
               alignment: Alignment.centerRight,
-              child: FlatButton(
+              child: IconButton(
+                icon: Icon(
+                  Icons.more_vert_rounded,
+                  size: 24,
+                  color: Colors.white,
+                ),
                 padding: EdgeInsets.all(8.0),
                 onPressed: () async {
                   await showDialog(
@@ -51,16 +56,13 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
                     },
                   );
                 },
-                child: Text(
-                  'homeChangeCountryButton'.localized(context),
-                  style: Theme.of(context).textTheme.button.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
               ),
             ),
             CurrentEmisWidget(
-                viewModel: viewModel, useMobileLayout: useMobileLayout),
+              viewModel: viewModel,
+              useMobileLayout: useMobileLayout,
+            ),
+            const SizedBox(height: 16),
             StreamBuilder<List<Section>>(
               stream: viewModel.sectionStream,
               builder: (ctx, snapshot) {

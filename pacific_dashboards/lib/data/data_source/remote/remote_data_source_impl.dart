@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:arch/arch.dart';
 import 'package:connectivity/connectivity.dart';
@@ -14,6 +15,8 @@ import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
+import 'package:pacific_dashboards/models/indicators/indicators.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -25,6 +28,7 @@ import 'package:pacific_dashboards/models/special_education/special_education.da
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
+import 'package:pacific_dashboards/utils/xml_to_json.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
@@ -32,7 +36,7 @@ const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis/api/";
 const _kKiribatiUrl = "https://data.moe.gov.ki/kemis/api/";
 
 typedef _HandledApiCallable<T> = FutureOr<T> Function(RestClient);
-typedef _ThrowableHandler = void Function(Object);
+typedef _FallbackHandler<T> = Future<T> Function(Object);
 
 class RemoteDataSourceImpl implements RemoteDataSource {
   static const platform = const MethodChannel('com.pacific_emis.opendata/api');
@@ -72,6 +76,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             } else {
               final eTag = response.eTag;
               _settings.setEtag(response.requestUrl, eTag);
+              if (response.headers[Headers.contentTypeHeader].contains("application/xml")) {
+                response.data =
+                    XmlToJson.decodeXmlResponseIntoJson(response.data);
+              }
               return response;
             }
           },
@@ -103,10 +111,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     if (response == null || response.statusCode == null) {
       if (error.message.contains('closed') ||
           error.message.contains('abort') ||
-          error.message.contains('no address'))
+          error.message.contains('no address')) {
         throw NoInternetException();
-      else
+      } else {
         await checkConnection();
+      }
 
       throw UnknownRemoteException(url: '');
     }
@@ -129,35 +138,102 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   Future<T> _withHandlers<T>(
     _HandledApiCallable<T> callable, {
-    List<_ThrowableHandler> additionalHandlers,
+    List<_FallbackHandler> fallbackHandlers,
   }) async {
     try {
-      await checkConnection();
+      try {
+        await checkConnection();
 
-      final emis = await _settings.currentEmis;
-      RestClient client;
-      switch (emis) {
-        case Emis.miemis:
-          client = _miemisClient;
-          break;
-        case Emis.fedemis:
-          client = _fedemisClient;
-          break;
-        case Emis.kemis:
-          client = _kemisClient;
-          break;
-      }
-      return await callable.call(client);
-    } catch (e) {
-      if (additionalHandlers != null) {
-        for (var handler in additionalHandlers) {
-          handler.call(e);
+        final emis = await _settings.currentEmis;
+        RestClient client;
+        switch (emis) {
+          case Emis.miemis:
+            client = _miemisClient;
+            break;
+          case Emis.fedemis:
+            client = _fedemisClient;
+            break;
+          case Emis.kemis:
+            client = _kemisClient;
+            break;
         }
+        return await callable.call(client);
+      } catch (e) {
+        if (fallbackHandlers != null) {
+          for (final handler in fallbackHandlers) {
+            final fallbackResult = await handler.call(e);
+            if (fallbackResult != null) {
+              return fallbackResult;
+            }
+          }
+        }
+        rethrow;
       }
+    } catch (e) {
       if (e is DioError) {
         await _handleErrors(e);
       }
       rethrow;
+    }
+  }
+
+  Future<Response<String>> _fallbackApiGetCall(String url, String eTag) async {
+    try {
+      final result = await platform.invokeMethod<Map>('apiGet', {
+        'url': url,
+        'eTag': eTag,
+      });
+      final response = Response<String>(
+        headers: Headers.fromMap({
+          'ETag': [result['eTag']]
+        }),
+        statusCode: result['code'],
+        data: result['body'],
+      );
+      return response;
+      // ignore: avoid_catches_without_on_clauses
+    } catch (error) {
+      debugPrint(error);
+      throw UnknownRemoteException(url: url);
+    }
+  }
+
+  Future<T> _fallbackToNative<T>(
+    Object throwable,
+    String urlCall,
+    Future<T> Function(String json) parseJson,
+  ) async {
+    if (!(throwable is DioError &&
+        throwable.message.contains('HttpException: '))) {
+      return null;
+    }
+    await checkConnection();
+    final emis = await _settings.currentEmis;
+    final url = '${emis.baseUrl}$urlCall';
+    try {
+      final savedETag = await _settings.getEtag(url);
+      final nativeResponse = await _fallbackApiGetCall(
+        url,
+        savedETag,
+      );
+      if (nativeResponse.statusCode == 304) {
+        throw NoNewDataRemoteException(url: url);
+      }
+      final eTag = nativeResponse.eTag;
+      await _settings.setEtag(url, eTag);
+
+      final responseJson = nativeResponse.data;
+      debugPrint('Fallback response : $responseJson');
+      final parsed = await parseJson(responseJson);
+      return parsed;
+    } on NoNewDataRemoteException {
+      debugPrint('Fallback 304');
+      rethrow;
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      // Ignore native errors since it is a fallback
+      debugPrint('Fallback error ${e.toString()}');
+      return null;
     }
   }
 
@@ -182,7 +258,26 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<List<Exam>> fetchExams() {
-    return _withHandlers((client) => client.getExams());
+    return _withHandlers(
+      (client) => client.getExams(),
+      fallbackHandlers: [
+            (e) => _fallbackToNative(
+          e,
+          'warehouse/examsdistrictresults',
+              (json) => compute<String, List<Exam>>(
+            _parseExamsList,
+            json,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Future<IndicatorsContainer> fetchIndicators(String districtCode) {
+    return _withHandlers(
+          (client) => client.getIndicators(districtCode),
+    );
   }
 
   @override
@@ -236,7 +331,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<Lookups> fetchLookupsModel() {
-    return _withHandlers((client) => client.getLookups());
+    return _withHandlers((client) => client.getLookups(), fallbackHandlers: [
+      (e) => _fallbackToNative(
+            e,
+            'lookups/collection/core',
+            (json) => compute<String, Lookups>(
+              _parseLookups,
+              json,
+            ),
+          ),
+    ]);
   }
 
   @override
@@ -261,12 +365,36 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<List<School>> fetchSchools() {
-    return _withHandlers((client) => client.getSchools());
+    return _withHandlers(
+      (client) => client.getSchools(),
+      fallbackHandlers: [
+        (e) => _fallbackToNative(
+              e,
+              'warehouse/tableenrol',
+              (json) => compute<String, List<School>>(
+                _parseSchoolList,
+                json,
+              ),
+            ),
+      ],
+    );
   }
 
   @override
   Future<List<Teacher>> fetchTeachers() {
-    return _withHandlers((client) => client.getTeachers());
+    return _withHandlers(
+      (client) => client.getTeachers(),
+      fallbackHandlers: [
+        (e) => _fallbackToNative(
+              e,
+              'warehouse/teachers?report',
+              (json) => compute<String, List<Teacher>>(
+                _parseTeachersList,
+                json,
+              ),
+            ),
+      ],
+    );
   }
 
   @override
@@ -324,4 +452,27 @@ extension ResponseExt on Response {
   String get eTag => this.headers.value('ETag');
 
   String get requestUrl => this.request.url;
+}
+
+List<School> _parseSchoolList(String json) {
+  final List<dynamic> data = jsonDecode(json);
+  return data.map((it) => School.fromJson(it as Map<String, dynamic>)).toList();
+}
+
+List<Teacher> _parseTeachersList(String json) {
+  final List<dynamic> data = jsonDecode(json);
+  return data
+      .map((it) => Teacher.fromJson(it as Map<String, dynamic>))
+      .toList();
+}
+
+List<Exam> _parseExamsList(String json) {
+  final List<dynamic> data = jsonDecode(json);
+  return data
+      .map((it) => Exam.fromJson(it as Map<String, dynamic>))
+      .toList();
+}
+
+Lookups _parseLookups(String json) {
+  return Lookups.fromJson(jsonDecode(json) as Map<String, dynamic>);
 }

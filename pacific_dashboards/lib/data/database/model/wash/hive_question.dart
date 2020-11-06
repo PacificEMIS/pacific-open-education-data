@@ -11,11 +11,17 @@ class HiveQuestion extends HiveObject {
   @HiveField(1)
   String qName;
 
+  @HiveField(2)
+  String qFlags;
+
   Question toQuestion() => Question(
       qID,
-      qName);
+      qName,
+      qFlags,
+  );
 
   static HiveQuestion from(Question question) => HiveQuestion()
     ..qID = question.id
-    ..qName = question.name;
+    ..qName = question.name
+    ..qFlags = question.qFlags;
 }

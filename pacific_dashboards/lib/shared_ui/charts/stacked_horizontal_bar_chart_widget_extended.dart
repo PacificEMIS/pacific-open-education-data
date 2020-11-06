@@ -69,7 +69,6 @@ class StackedHorizontalBarChartWidgetExtendedState
                 ),
               ),
               defaultRenderer: charts.BarRendererConfig(
-                stackHorizontalSeparator: 0,
                 groupingType: charts.BarGroupingType.stacked,
                 strokeWidthPx: 1,
               ),
@@ -125,18 +124,6 @@ class StackedHorizontalBarChartWidgetExtendedState
         color: widget.colorFunc != null
             ? widget.colorFunc(color)
             : HexColor.fromStringHash(color.toString())));
-  }
-
-  int _getDataLengthWithChecks(Map<String, List<int>> data) {
-    var length = -1;
-    data.forEach((_, value) {
-      if (length == -1) {
-        length = value.length;
-      } else if (value.length != length) {
-        throw Exception("Inconsistent data arrays");
-      }
-    });
-    return length;
   }
 }
 

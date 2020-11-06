@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
+import 'package:pacific_dashboards/pages/download/download_view_model.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
+import 'package:pacific_dashboards/pages/indicators/indicators_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_view_model.dart';
@@ -76,6 +78,15 @@ class ViewModelFactory {
     );
   }
 
+  IndicatorsViewModel createIndicatorsViewModel(BuildContext ctx) {
+    return IndicatorsViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      remoteConfig: serviceLocator.remoteConfig,
+      globalSettings: serviceLocator.globalSettings,
+    );
+  }
+
   SchoolsListViewModel createIndividualSchoolsList(BuildContext ctx) {
     return SchoolsListViewModel(
       ctx,
@@ -129,9 +140,9 @@ class ViewModelFactory {
   }
 
   IndividualAccreditationViewModel createIndividualAccreditationViewModel(
-      BuildContext ctx,
-      ShortSchool school,
-      ) {
+    BuildContext ctx,
+    ShortSchool school,
+  ) {
     return IndividualAccreditationViewModel(
       ctx,
       repository: serviceLocator.repository,
@@ -163,6 +174,17 @@ class ViewModelFactory {
       repository: serviceLocator.repository,
       remoteConfig: serviceLocator.remoteConfig,
       globalSettings: serviceLocator.globalSettings,
+    );
+  }
+
+  DownloadViewModel createDownloadViewModel(
+    BuildContext ctx,
+  ) {
+    return DownloadViewModel(
+      ctx,
+      globalSettings: serviceLocator.globalSettings,
+      remoteConfig: serviceLocator.remoteConfig,
+      repository: serviceLocator.repository,
     );
   }
 }

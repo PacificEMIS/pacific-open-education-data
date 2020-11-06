@@ -9,7 +9,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [GeneratedPluginRegistrant registerWithRegistry:self];
     
     FlutterViewController* controller = (FlutterViewController*)self.window.rootViewController;
-    FlutterMethodChannel* apiChannel = [FlutterMethodChannel methodChannelWithName:@"fm.doe.national.pacific_dashboards/api"
+    FlutterMethodChannel* apiChannel = [FlutterMethodChannel methodChannelWithName:@"com.pacific_emis.opendata/api"
                                                                    binaryMessenger:controller.binaryMessenger];
     
     __weak AppDelegate* weakSelf = self;

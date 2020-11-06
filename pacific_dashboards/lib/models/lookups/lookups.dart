@@ -1,37 +1,41 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/lookups/class_level_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
+import 'package:pacific_dashboards/models/lookups/school_type_lookup.dart';
 
 part 'lookups.g.dart';
 
 @JsonSerializable()
 class Lookups {
-  @JsonKey(name: 'authorityGovts')
+  @JsonKey(name: 'authorityGovts', defaultValue: [])
   final List<Lookup> authorityGovt;
 
-  @JsonKey(name: 'schoolTypes')
+  @JsonKey(name: 'schoolTypes', defaultValue: [])
   final List<Lookup> schoolTypes;
 
-  @JsonKey(name: 'districts')
+  @JsonKey(name: 'districts', defaultValue: [])
   final List<Lookup> districts;
 
-  @JsonKey(name: 'authorities')
+  @JsonKey(name: 'authorities', defaultValue: [])
   final List<Lookup> authorities;
 
-  @JsonKey(name: 'levels')
+  @JsonKey(name: 'levels', defaultValue: [])
   final List<ClassLevelLookup> levels;
 
-  @JsonKey(name: 'accreditationTerms')
+  @JsonKey(name: 'accreditationTerms', defaultValue: [])
   final List<Lookup> accreditationTerms;
 
-  @JsonKey(name: 'educationLevels')
+  @JsonKey(name: 'educationLevels', defaultValue: [])
   final List<Lookup> educationLevels;
 
-  @JsonKey(name: 'schoolCodes')
+  @JsonKey(name: 'schoolCodes', defaultValue: [])
   final List<Lookup> schoolCodes;
 
-  @JsonKey(name: 'question')
+  @JsonKey(name: 'question', defaultValue: [])
   final List<Lookup> question;
+
+  @JsonKey(name: 'schoolTypeLevels', defaultValue: [])
+  final List<SchoolTypeLookup> schoolTypeLevels;
 
   const Lookups({
     this.authorityGovt,
@@ -43,6 +47,7 @@ class Lookups {
     this.educationLevels,
     this.schoolCodes,
     this.question,
+    this.schoolTypeLevels,
   });
 
   factory Lookups.fromJson(Map<String, dynamic> json) =>

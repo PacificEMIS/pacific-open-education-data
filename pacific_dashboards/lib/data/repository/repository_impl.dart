@@ -11,6 +11,8 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/indicators/indicators.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -160,6 +162,16 @@ class RepositoryImpl implements Repository {
   }
 
   @override
+  Stream<RepositoryResponse<IndicatorsContainer>> fetchAllIndicators(String districtCode) async* {
+    yield* _fetchWithoutEtag(
+      getLocal: () => _localDataSource.fetchIndicators(districtCode),
+      getRemote: () => _remoteDataSource.fetchIndicators(districtCode),
+      updateLocal: (indicators) =>
+          _localDataSource.saveIndicators(indicators, districtCode),
+    );
+  }
+
+  @override
   Stream<RepositoryResponse<List<Budget>>> fetchAllBudgets() async* {
     yield* _fetchWithEtag(
       getLocal: _localDataSource.fetchBudgets,
@@ -229,12 +241,36 @@ class RepositoryImpl implements Repository {
                 return _remoteDataSource.fetchLookupsModel().then(
                     (remote) => _localDataSource.saveLookupsModel(remote));
               }
-            }).then((_) => pushSavedToSubject(),
-                onError: (er) => pushSavedToSubject());
+            }).then((_) => pushSavedToSubject(), onError: (er) {
+              debugPrint('Lookups error: $er');
+              pushSavedToSubject();
+            });
           }
 
           return subject;
         });
+  }
+
+  @override
+  Future<void> refreshLookups() async {
+    // ignore: close_sinks
+    final currentLookupsSubject =
+        await _globalSettings.currentEmis.then((emis) {
+      switch (emis) {
+        case Emis.miemis:
+          return _miemisLookupsSubject;
+        case Emis.fedemis:
+          return _fedemisLookupsSubject;
+        case Emis.kemis:
+          return _kemisLookupsSubject;
+      }
+      throw FallThroughError();
+    });
+
+    final remoteData = await _remoteDataSource.fetchLookupsModel();
+    await _localDataSource.saveLookupsModel(remoteData);
+
+    currentLookupsSubject.add(remoteData);
   }
 
   @override

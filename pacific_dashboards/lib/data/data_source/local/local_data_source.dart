@@ -2,6 +2,8 @@ import 'package:arch/arch.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/indicators/indicators.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -24,6 +26,8 @@ abstract class LocalDataSource {
 
   Future<Pair<bool, List<Exam>>> fetchExams();
 
+  Future<Pair<bool, IndicatorsContainer>> fetchIndicators(String districtCode);
+
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk();
 
   Future<WashChunk> fetchWashChunk();
@@ -31,6 +35,8 @@ abstract class LocalDataSource {
   Future<Pair<bool, Lookups>> fetchLookupsModel();
 
   Future<void> saveExams(List<Exam> exams);
+
+  Future<void> saveIndicators(IndicatorsContainer indicators, String districtCode);
 
   Future<void> saveTeachers(List<Teacher> teachers);
 
