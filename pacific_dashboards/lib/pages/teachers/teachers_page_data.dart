@@ -19,7 +19,8 @@ class TeachersPageData {
   final List<ChartData> teachersByAuthority;
   final List<ChartData> teachersByPrivacy;
 
-  final EnrollTeachersBySchoolLevelStateAndGender enrollTeachersBySchoolLevelStateAndGender;
+  final EnrollTeachersBySchoolLevelStateAndGender
+      enrollTeachersBySchoolLevelStateAndGender;
 
   final Map<String, Map<String, int>> teachersByCertification;
 }

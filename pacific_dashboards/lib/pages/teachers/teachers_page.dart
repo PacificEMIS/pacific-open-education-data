@@ -199,31 +199,47 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                           },
                           builder: (ctx, tab) {
                             switch (tab) {
-                              case  _TeachersTab.all:
-                                return TeachersMultiTable(selectedTabData: snapshot
-                                    .data
-                                    .enrollTeachersBySchoolLevelStateAndGender
-                                    .all);
-                              case  _TeachersTab.qualified:
-                                return TeachersMultiTable(selectedTabData: snapshot
-                                    .data
-                                    .enrollTeachersBySchoolLevelStateAndGender
-                                    .qualified);
-                              case  _TeachersTab.certified:
-                                return TeachersMultiTable(selectedTabData: snapshot
-                                    .data
-                                    .enrollTeachersBySchoolLevelStateAndGender
-                                    .certified);
-                              case  _TeachersTab.qualifiedAndCertified:
-                                return TeachersMultiTable(selectedTabData: snapshot
-                                    .data
-                                    .enrollTeachersBySchoolLevelStateAndGender
-                                    .allQualifiedAndCertified);
-                              default: return TeachersMultiTable(selectedTabData: snapshot
-                                    .data
-                                    .enrollTeachersBySchoolLevelStateAndGender
-                                    .all);
-                                }
+                              case _TeachersTab.all:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .all);
+                              case _TeachersTab.qualified:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .qualified);
+                              case _TeachersTab.certified:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .certified);
+                              case _TeachersTab.qualifiedAndCertified:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .allQualifiedAndCertified);
+                              default:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .all);
+                            }
                           },
                         ),
                       ],
@@ -261,19 +277,20 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
   }
 }
 
-class TeachersMultiTable extends StatelessWidget {
-  const TeachersMultiTable({
+class TeachersMultiTableWidget extends StatelessWidget {
+  const TeachersMultiTableWidget({
     Key key,
     @required this.selectedTabData,
+    @required this.objectKey,
   }) : super(key: key);
 
   final List selectedTabData;
+  final Key objectKey;
 
   @override
   Widget build(BuildContext context) {
     return TeachersMultiTable(
-      key: ObjectKey(snapshot.data
-          .enrollTeachersBySchoolLevelStateAndGender),
+      key: objectKey,
       columnNames: [
         'teachersDashboardsSchoolLevelDomain',
         'labelMale',
@@ -283,8 +300,7 @@ class TeachersMultiTable extends StatelessWidget {
       columnFlex: [3, 3, 3, 3],
       data: selectedTabData,
       keySortFunc: (lv, rv) => lv.compareTo(rv),
-      domainValueBuilder:
-          GenderTableData.sDomainValueBuilder,
+      domainValueBuilder: GenderTableData.sDomainValueBuilder,
     );
   }
 }
