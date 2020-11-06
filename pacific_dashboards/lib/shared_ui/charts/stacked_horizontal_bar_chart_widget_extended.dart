@@ -126,18 +126,6 @@ class StackedHorizontalBarChartWidgetExtendedState
             ? widget.colorFunc(color)
             : HexColor.fromStringHash(color.toString())));
   }
-
-  int _getDataLengthWithChecks(Map<String, List<int>> data) {
-    var length = -1;
-    data.forEach((_, value) {
-      if (length == -1) {
-        length = value.length;
-      } else if (value.length != length) {
-        throw Exception("Inconsistent data arrays");
-      }
-    });
-    return length;
-  }
 }
 
 class _Data {
