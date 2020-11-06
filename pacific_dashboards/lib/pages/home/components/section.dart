@@ -24,23 +24,23 @@ extension UI on Section {
   String get logoPath {
     switch (this) {
       case Section.schools:
-        return "images/schools.svg";
+        return "images/ic_schools.png";
       case Section.teachers:
-        return "images/teachers.svg";
+        return "images/ic_teachers.png";
       case Section.schoolAccreditations:
-        return "images/school_accreditations.svg";
+        return "images/ic_school_accreditations.png";
       case Section.exams:
-        return "images/exams.svg";
+        return "images/ic_exams.png";
       case Section.indicators:
-        return "images/indicators.svg";
+        return "images/ic_indicators.png";
       case Section.budgets:
-        return "images/budgets.svg";
+        return "images/ic_budgets.png";
       case Section.individualSchools:
-        return "images/individual_schools.svg";
+        return "images/ic_individual_schools.png";
       case Section.specialEducation:
-        return "images/special_education.svg";
+        return "images/ic_special_education.png";
       case Section.wash:
-        return "images/wash.svg";
+        return "images/ic_wash.png";
     }
     throw FallThroughError();
   }

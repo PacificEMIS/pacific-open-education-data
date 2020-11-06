@@ -72,7 +72,7 @@ class _MenuTab extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: Container(
-                    child: SvgPicture.asset(
+                    child: Image.asset(
                       _section.logoPath,
                       fit: BoxFit.contain,
                     ),
@@ -81,13 +81,15 @@ class _MenuTab extends StatelessWidget {
                 Container(
                   child: Container(
                     margin: const EdgeInsets.only(left: 5.0, right: 5.0),
-                    child: Text(_section.getName(context),
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        style: useMobileLayout
-                            ? Theme.of(context).textTheme.headline5
-                            : Theme.of(context).textTheme.headline4,
-                        textScaleFactor: 1.2),
+                    child: Text(
+                      _section.getName(context),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      style: useMobileLayout
+                          ? Theme.of(context).textTheme.headline5
+                          : Theme.of(context).textTheme.headline4,
+                      textScaleFactor: 1.2,
+                    ),
                   ),
                 ),
               ],

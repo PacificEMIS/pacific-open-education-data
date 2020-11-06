@@ -22,11 +22,11 @@ extension UI on Emis {
   String get logo {
     switch (this) {
       case Emis.miemis:
-        return "images/miemis.png";
+        return "images/logo_miemis.png";
       case Emis.fedemis:
-        return "images/fedemis.png";
+        return "images/logo_fedemis.png";
       case Emis.kemis:
-        return "images/kiribati.png";
+        return "images/logo_kemis.png";
     }
     throw FallThroughError();
   }
