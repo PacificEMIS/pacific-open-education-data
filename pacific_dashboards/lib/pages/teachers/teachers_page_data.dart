@@ -40,10 +40,10 @@ class EnrollTeachersBySchoolLevelStateAndGender {
 
 class TeachersBySchoolLevelStateAndGender {
   final String state;
-  final Map<String, GenderTableData> teachers;
+  final Map<String, GenderTableData> total;
 
   TeachersBySchoolLevelStateAndGender({
     @required this.state,
-    @required this.teachers,
+    @required this.total,
   });
 }

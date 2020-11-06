@@ -10,17 +10,19 @@ class TeachersMultiTable extends StatelessWidget {
     String title,
     @required List<String> columnNames,
     @required List<int> columnFlex,
-    @required  List<TeachersBySchoolLevelStateAndGender> data,
+    @required List<TeachersBySchoolLevelStateAndGender> data,
+    @required DomainValueBuilder domainValueBuilder,
     KeySortFunc keySortFunc,
-  })  :
-        assert(columnNames != null),
+  })  : assert(columnNames != null),
         assert(columnFlex != null),
         assert(data != null),
+        assert(domainValueBuilder != null),
         _title = title,
         _columnNames = columnNames,
         _columnFlex = columnFlex,
         _data = data,
         _keySortFunc = keySortFunc,
+        _domainValueBuilder = domainValueBuilder,
         super(key: key);
 
   final String _title;
@@ -28,29 +30,32 @@ class TeachersMultiTable extends StatelessWidget {
   final List<int> _columnFlex;
   final List<TeachersBySchoolLevelStateAndGender> _data;
   final KeySortFunc _keySortFunc;
+  final DomainValueBuilder _domainValueBuilder;
 
   @override
   Widget build(BuildContext context) {
     return TileWidget(
-      title: _title == null ? Container() : Text(
-        _title,
-        style: Theme.of(context).textTheme.headline4,
+      title: _title == null
+          ? Container()
+          : Text(
+              _title,
+              style: Theme.of(context).textTheme.headline4,
+            ),
+      body: Column(
+        children: _data.map((key) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: MultiTableWidget(
+              data: key.total,
+              columnNames: _columnNames,
+              columnFlex: _columnFlex,
+              title: key.state,
+              keySortFunc: _keySortFunc,
+              domainValueBuilder: _domainValueBuilder,
+            ),
+          );
+        }).toList(),
       ),
-      // body: Column(
-      //    children: _data.keys.map((key) {
-      //      return Padding(
-      //        padding: const EdgeInsets.only(bottom: 8),
-      //        child:
-      //        MultiTableWidget(
-      //          data: _data[key],
-      //          columnNames: _columnNames,
-      //          columnFlex: _columnFlex,
-      //          title: key,
-      //        keySortFunc: _keySortFunc,
-      //        ),
-      //      );
-      //    }).toList(),
-      //  ),
     );
   }
 }
