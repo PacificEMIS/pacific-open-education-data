@@ -7,18 +7,68 @@ class TeachersPageData {
     @required this.teachersByDistrict,
     @required this.teachersByAuthority,
     @required this.teachersByPrivacy,
-    @required this.teachersBySchoolLevelStateAndGender,
+    @required this.enrollTeachersBySchoolLevelStateAndGender,
     @required this.teachersByCertification,
   })  : assert(teachersByDistrict != null),
         assert(teachersByAuthority != null),
         assert(teachersByPrivacy != null),
-        assert(teachersBySchoolLevelStateAndGender != null),
-        assert(teachersByCertification != null);
+        assert(teachersByCertification != null),
+        assert(enrollTeachersBySchoolLevelStateAndGender != null);
 
   final List<ChartData> teachersByDistrict;
   final List<ChartData> teachersByAuthority;
   final List<ChartData> teachersByPrivacy;
-  final Map<String, Map<String, Map<String, GenderTableData>>>
-      teachersBySchoolLevelStateAndGender;
-  final Map<String, List<int>> teachersByCertification;
+
+  final EnrollTeachersBySchoolLevelStateAndGender
+      enrollTeachersBySchoolLevelStateAndGender;
+
+  final Map<String, TeachersByCertification> teachersByCertification;
+}
+
+class EnrollTeachersBySchoolLevelStateAndGender {
+  final List<TeachersBySchoolLevelStateAndGender> all;
+  final List<TeachersBySchoolLevelStateAndGender> qualified;
+  final List<TeachersBySchoolLevelStateAndGender> certified;
+  final List<TeachersBySchoolLevelStateAndGender> allQualifiedAndCertified;
+
+  EnrollTeachersBySchoolLevelStateAndGender({
+    @required this.all,
+    @required this.qualified,
+    @required this.certified,
+    @required this.allQualifiedAndCertified,
+  });
+}
+
+class TeachersBySchoolLevelStateAndGender {
+  final String state;
+  final Map<String, GenderTableData> total;
+
+  TeachersBySchoolLevelStateAndGender({
+    @required this.state,
+    @required this.total,
+  });
+}
+
+class TeachersByCertification {
+  int certifiedAndQualifiedFemale;
+  int qualifiedFemale;
+  int certifiedFemale;
+  int numberTeachersFemale;
+
+  int certifiedAndQualifiedMale;
+  int qualifiedMale;
+  int certifiedMale;
+  int numberTeachersMale;
+
+  TeachersByCertification({
+    @required this.certifiedAndQualifiedFemale,
+    @required this.qualifiedFemale,
+    @required this.certifiedFemale,
+    @required this.numberTeachersFemale,
+
+    @required this.certifiedAndQualifiedMale,
+    @required this.qualifiedMale,
+    @required this.certifiedMale,
+    @required this.numberTeachersMale,
+  });
 }

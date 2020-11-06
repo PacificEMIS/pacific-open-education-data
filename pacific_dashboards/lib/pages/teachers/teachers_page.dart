@@ -12,11 +12,12 @@ import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/charts/stacked_horizontal_bar_chart_widget_extended.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
+
+import 'components/teachers_multi_table.dart';
 
 class TeachersPage extends MvvmStatefulWidget {
   static const String kRoute = '/Teachers';
@@ -197,25 +198,48 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 .localized(context);
                           },
                           builder: (ctx, tab) {
-                            return MultiTable(
-                              key: ObjectKey(
-                                snapshot.data
-                                        .teachersBySchoolLevelStateAndGender[
-                                    tab.toString().substring(13)],
-                              ),
-                              columnNames: [
-                                'teachersDashboardsSchoolLevelDomain',
-                                'labelMale',
-                                'labelFemale',
-                                'labelTotal'
-                              ],
-                              columnFlex: [3, 3, 3, 3],
-                              data: snapshot
-                                      .data.teachersBySchoolLevelStateAndGender[
-                                  tab.toString().substring(13)],
-                              keySortFunc: (lv, rv) => lv.compareTo(rv),
-                              domainValueBuilder: GenderTableData.sDomainValueBuilder,
-                            );
+                            switch (tab) {
+                              case _TeachersTab.all:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .all);
+                              case _TeachersTab.qualified:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .qualified);
+                              case _TeachersTab.certified:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .certified);
+                              case _TeachersTab.qualifiedAndCertified:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .allQualifiedAndCertified);
+                              default:
+                                return TeachersMultiTableWidget(
+                                    objectKey: ObjectKey(snapshot.data
+                                        .enrollTeachersBySchoolLevelStateAndGender),
+                                    selectedTabData: snapshot
+                                        .data
+                                        .enrollTeachersBySchoolLevelStateAndGender
+                                        .all);
+                            }
                           },
                         ),
                       ],
@@ -250,6 +274,34 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
       return;
     }
     viewModel.onFiltersChanged(filters);
+  }
+}
+
+class TeachersMultiTableWidget extends StatelessWidget {
+  const TeachersMultiTableWidget({
+    Key key,
+    @required this.selectedTabData,
+    @required this.objectKey,
+  }) : super(key: key);
+
+  final List selectedTabData;
+  final Key objectKey;
+
+  @override
+  Widget build(BuildContext context) {
+    return TeachersMultiTable(
+      key: objectKey,
+      columnNames: [
+        'teachersDashboardsSchoolLevelDomain',
+        'labelMale',
+        'labelFemale',
+        'labelTotal'
+      ],
+      columnFlex: [3, 3, 3, 3],
+      data: selectedTabData,
+      keySortFunc: (lv, rv) => lv.compareTo(rv),
+      domainValueBuilder: GenderTableData.sDomainValueBuilder,
+    );
   }
 }
 

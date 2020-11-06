@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/res/strings.dart';
@@ -9,7 +10,7 @@ import 'chart_legend_item.dart';
 typedef Color ColorFunc(int index);
 
 class StackedHorizontalBarChartWidgetExtended extends StatefulWidget {
-  final Map<String, List<int>> data;
+  final Map<String, TeachersByCertification> data;
   final List<String> legend;
   final ColorFunc colorFunc;
 
@@ -77,46 +78,53 @@ class StackedHorizontalBarChartWidgetExtendedState
           Wrap(
               spacing: 8.0, // gap between adjacent chips
               runSpacing: 4.0, // gap between lines
-              children: getColumnTitles(widget.data, widget.legend))
+              children: getColumnTitles(widget.legend))
         ]);
   }
 
-  List<Widget> getColumnTitles(Map<String, List<int>> data, List<String> legend) {
+  List<Widget> getColumnTitles(List<String> legend) {
     List<Widget> widgetList = new List<Widget>();
     for (var i = 0; i < legend.length; i++) {
-      widgetList.add(
-        ChartLegendItem(color: widget.colorFunc(i), value: legend[i].localized(context))
-      );
+      widgetList.add(ChartLegendItem(
+          color: widget.colorFunc(i), value: legend[i].localized(context)));
     }
     return widgetList;
   }
 
   List<charts.Series<_Data, String>> _createSeries(
-    Map<String, List<int>> data,
+    Map<String, TeachersByCertification> data,
   ) {
-    final length = _getDataLengthWithChecks(data);
     final series = List<charts.Series<_Data, String>>();
 
-    for (var i = 0; i < length; i++) {
-      final chunk = List<_Data>();
-      data.forEach((key, values) {
-        chunk.add(_Data(
-            domain: key,
-            measure: values[i],
-            color: widget.colorFunc != null
-                ? widget.colorFunc(i)
-                : HexColor.fromStringHash(values[i].toString())));
-      });
-      series.add(charts.Series<_Data, String>(
-        id: 'series_${i.toString()}',
-        domainFn: (_Data data, int _) => data.domain,
-        measureFn: (_Data data, int _) => data.measure,
-        colorFn: (_Data data, int _) => data.color.chartsColor,
-        data: chunk,
-      ));
-    }
+    final chunk = List<_Data>();
+    data.forEach((key, values) {
+      generateChunk(chunk, key, 0, values.certifiedAndQualifiedFemale, series);
+      generateChunk(chunk, key, 1, values.qualifiedFemale, series);
+      generateChunk(chunk, key, 2, values.certifiedFemale, series);
+      generateChunk(chunk, key, 3, values.numberTeachersFemale, series);
+      generateChunk(chunk, key, 4, values.certifiedAndQualifiedMale, series);
+      generateChunk(chunk, key, 5, values.qualifiedMale, series);
+      generateChunk(chunk, key, 6, values.certifiedMale, series);
+      generateChunk(chunk, key, 7, values.numberTeachersMale, series);
+    });
 
+    series.add(charts.Series<_Data, String>(
+    id: 'series',
+    domainFn: (_Data data, int _) => data.domain,
+    measureFn: (_Data data, int _) => data.measure,
+    colorFn: (_Data data, int _) => data.color.chartsColor,
+    data: chunk));
     return series;
+  }
+
+  void generateChunk(List<_Data> chunk, String key, int color, int value,
+      List<charts.Series<_Data, String>> series) {
+    chunk.add(_Data(
+        domain: key,
+        measure: value,
+        color: widget.colorFunc != null
+            ? widget.colorFunc(color)
+            : HexColor.fromStringHash(color.toString())));
   }
 
   int _getDataLengthWithChecks(Map<String, List<int>> data) {
