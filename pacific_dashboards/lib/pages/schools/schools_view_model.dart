@@ -172,7 +172,7 @@ Future<SchoolsPageData> _transformSchoolsModel(
       return ChartData(
         domain,
         measure,
-        domain.toLowerCase().contains('non')
+        domain.toLowerCase().contains('non') || domain.toLowerCase().contains('public')
             ? AppColors.kNonGovernmentChartColor
             : AppColors.kGovernmentChartColor,
       );
