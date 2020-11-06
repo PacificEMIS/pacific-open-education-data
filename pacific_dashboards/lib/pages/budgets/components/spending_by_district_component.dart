@@ -270,6 +270,7 @@ class _Chart extends StatelessWidget {
         }
         throw FallThroughError();
       };
+      _data.sort((rv, lv) => rv.district.compareTo(lv.district));
       final data = _data.map((it) {
         return ChartData(
           it.year,
