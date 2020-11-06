@@ -198,43 +198,32 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 .localized(context);
                           },
                           builder: (ctx, tab) {
-                            var selectedTabData = List();
-                            var selectedTabName = tab;
-                            if (selectedTabName == _TeachersTab.all)
-                              selectedTabData = snapshot
-                                  .data
-                                  .enrollTeachersBySchoolLevelStateAndGender
-                                  .all;
-                            if (selectedTabName == _TeachersTab.qualified)
-                              selectedTabData = snapshot
-                                  .data
-                                  .enrollTeachersBySchoolLevelStateAndGender
-                                  .qualified;
-                            if (selectedTabName == _TeachersTab.certified)
-                              selectedTabData = snapshot
-                                  .data
-                                  .enrollTeachersBySchoolLevelStateAndGender
-                                  .certified;
-                            if (selectedTabName == _TeachersTab.qualifiedAndCertified)
-                              selectedTabData = snapshot
-                                  .data
-                                  .enrollTeachersBySchoolLevelStateAndGender
-                                  .allQualifiedAndCertified;
-
-                            return TeachersMultiTable(
-                              key: ObjectKey(snapshot.data
-                                  .enrollTeachersBySchoolLevelStateAndGender),
-                              columnNames: [
-                                'teachersDashboardsSchoolLevelDomain',
-                                'labelMale',
-                                'labelFemale',
-                                'labelTotal'
-                              ],
-                              columnFlex: [3, 3, 3, 3],
-                              data: selectedTabData,
-                              keySortFunc: (lv, rv) => lv.compareTo(rv),
-                              domainValueBuilder: GenderTableData.sDomainValueBuilder,
-                            );
+                            switch (tab) {
+                              case  _TeachersTab.all:
+                                return TeachersMultiTable(selectedTabData: snapshot
+                                    .data
+                                    .enrollTeachersBySchoolLevelStateAndGender
+                                    .all);
+                              case  _TeachersTab.qualified:
+                                return TeachersMultiTable(selectedTabData: snapshot
+                                    .data
+                                    .enrollTeachersBySchoolLevelStateAndGender
+                                    .qualified);
+                              case  _TeachersTab.certified:
+                                return TeachersMultiTable(selectedTabData: snapshot
+                                    .data
+                                    .enrollTeachersBySchoolLevelStateAndGender
+                                    .certified);
+                              case  _TeachersTab.qualifiedAndCertified:
+                                return TeachersMultiTable(selectedTabData: snapshot
+                                    .data
+                                    .enrollTeachersBySchoolLevelStateAndGender
+                                    .allQualifiedAndCertified);
+                              default: return TeachersMultiTable(selectedTabData: snapshot
+                                    .data
+                                    .enrollTeachersBySchoolLevelStateAndGender
+                                    .all);
+                                }
                           },
                         ),
                       ],
@@ -269,6 +258,34 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
       return;
     }
     viewModel.onFiltersChanged(filters);
+  }
+}
+
+class TeachersMultiTable extends StatelessWidget {
+  const TeachersMultiTable({
+    Key key,
+    @required this.selectedTabData,
+  }) : super(key: key);
+
+  final List selectedTabData;
+
+  @override
+  Widget build(BuildContext context) {
+    return TeachersMultiTable(
+      key: ObjectKey(snapshot.data
+          .enrollTeachersBySchoolLevelStateAndGender),
+      columnNames: [
+        'teachersDashboardsSchoolLevelDomain',
+        'labelMale',
+        'labelFemale',
+        'labelTotal'
+      ],
+      columnFlex: [3, 3, 3, 3],
+      data: selectedTabData,
+      keySortFunc: (lv, rv) => lv.compareTo(rv),
+      domainValueBuilder:
+          GenderTableData.sDomainValueBuilder,
+    );
   }
 }
 
