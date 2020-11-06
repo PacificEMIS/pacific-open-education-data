@@ -11,7 +11,7 @@ class ShortSchool {
   @JsonKey(name: 'schName')
   final String name;
 
-  @JsonKey(name: 'schElectN')
+  @JsonKey(name: 'iGroup')
   final String districtCode;
 
   @JsonKey(name: 'dName')
