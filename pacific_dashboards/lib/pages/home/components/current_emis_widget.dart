@@ -7,10 +7,11 @@ class CurrentEmisWidget extends StatelessWidget {
   final HomeViewModel _viewModel;
   final bool _useMobileLayout;
 
-  const CurrentEmisWidget({
-    Key key,
-    @required HomeViewModel viewModel, @required bool useMobileLayout
-  })  : assert(viewModel != null, useMobileLayout != null),
+  const CurrentEmisWidget(
+      {Key key,
+      @required HomeViewModel viewModel,
+      @required bool useMobileLayout})
+      : assert(viewModel != null, useMobileLayout != null),
         _viewModel = viewModel,
         _useMobileLayout = useMobileLayout,
         super(key: key);
@@ -28,7 +29,10 @@ class CurrentEmisWidget extends StatelessWidget {
               height: _useMobileLayout ? 180 : 270,
               width: _useMobileLayout ? 180 : 270,
               child: snapshot.hasData
-                  ? Image.asset(snapshot.data.logo)
+                  ? Image.asset(
+                      snapshot.data.logo,
+                      fit: BoxFit.cover,
+                    )
                   : Container(),
             ),
             Container(
