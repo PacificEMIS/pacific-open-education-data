@@ -1,28 +1,33 @@
-import 'package:built_collection/built_collection.dart';
+import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/pages/base/base_bloc.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_data.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
-import 'package:pacific_dashboards/pages/school_accreditation/bloc/bloc.dart';
+import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
-import 'package:pacific_dashboards/shared_ui/chart_factory.dart';
-import 'package:pacific_dashboards/shared_ui/module_note.dart';
-import 'package:pacific_dashboards/shared_ui/platform_alert_dialog.dart';
+import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
+import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
+import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
+import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
-import 'package:pacific_dashboards/shared_ui/platform_progress_indicator.dart';
 import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
+import 'package:pacific_dashboards/view_model_factory.dart';
 
-class SchoolAccreditationsPage extends StatefulWidget {
-  static String kRoute = '/School Accreditations';
+class SchoolAccreditationsPage extends MvvmStatefulWidget {
+  static String kRoute = '/SchoolAccreditations';
 
   SchoolAccreditationsPage({
     Key key,
-  }) : super(key: key);
+  }) : super(
+          key: key,
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createSchoolAccreditationViewModel(ctx),
+        );
 
   @override
   State<StatefulWidget> createState() {
@@ -30,112 +35,73 @@ class SchoolAccreditationsPage extends StatefulWidget {
   }
 }
 
-class SchoolsPageState extends State<SchoolAccreditationsPage> {
-  bool areFiltersVisible = false;
-
-  void updateFiltersVisibility(BuildContext context) {
-    setState(() {
-      areFiltersVisible = BlocProvider.of<AccreditationBloc>(context).state
-          is UpdatedAccreditationState;
-    });
-  }
-
+class SchoolsPageState
+    extends MvvmState<SchoolAccreditationViewModel, SchoolAccreditationsPage> {
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<AccreditationBloc, AccreditationState>(
-      listener: (context, state) {
-        updateFiltersVisibility(context);
-        if (state is ErrorState) {
-          _handleErrorState(state, context);
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: PlatformAppBar(
-          actions: <Widget>[
-            IconButton(
-              icon: SvgPicture.asset('images/filter.svg'),
-              onPressed: () {
-                _openFilters(context);
-              },
-            ),
-          ],
-          title: Text(AppLocalizations.schoolAccreditations),
-        ),
-        body: BlocBuilder<AccreditationBloc, AccreditationState>(
-          condition: (prevState, currentState) => !(currentState is ErrorState),
-          builder: (context, state) {
-            if (state is InitialAccreditationState) {
-              return Container();
-            }
-
-            if (state is LoadingAccreditationState) {
-              return Center(
-                child: PlatformProgressIndicator(),
+  Widget buildWidget(BuildContext context) {
+    return Scaffold(
+      appBar: PlatformAppBar(
+        title: Text('schoolsAccreditationDashboardsTitle'.localized(context)),
+        actions: <Widget>[
+          StreamBuilder<List<Filter>>(
+            stream: viewModel.filtersStream,
+            builder: (ctx, snapshot) {
+              return Visibility(
+                visible: snapshot.hasData,
+                child: IconButton(
+                  icon: SvgPicture.asset('images/filter.svg'),
+                  onPressed: () {
+                    _openFilters(snapshot.data);
+                  },
+                ),
               );
-            }
-
-            if (state is UpdatedAccreditationState) {
-              return _ContentBody(
-                data: state.data,
-              );
-            }
-
-            throw FallThroughError();
-          },
+            },
+          )
+        ],
+      ),
+      body: LoadingStack(
+        loadingStateStream: viewModel.activityIndicatorStream,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              PageNoteWidget(noteStream: viewModel.noteStream),
+              StreamBuilder<AccreditationData>(
+                stream: viewModel.dataStream,
+                builder: (ctx, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  } else {
+                    return _ContentBody(data: snapshot.data);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _handleErrorState(AccreditationState state, BuildContext context) {
-    if (state is UnknownErrorState) {
-      showDialog(
-        context: context,
-        builder: (buildContext) {
-          return PlatformAlertDialog(
-            title: AppLocalizations.error,
-            message: AppLocalizations.unknownError,
-          );
-        },
-      );
-    }
-    if (state is ServerUnavailableState) {
-      showDialog(
-        context: context,
-        builder: (buildContext) {
-          return PlatformAlertDialog(
-            title: AppLocalizations.error,
-            message: AppLocalizations.serverUnavailableError,
-          );
-        },
-      );
-    }
+  void _openFilters(List<Filter> filters) {
+    Navigator.push<List<Filter>>(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return FilterPage(
+          filters: filters,
+        );
+      }),
+    ).then((filters) => _applyFilters(context, filters));
   }
 
-  void _openFilters(BuildContext context) {
-    final state = BlocProvider.of<AccreditationBloc>(context).state;
-    if (state is UpdatedAccreditationState) {
-      Navigator.push<BuiltList<Filter>>(
-        context,
-        MaterialPageRoute(builder: (context) {
-          return FilterPage(
-            filters: state.data.filters,
-          );
-        }),
-      ).then((filters) => _applyFilters(context, filters));
-    }
-  }
-
-  void _applyFilters(BuildContext context, BuiltList<Filter> filters) {
+  void _applyFilters(BuildContext context, List<Filter> filters) {
     if (filters == null) {
       return;
     }
-    final state = BlocProvider.of<AccreditationBloc>(context).state;
-    if (state is UpdatedAccreditationState) {
-      BlocProvider.of<AccreditationBloc>(context)
-          .add(FiltersAppliedAccreditationEvent(filters: filters));
-    }
+    viewModel.onFiltersChanged(filters);
   }
 }
 
@@ -151,51 +117,131 @@ class _ContentBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (_data.note != null)
-            ModuleNote(
-              note: _data.note,
-            ),
-          TileWidget(
-            title: Text(
-              AppLocalizations.accreditationProgress,
-              style: Theme.of(context).textTheme.display1,
-            ),
-            body: ChartFactory.getStackedHorizontalBarChartViewByData(
-              chartData: _data.accreditationProgressData,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'schoolsAccreditationDashboardsProgressTitle'.localized(context),
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        _buildMiniTabLayoutAccreditationProgress(context, [
+          _data.accreditationProgressData,
+          _data.accreditationProgressCumulativeData,
+        ]),
+        Text(
+          'schoolsAccreditationDashboardsProgressByStateTitle'
+              .localized(context),
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        _buildMiniTabLayoutAccreditationProgress(context, [
+          _data.districtStatusData,
+          _data.districtStatusCumulativeData,
+        ]),
+        Text(
+          'schoolsAccreditationDashboardsProgressNationalTitle'
+              .localized(context),
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        _buildMiniTabLayoutAccreditationProgressPieChart(
+          context,
+          _data.accreditationNationalCumulativeData,
+          _data.accreditationNationalEvaluatedData,
+        ),
+        const SizedBox(height: 16),
+        _PerformanceTable(
+          title: 'schoolsAccreditationDashboardsStatusByStateTitle'
+              .localized(context),
+          firstColumnName:
+              'schoolsAccreditationDashboardsStateDomain'.localized(context),
+          year: _data.year,
+          data: _data.accreditationStatusByState,
+        ),
+        _PerformanceTable(
+          title: 'schoolsAccreditationDashboardsPerformanceByStandardTitle'
+              .localized(context),
+          firstColumnName:
+              'schoolsAccreditationDashboardsStandardDomain'.localized(context),
+          year: _data.year,
+          data: _data.performanceByStandard,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMiniTabLayoutAccreditationProgress(
+    BuildContext context,
+    List<Map<String, List<int>>> chartData,
+  ) {
+    return MiniTabLayout(
+      tabs: _Tab.values,
+      padding: 0.0,
+      tabNameBuilder: (tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            return '${'schoolAccreditationCumulative'.localized(context)} ${_data.year}';
+          case _Tab.evaluated:
+            return '${'schoolAccreditationEvaluated'.localized(context)} ${_data.year}';
+        }
+        throw FallThroughError();
+      },
+      builder: (ctx, tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            return ChartFactory.createStackedHorizontalBarChartViewByData(
+              chartData: chartData[0],
               colorFunc: _levelIndexToColor,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TileWidget(
-            title: Text(
-              AppLocalizations.districtStatus,
-              style: Theme.of(context).textTheme.display1,
-            ),
-            body: ChartFactory.getStackedHorizontalBarChartViewByData(
-              chartData: _data.districtStatusData,
+            );
+          case _Tab.evaluated:
+            return ChartFactory.createStackedHorizontalBarChartViewByData(
+              chartData: chartData[1],
               colorFunc: _levelIndexToColor,
-            ),
-          ),
-          const SizedBox(height: 16),
-          _PerformanceTable(
-            title: AppLocalizations.accreditationStatusByState,
-            firstColumnName: AppLocalizations.state,
-            year: _data.year,
-            data: _data.accreditationStatusByState,
-          ),
-          _PerformanceTable(
-            title: AppLocalizations.accreditationPerfomancebyStandard,
-            firstColumnName: AppLocalizations.standard,
-            year: _data.year,
-            data: _data.performanceByStandard,
-          ),
-        ],
-      ),
+            );
+        }
+        throw FallThroughError();
+      },
+    );
+  }
+
+  Widget _buildMiniTabLayoutAccreditationProgressPieChart(
+    BuildContext context,
+    List<ChartData> cumulativeData,
+    List<ChartData> evaluatedData,
+  ) {
+    return MiniTabLayout(
+      tabs: _Tab.values,
+      padding: 0.0,
+      tabNameBuilder: (tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            return '${'schoolAccreditationCumulative'.localized(context)} ${_data.year}';
+          case _Tab.evaluated:
+            return '${'schoolAccreditationEvaluated'.localized(context)} ${_data.year}';
+        }
+        throw FallThroughError();
+      },
+      builder: (ctx, tab) {
+        switch (tab) {
+          case _Tab.cumulative:
+            return ChartWithTable(
+              key: ObjectKey(cumulativeData),
+              chartType: ChartType.pie,
+              tableKeyName: 'levels'.localized(context),
+              tableValueName: 'schoolsDashboardsTitle'.localized(context),
+              title: '',
+              data: cumulativeData,
+            );
+          case _Tab.evaluated:
+            return ChartWithTable(
+              key: ObjectKey(evaluatedData),
+              chartType: ChartType.pie,
+              tableKeyName: 'levels'.localized(context),
+              tableValueName: 'schoolsDashboardsTitle'.localized(context),
+              title: '',
+              data: evaluatedData,
+            );
+        }
+        throw FallThroughError();
+      },
     );
   }
 
@@ -227,22 +273,41 @@ class _PerformanceTable extends StatelessWidget {
     return TileWidget(
       title: Text(
         _title,
-        style: Theme.of(context).textTheme.display1,
+        style: Theme.of(context).textTheme.headline4,
       ),
-      body: Column(
-        children: [
-          AccreditationTableWidget(
-            title: 'Evaluated in $_year',
-            firstColumnName: _firstColumnName,
-            data: _data.evaluatedData,
-          ),
-          AccreditationTableWidget(
-            title: 'Cumulative up to $_year',
-            firstColumnName: _firstColumnName,
-            data: _data.cumulatedData,
-          ),
-        ],
+      body: MiniTabLayout(
+        tabs: _Tab.values,
+        padding: 0.0,
+        tabNameBuilder: (tab) {
+          switch (tab) {
+            case _Tab.evaluated:
+              return 'washCumulative'.localized(context);
+            case _Tab.cumulative:
+              return 'washEvaluated'.localized(context);
+          }
+          throw FallThroughError();
+        },
+        builder: (ctx, tab) {
+          switch (tab) {
+            case _Tab.evaluated:
+              return AccreditationTableWidget(
+                title: 'Cumulative up to $_year',
+                firstColumnName: _firstColumnName,
+                data: _data.cumulatedData,
+              );
+            case _Tab.cumulative:
+              return AccreditationTableWidget(
+                title: 'Evaluated in $_year',
+                firstColumnName: _firstColumnName,
+                data: _data.evaluatedData,
+              );
+          }
+          throw FallThroughError();
+        },
       ),
     );
   }
 }
+
+enum _Tab { cumulative, evaluated }
+// enum _Tab { accreditationProgres, districtStatus }

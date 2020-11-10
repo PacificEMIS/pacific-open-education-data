@@ -1,51 +1,54 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:pacific_dashboards/models/lookups/class_level_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 
 part 'lookups.g.dart';
 
-abstract class Lookups implements Built<Lookups, LookupsBuilder> {
-  Lookups._();
+@JsonSerializable()
+class Lookups {
+  @JsonKey(name: 'authorityGovts')
+  final List<Lookup> authorityGovt;
 
-  factory Lookups([updates(LookupsBuilder b)]) = _$Lookups;
+  @JsonKey(name: 'schoolTypes')
+  final List<Lookup> schoolTypes;
 
-  static Lookups empty() => Lookups((b) {});
+  @JsonKey(name: 'districts')
+  final List<Lookup> districts;
 
-  @BuiltValueField(wireName: 'authorityGovt')
-  BuiltList<Lookup> get authorityGovt;
+  @JsonKey(name: 'authorities')
+  final List<Lookup> authorities;
 
-  @BuiltValueField(wireName: 'schoolTypes')
-  BuiltList<Lookup> get schoolTypes;
+  @JsonKey(name: 'levels')
+  final List<ClassLevelLookup> levels;
 
-  @BuiltValueField(wireName: 'districts')
-  BuiltList<Lookup> get districts;
+  @JsonKey(name: 'accreditationTerms')
+  final List<Lookup> accreditationTerms;
 
-  @BuiltValueField(wireName: 'authorities')
-  BuiltList<Lookup> get authorities;
+  @JsonKey(name: 'educationLevels')
+  final List<Lookup> educationLevels;
 
-  @BuiltValueField(wireName: 'levels')
-  BuiltList<Lookup> get levels;
+  @JsonKey(name: 'schoolCodes')
+  final List<Lookup> schoolCodes;
 
-  @BuiltValueField(wireName: 'accreditationTerms')
-  BuiltList<Lookup> get accreditationTerms;
+  @JsonKey(name: 'question')
+  final List<Lookup> question;
 
-  @BuiltValueField(wireName: 'educationLevels')
-  BuiltList<Lookup> get educationLevels;
+  const Lookups({
+    this.authorityGovt,
+    this.schoolTypes,
+    this.districts,
+    this.authorities,
+    this.levels,
+    this.accreditationTerms,
+    this.educationLevels,
+    this.schoolCodes,
+    this.question,
+  });
 
-  String toJson() {
-    return json.encode(serializers.serializeWith(Lookups.serializer, this));
-  }
+  factory Lookups.fromJson(Map<String, dynamic> json) =>
+      _$LookupsFromJson(json);
 
-  static Lookups fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        Lookups.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<Lookups> get serializer => _$lookupsSerializer;
+  Map<String, dynamic> toJson() => _$LookupsToJson(this);
 
   bool isEmpty() =>
       authorityGovt.isEmpty &&
@@ -53,10 +56,11 @@ abstract class Lookups implements Built<Lookups, LookupsBuilder> {
       districts.isEmpty &&
       authorities.isEmpty &&
       levels.isEmpty &&
+      question.isEmpty &&
       accreditationTerms.isEmpty;
 }
 
-extension Lookuped on String {
+extension LookupedString on String {
   String from(Iterable<Lookup> lookup) {
     return lookup
             .firstWhere((it) => it.code == this, orElse: () => null)
@@ -74,5 +78,15 @@ extension Lookuped on String {
     }
 
     return educationLevelCode.from(lookups.educationLevels);
+  }
+}
+
+extension LookupedInt on int {
+  String educationLevelCodeFrom(Lookups lookups) {
+    final educationLevelCode = lookups.levels
+        .firstWhere((it) => it.yearOfEducation == this, orElse: () => null)
+        ?.code;
+
+    return educationLevelCode ?? 'Class $this';
   }
 }

@@ -1,177 +1,304 @@
-import 'dart:convert';
+import 'dart:async';
 
-import 'package:built_collection/built_collection.dart';
-import 'package:dio/adapter.dart';
+import 'package:arch/arch.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/data/data_source/remote/remote_data_source.dart';
-import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
+import 'package:pacific_dashboards/data/data_source/remote/rest_client.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
-import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
+import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
+import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
+import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
+import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
+import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
+import 'package:pacific_dashboards/models/short_school/short_school.dart';
+import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
+import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm";
-const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis";
-const _kKiribatiUrl = "https://data.moe.gov.ki/kemis";
+const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
+const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis/api/";
+const _kKiribatiUrl = "https://data.moe.gov.ki/kemis/api/";
+
+typedef _HandledApiCallable<T> = FutureOr<T> Function(RestClient);
+typedef _ThrowableHandler = void Function(Object);
 
 class RemoteDataSourceImpl implements RemoteDataSource {
-  static const platform =
-      const MethodChannel('fm.doe.national.pacific_dashboards/api');
-
-  static const _kTeachersApiKey = "warehouse/teachercount";
-  static const _kSchoolsApiKey = "warehouse/tableenrol";
-  static const _kExamsApiKey = "warehouse/examsdistrictresults";
-  static const _kSchoolAccreditationsByStateApiKey =
-      "warehouse/accreditations/table?byState";
-  static const _kSchoolAccreditationsByStandardApiKey =
-      "warehouse/accreditations/table?byStandard";
-  static const _kLookupsApiKey = "lookups/collection/core";
+  static const platform = const MethodChannel('com.pacific_emis.opendata/api');
 
   final GlobalSettings _settings;
+
   Dio _dio;
+  RestClient _fedemisClient;
+  RestClient _miemisClient;
+  RestClient _kemisClient;
 
   RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings {
     _dio = Dio(BaseOptions(
       connectTimeout: Duration(seconds: 10).inMilliseconds,
-      receiveTimeout: Duration(minutes: 1).inMilliseconds,
+      receiveTimeout: Duration(minutes: 5).inMilliseconds,
+      headers: {
+        'Accept-Encoding': 'gzip, deflate',
+      },
     ))
-      ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+      ..interceptors.addAll([
+        InterceptorsWrapper(
+          onRequest: (options) async {
+            final savedETag = await _settings.getEtag(options.url);
+            if (savedETag != null && savedETag.isNotEmpty) {
+              options.headers['If-None-Match'] = savedETag;
+            }
+            return options;
+          },
+          onResponse: (response) {
+            if (response.statusCode == 304) {
+              return DioError(
+                request: response.request,
+                response: response,
+                type: DioErrorType.RESPONSE,
+                error: NoNewDataRemoteException(url: response.requestUrl),
+              );
+            } else {
+              final eTag = response.eTag;
+              _settings.setEtag(response.requestUrl, eTag);
+              return response;
+            }
+          },
+          onError: (error) {
+            print(error);
+            return error;
+          },
+        ),
+        if (kDebugMode)
+          PrettyDioLogger(
+            requestHeader: true,
+            requestBody: true,
+            responseBody: true,
+            responseHeader: true,
+            error: true,
+            compact: true,
+            maxWidth: 100,
+          ),
+      ])
+      ..transformer = FlutterTransformer();
 
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter)?.onHttpClientCreate =
-        (client) {
-      client.badCertificateCallback = (cert, host, port) {
-        print("badCertificateCallback cert=$cert host=$host port=$port");
-        return true;
-      };
-    };
+    _fedemisClient = RestClient(_dio, baseUrl: _kFederalStatesOfMicronesiaUrl);
+    _miemisClient = RestClient(_dio, baseUrl: _kMarshalIslandsUrl);
+    _kemisClient = RestClient(_dio, baseUrl: _kKiribatiUrl);
   }
 
-  Future<String> _get({@required String path, bool forced = false}) async {
-    final emis = await _settings.currentEmis;
-    final requestUrl = '${emis.baseUrl}/api/$path';
-    final existingEtag = forced ? null : await _settings.getEtag(requestUrl);
-    var headers = {
-      'Accept-Encoding': 'gzip, deflate',
-    };
-    if (existingEtag != null) {
-      headers['If-None-Match'] = existingEtag;
-    }
-    final options = Options(headers: headers);
-    Response<String> response;
+  Future<void> _handleErrors(DioError error) async {
+    final response = error.response;
+    if (response == null || response.statusCode == null) {
+      if (error.message.contains('closed') ||
+          error.message.contains('abort') ||
+          error.message.contains('no address'))
+        throw NoInternetException();
+      else
+        await checkConnection();
 
+      throw UnknownRemoteException(url: '');
+    }
+    final code = response.statusCode;
+    final url = response.requestUrl;
+
+    switch (code) {
+      case 401:
+        throw UnauthorizedRemoteException(
+          url: response.requestUrl,
+          message: response.statusMessage,
+          code: code,
+        );
+      case 304:
+        throw NoNewDataRemoteException(url: url);
+      default:
+        throw UnknownRemoteException(url: url);
+    }
+  }
+
+  Future<T> _withHandlers<T>(
+    _HandledApiCallable<T> callable, {
+    List<_ThrowableHandler> additionalHandlers,
+  }) async {
     try {
-      response = await _dio.get(requestUrl, options: options);
-    } on DioError catch (error) {
-      print(error.message);
-      // https://github.com/flutter/flutter/issues/41573
-      if (error.message.contains('full header') ||
-          error.message.contains('HttpException: ,')) {
-        response = await _fallbackApiGetCall(requestUrl, existingEtag);
-      } else {
-        throw UnavailableRemoteException();
+      await checkConnection();
+
+      final emis = await _settings.currentEmis;
+      RestClient client;
+      switch (emis) {
+        case Emis.miemis:
+          client = _miemisClient;
+          break;
+        case Emis.fedemis:
+          client = _fedemisClient;
+          break;
+        case Emis.kemis:
+          client = _kemisClient;
+          break;
       }
+      return await callable.call(client);
+    } catch (e) {
+      if (additionalHandlers != null) {
+        for (var handler in additionalHandlers) {
+          handler.call(e);
+        }
+      }
+      if (e is DioError) {
+        await _handleErrors(e);
+      }
+      rethrow;
     }
+  }
 
-    if (response.statusCode == 304) {
-      throw NoNewDataRemoteException();
-    } else if (response.statusCode != 200) {
-      throw ApiRemoteException(
-        url: requestUrl,
-        code: response.statusCode,
-        message: response.data.toString(),
-      );
+  Future<void> checkConnection() async {
+    final connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) {
+      throw NoInternetException();
     }
-
-    final responseEtag = response.headers.value("ETag");
-    if (responseEtag != null && responseEtag != existingEtag) {
-      _settings.setEtag(requestUrl, responseEtag);
-    }
-
-    return response.data;
   }
 
   @override
-  Future<BuiltList<Teacher>> fetchTeachers() async {
-    final responseData = await _get(path: _kTeachersApiKey);
-    final List<dynamic> data = json.decode(responseData);
-    return data
-        .map((item) => serializers.deserializeWith(Teacher.serializer, item))
-        .toBuiltList();
+  Future<String> fetchAccessToken() async {
+    final response = await _withHandlers(
+      (client) => client.getToken(
+        'password',
+        _settings.getApiUserName(),
+        _settings.getApiPassword(),
+      ),
+    );
+    return response.accessToken;
   }
 
   @override
-  Future<BuiltList<School>> fetchSchools() async {
-    final responseData = await _get(path: _kSchoolsApiKey);
-    final List<dynamic> data = json.decode(responseData);
-    return data
-        .map((item) => serializers.deserializeWith(School.serializer, item))
-        .toBuiltList();
+  Future<List<Exam>> fetchExams() {
+    return _withHandlers((client) => client.getExams());
   }
 
   @override
-  Future<BuiltList<Exam>> fetchExams() async {
-    final responseData = await _get(path: _kExamsApiKey);
-    final List<dynamic> data = json.decode(responseData);
-    return data
-        .map((item) => serializers.deserializeWith(Exam.serializer, item))
-        .toBuiltList();
+  Future<List<Budget>> fetchBudgets() {
+    return _withHandlers((client) => client.getBudgets());
   }
 
   @override
-  Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async {
-    final List<dynamic> byStandardData =
-        json.decode(await _get(path: _kSchoolAccreditationsByStandardApiKey));
-    final List<dynamic> byDistrictData =
-        json.decode(await _get(path: _kSchoolAccreditationsByStateApiKey));
+  Future<List<SpecialEducation>> fetchSpecialEducation() {
+    return _withHandlers((client) => client.getSpecialEducation());
+  }
 
-    final modelByStandard = byStandardData.map((item) =>
-        serializers.deserializeWith(StandardAccreditation.serializer, item));
-
-    final modelByDistrict = byDistrictData.map((item) =>
-        serializers.deserializeWith(DistrictAccreditation.serializer, item));
-
-    return AccreditationChunk(
-      (b) => b
-        ..byStandard = ListBuilder<StandardAccreditation>(modelByStandard)
-        ..byDistrict = ListBuilder<DistrictAccreditation>(modelByDistrict),
+  @override
+  Future<WashChunk> fetchWashChunk() async {
+    final totalData = await _withHandlers(
+      (client) => client.getWashGlobalData(),
+    );
+    final toiletsData = await _withHandlers(
+      (client) => client.getWashToilets(),
+    );
+    final waterData = await _withHandlers((client) => client.getWashWater());
+    final questionData = await _withHandlers(
+      (client) => client.getWashQuestions(),
+    );
+    return WashChunk(
+      total: totalData,
+      toilets: toiletsData,
+      water: waterData,
+      questions: questionData,
     );
   }
 
   @override
-  Future<Lookups> fetchLookupsModel() async {
-    final responseData = await _get(
-        path: _kLookupsApiKey,
-        forced: true); // TODO: deprecated. forced disables ETag
-    return Lookups.fromJson(responseData);
+  Future<List<SchoolEnroll>> fetchIndividualDistrictEnroll(
+    String districtCode,
+  ) {
+    return _withHandlers(
+        (client) => client.getIndividualDistrictEnroll(districtCode));
   }
 
-  Future<Response<String>> _fallbackApiGetCall(String url, String eTag) async {
-    try {
-      final Map result = await platform.invokeMethod('apiGet', {
-        'url': url,
-        'eTag': eTag,
-      });
-      print(result);
-      final response = Response<String>(
-        headers: Headers.fromMap({
-          'ETag': [result['eTag']]
-        }),
-        statusCode: result['code'],
-        data: result['body'],
-      );
-      return response;
-    } catch (error) {
-      print(error);
-      throw ApiRemoteException(url: url, code: 0, message: error.toString());
-    }
+  @override
+  Future<List<SchoolEnroll>> fetchIndividualNationEnroll() {
+    return _withHandlers((client) => client.getIndividualNationEnroll());
+  }
+
+  @override
+  Future<List<SchoolEnroll>> fetchIndividualSchoolEnroll(String schoolId) {
+    return _withHandlers(
+        (client) => client.getIndividualSchoolEnroll(schoolId));
+  }
+
+  @override
+  Future<Lookups> fetchLookupsModel() {
+    return _withHandlers((client) => client.getLookups());
+  }
+
+  @override
+  Future<FinancialLookups> fetchFinancialLookupsModel() {
+    return _withHandlers((client) => client.getFinanceLookups());
+  }
+
+  @override
+  Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async {
+    final districtData = await _withHandlers(
+        (client) => client.getSchoolAccreditationsByDistrict());
+    final standardData = await _withHandlers(
+        (client) => client.getSchoolAccreditationsByStandard());
+    final nationalData = await _withHandlers(
+        (client) => client.getSchoolAccreditationsByNation());
+    return AccreditationChunk(
+      byDistrict: districtData,
+      byStandard: standardData,
+      byNational: nationalData,
+    );
+  }
+
+  @override
+  Future<List<School>> fetchSchools() {
+    return _withHandlers((client) => client.getSchools());
+  }
+
+  @override
+  Future<List<Teacher>> fetchTeachers() {
+    return _withHandlers((client) => client.getTeachers());
+  }
+
+  @override
+  Future<List<ShortSchool>> fetchSchoolsList(String accessToken) async {
+    final response = await _withHandlers(
+      (client) => client.getSchoolsList('Bearer $accessToken', 0),
+    );
+    return response.schools;
+  }
+
+  @override
+  Future<List<SchoolFlow>> fetchSchoolFlow(String schoolId) {
+    return _withHandlers((client) => client.getSchoolFlow(schoolId));
+  }
+
+  @override
+  Future<List<SchoolExamReport>> fetchSchoolExamReports(String schoolId) {
+    return _withHandlers((client) => client.getSchoolExamReports(schoolId));
+  }
+
+  @override
+  Future<IndividualSchool> fetchIndividualSchool(
+    String accessToken,
+    String schoolId,
+  ) async {
+    final response = await _withHandlers(
+      (client) => client.getIndividualSchool(
+        'Bearer $accessToken',
+        schoolId,
+      ),
+    );
+    return response.school;
   }
 }
 
@@ -187,4 +314,14 @@ extension Urls on Emis {
     }
     throw FallThroughError();
   }
+}
+
+extension RequestOptionsExt on RequestOptions {
+  String get url => this.uri.toString();
+}
+
+extension ResponseExt on Response {
+  String get eTag => this.headers.value('ETag');
+
+  String get requestUrl => this.request.url;
 }

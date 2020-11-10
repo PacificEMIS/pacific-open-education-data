@@ -1,36 +1,26 @@
-import 'dart:convert';
-
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
-import 'package:pacific_dashboards/pages/home/section.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:pacific_dashboards/pages/home/components/section.dart';
 
 part 'module_config.g.dart';
 
-abstract class ModuleConfig
-    implements Built<ModuleConfig, ModuleConfigBuilder> {
-  ModuleConfig._();
+@JsonSerializable()
+class ModuleConfig {
+  @JsonKey(name: 'id')
+  final String id;
 
-  factory ModuleConfig([updates(ModuleConfigBuilder b)]) = _$ModuleConfig;
+  @JsonKey(name: 'note', nullable: true)
+  final String note;
 
-  @BuiltValueField(wireName: 'id')
-  String get id;
+  const ModuleConfig({
+    @required this.id,
+    this.note,
+  });
 
-  @nullable
-  @BuiltValueField(wireName: 'note')
-  String get note;
+  factory ModuleConfig.fromJson(Map<String, dynamic> json) =>
+      _$ModuleConfigFromJson(json);
 
-  String toJson() {
-    return json
-        .encode(serializers.serializeWith(ModuleConfig.serializer, this));
-  }
-
-  static ModuleConfig fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        ModuleConfig.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<ModuleConfig> get serializer => _$moduleConfigSerializer;
+  Map<String, dynamic> toJson() => _$ModuleConfigToJson(this);
 
   Section asSection() {
     switch (id) {
@@ -46,6 +36,12 @@ abstract class ModuleConfig
         return Section.indicators;
       case 'budgets':
         return Section.budgets;
+      case 'individual_schools':
+        return Section.individualSchools;
+      case 'special_education':
+        return Section.specialEducation;
+      case 'wash':
+        return Section.wash;
     }
     return null;
   }

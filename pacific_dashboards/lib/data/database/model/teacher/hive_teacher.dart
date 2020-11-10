@@ -59,23 +59,22 @@ class HiveTeacher extends HiveObject with Expirable {
   int timestamp;
 
   Teacher toTeacher() => Teacher(
-        (b) => b
-          ..surveyYear = surveyYear
-          ..ageGroup = ageGroup
-          ..districtCodeOptional = districtCode
-          ..authorityCodeOptional = authorityCode
-          ..authorityGovtOptional = authorityGovt
-          ..schoolTypeCodeOptional = schoolTypeCode
-          ..sector = sector
-          ..iSCEDSubClass = iSCEDSubClass
-          ..numTeachersM = numTeachersM
-          ..numTeachersF = numTeachersF
-          ..certifiedM = certifiedM
-          ..certifiedF = certifiedF
-          ..qualifiedM = qualifiedM
-          ..qualifiedF = qualifiedF
-          ..certQualM = certQualM
-          ..certQualF = certQualF,
+        surveyYear: surveyYear,
+        ageGroup: ageGroup,
+        districtCode: districtCode,
+        authorityCode: authorityCode,
+        authorityGovt: authorityGovt,
+        schoolTypeCode: schoolTypeCode,
+        sector: sector,
+        iSCEDSubClass: iSCEDSubClass,
+        numTeachersM: numTeachersM,
+        numTeachersF: numTeachersF,
+        certifiedM: certifiedM,
+        certifiedF: certifiedF,
+        qualifiedM: qualifiedM,
+        qualifiedF: qualifiedF,
+        certQualM: certQualM,
+        certQualF: certQualF,
       );
 
   static HiveTeacher from(Teacher teacher) => HiveTeacher()

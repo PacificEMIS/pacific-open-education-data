@@ -1,8 +1,8 @@
+import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/shared_ui/platform_widget.dart';
 
-class PlatformAppBar extends PlatformWidget<CupertinoNavigationBar, AppBar>
+class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
     implements PreferredSizeWidget {
   PlatformAppBar({
     this.leading,
@@ -34,11 +34,8 @@ class PlatformAppBar extends PlatformWidget<CupertinoNavigationBar, AppBar>
   }
 
   @override
-  CupertinoNavigationBar createIosWidget(BuildContext context) {
-    return CupertinoNavigationBar(
-      leading: leading,
-      middle: title,
-      backgroundColor: backgroundColor,
-    );
+  AppBar createIosWidget(BuildContext context) {
+    /// ignore Cupertino style
+    return createAndroidWidget(context);
   }
 }

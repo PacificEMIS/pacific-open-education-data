@@ -1,6 +1,6 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
+import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
@@ -21,7 +21,7 @@ class HiveLookups extends HiveObject with Expirable {
   List<HiveLookup> authorities;
 
   @HiveField(4)
-  List<HiveLookup> levels;
+  List<HiveClassLevelLookup> levels;
 
   @HiveField(5)
   List<HiveLookup> accreditationTerms;
@@ -33,18 +33,19 @@ class HiveLookups extends HiveObject with Expirable {
   @HiveField(7)
   int timestamp;
 
+  @HiveField(8)
+  List<HiveLookup> schoolCodes;
+
   Lookups toLookups() => Lookups(
-        (b) => b
-          ..authorityGovt =
-              ListBuilder(authorityGovt.map((it) => it.toLookup()))
-          ..schoolTypes = ListBuilder(schoolTypes.map((it) => it.toLookup()))
-          ..districts = ListBuilder(districts.map((it) => it.toLookup()))
-          ..authorities = ListBuilder(authorities.map((it) => it.toLookup()))
-          ..levels = ListBuilder(levels.map((it) => it.toLookup()))
-          ..accreditationTerms =
-              ListBuilder(accreditationTerms.map((it) => it.toLookup()))
-          ..educationLevels =
-              ListBuilder(educationLevels.map((it) => it.toLookup())),
+        authorityGovt: authorityGovt.map((it) => it.toLookup()).toList(),
+        schoolTypes: schoolTypes.map((it) => it.toLookup()).toList(),
+        districts: districts.map((it) => it.toLookup()).toList(),
+        authorities: authorities.map((it) => it.toLookup()).toList(),
+        levels: levels.map((it) => it.toLookup()).toList(),
+        accreditationTerms:
+            accreditationTerms.map((it) => it.toLookup()).toList(),
+        educationLevels: educationLevels.map((it) => it.toLookup()).toList(),
+        schoolCodes: schoolCodes.map((it) => it.toLookup()).toList(),
       );
 
   static HiveLookups from(Lookups lookups) => HiveLookups()
@@ -55,9 +56,12 @@ class HiveLookups extends HiveObject with Expirable {
     ..districts = lookups.districts.map((it) => HiveLookup.from(it)).toList()
     ..authorities =
         lookups.authorities.map((it) => HiveLookup.from(it)).toList()
-    ..levels = lookups.levels.map((it) => HiveLookup.from(it)).toList()
+    ..levels =
+        lookups.levels.map((it) => HiveClassLevelLookup.from(it)).toList()
     ..accreditationTerms =
         lookups.accreditationTerms.map((it) => HiveLookup.from(it)).toList()
     ..educationLevels =
-        lookups.educationLevels.map((it) => HiveLookup.from(it)).toList();
+        lookups.educationLevels.map((it) => HiveLookup.from(it)).toList()
+    ..schoolCodes =
+        lookups.schoolCodes.map((it) => HiveLookup.from(it)).toList();
 }

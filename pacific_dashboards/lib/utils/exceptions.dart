@@ -1,19 +1,15 @@
-abstract class RemoteException implements Exception {}
+import 'package:arch/arch.dart';
+import 'package:flutter/foundation.dart';
 
-class NoNewDataRemoteException implements RemoteException {
-  const NoNewDataRemoteException();
+class NoNewDataRemoteException extends RemoteException {
+  const NoNewDataRemoteException({@required String url})
+      : super(
+          code: 403,
+          message: 'No new data',
+          url: url,
+        );
 }
 
-class UnavailableRemoteException implements RemoteException {
-  const UnavailableRemoteException();
+class NoDataException extends AppException {
+  const NoDataException() : super(message: 'labelNoData');
 }
-
-class ApiRemoteException implements RemoteException {
-  const ApiRemoteException({this.url, this.code, this.message});
-
-  final int code;
-  final String message;
-  final String url;
-}
-
-class NoDataException implements Exception {}

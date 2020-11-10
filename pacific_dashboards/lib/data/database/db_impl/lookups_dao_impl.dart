@@ -1,12 +1,11 @@
+import 'package:arch/arch.dart';
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/pair.dart';
 
 class HiveLookupsDao extends LookupsDao {
-
   static const _kKey = 'lookups';
 
   static Future<T> _withBox<T>(Future<T> action(Box<HiveLookups> box)) async {
@@ -34,5 +33,4 @@ class HiveLookupsDao extends LookupsDao {
 
     await _withBox((box) async => box.put(emis.id, hiveLookups));
   }
-
 }

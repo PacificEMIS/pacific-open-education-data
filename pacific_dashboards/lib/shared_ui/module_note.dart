@@ -14,7 +14,7 @@ class ModuleNote extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Text(
         _note,
-        style: Theme.of(context).textTheme.body1,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
     );
   }
