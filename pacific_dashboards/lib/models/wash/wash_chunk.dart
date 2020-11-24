@@ -104,11 +104,14 @@ extension Filters on WashChunk {
         return sorted;
       };
 
+      final filteredQuestions = questions;
+      filteredQuestions.removeWhere((it) => !it.isValidForApp);
+
       return WashChunk(
         total: apply(this.total),
         toilets: apply(this.toilets),
         water: apply(this.water),
-        questions: this.questions
+        questions: filteredQuestions,
       );
     });
   }
