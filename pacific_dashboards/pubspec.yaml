@@ -1,7 +1,7 @@
 name: pacific_dashboards
 description: Pacific Dashboards app
 
-version: 1.1.1+27
+version: 1.1.1+28
 
 environment:
   sdk: ">=2.10.0 <3.0.0"

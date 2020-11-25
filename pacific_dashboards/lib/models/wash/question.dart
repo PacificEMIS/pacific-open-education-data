@@ -26,7 +26,7 @@ class Question {
 
   bool get isValidForApp {
     if (_isValidForApp == null) {
-      if (qFlags?.isNotEmpty ?? false) {
+      if (qFlags != null) {
         final flags = qFlags
             .split("|")
             .map((e) => _createFlagFromJsonName(e))
@@ -41,7 +41,7 @@ class Question {
                 type is _QuestionTypeBinary ||
                 type is _QuestionTypeTernary);
       } else {
-        _isValidForApp = false;
+        _isValidForApp = qFlags == null;
       }
     }
     return _isValidForApp;
