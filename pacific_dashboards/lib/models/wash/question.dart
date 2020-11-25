@@ -26,17 +26,23 @@ class Question {
 
   bool get isValidForApp {
     if (_isValidForApp == null) {
-      final flags = qFlags
-          .split("|")
-          .map((e) => _createFlagFromJsonName(e))
-          .where((e) => e != null)
-          .toList();
-      final type = _QuestionType.fromFlags(flags.sum);
-      _isValidForApp = type != null &&
-          (type is _QuestionTypeSingleSelection ||
-              type is _QuestionTypeMultiSelection ||
-              type is _QuestionTypeBinary ||
-              type is _QuestionTypeTernary);
+      if (qFlags?.isNotEmpty ?? false) {
+        final flags = qFlags
+            .split("|")
+            .map((e) => _createFlagFromJsonName(e))
+            .where((e) => e != null)
+            .toList();
+
+        final type = _QuestionType.fromFlags(flags.sum);
+
+        _isValidForApp = type != null &&
+            (type is _QuestionTypeSingleSelection ||
+                type is _QuestionTypeMultiSelection ||
+                type is _QuestionTypeBinary ||
+                type is _QuestionTypeTernary);
+      } else {
+        _isValidForApp = false;
+      }
     }
     return _isValidForApp;
   }
@@ -47,10 +53,11 @@ class Question {
       other is Question &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          name == other.name;
+          name == other.name &&
+          qFlags == other.qFlags;
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ qFlags.hashCode;
 }
 
 class _QuestionType {
