@@ -229,8 +229,10 @@ class RepositoryImpl implements Repository {
                 return _remoteDataSource.fetchLookupsModel().then(
                     (remote) => _localDataSource.saveLookupsModel(remote));
               }
-            }).then((_) => pushSavedToSubject(),
-                onError: (er) => pushSavedToSubject());
+            }).then((_) => pushSavedToSubject(), onError: (er) {
+              debugPrint('Lookups error: $er');
+              pushSavedToSubject();
+            });
           }
 
           return subject;
