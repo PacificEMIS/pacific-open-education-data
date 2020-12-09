@@ -4,12 +4,16 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 
 class BarChartStackedWidget extends StatefulWidget {
+  const BarChartStackedWidget({
+    Key key,
+    this.title,
+    this.data,
+    this.type,
+  }) : super(key: key);
+
   final Map<String, Map<String, int>> data;
   final String title;
   final charts.BarGroupingType type;
-
-  BarChartStackedWidget({Key key, this.title, this.data, this.type})
-      : super(key: key);
 
   @override
   BarChartStackedWidgetState createState() => BarChartStackedWidgetState();
@@ -20,25 +24,24 @@ class BarChartStackedWidgetState extends State<BarChartStackedWidget> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Future.microtask(() {
-        Map<String, List<ChartData>> data = Map();
+        final data = <String, List<ChartData>>{};
         widget.data.forEach((k, v) {
-          List<ChartData> chartData = new List();
+          final chartData = <ChartData>[];
           v.forEach((key, value) {
             chartData.add(ChartData(key, value, HexColor.fromStringHash(k)));
           });
           data[k] = chartData;
         });
-        List<ChartData> seriesWidgets = [];
+        final seriesWidgets = <ChartData>[];
         data.forEach((key, value) {
           seriesWidgets.addAll(value);
         });
-        List<ChartData> test = [];
-        test.add(seriesWidgets.first);
+        final test = <ChartData>[seriesWidgets.first];
         return [
           charts.Series(
-            domainFn: (ChartData chartData, _) => chartData.domain,
-            measureFn: (ChartData chartData, _) => chartData.measure,
-            colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+            domainFn: (chartData, _) => chartData.domain,
+            measureFn: (chartData, _) => chartData.measure,
+            colorFn: (chartData, _) => chartData.color.chartsColor,
             id: 'test',
             data: test,
           )

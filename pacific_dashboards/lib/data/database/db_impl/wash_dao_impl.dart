@@ -10,7 +10,7 @@ class HiveWashDao extends WashDao {
   static Future<T> _withBox<T>(
     Future<T> Function(Box<HiveWashChunk> box) action,
   ) async {
-    final box = await Hive.openBox(_kKey);
+    final box = await Hive.openBox<HiveWashChunk>(_kKey);
     final result = await action(box);
     await box.close();
     return result;

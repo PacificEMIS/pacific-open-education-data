@@ -10,7 +10,7 @@ class HiveAccreditationsDao extends AccreditationsDao {
   static Future<T> _withBox<T>(
     Future<T> Function(Box<HiveAccreditationChunk> box) action,
   ) async {
-    final box = await Hive.openBox(_kKey);
+    final box = await Hive.openBox<HiveAccreditationChunk>(_kKey);
     final result = await action(box);
     await box.close();
     return result;

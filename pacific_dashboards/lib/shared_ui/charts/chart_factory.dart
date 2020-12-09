@@ -8,9 +8,9 @@ class ChartFactory {
   static Widget createBarChartViewByData(
     List<ChartData> chartData,
   ) {
-    return (chartData.length == 0)
+    return (chartData.isEmpty)
         ? Container()
-        : Container(
+        : SizedBox(
             height: 250.0,
             child: BarChartWidget(key: ObjectKey(chartData), data: chartData),
           );
@@ -19,9 +19,9 @@ class ChartFactory {
   static Widget createPieChartViewByData(
     List<ChartData> chartData,
   ) {
-    return (chartData.length == 0)
+    return (chartData.isEmpty)
         ? Container()
-        : Container(
+        : SizedBox(
             height: 300.0,
             child: PieChartWidget(
               key: ObjectKey(chartData),
@@ -44,11 +44,13 @@ class ChartFactory {
     throw FallThroughError();
   }
 
-  static Widget createStackedHorizontalBarChartViewByData(
-      {Map<String, List<int>> chartData, ColorFunc colorFunc}) {
-    return (chartData.length == 0)
+  static Widget createStackedHorizontalBarChartViewByData({
+    Map<String, List<int>> chartData,
+    ColorFunc colorFunc,
+  }) {
+    return (chartData.isEmpty)
         ? Container()
-        : Container(
+        : SizedBox(
             height: 300.0,
             child: StackedHorizontalBarChartWidget(
               data: chartData,

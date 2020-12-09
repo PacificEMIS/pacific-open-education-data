@@ -2,9 +2,6 @@ import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 
 class LoadingStack extends StatelessWidget {
-  final Stream<bool> _loadingStateStream;
-  final Widget _child;
-
   const LoadingStack({
     Key key,
     @required Stream<bool> loadingStateStream,
@@ -14,6 +11,9 @@ class LoadingStack extends StatelessWidget {
         _loadingStateStream = loadingStateStream,
         _child = child,
         super(key: key);
+
+  final Stream<bool> _loadingStateStream;
+  final Widget _child;
 
   @override
   Widget build(BuildContext context) {

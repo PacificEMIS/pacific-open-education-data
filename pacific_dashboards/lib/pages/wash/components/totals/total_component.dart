@@ -9,9 +9,6 @@ import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
 class TotalsComponent extends StatelessWidget {
-  final WashTotalsViewData _data;
-  final VoidCallback _onQuestionSelectorPressed;
-
   const TotalsComponent({
     Key key,
     @required WashTotalsViewData data,
@@ -22,6 +19,9 @@ class TotalsComponent extends StatelessWidget {
         _onQuestionSelectorPressed = onQuestionSelectorPressed,
         super(key: key);
 
+  final WashTotalsViewData _data;
+  final VoidCallback _onQuestionSelectorPressed;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,9 +29,14 @@ class TotalsComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 10,
+            bottom: 10,
+          ),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 52),
+            constraints: const BoxConstraints(minHeight: 52),
             child: FlatButton(
               onPressed: _onQuestionSelectorPressed,
               color: AppColors.kGrayLight,
@@ -44,7 +49,7 @@ class TotalsComponent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 textDirection: TextDirection.rtl,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.keyboard_arrow_right,
                     size: 24,
                     color: AppColors.kBlueDark,
@@ -101,16 +106,18 @@ class TotalsComponent extends StatelessWidget {
   String _getTabName(BuildContext context, _Tab tab) {
     switch (tab) {
       case _Tab.evaluated:
-        return '${'washDistrictTotalsEvaluatedTab'.localized(context)}${_data.year}';
+        return '${'washDistrictTotalsEvaluatedTab'.localized(context)}'
+            '${_data.year}';
       case _Tab.accumulated:
-        return '${'washDistrictTotalsAccumulatedTab'.localized(context)}${_data.year}';
+        return '${'washDistrictTotalsAccumulatedTab'.localized(context)}'
+            '${_data.year}';
     }
     throw FallThroughError();
   }
 
   Future<Map<String, Color>> get _chartPalette => Future.microtask(
         () {
-          final colorMap = Map<String, Color>();
+          final colorMap = <String, Color>{};
           _data.data
               .expand((it) => it.answerDataList)
               .map((e) => e.answer)
@@ -131,10 +138,6 @@ enum _Tab {
 }
 
 class _Chart extends HorizontalStackedScrollableBarChart {
-  final List<WashTotalsViewDataByDistrict> _data;
-  final num Function(WashTotalsViewDataByAnswer) _measureExtractor;
-  final Map<String, Color> _colorPalette;
-
   const _Chart({
     Key key,
     @required List<WashTotalsViewDataByDistrict> data,
@@ -147,6 +150,10 @@ class _Chart extends HorizontalStackedScrollableBarChart {
         _measureExtractor = measureExtractor,
         _colorPalette = colorPalette,
         super(key: key);
+
+  final List<WashTotalsViewDataByDistrict> _data;
+  final num Function(WashTotalsViewDataByAnswer) _measureExtractor;
+  final Map<String, Color> _colorPalette;
 
   @override
   List<ChartData> get chartData => _data

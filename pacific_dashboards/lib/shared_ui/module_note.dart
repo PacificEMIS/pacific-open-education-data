@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ModuleNote extends StatelessWidget {
-  final String _note;
-
   const ModuleNote({Key key, @required String note})
       : assert(note != null),
         _note = note,
         super(key: key);
+
+  final String _note;
 
   @override
   Widget build(BuildContext context) {

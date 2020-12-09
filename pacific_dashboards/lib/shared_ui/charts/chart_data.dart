@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
+@immutable
 class ChartData {
+
+  const ChartData(
+    this.domain,
+    this.measure,
+    this.color,
+  );
+
   final String domain;
   final num measure;
   final Color color;
-
-  const ChartData(this.domain, this.measure, this.color);
 
   @override
   bool operator ==(Object other) =>

@@ -17,18 +17,6 @@ import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SchoolsViewModel extends BaseViewModel {
-  final Repository _repository;
-  final RemoteConfig _remoteConfig;
-  final GlobalSettings _globalSettings;
-
-  final Subject<String> _pageNoteSubject = BehaviorSubject();
-  final Subject<SchoolsPageData> _dataSubject = BehaviorSubject();
-  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
-
-  List<School> _schools;
-  List<Filter> _filters;
-  Lookups _lookups;
-
   SchoolsViewModel(
     BuildContext ctx, {
     @required Repository repository,
@@ -41,6 +29,18 @@ class SchoolsViewModel extends BaseViewModel {
         _remoteConfig = remoteConfig,
         _globalSettings = globalSettings,
         super(ctx);
+
+  final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
+
+  final Subject<String> _pageNoteSubject = BehaviorSubject();
+  final Subject<SchoolsPageData> _dataSubject = BehaviorSubject();
+  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
+
+  List<School> _schools;
+  List<Filter> _filters;
+  Lookups _lookups;
 
   @override
   void onInit() {
@@ -64,7 +64,7 @@ class SchoolsViewModel extends BaseViewModel {
 
   void _loadData() {
     listenHandled(
-      handleRepositoryFetch(fetch: () => _repository.fetchAllSchools()),
+      handleRepositoryFetch(fetch: _repository.fetchAllSchools),
       _onDataLoaded,
       notifyProgress: true,
     );
@@ -115,11 +115,11 @@ class SchoolsViewModel extends BaseViewModel {
 }
 
 class _SchoolsModel {
+  const _SchoolsModel(this.schools, this.lookups, this.filters);
+
   final List<School> schools;
   final Lookups lookups;
   final List<Filter> filters;
-
-  const _SchoolsModel(this.schools, this.lookups, this.filters);
 }
 
 Future<SchoolsPageData> _transformSchoolsModel(
@@ -172,7 +172,8 @@ Future<SchoolsPageData> _transformSchoolsModel(
       return ChartData(
         domain,
         measure,
-        domain.toLowerCase().contains('non') || domain.toLowerCase().contains('public')
+        domain.toLowerCase().contains('non') ||
+                domain.toLowerCase().contains('public')
             ? AppColors.kNonGovernmentChartColor
             : AppColors.kGovernmentChartColor,
       );
@@ -208,8 +209,7 @@ Map<String, Map<String, GenderTableData>>
 }) {
   final groupedByLevelWithTotal = {
     'labelTotal': schools,
-  };
-  groupedByLevelWithTotal.addEntries(schools
+  }..addEntries(schools
       .groupBy((it) => it.classLevel.educationLevelFrom(lookups))
       .entries);
 
@@ -227,10 +227,9 @@ Map<String, Map<String, GenderTableData>>
 }) {
   final groupedByDistrictWithTotal = {
     'labelTotal': schools,
-  };
-  groupedByDistrictWithTotal.addEntries(
-    schools.groupBy((it) => it.districtCode).entries,
-  );
+  }..addEntries(
+      schools.groupBy((it) => it.districtCode).entries,
+    );
 
   return groupedByDistrictWithTotal.map((districtCode, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
@@ -242,7 +241,7 @@ Map<String, Map<String, GenderTableData>>
 Map<String, GenderTableData> _generateInfoTableData(
     Map<String, List<School>> groupedData,
     {String districtCode}) {
-  final convertedData = Map<String, GenderTableData>();
+  final convertedData = <String, GenderTableData>{};
   var totalMaleCount = 0;
   var totalFemaleCount = 0;
 

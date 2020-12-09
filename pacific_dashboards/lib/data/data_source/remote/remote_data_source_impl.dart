@@ -189,7 +189,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return response;
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
-      debugPrint(error);
+      debugPrint(error.toString());
       throw UnknownRemoteException(url: url);
     }
   }

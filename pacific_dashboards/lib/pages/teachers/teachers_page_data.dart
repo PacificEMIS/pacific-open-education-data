@@ -26,30 +26,41 @@ class TeachersPageData {
 }
 
 class EnrollTeachersBySchoolLevelStateAndGender {
-  final List<TeachersBySchoolLevelStateAndGender> all;
-  final List<TeachersBySchoolLevelStateAndGender> qualified;
-  final List<TeachersBySchoolLevelStateAndGender> certified;
-  final List<TeachersBySchoolLevelStateAndGender> allQualifiedAndCertified;
-
-  EnrollTeachersBySchoolLevelStateAndGender({
+  const EnrollTeachersBySchoolLevelStateAndGender({
     @required this.all,
     @required this.qualified,
     @required this.certified,
     @required this.allQualifiedAndCertified,
   });
+
+  final List<TeachersBySchoolLevelStateAndGender> all;
+  final List<TeachersBySchoolLevelStateAndGender> qualified;
+  final List<TeachersBySchoolLevelStateAndGender> certified;
+  final List<TeachersBySchoolLevelStateAndGender> allQualifiedAndCertified;
 }
 
 class TeachersBySchoolLevelStateAndGender {
-  final String state;
-  final Map<String, GenderTableData> total;
-
-  TeachersBySchoolLevelStateAndGender({
+  const TeachersBySchoolLevelStateAndGender({
     @required this.state,
     @required this.total,
   });
+
+  final String state;
+  final Map<String, GenderTableData> total;
 }
 
 class TeachersByCertification {
+  TeachersByCertification({
+    @required this.certifiedAndQualifiedFemale,
+    @required this.qualifiedFemale,
+    @required this.certifiedFemale,
+    @required this.numberTeachersFemale,
+    @required this.certifiedAndQualifiedMale,
+    @required this.qualifiedMale,
+    @required this.certifiedMale,
+    @required this.numberTeachersMale,
+  });
+
   int certifiedAndQualifiedFemale;
   int qualifiedFemale;
   int certifiedFemale;
@@ -59,16 +70,4 @@ class TeachersByCertification {
   int qualifiedMale;
   int certifiedMale;
   int numberTeachersMale;
-
-  TeachersByCertification({
-    @required this.certifiedAndQualifiedFemale,
-    @required this.qualifiedFemale,
-    @required this.certifiedFemale,
-    @required this.numberTeachersFemale,
-
-    @required this.certifiedAndQualifiedMale,
-    @required this.qualifiedMale,
-    @required this.certifiedMale,
-    @required this.numberTeachersMale,
-  });
 }

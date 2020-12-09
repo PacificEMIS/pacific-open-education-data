@@ -11,19 +11,10 @@ import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/utils/string_ext.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_data.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'special_education_data.dart';
-
 class SpecialEducationViewModel extends BaseViewModel {
-  final Repository _repository;
-  final RemoteConfig _remoteConfig;
-  final GlobalSettings _globalSettings;
-
-  final Subject<String> _pageNoteSubject = BehaviorSubject();
-  final Subject<SpecialEducationData> _dataSubject = BehaviorSubject();
-  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
-
   SpecialEducationViewModel(
     BuildContext ctx, {
     @required Repository repository,
@@ -36,6 +27,14 @@ class SpecialEducationViewModel extends BaseViewModel {
         _remoteConfig = remoteConfig,
         _globalSettings = globalSettings,
         super(ctx);
+
+  final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
+
+  final Subject<String> _pageNoteSubject = BehaviorSubject();
+  final Subject<SpecialEducationData> _dataSubject = BehaviorSubject();
+  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
   List<SpecialEducation> _specialEducation;
   List<Filter> _filters;
@@ -63,8 +62,7 @@ class SpecialEducationViewModel extends BaseViewModel {
 
   void _loadData() {
     listenHandled(
-      handleRepositoryFetch(
-          fetch: () => _repository.fetchAllSpecialEducation()),
+      handleRepositoryFetch(fetch: _repository.fetchAllSpecialEducation),
       _onDataLoaded,
       notifyProgress: true,
     );
@@ -127,15 +125,15 @@ class SpecialEducationViewModel extends BaseViewModel {
 }
 
 class _SpecialEducationModel {
-  final List<SpecialEducation> specialEducation;
-  final Lookups lookups;
-  final List<Filter> filters;
-
   const _SpecialEducationModel(
     this.specialEducation,
     this.lookups,
     this.filters,
   );
+
+  final List<SpecialEducation> specialEducation;
+  final Lookups lookups;
+  final List<Filter> filters;
 }
 
 Future<SpecialEducationData> _generateSpecialEducationData(
@@ -207,7 +205,7 @@ List<DataByGroup> _generateDataByTitle(
     var male = 0;
     var female = 0;
 
-    for (var data in values) {
+    for (final data in values) {
       male += data.gender == 'Male' ? 0 : data.number;
       female += data.gender == 'Female' ? 0 : data.number;
     }

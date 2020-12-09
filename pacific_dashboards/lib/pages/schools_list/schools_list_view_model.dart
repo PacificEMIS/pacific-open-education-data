@@ -8,19 +8,19 @@ import 'package:pacific_dashboards/pages/individual_school/individual_school_pag
 import 'package:rxdart/rxdart.dart';
 
 class SchoolsListViewModel extends BaseViewModel {
-  final Repository _repository;
-
-  final Subject<List<ShortSchool>> _schoolsSubject = BehaviorSubject();
-
-  List<ShortSchool> _schools;
-  String _searchQuery = '';
-
   SchoolsListViewModel(
     BuildContext ctx, {
     @required Repository repository,
   })  : assert(repository != null),
         _repository = repository,
         super(ctx);
+
+  final Repository _repository;
+
+  final Subject<List<ShortSchool>> _schoolsSubject = BehaviorSubject();
+
+  List<ShortSchool> _schools;
+  String _searchQuery = '';
 
   @override
   void onInit() {

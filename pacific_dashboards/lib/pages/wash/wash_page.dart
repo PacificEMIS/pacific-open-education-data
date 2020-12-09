@@ -11,16 +11,13 @@ import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
-
-import 'components/toilets/toilets_component.dart';
-import 'components/toilets/toilets_data.dart';
-import 'components/totals/total_component.dart';
-import 'components/water/water_component.dart';
-import 'components/water/water_data.dart';
+import 'package:pacific_dashboards/pages/wash/components/toilets/toilets_component.dart';
+import 'package:pacific_dashboards/pages/wash/components/toilets/toilets_data.dart';
+import 'package:pacific_dashboards/pages/wash/components/totals/total_component.dart';
+import 'package:pacific_dashboards/pages/wash/components/water/water_component.dart';
+import 'package:pacific_dashboards/pages/wash/components/water/water_data.dart';
 
 class WashPage extends MvvmStatefulWidget {
-  static String kRoute = '/Wash';
-
   WashPage({
     Key key,
   }) : super(
@@ -28,6 +25,8 @@ class WashPage extends MvvmStatefulWidget {
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createWashViewModel(ctx),
         );
+
+  static String kRoute = '/Wash';
 
   @override
   _WashPageState createState() => _WashPageState();
@@ -80,10 +79,11 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _TitleWidget(text: 'washDistrictTotalsTitle'),
+                        const _TitleWidget(text: 'washDistrictTotalsTitle'),
                         TotalsComponent(
                           data: snapshot.data,
-                          onQuestionSelectorPressed: viewModel.onQuestionSelectorPressed,
+                          onQuestionSelectorPressed:
+                              viewModel.onQuestionSelectorPressed,
                         ),
                       ],
                     );
@@ -101,7 +101,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _TitleWidget(text: 'washToiletsTitle'),
+                        const _TitleWidget(text: 'washToiletsTitle'),
                         ToiletsComponent(
                           data: snapshot.data,
                         ),
@@ -121,7 +121,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _TitleWidget(text: 'washWaterSourcesTitle'),
+                        const _TitleWidget(text: 'washWaterSourcesTitle'),
                         WaterComponent(
                           data: snapshot.data,
                         ),
@@ -155,14 +155,14 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
 }
 
 class _TitleWidget extends StatelessWidget {
-  final String _text;
-
   const _TitleWidget({
     Key key,
     @required String text,
   })  : assert(text != null),
         _text = text,
         super(key: key);
+
+  final String _text;
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ class HiveIndividualSchoolDao extends IndividualSchoolDao {
   static Future<T> _withBox<T>(
     Future<T> Function(Box<HiveIndividualSchool> box) action,
   ) async {
-    final box = await Hive.openBox(_kKey);
+    final box = await Hive.openBox<HiveIndividualSchool>(_kKey);
     final result = await action(box);
     await box.close();
     return result;

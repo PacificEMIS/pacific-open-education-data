@@ -109,7 +109,7 @@ class RepositoryImpl implements Repository {
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (ex) {
-      debugPrint(ex);
+      debugPrint(ex.toString());
       yield FailureRepositoryResponse(RepositoryType.remote, ex);
     }
   }

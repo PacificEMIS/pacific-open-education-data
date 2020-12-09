@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class PageNoteWidget extends StatelessWidget {
-  final Stream<String> _noteStream;
-
-  const PageNoteWidget({Key key, @required Stream<String> noteStream})
-      : assert(noteStream != null),
+  const PageNoteWidget({
+    Key key,
+    @required Stream<String> noteStream,
+  })  : assert(noteStream != null),
         _noteStream = noteStream,
         super(key: key);
+
+  final Stream<String> _noteStream;
 
   @override
   Widget build(BuildContext context) {

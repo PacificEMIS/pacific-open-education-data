@@ -32,7 +32,7 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Container(
+        SizedBox(
           height: 300,
           child: FutureBuilder(
             future: _series,
@@ -49,7 +49,7 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.only(bottom: bottomPadding),
-                      child: Container(
+                      child: SizedBox(
                         width: max(minimalChartWidth, availableScreenWidth),
                         child: charts.BarChart(
                           snapshot.data,
@@ -57,7 +57,7 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
                           barGroupingType: charts.BarGroupingType.stacked,
                           primaryMeasureAxis: charts.NumericAxisSpec(
                             tickProviderSpec:
-                                charts.BasicNumericTickProviderSpec(
+                                const charts.BasicNumericTickProviderSpec(
                               desiredMinTickCount: 7,
                               desiredMaxTickCount: 13,
                             ),
@@ -94,7 +94,7 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
             },
           ),
         ),
-        Container(height: 6),
+        const SizedBox(height: 6),
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
@@ -114,9 +114,9 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
     return Future.microtask(() {
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'data',
           data: chartData,
         )

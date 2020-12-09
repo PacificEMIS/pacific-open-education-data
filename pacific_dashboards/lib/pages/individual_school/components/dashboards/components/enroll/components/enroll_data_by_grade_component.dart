@@ -27,7 +27,7 @@ class EnrollDataByGradeComponent extends StatelessWidget {
               'labelTotal'
             ],
             columnFlex: const [3, 3, 3, 3],
-            domainValueBuilder: GenderTableData.sDomainValueBuilder,
+            domainValueBuilder: GenderTableData.buildDomainValue,
           );
         } else {
           return Container();

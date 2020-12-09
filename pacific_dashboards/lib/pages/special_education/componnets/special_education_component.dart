@@ -9,16 +9,16 @@ import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
-import '../special_education_data.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_data.dart';
 
 class SpecialEducationComponent extends StatefulWidget {
-  final List<DataByGroup> data;
-
   const SpecialEducationComponent({
     Key key,
     @required this.data,
   })  : assert(data != null),
         super(key: key);
+
+  final List<DataByGroup> data;
 
   @override
   _SpecialEducationComponentState createState() =>
@@ -28,13 +28,13 @@ class SpecialEducationComponent extends StatefulWidget {
 class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
   Future<Map<String, Color>> get _colorScheme {
     return Future.microtask(() {
-      final colorScheme = Map<String, Color>();
-      final domains = widget.data.map((e) => e.title).toList();
-      domains.forEachIndexed((index, item) {
-        colorScheme[item] = index < AppColors.kDynamicPalette.length
-            ? AppColors.kDynamicPalette[index]
-            : HexColor.fromStringHash(item);
-      });
+      final colorScheme = <String, Color>{};
+      widget.data.map((e) => e.title).toList()
+        ..forEachIndexed((index, item) {
+          colorScheme[item] = index < AppColors.kDynamicPalette.length
+              ? AppColors.kDynamicPalette[index]
+              : HexColor.fromStringHash(item);
+        });
       return colorScheme;
     });
   }
@@ -86,13 +86,11 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
                       key: ObjectKey(widget.data),
                       title: '',
                       data: widget.data
-                          .map(
-                            (it) => ChartData(
-                              it.title.localized(context),
-                              it.total,
-                              colorScheme[it.title],
-                            )
-                          )
+                          .map((it) => ChartData(
+                                it.title.localized(context),
+                                it.total,
+                                colorScheme[it.title],
+                              ))
                           .toList(),
                       chartType: ChartType.pie,
                       tableKeyName:
@@ -117,9 +115,6 @@ enum _Tab {
 }
 
 class _Chart extends StatelessWidget {
-  final List<DataByGroup> _data;
-  final Map<String, Color> _colorScheme;
-
   const _Chart({
     Key key,
     @required List<DataByGroup> data,
@@ -129,6 +124,9 @@ class _Chart extends StatelessWidget {
         _colorScheme = colorScheme,
         _data = data,
         super(key: key);
+
+  final List<DataByGroup> _data;
+  final Map<String, Color> _colorScheme;
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +151,7 @@ class _Chart extends StatelessWidget {
                 vertical: false,
                 defaultInteractions: false,
                 primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                  tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -181,9 +179,7 @@ class _Chart extends StatelessWidget {
               color: AppColors.kMale,
               value: 'labelMale'.localized(context),
             ),
-            SizedBox(
-              width: 16,
-            ),
+            const SizedBox(width: 16),
             ChartLegendItem(
               color: AppColors.kFemale,
               value: 'labelFemale'.localized(context),
@@ -216,9 +212,9 @@ class _Chart extends StatelessWidget {
       }).toList();
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'special_education_Data',
           data: barChartData,
         )

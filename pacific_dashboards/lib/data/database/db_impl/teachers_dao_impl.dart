@@ -9,7 +9,7 @@ class HiveTeachersDao extends TeachersDao {
   static const _kKey = 'teachers';
 
   static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
-    final box = await Hive.openBox(_kKey);
+    final box = await Hive.openBox<List>(_kKey);
     final result = await action(box);
     await box.close();
     return result;

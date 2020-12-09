@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
     implements PreferredSizeWidget {
+  // ignore: use_key_in_widget_constructors
   PlatformAppBar({
     this.leading,
     this.title,
@@ -19,7 +20,7 @@ class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
   final List<Widget> actions;
 
   @override
-  Size get preferredSize => Size.fromHeight(56);
+  Size get preferredSize => const Size.fromHeight(56);
 
   @override
   AppBar createAndroidWidget(BuildContext context) {

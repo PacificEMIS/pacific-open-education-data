@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
 class ChartLegendItem extends StatelessWidget {
-  final Color _color;
-  final String _value;
-
   const ChartLegendItem({
     Key key,
     @required Color color,
@@ -14,6 +11,9 @@ class ChartLegendItem extends StatelessWidget {
         _color = color,
         _value = value,
         super(key: key);
+
+  final Color _color;
+  final String _value;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,7 @@ class ChartLegendItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 6,
-        ),
+        const SizedBox(width: 6),
         Text(
           _value,
           style: Theme.of(context).textTheme.chartLegend,

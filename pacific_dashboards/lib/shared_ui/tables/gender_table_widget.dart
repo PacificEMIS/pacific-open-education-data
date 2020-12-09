@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
-typedef int KeySortFunc(String lv, String rv);
+typedef KeySortFunc = int Function(String lv, String rv);
 
 const Color _kBorderColor = AppColors.kGeyser;
 const double _kBorderWidth = 1.0;
 
 class GenderTableWidget extends StatelessWidget {
-  GenderTableWidget({
+  const GenderTableWidget({
     Key key,
     @required Map<String, GenderTableData> data,
     @required String firstColumnName,
@@ -34,7 +34,7 @@ class GenderTableWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         border: Border.all(
           width: _kBorderWidth,
           color: _kBorderColor,
@@ -73,7 +73,7 @@ class GenderTableWidget extends StatelessWidget {
               _SubTitleCell(name: 'labelTotal'.localized(context)),
             ],
           ),
-          FutureBuilder(
+          FutureBuilder<List<_CellData>>(
             future: Future.microtask(() {
               final keys = _data.keys.toList();
               if (_keySortFunc != null) {
@@ -88,7 +88,7 @@ class GenderTableWidget extends StatelessWidget {
                       ))
                   .toList();
             }),
-            builder: (context, AsyncSnapshot<List<_CellData>> snapshot) {
+            builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Container();
               }
@@ -104,7 +104,7 @@ class GenderTableWidget extends StatelessWidget {
                   ...snapshot.data
                       .map((it) => Container(
                             decoration: BoxDecoration(
-                              color: it.index % 2 == 0
+                              color: it.index.isEven
                                   ? Colors.transparent
                                   : AppColors.kGrayLight,
                             ),
@@ -190,12 +190,12 @@ class _SubTitleCell extends StatelessWidget {
 }
 
 class GenderTableData {
-  static const String _kZeroSymbol = "-";
+  const GenderTableData(this._maleAmount, this._femaleAmount);
+
+  static const String _kZeroSymbol = '-';
 
   final int _maleAmount;
   final int _femaleAmount;
-
-  const GenderTableData(this._maleAmount, this._femaleAmount);
 
   String get maleAmount =>
       _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
@@ -209,13 +209,13 @@ class GenderTableData {
 }
 
 class _CellData {
-  final String domain;
-  final GenderTableData measure;
-  final int index;
-
   const _CellData({
     @required this.domain,
     @required this.measure,
     @required this.index,
   });
+
+  final String domain;
+  final GenderTableData measure;
+  final int index;
 }

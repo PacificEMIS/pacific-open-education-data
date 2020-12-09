@@ -4,31 +4,31 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 
 class PieChartWidget extends StatefulWidget {
-  final bool animate;
-  final List<ChartData> data;
-
-  PieChartWidget({
+  const PieChartWidget({
     Key key,
     this.data,
     this.animate,
   }) : super(key: key);
+
+  final bool animate;
+  final List<ChartData> data;
 
   @override
   PieChartWidgetState createState() => PieChartWidgetState();
 }
 
 class PieChartWidgetState extends State<PieChartWidget> {
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Future.microtask(() {
         return [
           charts.Series(
-            id: "name",
-            domainFn: (ChartData chartData, _) => chartData.domain,
-            measureFn: (ChartData chartData, _) => chartData.measure,
-            labelAccessorFn: (ChartData chartData, _) => chartData.domain,
+            id: 'name',
+            domainFn: (chartData, _) => chartData.domain,
+            measureFn: (chartData, _) => chartData.measure,
+            labelAccessorFn: (chartData, _) => chartData.domain,
+            // ignore: avoid_types_on_closure_parameters
             colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
             data: widget.data,
           ),

@@ -33,13 +33,14 @@ class ChartWithTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_title.isEmpty)
+    if (_title.isEmpty) {
       return ChartColumn(
         chartType: _chartType,
         data: _data,
         tableKeyName: _tableKeyName,
         tableValueName: _tableValueName,
       );
+    }
 
     return TileWidget(
       title: Text(

@@ -4,11 +4,16 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 
 class BarChartWidget extends StatefulWidget {
+  const BarChartWidget({
+    Key key,
+    this.title,
+    this.data,
+    this.type,
+  }) : super(key: key);
+
   final List<ChartData> data;
   final String title;
   final charts.BarGroupingType type;
-
-  BarChartWidget({Key key, this.title, this.data, this.type}) : super(key: key);
 
   @override
   BarChartWidgetState createState() => BarChartWidgetState();
@@ -21,9 +26,9 @@ class BarChartWidgetState extends State<BarChartWidget> {
       future: Future.microtask(() {
         return [
           charts.Series(
-            domainFn: (ChartData chartData, _) => chartData.domain,
-            measureFn: (ChartData chartData, _) => chartData.measure,
-            colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+            domainFn: (chartData, _) => chartData.domain,
+            measureFn: (chartData, _) => chartData.measure,
+            colorFn: (chartData, _) => chartData.color.chartsColor,
             id: widget.title,
             data: widget.data,
           ),

@@ -19,8 +19,6 @@ import 'package:pacific_dashboards/shared_ui/tile_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class SchoolAccreditationsPage extends MvvmStatefulWidget {
-  static String kRoute = '/SchoolAccreditations';
-
   SchoolAccreditationsPage({
     Key key,
   }) : super(
@@ -28,6 +26,8 @@ class SchoolAccreditationsPage extends MvvmStatefulWidget {
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createSchoolAccreditationViewModel(ctx),
         );
+
+  static String kRoute = '/SchoolAccreditations';
 
   @override
   State<StatefulWidget> createState() {
@@ -106,7 +106,7 @@ class SchoolsPageState
 }
 
 class _ContentBody extends StatelessWidget {
-  _ContentBody({
+  const _ContentBody({
     Key key,
     @required AccreditationData data,
   })  : assert(data != null),
@@ -178,9 +178,11 @@ class _ContentBody extends StatelessWidget {
       tabNameBuilder: (tab) {
         switch (tab) {
           case _Tab.cumulative:
-            return '${'schoolAccreditationCumulative'.localized(context)} ${_data.year}';
+            return '${'schoolAccreditationCumulative'.localized(context)} '
+                '${_data.year}';
           case _Tab.evaluated:
-            return '${'schoolAccreditationEvaluated'.localized(context)} ${_data.year}';
+            return '${'schoolAccreditationEvaluated'.localized(context)} '
+                '${_data.year}';
         }
         throw FallThroughError();
       },
@@ -213,9 +215,11 @@ class _ContentBody extends StatelessWidget {
       tabNameBuilder: (tab) {
         switch (tab) {
           case _Tab.cumulative:
-            return '${'schoolAccreditationCumulative'.localized(context)} ${_data.year}';
+            return '${'schoolAccreditationCumulative'.localized(context)} '
+                '${_data.year}';
           case _Tab.evaluated:
-            return '${'schoolAccreditationEvaluated'.localized(context)} ${_data.year}';
+            return '${'schoolAccreditationEvaluated'.localized(context)} '
+                '${_data.year}';
         }
         throw FallThroughError();
       },
@@ -310,4 +314,3 @@ class _PerformanceTable extends StatelessWidget {
 }
 
 enum _Tab { cumulative, evaluated }
-// enum _Tab { accreditationProgres, districtStatus }

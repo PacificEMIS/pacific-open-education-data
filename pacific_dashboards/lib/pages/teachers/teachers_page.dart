@@ -16,12 +16,9 @@ import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
-
-import 'components/teachers_multi_table.dart';
+import 'package:pacific_dashboards/pages/teachers/components/teachers_multi_table.dart';
 
 class TeachersPage extends MvvmStatefulWidget {
-  static const String kRoute = '/Teachers';
-
   TeachersPage({
     Key key,
   }) : super(
@@ -29,6 +26,8 @@ class TeachersPage extends MvvmStatefulWidget {
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createTeachersViewModel(ctx),
         );
+
+  static const String kRoute = '/Teachers';
 
   @override
   State<StatefulWidget> createState() {
@@ -167,18 +166,17 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             style: Theme.of(context).textTheme.headline5,
                           ),
                         ),
-                        (snapshot.data.teachersByCertification.length == 0)
-                            ? Container()
-                            : StackedHorizontalBarChartWidgetExtended(
-                                data: snapshot.data.teachersByCertification,
-                                legend: [
-                                  'schoolsCertifiedQualified',
-                                  'qualifiedNotCertified',
-                                  'certified'
-                                ],
-                                colorFunc: _levelIndexToColor,
-                              ),
-                        SizedBox(height: 10.0),
+                        if (snapshot.data.teachersByCertification.isNotEmpty)
+                          StackedHorizontalBarChartWidgetExtended(
+                            data: snapshot.data.teachersByCertification,
+                            legend: const [
+                              'schoolsCertifiedQualified',
+                              'qualifiedNotCertified',
+                              'certified'
+                            ],
+                            colorFunc: _levelIndexToColor,
+                          ),
+                        const SizedBox(height: 10.0),
                         Text(
                           'teachersDashboardsEnrollByLevelStateGenderTitle'
                               .localized(context),
@@ -201,44 +199,70 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                             switch (tab) {
                               case _TeachersTab.all:
                                 return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
+                                  objectKey: ObjectKey(
+                                    snapshot
                                         .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .all);
+                                        // ignore: lines_longer_than_80_chars
+                                        .enrollTeachersBySchoolLevelStateAndGender,
+                                  ),
+                                  selectedTabData: snapshot
+                                      .data
+                                      // ignore: lines_longer_than_80_chars
+                                      .enrollTeachersBySchoolLevelStateAndGender
+                                      .all,
+                                );
                               case _TeachersTab.qualified:
                                 return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
+                                  objectKey: ObjectKey(
+                                    snapshot
                                         .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .qualified);
+                                        // ignore: lines_longer_than_80_chars
+                                        .enrollTeachersBySchoolLevelStateAndGender,
+                                  ),
+                                  selectedTabData: snapshot
+                                      .data
+                                      .enrollTeachersBySchoolLevelStateAndGender
+                                      .qualified,
+                                );
                               case _TeachersTab.certified:
                                 return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
+                                  objectKey: ObjectKey(
+                                    snapshot
                                         .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .certified);
+                                        // ignore: lines_longer_than_80_chars
+                                        .enrollTeachersBySchoolLevelStateAndGender,
+                                  ),
+                                  selectedTabData: snapshot
+                                      .data
+                                      .enrollTeachersBySchoolLevelStateAndGender
+                                      .certified,
+                                );
                               case _TeachersTab.qualifiedAndCertified:
                                 return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
+                                  objectKey: ObjectKey(
+                                    snapshot
                                         .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .allQualifiedAndCertified);
+                                        // ignore: lines_longer_than_80_chars
+                                        .enrollTeachersBySchoolLevelStateAndGender,
+                                  ),
+                                  selectedTabData: snapshot
+                                      .data
+                                      .enrollTeachersBySchoolLevelStateAndGender
+                                      .allQualifiedAndCertified,
+                                );
                               default:
                                 return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
+                                  objectKey: ObjectKey(
+                                    snapshot
                                         .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .all);
+                                        // ignore: lines_longer_than_80_chars
+                                        .enrollTeachersBySchoolLevelStateAndGender,
+                                  ),
+                                  selectedTabData: snapshot
+                                      .data
+                                      .enrollTeachersBySchoolLevelStateAndGender
+                                      .all,
+                                );
                             }
                           },
                         ),
@@ -291,16 +315,16 @@ class TeachersMultiTableWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TeachersMultiTable(
       key: objectKey,
-      columnNames: [
+      columnNames: const [
         'teachersDashboardsSchoolLevelDomain',
         'labelMale',
         'labelFemale',
         'labelTotal'
       ],
-      columnFlex: [3, 3, 3, 3],
+      columnFlex: const [3, 3, 3, 3],
       data: selectedTabData,
       keySortFunc: (lv, rv) => lv.compareTo(rv),
-      domainValueBuilder: GenderTableData.sDomainValueBuilder,
+      domainValueBuilder: GenderTableData.buildDomainValue,
     );
   }
 }

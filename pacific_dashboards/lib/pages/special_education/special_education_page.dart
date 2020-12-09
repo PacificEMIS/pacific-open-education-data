@@ -11,12 +11,9 @@ import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
-
-import 'special_education_data.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_data.dart';
 
 class SpecialEducationPage extends MvvmStatefulWidget {
-  static String kRoute = "/Special Education";
-
   SpecialEducationPage({
     Key key,
   }) : super(
@@ -24,6 +21,8 @@ class SpecialEducationPage extends MvvmStatefulWidget {
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createSpecialEducationViewModel(ctx),
         );
+
+  static String kRoute = '/Special Education';
 
   @override
   _SpecialEducationPageState createState() => _SpecialEducationPageState();
@@ -102,7 +101,7 @@ class _SpecialEducationPageState
                           SpecialEducationComponent(
                             data: snapshot.data.dataByEnglishLearner,
                           ),
-                          _Title(
+                          const _Title(
                             text: 'specialEducationTitleCohortDistribution',
                           ),
                           _Title(
@@ -117,7 +116,8 @@ class _SpecialEducationPageState
                             year: year,
                           ),
                           CohortDistributionComponent(
-                            data: snapshot.data.dataByCohortDistributionByDistrict,
+                            data: snapshot
+                                .data.dataByCohortDistributionByDistrict,
                           ),
                         ],
                       );
@@ -134,9 +134,6 @@ class _SpecialEducationPageState
 }
 
 class _Title extends StatelessWidget {
-  final String _text;
-  final int _year;
-
   const _Title({
     Key key,
     @required String text,
@@ -145,6 +142,9 @@ class _Title extends StatelessWidget {
         _text = text,
         _year = year,
         super(key: key);
+
+  final String _text;
+  final int _year;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +157,7 @@ class _Title extends StatelessWidget {
         top: 10.0,
       ),
       child: Text(
-        '${_text.localized(context)}' + (_year == null ? '' : ' $_year'),
+        '${_text.localized(context)}${_year == null ? '' : ' $_year'}',
         style: _year == null
             ? Theme.of(context).textTheme.headline3.copyWith(
                   color: AppColors.kTextMain,

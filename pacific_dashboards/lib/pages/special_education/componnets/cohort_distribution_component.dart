@@ -7,16 +7,16 @@ import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
-import '../special_education_data.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_data.dart';
 
 class CohortDistributionComponent extends StatefulWidget {
-  final DataByCohortDistribution data;
-
   const CohortDistributionComponent({
     Key key,
     @required this.data,
   })  : assert(data != null),
         super(key: key);
+
+  final DataByCohortDistribution data;
 
   @override
   _CohortDistributionComponentState createState() =>
@@ -77,8 +77,6 @@ class _CohortDistributionComponentState
 enum _Tab { environment, disability, ethnicity, englishLearner }
 
 class _Chart extends StatelessWidget {
-  final List<DataByCohort> _data;
-
   const _Chart({
     Key key,
     @required List<DataByCohort> data,
@@ -86,15 +84,17 @@ class _Chart extends StatelessWidget {
         _data = data,
         super(key: key);
 
+  final List<DataByCohort> _data;
+
   Future<Map<String, Color>> get _colorScheme {
     return Future.microtask(() {
-      final colorScheme = Map<String, Color>();
-      final legends = _data.map((e) => e.cohortName);
-      legends.forEachIndexed((index, item) {
-        colorScheme[item] = index < AppColors.kDynamicPalette.length
-            ? AppColors.kDynamicPalette[index]
-            : HexColor.fromStringHash(item);
-      });
+      final colorScheme = <String, Color>{};
+      _data.map((e) => e.cohortName)
+        ..forEachIndexed((index, item) {
+          colorScheme[item] = index < AppColors.kDynamicPalette.length
+              ? AppColors.kDynamicPalette[index]
+              : HexColor.fromStringHash(item);
+        });
       return colorScheme;
     });
   }
@@ -132,7 +132,8 @@ class _Chart extends StatelessWidget {
                     vertical: false,
                     barGroupingType: charts.BarGroupingType.stacked,
                     primaryMeasureAxis: charts.NumericAxisSpec(
-                      tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                      tickProviderSpec:
+                          const charts.BasicNumericTickProviderSpec(
                         desiredMinTickCount: 7,
                         desiredMaxTickCount: 13,
                       ),
@@ -173,8 +174,9 @@ class _Chart extends StatelessWidget {
     Map<String, Color> colorScheme,
   ) {
     return Future.microtask(() {
-      final barChartData = List<ChartData>();
-      _data.forEach((cohortData) {
+      final barChartData = <ChartData>[];
+
+      for (final cohortData in _data) {
         barChartData.addAll(
           cohortData.groupDataList.map((it) {
             return ChartData(
@@ -184,12 +186,13 @@ class _Chart extends StatelessWidget {
             );
           }).toList(),
         );
-      });
+      }
+
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'cohort_distribution_Data',
           data: barChartData,
         )

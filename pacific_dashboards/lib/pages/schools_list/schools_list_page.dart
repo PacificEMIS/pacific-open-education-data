@@ -11,14 +11,14 @@ import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class SchoolsListPage extends MvvmStatefulWidget {
-  static const String kRoute = '/SchoolList';
-
   SchoolsListPage({Key key})
       : super(
           key: key,
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createIndividualSchoolsList(ctx),
         );
+
+  static const String kRoute = '/SchoolList';
 
   @override
   State<StatefulWidget> createState() {
@@ -86,12 +86,14 @@ class SchoolsListPageState
 }
 
 class _SearchBar extends StatefulWidget {
-  final SchoolsListViewModel _viewModel;
-
-  const _SearchBar({Key key, SchoolsListViewModel viewModel})
-      : assert(viewModel != null),
+  const _SearchBar({
+    Key key,
+    @required SchoolsListViewModel viewModel,
+  })  : assert(viewModel != null),
         _viewModel = viewModel,
         super(key: key);
+
+  final SchoolsListViewModel _viewModel;
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -142,7 +144,7 @@ class _SearchBarState extends State<_SearchBar> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 24,
             height: 24,
             child: Opacity(
@@ -176,12 +178,12 @@ class _SearchBarState extends State<_SearchBar> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: 24,
             height: 24,
             child: _isCloseButtonVisible
                 ? InkResponse(
-                    onTap: () => _controller.clear(),
+                    onTap: _controller.clear,
                     child: SvgPicture.asset(
                       'images/ic_search_close.svg',
                       fit: BoxFit.contain,
@@ -196,10 +198,6 @@ class _SearchBarState extends State<_SearchBar> {
 }
 
 class _SchoolRow extends StatelessWidget {
-  final bool _isEven;
-  final ShortSchool _school;
-  final SchoolsListViewModel _viewModel;
-
   const _SchoolRow({
     Key key,
     @required SchoolsListViewModel viewModel,
@@ -212,6 +210,10 @@ class _SchoolRow extends StatelessWidget {
         _school = school,
         _isEven = isEven,
         super(key: key);
+
+  final bool _isEven;
+  final ShortSchool _school;
+  final SchoolsListViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +231,7 @@ class _SchoolRow extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 86,
                   child: Text(
                     _school.id,

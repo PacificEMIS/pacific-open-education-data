@@ -14,13 +14,25 @@ import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/wash/components/totals/totals_view_data.dart';
+import 'package:pacific_dashboards/pages/wash/components/toilets/toilets_data.dart';
+import 'package:pacific_dashboards/pages/wash/components/totals/totals_question_selector_page.dart';
+import 'package:pacific_dashboards/pages/wash/components/water/water_data.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'components/toilets/toilets_data.dart';
-import 'components/totals/totals_question_selector_page.dart';
-import 'components/water/water_data.dart';
-
 class WashViewModel extends BaseViewModel {
+  WashViewModel(
+    BuildContext ctx, {
+    @required Repository repository,
+    @required RemoteConfig remoteConfig,
+    @required GlobalSettings globalSettings,
+  })  : assert(repository != null),
+        assert(remoteConfig != null),
+        assert(globalSettings != null),
+        _repository = repository,
+        _remoteConfig = remoteConfig,
+        _globalSettings = globalSettings,
+        super(ctx);
+
   final Repository _repository;
   final RemoteConfig _remoteConfig;
   final GlobalSettings _globalSettings;
@@ -35,19 +47,6 @@ class WashViewModel extends BaseViewModel {
   List<Filter> _filters;
   Lookups _lookups;
   Question _selectedQuestion;
-
-  WashViewModel(
-    BuildContext ctx, {
-    @required Repository repository,
-    @required RemoteConfig remoteConfig,
-    @required GlobalSettings globalSettings,
-  })  : assert(repository != null),
-        assert(remoteConfig != null),
-        assert(globalSettings != null),
-        _repository = repository,
-        _remoteConfig = remoteConfig,
-        _globalSettings = globalSettings,
-        super(ctx);
 
   Stream<WashToiletViewData> get toiletsDataStream =>
       _toiletsDataSubject.stream;
@@ -84,7 +83,7 @@ class WashViewModel extends BaseViewModel {
 
   void _loadData() {
     listenHandled(
-      handleRepositoryFetch(fetch: () => _repository.fetchAllWashChunk()),
+      handleRepositoryFetch(fetch: _repository.fetchAllWashChunk),
       _onDataLoaded,
       notifyProgress: true,
     );
@@ -169,31 +168,31 @@ class WashViewModel extends BaseViewModel {
       );
       if (newSelectedQuestion != _selectedQuestion) {
         _selectedQuestion = newSelectedQuestion;
-        _updateQuestionTotals();
+        await _updateQuestionTotals();
       }
     });
   }
 }
 
 class _WashModel {
+  const _WashModel(this.chunk, this.lookups);
+
   final WashChunk chunk;
   final Lookups lookups;
-
-  const _WashModel(this.chunk, this.lookups);
 }
 
 class _TotalsModel {
-  final List<Wash> washData;
-  final List<Question> lookups;
-  final Question selectedQuestion;
-  final int year;
-
   const _TotalsModel(
     this.washData,
     this.lookups,
     this.selectedQuestion,
     this.year,
   );
+
+  final List<Wash> washData;
+  final List<Question> lookups;
+  final Question selectedQuestion;
+  final int year;
 }
 
 int _selectedYear(List<Filter> filters) {
@@ -215,7 +214,7 @@ Future<WashToiletViewData> _calculateToiletsData(
   final pupilsByUsableToiletByGender = <SchoolDataByGender>[];
   final pupils = <SchoolDataByGender>[];
 
-  for (var it in toiletsData) {
+  for (final it in toiletsData) {
     final school = it.schNo;
     totalToilets.add(SchoolDataByToiletType(
       school: school,
@@ -284,7 +283,7 @@ Future<WashWaterViewData> _calculateWaterData(
   final available = <WaterViewDataBySchool>[];
   final usedForDrinking = <WaterViewDataBySchool>[];
 
-  for (var it in waterData) {
+  for (final it in waterData) {
     final school = it.schNo;
     available.add(WaterViewDataBySchool(
       school: school,
@@ -339,10 +338,10 @@ Future<WashTotalsViewData> _calculateTotalsData(
       var evaluated = 0;
       var accumulated = 0;
 
-      washDataEntries.forEach((it) {
+      for (final it in washDataEntries) {
         evaluated += it.numThisYear;
         accumulated += it.number;
-      });
+      }
 
       dataByAnswers.add(WashTotalsViewDataByAnswer(
         answer: answer,

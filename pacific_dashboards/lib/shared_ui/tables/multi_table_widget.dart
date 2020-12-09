@@ -3,21 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
-typedef int KeySortFunc(String lv, String rv);
-typedef String DomainValueBuilder<T>(int index, _CellData<T> data);
+typedef KeySortFunc = int Function(String lv, String rv);
+typedef DomainValueBuilder<T> = String Function(int index, _CellData<T> data);
 
 const Color _kBorderColor = AppColors.kGeyser;
 const double _kBorderWidth = 1.0;
 
 class MultiTableWidget<T> extends StatelessWidget {
-  final Map<String, T> _data;
-  final KeySortFunc _keySortFunc;
-  final String _title;
-  final List<String> _columnNames;
-  final List<int> _columnFlex;
-  final DomainValueBuilder _domainValueBuilder;
-
-  MultiTableWidget({
+  const MultiTableWidget({
     Key key,
     @required Map<String, T> data,
     @required List<String> columnNames,
@@ -37,13 +30,20 @@ class MultiTableWidget<T> extends StatelessWidget {
         _domainValueBuilder = domainValueBuilder,
         super(key: key);
 
+  final Map<String, T> _data;
+  final KeySortFunc _keySortFunc;
+  final String _title;
+  final List<String> _columnNames;
+  final List<int> _columnFlex;
+  final DomainValueBuilder _domainValueBuilder;
+
   bool get _haveTitle => _title != null && _title.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         border: Border.all(
           width: _kBorderWidth,
           color: _kBorderColor,
@@ -84,7 +84,7 @@ class MultiTableWidget<T> extends StatelessWidget {
               );
             }).toList(),
           ),
-          FutureBuilder(
+          FutureBuilder<List<_CellData>>(
             future: Future.microtask(() {
               final keys = _data.keys.toList();
               if (_keySortFunc != null) {
@@ -99,7 +99,7 @@ class MultiTableWidget<T> extends StatelessWidget {
                       ))
                   .toList();
             }),
-            builder: (context, AsyncSnapshot<List<_CellData>> snapshot) {
+            builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Container();
               }
@@ -116,7 +116,7 @@ class MultiTableWidget<T> extends StatelessWidget {
                       .map(
                         (it) => Container(
                           decoration: BoxDecoration(
-                            color: it.index % 2 == 0
+                            color: it.index.isEven
                                 ? Colors.transparent
                                 : AppColors.kGrayLight,
                           ),
@@ -126,10 +126,9 @@ class MultiTableWidget<T> extends StatelessWidget {
                             children: _columnNames.mapIndexed(
                               (index, columnName) {
                                 return _Cell(
-                                  flex: _columnFlex[index],
-                                  value: _domainValueBuilder(index, it),
-                                  fontWeight: _getFontWeight(it.domain)
-                                );
+                                    flex: _columnFlex[index],
+                                    value: _domainValueBuilder(index, it),
+                                    fontWeight: _getFontWeight(it.domain));
                               },
                             ).toList(),
                             //_generateColumnCells(_columnNames, it),
@@ -220,7 +219,24 @@ class _SubTitleCell extends StatelessWidget {
 }
 
 class GenderTableData {
-  static DomainValueBuilder sDomainValueBuilder = (index, data) {
+  const GenderTableData(this._maleAmount, this._femaleAmount);
+
+  static const String _kZeroSymbol = '-';
+
+  final int _maleAmount;
+  final int _femaleAmount;
+
+  String get maleAmount =>
+      _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
+
+  String get femaleAmount =>
+      _femaleAmount != 0 ? _femaleAmount.toString() : _kZeroSymbol;
+
+  String get total => (_maleAmount + _femaleAmount) != 0
+      ? (_maleAmount + _femaleAmount).toString()
+      : _kZeroSymbol;
+
+  static String buildDomainValue(int index, _CellData data) {
     switch (index) {
       case 0:
         return data.domain;
@@ -232,34 +248,17 @@ class GenderTableData {
         return data.measure.total.toString();
     }
     throw FallThroughError();
-  };
-  
-  static const String _kZeroSymbol = "-";
-
-  final int _maleAmount;
-  final int _femaleAmount;
-
-  const GenderTableData(this._maleAmount, this._femaleAmount);
-
-  String get maleAmount =>
-      _maleAmount != 0 ? _maleAmount.toString() : _kZeroSymbol;
-
-  String get femaleAmount =>
-      _femaleAmount != 0 ? _femaleAmount.toString() : _kZeroSymbol;
-
-  String get total => (_maleAmount + _femaleAmount) != 0
-      ? (_maleAmount + _femaleAmount).toString()
-      : _kZeroSymbol;
+  }
 }
 
 class _CellData<T> {
-  final String domain;
-  final T measure;
-  final int index;
-
   const _CellData({
     @required this.domain,
     @required this.measure,
     @required this.index,
   });
+
+  final String domain;
+  final T measure;
+  final int index;
 }

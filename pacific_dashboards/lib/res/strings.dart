@@ -3,24 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 
 class Strings {
+  Strings(this.locale);
+
   static Emis emis = Emis.fedemis;
 
   final Locale locale;
-
-  Strings(this.locale);
 
   static Strings of(BuildContext context) {
     return Localizations.of<Strings>(context, Strings);
   }
 
-  static Map<Emis, Map<String, Map<String, String>>> _stringsForEmis = {
+  static final Map<Emis, Map<String, Map<String, String>>> _stringsForEmis = {
     Emis.fedemis: _localizedValuesFedEmis,
     Emis.miemis: _localizedValuesMiEmis,
     Emis.kemis: _localizedValuesKiEmis,
   };
 
   /// This one should contain ALL stings, since it is used as fallback
-  static Map<String, Map<String, String>> _localizedValuesDefault = {
+  static final Map<String, Map<String, String>> _localizedValuesDefault = {
     'en': {
       'appName': 'Pacific Open Education Data',
       'splash': '\nPACIFIC OPEN\n EDUCATION DATA',
@@ -37,7 +37,8 @@ class Strings {
       'errorTitle': 'Error',
       'error_unknown': 'Unknown error occurred',
       'error_server_unavailable':
-          'You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.',
+          '''
+You are not connected to the Internet and there was no previously fetched data to display. Try again with a working Internet connection.''',
       'miemisTitle': 'Marshall Islands',
       'fedemisTitle': 'Federated States of Micronesia',
       'fedemisTitleMultiline': 'Federated States \nof Micronesia',
@@ -207,7 +208,8 @@ class Strings {
       'budgetsActualExpenditureTab': 'Actual Expenditure',
       'budgetsBudgetTab': 'Budget',
       'budgetsActualRecurrentExpenditureTab': 'Actual Recurrent Expenditure',
-      'budgetsBudgetedRecurrentExpenditureTab': 'Budgeted Recurrent Expenditure',
+      'budgetsBudgetedRecurrentExpenditureTab':
+          'Budgeted Recurrent Expenditure',
       'budgetsActualExpPerHeadTab': 'Actual Exp per Head',
       'budgetsEnrollmentTab': 'Enrollment',
       'budgetsBudgetExpPerHeadTab': 'Budget Exp per Head',
@@ -246,7 +248,8 @@ class Strings {
       'washToiletsPupilsByToiletTab': 'Pupils / toilet',
       'washToiletsPupilsByToiletByGenderTab': 'Pupils / toilet (gender)',
       'washToiletsPupilsByUsableToiletTab': 'Pupils / usable toilet',
-      'washToiletsPupilsByUsableToiletByGenderTab': 'Pupils / usable toilet (gender)',
+      'washToiletsPupilsByUsableToiletByGenderTab':
+          'Pupils / usable toilet (gender)',
       'washToiletsPupilsTab': 'Pupils',
       'washToiletsPupilsMirroredTab': 'Pupils (mirror format)',
       'washToiletsCommonLabel': 'Common',
@@ -283,18 +286,18 @@ class Strings {
       'all': 'Total',
       'qualified': 'Qualified',
       'certified': 'Certified',
-      'qualifiedAndCertified':'Qualified and Certified',
-      'qualifiedNotCertified':'Qualified (not certified)',
+      'qualifiedAndCertified': 'Qualified and Certified',
+      'qualifiedNotCertified': 'Qualified (not certified)',
       'other': 'Other'
     },
   };
 
   // region Specific strings
-  static Map<String, Map<String, String>> _localizedValuesFedEmis = {
+  static final Map<String, Map<String, String>> _localizedValuesFedEmis = {
     'en': {},
   };
 
-  static Map<String, Map<String, String>> _localizedValuesMiEmis = {
+  static final Map<String, Map<String, String>> _localizedValuesMiEmis = {
     'en': {
       'schoolsDashboardsEnrollByStateTitle': 'Enrollment by Atolls and Islands',
       'schoolsDashboardsEnrollByLevelStateGenderTitle':
@@ -325,7 +328,8 @@ class Strings {
       'filtersDisplayAllAuthority': 'Display All Authority',
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
-      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by Atoll / Island ',
+      'schoolsAccreditationDashboardsProgressByStateTitle':
+          'Accreditation Progress by Atoll / Island ',
       'schoolsAccreditationDashboardsDistrictTitle': 'Atoll / Island Status',
       'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
       'budgetsStatesDomain': 'Atolls and Islands',
@@ -335,7 +339,7 @@ class Strings {
     },
   };
 
-  static Map<String, Map<String, String>> _localizedValuesKiEmis = {
+  static final Map<String, Map<String, String>> _localizedValuesKiEmis = {
     'en': {
       'homeSectionExamsDashboards': 'National Tests',
       'filtersDisplayAllStates': 'Display All Districts',
@@ -376,22 +380,16 @@ class Strings {
 
   String _getLocalizedValue(String code) {
     final emisStrings = _stringsForEmis[emis];
-    String translation = emisStrings[locale.languageCode][code];
+    var translation = emisStrings[locale.languageCode][code];
 
     // fallback to 'en' locale in same Emis
-    if (translation == null) {
-      translation = emisStrings['en'][code];
-    }
+    translation ??= emisStrings['en'][code];
 
     // fallback to default translations
-    if (translation == null) {
-      translation = _localizedValuesDefault[locale.languageCode][code];
-    }
+    translation ??= _localizedValuesDefault[locale.languageCode][code];
 
     // fallback to 'en' locale in default translations
-    if (translation == null) {
-      translation = _localizedValuesDefault['en'][code];
-    }
+    translation ??= _localizedValuesDefault['en'][code];
 
     return translation;
   }

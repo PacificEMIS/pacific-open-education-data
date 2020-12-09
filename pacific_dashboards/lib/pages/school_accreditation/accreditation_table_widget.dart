@@ -4,7 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
 class AccreditationTableData {
-  static const String _kZeroSymbol = "-";
+  const AccreditationTableData(
+    this.level1,
+    this.level2,
+    this.level3,
+    this.level4,
+  );
+
+  static const String _kZeroSymbol = '-';
   final int level1;
   final int level2;
   final int level3;
@@ -18,11 +25,16 @@ class AccreditationTableData {
   String get total => (level1 + level2 + level3 + level4).toString();
 
   String get accreditated => (level2 + level3 + level4).toString();
-
-  AccreditationTableData(this.level1, this.level2, this.level3, this.level4);
 }
 
 class AccreditationTableWidget extends StatefulWidget {
+  const AccreditationTableWidget({
+    Key key,
+    @required this.data,
+    @required this.title,
+    @required this.firstColumnName,
+  }) : super(key: key);
+
   static const double _kBorderWidth = 1.0;
 
   final Map<String, AccreditationTableData> data;
@@ -33,13 +45,6 @@ class AccreditationTableWidget extends StatefulWidget {
   final Color _borderColor = AppColors.kGeyser;
   final Color _evenRowColor = Colors.white;
   final Color _oddRowColor = AppColors.kGrayLight;
-
-  AccreditationTableWidget({
-    Key key,
-    @required this.data,
-    @required this.title,
-    @required this.firstColumnName,
-  }) : super(key: key);
 
   @override
   State<AccreditationTableWidget> createState() =>
@@ -63,7 +68,7 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
           ),
         ),
         Table(
-          columnWidths: {
+          columnWidths: const {
             0: FlexColumnWidth(2.2),
             1: FlexColumnWidth(1),
           },
@@ -111,44 +116,44 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
             ),
           ),
         ),
-        TableCell(
+        const TableCell(
           child: _SubTitleCell(
             name: '1',
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            icon: const Icon(Icons.star, color: Colors.red, size: 13.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            icon: Icon(Icons.star, color: Colors.red, size: 13.0),
           ),
         ),
-        TableCell(
+        const TableCell(
           child: _SubTitleCell(
             name: '2',
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            icon: const Icon(Icons.star, color: Colors.yellow, size: 13.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            icon: Icon(Icons.star, color: Colors.yellow, size: 13.0),
           ),
         ),
-        TableCell(
+        const TableCell(
           child: _SubTitleCell(
             name: '3',
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            icon: const Icon(Icons.star, color: Colors.lightGreen, size: 13.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            icon: Icon(Icons.star, color: Colors.lightGreen, size: 13.0),
           ),
         ),
-        TableCell(
+        const TableCell(
           child: _SubTitleCell(
             name: '4',
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            icon: const Icon(Icons.star, color: Colors.green, size: 13.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            icon: Icon(Icons.star, color: Colors.green, size: 13.0),
           ),
         ),
-        TableCell(
+        const TableCell(
           child: _SubTitleCell(
             name: 'Total',
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
           ),
         ),
-        TableCell(
+        const TableCell(
           child: _SubTitleCell(
             name: 'Accreditated',
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
           ),
         ),
       ],
@@ -180,10 +185,9 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
     Map<dynamic, AccreditationTableData> data,
     TableRow subTitle,
   ) {
-    var rowsList = List<TableRow>();
-    rowsList.add(subTitle);
+    final rowsList = <TableRow>[subTitle];
 
-    int i = 0;
+    var i = 0;
     data.forEach((domain, measure) {
       rowsList.add(_generateTableRow(domain, measure, i));
       i++;
@@ -199,7 +203,7 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
   ) {
     return TableRow(
       decoration: BoxDecoration(
-        color: index % 2 == 0 ? widget._evenRowColor : widget._oddRowColor,
+        color: index.isEven ? widget._evenRowColor : widget._oddRowColor,
       ),
       children: [
         TableCell(

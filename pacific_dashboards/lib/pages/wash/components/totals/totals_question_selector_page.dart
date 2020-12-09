@@ -3,15 +3,15 @@ import 'package:pacific_dashboards/models/wash/question.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
 class TotalsQuestionSelectorPage extends StatefulWidget {
-  final List<Question> questions;
-  final Question initiallySelectedQuestion;
-
   const TotalsQuestionSelectorPage({
     Key key,
     @required this.questions,
     @required this.initiallySelectedQuestion,
   })  : assert(questions != null),
         super(key: key);
+
+  final List<Question> questions;
+  final Question initiallySelectedQuestion;
 
   @override
   _TotalsQuestionSelectorPageState createState() =>
@@ -73,12 +73,12 @@ class _TotalsQuestionSelectorPageState
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(22.0),
             ),
+            color: Theme.of(context).accentColor,
+            onPressed: () => _apply(context),
             child: const Icon(
               Icons.done,
               color: Colors.white,
             ),
-            color: Theme.of(context).accentColor,
-            onPressed: () => _apply(context),
           ),
         ),
       ),

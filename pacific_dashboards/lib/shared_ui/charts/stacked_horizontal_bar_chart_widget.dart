@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/colors.dart';
 
-typedef Color ColorFunc(int index);
+typedef ColorFunc = Color Function(int index);
 
 class StackedHorizontalBarChartWidget extends StatefulWidget {
-  final Map<String, List<int>> data;
-  final ColorFunc colorFunc;
-
-  StackedHorizontalBarChartWidget({
+  const StackedHorizontalBarChartWidget({
     Key key,
     @required this.data,
     this.colorFunc,
   }) : super(key: key);
+
+  final Map<String, List<int>> data;
+  final ColorFunc colorFunc;
 
   @override
   StackedHorizontalBarChartWidgetState createState() =>
@@ -66,23 +66,26 @@ class StackedHorizontalBarChartWidgetState
     Map<String, List<int>> data,
   ) {
     final length = _getDataLengthWithChecks(data);
-    final series = List<charts.Series<_Data, String>>();
+    final series = <charts.Series<_Data, String>>[];
 
     for (var i = 0; i < length; i++) {
-      final chunk = List<_Data>();
+      final chunk = <_Data>[];
       data.forEach((key, values) {
-        chunk.add(_Data(
+        chunk.add(
+          _Data(
             domain: key,
             measure: values[i],
             color: widget.colorFunc != null
                 ? widget.colorFunc(i)
-                : HexColor.fromStringHash(values[i].toString())));
+                : HexColor.fromStringHash(values[i].toString()),
+          ),
+        );
       });
       series.add(charts.Series<_Data, String>(
         id: 'series_${i.toString()}',
-        domainFn: (_Data data, int _) => data.domain,
-        measureFn: (_Data data, int _) => data.measure,
-        colorFn: (_Data data, int _) => data.color.chartsColor,
+        domainFn: (data, _) => data.domain,
+        measureFn: (data, _) => data.measure,
+        colorFn: (data, _) => data.color.chartsColor,
         data: chunk,
       ));
     }
@@ -96,7 +99,7 @@ class StackedHorizontalBarChartWidgetState
       if (length == -1) {
         length = value.length;
       } else if (value.length != length) {
-        throw Exception("Inconsistent data arrays");
+        throw Exception('Inconsistent data arrays');
       }
     });
     return length;
@@ -104,9 +107,9 @@ class StackedHorizontalBarChartWidgetState
 }
 
 class _Data {
+  const _Data({this.domain, this.measure, this.color});
+
   final String domain;
   final int measure;
   final Color color;
-
-  _Data({this.domain, this.measure, this.color});
 }

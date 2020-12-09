@@ -17,14 +17,14 @@ import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class SchoolsPage extends MvvmStatefulWidget {
-  static const String kRoute = '/Schools';
-
   SchoolsPage({Key key})
       : super(
           key: key,
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createSchoolsViewModel(ctx),
         );
+
+  static const String kRoute = '/Schools';
 
   @override
   State<StatefulWidget> createState() => SchoolsPageState();
@@ -86,11 +86,16 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           tabNameBuilder: (tab) {
                             switch (tab) {
                               case _DashboardsTab.byState:
-                                return '${'schoolsByState'.localized(context)} ${snapshot.data.year}';
+                                return '${'schoolsByState'.localized(context)} '
+                                    '${snapshot.data.year}';
                               case _DashboardsTab.byAuthority:
-                                return '${'schoolsByAuthority'.localized(context)} ${snapshot.data.year}';
+                                // ignore: lines_longer_than_80_chars
+                                return '${'schoolsByAuthority'.localized(context)} '
+                                    '${snapshot.data.year}';
                               case _DashboardsTab.byGovtNonGovt:
-                                return '${'schoolsByGovtNonGovt'.localized(context)} ${snapshot.data.year}';
+                                // ignore: lines_longer_than_80_chars
+                                return '${'schoolsByGovtNonGovt'.localized(context)} '
+                                    '${snapshot.data.year}';
                             }
                             throw FallThroughError();
                           },
@@ -142,17 +147,16 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           key: ValueKey(snapshot.data.enrolByAgeAndEducation),
                           title: 'schoolsDashboardsEnrollByAgeLevelGenderTitle'
                               .localized(context),
-                          columnNames: [
+                          columnNames: const [
                             'schoolsDashboardsAgeDomain',
                             'labelMale',
                             'labelFemale',
                             'labelTotal'
                           ],
-                          columnFlex: [3, 3, 3, 3],
+                          columnFlex: const [3, 3, 3, 3],
                           data: snapshot.data.enrolByAgeAndEducation,
                           keySortFunc: _compareEnrollmentByAgeAndEducation,
-                          domainValueBuilder:
-                              GenderTableData.sDomainValueBuilder,
+                          domainValueBuilder: GenderTableData.buildDomainValue,
                         ),
                         MultiTable(
                           key: ValueKey(
@@ -160,17 +164,16 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           title:
                               'schoolsDashboardsEnrollByLevelStateGenderTitle'
                                   .localized(context),
-                          columnNames: [
+                          columnNames: const [
                             'schoolsDashboardsSchoolLevelDomain',
                             'labelMale',
                             'labelFemale',
                             'labelTotal'
                           ],
-                          columnFlex: [3, 3, 3, 3],
+                          columnFlex: const [3, 3, 3, 3],
                           data: snapshot.data.enrolBySchoolLevelAndDistrict,
                           keySortFunc: _compareEnrollmentBySchoolLevelAndState,
-                          domainValueBuilder:
-                              GenderTableData.sDomainValueBuilder,
+                          domainValueBuilder: GenderTableData.buildDomainValue,
                         ),
                       ],
                     );
@@ -191,12 +194,12 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
   int _compareEnrollmentByAgeAndEducation(String lv, String rv) {
     // formats like 1-12
     final lvParts = lv.split('-');
-    if (lvParts.length < 1) {
+    if (lvParts.isEmpty) {
       return -1;
     }
 
     final rvParts = rv.split('-');
-    if (rvParts.length < 1) {
+    if (rvParts.isEmpty) {
       return 1;
     }
 
@@ -204,7 +207,9 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
       final lvNum = int.tryParse(lvParts.first);
       final rvNum = int.tryParse(rvParts.first);
       return lvNum.compareTo(rvNum);
-    } catch (_) {
+      // ignore: avoid_catches_without_on_clauses
+    } catch (t) {
+      debugPrint(t.toString());
       return lvParts.first.compareTo(rvParts.first);
     }
   }

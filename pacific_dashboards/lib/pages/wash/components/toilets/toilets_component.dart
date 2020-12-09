@@ -8,14 +8,14 @@ import 'package:pacific_dashboards/shared_ui/charts/horizontal_stacked_scrollabl
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 
 class ToiletsComponent extends StatelessWidget {
-  final WashToiletViewData _data;
-
   const ToiletsComponent({
     Key key,
     @required WashToiletViewData data,
   })  : assert(data != null),
         _data = data,
         super(key: key);
+
+  final WashToiletViewData _data;
 
   @override
   Widget build(BuildContext context) {
@@ -113,10 +113,7 @@ extension _TabsNameExt on _Tabs {
   }
 }
 
-class _SchoolDataByToiletTypeChart
-    extends HorizontalStackedScrollableBarChart {
-  final List<SchoolDataByToiletType> _data;
-
+class _SchoolDataByToiletTypeChart extends HorizontalStackedScrollableBarChart {
   const _SchoolDataByToiletTypeChart({
     Key key,
     @required List<SchoolDataByToiletType> data,
@@ -124,26 +121,29 @@ class _SchoolDataByToiletTypeChart
         _data = data,
         super(key: key);
 
+  final List<SchoolDataByToiletType> _data;
+
   @override
   List<ChartData> get chartData {
     final chartData = <ChartData>[];
-    _data.forEach((it) {
-      chartData.add(ChartData(
-        it.school,
-        it.boys,
-        AppColors.kMale,
-      ));
-      chartData.add(ChartData(
-        it.school,
-        it.girls,
-        AppColors.kFemale,
-      ));
-      chartData.add(ChartData(
-        it.school,
-        it.common,
-        AppColors.kGreen,
-      ));
-    });
+    for (final it in _data) {
+      chartData
+        ..add(ChartData(
+          it.school,
+          it.boys,
+          AppColors.kMale,
+        ))
+        ..add(ChartData(
+          it.school,
+          it.girls,
+          AppColors.kFemale,
+        ))
+        ..add(ChartData(
+          it.school,
+          it.common,
+          AppColors.kGreen,
+        ));
+    }
     return chartData;
   }
 
@@ -151,7 +151,7 @@ class _SchoolDataByToiletTypeChart
   int get domainLength => _data.length;
 
   @override
-  List<Pair<String, Color>> get legend => [
+  List<Pair<String, Color>> get legend => const [
         Pair('washToiletsBoysLabel', AppColors.kMale),
         Pair('washToiletsGirlsLabel', AppColors.kFemale),
         Pair('washToiletsCommonLabel', AppColors.kGreen),
@@ -159,8 +159,6 @@ class _SchoolDataByToiletTypeChart
 }
 
 class _SchoolDataByPercentChart extends HorizontalStackedScrollableBarChart {
-  final List<SchoolDataByPercent> _data;
-
   const _SchoolDataByPercentChart({
     Key key,
     @required List<SchoolDataByPercent> data,
@@ -168,32 +166,38 @@ class _SchoolDataByPercentChart extends HorizontalStackedScrollableBarChart {
         _data = data,
         super(key: key);
 
+  final List<SchoolDataByPercent> _data;
+
   @override
   List<ChartData> get chartData {
     final chartData = <ChartData>[];
-    _data.forEach((it) {
+    for (final it in _data) {
       chartData.add(ChartData(
         it.school,
         it.percent,
         AppColors.kPercent,
       ));
-    });
-    return chartData;
+    }
+    return _data
+        .map((it) => ChartData(
+              it.school,
+              it.percent,
+              AppColors.kPercent,
+            ))
+        .toList();
   }
 
   @override
   int get domainLength => _data.length;
 
   @override
-  List<Pair<String, Color>> get legend => [
+  List<Pair<String, Color>> get legend => const [
         Pair('washToiletsUsablePercentLabel', AppColors.kPercent),
       ];
 }
 
 class _SchoolDataByGenderPercentChart
     extends HorizontalStackedScrollableBarChart {
-  final List<SchoolDataByGenderPercent> _data;
-
   const _SchoolDataByGenderPercentChart({
     Key key,
     @required List<SchoolDataByGenderPercent> data,
@@ -201,21 +205,25 @@ class _SchoolDataByGenderPercentChart
         _data = data,
         super(key: key);
 
+  final List<SchoolDataByGenderPercent> _data;
+
   @override
   List<ChartData> get chartData {
     final chartData = <ChartData>[];
-    _data.forEach((it) {
-      chartData.add(ChartData(
-        it.school,
-        it.percentMale,
-        AppColors.kMale,
-      ));
-      chartData.add(ChartData(
-        it.school,
-        -it.percentFemale,
-        AppColors.kFemale,
-      ));
-    });
+
+    for (final it in _data) {
+      chartData
+        ..add(ChartData(
+          it.school,
+          it.percentMale,
+          AppColors.kMale,
+        ))
+        ..add(ChartData(
+          it.school,
+          -it.percentFemale,
+          AppColors.kFemale,
+        ));
+    }
     return chartData;
   }
 
@@ -223,15 +231,13 @@ class _SchoolDataByGenderPercentChart
   int get domainLength => _data.length;
 
   @override
-  List<Pair<String, Color>> get legend => [
+  List<Pair<String, Color>> get legend => const [
         Pair('washToiletsBoysLabel', AppColors.kMale),
         Pair('washToiletsGirlsLabel', AppColors.kFemale),
       ];
 }
 
 class _SchoolDataByPupilsChart extends HorizontalStackedScrollableBarChart {
-  final List<SchoolDataByPupils> _data;
-
   const _SchoolDataByPupilsChart({
     Key key,
     @required List<SchoolDataByPupils> data,
@@ -239,32 +245,27 @@ class _SchoolDataByPupilsChart extends HorizontalStackedScrollableBarChart {
         _data = data,
         super(key: key);
 
+  final List<SchoolDataByPupils> _data;
+
   @override
   List<ChartData> get chartData {
-    final chartData = <ChartData>[];
-    _data.forEach((it) {
-      chartData.add(ChartData(
-        it.school,
-        it.pupils,
-        AppColors.kPupil,
-      ));
-    });
-    return chartData;
+    return _data.map((it) => ChartData(
+          it.school,
+          it.pupils,
+          AppColors.kPupil,
+        ));
   }
 
   @override
   int get domainLength => _data.length;
 
   @override
-  List<Pair<String, Color>> get legend => [
+  List<Pair<String, Color>> get legend => const [
         Pair('washToiletsPupilsLabel', AppColors.kPupil),
       ];
 }
 
 class _SchoolDataByGenderChart extends HorizontalStackedScrollableBarChart {
-  final List<SchoolDataByGender> _data;
-  final bool _isMirrored;
-
   const _SchoolDataByGenderChart({
     Key key,
     @required List<SchoolDataByGender> data,
@@ -275,21 +276,25 @@ class _SchoolDataByGenderChart extends HorizontalStackedScrollableBarChart {
         _isMirrored = isMirrored,
         super(key: key);
 
+  final List<SchoolDataByGender> _data;
+  final bool _isMirrored;
+
   @override
   List<ChartData> get chartData {
     final chartData = <ChartData>[];
-    _data.forEach((it) {
-      chartData.add(ChartData(
-        it.school,
-        it.male,
-        AppColors.kMale,
-      ));
-      chartData.add(ChartData(
-        it.school,
-        it.female * (_isMirrored ? -1 : 1),
-        AppColors.kFemale,
-      ));
-    });
+    for (final it in _data) {
+      chartData
+        ..add(ChartData(
+          it.school,
+          it.male,
+          AppColors.kMale,
+        ))
+        ..add(ChartData(
+          it.school,
+          it.female * (_isMirrored ? -1 : 1),
+          AppColors.kFemale,
+        ));
+    }
     return chartData;
   }
 
@@ -297,7 +302,7 @@ class _SchoolDataByGenderChart extends HorizontalStackedScrollableBarChart {
   int get domainLength => _data.length;
 
   @override
-  List<Pair<String, Color>> get legend => [
+  List<Pair<String, Color>> get legend => const [
         Pair('labelMale', AppColors.kMale),
         Pair('labelFemale', AppColors.kFemale),
       ];

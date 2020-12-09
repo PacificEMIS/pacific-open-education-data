@@ -12,6 +12,16 @@ import 'package:pacific_dashboards/pages/individual_school/components/exams/indi
 import 'package:rxdart/rxdart.dart';
 
 class IndividualExamsViewModel extends BaseViewModel {
+  IndividualExamsViewModel(
+    BuildContext ctx, {
+    @required ShortSchool school,
+    @required Repository repository,
+  })  : assert(repository != null),
+        assert(school != null),
+        _school = school,
+        _repository = repository,
+        super(ctx);
+
   final Repository _repository;
   final ShortSchool _school;
 
@@ -30,16 +40,6 @@ class IndividualExamsViewModel extends BaseViewModel {
 
   int _yearIndexForFilter = 0;
   int _examCodeIndexForFilter = 0;
-
-  IndividualExamsViewModel(
-    BuildContext ctx, {
-    @required ShortSchool school,
-    @required Repository repository,
-  })  : assert(repository != null),
-        assert(school != null),
-        _school = school,
-        _repository = repository,
-        super(ctx);
 
   @override
   void onInit() {
@@ -137,8 +137,8 @@ class IndividualExamsViewModel extends BaseViewModel {
 
   Future<void> _onExamReportsLoaded(List<SchoolExamReport> reports) =>
       launchHandled(() async {
-        final groupedByYear = reports.groupBy((it) => it.year);
-        groupedByYear.removeWhere((k, v) => k == null);
+        final groupedByYear = reports.groupBy((it) => it.year)
+          ..removeWhere((k, v) => k == null);
         final sortedYears =
             groupedByYear.keys.chainSort((lv, rv) => rv.compareTo(lv)).toList();
         final reportsByYearAndExamCode = sortedYears.asMap().map(
@@ -181,7 +181,8 @@ class IndividualExamsViewModel extends BaseViewModel {
       final historyData = _generateHistoryData(viewModelData);
       _historyRowsSubject.add(historyData);
 
-      //Removed compute - NAN issue(compute available types - null, num, bool, double, String)
+      //  Removed compute -
+      //    NAN issue(compute available types - null, num, bool, double, String)
       //
       // _historyRowsSubject.add(await compute(
       //       //   _generateHistoryData,
@@ -228,22 +229,22 @@ class IndividualExamsViewModel extends BaseViewModel {
 }
 
 class _PreparedViewModelData {
-  final List<int> sortedYears;
-  final Map<int, List<String>> sortedExamCodesByYear;
-  final Map<int, Map<String, List<SchoolExamReport>>> reportsByYearAndExamCode;
-
   const _PreparedViewModelData({
     @required this.sortedYears,
     @required this.sortedExamCodesByYear,
     @required this.reportsByYearAndExamCode,
   });
+
+  final List<int> sortedYears;
+  final Map<int, List<String>> sortedExamCodesByYear;
+  final Map<int, Map<String, List<SchoolExamReport>>> reportsByYearAndExamCode;
 }
 
 ExamReportsBenchmarkResults _generateBenchmarkResults(
   List<SchoolExamReport> reports,
 ) {
   final reportsByBenchmark = reports.groupBy((it) => it.benchmarkCode);
-  final List<ExamReportsBenchmarkData> dataList = [];
+  final dataList = <ExamReportsBenchmarkData>[];
 
   var maxNegativeCandidates = 0;
   var maxPositiveCandidates = 0;
@@ -373,24 +374,25 @@ List<ExamReportsHistoryByYearData> _generateHistoryData(
     final dataByExamCode = data.reportsByYearAndExamCode[year];
     final sortedExamCodes = data.sortedExamCodesByYear[year];
 
-    final List<ExamReportsHistoryRowData> rows = [];
-    sortedExamCodes.forEach((examCode) {
+    final rows = <ExamReportsHistoryRowData>[];
+
+    for (final examCode in sortedExamCodes) {
       final reports = dataByExamCode[examCode];
       var maleCandidates = 0;
       var femaleCandidates = 0;
-      reports.forEach((report) {
+
+      for (final report in reports) {
         maleCandidates += report.maleCandidates;
         femaleCandidates += report.femaleCandidates;
-      });
-      print('examCode');
-      // print(reports.head.examName);
+      }
+
       rows.add(ExamReportsHistoryRowData(
         examCode: examCode ?? '-',
         examName: reports.head.examName,
         male: maleCandidates,
         female: femaleCandidates,
       ));
-    });
+    }
 
     return ExamReportsHistoryByYearData(
       year: year,

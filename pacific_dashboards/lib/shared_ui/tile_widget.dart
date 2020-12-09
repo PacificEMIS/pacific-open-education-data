@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TileWidget extends StatelessWidget {
+  const TileWidget({
+    Key key,
+    this.title,
+    this.body,
+  }) : super(key: key);
+
   final Widget title;
   final Widget body;
-
-  const TileWidget({this.title, this.body});
 
   @override
   Widget build(BuildContext context) {

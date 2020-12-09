@@ -4,22 +4,21 @@ import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 
-import 'chart_legend_item.dart';
-
-typedef Color ColorFunc(int index);
+typedef ColorFunc = Color Function(int index);
 
 class StackedHorizontalBarChartWidgetExtended extends StatefulWidget {
-  final Map<String, TeachersByCertification> data;
-  final List<String> legend;
-  final ColorFunc colorFunc;
-
-  StackedHorizontalBarChartWidgetExtended({
+  const StackedHorizontalBarChartWidgetExtended({
     Key key,
     @required this.data,
     @required this.legend,
     this.colorFunc,
   }) : super(key: key);
+
+  final Map<String, TeachersByCertification> data;
+  final List<String> legend;
+  final ColorFunc colorFunc;
 
   @override
   StackedHorizontalBarChartWidgetExtendedState createState() =>
@@ -34,7 +33,7 @@ class StackedHorizontalBarChartWidgetExtendedState
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Container(
+          SizedBox(
             height: 300,
             width: 400,
             child: charts.BarChart(
@@ -83,10 +82,14 @@ class StackedHorizontalBarChartWidgetExtendedState
   }
 
   List<Widget> getColumnTitles(List<String> legend) {
-    List<Widget> widgetList = new List<Widget>();
+    final widgetList = <Widget>[];
     for (var i = 0; i < legend.length; i++) {
-      widgetList.add(ChartLegendItem(
-          color: widget.colorFunc(i), value: legend[i].localized(context)));
+      widgetList.add(
+        ChartLegendItem(
+          color: widget.colorFunc(i),
+          value: legend[i].localized(context),
+        ),
+      );
     }
     return widgetList;
   }
@@ -94,9 +97,9 @@ class StackedHorizontalBarChartWidgetExtendedState
   List<charts.Series<_Data, String>> _createSeries(
     Map<String, TeachersByCertification> data,
   ) {
-    final series = List<charts.Series<_Data, String>>();
+    final series = <charts.Series<_Data, String>>[];
 
-    final chunk = List<_Data>();
+    final chunk = <_Data>[];
     data.forEach((key, values) {
       generateChunk(chunk, key, 0, values.certifiedAndQualifiedFemale, series);
       generateChunk(chunk, key, 1, values.qualifiedFemale, series);
@@ -109,29 +112,37 @@ class StackedHorizontalBarChartWidgetExtendedState
     });
 
     series.add(charts.Series<_Data, String>(
-    id: 'series',
-    domainFn: (_Data data, int _) => data.domain,
-    measureFn: (_Data data, int _) => data.measure,
-    colorFn: (_Data data, int _) => data.color.chartsColor,
-    data: chunk));
+        id: 'series',
+        domainFn: (data, _) => data.domain,
+        measureFn: (data, _) => data.measure,
+        colorFn: (data, _) => data.color.chartsColor,
+        data: chunk));
     return series;
   }
 
-  void generateChunk(List<_Data> chunk, String key, int color, int value,
-      List<charts.Series<_Data, String>> series) {
-    chunk.add(_Data(
+  void generateChunk(
+    List<_Data> chunk,
+    String key,
+    int color,
+    int value,
+    List<charts.Series<_Data, String>> series,
+  ) {
+    chunk.add(
+      _Data(
         domain: key,
         measure: value,
         color: widget.colorFunc != null
             ? widget.colorFunc(color)
-            : HexColor.fromStringHash(color.toString())));
+            : HexColor.fromStringHash(color.toString()),
+      ),
+    );
   }
 }
 
 class _Data {
+  const _Data({this.domain, this.measure, this.color});
+
   final String domain;
   final int measure;
   final Color color;
-
-  _Data({this.domain, this.measure, this.color});
 }

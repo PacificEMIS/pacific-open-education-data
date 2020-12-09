@@ -7,8 +7,8 @@ final ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: AppColors.kBlue,
   accentColor: AppColors.kPeacockBlue,
-  dialogTheme: DialogTheme(
-    titleTextStyle: const TextStyle(
+  dialogTheme: const DialogTheme(
+    titleTextStyle: TextStyle(
       color: AppColors.kTextMain,
       fontSize: 18.0,
       fontWeight: FontWeight.normal,
@@ -19,69 +19,69 @@ final ThemeData appTheme = ThemeData(
   iconTheme: const IconThemeData(color: Colors.white),
   splashColor: AppColors.kRipple,
   textTheme: const TextTheme(
-    headline2: const TextStyle(
+    headline2: TextStyle(
       color: Colors.white,
       fontSize: 28.0,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
     ),
-    headline3: const TextStyle(
+    headline3: TextStyle(
       color: Colors.white,
       fontSize: 24.0,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
     ),
-    headline4: const TextStyle(
+    headline4: TextStyle(
       color: AppColors.kTextMain,
       fontSize: 16.0,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
     ),
-    headline5: const TextStyle(
+    headline5: TextStyle(
       color: AppColors.kTextMinor,
       fontSize: 14.0,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
     ),
-    headline6: const TextStyle(
+    headline6: TextStyle(
       color: Colors.white,
       fontSize: 18.0,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
     ),
-    subtitle1: const TextStyle(
+    subtitle1: TextStyle(
       color: AppColors.kTextMain,
       fontSize: 14.0,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
     ),
-    button: const TextStyle(
+    button: TextStyle(
       color: AppColors.kTextMain,
       fontSize: 16.0,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
     ),
-    subtitle2: const TextStyle(
+    subtitle2: TextStyle(
       color: AppColors.kTextMain,
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
     ),
-    overline: const TextStyle(
+    overline: TextStyle(
       color: AppColors.kTextMinor,
       fontSize: 10.0,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
       letterSpacing: 0.0,
     ),
-    bodyText1: const TextStyle(
+    bodyText1: TextStyle(
       color: AppColors.kPeacockBlue,
       fontSize: 14.0,
       fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
       fontFamily: 'Roboto',
     ),
-    bodyText2: const TextStyle(
+    bodyText2: TextStyle(
       color: AppColors.kTextMinor,
       fontSize: 14.0,
       fontStyle: FontStyle.italic,
@@ -92,7 +92,7 @@ final ThemeData appTheme = ThemeData(
   ),
 );
 
-const charts.TextStyleSpec largeChartsDomain = const charts.TextStyleSpec(
+const charts.TextStyleSpec largeChartsDomain = charts.TextStyleSpec(
   fontFamily: 'NotoSans',
   color: charts.Color(a: 255, r: 99, g: 105, b: 109),
   fontSize: 14,
@@ -109,74 +109,73 @@ final chartAxisLineStyle = charts.LineStyleSpec(
 
 extension ChartsTextStyle on TextStyle {
   charts.TextStyleSpec get chartsSpec => charts.TextStyleSpec(
-        fontFamily: this.fontFamily,
-        color: this.color.chartsColor,
-        fontSize: this.fontSize.round(),
-        lineHeight: this.height,
+        fontFamily: fontFamily,
+        color: color.chartsColor,
+        fontSize: fontSize.round(),
+        lineHeight: height,
       );
 }
 
 extension TextThemeExt on TextTheme {
-  TextStyle get chartLegend => this.overline.copyWith(
+  TextStyle get chartLegend => overline.copyWith(
         color: AppColors.kTextMain,
       );
 
-  TextStyle get miniTab => this.button.copyWith(
+  TextStyle get miniTab => button.copyWith(
         color: AppColors.kTextMinor,
         fontSize: 12,
         fontWeight: FontWeight.normal,
         letterSpacing: 0.25,
       );
 
-  TextStyle get miniTabSelected => this.miniTab.copyWith(
+  TextStyle get miniTabSelected => miniTab.copyWith(
         color: AppColors.kPeacockBlue,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get individualDashboardsSubtitle =>
-      this.headline4.copyWith(fontSize: 12);
+      headline4.copyWith(fontSize: 12);
 
-  TextStyle get bigTab =>
-      this.headline5.copyWith(fontSize: 12, letterSpacing: 0.25);
+  TextStyle get bigTab => headline5.copyWith(fontSize: 12, letterSpacing: 0.25);
 
   TextStyle get individualDashboardsExamSubtitle =>
-      this.headline5.copyWith(fontSize: 12, letterSpacing: 0.25);
+      headline5.copyWith(fontSize: 12, letterSpacing: 0.25);
 
   TextStyle get individualDashboardsExamBody =>
-      this.individualDashboardsExamSubtitle.copyWith(
-            fontWeight: FontWeight.normal,
-          );
+      individualDashboardsExamSubtitle.copyWith(
+        fontWeight: FontWeight.normal,
+      );
 
   TextStyle get individualDashboardsExamHistoryTableHeader =>
-      this.subtitle2.copyWith(
-            color: AppColors.kTextMinor,
-          );
+      subtitle2.copyWith(
+        color: AppColors.kTextMinor,
+      );
 
   TextStyle get individualDashboardsExamHistoryTableYearHeader =>
-      this.subtitle2.copyWith(
-            fontWeight: FontWeight.bold,
-          );
+      subtitle2.copyWith(
+        fontWeight: FontWeight.bold,
+      );
 
   TextStyle get individualDashboardsExamHistoryTablePercentage =>
-      this.overline.copyWith(
-            fontSize: 10.0,
-            fontWeight: FontWeight.bold,
-          );
+      overline.copyWith(
+        fontSize: 10.0,
+        fontWeight: FontWeight.bold,
+      );
 
-  TextStyle get individualAccreditationInspectedBy => this.headline5.copyWith(
+  TextStyle get individualAccreditationInspectedBy => headline5.copyWith(
         fontSize: 12.0,
       );
 
-  TextStyle get individualAccreditationLevel => this.overline.copyWith(
+  TextStyle get individualAccreditationLevel => overline.copyWith(
         fontSize: 12.0,
       );
 
-  TextStyle get individualAccreditationStandard => this.overline.copyWith(
+  TextStyle get individualAccreditationStandard => overline.copyWith(
         color: AppColors.kTextMain,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get washSelectedQuestion => this.subtitle2.copyWith(
+  TextStyle get washSelectedQuestion => subtitle2.copyWith(
         color: AppColors.kBlueDark,
       );
 }

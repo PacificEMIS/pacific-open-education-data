@@ -7,11 +7,16 @@ const double _kBorderWidth = 1.0;
 const Color _kBorderColor = AppColors.kGeyser;
 
 class ChartInfoTableWidget extends StatefulWidget {
+  const ChartInfoTableWidget(
+    this._data,
+    this._titleName,
+    this._titleValue, {
+    Key key,
+  }) : super(key: key);
+
   final List<ChartData> _data;
   final String _titleName;
   final String _titleValue;
-
-  ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
 
   @override
   _ChartInfoTableWidgetState createState() => _ChartInfoTableWidgetState();
@@ -24,7 +29,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
   Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         border: Border.all(
           width: _kBorderWidth,
           color: _kBorderColor,
@@ -132,9 +137,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
               .mapIndexed(_convertToRowData)
               .toList();
         case SortType.none:
-          return widget._data
-              .mapIndexed(_convertToRowData)
-              .toList();
+          return widget._data.mapIndexed(_convertToRowData).toList();
       }
 
       throw FallThroughError();
@@ -153,9 +156,9 @@ class _ColumnFutureBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<List<_RowData>>(
       future: _sortedRowDatas,
-      builder: (context, AsyncSnapshot<List<_RowData>> snapshot) {
+      builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Container();
         }
@@ -255,27 +258,27 @@ class _SortingDomain extends StatelessWidget {
 }
 
 class _Row extends StatelessWidget {
-  final _RowData _rowData;
-
   const _Row({Key key, @required _RowData rowData})
       : assert(rowData != null),
         _rowData = rowData,
         super(key: key);
 
+  final _RowData _rowData;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: ((_rowData.index % 2 == 0)
-          ? Colors.transparent
-          : AppColors.kGrayLight),
+      color: _rowData.index.isEven ? Colors.transparent : AppColors.kGrayLight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Flexible(
             flex: 2,
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0,),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 10.0,
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -284,7 +287,7 @@ class _Row extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius:
-                            const BorderRadius.all(const Radius.circular(1.0)),
+                            const BorderRadius.all(Radius.circular(1.0)),
                         color: _rowData.color,
                       ),
                       height: 8.0,
@@ -329,17 +332,17 @@ class _Row extends StatelessWidget {
 }
 
 class _RowData {
-  final String domain;
-  final int measure;
-  final int index;
-  final Color color;
-
-  _RowData({
+  const _RowData({
     @required this.domain,
     @required this.measure,
     @required this.index,
     @required this.color,
   });
+
+  final String domain;
+  final int measure;
+  final int index;
+  final Color color;
 }
 
 enum SortType {
@@ -354,15 +357,15 @@ enum ValueType { domain, measure }
 
 extension SortTypeIcon on SortType {
   Icon iconFor(ValueType valueType) {
-    const downIcon = const Icon(
+    const downIcon = Icon(
       Icons.expand_more,
       color: AppColors.kTextMinor,
     );
-    const upIcon = const Icon(
+    const upIcon = Icon(
       Icons.expand_less,
       color: AppColors.kTextMinor,
     );
-    const noneIcon = const Icon(
+    const noneIcon = Icon(
       Icons.minimize,
       color: Colors.transparent,
     );

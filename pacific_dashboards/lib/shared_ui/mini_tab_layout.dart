@@ -7,11 +7,6 @@ typedef TabbedWidgetBuilder<T> = Widget Function(BuildContext context, T tab);
 typedef TabNameBuilder<T> = String Function(T tab);
 
 class MiniTabLayout<T> extends StatefulWidget {
-  final List<T> tabs;
-  final TabbedWidgetBuilder<T> builder;
-  final TabNameBuilder<T> tabNameBuilder;
-  final double padding;
-
   const MiniTabLayout({
     Key key,
     @required this.tabs,
@@ -23,12 +18,16 @@ class MiniTabLayout<T> extends StatefulWidget {
         assert(builder != null),
         super(key: key);
 
+  final List<T> tabs;
+  final TabbedWidgetBuilder<T> builder;
+  final TabNameBuilder<T> tabNameBuilder;
+  final double padding;
+
   @override
   _MiniTabLayoutState<T> createState() => _MiniTabLayoutState<T>();
 }
 
 class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
-
   int _selectedIndex;
 
   @override
@@ -47,9 +46,7 @@ class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -82,13 +79,9 @@ class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
             height: 1,
             color: AppColors.kGeyser,
           ),
-          SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           widget.builder(context, _tabCheckingIndexes),
-          SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
         ],
       ),
     );

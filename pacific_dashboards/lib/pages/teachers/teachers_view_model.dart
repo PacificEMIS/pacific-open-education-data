@@ -17,14 +17,6 @@ import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TeachersViewModel extends BaseViewModel {
-  final Repository _repository;
-  final RemoteConfig _remoteConfig;
-  final GlobalSettings _globalSettings;
-
-  final Subject<String> _pageNoteSubject = BehaviorSubject();
-  final Subject<TeachersPageData> _dataSubject = BehaviorSubject();
-  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
-
   TeachersViewModel(
     BuildContext ctx, {
     @required Repository repository,
@@ -37,6 +29,14 @@ class TeachersViewModel extends BaseViewModel {
         _remoteConfig = remoteConfig,
         _globalSettings = globalSettings,
         super(ctx);
+
+  final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
+
+  final Subject<String> _pageNoteSubject = BehaviorSubject();
+  final Subject<TeachersPageData> _dataSubject = BehaviorSubject();
+  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
   List<Teacher> _teachers;
   List<Filter> _filters;
@@ -64,7 +64,7 @@ class TeachersViewModel extends BaseViewModel {
 
   void _loadData() {
     listenHandled(
-      handleRepositoryFetch(fetch: () => _repository.fetchAllTeachers()),
+      handleRepositoryFetch(fetch: _repository.fetchAllTeachers),
       _onDataLoaded,
       notifyProgress: true,
     );
@@ -115,11 +115,11 @@ class TeachersViewModel extends BaseViewModel {
 }
 
 class _TeachersModel {
+  const _TeachersModel(this.teachers, this.lookups, this.filters);
+
   final List<Teacher> teachers;
   final Lookups lookups;
   final List<Filter> filters;
-
-  const _TeachersModel(this.teachers, this.lookups, this.filters);
 }
 
 Future<TeachersPageData> _transformTeachersModel(
@@ -198,60 +198,82 @@ EnrollTeachersBySchoolLevelStateAndGender
   List<Teacher> teachers,
   Lookups lookups,
 }) {
-  final groupedByDistrictWithTotal = {
+  final all = <TeachersBySchoolLevelStateAndGender>[];
+  final qualified = <TeachersBySchoolLevelStateAndGender>[];
+  final qualifiedAndCertified = <TeachersBySchoolLevelStateAndGender>[];
+  final certified = <TeachersBySchoolLevelStateAndGender>[];
+
+  <String, List<Teacher>>{
     'labelTotal': teachers,
-  };
-
-  groupedByDistrictWithTotal.addEntries(
-    teachers.groupBy((it) => it.districtCode).entries,
-  );
-
-  final all = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    all.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(groupedBySchoolType, 'all')));
-  });
-
-  final qualified = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    qualified.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(groupedBySchoolType, 'qualified')));
-  });
-
-  final qualifiedAndCertified = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    qualifiedAndCertified.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(groupedBySchoolType, 'certified')));
-  });
-
-  final certified = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    certified.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(
-            groupedBySchoolType, 'qualifiedAndCertified')));
-  });
+  }
+    ..addEntries(
+      teachers.groupBy((it) => it.districtCode).entries,
+    )
+    ..forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      all.add(
+        TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts),
+          total: _generateInfoTableData(
+            groupedBySchoolType,
+            'all',
+          ),
+        ),
+      );
+    })
+    ..forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      qualified.add(
+        TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts),
+          total: _generateInfoTableData(
+            groupedBySchoolType,
+            'qualified',
+          ),
+        ),
+      );
+    })
+    ..forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      qualifiedAndCertified.add(
+        TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts),
+          total: _generateInfoTableData(
+            groupedBySchoolType,
+            'certified',
+          ),
+        ),
+      );
+    })
+    ..forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      certified.add(
+        TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts),
+          total: _generateInfoTableData(
+            groupedBySchoolType,
+            'qualifiedAndCertified',
+          ),
+        ),
+      );
+    });
   return EnrollTeachersBySchoolLevelStateAndGender(
-      all: all,
-      qualified: qualified,
-      certified: certified,
-      allQualifiedAndCertified: qualifiedAndCertified);
+    all: all,
+    qualified: qualified,
+    certified: certified,
+    allQualifiedAndCertified: qualifiedAndCertified,
+  );
 }
 
 Map<String, GenderTableData> _generateInfoTableData(
-    Map<String, List<Teacher>> groupedData, String category,
-    {String districtCode}) {
-  Map<String, GenderTableData> allData = new Map();
-  Map<String, GenderTableData> certifiedData = new Map();
-  Map<String, GenderTableData> qualifiedData = new Map();
-  Map<String, GenderTableData> certifiedQualifiedData = new Map();
+  Map<String, List<Teacher>> groupedData,
+  String category, {
+  String districtCode,
+}) {
+  final allData = <String, GenderTableData>{};
+  final certifiedData = <String, GenderTableData>{};
+  final qualifiedData = <String, GenderTableData>{};
+  final certifiedQualifiedData = <String, GenderTableData>{};
 
   var totalMaleCount = 0;
   var totalFemaleCount = 0;
@@ -342,9 +364,10 @@ Map<String, GenderTableData> _generateInfoTableData(
 Map<String, TeachersByCertification> _generateCertificationData(
   Map<String, List<Teacher>> data,
 ) {
-  final result = Map<String, TeachersByCertification>();
+  final result = <String, TeachersByCertification>{};
   data.forEach((key, value) {
-    TeachersByCertification certification = TeachersByCertification(
+    if (key != null) {
+      final certification = TeachersByCertification(
         certifiedAndQualifiedFemale: 0,
         qualifiedFemale: 0,
         certifiedFemale: 0,
@@ -352,28 +375,31 @@ Map<String, TeachersByCertification> _generateCertificationData(
         certifiedAndQualifiedMale: 0,
         qualifiedMale: 0,
         certifiedMale: 0,
-        numberTeachersMale: 0);
+        numberTeachersMale: 0,
+      );
 
-    value.forEach((it) {
-      certification.certifiedAndQualifiedFemale -= it.certQualF;
-      certification.qualifiedFemale -= (it.qualifiedF - it.certQualF);
-      certification.certifiedFemale -= (it.certifiedF - it.certQualF);
-      certification.numberTeachersFemale -= it.numTeachersF;
+      for (final it in value) {
+        certification
+          ..certifiedAndQualifiedFemale -= it.certQualF
+          ..qualifiedFemale -= (it.qualifiedF - it.certQualF)
+          ..certifiedFemale -= (it.certifiedF - it.certQualF)
+          ..numberTeachersFemale -= it.numTeachersF
+          ..certifiedAndQualifiedMale += it.certQualM
+          ..qualifiedMale += (it.qualifiedM - it.certQualM)
+          ..certifiedMale += (it.certifiedM - it.certQualM)
+          ..numberTeachersMale += it.numTeachersM;
+      }
 
-      certification.certifiedAndQualifiedMale += it.certQualM;
-      certification.qualifiedMale += (it.qualifiedM - it.certQualM);
-      certification.certifiedMale += (it.certifiedM - it.certQualM);
-      certification.numberTeachersMale += it.numTeachersM;
-    });
-    certification.numberTeachersFemale -=
-        (certification.certifiedAndQualifiedFemale +
+      certification
+        ..numberTeachersFemale -= certification.certifiedAndQualifiedFemale +
             certification.qualifiedFemale +
-            certification.certifiedFemale);
-    certification.numberTeachersMale -=
-        (certification.certifiedAndQualifiedMale +
+            certification.certifiedFemale
+        ..numberTeachersMale -= certification.certifiedAndQualifiedMale +
             certification.qualifiedMale +
-            certification.certifiedMale);
-    if (key != null) result[key] = certification;
+            certification.certifiedMale;
+
+      result[key] = certification;
+    }
   });
 
   return result;
