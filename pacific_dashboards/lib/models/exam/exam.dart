@@ -5,6 +5,26 @@ part 'exam.g.dart';
 
 @JsonSerializable()
 class Exam {
+  const Exam({
+    @required this.name,
+    @required this.year,
+    @required this.districtCode,
+    @required this.standard,
+    @required this.benchmark,
+    @required this.candidatesM,
+    @required this.wellBelowCompetentM,
+    @required this.approachingCompetenceM,
+    @required this.minimallyCompetentM,
+    @required this.competentM,
+    @required this.candidatesF,
+    @required this.wellBelowCompetentF,
+    @required this.approachingCompetenceF,
+    @required this.minimallyCompetentF,
+    @required this.competentF,
+  });
+
+  factory Exam.fromJson(Map<String, dynamic> json) => _$ExamFromJson(json);
+
   @JsonKey(name: 'Exam')
   final String name;
 
@@ -49,26 +69,6 @@ class Exam {
 
   @JsonKey(name: 'CompetentF', defaultValue: 0)
   final int competentF;
-
-  const Exam({
-    @required this.name,
-    @required this.year,
-    @required this.districtCode,
-    @required this.standard,
-    @required this.benchmark,
-    @required this.candidatesM,
-    @required this.wellBelowCompetentM,
-    @required this.approachingCompetenceM,
-    @required this.minimallyCompetentM,
-    @required this.competentM,
-    @required this.candidatesF,
-    @required this.wellBelowCompetentF,
-    @required this.approachingCompetenceF,
-    @required this.minimallyCompetentF,
-    @required this.competentF,
-  });
-
-  factory Exam.fromJson(Map<String, dynamic> json) => _$ExamFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExamToJson(this);
 

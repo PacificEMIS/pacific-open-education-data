@@ -6,10 +6,6 @@ part 'individual_school.g.dart';
 
 @JsonSerializable()
 class IndividualSchool {
-
-  @JsonKey(name: 'SchoolAccreditations')
-  final List<IndividualAccreditation> accreditationList;
-
   const IndividualSchool({
     @required this.accreditationList,
   });
@@ -17,6 +13,8 @@ class IndividualSchool {
   factory IndividualSchool.fromJson(Map<String, dynamic> json) =>
       _$IndividualSchoolFromJson(json);
 
-  Map<String, dynamic> toJson() => _$IndividualSchoolToJson(this);
+  @JsonKey(name: 'SchoolAccreditations')
+  final List<IndividualAccreditation> accreditationList;
 
+  Map<String, dynamic> toJson() => _$IndividualSchoolToJson(this);
 }

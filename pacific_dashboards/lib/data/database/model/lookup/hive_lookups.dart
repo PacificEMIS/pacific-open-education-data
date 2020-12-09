@@ -8,6 +8,26 @@ part 'hive_lookups.g.dart';
 
 @HiveType(typeId: 0)
 class HiveLookups extends HiveObject with Expirable {
+  HiveLookups();
+
+  HiveLookups.from(Lookups lookups)
+      : authorityGovt =
+            lookups.authorityGovt.map((it) => HiveLookup.from(it)).toList(),
+        schoolTypes =
+            lookups.schoolTypes.map((it) => HiveLookup.from(it)).toList(),
+        districts = lookups.districts.map((it) => HiveLookup.from(it)).toList(),
+        authorities =
+            lookups.authorities.map((it) => HiveLookup.from(it)).toList(),
+        levels =
+            lookups.levels.map((it) => HiveClassLevelLookup.from(it)).toList(),
+        accreditationTerms = lookups.accreditationTerms
+            .map((it) => HiveLookup.from(it))
+            .toList(),
+        educationLevels =
+            lookups.educationLevels.map((it) => HiveLookup.from(it)).toList(),
+        schoolCodes =
+            lookups.schoolCodes.map((it) => HiveLookup.from(it)).toList();
+
   @HiveField(0)
   List<HiveLookup> authorityGovt;
 
@@ -47,21 +67,4 @@ class HiveLookups extends HiveObject with Expirable {
         educationLevels: educationLevels.map((it) => it.toLookup()).toList(),
         schoolCodes: schoolCodes.map((it) => it.toLookup()).toList(),
       );
-
-  static HiveLookups from(Lookups lookups) => HiveLookups()
-    ..authorityGovt =
-        lookups.authorityGovt.map((it) => HiveLookup.from(it)).toList()
-    ..schoolTypes =
-        lookups.schoolTypes.map((it) => HiveLookup.from(it)).toList()
-    ..districts = lookups.districts.map((it) => HiveLookup.from(it)).toList()
-    ..authorities =
-        lookups.authorities.map((it) => HiveLookup.from(it)).toList()
-    ..levels =
-        lookups.levels.map((it) => HiveClassLevelLookup.from(it)).toList()
-    ..accreditationTerms =
-        lookups.accreditationTerms.map((it) => HiveLookup.from(it)).toList()
-    ..educationLevels =
-        lookups.educationLevels.map((it) => HiveLookup.from(it)).toList()
-    ..schoolCodes =
-        lookups.schoolCodes.map((it) => HiveLookup.from(it)).toList();
 }

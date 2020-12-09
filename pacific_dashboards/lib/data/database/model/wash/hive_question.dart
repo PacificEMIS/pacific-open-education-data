@@ -5,6 +5,13 @@ part 'hive_question.g.dart';
 
 @HiveType(typeId: 22)
 class HiveQuestion extends HiveObject {
+  HiveQuestion();
+
+  HiveQuestion.from(Question question)
+      : qID = question.id,
+        qName = question.name,
+        qFlags = question.qFlags;
+
   @HiveField(0)
   String qID;
 
@@ -15,13 +22,8 @@ class HiveQuestion extends HiveObject {
   String qFlags;
 
   Question toQuestion() => Question(
-      qID,
-      qName,
-      qFlags,
-  );
-
-  static HiveQuestion from(Question question) => HiveQuestion()
-    ..qID = question.id
-    ..qName = question.name
-    ..qFlags = question.qFlags;
+        qID,
+        qName,
+        qFlags,
+      );
 }

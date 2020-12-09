@@ -5,6 +5,16 @@ part 'hive_school_flow.g.dart';
 
 @HiveType(typeId: 10)
 class HiveSchoolFlow extends HiveObject {
+  HiveSchoolFlow();
+
+  HiveSchoolFlow.from(SchoolFlow flow)
+      : year = flow.year,
+        yearOfEducation = flow.yearOfEducation,
+        repeatRate = flow.repeatRate,
+        promoteRate = flow.promoteRate,
+        dropoutRate = flow.dropoutRate,
+        survivalRate = flow.survivalRate;
+
   @HiveField(0)
   int year;
 
@@ -30,12 +40,4 @@ class HiveSchoolFlow extends HiveObject {
     ..promoteRate = promoteRate
     ..dropoutRate = dropoutRate
     ..survivalRate = survivalRate;
-
-  static HiveSchoolFlow from(SchoolFlow flow) => HiveSchoolFlow()
-    ..year = flow.year
-    ..yearOfEducation = flow.yearOfEducation
-    ..repeatRate = flow.repeatRate
-    ..promoteRate = flow.promoteRate
-    ..dropoutRate = flow.dropoutRate
-    ..survivalRate = flow.survivalRate;
 }

@@ -7,8 +7,8 @@ import 'package:pacific_dashboards/models/short_school/short_school.dart';
 class HiveShortSchoolDao extends ShortSchoolDao {
   static const _kKey = 'HiveShortSchoolDao';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -20,8 +20,8 @@ class HiveShortSchoolDao extends ShortSchoolDao {
     if (storedSchools == null) {
       return null;
     }
-    final List<ShortSchool> storedItems = [];
-    for (var value in storedSchools) {
+    final storedItems = <ShortSchool>[];
+    for (final value in storedSchools) {
       final hiveSchool = value as HiveShortSchool;
       storedItems.add(hiveSchool.toShortSchool());
     }

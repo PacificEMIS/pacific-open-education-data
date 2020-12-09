@@ -6,6 +6,21 @@ part 'lookups.g.dart';
 
 @JsonSerializable()
 class Lookups {
+  const Lookups({
+    this.authorityGovt,
+    this.schoolTypes,
+    this.districts,
+    this.authorities,
+    this.levels,
+    this.accreditationTerms,
+    this.educationLevels,
+    this.schoolCodes,
+    this.question,
+  });
+
+  factory Lookups.fromJson(Map<String, dynamic> json) =>
+      _$LookupsFromJson(json);
+
   @JsonKey(name: 'authorityGovts', defaultValue: [])
   final List<Lookup> authorityGovt;
 
@@ -32,21 +47,6 @@ class Lookups {
 
   @JsonKey(name: 'question', defaultValue: [])
   final List<Lookup> question;
-
-  const Lookups({
-    this.authorityGovt,
-    this.schoolTypes,
-    this.districts,
-    this.authorities,
-    this.levels,
-    this.accreditationTerms,
-    this.educationLevels,
-    this.schoolCodes,
-    this.question,
-  });
-
-  factory Lookups.fromJson(Map<String, dynamic> json) =>
-      _$LookupsFromJson(json);
 
   Map<String, dynamic> toJson() => _$LookupsToJson(this);
 

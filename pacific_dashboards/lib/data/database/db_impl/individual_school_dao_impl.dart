@@ -8,9 +8,9 @@ class HiveIndividualSchoolDao extends IndividualSchoolDao {
   static const _kKey = 'HiveIndividualSchoolDao';
 
   static Future<T> _withBox<T>(
-    Future<T> action(Box<HiveIndividualSchool> box),
+    Future<T> Function(Box<HiveIndividualSchool> box) action,
   ) async {
-    final Box<HiveIndividualSchool> box = await Hive.openBox(_kKey);
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -34,7 +34,6 @@ class HiveIndividualSchoolDao extends IndividualSchoolDao {
     Emis emis,
   ) async {
     final hiveSchool = HiveIndividualSchool.from(school);
-
     await _withBox(
       (box) async => box.put(_generateKey(schoolId, emis), hiveSchool),
     );

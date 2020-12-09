@@ -5,6 +5,33 @@ part 'hive_budget.g.dart';
 
 @HiveType(typeId: 13)
 class HiveBudget extends HiveObject {
+  HiveBudget();
+
+  HiveBudget.from(Budget budget)
+      : surveyYear = budget.surveyYear,
+        districtCode = budget.districtCode,
+        gNP = budget.gNP,
+        gNPCapita = budget.gNPCapita,
+        gNPCurrency = budget.gNPCurrency,
+        gNPLocal = budget.gNPLocal,
+        gNPCapitaLocal = budget.gNPCapitaLocal,
+        govtExpA = budget.govtExpA,
+        govtExpB = budget.govtExpB,
+        edExpA = budget.edExpA,
+        edExpB = budget.edExpB,
+        edGovtExpBPerc = budget.edGovtExpBPerc,
+        edExpAGNPPerc = budget.edExpAGNPPerc,
+        edExpBGNPPerc = budget.edExpBGNPPerc,
+        edExpAPerHead = budget.edExpAPerHead,
+        edExpBPerHead = budget.edExpBPerHead,
+        edExpAPerHeadGNPCapitaPerc = budget.edExpAPerHeadGNPCapitaPerc,
+        edExpBPerHeadGNPCapitaPerc = budget.edExpBPerHeadGNPCapitaPerc,
+        enrolment = budget.enrolment,
+        sectorCode = budget.sectorCode,
+        edRecurrentExpA = budget.edRecurrentExpA,
+        edRecurrentExpB = budget.edRecurrentExpB,
+        enrolmentNation = budget.enrolmentNation;
+
   @HiveField(0)
   int surveyYear;
 
@@ -78,53 +105,29 @@ class HiveBudget extends HiveObject {
   int enrolmentNation;
 
   Budget toBudget() => Budget(
-      surveyYear,
-      districtCode,
-      gNP,
-      gNPCapita,
-      gNPCurrency,
-      gNPLocal,
-      gNPCapitaLocal,
-      govtExpA,
-      govtExpB,
-      govtExpBGNPPerc,
-      edExpA,
-      edExpB,
-      edGovtExpBPerc,
-      edExpAGNPPerc,
-      edExpBGNPPerc,
-      edExpAPerHead,
-      edExpBPerHead,
-      edExpAPerHeadGNPCapitaPerc,
-      edExpBPerHeadGNPCapitaPerc,
-      enrolment,
-      sectorCode,
-      edRecurrentExpA,
-      edRecurrentExpB,
-      enrolmentNation);
-
-  static HiveBudget from(Budget budget) => HiveBudget()
-    ..surveyYear = budget.surveyYear
-    ..districtCode = budget.districtCode
-    ..gNP = budget.gNP
-    ..gNPCapita = budget.gNPCapita
-    ..gNPCurrency = budget.gNPCurrency
-    ..gNPLocal = budget.gNPLocal
-    ..gNPCapitaLocal = budget.gNPCapitaLocal
-    ..govtExpA = budget.govtExpA
-    ..govtExpB = budget.govtExpB
-    ..edExpA = budget.edExpA
-    ..edExpB = budget.edExpB
-    ..edGovtExpBPerc = budget.edGovtExpBPerc
-    ..edExpAGNPPerc = budget.edExpAGNPPerc
-    ..edExpBGNPPerc = budget.edExpBGNPPerc
-    ..edExpAPerHead = budget.edExpAPerHead
-    ..edExpBPerHead = budget.edExpBPerHead
-    ..edExpAPerHeadGNPCapitaPerc = budget.edExpAPerHeadGNPCapitaPerc
-    ..edExpBPerHeadGNPCapitaPerc = budget.edExpBPerHeadGNPCapitaPerc
-    ..enrolment = budget.enrolment
-    ..sectorCode = budget.sectorCode
-    ..edRecurrentExpA = budget.edRecurrentExpA
-    ..edRecurrentExpB = budget.edRecurrentExpB
-    ..enrolmentNation = budget.enrolmentNation;
+        surveyYear,
+        districtCode,
+        gNP,
+        gNPCapita,
+        gNPCurrency,
+        gNPLocal,
+        gNPCapitaLocal,
+        govtExpA,
+        govtExpB,
+        govtExpBGNPPerc,
+        edExpA,
+        edExpB,
+        edGovtExpBPerc,
+        edExpAGNPPerc,
+        edExpBGNPPerc,
+        edExpAPerHead,
+        edExpBPerHead,
+        edExpAPerHeadGNPCapitaPerc,
+        edExpBPerHeadGNPCapitaPerc,
+        enrolment,
+        sectorCode,
+        edRecurrentExpA,
+        edRecurrentExpB,
+        enrolmentNation,
+      );
 }

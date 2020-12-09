@@ -4,6 +4,11 @@ part 'school_exam_report.g.dart';
 
 @JsonSerializable()
 class SchoolExamReport {
+  SchoolExamReport();
+
+  factory SchoolExamReport.fromJson(Map<String, dynamic> json) =>
+      _$SchoolExamReportFromJson(json);
+
   @JsonKey(name: 'examCode')
   String examCode;
 
@@ -31,12 +36,7 @@ class SchoolExamReport {
   @JsonKey(name: 'CandidatesF', defaultValue: 0)
   int femaleCandidates;
 
-  SchoolExamReport();
-
   int get totalCandidates => maleCandidates + femaleCandidates;
-
-  factory SchoolExamReport.fromJson(Map<String, dynamic> json) =>
-      _$SchoolExamReportFromJson(json);
 
   Map<String, dynamic> toJson() => _$SchoolExamReportToJson(this);
 }

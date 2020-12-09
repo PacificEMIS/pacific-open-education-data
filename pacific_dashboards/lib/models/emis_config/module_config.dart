@@ -6,12 +6,6 @@ part 'module_config.g.dart';
 
 @JsonSerializable()
 class ModuleConfig {
-  @JsonKey(name: 'id')
-  final String id;
-
-  @JsonKey(name: 'note', nullable: true)
-  final String note;
-
   const ModuleConfig({
     @required this.id,
     this.note,
@@ -19,6 +13,12 @@ class ModuleConfig {
 
   factory ModuleConfig.fromJson(Map<String, dynamic> json) =>
       _$ModuleConfigFromJson(json);
+
+  @JsonKey(name: 'id')
+  final String id;
+
+  @JsonKey(name: 'note', nullable: true)
+  final String note;
 
   Map<String, dynamic> toJson() => _$ModuleConfigToJson(this);
 

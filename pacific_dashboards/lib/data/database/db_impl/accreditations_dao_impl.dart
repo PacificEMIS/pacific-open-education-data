@@ -8,8 +8,9 @@ class HiveAccreditationsDao extends AccreditationsDao {
   static const _kKey = 'accreditations';
 
   static Future<T> _withBox<T>(
-      Future<T> action(Box<HiveAccreditationChunk> box)) async {
-    final Box<HiveAccreditationChunk> box = await Hive.openBox(_kKey);
+    Future<T> Function(Box<HiveAccreditationChunk> box) action,
+  ) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -18,7 +19,7 @@ class HiveAccreditationsDao extends AccreditationsDao {
   @override
   Future<AccreditationChunk> get(Emis emis) async {
     final storedChunk = await _withBox((box) async => box.get(emis.id));
-    return storedChunk?.toAccreditationChunk() ?? null;
+    return storedChunk?.toAccreditationChunk();
   }
 
   @override

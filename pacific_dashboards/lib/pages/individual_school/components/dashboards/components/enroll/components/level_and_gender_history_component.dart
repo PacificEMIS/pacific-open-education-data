@@ -5,15 +5,15 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 
 class LevelAndGenderHistoryComponent extends StatefulWidget {
-  final List<EnrollDataByGradeHistory> data;
-  final int year;
-
   const LevelAndGenderHistoryComponent({
     Key key,
     @required this.year,
     @required this.data,
   })  : assert(data != null),
         super(key: key);
+
+  final List<EnrollDataByGradeHistory> data;
+  final int year;
 
   @override
   _LevelAndGenderHistoryComponentState createState() =>
@@ -32,7 +32,8 @@ class _LevelAndGenderHistoryComponentState
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-           '${'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle'.localized(context)}',
+            'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle'
+                .localized(context),
             style: textTheme.headline4,
           ),
         ),

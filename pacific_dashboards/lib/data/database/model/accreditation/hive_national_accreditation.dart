@@ -5,6 +5,22 @@ part 'hive_national_accreditation.g.dart';
 
 @HiveType(typeId: 15)
 class HiveNationalAccreditation extends HiveObject {
+  HiveNationalAccreditation();
+
+  HiveNationalAccreditation.from(NationalAccreditation accreditation)
+      : surveyYear = accreditation.surveyYear,
+        districtCode = accreditation.districtCode,
+        district = accreditation.district,
+        authorityCode = accreditation.authorityCode,
+        authority = accreditation.authority,
+        authorityGovtCode = accreditation.authorityGovtCode,
+        authorityGovt = accreditation.authorityGovt,
+        schoolTypeCode = accreditation.schoolTypeCode,
+        schoolType = accreditation.schoolType,
+        inspectionResult = accreditation.inspectionResult,
+        total = accreditation.total,
+        numThisYear = accreditation.numThisYear;
+
   @HiveField(0)
   int surveyYear;
 
@@ -34,7 +50,7 @@ class HiveNationalAccreditation extends HiveObject {
 
   @HiveField(9)
   String inspectionResult;
-  
+
   @HiveField(10)
   int total;
 
@@ -55,19 +71,4 @@ class HiveNationalAccreditation extends HiveObject {
         total: total,
         numThisYear: numThisYear,
       );
-
-  static HiveNationalAccreditation from(NationalAccreditation accreditation) =>
-      HiveNationalAccreditation()
-        ..surveyYear = accreditation.surveyYear
-        ..districtCode = accreditation.districtCode
-        ..district = accreditation.district
-        ..authorityCode = accreditation.authorityCode
-        ..authority = accreditation.authority
-        ..authorityGovtCode = accreditation.authorityGovtCode
-        ..authorityGovt = accreditation.authorityGovt
-        ..schoolTypeCode = accreditation.schoolTypeCode
-        ..schoolType = accreditation.schoolType
-        ..inspectionResult = accreditation.inspectionResult
-        ..total = accreditation.total
-        ..numThisYear = accreditation.numThisYear;
 }

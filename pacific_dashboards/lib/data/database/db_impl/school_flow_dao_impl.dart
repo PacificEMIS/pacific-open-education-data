@@ -7,8 +7,8 @@ import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
 class HiveSchoolFlowDao extends SchoolFlowDao {
   static const _kKey = 'HiveSchoolFlowDao';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -25,8 +25,8 @@ class HiveSchoolFlowDao extends SchoolFlowDao {
     if (storedFlows == null) {
       return null;
     }
-    final List<SchoolFlow> storedItems = [];
-    for (var value in storedFlows) {
+    final storedItems = <SchoolFlow>[];
+    for (final value in storedFlows) {
       final hiveSchoolFlow = value as HiveSchoolFlow;
       storedItems.add(hiveSchoolFlow.toSchoolFlow());
     }
@@ -40,8 +40,9 @@ class HiveSchoolFlowDao extends SchoolFlowDao {
     Emis emis,
   ) async {
     final hiveSchoolFlows = flows.map((it) => HiveSchoolFlow.from(it)).toList();
-
-    await _withBox(
-        (box) async => box.put(_generateKey(schoolId, emis), hiveSchoolFlows));
+    await _withBox((box) async => box.put(
+          _generateKey(schoolId, emis),
+          hiveSchoolFlows,
+        ));
   }
 }

@@ -5,6 +5,14 @@ part 'hive_class_level_lookup.g.dart';
 
 @HiveType(typeId: 11)
 class HiveClassLevelLookup {
+  HiveClassLevelLookup();
+
+  HiveClassLevelLookup.from(ClassLevelLookup lookup)
+      : code = lookup.code,
+        name = lookup.name,
+        l = lookup.l,
+        yearOfEducation = lookup.yearOfEducation;
+
   @HiveField(0)
   String code;
 
@@ -30,12 +38,4 @@ class HiveClassLevelLookup {
         l: l,
         yearOfEducation: yearOfEducation,
       );
-
-  static HiveClassLevelLookup from(ClassLevelLookup lookup) {
-    return HiveClassLevelLookup()
-      ..code = lookup.code
-      ..name = lookup.name
-      ..l = lookup.l
-      ..yearOfEducation = lookup.yearOfEducation;
-  }
 }

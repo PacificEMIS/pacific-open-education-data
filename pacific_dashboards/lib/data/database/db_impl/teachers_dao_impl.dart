@@ -8,8 +8,8 @@ import 'package:pacific_dashboards/models/teacher/teacher.dart';
 class HiveTeachersDao extends TeachersDao {
   static const _kKey = 'teachers';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -19,11 +19,11 @@ class HiveTeachersDao extends TeachersDao {
   Future<Pair<bool, List<Teacher>>> get(Emis emis) async {
     final storedTeachers = await _withBox((box) async => box.get(emis.id));
     if (storedTeachers == null) {
-      return Pair(false, null);
+      return const Pair(false, null);
     }
     var expired = false;
-    List<Teacher> storedItems = [];
-    for (var value in storedTeachers) {
+    final storedItems = <Teacher>[];
+    for (final value in storedTeachers) {
       final hiveTeacher = value as HiveTeacher;
       expired |= hiveTeacher.isExpired();
       storedItems.add(hiveTeacher.toTeacher());

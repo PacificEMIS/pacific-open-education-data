@@ -10,11 +10,6 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:rxdart/rxdart.dart';
 
 class EnrollViewModel extends BaseViewModel {
-  final Repository _repository;
-  final ShortSchool _school;
-  final Subject<EnrollData> _dataSubject = BehaviorSubject();
-  SchoolEnrollChunk _chunk;
-
   EnrollViewModel(
     BuildContext ctx, {
     @required ShortSchool school,
@@ -24,6 +19,11 @@ class EnrollViewModel extends BaseViewModel {
         _school = school,
         _repository = repository,
         super(ctx);
+
+  final Repository _repository;
+  final ShortSchool _school;
+  final Subject<EnrollData> _dataSubject = BehaviorSubject();
+  SchoolEnrollChunk _chunk;
 
   Stream<EnrollData> get dataStream => _dataSubject.stream;
 
@@ -47,7 +47,7 @@ class EnrollViewModel extends BaseViewModel {
     );
   }
 
-  Future<void>  _onEnrollLoaded(SchoolEnrollChunk chunk) {
+  Future<void> _onEnrollLoaded(SchoolEnrollChunk chunk) {
     _chunk = chunk;
     return _parseData();
   }
@@ -88,73 +88,70 @@ class EnrollViewModel extends BaseViewModel {
 List<EnrollDataByGradeHistory> _generateGradeDataHistory(
   List<SchoolEnroll> schoolData,
 ) {
-  final List<EnrollDataByGradeHistory> results = [];
-  final groupedByYear = schoolData.groupBy((it) => it.year);
+  final results = <EnrollDataByGradeHistory>[];
 
-  groupedByYear.forEach((year, enrollList) {
-    final groupedByGrade = enrollList.groupBy((it) => it.classLevel);
-    groupedByGrade.removeWhere((key, value) => key == null);
+  schoolData.groupBy((it) => it.year)
+    ..forEach((year, enrollList) {
+      final enrollInYear = <EnrollDataByGrade>[];
+      enrollList.groupBy((it) => it.classLevel)
+        ..removeWhere((key, value) => key == null)
+        ..forEach((grade, enrollList) {
+          enrollInYear.addAll(enrollList.map((it) {
+            return EnrollDataByGrade(
+              grade: grade,
+              male: it.enrollMale,
+              female: it.enrollFemale,
+              total: it.totalEnroll,
+            );
+          }));
+        });
 
-    final List<EnrollDataByGrade> enrollInYear = [];
-
-    groupedByGrade.forEach((grade, enrollList) {
-      enrollInYear.addAll(enrollList.map((it) {
-        return EnrollDataByGrade(
-          grade: grade,
-          male: it.enrollMale,
-          female: it.enrollFemale,
-          total: it.totalEnroll,
-        );
-      }));
+      results.add(EnrollDataByGradeHistory(
+        year: year,
+        data: enrollInYear,
+      ));
     });
-
-    results.add(EnrollDataByGradeHistory(
-      year: year,
-      data: enrollInYear,
-    ));
-  });
   return results.chainSort((lv, rv) => rv.year.compareTo(lv.year));
 }
 
 List<EnrollDataByYear> _generateGenderDataHistory(
   List<SchoolEnroll> schoolData,
 ) {
-  final List<EnrollDataByYear> results = [];
-  final groupedByYear = schoolData.groupBy((it) => it.year);
-  groupedByYear.removeWhere((key, value) => key == null);
-
-  groupedByYear.forEach((year, enrollList) {
-    int femaleByYear = 0;
-    int maleByYear = 0;
-    int totalByYear = 0;
-    for (var enrollData in enrollList) {
-      femaleByYear += enrollData.enrollFemale;
-      maleByYear += enrollData.enrollMale;
-      totalByYear += enrollData.totalEnroll;
-    }
-    results.add(EnrollDataByYear(
-      year: year,
-      female: femaleByYear,
-      male: maleByYear,
-      total: totalByYear,
-    ));
-  });
+  final results = <EnrollDataByYear>[];
+  schoolData.groupBy((it) => it.year)
+    ..removeWhere((key, value) => key == null)
+    ..forEach((year, enrollList) {
+      var femaleByYear = 0;
+      var maleByYear = 0;
+      var totalByYear = 0;
+      for (final enrollData in enrollList) {
+        femaleByYear += enrollData.enrollFemale;
+        maleByYear += enrollData.enrollMale;
+        totalByYear += enrollData.totalEnroll;
+      }
+      results.add(EnrollDataByYear(
+        year: year,
+        female: femaleByYear,
+        male: maleByYear,
+        total: totalByYear,
+      ));
+    });
   return results.chainSort((lv, rv) => lv.year.compareTo(rv.year));
 }
 
 EnrollDataByFemalePartOnLastYear _generateFemaleDataOnLastYear(
   SchoolEnrollChunk chunk,
 ) {
-  var groupedByYearSchool = chunk.schoolData.groupBy((it) => it.year);
-  groupedByYearSchool.removeWhere((key, value) => key == null);
+  final groupedByYearSchool = chunk.schoolData.groupBy((it) => it.year)
+    ..removeWhere((key, value) => key == null);
   final groupedByYearDistrict = chunk.districtData.groupBy((it) => it.year);
   final groupedByYearNation = chunk.nationalData.groupBy((it) => it.year);
   final lastSchoolYear =
       groupedByYearSchool.keys.chainSort((lv, rv) => rv.compareTo(lv)).first;
 
-  var schoolDataOnLastYear = groupedByYearSchool[lastSchoolYear];
-  var districtDataOnLastYear = groupedByYearDistrict[lastSchoolYear] ?? [];
-  var nationDataOnLastYear = groupedByYearNation[lastSchoolYear] ?? [];
+  final schoolDataOnLastYear = groupedByYearSchool[lastSchoolYear];
+  final districtDataOnLastYear = groupedByYearDistrict[lastSchoolYear] ?? [];
+  final nationDataOnLastYear = groupedByYearNation[lastSchoolYear] ?? [];
 
   schoolDataOnLastYear.removeWhere((it) => it.classLevel == null);
   districtDataOnLastYear.removeWhere((it) => it.classLevel == null);
@@ -167,7 +164,7 @@ EnrollDataByFemalePartOnLastYear _generateFemaleDataOnLastYear(
   final nationDataOnLastYearByGrade =
       nationDataOnLastYear.groupBy((it) => it.classLevel);
 
-  final List<EnrollDataByFemalePart> data = [];
+  final data = <EnrollDataByFemalePart>[];
   schoolDataOnLastYearByGrade.forEach((grade, enrollData) {
     final districtEnrollData = districtDataOnLastYearByGrade[grade] ?? [];
     final nationEnrollData = nationDataOnLastYearByGrade[grade] ?? [];
@@ -194,24 +191,25 @@ List<EnrollDataByFemalePartHistory> _generateFemalePartHistory(
   final groupedByYearDistrict = chunk.districtData.groupBy((it) => it.year);
   final groupedByYearNation = chunk.nationalData.groupBy((it) => it.year);
 
-  final List<EnrollDataByFemalePartHistory> result = [];
-  groupedByYearSchool.removeWhere((key, value) => key == null);
-  groupedByYearSchool.forEach((year, enrollData) {
-    final districtEnrollData = groupedByYearDistrict[year] ?? [];
-    final nationEnrollData = groupedByYearNation[year] ?? [];
-    result.add(EnrollDataByFemalePartHistory(
-      year: year,
-      school: enrollData
-          .map((it) => it.enrollFemale)
-          .fold(0, (prev, newValue) => prev + newValue),
-      district: districtEnrollData
-          .map((it) => it.enrollFemale)
-          .fold(0, (prev, newValue) => prev + newValue),
-      nation: nationEnrollData
-          .map((it) => it.enrollFemale)
-          .fold(0, (prev, newValue) => prev + newValue),
-    ));
-  });
+  final result = <EnrollDataByFemalePartHistory>[];
+  groupedByYearSchool
+    ..removeWhere((key, value) => key == null)
+    ..forEach((year, enrollData) {
+      final districtEnrollData = groupedByYearDistrict[year] ?? [];
+      final nationEnrollData = groupedByYearNation[year] ?? [];
+      result.add(EnrollDataByFemalePartHistory(
+        year: year,
+        school: enrollData
+            .map((it) => it.enrollFemale)
+            .fold(0, (prev, newValue) => prev + newValue),
+        district: districtEnrollData
+            .map((it) => it.enrollFemale)
+            .fold(0, (prev, newValue) => prev + newValue),
+        nation: nationEnrollData
+            .map((it) => it.enrollFemale)
+            .fold(0, (prev, newValue) => prev + newValue),
+      ));
+    });
 
   return result;
 }

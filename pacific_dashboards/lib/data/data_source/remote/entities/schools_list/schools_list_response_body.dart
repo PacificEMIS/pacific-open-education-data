@@ -5,13 +5,13 @@ part 'schools_list_response_body.g.dart';
 
 @JsonSerializable()
 class SchoolsListResponseBody {
-  @JsonKey(name: 'ResultSet')
-  List<ShortSchool> schools;
-
   SchoolsListResponseBody();
 
   factory SchoolsListResponseBody.fromJson(Map<String, dynamic> json) =>
       _$SchoolsListResponseBodyFromJson(json);
+
+  @JsonKey(name: 'ResultSet')
+  List<ShortSchool> schools;
 
   Map<String, dynamic> toJson() => _$SchoolsListResponseBodyToJson(this);
 }

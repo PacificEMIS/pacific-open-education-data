@@ -5,6 +5,38 @@ part 'hive_water.g.dart';
 
 @HiveType(typeId: 14)
 class HiveWater extends HiveObject {
+  HiveWater();
+
+  HiveWater.from(Water water)
+      : schNo = water.schNo,
+        surveyYear = water.surveyYear,
+        district = water.district,
+        districtCode = water.districtCode,
+        schoolType = water.schoolType,
+        schoolTypeCode = water.schoolTypeCode,
+        authority = water.authority,
+        authorityCode = water.authorityCode,
+        authorityGovt = water.authorityGovt,
+        authorityGovtCode = water.authorityGovtCode,
+        pipedWaterSupplyCurrentlyAvailable =
+            water.pipedWaterSupplyCurrentlyAvailable,
+        pipedWaterSupplyUsedForDrinking = water.pipedWaterSupplyUsedForDrinking,
+        protectedWellCurrentlyAvailable = water.protectedWellCurrentlyAvailable,
+        protectedWellUsedForDrinking = water.protectedWellUsedForDrinking,
+        unprotectedWellSpringCurrentlyAvailable =
+            water.unprotectedWellSpringCurrentlyAvailable,
+        unprotectedWellSpringUsedForDrinking =
+            water.unprotectedWellSpringUsedForDrinking,
+        rainwaterCurrentlyAvailable = water.rainwaterCurrentlyAvailable,
+        rainwaterUsedForDrinking = water.rainwaterUsedForDrinking,
+        bottledWaterCurrentlyAvailable = water.bottledWaterCurrentlyAvailable,
+        bottledWaterUsedForDrinking = water.bottledWaterUsedForDrinking,
+        tankerTruckCartCurrentlyAvailable =
+            water.tankerTruckCartCurrentlyAvailable,
+        tankerTruckCartUsedForDrinking = water.tankerTruckCartUsedForDrinking,
+        surfacedWaterCurrentlyAvailable = water.surfacedWaterCurrentlyAvailable,
+        surfacedWaterUsedForDrinking = water.surfacedWaterUsedForDrinking;
+
   @HiveField(0)
   String schNo;
 
@@ -92,8 +124,10 @@ class HiveWater extends HiveObject {
         pipedWaterSupplyUsedForDrinking: pipedWaterSupplyUsedForDrinking,
         protectedWellCurrentlyAvailable: protectedWellCurrentlyAvailable,
         protectedWellUsedForDrinking: protectedWellUsedForDrinking,
-        unprotectedWellSpringCurrentlyAvailable: unprotectedWellSpringCurrentlyAvailable,
-        unprotectedWellSpringUsedForDrinking: unprotectedWellSpringUsedForDrinking,
+        unprotectedWellSpringCurrentlyAvailable:
+            unprotectedWellSpringCurrentlyAvailable,
+        unprotectedWellSpringUsedForDrinking:
+            unprotectedWellSpringUsedForDrinking,
         rainwaterCurrentlyAvailable: rainwaterCurrentlyAvailable,
         rainwaterUsedForDrinking: rainwaterUsedForDrinking,
         bottledWaterCurrentlyAvailable: bottledWaterCurrentlyAvailable,
@@ -103,34 +137,4 @@ class HiveWater extends HiveObject {
         surfacedWaterCurrentlyAvailable: surfacedWaterCurrentlyAvailable,
         surfacedWaterUsedForDrinking: surfacedWaterUsedForDrinking,
       );
-
-  static HiveWater from(Water water) => HiveWater()
-    ..schNo = water.schNo
-    ..surveyYear = water.surveyYear
-    ..district = water.district
-    ..districtCode = water.districtCode
-    ..schoolType = water.schoolType
-    ..schoolTypeCode = water.schoolTypeCode
-    ..authority = water.authority
-    ..authorityCode = water.authorityCode
-    ..authorityGovt = water.authorityGovt
-    ..authorityGovtCode = water.authorityGovtCode
-    ..pipedWaterSupplyCurrentlyAvailable =
-        water.pipedWaterSupplyCurrentlyAvailable
-    ..pipedWaterSupplyUsedForDrinking = water.pipedWaterSupplyUsedForDrinking
-    ..protectedWellCurrentlyAvailable = water.protectedWellCurrentlyAvailable
-    ..protectedWellUsedForDrinking = water.protectedWellUsedForDrinking
-    ..unprotectedWellSpringCurrentlyAvailable =
-        water.unprotectedWellSpringCurrentlyAvailable
-    ..unprotectedWellSpringUsedForDrinking =
-        water.unprotectedWellSpringUsedForDrinking
-    ..rainwaterCurrentlyAvailable = water.rainwaterCurrentlyAvailable
-    ..rainwaterUsedForDrinking = water.rainwaterUsedForDrinking
-    ..bottledWaterCurrentlyAvailable = water.bottledWaterCurrentlyAvailable
-    ..bottledWaterUsedForDrinking = water.bottledWaterUsedForDrinking
-    ..tankerTruckCartCurrentlyAvailable =
-        water.tankerTruckCartCurrentlyAvailable
-    ..tankerTruckCartUsedForDrinking = water.tankerTruckCartUsedForDrinking
-    ..surfacedWaterCurrentlyAvailable = water.surfacedWaterCurrentlyAvailable
-    ..surfacedWaterUsedForDrinking = water.surfacedWaterUsedForDrinking;
 }

@@ -3,14 +3,14 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 
 class EnrollDataByGradeComponent extends StatelessWidget {
-  final List<EnrollDataByGrade> _data;
-
   const EnrollDataByGradeComponent({
     Key key,
     @required List<EnrollDataByGrade> data,
   })  : assert(data != null),
         _data = data,
         super(key: key);
+
+  final List<EnrollDataByGrade> _data;
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,13 @@ class EnrollDataByGradeComponent extends StatelessWidget {
         if (snapshot.hasData) {
           return MultiTableWidget(
             data: snapshot.data,
-            columnNames: [
+            columnNames: const [
               'individualSchoolDashboardEnrollByGradeLevelGenderGrade',
               'labelMale',
               'labelFemale',
               'labelTotal'
             ],
-            columnFlex: [3, 3, 3, 3],
+            columnFlex: const [3, 3, 3, 3],
             domainValueBuilder: GenderTableData.sDomainValueBuilder,
           );
         } else {
@@ -38,8 +38,8 @@ class EnrollDataByGradeComponent extends StatelessWidget {
 
   Future<Map<String, GenderTableData>> _transformToTableData() {
     return Future.microtask(() {
-      final Map<String, GenderTableData> result = {};
-      for (var it in _data) {
+      final result = <String, GenderTableData>{};
+      for (final it in _data) {
         result[it.grade] = GenderTableData(it.male, it.female);
       }
       return result;

@@ -13,18 +13,6 @@ import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ExamsViewModel extends BaseViewModel {
-  final Repository _repository;
-  final RemoteConfig _remoteConfig;
-  final GlobalSettings _globalSettings;
-
-  final Subject<String> _pageNoteSubject = BehaviorSubject();
-  final Subject<ExamsFilterData> _filtersSubject = BehaviorSubject();
-  final Subject<Map<String, Map<String, Exam>>> _dataSubject =
-      BehaviorSubject();
-
-  ExamsNavigator _navigator;
-  Lookups _lookups;
-
   ExamsViewModel(
     BuildContext ctx, {
     @required Repository repository,
@@ -37,6 +25,18 @@ class ExamsViewModel extends BaseViewModel {
         _remoteConfig = remoteConfig,
         _globalSettings = globalSettings,
         super(ctx);
+
+  final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
+
+  final Subject<String> _pageNoteSubject = BehaviorSubject();
+  final Subject<ExamsFilterData> _filtersSubject = BehaviorSubject();
+  final Subject<Map<String, Map<String, Exam>>> _dataSubject =
+      BehaviorSubject();
+
+  ExamsNavigator _navigator;
+  Lookups _lookups;
 
   @override
   void onInit() {
@@ -60,7 +60,7 @@ class ExamsViewModel extends BaseViewModel {
 
   void _loadData() {
     listenHandled(
-      handleRepositoryFetch(fetch: () => _repository.fetchAllExams()),
+      handleRepositoryFetch(fetch: _repository.fetchAllExams),
       _onDataLoaded,
       notifyProgress: true,
     );

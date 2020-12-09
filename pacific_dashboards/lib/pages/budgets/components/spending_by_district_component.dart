@@ -7,8 +7,7 @@ import 'package:pacific_dashboards/shared_ui/tables/chart_info_table_widget.dart
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
-
-import '../budget_data.dart';
+import 'package:pacific_dashboards/pages/budgets/budget_data.dart';
 
 enum _Tab {
   actualExpenditure,
@@ -43,10 +42,6 @@ extension _TabStringExt on _Tab {
 }
 
 class SpendingByDistrictComponent extends StatefulWidget {
-  final List<DataSpendingByDistrict> data;
-  final List<DataSpendingByDistrict> dataFiltered;
-  final String domain;
-
   const SpendingByDistrictComponent({
     Key key,
     @required this.data,
@@ -55,6 +50,10 @@ class SpendingByDistrictComponent extends StatefulWidget {
   })  : assert(data != null),
         assert(dataFiltered != null),
         super(key: key);
+
+  final List<DataSpendingByDistrict> data;
+  final List<DataSpendingByDistrict> dataFiltered;
+  final String domain;
 
   @override
   _SpendingByDistrictComponentState createState() =>
@@ -105,12 +104,6 @@ class _SpendingByDistrictComponentState
 }
 
 class _Chart extends StatelessWidget {
-  final List<DataSpendingByDistrict> _data;
-  final List<DataSpendingByDistrict> _dataFiltered;
-  final charts.BarGroupingType _groupingType;
-  final _Tab _tab;
-  final String _domain;
-
   const _Chart({
     Key key,
     @required List<DataSpendingByDistrict> data,
@@ -125,6 +118,12 @@ class _Chart extends StatelessWidget {
         _tab = tab,
         _domain = domain,
         super(key: key);
+
+  final List<DataSpendingByDistrict> _data;
+  final List<DataSpendingByDistrict> _dataFiltered;
+  final charts.BarGroupingType _groupingType;
+  final _Tab _tab;
+  final String _domain;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +153,8 @@ class _Chart extends StatelessWidget {
                     barGroupingType: _groupingType,
                     vertical: false,
                     primaryMeasureAxis: charts.NumericAxisSpec(
-                      tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                      tickProviderSpec:
+                          const charts.BasicNumericTickProviderSpec(
                         desiredMinTickCount: 5,
                         desiredMaxTickCount: 13,
                       ),
@@ -182,10 +182,9 @@ class _Chart extends StatelessWidget {
 
   Future<Map<String, Color>> get _colorScheme {
     return Future.microtask(() {
-      final colorScheme = Map<String, Color>();
+      final colorScheme = <String, Color>{};
       final dataSortedByDistrict = _data.groupBy((it) => it.district);
-      final districts = dataSortedByDistrict.keys.toList();
-      districts.forEachIndexed((index, item) {
+      dataSortedByDistrict.keys.forEachIndexed((index, item) {
         colorScheme[item] = index < AppColors.kDynamicPalette.length
             ? AppColors.kDynamicPalette[index]
             : HexColor.fromStringHash(item);
@@ -199,10 +198,10 @@ class _Chart extends StatelessWidget {
     Map<String, Color> colorScheme,
     String domain,
   ) {
-    final districts = Map<String, int>();
+    final districts = <String, int>{};
     _dataFiltered.groupBy((it) => it.district).forEach((district, value) {
       var spending = 0;
-      value.forEach((it) {
+      for (final it in value) {
         switch (_tab) {
           case _Tab.actualExpenditure:
             spending += it.edExpA;
@@ -226,11 +225,11 @@ class _Chart extends StatelessWidget {
             spending += it.enrolment;
             break;
         }
-      });
+      }
       districts[district] = spending;
     });
 
-    if (districts.length == 0) return Container();
+    if (districts.isEmpty) return Container();
 
     final chartData = districts.mapToList((domain, measure) {
       return ChartData(
@@ -250,8 +249,7 @@ class _Chart extends StatelessWidget {
     Map<String, Color> colorScheme,
   ) {
     return Future.microtask(() {
-      num Function(DataSpendingByDistrict, _Tab) extractMeasure =
-          (data, tab) {
+      num extractMeasure(DataSpendingByDistrict data, _Tab tab) {
         switch (tab) {
           case _Tab.actualExpenditure:
             return data.edExpA;
@@ -269,7 +267,8 @@ class _Chart extends StatelessWidget {
             return data.enrolment;
         }
         throw FallThroughError();
-      };
+      }
+
       _data.sort((rv, lv) => rv.district.compareTo(lv.district));
       final data = _data.map((it) {
         return ChartData(
@@ -280,9 +279,9 @@ class _Chart extends StatelessWidget {
       }).toList();
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'spending_Data',
           data: data,
         )

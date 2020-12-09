@@ -11,12 +11,6 @@ import 'package:rxdart/rxdart.dart';
 const _kPossibleLevelInts = [1, 2, 3, 4];
 
 class IndividualAccreditationViewModel extends BaseViewModel {
-  final Repository _repository;
-  final ShortSchool _school;
-
-  final Subject<List<IndividualAccreditationData>> _dataSubject =
-      BehaviorSubject();
-
   IndividualAccreditationViewModel(
     BuildContext ctx, {
     @required ShortSchool school,
@@ -26,6 +20,12 @@ class IndividualAccreditationViewModel extends BaseViewModel {
         _school = school,
         _repository = repository,
         super(ctx);
+
+  final Repository _repository;
+  final ShortSchool _school;
+
+  final Subject<List<IndividualAccreditationData>> _dataSubject =
+      BehaviorSubject();
 
   Stream<List<IndividualAccreditationData>> get dataStream =>
       _dataSubject.stream;
@@ -48,11 +48,12 @@ class IndividualAccreditationViewModel extends BaseViewModel {
   }
 
   int _getAccreditationResult(IndividualAccreditation accreditation) {
-    for (var it in _kPossibleLevelInts) {
+    for (final it in _kPossibleLevelInts) {
       if (accreditation.result.contains('$it')) {
         return it;
       }
     }
+    // ignore: avoid_returning_null
     return null;
   }
 

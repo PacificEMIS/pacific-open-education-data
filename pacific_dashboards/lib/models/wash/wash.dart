@@ -6,12 +6,32 @@ part 'wash.g.dart';
 
 @JsonSerializable()
 class Wash implements BaseWash {
+  const Wash({
+    @required this.surveyYear,
+    @required this.districtCode,
+    @required this.district,
+    @required this.authorityCode,
+    @required this.authority,
+    @required this.authorityGroupCode,
+    @required this.authorityGroup,
+    @required this.schoolTypeCode,
+    @required this.schoolType,
+    @required this.question,
+    @required this.answer,
+    @required this.response,
+    @required this.item,
+    @required this.number,
+    @required this.numThisYear,
+  });
+
+  factory Wash.fromJson(Map<String, dynamic> json) => _$WashFromJson(json);
+
   @override
   @JsonKey(name: 'SurveyYear')
   final int surveyYear;
 
   @override
-  @JsonKey(name: "DistrictCode") 
+  @JsonKey(name: 'DistrictCode')
   final String districtCode;
 
   @JsonKey(name: 'District', defaultValue: '')
@@ -56,26 +76,6 @@ class Wash implements BaseWash {
   final int numThisYear;
 
   String get result => answer ?? response ?? item ?? '';
-
-  const Wash({
-    @required this.surveyYear,
-    @required this.districtCode,
-    @required this.district,
-    @required this.authorityCode,
-    @required this.authority,
-    @required this.authorityGroupCode,
-    @required this.authorityGroup,
-    @required this.schoolTypeCode,
-    @required this.schoolType,
-    @required this.question,
-    @required this.answer,
-    @required this.response,
-    @required this.item,
-    @required this.number,
-    @required this.numThisYear,
-  });
-
-  factory Wash.fromJson(Map<String, dynamic> json) => _$WashFromJson(json);
 
   Map<String, dynamic> toJson() => _$WashToJson(this);
 }

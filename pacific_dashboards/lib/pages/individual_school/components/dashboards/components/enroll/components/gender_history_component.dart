@@ -9,9 +9,6 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class GenderHistoryComponent extends StatefulWidget {
-  final List<EnrollDataByYear> data;
-  final int year;
-
   const GenderHistoryComponent({
     Key key,
     @required this.year,
@@ -19,6 +16,9 @@ class GenderHistoryComponent extends StatefulWidget {
   })  : assert(year != null),
         assert(data != null),
         super(key: key);
+
+  final List<EnrollDataByYear> data;
+  final int year;
 
   @override
   _GenderHistoryComponentState createState() => _GenderHistoryComponentState();
@@ -35,7 +35,9 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${'individualSchoolDashboardEnrollByGenderHistoryTitle'.localized(context)}',
+            // ignore: lines_longer_than_80_chars
+            'individualSchoolDashboardEnrollByGenderHistoryTitle'
+                .localized(context),
             style: textTheme.headline4,
           ),
         ),
@@ -44,9 +46,11 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
           tabNameBuilder: (tab) {
             switch (tab) {
               case _Tab.stacked:
+                // ignore: lines_longer_than_80_chars
                 return 'individualSchoolDashboardEnrollByGradeLevelGenderHistoryStacked'
                     .localized(context);
               case _Tab.unstacked:
+                // ignore: lines_longer_than_80_chars
                 return 'individualSchoolDashboardEnrollByGradeLevelGenderHistoryUnstacked'
                     .localized(context);
             }
@@ -70,14 +74,14 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
 enum _Tab { stacked, unstacked }
 
 class _StackedChart extends StatelessWidget {
-  final List<EnrollDataByYear> _data;
-
   const _StackedChart({
     Key key,
     @required List<EnrollDataByYear> data,
   })  : assert(data != null),
         _data = data,
         super(key: key);
+
+  final List<EnrollDataByYear> _data;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +106,7 @@ class _StackedChart extends StatelessWidget {
                   stacked: true,
                 ),
                 primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                  tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -130,7 +134,7 @@ class _StackedChart extends StatelessWidget {
               color: AppColors.kMale,
               value: 'labelMale'.localized(context),
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
@@ -162,20 +166,18 @@ class _StackedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'femaledata',
           data: femaleData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'maledata',
           data: maleData,
         ),
@@ -185,14 +187,14 @@ class _StackedChart extends StatelessWidget {
 }
 
 class _UnstackedChart extends StatelessWidget {
-  final List<EnrollDataByYear> _data;
-
   const _UnstackedChart({
     Key key,
     @required List<EnrollDataByYear> data,
   })  : assert(data != null),
         _data = data,
         super(key: key);
+
+  final List<EnrollDataByYear> _data;
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +216,7 @@ class _UnstackedChart extends StatelessWidget {
                 animate: false,
                 defaultRenderer: charts.LineRendererConfig(),
                 primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                  tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -242,14 +244,14 @@ class _UnstackedChart extends StatelessWidget {
               color: AppColors.kBlue,
               value: 'labelMale'.localized(context),
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kRed,
               value: 'labelFemale'.localized(context),
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
@@ -289,29 +291,26 @@ class _UnstackedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'maledata',
           data: maleData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'femaledata',
           data: femaleData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'totaldata',
           data: totalData,
         ),

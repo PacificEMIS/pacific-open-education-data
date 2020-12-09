@@ -5,6 +5,15 @@ part 'hive_school_enroll.g.dart';
 
 @HiveType(typeId: 8)
 class HiveSchoolEnroll extends HiveObject {
+  HiveSchoolEnroll();
+
+  HiveSchoolEnroll.from(SchoolEnroll enroll)
+      : year = enroll.year,
+        classLevel = enroll.classLevel,
+        enrollFemale = enroll.enrollFemale,
+        enrollMale = enroll.enrollMale,
+        totalEnroll = enroll.totalEnroll;
+
   @HiveField(0)
   int year;
 
@@ -26,11 +35,4 @@ class HiveSchoolEnroll extends HiveObject {
     ..enrollFemale = enrollFemale
     ..enrollMale = enrollMale
     ..totalEnroll = totalEnroll;
-
-  static HiveSchoolEnroll from(SchoolEnroll enroll) => HiveSchoolEnroll()
-    ..year = enroll.year
-    ..classLevel = enroll.classLevel
-    ..enrollFemale = enroll.enrollFemale
-    ..enrollMale = enroll.enrollMale
-    ..totalEnroll = enroll.totalEnroll;
 }

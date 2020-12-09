@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 
+@immutable
 class IndividualAccreditationData {
-  final DateTime dateTime;
-  final int inspectionYear;
-  final String inspectedBy;
-  final int result;
-  final List<AccreditationByStandard> standards;
-  final int classroomObservation1;
-  final int classroomObservation2;
-
   const IndividualAccreditationData({
     @required this.dateTime,
     @required this.inspectionYear,
@@ -18,6 +11,14 @@ class IndividualAccreditationData {
     @required this.classroomObservation1,
     @required this.classroomObservation2,
   });
+
+  final DateTime dateTime;
+  final int inspectionYear;
+  final String inspectedBy;
+  final int result;
+  final List<AccreditationByStandard> standards;
+  final int classroomObservation1;
+  final int classroomObservation2;
 
   @override
   bool operator ==(Object other) =>
@@ -43,14 +44,8 @@ class IndividualAccreditationData {
       classroomObservation2.hashCode;
 }
 
+@immutable
 class AccreditationByStandard {
-  final String standard;
-  final int result;
-  final int criteria1;
-  final int criteria2;
-  final int criteria3;
-  final int criteria4;
-
   const AccreditationByStandard({
     @required this.standard,
     @required this.result,
@@ -59,6 +54,13 @@ class AccreditationByStandard {
     @required this.criteria3,
     @required this.criteria4,
   });
+
+  final String standard;
+  final int result;
+  final int criteria1;
+  final int criteria2;
+  final int criteria3;
+  final int criteria4;
 
   @override
   bool operator ==(Object other) =>

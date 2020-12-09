@@ -4,6 +4,11 @@ part 'school_flow.g.dart';
 
 @JsonSerializable()
 class SchoolFlow {
+  SchoolFlow();
+
+  factory SchoolFlow.fromJson(Map<String, dynamic> json) =>
+      _$SchoolFlowFromJson(json);
+
   @JsonKey(name: 'SurveyYear')
   int year;
 
@@ -21,11 +26,6 @@ class SchoolFlow {
 
   @JsonKey(name: 'SurvivalRate', defaultValue: 0.0)
   double survivalRate;
-
-  SchoolFlow();
-
-  factory SchoolFlow.fromJson(Map<String, dynamic> json) =>
-      _$SchoolFlowFromJson(json);
 
   Map<String, dynamic> toJson() => _$SchoolFlowToJson(this);
 }

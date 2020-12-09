@@ -7,8 +7,8 @@ import 'package:pacific_dashboards/models/emis.dart';
 class HiveBudgetsDao extends BudgetsDao {
   static const _kKey = 'HiveBudgetsDao';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -20,8 +20,8 @@ class HiveBudgetsDao extends BudgetsDao {
     if (storedBudgets == null) {
       return null;
     }
-    List<Budget> storedItems = [];
-    for (var value in storedBudgets) {
+    final storedItems = <Budget>[];
+    for (final value in storedBudgets) {
       final hiveBudget = value as HiveBudget;
       storedItems.add(hiveBudget.toBudget());
     }

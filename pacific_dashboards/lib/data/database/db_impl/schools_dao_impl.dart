@@ -7,8 +7,8 @@ import 'package:pacific_dashboards/models/school/school.dart';
 class HiveSchoolsDao extends SchoolsDao {
   static const _kKey = 'schools';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -20,8 +20,8 @@ class HiveSchoolsDao extends SchoolsDao {
     if (storedSchools == null) {
       return null;
     }
-    List<School> storedItems = [];
-    for (var value in storedSchools) {
+    final storedItems = <School>[];
+    for (final value in storedSchools) {
       final hiveSchool = value as HiveSchool;
       storedItems.add(hiveSchool.toSchool());
     }

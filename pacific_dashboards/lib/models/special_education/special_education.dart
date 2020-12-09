@@ -7,10 +7,37 @@ part 'special_education.g.dart';
 
 @JsonSerializable()
 class SpecialEducation {
+  const SpecialEducation(
+    this.surveyYear,
+    this.edLevelCode,
+    this.edLevel,
+    this.ethnicityCode,
+    this.genderCode,
+    this.gender,
+    this.age,
+    this.authorityCode,
+    this.authority,
+    this.districtCode,
+    this.district,
+    this.authorityGovtCode,
+    this.authorityGovt,
+    this.schoolTypeCode,
+    this.schoolType,
+    this.regionCode,
+    this.region,
+    this.number,
+    this.disability,
+    this.environment,
+    this.englishLearner,
+  );
+
+  factory SpecialEducation.fromJson(Map<String, dynamic> json) =>
+      _$SpecialEducationFromJson(json);
+
   @JsonKey(name: 'SurveyYear') //Year
   final int surveyYear;
 
-  @JsonKey(name: "EdLevelCode") //DistrictCode
+  @JsonKey(name: 'EdLevelCode') //DistrictCode
   final String edLevelCode;
 
   @JsonKey(name: 'EdLevel', defaultValue: '') //GNP
@@ -70,32 +97,6 @@ class SpecialEducation {
   @JsonKey(name: 'EnglishLearner', defaultValue: '')
   final String englishLearner;
 
-  const SpecialEducation(
-      this.surveyYear,
-      this.edLevelCode,
-      this.edLevel,
-      this.ethnicityCode,
-      this.genderCode,
-      this.gender,
-      this.age,
-      this.authorityCode,
-      this.authority,
-      this.districtCode,
-      this.district,
-      this.authorityGovtCode,
-      this.authorityGovt,
-      this.schoolTypeCode,
-      this.schoolType,
-      this.regionCode,
-      this.region,
-      this.number,
-      this.disability,
-      this.environment,
-      this.englishLearner);
-
-  factory SpecialEducation.fromJson(Map<String, dynamic> json) =>
-      _$SpecialEducationFromJson(json);
-
   Map<String, dynamic> toJson() => _$SpecialEducationToJson(this);
 }
 
@@ -111,8 +112,7 @@ extension Filters on List<SpecialEducation> {
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
-        items: this
-            .uniques((it) => it.surveyYear)
+        items: uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -122,9 +122,8 @@ extension Filters on List<SpecialEducation> {
         id: _kDistrictFilterId,
         title: 'filtersByState',
         items: [
-          FilterItem(null, 'filtersDisplayAllStates'),
-          ...this
-              .uniques((it) => it.districtCode)
+          const FilterItem(null, 'filtersDisplayAllStates'),
+          ...uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,
@@ -133,9 +132,8 @@ extension Filters on List<SpecialEducation> {
         id: _kGovtFilterId,
         title: 'filtersByGovernment',
         items: [
-          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
-          ...this
-              .uniques((it) => it.authorityGovtCode)
+          const FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          ...uniques((it) => it.authorityGovtCode)
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
         ],
         selectedIndex: 0,
@@ -144,9 +142,8 @@ extension Filters on List<SpecialEducation> {
         id: _kAuthorityFilterId,
         title: 'filtersByAuthority',
         items: [
-          FilterItem(null, 'filtersDisplayAllAuthority'),
-          ...this
-              .uniques((it) => it.authorityCode)
+          const FilterItem(null, 'filtersDisplayAllAuthority'),
+          ...uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
         ],
         selectedIndex: 0,
@@ -155,9 +152,8 @@ extension Filters on List<SpecialEducation> {
         id: _kSchoolLevelFilterId,
         title: 'filtersBySchoolLevels',
         items: [
-          FilterItem(null, 'filtersDisplayAllLevelFilters'),
-          ...this
-              .uniques((it) => it.schoolType)
+          const FilterItem(null, 'filtersDisplayAllLevelFilters'),
+          ...uniques((it) => it.schoolType)
               .map((it) => FilterItem(it, it.from(lookups.levels))),
         ],
         selectedIndex: 0,
@@ -173,8 +169,7 @@ extension Filters on List<SpecialEducation> {
       final districtFilter =
           filters.firstWhere((it) => it.id == _kDistrictFilterId);
 
-      final govtFilter =
-          filters.firstWhere((it) => it.id == _kGovtFilterId);
+      final govtFilter = filters.firstWhere((it) => it.id == _kGovtFilterId);
 
       final authorityFilter =
           filters.firstWhere((it) => it.id == _kAuthorityFilterId);
@@ -182,7 +177,7 @@ extension Filters on List<SpecialEducation> {
       final schoolLevelFilter =
           filters.firstWhere((it) => it.id == _kSchoolLevelFilterId);
 
-      return this.where((it) {
+      return where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }
@@ -196,7 +191,7 @@ extension Filters on List<SpecialEducation> {
             it.authorityGovtCode != govtFilter.stringValue) {
           return false;
         }
-        
+
         if (!authorityFilter.isDefault &&
             it.authorityCode != authorityFilter.stringValue) {
           return false;

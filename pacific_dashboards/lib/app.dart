@@ -14,19 +14,21 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
 class App extends StatelessWidget {
+  const App({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         StringsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en'),
+      supportedLocales: const [
+        Locale('en'),
       ],
-      onGenerateTitle: (BuildContext context) => 'appName'.localized(context),
+      onGenerateTitle: (context) => 'appName'.localized(context),
       theme: appTheme,
       initialRoute: HomePage.kRoute,
       routes: {
@@ -40,7 +42,7 @@ class App extends StatelessWidget {
         IndividualSchoolPage.kRoute: (context) => IndividualSchoolPage(),
         BudgetsPage.kRoute: (context) => BudgetsPage(),
         WashPage.kRoute: (context) => WashPage(),
-        "/Indicators": (context) => _NotImplementedPage(),
+        '/Indicators': (context) => _NotImplementedPage(),
         SpecialEducationPage.kRoute: (context) => SpecialEducationPage()
       },
     );

@@ -7,10 +7,38 @@ part 'budget.g.dart';
 
 @JsonSerializable()
 class Budget {
+  const Budget(
+      this.surveyYear,
+      this.districtCode,
+      this.gNP,
+      this.gNPCapita,
+      this.gNPCurrency,
+      this.gNPLocal,
+      this.gNPCapitaLocal,
+      this.govtExpA,
+      this.govtExpB,
+      this.govtExpBGNPPerc,
+      this.edExpA,
+      this.edExpB,
+      this.edGovtExpBPerc,
+      this.edExpAGNPPerc,
+      this.edExpBGNPPerc,
+      this.edExpAPerHead,
+      this.edExpBPerHead,
+      this.edExpAPerHeadGNPCapitaPerc,
+      this.edExpBPerHeadGNPCapitaPerc,
+      this.enrolment,
+      this.sectorCode,
+      this.edRecurrentExpA,
+      this.edRecurrentExpB,
+      this.enrolmentNation);
+
+  factory Budget.fromJson(Map<String, dynamic> json) => _$BudgetFromJson(json);
+
   @JsonKey(name: 'SurveyYear') //Year
   final int surveyYear;
 
-  @JsonKey(name: "DistrictCode", defaultValue: '') //DistrictCode
+  @JsonKey(name: 'DistrictCode', defaultValue: '') //DistrictCode
   final String districtCode;
 
   @JsonKey(name: 'GNP', defaultValue: 0) //GNP
@@ -76,36 +104,8 @@ class Budget {
   @JsonKey(name: 'EdRecurrentExpB', defaultValue: 0)
   final double edRecurrentExpB;
 
-  @JsonKey(name: "EnrolmentNation", defaultValue: 0)
+  @JsonKey(name: 'EnrolmentNation', defaultValue: 0)
   final int enrolmentNation;
-
-  const Budget(
-      this.surveyYear,
-      this.districtCode,
-      this.gNP,
-      this.gNPCapita,
-      this.gNPCurrency,
-      this.gNPLocal,
-      this.gNPCapitaLocal,
-      this.govtExpA,
-      this.govtExpB,
-      this.govtExpBGNPPerc,
-      this.edExpA,
-      this.edExpB,
-      this.edGovtExpBPerc,
-      this.edExpAGNPPerc,
-      this.edExpBGNPPerc,
-      this.edExpAPerHead,
-      this.edExpBPerHead,
-      this.edExpAPerHeadGNPCapitaPerc,
-      this.edExpBPerHeadGNPCapitaPerc,
-      this.enrolment,
-      this.sectorCode,
-      this.edRecurrentExpA,
-      this.edRecurrentExpB,
-      this.enrolmentNation);
-
-  factory Budget.fromJson(Map<String, dynamic> json) => _$BudgetFromJson(json);
 
   Map<String, dynamic> toJson() => _$BudgetToJson(this);
 }
@@ -119,8 +119,7 @@ extension Filters on List<Budget> {
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
-        items: this
-            .uniques((it) => it.surveyYear)
+        items: uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -130,9 +129,8 @@ extension Filters on List<Budget> {
         id: _kDistrictFilterId,
         title: 'filtersByState',
         items: [
-          FilterItem(null, 'filtersDisplayAllStates'),
-          ...this
-              .uniques((it) => it.districtCode)
+          const FilterItem(null, 'filtersDisplayAllStates'),
+          ...uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,
@@ -148,7 +146,7 @@ extension Filters on List<Budget> {
       final districtFilter =
           filters.firstWhere((it) => it.id == _kDistrictFilterId);
 
-      return this.where((it) {
+      return where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }

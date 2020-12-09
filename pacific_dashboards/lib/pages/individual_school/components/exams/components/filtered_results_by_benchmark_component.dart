@@ -9,9 +9,6 @@ import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class FilteredResultsByBenchmarkComponent extends StatelessWidget {
-  final Stream<bool> _loadingStream;
-  final Stream<ExamReportsFilteredData> _dataStream;
-
   const FilteredResultsByBenchmarkComponent({
     Key key,
     @required Stream<bool> loadingStream,
@@ -21,6 +18,9 @@ class FilteredResultsByBenchmarkComponent extends StatelessWidget {
         _loadingStream = loadingStream,
         _dataStream = dataStream,
         super(key: key);
+
+  final Stream<bool> _loadingStream;
+  final Stream<ExamReportsFilteredData> _dataStream;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class FilteredResultsByBenchmarkComponent extends StatelessWidget {
           }
           final isLoading = snapshot.data;
           if (isLoading) {
-            return Container(
+            return SizedBox(
               height: 100,
               child: Center(
                 child: PlatformProgressIndicator(),
@@ -115,10 +115,6 @@ class FilteredResultsByBenchmarkComponent extends StatelessWidget {
 }
 
 class _StandardResults extends StatelessWidget {
-  final int _maxNegative;
-  final int _maxPositive;
-  final ExamReportsBenchmarkData _data;
-
   const _StandardResults({
     Key key,
     @required int maxNegative,
@@ -131,6 +127,10 @@ class _StandardResults extends StatelessWidget {
         _maxPositive = maxPositive,
         _data = data,
         super(key: key);
+
+  final int _maxNegative;
+  final int _maxPositive;
+  final ExamReportsBenchmarkData _data;
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +167,6 @@ class _StandardResults extends StatelessWidget {
 }
 
 class _StandardChart extends StatelessWidget {
-  final int _maxNegative;
-  final int _maxPositive;
-  final ExamReportsBenchmarkData _data;
-
   const _StandardChart({
     Key key,
     @required int maxNegative,
@@ -183,6 +179,10 @@ class _StandardChart extends StatelessWidget {
         _maxPositive = maxPositive,
         _data = data,
         super(key: key);
+
+  final int _maxNegative;
+  final int _maxPositive;
+  final ExamReportsBenchmarkData _data;
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +225,7 @@ class _StandardChart extends StatelessWidget {
             ),
             domainAxis: const charts.OrdinalAxisSpec(
               showAxisLine: false,
-              renderSpec: const charts.NoneRenderSpec(),
+              renderSpec: charts.NoneRenderSpec(),
             ),
             defaultRenderer: charts.BarRendererConfig(
               stackHorizontalSeparator: 0,
@@ -266,9 +266,9 @@ class _StandardChart extends StatelessWidget {
       return [
         charts.Series(
           id: '${_data.benchmarkCode}_data',
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           data: data,
         ),
       ];

@@ -13,11 +13,6 @@ typedef ClassLevelRateAccessor = double Function(ClassLevelRatesData data);
 typedef YearRateAccessor = double Function(YearRateData data);
 
 class RateSliceComponent extends StatelessWidget {
-  final RatesData _ratesData;
-  final ClassLevelRateAccessor _classLevelRateAccessor;
-  final YearRateAccessor _yearRateAccessor;
-  final String _title;
-
   const RateSliceComponent({
     Key key,
     @required String title,
@@ -33,6 +28,11 @@ class RateSliceComponent extends StatelessWidget {
         _classLevelRateAccessor = classLevelRateAccessor,
         _yearRateAccessor = yearRateAccessor,
         super(key: key);
+
+  final RatesData _ratesData;
+  final ClassLevelRateAccessor _classLevelRateAccessor;
+  final YearRateAccessor _yearRateAccessor;
+  final String _title;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,7 @@ class RateSliceComponent extends StatelessWidget {
             switch (tab) {
               case _Tab.lastYearDetailed:
                 return '${_ratesData.lastYearRatesData.year}'
+                    // ignore: lines_longer_than_80_chars
                     '${'individualSchoolDashboardRatesDetailed'.localized(context)}';
               case _Tab.historyChart:
                 return 'individualSchoolDashboardRatesHistoryChart'
@@ -97,9 +98,6 @@ enum _Tab {
 }
 
 class _DetailedChart extends StatelessWidget {
-  final List<ClassLevelRatesData> _data;
-  final ClassLevelRateAccessor _classLevelRateAccessor;
-
   const _DetailedChart({
     Key key,
     @required List<ClassLevelRatesData> data,
@@ -109,6 +107,9 @@ class _DetailedChart extends StatelessWidget {
         _data = data,
         _classLevelRateAccessor = classLevelRateAccessor,
         super(key: key);
+
+  final List<ClassLevelRatesData> _data;
+  final ClassLevelRateAccessor _classLevelRateAccessor;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +127,7 @@ class _DetailedChart extends StatelessWidget {
             animate: false,
             barGroupingType: charts.BarGroupingType.stacked,
             primaryMeasureAxis: charts.NumericAxisSpec(
-              tickProviderSpec: charts.BasicNumericTickProviderSpec(
+              tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                 desiredMinTickCount: 7,
                 desiredMaxTickCount: 13,
               ),
@@ -159,9 +160,9 @@ class _DetailedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'data',
           data: data,
         ),
@@ -172,10 +173,6 @@ class _DetailedChart extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _Chart extends StatelessWidget {
-  final List<YearByClassLevelRateData> _data;
-  final YearRateAccessor _yearRateAccessor;
-  Map<String, Color> _colorScheme;
-
   _Chart({
     Key key,
     @required List<YearByClassLevelRateData> data,
@@ -187,6 +184,10 @@ class _Chart extends StatelessWidget {
         super(key: key) {
     _colorScheme = _generateColorScheme();
   }
+
+  final List<YearByClassLevelRateData> _data;
+  final YearRateAccessor _yearRateAccessor;
+  Map<String, Color> _colorScheme;
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +209,7 @@ class _Chart extends StatelessWidget {
                 animate: false,
                 defaultRenderer: charts.LineRendererConfig(),
                 primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                  tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -236,9 +237,9 @@ class _Chart extends StatelessWidget {
   }
 
   Map<String, Color> _generateColorScheme() {
-    final colorScheme = Map<String, Color>();
+    final colorScheme = <String, Color>{};
     var colorIndex = 0;
-    _data.forEach((it) {
+    for (final it in _data) {
       final domain = it.classLevel;
       if (!colorScheme.containsKey(domain)) {
         if (colorIndex >= AppColors.kDynamicPalette.length) {
@@ -248,7 +249,7 @@ class _Chart extends StatelessWidget {
           colorIndex++;
         }
       }
-    });
+    }
     return colorScheme;
   }
 
@@ -275,10 +276,10 @@ class _Chart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'data[-1]',
           data: List.generate(
             maxYear - minYear,
@@ -287,10 +288,10 @@ class _Chart extends StatelessWidget {
         ),
         ...gradesData.mapIndexed((index, data) {
           return charts.Series(
-            domainFn: (ChartData chartData, _) => chartData.domain,
-            measureFn: (ChartData chartData, _) => chartData.measure,
-            colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-            areaColorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+            domainFn: (chartData, _) => chartData.domain,
+            measureFn: (chartData, _) => chartData.measure,
+            colorFn: (chartData, _) => chartData.color.chartsColor,
+            areaColorFn: (chartData, _) => chartData.color.chartsColor,
             id: 'data[$index]',
             data: data,
           );
@@ -302,11 +303,6 @@ class _Chart extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _LongLegend extends StatelessWidget {
-  static const _kMaxItemsInRow = 5;
-
-  final Color Function(String) _colorFn;
-  List<List<String>> _items;
-
   _LongLegend({
     Key key,
     @required List<String> items,
@@ -317,6 +313,11 @@ class _LongLegend extends StatelessWidget {
         super(key: key) {
     _items = _splitItems(items);
   }
+
+  static const _kMaxItemsInRow = 5;
+
+  final Color Function(String) _colorFn;
+  List<List<String>> _items;
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +334,7 @@ class _LongLegend extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                if (index > 0) SizedBox(width: 16),
+                if (index > 0) const SizedBox(width: 16),
                 ChartLegendItem(
                   color: _colorFn.call(item),
                   value: item,
@@ -347,9 +348,9 @@ class _LongLegend extends StatelessWidget {
   }
 
   List<List<String>> _splitItems(List<String> items) {
-    final List<List<String>> result = [];
-    List<String> buffer = [];
-    for (var it in items) {
+    final result = <List<String>>[];
+    var buffer = <String>[];
+    for (final it in items) {
       if (buffer.length >= _kMaxItemsInRow) {
         result.add(buffer);
         buffer = [];
@@ -369,9 +370,6 @@ const double _kCellWidth = 64;
 const double _kCellHeight = 40;
 
 class _HistoryTable extends StatelessWidget {
-  final List<YearByClassLevelRateData> _data;
-  final YearRateAccessor _yearRateAccessor;
-
   const _HistoryTable({
     Key key,
     @required List<YearByClassLevelRateData> data,
@@ -382,11 +380,14 @@ class _HistoryTable extends StatelessWidget {
         _yearRateAccessor = yearRateAccessor,
         super(key: key);
 
+  final List<YearByClassLevelRateData> _data;
+  final YearRateAccessor _yearRateAccessor;
+
   List<int> _generateDomainYears() {
-    final Set<int> years = {};
-    _data.forEach((dataByClassLevel) {
+    final years = <int>{};
+    for (final dataByClassLevel in _data) {
       years.addAll(dataByClassLevel.data.map((it) => it.year));
-    });
+    }
     return years.toList().chainSort((lv, rv) => lv.compareTo(rv));
   }
 
@@ -399,7 +400,7 @@ class _HistoryTable extends StatelessWidget {
     final years = _generateDomainYears();
     return Container(
       foregroundDecoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         border: Border.all(
           width: _kBorderWidth,
           color: _kBorderColor,
@@ -465,7 +466,7 @@ class _HistoryTable extends StatelessWidget {
                             (it) => it.year == year,
                             orElse: () => null,
                           );
-                          String value = '-';
+                          var value = '-';
                           if (dataOnYear != null) {
                             value = _yearRateAccessor
                                     .call(dataOnYear)
@@ -490,9 +491,6 @@ class _HistoryTable extends StatelessWidget {
 }
 
 class _Cell extends StatelessWidget {
-  final String _value;
-  final _CellType _cellType;
-
   const _Cell({
     Key key,
     @required String value,
@@ -501,9 +499,12 @@ class _Cell extends StatelessWidget {
         _cellType = cellType,
         super(key: key);
 
+  final String _value;
+  final _CellType _cellType;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: _kCellWidth,
       height: _kCellHeight,
       child: Center(

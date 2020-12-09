@@ -3,9 +3,6 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
 class AccreditationLevelComponent extends StatelessWidget {
-  final int _level;
-  final bool _wrapContent;
-
   const AccreditationLevelComponent({
     Key key,
     @required int level,
@@ -13,6 +10,9 @@ class AccreditationLevelComponent extends StatelessWidget {
   })  : _level = level,
         _wrapContent = wrapContent,
         super(key: key);
+
+  final int _level;
+  final bool _wrapContent;
 
   @override
   Widget build(BuildContext context) {

@@ -1,26 +1,31 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'question.g.dart';
 
 @JsonSerializable()
+@immutable
+
+/// field [_isValidForApp] is immutable lazy value
+// ignore: must_be_immutable
 class Question {
-  @JsonKey(name: 'QID')
-  final String id;
-
-  @JsonKey(name: "QName")
-  final String name;
-
-  @JsonKey(name: "QFlags")
-  final String qFlags;
-
-  bool _isValidForApp;
-
   Question(this.id, this.name, this.qFlags);
 
   factory Question.fromJson(Map<String, dynamic> json) =>
       _$QuestionFromJson(json);
+
+  @JsonKey(name: 'QID')
+  final String id;
+
+  @JsonKey(name: 'QName')
+  final String name;
+
+  @JsonKey(name: 'QFlags')
+  final String qFlags;
+
+  bool _isValidForApp;
 
   Map<String, dynamic> toJson() => _$QuestionToJson(this);
 
@@ -28,8 +33,8 @@ class Question {
     if (_isValidForApp == null) {
       if (qFlags != null) {
         final flags = qFlags
-            .split("|")
-            .map((e) => _createFlagFromJsonName(e))
+            .split('|')
+            .map(_createFlagFromJsonName)
             .where((e) => e != null)
             .toList();
 
@@ -65,128 +70,139 @@ class _QuestionType {
 
   factory _QuestionType.fromFlags(int flagSum) {
     if (flagSum == _QuestionTypeBinary.flags.sum) {
-      return _QuestionTypeBinary();
+      return const _QuestionTypeBinary();
     }
     if (flagSum == _QuestionTypeTernary.flags.sum) {
-      return _QuestionTypeTernary();
+      return const _QuestionTypeTernary();
     }
     if (flagSum == _QuestionTypeTextInput.flags.sum) {
-      return _QuestionTypeTextInput();
+      return const _QuestionTypeTextInput();
     }
     if (flagSum == _QuestionTypeNumberInput.flags.sum) {
-      return _QuestionTypeNumberInput();
+      return const _QuestionTypeNumberInput();
     }
     if (flagSum == _QuestionTypePhoneInput.flags.sum) {
-      return _QuestionTypePhoneInput();
+      return const _QuestionTypePhoneInput();
     }
     if (flagSum == _QuestionTypeGeolocation.flags.sum) {
-      return _QuestionTypeGeolocation();
+      return const _QuestionTypeGeolocation();
     }
     if (flagSum == _QuestionTypePhoto.flags.sum) {
-      return _QuestionTypePhoto();
+      return const _QuestionTypePhoto();
     }
     if (flagSum == _QuestionTypeSingleSelection.flags.sum) {
-      return _QuestionTypeSingleSelection();
+      return const _QuestionTypeSingleSelection();
     }
     if (flagSum == _QuestionTypeMultiSelection.flags.sum) {
-      return _QuestionTypeMultiSelection();
+      return const _QuestionTypeMultiSelection();
     }
     if (flagSum == _QuestionTypeComplexBinary.flags.sum) {
-      return _QuestionTypeComplexBinary();
+      return const _QuestionTypeComplexBinary();
     }
     if (flagSum == _QuestionTypeComplexNumberInput.flags.sum) {
-      return _QuestionTypeComplexNumberInput();
+      return const _QuestionTypeComplexNumberInput();
     }
     return null;
   }
 }
 
 extension _FlagListExt on List<_QuestionTypeFlag> {
-  int get sum => this.fold(0, (acc, it) => acc | it.value);
+  int get sum => fold(0, (acc, it) => acc | it.value);
 }
 
 class _QuestionTypeBinary extends _QuestionType {
+  const _QuestionTypeBinary() : super();
+
   static const flags = [
     _QuestionTypeFlag.binary,
   ];
-  const _QuestionTypeBinary() : super();
 }
 
 class _QuestionTypeTernary extends _QuestionType {
+  const _QuestionTypeTernary() : super();
+
   static const flags = [
     _QuestionTypeFlag.ternary,
   ];
-  const _QuestionTypeTernary() : super();
 }
 
 class _QuestionTypeTextInput extends _QuestionType {
+  const _QuestionTypeTextInput() : super();
+
   static const flags = [
     _QuestionTypeFlag.input,
   ];
-  const _QuestionTypeTextInput() : super();
 }
 
 class _QuestionTypeNumberInput extends _QuestionType {
+  const _QuestionTypeNumberInput() : super();
+
   static const flags = [
     _QuestionTypeFlag.input,
     _QuestionTypeFlag.numeric,
   ];
-  const _QuestionTypeNumberInput() : super();
 }
 
 class _QuestionTypePhoneInput extends _QuestionType {
+  const _QuestionTypePhoneInput() : super();
+
   static const flags = [
     _QuestionTypeFlag.input,
     _QuestionTypeFlag.phone,
   ];
-  const _QuestionTypePhoneInput() : super();
 }
 
 class _QuestionTypeGeolocation extends _QuestionType {
+  const _QuestionTypeGeolocation() : super();
+
   static const flags = [
     _QuestionTypeFlag.geo,
   ];
-  const _QuestionTypeGeolocation() : super();
 }
 
 class _QuestionTypePhoto extends _QuestionType {
+  const _QuestionTypePhoto() : super();
+
   static const flags = [
     _QuestionTypeFlag.photo,
   ];
-  const _QuestionTypePhoto() : super();
 }
 
 class _QuestionTypeSingleSelection extends _QuestionType {
+  const _QuestionTypeSingleSelection() : super();
+
   static const flags = [
     _QuestionTypeFlag.choose,
     _QuestionTypeFlag.single,
   ];
-  const _QuestionTypeSingleSelection() : super();
 }
 
 class _QuestionTypeMultiSelection extends _QuestionType {
+  const _QuestionTypeMultiSelection() : super();
+
   static const flags = [
     _QuestionTypeFlag.choose,
     _QuestionTypeFlag.multiple,
   ];
-  const _QuestionTypeMultiSelection() : super();
 }
 
 class _QuestionTypeComplexBinary extends _QuestionType {
+  const _QuestionTypeComplexBinary() : super();
+
   static const flags = [
     _QuestionTypeFlag.variable,
     _QuestionTypeFlag.binary,
   ];
-  const _QuestionTypeComplexBinary() : super();
 }
 
 class _QuestionTypeComplexNumberInput extends _QuestionType {
+  const _QuestionTypeComplexNumberInput() : super();
+
   static const flags = [
     _QuestionTypeFlag.variable,
     _QuestionTypeFlag.input,
     _QuestionTypeFlag.numeric,
   ];
-  const _QuestionTypeComplexNumberInput() : super();
 }
 
 enum _QuestionTypeFlag {
@@ -204,32 +220,32 @@ enum _QuestionTypeFlag {
 }
 
 extension _QuestionTypeFlagExt on _QuestionTypeFlag {
-  int get value => pow(2, this.index);
+  int get value => pow(2, index);
 }
 
 _QuestionTypeFlag _createFlagFromJsonName(String jsonName) {
   switch (jsonName) {
-    case "BINARY":
+    case 'BINARY':
       return _QuestionTypeFlag.binary;
-    case "INPUT":
+    case 'INPUT':
       return _QuestionTypeFlag.input;
-    case "NUMERIC":
+    case 'NUMERIC':
       return _QuestionTypeFlag.numeric;
-    case "CHOOSE":
+    case 'CHOOSE':
       return _QuestionTypeFlag.choose;
-    case "SINGLE":
+    case 'SINGLE':
       return _QuestionTypeFlag.single;
-    case "MULTIPLE":
+    case 'MULTIPLE':
       return _QuestionTypeFlag.multiple;
-    case "VAR":
+    case 'VAR':
       return _QuestionTypeFlag.variable;
-    case "PHOTO":
+    case 'PHOTO':
       return _QuestionTypeFlag.photo;
-    case "GEO":
+    case 'GEO':
       return _QuestionTypeFlag.geo;
-    case "TERNARY":
+    case 'TERNARY':
       return _QuestionTypeFlag.ternary;
-    case "PHONE":
+    case 'PHONE':
       return _QuestionTypeFlag.phone;
   }
   return null;

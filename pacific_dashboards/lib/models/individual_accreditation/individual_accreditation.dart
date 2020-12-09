@@ -5,6 +5,47 @@ part 'individual_accreditation.g.dart';
 
 @JsonSerializable()
 class IndividualAccreditation {
+  const IndividualAccreditation({
+    @required this.dateTime,
+    @required this.inspectionYear,
+    @required this.result,
+    @required this.se_1,
+    @required this.se_1_1,
+    @required this.se_1_2,
+    @required this.se_1_3,
+    @required this.se_1_4,
+    @required this.se_2,
+    @required this.se_2_1,
+    @required this.se_2_2,
+    @required this.se_2_3,
+    @required this.se_2_4,
+    @required this.se_3,
+    @required this.se_3_1,
+    @required this.se_3_2,
+    @required this.se_3_3,
+    @required this.se_3_4,
+    @required this.se_4,
+    @required this.se_4_1,
+    @required this.se_4_2,
+    @required this.se_4_3,
+    @required this.se_4_4,
+    @required this.se_5,
+    @required this.se_5_1,
+    @required this.se_5_2,
+    @required this.se_5_3,
+    @required this.se_5_4,
+    @required this.se_6,
+    @required this.se_6_1,
+    @required this.se_6_2,
+    @required this.se_6_3,
+    @required this.se_6_4,
+    @required this.co_1,
+    @required this.co_2,
+    @required this.inspectedBy,
+  });
+
+  factory IndividualAccreditation.fromJson(Map<String, dynamic> json) =>
+      _$IndividualAccreditationFromJson(json);
 
   @JsonKey(name: 'StartDate')
   final DateTime dateTime;
@@ -114,49 +155,5 @@ class IndividualAccreditation {
   @JsonKey(name: 'InspectedBy')
   final String inspectedBy;
 
-
-  const IndividualAccreditation({
-    @required this.dateTime,
-    @required this.inspectionYear,
-    @required this.result,
-    @required this.se_1,
-    @required this.se_1_1,
-    @required this.se_1_2,
-    @required this.se_1_3,
-    @required this.se_1_4,
-    @required this.se_2,
-    @required this.se_2_1,
-    @required this.se_2_2,
-    @required this.se_2_3,
-    @required this.se_2_4,
-    @required this.se_3,
-    @required this.se_3_1,
-    @required this.se_3_2,
-    @required this.se_3_3,
-    @required this.se_3_4,
-    @required this.se_4,
-    @required this.se_4_1,
-    @required this.se_4_2,
-    @required this.se_4_3,
-    @required this.se_4_4,
-    @required this.se_5,
-    @required this.se_5_1,
-    @required this.se_5_2,
-    @required this.se_5_3,
-    @required this.se_5_4,
-    @required this.se_6,
-    @required this.se_6_1,
-    @required this.se_6_2,
-    @required this.se_6_3,
-    @required this.se_6_4,
-    @required this.co_1,
-    @required this.co_2,
-    @required this.inspectedBy,
-  });
-
-  factory IndividualAccreditation.fromJson(Map<String, dynamic> json) =>
-      _$IndividualAccreditationFromJson(json);
-
   Map<String, dynamic> toJson() => _$IndividualAccreditationToJson(this);
-
 }

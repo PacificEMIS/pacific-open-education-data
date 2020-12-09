@@ -5,6 +5,24 @@ part 'national_accreditation.g.dart';
 
 @JsonSerializable()
 class NationalAccreditation implements Accreditation {
+  const NationalAccreditation({
+    this.surveyYear,
+    this.districtCode,
+    this.district,
+    this.authorityCode,
+    this.authority,
+    this.authorityGovtCode,
+    this.authorityGovt,
+    this.schoolTypeCode,
+    this.schoolType,
+    this.inspectionResult,
+    this.total,
+    this.numThisYear,
+  });
+
+  factory NationalAccreditation.fromJson(Map<String, dynamic> json) =>
+      _$NationalAccreditationFromJson(json);
+
   @JsonKey(name: 'SurveyYear')
   @override
   final int surveyYear;
@@ -23,6 +41,7 @@ class NationalAccreditation implements Accreditation {
   @JsonKey(name: 'Authority')
   final String authority;
 
+  @override
   @JsonKey(name: 'AuthorityGovtCode')
   final String authorityGovtCode;
 
@@ -46,29 +65,11 @@ class NationalAccreditation implements Accreditation {
   @override
   final int numThisYear;
 
-  const NationalAccreditation({
-    this.surveyYear,
-    this.districtCode,
-    this.district,
-    this.authorityCode,
-    this.authority,
-    this.authorityGovtCode,
-    this.authorityGovt,
-    this.schoolTypeCode,
-    this.schoolType,
-    this.inspectionResult,
-    this.total,
-    this.numThisYear,
-  });
-
-  factory NationalAccreditation.fromJson(Map<String, dynamic> json) =>
-      _$NationalAccreditationFromJson(json);
-
   Map<String, dynamic> toJson() => _$NationalAccreditationToJson(this);
 
   @override
   String get result => inspectionResult;
 
   @override
-  Comparable get sortField => "";
+  Comparable get sortField => '';
 }

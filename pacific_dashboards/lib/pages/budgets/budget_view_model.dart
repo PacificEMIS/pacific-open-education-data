@@ -9,22 +9,13 @@ import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
+import 'package:pacific_dashboards/pages/budgets/budget_data.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:rxdart/rxdart.dart';
-
-import 'budget_data.dart';
 
 const int _filterBeforeYear = 2014;
 
 class BudgetViewModel extends BaseViewModel {
-  final Repository _repository;
-  final RemoteConfig _remoteConfig;
-  final GlobalSettings _globalSettings;
-
-  final Subject<String> _pageNoteSubject = BehaviorSubject();
-  final Subject<BudgetData> _dataSubject = BehaviorSubject();
-  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
-
   BudgetViewModel(
     BuildContext ctx, {
     @required Repository repository,
@@ -37,6 +28,14 @@ class BudgetViewModel extends BaseViewModel {
         _remoteConfig = remoteConfig,
         _globalSettings = globalSettings,
         super(ctx);
+
+  final Repository _repository;
+  final RemoteConfig _remoteConfig;
+  final GlobalSettings _globalSettings;
+
+  final Subject<String> _pageNoteSubject = BehaviorSubject();
+  final Subject<BudgetData> _dataSubject = BehaviorSubject();
+  final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
   List<Budget> _budget;
   List<Filter> _filters;
@@ -64,7 +63,7 @@ class BudgetViewModel extends BaseViewModel {
 
   void _loadData() {
     listenHandled(
-      handleRepositoryFetch(fetch: () => _repository.fetchAllBudgets()),
+      handleRepositoryFetch(fetch: _repository.fetchAllBudgets),
       _onDataLoaded,
       notifyProgress: true,
     );
@@ -116,12 +115,12 @@ class BudgetViewModel extends BaseViewModel {
 }
 
 class _BudgetModel {
+  const _BudgetModel(this.budget, this.lookups, this.filters, this.emis);
+
   final List<Budget> budget;
   final Lookups lookups;
   final List<Filter> filters;
   final Emis emis;
-
-  const _BudgetModel(this.budget, this.lookups, this.filters, this.emis);
 }
 
 Future<BudgetData> _transformBudgetModel(
@@ -193,27 +192,26 @@ List<DataSpendingByDistrict> _generateSpendingDistrictData(
   int currentYear,
   Emis emis,
 ) {
-  List<DataSpendingByDistrict> dataSpendingByDistrict = new List();
+  final dataSpendingByDistrict = <DataSpendingByDistrict>[];
   budgetDataGroupedByYear.forEach((year, spendings) {
-    var groupedByDistrict =
-        spendings.groupBy((element) => element.districtCode);
-
-    groupedByDistrict.forEach((district, values) {
+    spendings
+        .groupBy((element) => element.districtCode)
+        .forEach((district, values) {
       if (district != null && district.isNotEmpty && year > _filterBeforeYear) {
-        double districtEdExpA = 0;
-        double districtEdExpB = 0;
-        double districtEdRecurrentExpA = 0;
-        double districtEdRecurrentExpB = 0;
-        double districtEnrolment = 0;
+        var districtEdExpA = 0.0;
+        var districtEdExpB = 0.0;
+        var districtEdRecurrentExpA = 0.0;
+        var districtEdRecurrentExpB = 0.0;
+        var districtEnrolment = 0.0;
 
-        values.forEach((element) {
+        for (final element in values) {
           districtEdExpA += element.edExpA;
           districtEdExpB += element.edExpB;
           districtEdRecurrentExpA += element.edRecurrentExpA;
           districtEdRecurrentExpB += element.edRecurrentExpB;
           districtEnrolment += element.enrolment;
           districtEnrolment += element.enrolmentNation;
-        });
+        }
         if (districtEdExpA > 0 ||
             districtEdExpB > 0 ||
             districtEdRecurrentExpA > 0 ||
@@ -266,29 +264,29 @@ List<DataSpendingByDistrict> _generateSpendingSectorData(
   Map<int, List<Budget>> budgetDataGroupedByYear,
   Lookups lookups,
 ) {
-  List<DataSpendingByDistrict> dataSpendingByDistrict = new List();
+  final dataSpendingByDistrict = <DataSpendingByDistrict>[];
   budgetDataGroupedByYear.forEach((year, spendings) {
-    final groupedBySectorCode =
-        spendings.groupBy((element) => element.sectorCode);
-
-    groupedBySectorCode.forEach((sectorCode, values) {
+    spendings
+        .groupBy((element) => element.sectorCode)
+        .forEach((sectorCode, values) {
       if (sectorCode != null &&
           sectorCode.isNotEmpty &&
           year > _filterBeforeYear) {
-        double districtEdExpA = 0;
-        double districtEdExpB = 0;
-        double districtEdRecurrentExpA = 0;
-        double districtEdRecurrentExpB = 0;
-        double districtEnrolment = 0;
+        var districtEdExpA = 0.0;
+        var districtEdExpB = 0.0;
+        var districtEdRecurrentExpA = 0.0;
+        var districtEdRecurrentExpB = 0.0;
+        var districtEnrolment = 0.0;
 
-        values.forEach((element) {
+        for (final element in values) {
           districtEdExpA += element.edExpA;
           districtEdExpB += element.edExpB;
           districtEdRecurrentExpA += element.edRecurrentExpA;
           districtEdRecurrentExpB += element.edRecurrentExpB;
           districtEnrolment += element.enrolment;
           districtEnrolment += element.enrolmentNation;
-        });
+        }
+
         dataSpendingByDistrict.add(
           DataSpendingByDistrict(
             year: year.toString(),
@@ -317,22 +315,22 @@ List _generateSpendingByYearData(
   Map<int, List<Budget>> budgetDataGroupedByYear,
   int currentYear,
 ) {
-  final List<DataByGnpAndGovernmentSpending> actualData = [];
-  final List<DataByGnpAndGovernmentSpending> budgetedData = [];
+  final actualData = <DataByGnpAndGovernmentSpending>[];
+  final budgetedData = <DataByGnpAndGovernmentSpending>[];
 
   budgetDataGroupedByYear.forEach((year, values) {
     if (year > _filterBeforeYear) {
-      double govtExpenseA = 0;
-      double govtExpenseB = 0;
-      double gNP = 0;
-      double edExpenseA = 0;
-      double edExpenseB = 0;
-      double percentageEdGovtA = 0;
-      double percentageEdGovtB = 0;
-      double percentageEdGnpA = 0;
-      double percentageEdGnpB = 0;
+      var govtExpenseA = 0.0;
+      var govtExpenseB = 0.0;
+      var gNP = 0.0;
+      var edExpenseA = 0.0;
+      var edExpenseB = 0.0;
+      var percentageEdGovtA = 0.0;
+      var percentageEdGovtB = 0.0;
+      var percentageEdGnpA = 0.0;
+      var percentageEdGnpB = 0.0;
 
-      for (var data in values) {
+      for (final data in values) {
         gNP += data.gNP;
         govtExpenseA += data.govtExpA;
         edExpenseA += data.edExpA;
@@ -349,9 +347,9 @@ List _generateSpendingByYearData(
       if (gNP == 0 &&
           edExpenseA == 0 &&
           govtExpenseA == 0 &&
-          year != currentYear)
+          year != currentYear) {
         debugPrint('empty');
-      else {
+      } else {
         actualData.add(
           DataByGnpAndGovernmentSpending(
             year: year,
@@ -372,9 +370,9 @@ List _generateSpendingByYearData(
       if (gNP == 0 &&
           edExpenseB == 0 &&
           govtExpenseB == 0 &&
-          year != currentYear)
+          year != currentYear) {
         debugPrint('empty');
-      else {
+      } else {
         budgetedData.add(
           DataByGnpAndGovernmentSpending(
             year: year,
@@ -408,28 +406,28 @@ List<DataSpendingBySector> _generateYearAndSectorData(
   Lookups lookups,
   int currentYear,
 ) {
-  final List<DataSpendingBySector> dataSpendingBySector = [];
+  final dataSpendingBySector = <DataSpendingBySector>[];
 
-  double eceTotalActual = 0;
-  double primaryTotalActual = 0;
-  double secondaryTotalActual = 0;
+  var eceTotalActual = 0.0;
+  var primaryTotalActual = 0.0;
+  var secondaryTotalActual = 0.0;
 
-  double eceTotalBudgeted = 0;
-  double primaryTotalBudgeted = 0;
-  double secondaryTotalBudgeted = 0;
+  var eceTotalBudgeted = 0.0;
+  var primaryTotalBudgeted = 0.0;
+  var secondaryTotalBudgeted = 0.0;
 
   budgetDataGroupedByDistrict.forEach((sector, values) {
-    String districtCode = '';
-    double eceActual = 0;
-    double eceBudget = 0;
-    double primaryActual = 0;
-    double primaryBudget = 0;
-    double secondaryActual = 0;
-    double secondaryBudget = 0;
-    double totalActual = 0;
-    double totalBudget = 0;
+    var districtCode = '';
+    var eceActual = 0.0;
+    var eceBudget = 0.0;
+    var primaryActual = 0.0;
+    var primaryBudget = 0.0;
+    var secondaryActual = 0.0;
+    var secondaryBudget = 0.0;
+    var totalActual = 0.0;
+    var totalBudget = 0.0;
 
-    for (var data in values) {
+    for (final data in values) {
       if (data.sectorCode != null &&
           data.sectorCode.isNotEmpty &&
           data.districtCode != null) {
@@ -467,7 +465,7 @@ List<DataSpendingBySector> _generateYearAndSectorData(
           secondaryActual > 0 ||
           secondaryBudget > 0 ||
           totalActual > 0 ||
-          totalBudget > 0)
+          totalBudget > 0) {
         dataSpendingBySector.add(
           DataSpendingBySector(
             districtCode: districtCode,
@@ -481,6 +479,7 @@ List<DataSpendingBySector> _generateYearAndSectorData(
             totalBudget: totalBudget,
           ),
         );
+      }
     }
   });
 
@@ -490,7 +489,7 @@ List<DataSpendingBySector> _generateYearAndSectorData(
       primaryTotalActual > 0 ||
       primaryTotalBudgeted > 0 ||
       secondaryTotalActual > 0 ||
-      secondaryTotalBudgeted > 0)
+      secondaryTotalBudgeted > 0) {
     dataSpendingBySector.add(
       DataSpendingBySector(
         districtCode: 'labelTotal',
@@ -505,5 +504,6 @@ List<DataSpendingBySector> _generateYearAndSectorData(
             eceTotalBudgeted + primaryTotalBudgeted + secondaryTotalBudgeted,
       ),
     );
+  }
   return dataSpendingBySector;
 }

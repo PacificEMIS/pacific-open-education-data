@@ -1,0 +1,155 @@
+analyzer:
+  exclude:
+    - 'lib/**/*.g.dart'
+
+linter:
+  rules:
+    # STYLE
+    - camel_case_types
+    - camel_case_extensions
+    - library_names
+    - file_names
+    - library_prefixes
+    - always_use_package_imports
+    - non_constant_identifier_names
+    - constant_identifier_names # prefer
+    - directives_ordering
+    - lines_longer_than_80_chars # avoid
+    - curly_braces_in_flow_control_structures
+
+    # DOCUMENTATION
+    - slash_for_doc_comments
+    - package_api_docs # prefer
+    # - public_member_api_docs # prefer -- only used in external packages
+    # - comment_references # Unused because https://github.com/dart-lang/sdk/issues/36974
+
+    # USAGE
+    - implementation_imports
+    - avoid_relative_lib_imports
+    - prefer_adjacent_string_concatenation
+    - prefer_interpolation_to_compose_strings # prefer
+    - unnecessary_brace_in_string_interps # avoid
+    - prefer_collection_literals
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - avoid_function_literals_in_foreach_calls # avoid
+    - prefer_iterable_whereType
+    - prefer_function_declarations_over_variables
+    - unnecessary_lambdas
+    - prefer_equal_for_default_values
+    - avoid_init_to_null
+    - unnecessary_getters_setters
+    #- unnecessary_getters # prefer # Disabled pending fix: https://github.com/dart-lang/linter/issues/23
+    # - prefer_expression_function_bodies # consider
+    - unnecessary_this
+    - prefer_initializing_formals
+    - type_init_formals
+    - empty_constructor_bodies
+    - unnecessary_new
+    - unnecessary_const
+    - avoid_catches_without_on_clauses # avoid
+    - avoid_catching_errors
+    - use_rethrow_when_possible
+
+    # DESIGN
+    - use_to_and_as_if_applicable # prefer
+    - one_member_abstracts # avoid
+    - avoid_classes_with_only_static_members # avoid
+    - prefer_mixin
+    - prefer_final_fields # prefer
+    - use_setters_to_change_properties
+    - avoid_setters_without_getters
+    - avoid_returning_null # avoid
+    - avoid_returning_this # avoid
+    - type_annotate_public_apis # prefer
+    - prefer_typing_uninitialized_variables
+    - omit_local_variable_types # avoid
+    - avoid_types_on_closure_parameters # avoid
+    - avoid_return_types_on_setters
+    - prefer_generic_function_type_aliases
+    # - avoid_private_typedef_functions # prefer
+    - use_function_type_syntax_for_parameters # consider
+    - avoid_positional_boolean_parameters # avoid
+    - hash_and_equals
+    - avoid_equals_and_hash_code_on_mutable_classes # avoid
+    - avoid_null_checks_in_equality_operators
+
+    # NON EFFECTIVE DART RULES
+    - always_declare_return_types
+    - always_require_non_null_named_parameters
+    - annotate_overrides
+    - avoid_empty_else
+    - avoid_escaping_inner_quotes
+    - avoid_implementing_value_types
+    - avoid_print
+    - avoid_returning_null_for_void
+    - avoid_shadowing_type_parameters
+    - avoid_slow_async_io
+    - avoid_types_as_parameter_names
+    - avoid_unnecessary_containers
+    - avoid_void_async
+    - avoid_web_libraries_in_flutter
+    - await_only_futures
+    - cancel_subscriptions
+    - cascade_invocations
+    - close_sinks
+    - control_flow_in_finally
+    - empty_catches
+    - empty_statements
+    - exhaustive_cases
+    - iterable_contains_unrelated_type
+    - list_remove_unrelated_type
+    - no_adjacent_strings_in_list
+    - no_duplicate_case_values
+    - no_logic_in_create_state
+    - no_runtimeType_toString
+    - null_closures
+    - only_throw_errors
+    - package_names
+    - package_prefixed_library_names
+    - prefer_asserts_in_initializer_lists
+    - prefer_conditional_assignment
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_constructors_over_static_methods
+    - prefer_contains
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_for_elements_to_map_fromIterable
+    - prefer_foreach
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_if_null_operators
+    - prefer_inlined_adds
+    - prefer_is_not_operator
+    - prefer_null_aware_operators
+    - prefer_single_quotes
+    - prefer_spread_collections
+    - prefer_void_to_null
+    - provide_deprecation_message
+    - recursive_getters
+    - sized_box_for_whitespace
+    - sort_child_properties_last
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+    - test_types_in_equals
+    - throw_in_finally
+    - unawaited_futures
+    - unnecessary_await_in_return
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_in_if_null_operators
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    - unnecessary_raw_strings
+    - unnecessary_statements
+    - unnecessary_string_escapes
+    - unnecessary_string_interpolations
+    - unrelated_type_equality_checks
+    - use_full_hex_values_for_flutter_colors
+    - use_is_even_rather_than_modulo
+    - use_key_in_widget_constructors
+    - use_raw_strings
+    - use_string_buffers
+    - valid_regexps
+    - void_checks

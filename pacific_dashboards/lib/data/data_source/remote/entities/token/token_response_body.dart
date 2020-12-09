@@ -4,13 +4,13 @@ part 'token_response_body.g.dart';
 
 @JsonSerializable()
 class TokenResponseBody {
-  @JsonKey(name: 'access_token')
-  String accessToken;
-
   TokenResponseBody();
 
   factory TokenResponseBody.fromJson(Map<String, dynamic> json) =>
       _$TokenResponseBodyFromJson(json);
+
+  @JsonKey(name: 'access_token')
+  String accessToken;
 
   Map<String, dynamic> toJson() => _$TokenResponseBodyToJson(this);
 }

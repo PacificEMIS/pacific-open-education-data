@@ -9,6 +9,19 @@ part 'hive_accreditation_chunk.g.dart';
 
 @HiveType(typeId: 6)
 class HiveAccreditationChunk extends HiveObject with Expirable {
+  HiveAccreditationChunk();
+
+  HiveAccreditationChunk.from(AccreditationChunk accreditationChunk)
+      : byDistrict = accreditationChunk.byDistrict
+            .map((it) => HiveDistrictAccreditation.from(it))
+            .toList(),
+        byStandard = accreditationChunk.byStandard
+            .map((it) => HiveStandardAccreditation.from(it))
+            .toList(),
+        byNational = accreditationChunk.byNational
+            .map((it) => HiveNationalAccreditation.from(it))
+            .toList();
+
   @HiveField(0)
   List<HiveDistrictAccreditation> byDistrict;
 
@@ -27,16 +40,4 @@ class HiveAccreditationChunk extends HiveObject with Expirable {
         byStandard: byStandard.map((it) => it.toAccreditation()).toList(),
         byNational: byNational.map((it) => it.toAccreditation()).toList(),
       );
-
-  static HiveAccreditationChunk from(AccreditationChunk accreditationChunk) =>
-      HiveAccreditationChunk()
-        ..byDistrict = accreditationChunk.byDistrict
-            .map((it) => HiveDistrictAccreditation.from(it))
-            .toList()
-        ..byStandard = accreditationChunk.byStandard
-            .map((it) => HiveStandardAccreditation.from(it))
-            .toList()
-        ..byNational = accreditationChunk.byNational
-            .map((it) => HiveNationalAccreditation.from(it))
-            .toList();
 }

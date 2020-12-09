@@ -2,15 +2,16 @@ import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 
 class GlobalSettings {
+
+  const GlobalSettings(this._stringsDao);
+  
   static const kDefaultEmis = Emis.fedemis;
-  static const _kApiUser = const String.fromEnvironment('envApiUser');
-  static const _kApiPassword = const String.fromEnvironment('envApiPassword');
-  static const _kEmisKey = "emis";
-  static const _kVersionSuffix = "_version";
+  static const _kApiUser = String.fromEnvironment('envApiUser');
+  static const _kApiPassword = String.fromEnvironment('envApiPassword');
+  static const _kEmisKey = 'emis';
+  static const _kVersionSuffix = '_version';
 
   final StringsDao _stringsDao;
-
-  GlobalSettings(this._stringsDao);
 
   Future<Emis> get currentEmis async {
     return emisFromString(await _stringsDao.getByKey(_kEmisKey)) ??

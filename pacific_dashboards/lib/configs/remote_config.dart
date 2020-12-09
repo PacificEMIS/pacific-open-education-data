@@ -1,13 +1,11 @@
 import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart'
-    as fireConfig;
+    as fire_config;
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/emis_config/module_config.dart';
-
-import '../models/emis_config/module_config.dart';
 
 abstract class RemoteConfig {
   Future<EmisesConfig> get emises;
@@ -16,18 +14,18 @@ abstract class RemoteConfig {
 class FirebaseRemoteConfig extends RemoteConfig {
   static const _kConfigName = 'app_config';
 
-  fireConfig.RemoteConfig _remoteConfig;
+  fire_config.RemoteConfig _remoteConfig;
 
   Future<void> init() async {
-    _remoteConfig = await fireConfig.RemoteConfig.instance;
+    _remoteConfig = await fire_config.RemoteConfig.instance;
     final defaultConfig = _defaultConfig.toJson();
     await _remoteConfig.setDefaults({_kConfigName: defaultConfig});
 
     try {
       await _remoteConfig.fetch(expiration: const Duration(hours: 5));
       await _remoteConfig.activateFetched();
-    } catch (e) {
-      print(e);
+    } on Exception catch (ex) {
+      debugPrint(ex.toString());
     }
   }
 
@@ -43,7 +41,7 @@ class FirebaseRemoteConfig extends RemoteConfig {
   }
 }
 
-EmisesConfig _defaultConfig = EmisesConfig(
+const EmisesConfig _defaultConfig = EmisesConfig(
   [
     EmisConfig(
       id: 'miemis',

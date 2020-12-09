@@ -7,8 +7,8 @@ import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 class HiveSchoolEnrollDao extends SchoolEnrollDao {
   static const _kKey = 'SchoolEnrollDao';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -25,8 +25,8 @@ class HiveSchoolEnrollDao extends SchoolEnrollDao {
     if (storedEnrolls == null) {
       return null;
     }
-    final List<SchoolEnroll> storedItems = [];
-    for (var value in storedEnrolls) {
+    final storedItems = <SchoolEnroll>[];
+    for (final value in storedEnrolls) {
       final hiveSchoolEnroll = value as HiveSchoolEnroll;
       storedItems.add(hiveSchoolEnroll.toSchoolEnroll());
     }
@@ -38,7 +38,6 @@ class HiveSchoolEnrollDao extends SchoolEnrollDao {
       String schoolId, List<SchoolEnroll> enroll, Emis emis) async {
     final hiveSchoolEnrolls =
         enroll.map((it) => HiveSchoolEnroll.from(it)).toList();
-
     await _withBox((box) async =>
         box.put(_generateKey(schoolId, emis), hiveSchoolEnrolls));
   }

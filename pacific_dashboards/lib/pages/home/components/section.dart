@@ -6,6 +6,7 @@ import 'package:pacific_dashboards/pages/schools/schools_page.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
 import 'package:pacific_dashboards/pages/special_education/special_education_page.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page.dart';
+import 'package:pacific_dashboards/pages/wash/wash_page.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
 enum Section {
@@ -24,23 +25,23 @@ extension UI on Section {
   String get logoPath {
     switch (this) {
       case Section.schools:
-        return "images/ic_schools.png";
+        return 'images/ic_schools.png';
       case Section.teachers:
-        return "images/ic_teachers.png";
+        return 'images/ic_teachers.png';
       case Section.schoolAccreditations:
-        return "images/ic_school_accreditations.png";
+        return 'images/ic_school_accreditations.png';
       case Section.exams:
-        return "images/ic_exams.png";
+        return 'images/ic_exams.png';
       case Section.indicators:
-        return "images/ic_indicators.png";
+        return 'images/ic_indicators.png';
       case Section.budgets:
-        return "images/ic_budgets.png";
+        return 'images/ic_budgets.png';
       case Section.individualSchools:
-        return "images/ic_individual_schools.png";
+        return 'images/ic_individual_schools.png';
       case Section.specialEducation:
-        return "images/ic_special_education.png";
+        return 'images/ic_special_education.png';
       case Section.wash:
-        return "images/ic_wash.png";
+        return 'images/ic_wash.png';
     }
     throw FallThroughError();
   }
@@ -81,9 +82,9 @@ extension UI on Section {
       case Section.exams:
         return ExamsPage.kRoute;
       case Section.indicators:
-        return "/Indicators";
+        return '/Indicators';
       case Section.wash:
-        return "/Wash";
+        return WashPage.kRoute;
       case Section.budgets:
         return BudgetsPage.kRoute;
       case Section.individualSchools:

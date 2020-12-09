@@ -9,6 +9,28 @@ part 'teacher.g.dart';
 
 @JsonSerializable()
 class Teacher {
+  const Teacher({
+    @required this.surveyYear,
+    @required this.ageGroup,
+    @required this.districtCode,
+    @required this.authorityCode,
+    @required this.authorityGovt,
+    @required this.schoolTypeCode,
+    @required this.sector,
+    @required this.iSCEDSubClass,
+    @required this.numTeachersM,
+    @required this.numTeachersF,
+    @required this.certifiedM,
+    @required this.certifiedF,
+    @required this.qualifiedM,
+    @required this.qualifiedF,
+    @required this.certQualM,
+    @required this.certQualF,
+  });
+
+  factory Teacher.fromJson(Map<String, dynamic> json) =>
+      _$TeacherFromJson(json);
+
   @JsonKey(name: 'SurveyYear')
   final int surveyYear;
 
@@ -57,28 +79,6 @@ class Teacher {
   @JsonKey(name: 'CertQualF', defaultValue: 0)
   final int certQualF;
 
-  const Teacher({
-    @required this.surveyYear,
-    @required this.ageGroup,
-    @required this.districtCode,
-    @required this.authorityCode,
-    @required this.authorityGovt,
-    @required this.schoolTypeCode,
-    @required this.sector,
-    @required this.iSCEDSubClass,
-    @required this.numTeachersM,
-    @required this.numTeachersF,
-    @required this.certifiedM,
-    @required this.certifiedF,
-    @required this.qualifiedM,
-    @required this.qualifiedF,
-    @required this.certQualM,
-    @required this.certQualF,
-  });
-
-  factory Teacher.fromJson(Map<String, dynamic> json) =>
-      _$TeacherFromJson(json);
-
   Map<String, dynamic> toJson() => _$TeacherToJson(this);
 
   int getTeachersCount(Gender gender) {
@@ -111,8 +111,7 @@ extension Filters on List<Teacher> {
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
-        items: this
-            .uniques((it) => it.surveyYear)
+        items: uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -122,9 +121,8 @@ extension Filters on List<Teacher> {
         id: _kDistrictFilterId,
         title: 'filtersByState',
         items: [
-          FilterItem(null, 'filtersDisplayAllStates'),
-          ...this
-              .uniques((it) => it.districtCode)
+          const FilterItem(null, 'filtersDisplayAllStates'),
+          ...uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,
@@ -133,9 +131,8 @@ extension Filters on List<Teacher> {
         id: _kAuthorityFilterId,
         title: 'filtersByAuthority',
         items: [
-          FilterItem(null, 'filtersDisplayAllAuthority'),
-          ...this
-              .uniques((it) => it.authorityCode)
+          const FilterItem(null, 'filtersDisplayAllAuthority'),
+          ...uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
         ],
         selectedIndex: 0,
@@ -144,9 +141,8 @@ extension Filters on List<Teacher> {
         id: _kGovtFilterId,
         title: 'filtersByGovernment',
         items: [
-          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
-          ...this
-              .uniques((it) => it.authorityGovt)
+          const FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          ...uniques((it) => it.authorityGovt)
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
         ],
         selectedIndex: 0,
@@ -167,7 +163,7 @@ extension Filters on List<Teacher> {
 
       final govtFilter = filters.firstWhere((it) => it.id == _kGovtFilterId);
 
-      return this.where((it) {
+      return where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }

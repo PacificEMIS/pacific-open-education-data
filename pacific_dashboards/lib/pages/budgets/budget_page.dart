@@ -11,12 +11,10 @@ import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
-import 'components/enroll_data_by_gnp_government_component.dart';
-import 'components/spending_by_district_component.dart';
+import 'package:pacific_dashboards/pages/budgets/components/enroll_data_by_gnp_government_component.dart';
+import 'package:pacific_dashboards/pages/budgets/components/spending_by_district_component.dart';
 
 class BudgetsPage extends MvvmStatefulWidget {
-  static String kRoute = '/Budgets';
-
   BudgetsPage({
     Key key,
   }) : super(
@@ -24,6 +22,8 @@ class BudgetsPage extends MvvmStatefulWidget {
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createBudgetsViewModel(ctx),
         );
+
+  static String kRoute = '/Budgets';
 
   @override
   _BudgetPageState createState() => _BudgetPageState();
@@ -75,7 +75,9 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           //GNP and Government Spending Actual
                           _TitleWidget(
                             text:
-                                '${'budgetsGnpAndGovernmentSpendingActualExpense'.localized(context)} ${snapshot.data.year}',
+                                // ignore: lines_longer_than_80_chars
+                                '${'budgetsGnpAndGovernmentSpendingActualExpense'.localized(context)} '
+                                '${snapshot.data.year}',
                           ),
                           _GnpAndGovernmentSpendingActualExpense(
                             data: snapshot
@@ -84,7 +86,9 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           //-- GNP and Government Spending Budgeted
                           _TitleWidget(
                             text:
-                                '${'budgetsGnpAndGovernmentSpendingBudgetedExpense'.localized(context)} ${snapshot.data.year}',
+                                // ignore: lines_longer_than_80_chars
+                                '${'budgetsGnpAndGovernmentSpendingBudgetedExpense'.localized(context)} '
+                                '${snapshot.data.year}',
                           ),
                           _GnpAndGovernmentSpendingActualExpense(
                             data: snapshot
@@ -93,7 +97,9 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           //-- Spending By Sector
                           _TitleWidget(
                             text:
-                                '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
+                                // ignore: lines_longer_than_80_chars
+                                '${'budgetsSpendingByDistrict'.localized(context)} '
+                                '${snapshot.data.year}',
                           ),
                           _SpendingBySector(
                             data: snapshot.data.dataSpendingBySector,
@@ -101,7 +107,9 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           // //-- Spending By Sector
                           _TitleWidget(
                             text:
-                                '${'budgetsSpendingBySector'.localized(context)} ${snapshot.data.year}',
+                                // ignore: lines_longer_than_80_chars
+                                '${'budgetsSpendingBySector'.localized(context)} '
+                                '${snapshot.data.year}',
                           ),
                           SpendingByDistrictComponent(
                             data: snapshot.data.dataSpendingBySectorAndYear,
@@ -111,7 +119,9 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           ),
                           _TitleWidget(
                             text:
-                                '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
+                                // ignore: lines_longer_than_80_chars
+                                '${'budgetsSpendingByDistrict'.localized(context)} '
+                                '${snapshot.data.year}',
                           ),
                           SpendingByDistrictComponent(
                             data: snapshot.data.dataSpendingByDistrict,
@@ -155,14 +165,14 @@ enum _GovtTab { govtExpenditure, gnp }
 enum _SpendingTab { ece, primary, secondary, total }
 
 class _TitleWidget extends StatelessWidget {
-  final String _text;
-
   const _TitleWidget({
     Key key,
     @required String text,
   })  : assert(text != null),
         _text = text,
         super(key: key);
+
+  final String _text;
 
   @override
   Widget build(BuildContext context) {
@@ -183,14 +193,14 @@ class _TitleWidget extends StatelessWidget {
 }
 
 class _GnpAndGovernmentSpendingActualExpense extends StatelessWidget {
-  final List<DataByGnpAndGovernmentSpending> _data;
-
   const _GnpAndGovernmentSpendingActualExpense({
     Key key,
     @required List<DataByGnpAndGovernmentSpending> data,
   })  : assert(data != null),
         _data = data,
         super(key: key);
+
+  final List<DataByGnpAndGovernmentSpending> _data;
 
   @override
   Widget build(BuildContext context) {
@@ -225,8 +235,6 @@ class _GnpAndGovernmentSpendingActualExpense extends StatelessWidget {
 }
 
 class _SpendingBySector extends StatelessWidget {
-  final List<DataSpendingBySector> _data;
-
   const _SpendingBySector({
     Key key,
     @required List<DataSpendingBySector> data,
@@ -234,9 +242,11 @@ class _SpendingBySector extends StatelessWidget {
         _data = data,
         super(key: key);
 
+  final List<DataSpendingBySector> _data;
+
   @override
   Widget build(BuildContext context) {
-    if (_data.length == 0)
+    if (_data.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -246,6 +256,7 @@ class _SpendingBySector extends StatelessWidget {
           ),
         ),
       );
+    }
 
     return MiniTabLayout(
       tabs: _SpendingTab.values,

@@ -6,6 +6,13 @@ part 'hive_individual_school.g.dart';
 
 @HiveType(typeId: 17)
 class HiveIndividualSchool extends HiveObject {
+  HiveIndividualSchool();
+
+  HiveIndividualSchool.from(IndividualSchool school)
+      : accreditationList = school.accreditationList
+            .map((e) => HiveIndividualAccreditation.from(e))
+            .toList();
+
   @HiveField(0)
   List<HiveIndividualAccreditation> accreditationList;
 
@@ -14,10 +21,4 @@ class HiveIndividualSchool extends HiveObject {
             .map((e) => e.toIndividualAccreditation())
             .toList(),
       );
-
-  static HiveIndividualSchool from(IndividualSchool school) =>
-      HiveIndividualSchool()
-        ..accreditationList = school.accreditationList
-            .map((e) => HiveIndividualAccreditation.from(e))
-            .toList();
 }

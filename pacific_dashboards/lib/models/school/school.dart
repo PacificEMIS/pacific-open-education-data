@@ -9,6 +9,20 @@ part 'school.g.dart';
 
 @JsonSerializable()
 class School {
+  const School({
+    @required this.surveyYear,
+    @required this.classLevel,
+    @required this.age,
+    @required this.districtCode,
+    @required this.authorityCode,
+    @required this.authorityGovt,
+    @required this.genderCode,
+    @required this.schoolTypeCode,
+    @required this.enrol,
+  });
+
+  factory School.fromJson(Map<String, dynamic> json) => _$SchoolFromJson(json);
+
   @JsonKey(name: 'SurveyYear')
   final int surveyYear;
 
@@ -35,21 +49,6 @@ class School {
 
   @JsonKey(name: 'Enrol')
   final int enrol;
-
-  const School({
-    @required this.surveyYear,
-    @required this.classLevel,
-    @required this.age,
-    @required this.districtCode,
-    @required this.authorityCode,
-    @required this.authorityGovt,
-    @required this.genderCode,
-    @required this.schoolTypeCode,
-    @required this.enrol,
-  });
-
-  factory School.fromJson(Map<String, dynamic> json) => _$SchoolFromJson(json);
-
   Map<String, dynamic> toJson() => _$SchoolToJson(this);
 
   Gender get gender {
@@ -63,11 +62,11 @@ class School {
 
   String get ageGroup {
     if (age == null) {
-      return "no age";
+      return 'no age';
     }
 
-    int ageCoeff = age ~/ 5 + 1;
-    return '${((ageCoeff * 5) - 4)}-${(ageCoeff * 5)}';
+    final ageCoeff = age ~/ 5 + 1;
+    return '${(ageCoeff * 5) - 4}-${ageCoeff * 5}';
   }
 }
 
@@ -88,8 +87,7 @@ extension Filters on List<School> {
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
-        items: this
-            .uniques((it) => it.surveyYear)
+        items: uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -99,9 +97,8 @@ extension Filters on List<School> {
         id: _kDistrictFilterId,
         title: 'filtersByState',
         items: [
-          FilterItem(null, 'filtersDisplayAllStates'),
-          ...this
-              .uniques((it) => it.districtCode)
+          const FilterItem(null, 'filtersDisplayAllStates'),
+          ...uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,
@@ -110,9 +107,8 @@ extension Filters on List<School> {
         id: _kAuthorityFilterId,
         title: 'filtersByAuthority',
         items: [
-          FilterItem(null, 'filtersDisplayAllAuthority'),
-          ...this
-              .uniques((it) => it.authorityCode)
+          const FilterItem(null, 'filtersDisplayAllAuthority'),
+          ...uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
         ],
         selectedIndex: 0,
@@ -121,9 +117,8 @@ extension Filters on List<School> {
         id: _kGovtFilterId,
         title: 'filtersByGovernment',
         items: [
-          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
-          ...this
-              .uniques((it) => it.authorityGovt)
+          const FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          ...uniques((it) => it.authorityGovt)
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
         ],
         selectedIndex: 0,
@@ -132,9 +127,8 @@ extension Filters on List<School> {
         id: _kClassLevelFilterId,
         title: 'filtersByClassLevel',
         items: [
-          FilterItem(null, 'filtersDisplayAllLevelFilters'),
-          ...this
-              .uniques((it) => it.classLevel)
+          const FilterItem(null, 'filtersDisplayAllLevelFilters'),
+          ...uniques((it) => it.classLevel)
               .map((it) => FilterItem(it, it.from(lookups.levels))),
         ],
         selectedIndex: 0,
@@ -158,7 +152,7 @@ extension Filters on List<School> {
       final classLevelFilter =
           filters.firstWhere((it) => it.id == _kClassLevelFilterId);
 
-      return this.where((it) {
+      return where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }

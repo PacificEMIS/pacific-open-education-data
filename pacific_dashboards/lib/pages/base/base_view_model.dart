@@ -18,12 +18,12 @@ abstract class BaseViewModel extends ViewModel {
 
   @protected
   Stream<T> handleRepositoryFetch<T>({
-    @required Stream<RepositoryResponse<T>> fetch(),
+    @required Stream<RepositoryResponse<T>> Function() fetch,
   }) async* {
     try {
       final fetchStream = fetch();
       var isCacheEmpty = false;
-      await for (var response in fetchStream) {
+      await for (final response in fetchStream) {
         if (response is SuccessRepositoryResponse) {
           yield response.data;
         } else if (response is FailureRepositoryResponse) {
@@ -33,12 +33,14 @@ abstract class BaseViewModel extends ViewModel {
               break;
             case RepositoryType.remote:
               if (isCacheEmpty) {
+                // ignore: only_throw_errors
                 throw response.throwable;
               }
               break;
           }
         }
       }
+    // ignore: avoid_catches_without_on_clauses
     } catch (ex) {
       handleThrows(ex);
     }

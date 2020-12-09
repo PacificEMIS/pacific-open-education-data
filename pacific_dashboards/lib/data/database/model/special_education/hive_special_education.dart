@@ -5,6 +5,31 @@ part 'hive_special_education.g.dart';
 
 @HiveType(typeId: 18)
 class HiveSpecialEducation extends HiveObject {
+  HiveSpecialEducation();
+
+  HiveSpecialEducation.from(SpecialEducation specialEducation)
+      : surveyYear = specialEducation.surveyYear,
+        edLevelCode = specialEducation.edLevelCode,
+        edLevel = specialEducation.edLevel,
+        ethnicityCode = specialEducation.ethnicityCode,
+        genderCode = specialEducation.genderCode,
+        gender = specialEducation.gender,
+        age = specialEducation.age,
+        authorityCode = specialEducation.authorityCode,
+        authority = specialEducation.authority,
+        districtCode = specialEducation.districtCode,
+        district = specialEducation.district,
+        authorityGovtCode = specialEducation.authorityGovtCode,
+        authorityGovt = specialEducation.authorityGovt,
+        schoolTypeCode = specialEducation.schoolTypeCode,
+        schoolType = specialEducation.schoolType,
+        regionCode = specialEducation.regionCode,
+        region = specialEducation.region,
+        number = specialEducation.number,
+        disability = specialEducation.disability,
+        environment = specialEducation.environment,
+        englishLearner = specialEducation.englishLearner;
+
   @HiveField(0)
   int surveyYear;
 
@@ -90,28 +115,4 @@ class HiveSpecialEducation extends HiveObject {
       disability,
       environment,
       englishLearner);
-
-  static HiveSpecialEducation from(SpecialEducation specialEducation) =>
-      HiveSpecialEducation()
-        ..surveyYear = specialEducation.surveyYear
-        ..edLevelCode = specialEducation.edLevelCode
-        ..edLevel = specialEducation.edLevel
-        ..ethnicityCode = specialEducation.ethnicityCode
-        ..genderCode = specialEducation.genderCode
-        ..gender = specialEducation.gender
-        ..age = specialEducation.age
-        ..authorityCode = specialEducation.authorityCode
-        ..authority = specialEducation.authority
-        ..districtCode = specialEducation.districtCode
-        ..district = specialEducation.district
-        ..authorityGovtCode = specialEducation.authorityGovtCode
-        ..authorityGovt = specialEducation.authorityGovt
-        ..schoolTypeCode = specialEducation.schoolTypeCode
-        ..schoolType = specialEducation.schoolType
-        ..regionCode = specialEducation.regionCode
-        ..region = specialEducation.region
-        ..number = specialEducation.number
-        ..disability = specialEducation.disability
-        ..environment = specialEducation.environment
-        ..englishLearner = specialEducation.englishLearner;
 }

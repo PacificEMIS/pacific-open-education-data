@@ -28,27 +28,18 @@ import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
-const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis/api/";
-const _kKiribatiUrl = "https://data.moe.gov.ki/kemis/api/";
+const _kFederalStatesOfMicronesiaUrl = 'https://fedemis.doe.fm/api/';
+const _kMarshalIslandsUrl = 'http://data.pss.edu.mh/miemis/api/';
+const _kKiribatiUrl = 'https://data.moe.gov.ki/kemis/api/';
 
 typedef _HandledApiCallable<T> = FutureOr<T> Function(RestClient);
 typedef _FallbackHandler<T> = Future<T> Function(Object);
 
 class RemoteDataSourceImpl implements RemoteDataSource {
-  static const platform = const MethodChannel('com.pacific_emis.opendata/api');
-
-  final GlobalSettings _settings;
-
-  Dio _dio;
-  RestClient _fedemisClient;
-  RestClient _miemisClient;
-  RestClient _kemisClient;
-
   RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings {
     _dio = Dio(BaseOptions(
-      connectTimeout: Duration(seconds: 10).inMilliseconds,
-      receiveTimeout: Duration(minutes: 5).inMilliseconds,
+      connectTimeout: const Duration(seconds: 10).inMilliseconds,
+      receiveTimeout: const Duration(minutes: 5).inMilliseconds,
       headers: {
         'Accept-Encoding': 'gzip, deflate',
       },
@@ -77,7 +68,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             }
           },
           onError: (error) {
-            print(error);
+            debugPrint(error.toString());
             return error;
           },
         ),
@@ -99,18 +90,27 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     _kemisClient = RestClient(_dio, baseUrl: _kKiribatiUrl);
   }
 
+  static const platform = MethodChannel('com.pacific_emis.opendata/api');
+
+  final GlobalSettings _settings;
+
+  Dio _dio;
+  RestClient _fedemisClient;
+  RestClient _miemisClient;
+  RestClient _kemisClient;
+
   Future<void> _handleErrors(DioError error) async {
     final response = error.response;
     if (response == null || response.statusCode == null) {
       if (error.message.contains('closed') ||
           error.message.contains('abort') ||
           error.message.contains('no address')) {
-        throw NoInternetException();
+        throw const NoInternetException();
       } else {
         await checkConnection();
       }
 
-      throw UnknownRemoteException(url: '');
+      throw const UnknownRemoteException(url: '');
     }
     final code = response.statusCode;
     final url = response.requestUrl;
@@ -150,7 +150,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             client = _kemisClient;
             break;
         }
+
         return await callable.call(client);
+        // ignore: avoid_catches_without_on_clauses
       } catch (e) {
         if (fallbackHandlers != null) {
           for (final handler in fallbackHandlers) {
@@ -162,6 +164,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         }
         rethrow;
       }
+      // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       if (e is DioError) {
         await _handleErrors(e);
@@ -232,7 +235,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<void> checkConnection() async {
     final connection = await Connectivity().checkConnectivity();
     if (connection == ConnectivityResult.none) {
-      throw NoInternetException();
+      throw const NoInternetException();
     }
   }
 
@@ -254,13 +257,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       (client) => client.getExams(),
       fallbackHandlers: [
         (e) => _fallbackToNative(
-            e,
-            'warehouse/examsdistrictresults',
-            (json) => compute<String, List<Exam>>(
-              _parseExamsList,
-              json,
+              e,
+              'warehouse/examsdistrictresults',
+              (json) => compute<String, List<Exam>>(
+                _parseExamsList,
+                json,
+              ),
             ),
-          ),
       ],
     );
   }
@@ -430,13 +433,13 @@ extension Urls on Emis {
 }
 
 extension RequestOptionsExt on RequestOptions {
-  String get url => this.uri.toString();
+  String get url => uri.toString();
 }
 
 extension ResponseExt on Response {
-  String get eTag => this.headers.value('ETag');
+  String get eTag => headers.value('ETag');
 
-  String get requestUrl => this.request.url;
+  String get requestUrl => request.url;
 }
 
 List<School> _parseSchoolList(String json) {
@@ -453,9 +456,7 @@ List<Teacher> _parseTeachersList(String json) {
 
 List<Exam> _parseExamsList(String json) {
   final List<dynamic> data = jsonDecode(json);
-  return data
-      .map((it) => Exam.fromJson(it as Map<String, dynamic>))
-      .toList();
+  return data.map((it) => Exam.fromJson(it as Map<String, dynamic>)).toList();
 }
 
 Lookups _parseLookups(String json) {

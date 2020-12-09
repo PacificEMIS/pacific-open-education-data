@@ -12,14 +12,14 @@ import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class ExamsPage extends MvvmStatefulWidget {
-  static const String kRoute = "/Exams";
-
   ExamsPage({Key key})
       : super(
           key: key,
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createExamsViewModel(ctx),
         );
+
+  static const String kRoute = '/Exams';
 
   @override
   State<StatefulWidget> createState() {
@@ -70,8 +70,6 @@ class ExamsPageState extends MvvmState<ExamsViewModel, ExamsPage> {
 }
 
 class _PopulatedContent extends StatelessWidget {
-  final Map<String, Map<String, Exam>> _examResults;
-
   const _PopulatedContent({
     Key key,
     @required Map<String, Map<String, Exam>> examResults,
@@ -79,52 +77,52 @@ class _PopulatedContent extends StatelessWidget {
         _examResults = examResults,
         super(key: key);
 
+  final Map<String, Map<String, Exam>> _examResults;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         ..._examResults.keys.map((it) {
           final results = _examResults[it];
-          return Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  it,
-                  style: Theme.of(context).textTheme.subtitle2,
-                  textAlign: TextAlign.left,
-                  maxLines: 5,
-                ),
-                ...results.keys.map((it) {
-                  final chart =
-                      ExamsStackedHorizontalBarChart.fromModel(results[it]);
-                  if (it != ExamsNavigator.kNoTitleKey) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                          child: Text(
-                            it,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                .copyWith(fontSize: 12.0),
-                            textAlign: TextAlign.left,
-                          ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                it,
+                style: Theme.of(context).textTheme.subtitle2,
+                textAlign: TextAlign.left,
+                maxLines: 5,
+              ),
+              ...results.keys.map((it) {
+                final chart =
+                    ExamsStackedHorizontalBarChart.fromModel(results[it]);
+                if (it != ExamsNavigator.kNoTitleKey) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                        child: Text(
+                          it,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              .copyWith(fontSize: 12.0),
+                          textAlign: TextAlign.left,
                         ),
-                        chart,
-                      ],
-                    );
-                  }
-                  return chart;
-                }).toList(),
-              ],
-            ),
+                      ),
+                      chart,
+                    ],
+                  );
+                }
+                return chart;
+              }).toList(),
+            ],
           );
         }).toList(),
       ],

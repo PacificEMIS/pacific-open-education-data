@@ -6,6 +6,21 @@ part 'standard_accreditation.g.dart';
 
 @JsonSerializable()
 class StandardAccreditation implements Accreditation {
+  const StandardAccreditation({
+    @required this.surveyYear,
+    @required this.districtCode,
+    @required this.authorityCode,
+    @required this.authorityGovtCode,
+    @required this.schoolTypeCode,
+    @required this.standard,
+    @required this.result,
+    @required this.total,
+    @required this.numThisYear,
+  });
+
+  factory StandardAccreditation.fromJson(Map<String, dynamic> json) =>
+      _$StandardAccreditationFromJson(json);
+
   @JsonKey(name: 'SurveyYear')
   @override
   final int surveyYear;
@@ -40,23 +55,8 @@ class StandardAccreditation implements Accreditation {
   @override
   final int numThisYear;
 
-  const StandardAccreditation({
-    @required this.surveyYear,
-    @required this.districtCode,
-    @required this.authorityCode,
-    @required this.authorityGovtCode,
-    @required this.schoolTypeCode,
-    @required this.standard,
-    @required this.result,
-    @required this.total,
-    @required this.numThisYear,
-  });
-
-  factory StandardAccreditation.fromJson(Map<String, dynamic> json) =>
-      _$StandardAccreditationFromJson(json);
-
   Map<String, dynamic> toJson() => _$StandardAccreditationToJson(this);
 
   @override
-  Comparable get sortField => standard ?? "";
+  Comparable get sortField => standard ?? '';
 }

@@ -5,6 +5,19 @@ part 'hive_school_exam_report.g.dart';
 
 @HiveType(typeId: 12)
 class HiveSchoolExamReport extends HiveObject {
+  HiveSchoolExamReport();
+
+  HiveSchoolExamReport.from(SchoolExamReport report)
+      : examCode = report.examCode,
+        year = report.year,
+        examName = report.examName,
+        benchmarkCode = report.benchmarkCode,
+        benchmarkDescription = report.benchmarkDescription,
+        achievementLevel = report.achievementLevel,
+        achievementDescription = report.achievementDescription,
+        maleCandidates = report.maleCandidates,
+        femaleCandidates = report.femaleCandidates;
+
   @HiveField(0)
   String examCode;
 
@@ -42,16 +55,4 @@ class HiveSchoolExamReport extends HiveObject {
     ..achievementDescription = achievementDescription
     ..maleCandidates = maleCandidates
     ..femaleCandidates = femaleCandidates;
-
-  static HiveSchoolExamReport from(SchoolExamReport report) =>
-      HiveSchoolExamReport()
-        ..examCode = report.examCode
-        ..year = report.year
-        ..examName = report.examName
-        ..benchmarkCode = report.benchmarkCode
-        ..benchmarkDescription = report.benchmarkDescription
-        ..achievementLevel = report.achievementLevel
-        ..achievementDescription = report.achievementDescription
-        ..maleCandidates = report.maleCandidates
-        ..femaleCandidates = report.femaleCandidates;
 }

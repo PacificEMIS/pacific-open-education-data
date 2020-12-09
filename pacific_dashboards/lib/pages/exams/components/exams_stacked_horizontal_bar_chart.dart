@@ -6,14 +6,15 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
 class ExamsStackedHorizontalBarChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
+  const ExamsStackedHorizontalBarChart(this.seriesList, {Key key})
+      : super(key: key);
 
-  ExamsStackedHorizontalBarChart(this.seriesList);
+  final List<charts.Series> seriesList;
 
   static Widget fromModel(Exam exam) {
     return FutureBuilder(
       future: Future.microtask(() => _createData(exam)),
-      builder: (context, AsyncSnapshot<List<charts.Series>> snapshot) {
+      builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return PlatformProgressIndicator();
         }
@@ -42,18 +43,18 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
                 rightMarginSpec: charts.MarginSpec.fixedPixel(20),
                 bottomMarginSpec: charts.MarginSpec.fixedPixel(4),
               ),
-              primaryMeasureAxis: charts.NumericAxisSpec(
+              primaryMeasureAxis: const charts.NumericAxisSpec(
                 showAxisLine: false,
-                renderSpec: const charts.NoneRenderSpec(),
-                tickProviderSpec: const charts.BasicNumericTickProviderSpec(
+                renderSpec: charts.NoneRenderSpec(),
+                tickProviderSpec: charts.BasicNumericTickProviderSpec(
                   dataIsInWholeNumbers: true,
                   desiredTickCount: 11,
                 ),
-                viewport: const charts.NumericExtents(-100.0, 100.0),
+                viewport: charts.NumericExtents(-100.0, 100.0),
               ),
               domainAxis: const charts.OrdinalAxisSpec(
                 showAxisLine: false,
-                renderSpec: const charts.SmallTickRendererSpec(
+                renderSpec: charts.SmallTickRendererSpec(
                   tickLengthPx: 0,
                   labelStyle: largeChartsDomain,
                 ),
@@ -73,11 +74,11 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
                 Container(width: 30),
                 ...List.generate(9, (index) => -80 + 20 * index).map((it) {
                   final text = it.abs().toString();
-                  if (text != "0") {
-                    return Container(
+                  if (text != '0') {
+                    return SizedBox(
                       width: 25,
                       child: Text(
-                        text != "0" ? text : "",
+                        text != '0' ? text : '',
                         style: Theme.of(context).textTheme.overline.copyWith(
                               color: AppColors.kTextMinor.withOpacity(0.5),
                             ),
@@ -86,7 +87,7 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
                       ),
                     );
                   } else {
-                    return Container(
+                    return SizedBox(
                       width: 25,
                       child: Center(
                         child: Container(
@@ -108,8 +109,8 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
   }
 
   static List<charts.Series<ExamResultPercent, String>> _createData(Exam exam) {
-    bool isIncorrectFData = exam.candidatesF == 0;
-    bool isIncorrectMData = exam.candidatesM == 0;
+    final isIncorrectFData = exam.candidatesF == 0;
+    final isIncorrectMData = exam.candidatesM == 0;
 
     final percentFail1 = [
       ExamResultPercent(
@@ -198,44 +199,44 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
     return [
       charts.Series<ExamResultPercent, String>(
         id: 'Result2',
-        colorFn: (_, __) => charts.Color(r: 255, g: 186, b: 10),
-        domainFn: (ExamResultPercent sales, _) => sales.gender,
-        measureFn: (ExamResultPercent sales, _) => sales.percent,
+        colorFn: (_, __) => const charts.Color(r: 255, g: 186, b: 10),
+        domainFn: (data, _) => data.gender,
+        measureFn: (data, _) => data.percent,
         data: percentFail2,
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'Result1',
         colorFn: (_, __) => const charts.Color(r: 248, g: 84, b: 84),
-        domainFn: (ExamResultPercent sales, _) => sales.gender,
-        measureFn: (ExamResultPercent sales, _) => sales.percent,
+        domainFn: (data, _) => data.gender,
+        measureFn: (data, _) => data.percent,
         data: percentFail1,
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'ResultFiller1',
         colorFn: (_, __) => const charts.Color(r: 245, g: 246, b: 248),
-        domainFn: (ExamResultPercent sales, _) => sales.gender,
-        measureFn: (ExamResultPercent sales, _) => sales.percent,
+        domainFn: (data, _) => data.gender,
+        measureFn: (data, _) => data.percent,
         data: percentFiller1,
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'Result3',
         colorFn: (_, __) => const charts.Color(r: 148, g: 220, b: 57),
-        domainFn: (ExamResultPercent sales, _) => sales.gender,
-        measureFn: (ExamResultPercent sales, _) => sales.percent,
+        domainFn: (data, _) => data.gender,
+        measureFn: (data, _) => data.percent,
         data: percentCompetent1,
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'Result4',
         colorFn: (_, __) => const charts.Color(r: 13, g: 211, b: 92),
-        domainFn: (ExamResultPercent sales, _) => sales.gender,
-        measureFn: (ExamResultPercent sales, _) => sales.percent,
+        domainFn: (data, _) => data.gender,
+        measureFn: (data, _) => data.percent,
         data: percentCompetent2,
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'ResultFiller2',
         colorFn: (_, __) => const charts.Color(r: 245, g: 246, b: 248),
-        domainFn: (ExamResultPercent sales, _) => sales.gender,
-        measureFn: (ExamResultPercent sales, _) => sales.percent,
+        domainFn: (data, _) => data.gender,
+        measureFn: (data, _) => data.percent,
         data: percentFiller2,
       ),
     ];
@@ -243,8 +244,8 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
 }
 
 class ExamResultPercent {
+  const ExamResultPercent({this.gender, this.percent});
+
   final String gender;
   final int percent;
-
-  ExamResultPercent({this.gender, this.percent});
 }

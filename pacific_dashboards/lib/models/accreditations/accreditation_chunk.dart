@@ -6,24 +6,12 @@ import 'package:pacific_dashboards/models/accreditations/district_accreditation.
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-
-import 'national_accreditation.dart';
+import 'package:pacific_dashboards/models/accreditations/national_accreditation.dart';
 
 part 'accreditation_chunk.g.dart';
 
-typedef FilterApplier<T> = T Function(T a);
-
 @JsonSerializable()
 class AccreditationChunk {
-  @JsonKey(name: 'byDistrict')
-  final List<DistrictAccreditation> byDistrict;
-
-  @JsonKey(name: 'byStandard')
-  final List<StandardAccreditation> byStandard;
-
-  @JsonKey(name: 'byNation')
-  final List<NationalAccreditation> byNational;
-
   const AccreditationChunk({
     @required this.byDistrict,
     @required this.byStandard,
@@ -33,19 +21,28 @@ class AccreditationChunk {
   factory AccreditationChunk.fromJson(Map<String, dynamic> json) =>
       _$AccreditationChunkFromJson(json);
 
+  @JsonKey(name: 'byDistrict')
+  final List<DistrictAccreditation> byDistrict;
+
+  @JsonKey(name: 'byStandard')
+  final List<StandardAccreditation> byStandard;
+
+  @JsonKey(name: 'byNation')
+  final List<NationalAccreditation> byNational;
+
   Map<String, dynamic> toJson() => _$AccreditationChunkToJson(this);
 }
 
 class AccreditationChunkJsonParts {
-  final List<dynamic> byDistrictJson;
-  final List<dynamic> byStandardJson;
-  final List<dynamic> byNationJson;
-
   const AccreditationChunkJsonParts({
     this.byDistrictJson,
     this.byStandardJson,
     this.byNationJson,
   });
+
+  final List<dynamic> byDistrictJson;
+  final List<dynamic> byStandardJson;
+  final List<dynamic> byNationJson;
 }
 
 extension Filters on AccreditationChunk {
@@ -62,8 +59,7 @@ extension Filters on AccreditationChunk {
   static const _kGovtFilterId = 3;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
-    final allItems = List<Accreditation>.of(this.byDistrict)
-      ..addAll(this.byStandard);
+    final allItems = List<Accreditation>.of(byDistrict)..addAll(byStandard);
     return List.of([
       Filter(
         id: _kYearFilterId,
@@ -79,7 +75,7 @@ extension Filters on AccreditationChunk {
         id: _kDistrictFilterId,
         title: 'filtersByState',
         items: [
-          FilterItem(null, 'filtersDisplayAllStates'),
+          const FilterItem(null, 'filtersDisplayAllStates'),
           ...allItems
               .uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
@@ -90,7 +86,7 @@ extension Filters on AccreditationChunk {
         id: _kAuthorityFilterId,
         title: 'filtersByAuthority',
         items: [
-          FilterItem(null, 'filtersDisplayAllAuthority'),
+          const FilterItem(null, 'filtersDisplayAllAuthority'),
           ...allItems
               .uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
@@ -101,7 +97,7 @@ extension Filters on AccreditationChunk {
         id: _kGovtFilterId,
         title: 'filtersByGovernment',
         items: [
-          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          const FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
           ...allItems
               .uniques((it) => it.authorityGovtCode)
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
@@ -124,7 +120,7 @@ extension Filters on AccreditationChunk {
 
       final govtFilter = filters.firstWhere((it) => it.id == _kGovtFilterId);
 
-      FilterApplier<Iterable<Accreditation>> apply = (input) {
+      Iterable<Accreditation> apply(Iterable<Accreditation> input) {
         return input
           ..where((it) {
             if (it.surveyYear != selectedYear) {
@@ -148,12 +144,12 @@ extension Filters on AccreditationChunk {
 
             return true;
           });
-      };
+      }
 
       return AccreditationChunk(
-        byDistrict: apply(this.byDistrict),
-        byStandard: apply(this.byStandard),
-        byNational: apply(this.byNational),
+        byDistrict: apply(byDistrict),
+        byStandard: apply(byStandard),
+        byNational: apply(byNational),
       );
     });
   }

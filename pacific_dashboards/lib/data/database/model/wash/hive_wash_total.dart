@@ -5,6 +5,25 @@ part 'hive_wash_total.g.dart';
 
 @HiveType(typeId: 19)
 class HiveWashTotal extends HiveObject {
+  HiveWashTotal();
+
+  HiveWashTotal.from(Wash wash)
+      : surveyYear = wash.surveyYear,
+        districtCode = wash.districtCode,
+        district = wash.district,
+        authorityCode = wash.authorityCode,
+        authority = wash.authority,
+        authorityGroupCode = wash.authorityGroupCode,
+        authorityGroup = wash.authorityGroup,
+        schoolTypeCode = wash.schoolTypeCode,
+        schoolType = wash.schoolType,
+        question = wash.question,
+        answer = wash.answer,
+        response = wash.response,
+        item = wash.item,
+        number = wash.number,
+        numThisYear = wash.numThisYear;
+
   @HiveField(0)
   int surveyYear;
 
@@ -67,22 +86,4 @@ class HiveWashTotal extends HiveObject {
         number: number,
         numThisYear: numThisYear,
       );
-
-
-  static HiveWashTotal from(Wash wash) => HiveWashTotal()
-    ..surveyYear = wash.surveyYear
-    ..districtCode = wash.districtCode
-    ..district = wash.district
-    ..authorityCode = wash.authorityCode
-    ..authority = wash.authority
-    ..authorityGroupCode = wash.authorityGroupCode
-    ..authorityGroup = wash.authorityGroup
-    ..schoolTypeCode = wash.schoolTypeCode
-    ..schoolType = wash.schoolType
-    ..question = wash.question
-    ..answer = wash.answer
-    ..response = wash.response
-    ..item = wash.item
-    ..number = wash.number
-    ..numThisYear = wash.numThisYear;
 }

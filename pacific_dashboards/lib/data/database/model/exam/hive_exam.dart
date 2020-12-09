@@ -6,6 +6,25 @@ part 'hive_exam.g.dart';
 
 @HiveType(typeId: 4)
 class HiveExam extends HiveObject with Expirable {
+  HiveExam();
+
+  HiveExam.from(Exam exam)
+      : name = exam.name,
+        year = exam.year,
+        districtCode = exam.districtCode,
+        standard = exam.standard,
+        benchmark = exam.benchmark,
+        candidatesM = exam.candidatesM,
+        wellBelowCompetentM = exam.wellBelowCompetentM,
+        approachingCompetenceM = exam.approachingCompetenceM,
+        minimallyCompetentM = exam.minimallyCompetentM,
+        competentM = exam.competentM,
+        candidatesF = exam.candidatesF,
+        wellBelowCompetentF = exam.wellBelowCompetentF,
+        approachingCompetenceF = exam.approachingCompetenceF,
+        minimallyCompetentF = exam.minimallyCompetentF,
+        competentF = exam.competentF;
+
   @HiveField(0)
   String name;
 
@@ -72,21 +91,4 @@ class HiveExam extends HiveObject with Expirable {
         minimallyCompetentF: minimallyCompetentF,
         competentF: competentF,
       );
-
-  static HiveExam from(Exam exam) => HiveExam()
-    ..name = exam.name
-    ..year = exam.year
-    ..districtCode = exam.districtCode
-    ..standard = exam.standard
-    ..benchmark = exam.benchmark
-    ..candidatesM = exam.candidatesM
-    ..wellBelowCompetentM = exam.wellBelowCompetentM
-    ..approachingCompetenceM = exam.approachingCompetenceM
-    ..minimallyCompetentM = exam.minimallyCompetentM
-    ..competentM = exam.competentM
-    ..candidatesF = exam.candidatesF
-    ..wellBelowCompetentF = exam.wellBelowCompetentF
-    ..approachingCompetenceF = exam.approachingCompetenceF
-    ..minimallyCompetentF = exam.minimallyCompetentF
-    ..competentF = exam.competentF;
 }

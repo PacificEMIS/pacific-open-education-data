@@ -5,6 +5,29 @@ part 'hive_toilet.g.dart';
 
 @HiveType(typeId: 21)
 class HiveToilet extends HiveObject {
+  HiveToilet();
+
+  HiveToilet.from(Toilets toilets)
+      : schNo = toilets.schNo,
+        surveyYear = toilets.surveyYear,
+        districtCode = toilets.districtCode,
+        inspID = toilets.inspID,
+        inspectionYear = toilets.inspectionYear,
+        schoolTypeCode = toilets.schoolTypeCode,
+        authorityCode = toilets.authorityCode,
+        authorityGovt = toilets.schoolTypeCode,
+        totalF = toilets.totalF,
+        usableF = toilets.usableF,
+        enrolF = toilets.enrolF,
+        totalC = toilets.totalC,
+        usableC = toilets.usableC,
+        total = toilets.total,
+        usable = toilets.usable,
+        enrol = toilets.enrol,
+        enrolM = toilets.enrolM,
+        usableM = toilets.usableM,
+        totalM = toilets.totalM;
+
   @HiveField(0)
   String schNo;
 
@@ -81,26 +104,4 @@ class HiveToilet extends HiveObject {
       enrolM,
       usableM,
       totalM);
-
-  static HiveToilet from(Toilets toilets) => HiveToilet()
-    ..schNo = toilets.schNo
-    ..surveyYear = toilets.surveyYear
-    ..districtCode = toilets.districtCode
-    ..inspID = toilets.inspID
-    ..inspectionYear = toilets.inspectionYear
-    ..districtCode = toilets.districtCode
-    ..schoolTypeCode = toilets.schoolTypeCode
-    ..authorityCode = toilets.authorityCode
-    ..authorityGovt = toilets.schoolTypeCode
-    ..totalF = toilets.totalF
-    ..usableF = toilets.usableF
-    ..enrolF = toilets.enrolF
-    ..totalC = toilets.totalC
-    ..usableC = toilets.usableC
-    ..total = toilets.total
-    ..usable = toilets.usable
-    ..enrol = toilets.enrol
-    ..enrolM = toilets.enrolM
-    ..usableM = toilets.usableM
-    ..totalM = toilets.totalM;
 }

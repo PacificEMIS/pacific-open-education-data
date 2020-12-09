@@ -8,8 +8,8 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 class HiveExamsDao extends ExamsDao {
   static const _kKey = 'exams';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -19,11 +19,11 @@ class HiveExamsDao extends ExamsDao {
   Future<Pair<bool, List<Exam>>> get(Emis emis) async {
     final storedExams = await _withBox((box) async => box.get(emis.id));
     if (storedExams == null) {
-      return Pair(false, null);
+      return const Pair(false, null);
     }
     var expired = false;
-    List<Exam> storedItems = [];
-    for (var value in storedExams) {
+    final storedItems = <Exam>[];
+    for (final value in storedExams) {
       final hiveExam = value as HiveExam;
       expired |= hiveExam.isExpired();
       storedItems.add(hiveExam.toExam());

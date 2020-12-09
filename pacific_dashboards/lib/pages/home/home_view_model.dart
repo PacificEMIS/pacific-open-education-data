@@ -4,22 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeViewModel extends ViewModel {
-  final GlobalSettings _globalSettings;
-  final RemoteConfig _remoteConfig;
-
-  final Subject<Emis> _selectedEmisSubject = BehaviorSubject();
-  final Subject<List<Section>> _sectionsSubject = BehaviorSubject();
-
-  Stream<Emis> get selectedEmisStream => _selectedEmisSubject.stream;
-
-  Stream<List<Section>> get sectionStream => _sectionsSubject.stream;
-
   HomeViewModel(
     BuildContext ctx, {
     @required GlobalSettings globalSettings,
@@ -29,6 +18,16 @@ class HomeViewModel extends ViewModel {
         _globalSettings = globalSettings,
         _remoteConfig = remoteConfig,
         super(ctx);
+
+  final GlobalSettings _globalSettings;
+  final RemoteConfig _remoteConfig;
+
+  final Subject<Emis> _selectedEmisSubject = BehaviorSubject();
+  final Subject<List<Section>> _sectionsSubject = BehaviorSubject();
+
+  Stream<Emis> get selectedEmisStream => _selectedEmisSubject.stream;
+
+  Stream<List<Section>> get sectionStream => _sectionsSubject.stream;
 
   @override
   void onInit() {
@@ -45,14 +44,10 @@ class HomeViewModel extends ViewModel {
     });
   }
 
-  void _configureLanguageChanges(Emis currentEmis) {
-    Strings.emis = currentEmis;
-  }
-
   void onEmisChanged(Emis emis) {
     _globalSettings.setCurrentEmis(emis);
     launchHandled(() async {
-      _configureLanguageChanges(emis);
+      Strings.emis = emis;
       _selectedEmisSubject.add(emis);
       _sectionsSubject.add(await _getSectionsForEmis(emis));
     });
@@ -61,7 +56,7 @@ class HomeViewModel extends ViewModel {
   Future<List<Section>> _getSectionsForEmis(Emis emis) async {
     final emisesConfig = await _remoteConfig.emises;
 
-    EmisConfig emisConfig = emisesConfig.getEmisConfigFor(emis);
+    final emisConfig = emisesConfig.getEmisConfigFor(emis);
     if (emisConfig == null) {
       return [];
     }

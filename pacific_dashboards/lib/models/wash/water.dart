@@ -9,13 +9,42 @@ part 'water.g.dart';
 
 @JsonSerializable()
 class Water implements BaseWash {
+  const Water({
+    @required this.schNo,
+    @required this.surveyYear,
+    @required this.district,
+    @required this.districtCode,
+    @required this.schoolType,
+    @required this.schoolTypeCode,
+    @required this.authority,
+    @required this.authorityCode,
+    @required this.authorityGovt,
+    @required this.authorityGovtCode,
+    @required this.pipedWaterSupplyCurrentlyAvailable,
+    @required this.pipedWaterSupplyUsedForDrinking,
+    @required this.protectedWellCurrentlyAvailable,
+    @required this.protectedWellUsedForDrinking,
+    @required this.unprotectedWellSpringCurrentlyAvailable,
+    @required this.unprotectedWellSpringUsedForDrinking,
+    @required this.rainwaterCurrentlyAvailable,
+    @required this.rainwaterUsedForDrinking,
+    @required this.bottledWaterCurrentlyAvailable,
+    @required this.bottledWaterUsedForDrinking,
+    @required this.tankerTruckCartCurrentlyAvailable,
+    @required this.tankerTruckCartUsedForDrinking,
+    @required this.surfacedWaterCurrentlyAvailable,
+    @required this.surfacedWaterUsedForDrinking,
+  });
+
+  factory Water.fromJson(Map<String, dynamic> json) => _$WaterFromJson(json);
+
   static const _kBoolTrueAsBackendString = 'Yes';
 
   @JsonKey(name: 'schNo', defaultValue: '')
   final String schNo;
 
   @override
-  @JsonKey(name: "SurveyYear")
+  @JsonKey(name: 'SurveyYear')
   final int surveyYear;
 
   @JsonKey(name: 'District', defaultValue: 0)
@@ -129,35 +158,6 @@ class Water implements BaseWash {
   bool get isSurfacedWaterUsedForDrinking =>
       surfacedWaterUsedForDrinking == _kBoolTrueAsBackendString;
 
-  const Water({
-    @required this.schNo,
-    @required this.surveyYear,
-    @required this.district,
-    @required this.districtCode,
-    @required this.schoolType,
-    @required this.schoolTypeCode,
-    @required this.authority,
-    @required this.authorityCode,
-    @required this.authorityGovt,
-    @required this.authorityGovtCode,
-    @required this.pipedWaterSupplyCurrentlyAvailable,
-    @required this.pipedWaterSupplyUsedForDrinking,
-    @required this.protectedWellCurrentlyAvailable,
-    @required this.protectedWellUsedForDrinking,
-    @required this.unprotectedWellSpringCurrentlyAvailable,
-    @required this.unprotectedWellSpringUsedForDrinking,
-    @required this.rainwaterCurrentlyAvailable,
-    @required this.rainwaterUsedForDrinking,
-    @required this.bottledWaterCurrentlyAvailable,
-    @required this.bottledWaterUsedForDrinking,
-    @required this.tankerTruckCartCurrentlyAvailable,
-    @required this.tankerTruckCartUsedForDrinking,
-    @required this.surfacedWaterCurrentlyAvailable,
-    @required this.surfacedWaterUsedForDrinking,
-  });
-
-  factory Water.fromJson(Map<String, dynamic> json) => _$WaterFromJson(json);
-
   Map<String, dynamic> toJson() => _$WaterToJson(this);
 }
 
@@ -169,8 +169,7 @@ extension Filters on List<Water> {
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
-        items: this
-            .uniques((it) => it.surveyYear)
+        items: uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -184,7 +183,7 @@ extension Filters on List<Water> {
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
 
-      return this.where((it) {
+      return where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }

@@ -3,10 +3,13 @@ import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 
 class ExamsNavigator {
-  static const String kNoTitleKey = "";
-  int _selectedExamPageId = 0;
-  int _selectedExamViewId = 0;
-  int _selectedExamStandardId = 0;
+  ExamsNavigator(List<Exam> exams)
+      : _examPageNames = exams.uniques((it) => it.name),
+        _exams = exams {
+    _changeExamPage();
+  }
+
+  static const String kNoTitleKey = '';
 
   final List<String> _examPageNames;
   final List<String> _examViews = [
@@ -16,13 +19,10 @@ class ExamsNavigator {
   ];
   final List<Exam> _exams;
 
+  int _selectedExamPageId = 0;
+  int _selectedExamViewId = 0;
+  int _selectedExamStandardId = 0;
   List<String> _examStandards;
-
-  ExamsNavigator(List<Exam> exams)
-      : _examPageNames = exams.uniques((it) => it.name),
-        _exams = exams {
-    _changeExamPage();
-  }
 
   void nextExamPage() {
     _selectedExamPageId++;
@@ -89,14 +89,14 @@ class ExamsNavigator {
   String get pageName {
     if (_examPageNames == null ||
         _selectedExamPageId >= _examPageNames.length) {
-      return "";
+      return '';
     }
     return _examPageNames[_selectedExamPageId];
   }
 
   String get viewName {
     if (_examViews == null || _selectedExamViewId >= _examViews.length) {
-      return "";
+      return '';
     }
     return _examViews[_selectedExamViewId];
   }
@@ -104,7 +104,7 @@ class ExamsNavigator {
   String get standardName {
     if (_examStandards == null ||
         _selectedExamStandardId >= _examStandards.length) {
-      return "";
+      return '';
     }
     return _examStandards[_selectedExamStandardId];
   }
@@ -127,38 +127,38 @@ class ExamsNavigator {
 
   Map<String, Map<String, Exam>> _getExamResultsByBenchmark() {
     return _getGroupedResults().map((benchmark, exams) {
-      final groupedByBenchmarkData = Map<String, Exam>();
-      exams.forEach((exam) {
+      final groupedByBenchmarkData = <String, Exam>{};
+      for (final exam in exams) {
         if (groupedByBenchmarkData.containsKey(kNoTitleKey)) {
           groupedByBenchmarkData[kNoTitleKey] =
               groupedByBenchmarkData[kNoTitleKey] + exam;
         } else {
           groupedByBenchmarkData[kNoTitleKey] = exam;
         }
-      });
+      }
       return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
   Map<String, Map<String, Exam>> _getExamResultsByYear() {
     return _getGroupedResults().map((benchmark, exams) {
-      final groupedByBenchmarkData = Map<String, Exam>();
-      exams.forEach((exam) {
+      final groupedByBenchmarkData = <String, Exam>{};
+      for (final exam in exams) {
         final year = exam.year.toString();
         if (groupedByBenchmarkData.containsKey(year)) {
           groupedByBenchmarkData[year] = groupedByBenchmarkData[year] + exam;
         } else {
           groupedByBenchmarkData[year] = exam;
         }
-      });
+      }
       return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
   Map<String, Map<String, Exam>> _getExamResultsByState(Lookups lookups) {
     return _getGroupedResults().map((benchmark, exams) {
-      final groupedByBenchmarkData = Map<String, Exam>();
-      exams.forEach((exam) {
+      final groupedByBenchmarkData = <String, Exam>{};
+      for (final exam in exams) {
         final district = exam.districtCode.from(lookups.districts);
         if (groupedByBenchmarkData.containsKey(district)) {
           groupedByBenchmarkData[district] =
@@ -166,7 +166,7 @@ class ExamsNavigator {
         } else {
           groupedByBenchmarkData[district] = exam;
         }
-      });
+      }
       return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }

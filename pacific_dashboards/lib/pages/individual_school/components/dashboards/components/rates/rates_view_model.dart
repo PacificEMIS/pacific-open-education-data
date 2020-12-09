@@ -10,11 +10,6 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:rxdart/rxdart.dart';
 
 class RatesViewModel extends BaseViewModel {
-  final Repository _repository;
-  final ShortSchool _school;
-  final Subject<RatesData> _dataSubject = BehaviorSubject();
-  List<SchoolFlow> _data;
-
   RatesViewModel(
     BuildContext ctx, {
     @required ShortSchool school,
@@ -24,6 +19,11 @@ class RatesViewModel extends BaseViewModel {
         _school = school,
         _repository = repository,
         super(ctx);
+
+  final Repository _repository;
+  final ShortSchool _school;
+  final Subject<RatesData> _dataSubject = BehaviorSubject();
+  List<SchoolFlow> _data;
 
   Stream<RatesData> get dataStream => _dataSubject.stream;
 
@@ -44,12 +44,12 @@ class RatesViewModel extends BaseViewModel {
     );
   }
 
-  Future<void>  _onFlowLoaded(List<SchoolFlow> flows) {
+  Future<void> _onFlowLoaded(List<SchoolFlow> flows) {
     _data = flows;
     return _parseData();
   }
 
-  Future<void>  _parseData() {
+  Future<void> _parseData() {
     if (_data == null) return Future.value();
     return launchHandled(() async {
       final lookups = await _repository.lookups.first;
@@ -72,10 +72,10 @@ class RatesViewModel extends BaseViewModel {
 }
 
 class _FlowsLookuped {
+  _FlowsLookuped(this.flows, this.lookups);
+
   List<SchoolFlow> flows;
   Lookups lookups;
-
-  _FlowsLookuped(this.flows, this.lookups);
 }
 
 LastYearRatesData _generateLastYearData(
@@ -118,15 +118,15 @@ List<YearByClassLevelRateData> _generateHistoricalData(
     return [];
   }
 
-  final flowsByYearOfEducation =
-      flowsLookuped.flows.groupBy((it) => it.yearOfEducation);
-  flowsByYearOfEducation.removeWhere((key, value) => key == null);
+  final flowsByYearOfEducation = flowsLookuped.flows
+      .groupBy((it) => it.yearOfEducation)
+        ..removeWhere((key, value) => key == null);
   final sortedYearOfEducationList = flowsByYearOfEducation.keys
       .chainSort((lv, rv) => lv.compareTo(rv))
       .toList();
 
-  final List<YearByClassLevelRateData> result = [];
-  for (var yearOfEducation in sortedYearOfEducationList) {
+  final result = <YearByClassLevelRateData>[];
+  for (final yearOfEducation in sortedYearOfEducationList) {
     result.add(YearByClassLevelRateData(
       classLevel: yearOfEducation.educationLevelCodeFrom(
         flowsLookuped.lookups,

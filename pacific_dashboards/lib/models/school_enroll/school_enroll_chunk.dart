@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 
 class SchoolEnrollChunk {
-  final List<SchoolEnroll> schoolData;
-  final List<SchoolEnroll> districtData;
-  final List<SchoolEnroll> nationalData;
-
   const SchoolEnrollChunk({
     @required this.schoolData,
     @required this.districtData,
     @required this.nationalData,
   });
 
+  final List<SchoolEnroll> schoolData;
+  final List<SchoolEnroll> districtData;
+  final List<SchoolEnroll> nationalData;
+
+  // ignore: prefer_constructors_over_static_methods
   static SchoolEnrollChunk fromNonCollapsed(SchoolEnrollChunk chunk) {
     return SchoolEnrollChunk(
       schoolData: _collapseEnrollByYearAndClassLevel(chunk.schoolData),
@@ -25,14 +26,14 @@ class SchoolEnrollChunk {
     List<SchoolEnroll> data,
   ) {
     final schoolDataGroupedByYear = data.groupBy((it) => it.year);
-    final Map<int, Map<String, List<SchoolEnroll>>>
-        schoolDataGroupedByYearGroupedByClassLevel = {};
+    final schoolDataGroupedByYearGroupedByClassLevel =
+        <int, Map<String, List<SchoolEnroll>>>{};
     schoolDataGroupedByYear.forEach((key, value) {
       final groupedByClassLevel = value.groupBy((it) => it.classLevel);
       schoolDataGroupedByYearGroupedByClassLevel[key] = groupedByClassLevel;
     });
 
-    final List<SchoolEnroll> collapsedData = [];
+    final collapsedData = <SchoolEnroll>[];
     schoolDataGroupedByYearGroupedByClassLevel
         .forEach((_, groupedByClassLevel) {
       groupedByClassLevel.forEach((_, listOfSameYearAndClassLevel) {

@@ -6,6 +6,26 @@ part 'hive_teacher.g.dart';
 
 @HiveType(typeId: 3)
 class HiveTeacher extends HiveObject with Expirable {
+  HiveTeacher();
+
+  HiveTeacher.from(Teacher teacher)
+      : surveyYear = teacher.surveyYear,
+        ageGroup = teacher.ageGroup,
+        districtCode = teacher.districtCode,
+        authorityCode = teacher.authorityCode,
+        authorityGovt = teacher.authorityGovt,
+        schoolTypeCode = teacher.schoolTypeCode,
+        sector = teacher.sector,
+        iSCEDSubClass = teacher.iSCEDSubClass,
+        numTeachersM = teacher.numTeachersM,
+        numTeachersF = teacher.numTeachersF,
+        certifiedM = teacher.certifiedM,
+        certifiedF = teacher.certifiedF,
+        qualifiedM = teacher.qualifiedM,
+        qualifiedF = teacher.qualifiedF,
+        certQualM = teacher.certQualM,
+        certQualF = teacher.certQualF;
+
   @HiveField(0)
   int surveyYear;
 
@@ -76,22 +96,4 @@ class HiveTeacher extends HiveObject with Expirable {
         certQualM: certQualM,
         certQualF: certQualF,
       );
-
-  static HiveTeacher from(Teacher teacher) => HiveTeacher()
-    ..surveyYear = teacher.surveyYear
-    ..ageGroup = teacher.ageGroup
-    ..districtCode = teacher.districtCode
-    ..authorityCode = teacher.authorityCode
-    ..authorityGovt = teacher.authorityGovt
-    ..schoolTypeCode = teacher.schoolTypeCode
-    ..sector = teacher.sector
-    ..iSCEDSubClass = teacher.iSCEDSubClass
-    ..numTeachersM = teacher.numTeachersM
-    ..numTeachersF = teacher.numTeachersF
-    ..certifiedM = teacher.certifiedM
-    ..certifiedF = teacher.certifiedF
-    ..qualifiedM = teacher.qualifiedM
-    ..qualifiedF = teacher.qualifiedF
-    ..certQualM = teacher.certQualM
-    ..certQualF = teacher.certQualF;
 }

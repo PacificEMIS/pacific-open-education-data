@@ -17,19 +17,16 @@ import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
 import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
 import 'package:pacific_dashboards/service_locator.dart';
 
-import 'models/short_school/short_school.dart';
-
 class ViewModelFactory {
+  ViewModelFactory._();
+
   static ViewModelFactory _instance;
 
+  // ignore: prefer_constructors_over_static_methods
   static ViewModelFactory get instance {
-    if (_instance == null) {
-      _instance = ViewModelFactory._();
-    }
+    _instance ??= ViewModelFactory._();
     return _instance;
   }
-
-  ViewModelFactory._();
 
   HomeViewModel createHomeViewModel(BuildContext ctx) {
     return HomeViewModel(
@@ -129,9 +126,9 @@ class ViewModelFactory {
   }
 
   IndividualAccreditationViewModel createIndividualAccreditationViewModel(
-      BuildContext ctx,
-      ShortSchool school,
-      ) {
+    BuildContext ctx,
+    ShortSchool school,
+  ) {
     return IndividualAccreditationViewModel(
       ctx,
       repository: serviceLocator.repository,

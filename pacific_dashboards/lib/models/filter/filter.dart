@@ -1,13 +1,20 @@
 import 'package:flutter/foundation.dart';
 
 class FilterItem {
+  const FilterItem(this.value, this.visibleName);
+
   final String visibleName;
   final Object value;
-
-  const FilterItem(this.value, this.visibleName);
 }
 
 class Filter {
+  Filter({
+    @required this.id,
+    @required this.title,
+    @required this.items,
+    @required this.selectedIndex,
+  });
+
   final int id;
 
   final String title;
@@ -15,13 +22,6 @@ class Filter {
   final List<FilterItem> items;
 
   int selectedIndex;
-
-  Filter({
-    @required this.id,
-    @required this.title,
-    @required this.items,
-    @required this.selectedIndex,
-  });
 
   bool get isDefault => items[selectedIndex].value == null;
 

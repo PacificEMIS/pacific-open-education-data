@@ -6,9 +6,6 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
 class HistoryComponent extends StatelessWidget {
-  final Stream<bool> _loadingStream;
-  final Stream<List<ExamReportsHistoryByYearData>> _dataStream;
-
   const HistoryComponent({
     Key key,
     @required Stream<bool> loadingStream,
@@ -18,6 +15,9 @@ class HistoryComponent extends StatelessWidget {
         _loadingStream = loadingStream,
         _dataStream = dataStream,
         super(key: key);
+
+  final Stream<bool> _loadingStream;
+  final Stream<List<ExamReportsHistoryByYearData>> _dataStream;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class HistoryComponent extends StatelessWidget {
           }
           final isLoading = snapshot.data;
           if (isLoading) {
-            return Container(
+            return SizedBox(
               height: 100,
               child: Center(
                 child: PlatformProgressIndicator(),
@@ -58,8 +58,6 @@ const Color _kFillColor = AppColors.kGrayLight;
 const double _kBorderWidth = 1.0;
 
 class _HistoryTable extends StatelessWidget {
-  final List<ExamReportsHistoryByYearData> _data;
-
   const _HistoryTable({
     Key key,
     @required List<ExamReportsHistoryByYearData> data,
@@ -67,11 +65,13 @@ class _HistoryTable extends StatelessWidget {
         _data = data,
         super(key: key);
 
+  final List<ExamReportsHistoryByYearData> _data;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         border: Border.all(
           width: _kBorderWidth,
           color: _kBorderColor,
@@ -95,7 +95,7 @@ class _HistoryTable extends StatelessWidget {
                 ...byYearData.rows.mapIndexed((index, item) {
                   return _DataRow(
                     data: item,
-                    haveBackground: index % 2 == 1,
+                    haveBackground: index.isOdd,
                   );
                 }),
               ],
@@ -107,9 +107,6 @@ class _HistoryTable extends StatelessWidget {
 }
 
 class _DataRow extends StatelessWidget {
-  final ExamReportsHistoryRowData _data;
-  final bool _haveBackground;
-
   const _DataRow({
     Key key,
     @required ExamReportsHistoryRowData data,
@@ -119,6 +116,9 @@ class _DataRow extends StatelessWidget {
         _data = data,
         _haveBackground = haveBackground,
         super(key: key);
+
+  final ExamReportsHistoryRowData _data;
+  final bool _haveBackground;
 
   @override
   Widget build(BuildContext context) {
@@ -162,12 +162,12 @@ class _HeaderRow extends StatelessWidget {
 }
 
 class _HeaderCell extends StatelessWidget {
-  final String _value;
-
   const _HeaderCell({Key key, @required String value})
       : assert(value != null),
         _value = value,
         super(key: key);
+
+  final String _value;
 
   @override
   Widget build(BuildContext context) {
@@ -182,12 +182,12 @@ class _HeaderCell extends StatelessWidget {
 }
 
 class _MeasureCell extends StatelessWidget {
-  final String _value;
-
   const _MeasureCell({Key key, @required String value})
       : assert(value != null),
         _value = value,
         super(key: key);
+
+  final String _value;
 
   @override
   Widget build(BuildContext context) {
@@ -200,12 +200,12 @@ class _MeasureCell extends StatelessWidget {
 }
 
 class _YearCell extends StatelessWidget {
-  final int _year;
-
   const _YearCell({Key key, @required int year})
       : assert(year != null),
         _year = year,
         super(key: key);
+
+  final int _year;
 
   @override
   Widget build(BuildContext context) {
@@ -225,9 +225,6 @@ class _YearCell extends StatelessWidget {
 }
 
 class _CandidatesCell extends StatelessWidget {
-  final int _count;
-  final int _percent;
-
   const _CandidatesCell({
     Key key,
     @required int count,
@@ -236,6 +233,9 @@ class _CandidatesCell extends StatelessWidget {
         _count = count,
         _percent = percent,
         super(key: key);
+
+  final int _count;
+  final int _percent;
 
   @override
   Widget build(BuildContext context) {
@@ -259,12 +259,6 @@ class _CandidatesCell extends StatelessWidget {
 }
 
 class _Row extends StatelessWidget {
-  final Widget _measure;
-  final Widget _male;
-  final Widget _female;
-  final Widget _total;
-  final bool _haveBackground;
-
   const _Row({
     Key key,
     @required Widget measure,
@@ -284,6 +278,12 @@ class _Row extends StatelessWidget {
         _haveBackground = haveBackground,
         super(key: key);
 
+  final Widget _measure;
+  final Widget _male;
+  final Widget _female;
+  final Widget _total;
+  final bool _haveBackground;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -296,17 +296,17 @@ class _Row extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(child: _measure),
           const SizedBox(width: 8),
-          Container(
+          SizedBox(
             width: 60,
             child: _male,
           ),
           const SizedBox(width: 8),
-          Container(
+          SizedBox(
             width: 60,
             child: _female,
           ),
           const SizedBox(width: 8),
-          Container(
+          SizedBox(
             width: 40,
             child: _total,
           ),

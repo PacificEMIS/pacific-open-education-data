@@ -6,6 +6,19 @@ part 'hive_school.g.dart';
 
 @HiveType(typeId: 2)
 class HiveSchool extends HiveObject with Expirable {
+  HiveSchool();
+
+  HiveSchool.from(School school)
+      : surveyYear = school.surveyYear,
+        classLevel = school.classLevel,
+        age = school.age,
+        districtCode = school.districtCode,
+        authorityCode = school.authorityCode,
+        authorityGovt = school.authorityGovt,
+        genderCode = school.genderCode,
+        schoolTypeCode = school.schoolTypeCode,
+        enrol = school.enrol;
+
   @HiveField(0)
   int surveyYear;
 
@@ -48,15 +61,4 @@ class HiveSchool extends HiveObject with Expirable {
         schoolTypeCode: schoolTypeCode,
         enrol: enrol,
       );
-
-  static HiveSchool from(School school) => HiveSchool()
-    ..surveyYear = school.surveyYear
-    ..classLevel = school.classLevel
-    ..age = school.age
-    ..districtCode = school.districtCode
-    ..authorityCode = school.authorityCode
-    ..authorityGovt = school.authorityGovt
-    ..genderCode = school.genderCode
-    ..schoolTypeCode = school.schoolTypeCode
-    ..enrol = school.enrol;
 }

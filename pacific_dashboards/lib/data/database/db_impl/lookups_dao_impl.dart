@@ -8,8 +8,10 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 class HiveLookupsDao extends LookupsDao {
   static const _kKey = 'lookups';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<HiveLookups> box)) async {
-    final Box<HiveLookups> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(
+    Future<T> Function(Box<HiveLookups> box) action,
+  ) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -20,7 +22,7 @@ class HiveLookupsDao extends LookupsDao {
     final storedLookups = await _withBox((box) async => box.get(emis.id));
 
     if (storedLookups == null) {
-      return Pair(false, null);
+      return const Pair(false, null);
     }
 
     return Pair(storedLookups.isExpired(), storedLookups.toLookups());

@@ -20,101 +20,101 @@ import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 const _kAccessTokenKey = '_kAccessTokenKey';
 
 class LocalDataSourceImpl extends LocalDataSource {
+  LocalDataSourceImpl(this._database, this._globalSettings);
+
   final Database _database;
   final GlobalSettings _globalSettings;
-
-  LocalDataSourceImpl(this._database, this._globalSettings);
 
   Future<Emis> get _emis => _globalSettings.currentEmis;
 
   @override
   Future<List<School>> fetchSchools() async =>
-      await _database.schools.get(await _emis);
+      _database.schools.get(await _emis);
 
   @override
   Future<Pair<bool, List<Teacher>>> fetchTeachers() async =>
-      await _database.teachers.get(await _emis);
+      _database.teachers.get(await _emis);
 
   @override
   Future<Pair<bool, List<Exam>>> fetchExams() async =>
-      await _database.exams.get(await _emis);
+      _database.exams.get(await _emis);
 
   @override
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async =>
-      await _database.accreditations.get(await _emis);
+      _database.accreditations.get(await _emis);
 
-  Future<WashChunk> fetchWashChunk() async =>
-      await _database.wash.get(await _emis);
+  @override
+  Future<WashChunk> fetchWashChunk() async => _database.wash.get(await _emis);
 
   @override
   Future<Pair<bool, Lookups>> fetchLookupsModel() async =>
-      await _database.lookups.get(await _emis);
+      _database.lookups.get(await _emis);
 
   @override
   Future<List<Budget>> fetchBudgets() async =>
-      await _database.budgets.get(await _emis);
+      _database.budgets.get(await _emis);
 
   @override
   Future<List<SpecialEducation>> fetchSpecialEducation() async =>
-      await _database.specialEducation.get(await _emis);
+      _database.specialEducation.get(await _emis);
 
   @override
   Future<void> saveSchools(List<School> schools) async =>
-      await _database.schools.save(schools, await _emis);
+      _database.schools.save(schools, await _emis);
 
   @override
   Future<void> saveTeachers(List<Teacher> teachers) async =>
-      await _database.teachers.save(teachers, await _emis);
+      _database.teachers.save(teachers, await _emis);
 
   @override
   Future<void> saveExams(List<Exam> exams) async =>
-      await _database.exams.save(exams, await _emis);
+      _database.exams.save(exams, await _emis);
 
   @override
   Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk) async =>
-      await _database.accreditations.save(chunk, await _emis);
+      _database.accreditations.save(chunk, await _emis);
 
   @override
   Future<void> saveWashChunk(WashChunk chunk) async =>
-      await _database.wash.save(chunk, await _emis);
+      _database.wash.save(chunk, await _emis);
 
   @override
   Future<void> saveLookupsModel(Lookups model) async =>
-      await _database.lookups.save(model, await _emis);
+      _database.lookups.save(model, await _emis);
 
   @override
   Future<void> saveBudgets(List<Budget> budgets) async =>
-      await _database.budgets.save(budgets, await _emis);
+      _database.budgets.save(budgets, await _emis);
 
   @override
   Future<void> saveSpecialEducation(
           List<SpecialEducation> specialEducation) async =>
-      await _database.specialEducation.save(specialEducation, await _emis);
+      _database.specialEducation.save(specialEducation, await _emis);
 
   @override
   Future<List<SchoolEnroll>> fetchIndividualSchoolEnroll(
           String schoolId) async =>
-      await _database.schoolEnroll.get(schoolId, await _emis);
+      _database.schoolEnroll.get(schoolId, await _emis);
 
   @override
   Future<void> saveIndividualSchoolEnroll(
     String schoolId,
     List<SchoolEnroll> enroll,
   ) async =>
-      await _database.schoolEnroll.save(schoolId, enroll, await _emis);
+      _database.schoolEnroll.save(schoolId, enroll, await _emis);
 
   @override
   Future<List<SchoolEnroll>> fetchIndividualDistrictEnroll(
     String districtCode,
   ) async =>
-      await _database.districtEnroll.get(districtCode, await _emis);
+      _database.districtEnroll.get(districtCode, await _emis);
 
   @override
   Future<void> saveIndividualDistrictEnroll(
     String districtCode,
     List<SchoolEnroll> enroll,
   ) async =>
-      await _database.districtEnroll.save(
+      _database.districtEnroll.save(
         districtCode,
         enroll,
         await _emis,
@@ -122,7 +122,7 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   @override
   Future<List<SchoolEnroll>> fetchIndividualNationEnroll() async =>
-      await _database.nationEnroll.get(await _emis);
+      _database.nationEnroll.get(await _emis);
 
   @override
   Future<void> saveIndividualNationEnroll(List<SchoolEnroll> enroll) async =>
@@ -138,7 +138,7 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   @override
   Future<List<ShortSchool>> fetchSchoolsList() async =>
-      await _database.shortSchool.get(await _emis);
+      _database.shortSchool.get(await _emis);
 
   @override
   Future<void> saveSchoolsList(List<ShortSchool> schools) async =>
@@ -146,25 +146,25 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   @override
   Future<List<SchoolFlow>> fetchSchoolFlow(String schoolId) async =>
-      await _database.schoolFlow.get(schoolId, await _emis);
+      _database.schoolFlow.get(schoolId, await _emis);
 
   @override
   Future<void> saveSchoolFlow(
           String schoolId, List<SchoolFlow> schoolFlows) async =>
-      await _database.schoolFlow.save(schoolId, schoolFlows, await _emis);
+      _database.schoolFlow.save(schoolId, schoolFlows, await _emis);
 
   @override
   Future<List<SchoolExamReport>> fetchSchoolExamReports(
     String schoolId,
   ) async =>
-      await _database.schoolExamReports.get(schoolId, await _emis);
+      _database.schoolExamReports.get(schoolId, await _emis);
 
   @override
   Future<void> saveSchoolExamReports(
     String schoolId,
     List<SchoolExamReport> reports,
   ) async =>
-      await _database.schoolExamReports.save(schoolId, reports, await _emis);
+      _database.schoolExamReports.save(schoolId, reports, await _emis);
 
   @override
   Future<IndividualSchool> fetchIndividualSchool(String schoolId) async =>

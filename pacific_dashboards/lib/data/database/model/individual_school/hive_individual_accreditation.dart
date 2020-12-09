@@ -5,6 +5,46 @@ part 'hive_individual_accreditation.g.dart';
 
 @HiveType(typeId: 16)
 class HiveIndividualAccreditation extends HiveObject {
+  HiveIndividualAccreditation();
+
+  HiveIndividualAccreditation.from(IndividualAccreditation accreditation)
+      : dateTime = accreditation.dateTime,
+        inspectionYear = accreditation.inspectionYear,
+        result = accreditation.result,
+        se_1 = accreditation.se_1,
+        se_1_1 = accreditation.se_1_1,
+        se_1_2 = accreditation.se_1_2,
+        se_1_3 = accreditation.se_1_3,
+        se_1_4 = accreditation.se_1_4,
+        se_2 = accreditation.se_2,
+        se_2_1 = accreditation.se_2_1,
+        se_2_2 = accreditation.se_2_2,
+        se_2_3 = accreditation.se_2_3,
+        se_2_4 = accreditation.se_2_4,
+        se_3 = accreditation.se_3,
+        se_3_1 = accreditation.se_3_1,
+        se_3_2 = accreditation.se_3_2,
+        se_3_3 = accreditation.se_3_3,
+        se_3_4 = accreditation.se_3_4,
+        se_4 = accreditation.se_4,
+        se_4_1 = accreditation.se_4_1,
+        se_4_2 = accreditation.se_4_2,
+        se_4_3 = accreditation.se_4_3,
+        se_4_4 = accreditation.se_4_4,
+        se_5 = accreditation.se_5,
+        se_5_1 = accreditation.se_5_1,
+        se_5_2 = accreditation.se_5_2,
+        se_5_3 = accreditation.se_5_3,
+        se_5_4 = accreditation.se_5_4,
+        se_6 = accreditation.se_6,
+        se_6_1 = accreditation.se_6_1,
+        se_6_2 = accreditation.se_6_2,
+        se_6_3 = accreditation.se_6_3,
+        se_6_4 = accreditation.se_6_4,
+        co_1 = accreditation.co_1,
+        co_2 = accreditation.co_2,
+        inspectedBy = accreditation.inspectedBy;
+
   @HiveField(0)
   DateTime dateTime;
 
@@ -152,45 +192,4 @@ class HiveIndividualAccreditation extends HiveObject {
         co_2: co_2,
         inspectedBy: inspectedBy,
       );
-
-  static HiveIndividualAccreditation from(
-    IndividualAccreditation accreditation,
-  ) =>
-      HiveIndividualAccreditation()
-        ..dateTime = accreditation.dateTime
-        ..inspectionYear = accreditation.inspectionYear
-        ..result = accreditation.result
-        ..se_1 = accreditation.se_1
-        ..se_1_1 = accreditation.se_1_1
-        ..se_1_2 = accreditation.se_1_2
-        ..se_1_3 = accreditation.se_1_3
-        ..se_1_4 = accreditation.se_1_4
-        ..se_2 = accreditation.se_2
-        ..se_2_1 = accreditation.se_2_1
-        ..se_2_2 = accreditation.se_2_2
-        ..se_2_3 = accreditation.se_2_3
-        ..se_2_4 = accreditation.se_2_4
-        ..se_3 = accreditation.se_3
-        ..se_3_1 = accreditation.se_3_1
-        ..se_3_2 = accreditation.se_3_2
-        ..se_3_3 = accreditation.se_3_3
-        ..se_3_4 = accreditation.se_3_4
-        ..se_4 = accreditation.se_4
-        ..se_4_1 = accreditation.se_4_1
-        ..se_4_2 = accreditation.se_4_2
-        ..se_4_3 = accreditation.se_4_3
-        ..se_4_4 = accreditation.se_4_4
-        ..se_5 = accreditation.se_5
-        ..se_5_1 = accreditation.se_5_1
-        ..se_5_2 = accreditation.se_5_2
-        ..se_5_3 = accreditation.se_5_3
-        ..se_5_4 = accreditation.se_5_4
-        ..se_6 = accreditation.se_6
-        ..se_6_1 = accreditation.se_6_1
-        ..se_6_2 = accreditation.se_6_2
-        ..se_6_3 = accreditation.se_6_3
-        ..se_6_4 = accreditation.se_6_4
-        ..co_1 = accreditation.co_1
-        ..co_2 = accreditation.co_2
-        ..inspectedBy = accreditation.inspectedBy;
 }

@@ -8,20 +8,18 @@ import 'package:pacific_dashboards/models/wash/toilets.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/models/wash/water.dart';
 
-typedef FilterApplier<T> = T Function(T a);
-
 class WashChunk {
-  final List<Wash> total;
-  final List<Toilets> toilets;
-  final List<Water> water;
-  final List<Question> questions;
-
   const WashChunk({
     @required this.total,
     @required this.toilets,
     @required this.water,
     @required this.questions,
   });
+
+  final List<Wash> total;
+  final List<Toilets> toilets;
+  final List<Water> water;
+  final List<Question> questions;
 }
 
 extension Filters on WashChunk {
@@ -33,9 +31,7 @@ extension Filters on WashChunk {
   static const _kGovtFilterId = 3;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
-    final allItems = List<BaseWash>.of(this.total)
-      ..addAll(this.toilets)
-      ..addAll(this.water);
+    final allItems = List<BaseWash>.of(total)..addAll(toilets)..addAll(water);
     return List.of([
       Filter(
         id: _kYearFilterId,
@@ -51,7 +47,7 @@ extension Filters on WashChunk {
         id: _kDistrictFilterId,
         title: 'filtersByState',
         items: [
-          FilterItem(null, 'filtersDisplayAllStates'),
+          const FilterItem(null, 'filtersDisplayAllStates'),
           ...allItems
               .uniques((it) => it.districtCode)
               .map((it) => FilterItem(it, it.from(lookups.districts))),
@@ -62,7 +58,7 @@ extension Filters on WashChunk {
         id: _kAuthorityFilterId,
         title: 'filtersByAuthority',
         items: [
-          FilterItem(null, 'filtersDisplayAllAuthority'),
+          const FilterItem(null, 'filtersDisplayAllAuthority'),
           ...allItems
               .uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
@@ -83,8 +79,8 @@ extension Filters on WashChunk {
       final authorityFilter =
           filters.firstWhere((it) => it.id == _kAuthorityFilterId);
 
-      FilterApplier<Iterable<BaseWash>> apply = (input) {
-        var sorted = input.where((it) {
+      Iterable<BaseWash> apply(Iterable<BaseWash> input) {
+        final sorted = input.where((it) {
           if (it.surveyYear != selectedYear) {
             return false;
           }
@@ -102,15 +98,15 @@ extension Filters on WashChunk {
           return true;
         }).toList();
         return sorted;
-      };
+      }
 
-      final filteredQuestions = questions;
-      filteredQuestions.removeWhere((it) => !it.isValidForApp);
+      final filteredQuestions = questions
+        ..removeWhere((it) => !it.isValidForApp);
 
       return WashChunk(
-        total: apply(this.total),
-        toilets: apply(this.toilets),
-        water: apply(this.water),
+        total: apply(total),
+        toilets: apply(toilets),
+        water: apply(water),
         questions: filteredQuestions,
       );
     });

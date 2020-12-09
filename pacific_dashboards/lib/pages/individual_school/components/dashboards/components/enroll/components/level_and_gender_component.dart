@@ -10,13 +10,13 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
 
 class LevelAndGenderComponent extends StatefulWidget {
-  final EnrollDataByGradeHistory data;
-
   const LevelAndGenderComponent({
     Key key,
     @required this.data,
   })  : assert(data != null),
         super(key: key);
+
+  final EnrollDataByGradeHistory data;
 
   @override
   _LevelAndGenderComponentState createState() =>
@@ -34,7 +34,9 @@ class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${'individualSchoolDashboardEnrollByGradeLevelGenderTitle'.localized(context)} ${widget.data.year}',
+            // ignore: lines_longer_than_80_chars
+            '${'individualSchoolDashboardEnrollByGradeLevelGenderTitle'.localized(context)} '
+            '${widget.data.year}',
             style: textTheme.headline4,
           ),
         ),
@@ -69,14 +71,14 @@ class _LevelAndGenderComponentState extends State<LevelAndGenderComponent> {
 enum _View { chart, table }
 
 class _Chart extends StatelessWidget {
-  final List<EnrollDataByGrade> _data;
-
   const _Chart({
     Key key,
     @required List<EnrollDataByGrade> data,
   })  : assert(data != null),
         _data = data,
         super(key: key);
+
+  final List<EnrollDataByGrade> _data;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +100,7 @@ class _Chart extends StatelessWidget {
                 animate: false,
                 barGroupingType: charts.BarGroupingType.stacked,
                 primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                  tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -126,7 +128,7 @@ class _Chart extends StatelessWidget {
               color: AppColors.kBlue,
               value: 'labelMale'.localized(context),
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
@@ -158,16 +160,16 @@ class _Chart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'maledata',
           data: maleData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'femaledata',
           data: femaleData,
         ),

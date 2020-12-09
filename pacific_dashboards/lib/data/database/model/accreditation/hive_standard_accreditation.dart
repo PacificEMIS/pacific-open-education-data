@@ -5,6 +5,19 @@ part 'hive_standard_accreditation.g.dart';
 
 @HiveType(typeId: 7)
 class HiveStandardAccreditation extends HiveObject {
+  HiveStandardAccreditation();
+
+  HiveStandardAccreditation.from(StandardAccreditation accreditation)
+      : surveyYear = accreditation.surveyYear,
+        districtCode = accreditation.districtCode,
+        authorityCode = accreditation.authorityCode,
+        authorityGovtCode = accreditation.authorityGovtCode,
+        schoolTypeCode = accreditation.schoolTypeCode,
+        standard = accreditation.standard,
+        result = accreditation.result,
+        total = accreditation.total,
+        numInYear = accreditation.numThisYear;
+
   @HiveField(0)
   int surveyYear;
 
@@ -43,16 +56,4 @@ class HiveStandardAccreditation extends HiveObject {
         total: total,
         numThisYear: numInYear,
       );
-
-  static HiveStandardAccreditation from(StandardAccreditation accreditation) =>
-      HiveStandardAccreditation()
-        ..surveyYear = accreditation.surveyYear
-        ..districtCode = accreditation.districtCode
-        ..authorityCode = accreditation.authorityCode
-        ..authorityGovtCode = accreditation.authorityGovtCode
-        ..schoolTypeCode = accreditation.schoolTypeCode
-        ..standard = accreditation.standard
-        ..result = accreditation.result
-        ..total = accreditation.total
-        ..numInYear = accreditation.numThisYear;
 }

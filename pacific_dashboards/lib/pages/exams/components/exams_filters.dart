@@ -7,9 +7,6 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
 class ExamsFiltersWidget extends StatelessWidget {
-  final double _bottomInset;
-  final ExamsViewModel _viewModel;
-
   const ExamsFiltersWidget({
     Key key,
     @required double bottomInset,
@@ -19,6 +16,9 @@ class ExamsFiltersWidget extends StatelessWidget {
         _bottomInset = bottomInset,
         _viewModel = viewModel,
         super(key: key);
+
+  final double _bottomInset;
+  final ExamsViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -102,14 +102,14 @@ class _BottomMenuState extends State<_BottomMenu>
 
   void _configureAnimations() {
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       vsync: this,
     );
 
     _insetAnimation = Tween<double>(begin: widget._bottomInset, end: 0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Interval(0, 0.5),
+        curve: const Interval(0, 0.5),
       ),
     )..addStatusListener((status) {
         if (status == AnimationStatus.dismissed) {
@@ -166,7 +166,7 @@ class _BottomMenuState extends State<_BottomMenu>
           Container(
             width: buttonSize,
             height: buttonSize,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
@@ -179,10 +179,10 @@ class _BottomMenuState extends State<_BottomMenu>
           ),
           Container(
             margin: const EdgeInsets.only(top: 18),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(
-                top: const Radius.circular(8),
+                top: Radius.circular(8),
               ),
               boxShadow: [
                 BoxShadow(
@@ -192,12 +192,12 @@ class _BottomMenuState extends State<_BottomMenu>
               ],
             ),
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (widget._children.length > 0) widget._children[0],
+                  if (widget._children.isNotEmpty) widget._children[0],
                   if (widget._children.length > 1)
                     AnimatedBuilder(
                       animation: _insetAnimation,
@@ -210,8 +210,7 @@ class _BottomMenuState extends State<_BottomMenu>
                     ),
                   ...widget._children.sublist(1),
                   if (widget._bottomInset > 0)
-                    Container(
-                      width: double.infinity,
+                    SizedBox(
                       height: widget._bottomInset,
                     ),
                 ],
@@ -226,7 +225,7 @@ class _BottomMenuState extends State<_BottomMenu>
                 child: child,
               );
             },
-            child: Container(
+            child: SizedBox(
               width: buttonSize,
               height: buttonSize,
               child: RawMaterialButton(

@@ -6,13 +6,13 @@ part 'emises_config.g.dart';
 
 @JsonSerializable()
 class EmisesConfig {
-  @JsonKey(name: 'emises')
-  final List<EmisConfig> emises;
-
   const EmisesConfig(this.emises);
 
   factory EmisesConfig.fromJson(Map<String, dynamic> json) =>
       _$EmisesConfigFromJson(json);
+
+  @JsonKey(name: 'emises')
+  final List<EmisConfig> emises;
 
   Map<String, dynamic> toJson() => _$EmisesConfigToJson(this);
 

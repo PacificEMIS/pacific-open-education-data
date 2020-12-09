@@ -12,22 +12,22 @@ import 'package:pacific_dashboards/view_model_factory.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
 class IndividualSchoolPageArgs {
-  final ShortSchool school;
-
   const IndividualSchoolPageArgs({
     @required this.school,
   });
+
+  final ShortSchool school;
 }
 
 class IndividualSchoolPage extends MvvmStatefulWidget {
-  static const kRoute = '/IndividualSchoolPage';
-
   IndividualSchoolPage({Key key})
       : super(
           key: key,
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createIndividualSchoolViewModel(ctx),
         );
+
+  static const kRoute = '/IndividualSchoolPage';
 
   @override
   _IndividualSchoolPageState createState() => _IndividualSchoolPageState();
@@ -68,7 +68,7 @@ class _IndividualSchoolPageState
             ),
             Expanded(
               child: TabBarView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   DashboardComponent(school: args.school),
                   IndividualsExamsComponent(school: args.school),

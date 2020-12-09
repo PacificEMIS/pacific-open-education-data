@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
-
-import '../budget_data.dart';
+import 'package:pacific_dashboards/pages/budgets/budget_data.dart';
 
 final _sLongNumberFormat = NumberFormat('###,###,###', 'en');
 
@@ -16,9 +15,6 @@ enum SpendingComponentType {
 }
 
 class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
-  final List<T> _data;
-  final SpendingComponentType _type;
-
   const EnrollDataByGnpAndGovernmentSpendingComponent({
     Key key,
     @required SpendingComponentType type,
@@ -28,6 +24,9 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
         _data = data,
         _type = type,
         super(key: key);
+
+  final List<T> _data;
+  final SpendingComponentType _type;
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +75,8 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
       switch (_type) {
         case SpendingComponentType.gnp:
         case SpendingComponentType.govt:
-          final Map<String, DataByGnpAndGovernmentSpending> result = {};
-          for (var it in _data) {
+          final result = <String, DataByGnpAndGovernmentSpending>{};
+          for (final it in _data) {
             final dataByGnpAndGovernmentSpending =
                 it as DataByGnpAndGovernmentSpending;
             result[dataByGnpAndGovernmentSpending.year.toString()] =
@@ -95,8 +94,8 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
         case SpendingComponentType.sectorPrimary:
         case SpendingComponentType.sectorSecondary:
         case SpendingComponentType.sectorsTotal:
-          final Map<String, DataSpendingBySector> result = {};
-          for (var it in _data) {
+          final result = <String, DataSpendingBySector>{};
+          for (final it in _data) {
             final dataBySectorSpending = it as DataSpendingBySector;
             result[dataBySectorSpending.districtCode.toString()] =
                 DataSpendingBySector(
@@ -119,8 +118,6 @@ class EnrollDataByGnpAndGovernmentSpendingComponent<T> extends StatelessWidget {
 }
 
 class _GnpMultiTable extends StatelessWidget {
-  final Map<String, DataByGnpAndGovernmentSpending> _data;
-
   const _GnpMultiTable({
     Key key,
     @required Map<String, DataByGnpAndGovernmentSpending> data,
@@ -128,17 +125,19 @@ class _GnpMultiTable extends StatelessWidget {
         _data = data,
         super(key: key);
 
+  final Map<String, DataByGnpAndGovernmentSpending> _data;
+
   @override
   Widget build(BuildContext context) {
     return MultiTableWidget(
       data: _data,
-      columnNames: [
+      columnNames: const [
         'budgetsYearColumn',
         'budgetsGnpColumn',
         'budgetsEdExpenseColumn',
         'budgetsEdGNPPercentageColumn',
       ],
-      columnFlex: [2, 3, 3, 3],
+      columnFlex: const [2, 3, 3, 3],
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
@@ -157,8 +156,6 @@ class _GnpMultiTable extends StatelessWidget {
 }
 
 class _GovernmentMultiTable extends StatelessWidget {
-  final Map<String, DataByGnpAndGovernmentSpending> _data;
-
   const _GovernmentMultiTable({
     Key key,
     @required Map<String, DataByGnpAndGovernmentSpending> data,
@@ -166,17 +163,19 @@ class _GovernmentMultiTable extends StatelessWidget {
         _data = data,
         super(key: key);
 
+  final Map<String, DataByGnpAndGovernmentSpending> _data;
+
   @override
   Widget build(BuildContext context) {
     return MultiTableWidget(
       data: _data,
-      columnNames: [
+      columnNames: const [
         'budgetsYearColumn',
         'budgetsGovtExpenseColumn',
         'budgetsEdExpenseColumn',
         'budgetsEdGovtPercentageColumn',
       ],
-      columnFlex: [2, 3, 3, 3],
+      columnFlex: const [2, 3, 3, 3],
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
@@ -195,10 +194,6 @@ class _GovernmentMultiTable extends StatelessWidget {
 }
 
 class _SectorMultiTable extends StatelessWidget {
-  final Map<String, DataSpendingBySector> _data;
-  final double Function(DataSpendingBySector) _actualExtractor;
-  final double Function(DataSpendingBySector) _budgetedExtractor;
-
   const _SectorMultiTable({
     Key key,
     @required Map<String, DataSpendingBySector> data,
@@ -212,16 +207,20 @@ class _SectorMultiTable extends StatelessWidget {
         _budgetedExtractor = budgetedExtractor,
         super(key: key);
 
+  final Map<String, DataSpendingBySector> _data;
+  final double Function(DataSpendingBySector) _actualExtractor;
+  final double Function(DataSpendingBySector) _budgetedExtractor;
+
   @override
   Widget build(BuildContext context) {
     return MultiTableWidget(
       data: _data,
-      columnNames: [
+      columnNames: const [
         'budgetsDistrictColumn',
         'budgetsActualColumn',
         'budgetsBudgetedColumn',
       ],
-      columnFlex: [4, 3, 3],
+      columnFlex: const [4, 3, 3],
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:

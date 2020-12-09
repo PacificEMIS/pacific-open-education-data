@@ -7,8 +7,8 @@ import 'package:pacific_dashboards/models/special_education/special_education.da
 class HiveSpecialEducationDao extends SpecialEducationDao {
   static const _kKey = 'HiveSpecialEducationDao';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -21,8 +21,8 @@ class HiveSpecialEducationDao extends SpecialEducationDao {
     if (storedSpecialEducation == null) {
       return null;
     }
-    List<SpecialEducation> storedItems = [];
-    for (var value in storedSpecialEducation) {
+    final storedItems = <SpecialEducation>[];
+    for (final value in storedSpecialEducation) {
       final hiveSpecialEducation = value as HiveSpecialEducation;
       storedItems.add(hiveSpecialEducation.toSpecialEducation());
     }
@@ -31,9 +31,8 @@ class HiveSpecialEducationDao extends SpecialEducationDao {
 
   @override
   Future<void> save(List<SpecialEducation> specialEducation, Emis emis) async {
-    final hiveSpecialEducation = specialEducation
-        .map((it) => HiveSpecialEducation.from(it))
-        .toList();
+    final hiveSpecialEducation =
+        specialEducation.map((it) => HiveSpecialEducation.from(it)).toList();
 
     await _withBox((box) async => box.put(emis.id, hiveSpecialEducation));
   }

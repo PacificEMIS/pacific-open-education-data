@@ -4,6 +4,11 @@ part 'school_enroll.g.dart';
 
 @JsonSerializable()
 class SchoolEnroll {
+  SchoolEnroll();
+
+  factory SchoolEnroll.fromJson(Map<String, dynamic> json) =>
+      _$SchoolEnrollFromJson(json);
+
   @JsonKey(name: 'SurveyYear')
   int year;
 
@@ -18,11 +23,6 @@ class SchoolEnroll {
 
   @JsonKey(name: 'Enrol', defaultValue: 0)
   int totalEnroll;
-
-  SchoolEnroll();
-
-  factory SchoolEnroll.fromJson(Map<String, dynamic> json) =>
-      _$SchoolEnrollFromJson(json);
 
   Map<String, dynamic> toJson() => _$SchoolEnrollToJson(this);
 

@@ -5,6 +5,14 @@ part 'hive_short_school.g.dart';
 
 @HiveType(typeId: 9)
 class HiveShortSchool {
+  HiveShortSchool();
+
+  HiveShortSchool.from(ShortSchool school)
+      : id = school.id,
+        name = school.name,
+        districtCode = school.districtCode,
+        districtName = school.districtName;
+
   @HiveField(0)
   String id;
 
@@ -23,10 +31,4 @@ class HiveShortSchool {
         districtCode: districtCode,
         districtName: districtName,
       );
-
-  static HiveShortSchool from(ShortSchool school) => HiveShortSchool()
-    ..id = school.id
-    ..name = school.name
-    ..districtCode = school.districtCode
-    ..districtName = school.districtName;
 }

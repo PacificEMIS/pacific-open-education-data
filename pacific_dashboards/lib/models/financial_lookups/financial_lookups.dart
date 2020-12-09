@@ -1,19 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'financial_lookup.dart';
+import 'package:pacific_dashboards/models/financial_lookups/financial_lookup.dart';
 
 part 'financial_lookups.g.dart';
 
 @JsonSerializable()
 class FinancialLookups {
-  @JsonKey(name: 'costCentres')
-  final List<FinancialLookup> costCentres;
-
-  @JsonKey(name: 'fundingSources')
-  final List<FinancialLookup> fundingSources;
-
-  @JsonKey(name: 'fundingSourceGroups')
-  final List<FinancialLookup> fundingSourceGroups;
-
   const FinancialLookups({
     this.costCentres,
     this.fundingSources,
@@ -22,6 +13,15 @@ class FinancialLookups {
 
   factory FinancialLookups.fromJson(Map<String, dynamic> json) =>
       _$FinancialLookupsFromJson(json);
+
+  @JsonKey(name: 'costCentres')
+  final List<FinancialLookup> costCentres;
+
+  @JsonKey(name: 'fundingSources')
+  final List<FinancialLookup> fundingSources;
+
+  @JsonKey(name: 'fundingSourceGroups')
+  final List<FinancialLookup> fundingSourceGroups;
 
   Map<String, dynamic> toJson() => _$FinancialLookupsToJson(this);
 

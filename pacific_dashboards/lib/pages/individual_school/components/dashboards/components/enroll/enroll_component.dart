@@ -10,8 +10,6 @@ import 'package:pacific_dashboards/pages/individual_school/components/dashboards
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class EnrollComponent extends MvvmStatefulWidget {
-  final ShortSchool school;
-
   EnrollComponent({
     Key key,
     @required this.school,
@@ -24,6 +22,7 @@ class EnrollComponent extends MvvmStatefulWidget {
             school,
           ),
         );
+  final ShortSchool school;
 
   @override
   _EnrollComponentState createState() => _EnrollComponentState();
@@ -57,14 +56,14 @@ class _EnrollComponentState
                       data: snapshot.data.gradeDataOnLastYear,
                     ),
                     LevelAndGenderHistoryComponent(
-                      year:snapshot.data.gradeDataOnLastYear.year,
+                      year: snapshot.data.gradeDataOnLastYear.year,
                       data: snapshot.data.gradeDataHistory,
                     ),
                     GenderHistoryComponent(
-                        year:snapshot.data.gradeDataOnLastYear.year,
+                        year: snapshot.data.gradeDataOnLastYear.year,
                         data: snapshot.data.genderDataHistory),
                     FemalePartComponent(
-                      year:snapshot.data.gradeDataOnLastYear.year,
+                      year: snapshot.data.gradeDataOnLastYear.year,
                       data: snapshot.data,
                       schoolId: widget.school.id,
                       district: widget.school.districtName,

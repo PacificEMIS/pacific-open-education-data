@@ -14,13 +14,13 @@ enum AccreditationLevel { level1, level2, level3, level4, undefined }
 extension AccreditationExt on Accreditation {
   AccreditationLevel get level {
     switch (result) {
-      case "Level 1":
+      case 'Level 1':
         return AccreditationLevel.level1;
-      case "Level 2":
+      case 'Level 2':
         return AccreditationLevel.level2;
-      case "Level 3":
+      case 'Level 3':
         return AccreditationLevel.level3;
-      case "Level 4":
+      case 'Level 4':
         return AccreditationLevel.level4;
       default:
         return AccreditationLevel.undefined;

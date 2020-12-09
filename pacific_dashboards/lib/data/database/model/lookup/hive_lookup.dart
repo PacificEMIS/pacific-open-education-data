@@ -5,6 +5,12 @@ part 'hive_lookup.g.dart';
 
 @HiveType(typeId: 1)
 class HiveLookup {
+  HiveLookup();
+
+  HiveLookup.from(Lookup lookup)
+      : code = lookup.code,
+        name = lookup.name;
+
   @HiveField(0)
   String code;
 
@@ -15,10 +21,4 @@ class HiveLookup {
         name: name,
         code: code,
       );
-
-  static HiveLookup from(Lookup lookup) {
-    return HiveLookup()
-      ..code = lookup.code
-      ..name = lookup.name;
-  }
 }

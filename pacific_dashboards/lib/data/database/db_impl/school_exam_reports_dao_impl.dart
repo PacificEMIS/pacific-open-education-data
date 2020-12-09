@@ -7,8 +7,8 @@ import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.
 class HiveSchoolExamsReportDao extends SchoolExamReportsDao {
   static const _kKey = 'HiveSchoolExamsReportDao';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<List> box)) async {
-    final Box<List> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(Future<T> Function(Box<List> box) action) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -25,8 +25,8 @@ class HiveSchoolExamsReportDao extends SchoolExamReportsDao {
     if (storedReports == null) {
       return null;
     }
-    final List<SchoolExamReport> storedItems = [];
-    for (var value in storedReports) {
+    final storedItems = <SchoolExamReport>[];
+    for (final value in storedReports) {
       final hiveSchoolExamReport = value as HiveSchoolExamReport;
       storedItems.add(hiveSchoolExamReport.toSchoolExamReport());
     }
@@ -41,7 +41,6 @@ class HiveSchoolExamsReportDao extends SchoolExamReportsDao {
   ) async {
     final hiveSchoolExamReports =
         reports.map((it) => HiveSchoolExamReport.from(it)).toList();
-
     await _withBox((box) async => box.put(
           _generateKey(schoolId, emis),
           hiveSchoolExamReports,

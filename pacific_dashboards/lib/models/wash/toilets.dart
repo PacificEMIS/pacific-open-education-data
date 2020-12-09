@@ -2,17 +2,40 @@ import 'package:arch/arch.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-
-import 'base_wash.dart';
+import 'package:pacific_dashboards/models/wash/base_wash.dart';
 
 part 'toilets.g.dart';
 
 @JsonSerializable()
 class Toilets implements BaseWash {
+  const Toilets(
+      this.schNo,
+      this.surveyYear,
+      this.inspID,
+      this.inspectionYear,
+      this.districtCode,
+      this.schoolTypeCode,
+      this.authorityCode,
+      this.authorityGovt,
+      this.totalF,
+      this.usableF,
+      this.enrolF,
+      this.totalC,
+      this.usableC,
+      this.total,
+      this.usable,
+      this.enrol,
+      this.enrolM,
+      this.usableM,
+      this.totalM);
+
+  factory Toilets.fromJson(Map<String, dynamic> json) =>
+      _$ToiletsFromJson(json);
+
   @JsonKey(name: 'schNo') //Year
   final String schNo;
   @override
-  @JsonKey(name: "SurveyYear") //DistrictCode
+  @JsonKey(name: 'SurveyYear') //DistrictCode
   final int surveyYear;
 
   @JsonKey(name: 'inspID', defaultValue: 0) //GNP
@@ -67,30 +90,6 @@ class Toilets implements BaseWash {
   @JsonKey(name: 'TotalM', defaultValue: 0)
   final int totalM;
 
-  const Toilets(
-      this.schNo,
-      this.surveyYear,
-      this.inspID,
-      this.inspectionYear,
-      this.districtCode,
-      this.schoolTypeCode,
-      this.authorityCode,
-      this.authorityGovt,
-      this.totalF,
-      this.usableF,
-      this.enrolF,
-      this.totalC,
-      this.usableC,
-      this.total,
-      this.usable,
-      this.enrol,
-      this.enrolM,
-      this.usableM,
-      this.totalM);
-
-  factory Toilets.fromJson(Map<String, dynamic> json) =>
-      _$ToiletsFromJson(json);
-
   Map<String, dynamic> toJson() => _$ToiletsToJson(this);
 }
 
@@ -102,8 +101,7 @@ extension Filters on List<Toilets> {
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
-        items: this
-            .uniques((it) => it.surveyYear)
+        items: uniques((it) => it.surveyYear)
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -116,7 +114,7 @@ extension Filters on List<Toilets> {
     return Future(() {
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
-      return this.where((it) {
+      return where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }

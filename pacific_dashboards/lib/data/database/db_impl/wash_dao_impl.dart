@@ -7,8 +7,10 @@ import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 class HiveWashDao extends WashDao {
   static const _kKey = 'HiveWashDao';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<HiveWashChunk> box)) async {
-    final Box<HiveWashChunk> box = await Hive.openBox(_kKey);
+  static Future<T> _withBox<T>(
+    Future<T> Function(Box<HiveWashChunk> box) action,
+  ) async {
+    final box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
     return result;
@@ -17,7 +19,7 @@ class HiveWashDao extends WashDao {
   @override
   Future<WashChunk> get(Emis emis) async {
     final storedChunk = await _withBox((box) async => box.get(emis.id));
-    return storedChunk?.toWashChunk() ?? null;
+    return storedChunk?.toWashChunk();
   }
 
   @override

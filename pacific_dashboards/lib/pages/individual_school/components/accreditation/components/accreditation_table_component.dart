@@ -12,8 +12,6 @@ const double _kCellHeight = 40.0;
 const List<int> _kCellFlexes = [45, 25, 20, 20, 20, 20];
 
 class AccreditationTableComponent extends StatelessWidget {
-  final List<AccreditationByStandard> _data;
-
   const AccreditationTableComponent({
     Key key,
     @required List<AccreditationByStandard> data,
@@ -21,11 +19,13 @@ class AccreditationTableComponent extends StatelessWidget {
         _data = data,
         super(key: key);
 
+  final List<AccreditationByStandard> _data;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         border: Border.all(
           width: _kBorderWidth,
           color: _kBorderColor,
@@ -53,9 +53,6 @@ class AccreditationTableComponent extends StatelessWidget {
 }
 
 class _StandardRow extends StatelessWidget {
-  final AccreditationByStandard _data;
-  final int _index;
-
   const _StandardRow({
     Key key,
     @required AccreditationByStandard data,
@@ -66,11 +63,14 @@ class _StandardRow extends StatelessWidget {
         _index = index,
         super(key: key);
 
+  final AccreditationByStandard _data;
+  final int _index;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: _index % 2 == 0 ? Colors.white : AppColors.kGrayLight,
+        color: _index.isEven ? Colors.white : AppColors.kGrayLight,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -185,10 +185,6 @@ class _HeaderRow extends StatelessWidget {
 }
 
 class _Cell extends StatelessWidget {
-  final Widget _child;
-  final int _flex;
-  final Color _color;
-
   const _Cell({
     Key key,
     @required Widget child,
@@ -200,6 +196,10 @@ class _Cell extends StatelessWidget {
         _flex = flex,
         _color = color,
         super(key: key);
+
+  final Widget _child;
+  final int _flex;
+  final Color _color;
 
   @override
   Widget build(BuildContext context) {
@@ -217,9 +217,6 @@ class _Cell extends StatelessWidget {
 }
 
 class _StandardText extends StatelessWidget {
-  final String _title;
-  final TextStyle _textStyle;
-
   const _StandardText({
     Key key,
     @required String title,
@@ -228,6 +225,9 @@ class _StandardText extends StatelessWidget {
         _title = title ?? '-',
         _textStyle = textStyle,
         super(key: key);
+
+  final String _title;
+  final TextStyle _textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -249,13 +249,13 @@ class _StandardText extends StatelessWidget {
 }
 
 class _CenteredText extends StatelessWidget {
-  final String _title;
-
   const _CenteredText({
     Key key,
     @required String title,
   })  : _title = title ?? '-',
         super(key: key);
+
+  final String _title;
 
   @override
   Widget build(BuildContext context) {
@@ -272,9 +272,6 @@ class _CenteredText extends StatelessWidget {
 }
 
 class _CriteriaText extends StatelessWidget {
-  final String _title;
-  final String _tooltip;
-
   const _CriteriaText({
     Key key,
     @required String title,
@@ -283,13 +280,16 @@ class _CriteriaText extends StatelessWidget {
         _tooltip = tooltip,
         super(key: key);
 
+  final String _title;
+  final String _tooltip;
+
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: _tooltip,
       preferBelow: false,
       textStyle: Theme.of(context).textTheme.individualAccreditationLevel,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
         boxShadow: [
@@ -311,7 +311,7 @@ class _CriteriaText extends StatelessWidget {
             _title,
             style: Theme.of(context).textTheme.individualAccreditationLevel,
           ),
-          SizedBox(width: 2),
+          const SizedBox(width: 2),
           Image.asset(
             'images/ic_hint.png',
             width: 14,

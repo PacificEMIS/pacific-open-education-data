@@ -9,11 +9,6 @@ import 'package:pacific_dashboards/res/themes.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class FemalePartComponent extends StatefulWidget {
-  final EnrollData data;
-  final int year;
-  final String schoolId;
-  final String district;
-
   const FemalePartComponent({
     Key key,
     @required this.year,
@@ -24,6 +19,11 @@ class FemalePartComponent extends StatefulWidget {
         assert(schoolId != null),
         assert(district != null),
         super(key: key);
+
+  final EnrollData data;
+  final int year;
+  final String schoolId;
+  final String district;
 
   @override
   _FemalePartComponentState createState() => _FemalePartComponentState();
@@ -40,7 +40,9 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '${'individualSchoolDashboardEnrollFemalePartTitle'.localized(context)} ${widget.year}',
+            // ignore: lines_longer_than_80_chars
+            '${'individualSchoolDashboardEnrollFemalePartTitle'.localized(context)} '
+            '${widget.year}',
             style: textTheme.headline4,
           ),
         ),
@@ -50,6 +52,7 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
             switch (tab) {
               case _Tab.detailed:
                 return '${widget.data.femalePartOnLastYear.year}'
+                    // ignore: lines_longer_than_80_chars
                     '${'individualSchoolDashboardEnrollFemalePartDetailed'.localized(context)}';
               case _Tab.history:
                 return 'individualSchoolDashboardEnrollFemalePartHistory'
@@ -83,10 +86,6 @@ class _FemalePartComponentState extends State<FemalePartComponent> {
 enum _Tab { detailed, history }
 
 class _DetailedChart extends StatelessWidget {
-  final List<EnrollDataByFemalePart> _data;
-  final String schoolId;
-  final String district;
-
   const _DetailedChart({
     Key key,
     @required List<EnrollDataByFemalePart> data,
@@ -97,6 +96,10 @@ class _DetailedChart extends StatelessWidget {
         assert(district != null),
         _data = data,
         super(key: key);
+
+  final List<EnrollDataByFemalePart> _data;
+  final String schoolId;
+  final String district;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +121,7 @@ class _DetailedChart extends StatelessWidget {
                 animate: false,
                 barGroupingType: charts.BarGroupingType.grouped,
                 primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                  tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -146,14 +149,14 @@ class _DetailedChart extends StatelessWidget {
               color: AppColors.kPeacockBlue,
               value: schoolId,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kGreen,
               value: district,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
@@ -194,23 +197,23 @@ class _DetailedChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'school',
           data: schoolData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'district',
           data: districtData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'nation',
           data: nationData,
         ),
@@ -220,10 +223,6 @@ class _DetailedChart extends StatelessWidget {
 }
 
 class _HistoryChart extends StatelessWidget {
-  final List<EnrollDataByFemalePartHistory> _data;
-  final String schoolId;
-  final String district;
-
   const _HistoryChart({
     Key key,
     @required List<EnrollDataByFemalePartHistory> data,
@@ -234,6 +233,10 @@ class _HistoryChart extends StatelessWidget {
         assert(district != null),
         _data = data,
         super(key: key);
+
+  final List<EnrollDataByFemalePartHistory> _data;
+  final String schoolId;
+  final String district;
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +258,7 @@ class _HistoryChart extends StatelessWidget {
                 animate: false,
                 defaultRenderer: charts.LineRendererConfig(),
                 primaryMeasureAxis: charts.NumericAxisSpec(
-                  tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                  tickProviderSpec: const charts.BasicNumericTickProviderSpec(
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -283,14 +286,14 @@ class _HistoryChart extends StatelessWidget {
               color: AppColors.kPeacockBlue,
               value: schoolId,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
               color: AppColors.kGreen,
               value: district,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             ChartLegendItem(
@@ -331,29 +334,26 @@ class _HistoryChart extends StatelessWidget {
 
       return [
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'school',
           data: schoolData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'district',
           data: districtData,
         ),
         charts.Series(
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
-          areaColorFn: (ChartData chartData, _) =>
-              chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
+          areaColorFn: (chartData, _) => chartData.color.chartsColor,
           id: 'nation',
           data: nationData,
         ),

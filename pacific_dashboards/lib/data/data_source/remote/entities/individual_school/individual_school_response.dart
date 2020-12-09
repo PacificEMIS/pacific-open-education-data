@@ -6,10 +6,6 @@ part 'individual_school_response.g.dart';
 
 @JsonSerializable()
 class IndividualSchoolResponse {
-
-  @JsonKey(name: 'ResultSet')
-  final IndividualSchool school;
-
   const IndividualSchoolResponse({
     @required this.school,
   });
@@ -17,6 +13,8 @@ class IndividualSchoolResponse {
   factory IndividualSchoolResponse.fromJson(Map<String, dynamic> json) =>
       _$IndividualSchoolResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$IndividualSchoolResponseToJson(this);
+  @JsonKey(name: 'ResultSet')
+  final IndividualSchool school;
 
+  Map<String, dynamic> toJson() => _$IndividualSchoolResponseToJson(this);
 }

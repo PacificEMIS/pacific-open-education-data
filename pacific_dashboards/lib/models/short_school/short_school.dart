@@ -5,6 +5,16 @@ part 'short_school.g.dart';
 
 @JsonSerializable()
 class ShortSchool {
+  const ShortSchool({
+    @required this.id,
+    @required this.name,
+    @required this.districtCode,
+    @required this.districtName,
+  });
+
+  factory ShortSchool.fromJson(Map<String, dynamic> json) =>
+      _$ShortSchoolFromJson(json);
+
   @JsonKey(name: 'schNo')
   final String id;
 
@@ -16,16 +26,6 @@ class ShortSchool {
 
   @JsonKey(name: 'dName')
   final String districtName;
-
-  const ShortSchool({
-    @required this.id,
-    @required this.name,
-    @required this.districtCode,
-    @required this.districtName,
-  });
-
-  factory ShortSchool.fromJson(Map<String, dynamic> json) =>
-      _$ShortSchoolFromJson(json);
 
   Map<String, dynamic> toJson() => _$ShortSchoolToJson(this);
 }

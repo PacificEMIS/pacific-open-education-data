@@ -9,9 +9,6 @@ import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class FilteredResultsByGenderComponent extends StatelessWidget {
-  final Stream<bool> _loadingStream;
-  final Stream<ExamReportsFilteredData> _dataStream;
-
   const FilteredResultsByGenderComponent({
     Key key,
     @required Stream<bool> loadingStream,
@@ -21,6 +18,9 @@ class FilteredResultsByGenderComponent extends StatelessWidget {
         _loadingStream = loadingStream,
         _dataStream = dataStream,
         super(key: key);
+
+  final Stream<bool> _loadingStream;
+  final Stream<ExamReportsFilteredData> _dataStream;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class FilteredResultsByGenderComponent extends StatelessWidget {
           }
           final isLoading = snapshot.data;
           if (isLoading) {
-            return Container(
+            return SizedBox(
               height: 100,
               child: Center(
                 child: PlatformProgressIndicator(),
@@ -134,12 +134,6 @@ class FilteredResultsByGenderComponent extends StatelessWidget {
 }
 
 class _GenderResults extends StatelessWidget {
-  final int _maxFemale;
-  final int _maxMale;
-  final ExamReportsGenderData _data;
-  final String _title;
-  final bool _needToShowMeasureAxis;
-
   const _GenderResults({
     Key key,
     @required int maxFemale,
@@ -158,6 +152,12 @@ class _GenderResults extends StatelessWidget {
         _title = title,
         _needToShowMeasureAxis = needToShowMeasureAxis,
         super(key: key);
+
+  final int _maxFemale;
+  final int _maxMale;
+  final ExamReportsGenderData _data;
+  final String _title;
+  final bool _needToShowMeasureAxis;
 
   @override
   Widget build(BuildContext context) {
@@ -187,11 +187,6 @@ class _GenderResults extends StatelessWidget {
 }
 
 class _GenderChart extends StatelessWidget {
-  final int _maxFemale;
-  final int _maxMale;
-  final ExamReportsGenderData _data;
-  final bool _needToShowMeasureAxis;
-
   const _GenderChart({
     Key key,
     @required int maxFemale,
@@ -207,6 +202,11 @@ class _GenderChart extends StatelessWidget {
         _data = data,
         _needToShowMeasureAxis = needToShowMeasureAxis,
         super(key: key);
+
+  final int _maxFemale;
+  final int _maxMale;
+  final ExamReportsGenderData _data;
+  final bool _needToShowMeasureAxis;
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +250,7 @@ class _GenderChart extends StatelessWidget {
             ),
             domainAxis: const charts.OrdinalAxisSpec(
               showAxisLine: false,
-              renderSpec: const charts.NoneRenderSpec(),
+              renderSpec: charts.NoneRenderSpec(),
             ),
             defaultRenderer: charts.BarRendererConfig(
               stackHorizontalSeparator: 0,
@@ -281,9 +281,9 @@ class _GenderChart extends StatelessWidget {
       return [
         charts.Series(
           id: 'gender_data',
-          domainFn: (ChartData chartData, _) => chartData.domain,
-          measureFn: (ChartData chartData, _) => chartData.measure,
-          colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+          domainFn: (chartData, _) => chartData.domain,
+          measureFn: (chartData, _) => chartData.measure,
+          colorFn: (chartData, _) => chartData.color.chartsColor,
           data: data,
         ),
       ];

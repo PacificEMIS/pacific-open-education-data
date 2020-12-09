@@ -4,17 +4,17 @@ import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
 class CurrentEmisWidget extends StatelessWidget {
-  final HomeViewModel _viewModel;
-  final bool _useMobileLayout;
-
-  const CurrentEmisWidget(
-      {Key key,
-      @required HomeViewModel viewModel,
-      @required bool useMobileLayout})
-      : assert(viewModel != null, useMobileLayout != null),
+  const CurrentEmisWidget({
+    Key key,
+    @required HomeViewModel viewModel,
+    @required bool useMobileLayout,
+  })  : assert(viewModel != null, useMobileLayout != null),
         _viewModel = viewModel,
         _useMobileLayout = useMobileLayout,
         super(key: key);
+
+  final HomeViewModel _viewModel;
+  final bool _useMobileLayout;
 
   @override
   Widget build(BuildContext context) {

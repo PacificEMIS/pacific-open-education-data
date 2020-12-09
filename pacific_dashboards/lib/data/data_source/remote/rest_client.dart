@@ -20,7 +20,6 @@ import 'package:pacific_dashboards/models/wash/toilets.dart';
 import 'package:pacific_dashboards/models/wash/wash.dart';
 import 'package:pacific_dashboards/models/wash/water.dart';
 import 'package:retrofit/retrofit.dart';
-import '../../../models/lookups/lookups.dart';
 
 part 'rest_client.g.dart';
 

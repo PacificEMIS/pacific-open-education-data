@@ -102,11 +102,6 @@ class _IndividualAccreditationComponentState extends MvvmState<
 }
 
 class _AccreditationWidget extends StatelessWidget {
-  static const double _kObservationHeight = 40.0;
-  static const List<int> _kObservationFlexes = [11, 2, 2];
-
-  final IndividualAccreditationData _data;
-
   const _AccreditationWidget({
     Key key,
     @required IndividualAccreditationData data,
@@ -114,35 +109,42 @@ class _AccreditationWidget extends StatelessWidget {
         _data = data,
         super(key: key);
 
+  static const double _kObservationHeight = 40.0;
+  static const List<int> _kObservationFlexes = [11, 2, 2];
+
+  final IndividualAccreditationData _data;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              '${'individualSchoolAccreditationsInspectedBy'.localized(context)}${_getInspectedBy(context)}',
+              // ignore: lines_longer_than_80_chars
+              '${'individualSchoolAccreditationsInspectedBy'.localized(context)}'
+              '${_getInspectedBy(context)}',
               style: Theme.of(context)
                   .textTheme
                   .individualAccreditationInspectedBy,
             ),
-            Spacer(),
+            const Spacer(),
             AccreditationLevelComponent(
               level: _data.result,
             ),
           ],
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         AccreditationTableComponent(
           data: _data.standards,
         ),
-        SizedBox(height: 8),
-        Container(
+        const SizedBox(height: 8),
+        SizedBox(
           height: _kObservationHeight,
           child: Row(
             mainAxisSize: MainAxisSize.max,

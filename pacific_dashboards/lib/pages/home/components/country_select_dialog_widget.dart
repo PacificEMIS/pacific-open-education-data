@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-
-import '../home_view_model.dart';
+import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 
 class CountrySelectDialog extends StatelessWidget {
-  final HomeViewModel _viewModel;
-
   const CountrySelectDialog({
     Key key,
     @required HomeViewModel viewModel,
@@ -15,13 +12,15 @@ class CountrySelectDialog extends StatelessWidget {
         _viewModel = viewModel,
         super(key: key);
 
+  final HomeViewModel _viewModel;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 244,
       child: AlertDialog(
         shape: const RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
         contentPadding: const EdgeInsets.only(top: 10.0, right: 0),
         title: Text(
@@ -57,9 +56,6 @@ class CountrySelectDialog extends StatelessWidget {
 }
 
 class _Country extends StatelessWidget {
-  final HomeViewModel _viewModel;
-  final Emis _emis;
-
   const _Country({
     Key key,
     @required Emis emis,
@@ -69,6 +65,9 @@ class _Country extends StatelessWidget {
         _emis = emis,
         _viewModel = viewModel,
         super(key: key);
+
+  final HomeViewModel _viewModel;
+  final Emis _emis;
 
   @override
   Widget build(BuildContext context) {

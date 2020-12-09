@@ -9,8 +9,6 @@ import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
 class DashboardComponent extends MvvmStatefulWidget {
-  final ShortSchool school;
-
   DashboardComponent({
     Key key,
     @required this.school,
@@ -19,6 +17,8 @@ class DashboardComponent extends MvvmStatefulWidget {
           viewModelBuilder: (ctx) =>
               ViewModelFactory.instance.createDashboardsViewModel(ctx),
         );
+
+  final ShortSchool school;
 
   @override
   _DashboardComponentState createState() => _DashboardComponentState();
@@ -47,8 +47,10 @@ class _DashboardComponentState
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       'individualSchoolDashboardEnrollTitle'.localized(context),
-                      style: Theme.of(context).textTheme.headline3.copyWith(
-                        color: Colors.black87),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3
+                          .copyWith(color: Colors.black87),
                     ),
                   ),
                   EnrollComponent(
@@ -62,8 +64,10 @@ class _DashboardComponentState
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       'individualSchoolDashboardRatesTitle'.localized(context),
-                      style: Theme.of(context).textTheme.headline3.copyWith(
-                          color: Colors.black87),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3
+                          .copyWith(color: Colors.black87),
                     ),
                   ),
                   RatesComponent(
