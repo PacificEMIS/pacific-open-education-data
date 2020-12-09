@@ -288,10 +288,15 @@ class _Chart extends StatelessWidget {
         ),
         ...gradesData.mapIndexed((index, data) {
           return charts.Series(
-            domainFn: (chartData, _) => chartData.domain,
-            measureFn: (chartData, _) => chartData.measure,
-            colorFn: (chartData, _) => chartData.color.chartsColor,
-            areaColorFn: (chartData, _) => chartData.color.chartsColor,
+            // ignore: avoid_types_on_closure_parameters
+            domainFn: (ChartData chartData, _) => chartData.domain,
+            // ignore: avoid_types_on_closure_parameters
+            measureFn: (ChartData chartData, _) => chartData.measure,
+            // ignore: avoid_types_on_closure_parameters
+            colorFn: (ChartData chartData, _) => chartData.color.chartsColor,
+            // ignore: avoid_types_on_closure_parameters
+            areaColorFn: (ChartData chartData, _) =>
+                chartData.color.chartsColor,
             id: 'data[$index]',
             data: data,
           );
