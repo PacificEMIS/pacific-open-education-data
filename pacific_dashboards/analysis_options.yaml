@@ -91,7 +91,6 @@ linter:
     - avoid_web_libraries_in_flutter
     - await_only_futures
     - cancel_subscriptions
-    - cascade_invocations
     - close_sinks
     - control_flow_in_finally
     - empty_catches

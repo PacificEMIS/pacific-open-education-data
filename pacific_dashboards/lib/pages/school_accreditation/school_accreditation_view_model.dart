@@ -114,7 +114,11 @@ class SchoolAccreditationViewModel extends BaseViewModel {
 }
 
 class _AccreditationChunkModel {
-  const _AccreditationChunkModel(this.chunk, this.lookups, this.filters);
+  const _AccreditationChunkModel(
+    this.chunk,
+    this.lookups,
+    this.filters,
+  );
 
   final AccreditationChunk chunk;
   final Lookups lookups;
@@ -266,39 +270,38 @@ Map<String, List<int>> _generateCumulativeMap({
   @required bool cumulative,
 }) {
   final result = <String, List<int>>{};
-  data
-    ..removeWhere((key, value) => key == null)
-    ..forEach((key, value) {
-      final levels = [0, 0, 0, 0];
+  data.removeWhere((key, value) => key == null);
+  data.forEach((key, value) {
+    final levels = [0, 0, 0, 0];
 
-      for (final accreditation in value) {
-        final sum =
-            cumulative ? accreditation.total : accreditation.numThisYear;
+    // ignore: avoid_function_literals_in_foreach_calls
+    value.forEach((accreditation) {
+      final sum = cumulative ? accreditation.total : accreditation.numThisYear;
 
-        if (year != null && accreditation.surveyYear != year) {
-          return;
-        }
-
-        switch (accreditation.level) {
-          case AccreditationLevel.level1:
-            key.contains('Level') ? levels[0] += sum : levels[0] -= sum;
-            break;
-          case AccreditationLevel.level2:
-            levels[1] += sum;
-            break;
-          case AccreditationLevel.level3:
-            levels[2] += sum;
-            break;
-          case AccreditationLevel.level4:
-            levels[3] += sum;
-            break;
-          case AccreditationLevel.undefined:
-            break;
-        }
+      if (year != null && accreditation.surveyYear != year) {
+        return;
       }
 
-      if (key != null && key != 'null') result[key] = levels;
+      switch (accreditation.level) {
+        case AccreditationLevel.level1:
+          key.contains('Level') ? levels[0] += sum : levels[0] -= sum;
+          break;
+        case AccreditationLevel.level2:
+          levels[1] += sum;
+          break;
+        case AccreditationLevel.level3:
+          levels[2] += sum;
+          break;
+        case AccreditationLevel.level4:
+          levels[3] += sum;
+          break;
+        case AccreditationLevel.undefined:
+          break;
+      }
     });
+
+    if (key != null && key != 'null') result[key] = levels;
+  });
 
   return result;
 }
@@ -312,53 +315,54 @@ Map<String, AccreditationTableData> _generateAccreditationTableData(
     bool isCumulative,
     int currentYear) {
   final convertedData = <String, AccreditationTableData>{};
-  rawMapData.keys.toList()
+  final sortedMapKeys = rawMapData.keys.toList()
     ..sort((lv, rv) => rawMapData[lv]
         .first
         ?.sortField
-        ?.compareTo(rawMapData[rv].first?.sortField))
-    ..forEach((key) {
-      final levels = [0, 0, 0, 0, 0, 0, 0, 0];
-      final rawValue = rawMapData[key];
-      for (var j = 0; j < rawValue.length; ++j) {
-        final model = rawValue;
-        final level = model[j].level;
-        var numThisYear = 0;
-        var numSum = 0;
-        if (model[j].surveyYear == currentYear) {
-          numThisYear += model[j].numThisYear ?? 0;
-          numSum += model[j].total ?? 0;
-          switch (level) {
-            case AccreditationLevel.level1:
-              levels[0] += numThisYear;
-              levels[4] += numSum;
-              break;
-            case AccreditationLevel.level2:
-              levels[1] += numThisYear;
-              levels[5] += numSum;
-              break;
-            case AccreditationLevel.level3:
-              levels[2] += numThisYear;
-              levels[6] += numSum;
-              break;
-            case AccreditationLevel.level4:
-              levels[3] += numThisYear;
-              levels[7] += numSum;
-              break;
-            case AccreditationLevel.undefined:
-              break;
-          }
+        ?.compareTo(rawMapData[rv].first?.sortField));
+
+  for (final key in sortedMapKeys) {
+    final levels = [0, 0, 0, 0, 0, 0, 0, 0];
+    final rawValue = rawMapData[key];
+    for (var j = 0; j < rawValue.length; ++j) {
+      final model = rawValue;
+      final level = model[j].level;
+      var numThisYear = 0;
+      var numSum = 0;
+      if (model[j].surveyYear == currentYear) {
+        numThisYear += model[j].numThisYear ?? 0;
+        numSum += model[j].total ?? 0;
+        switch (level) {
+          case AccreditationLevel.level1:
+            levels[0] += numThisYear;
+            levels[4] += numSum;
+            break;
+          case AccreditationLevel.level2:
+            levels[1] += numThisYear;
+            levels[5] += numSum;
+            break;
+          case AccreditationLevel.level3:
+            levels[2] += numThisYear;
+            levels[6] += numSum;
+            break;
+          case AccreditationLevel.level4:
+            levels[3] += numThisYear;
+            levels[7] += numSum;
+            break;
+          case AccreditationLevel.undefined:
+            break;
         }
       }
+    }
 
-      if (isCumulative) {
-        convertedData[key] =
-            AccreditationTableData(levels[4], levels[5], levels[6], levels[7]);
-      } else {
-        convertedData[key] =
-            AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
-      }
-    });
+    if (isCumulative) {
+      convertedData[key] =
+          AccreditationTableData(levels[4], levels[5], levels[6], levels[7]);
+    } else {
+      convertedData[key] =
+          AccreditationTableData(levels[0], levels[1], levels[2], levels[3]);
+    }
+  }
 
   return convertedData;
 }
