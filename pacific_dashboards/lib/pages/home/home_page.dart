@@ -1,5 +1,6 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/pages/home/components/download_data_dialog/download_data_dialog.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -63,6 +64,14 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
               viewModel: viewModel,
               useMobileLayout: useMobileLayout,
             ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                showDownloadDataDialog(context);
+              },
+              child: Text('Download all'),
+            ),
+            const SizedBox(height: 16),
             StreamBuilder<List<Section>>(
               stream: viewModel.sectionStream,
               builder: (ctx, snapshot) {
