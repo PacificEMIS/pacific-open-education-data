@@ -26,32 +26,38 @@ class MainActivity : FlutterActivity() {
 
     private fun handleApiGet(url: String, eTag: String?, result: MethodChannel.Result) {
         GlobalScope.launch {
-            val client = OkHttpClient()
-            val request = Request.Builder().apply {
-                get()
-                url(url)
-                eTag?.let {
-                    header("If-None-Match", it)
-                }
-            }.build()
-            val response = client.newCall(request).execute()
+            try {
+                val client = OkHttpClient()
+                val request = Request.Builder().apply {
+                    get()
+                    url(url)
+                    eTag?.let {
+                        header("If-None-Match", it)
+                    }
+                }.build()
+                val response = client.newCall(request).execute()
 
-            val stringBuilder = StringBuilder()
-            val buffer = Buffer()
-            response.body?.source()?.use { source ->
-                while (!source.exhausted()) {
-                    val readBytes = source.read(buffer, Long.MAX_VALUE)
-                    val data = buffer.readString(Charsets.UTF_8)
-                    stringBuilder.append(data)
+                val stringBuilder = StringBuilder()
+                val buffer = Buffer()
+                response.body?.source()?.use { source ->
+                    while (!source.exhausted()) {
+                        val data = buffer.readString(Charsets.UTF_8)
+                        stringBuilder.append(data)
+                    }
+                }
+                runOnUiThread {
+                    result.success(mapOf(
+                            "code" to response.code,
+                            "eTag" to response.header("ETag"),
+                            "body" to stringBuilder.toString()
+                    ))
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    result.error("999", e.message, e)
                 }
             }
-            runOnUiThread {
-                result.success(mapOf(
-                        "code" to response.code,
-                        "eTag" to response.header("ETag"),
-                        "body" to stringBuilder.toString()
-                ))
-            }
+
         }
     }
 }

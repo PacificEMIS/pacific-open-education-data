@@ -200,6 +200,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         throwable.message.contains('HttpException: '))) {
       return null;
     }
+    await checkConnection();
     final emis = await _settings.currentEmis;
     final url = '${emis.baseUrl}$urlCall';
     try {

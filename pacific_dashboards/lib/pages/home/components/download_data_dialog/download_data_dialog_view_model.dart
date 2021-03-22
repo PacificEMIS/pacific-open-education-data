@@ -10,6 +10,7 @@ import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/emis_config/emis_config.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
+import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:screen/screen.dart';
 
@@ -19,7 +20,7 @@ class DownloadDataDialogViewModel extends ViewModel {
   final Repository _repository;
 
   final _progressSubject = BehaviorSubject<double>.seeded(0.0);
-  final _loadingErrorsSubject = BehaviorSubject<List<LoadingItem>>();
+  final _loadingErrorsSubject = BehaviorSubject<List<LoadingItem>>.seeded([]);
   final _currentItemSubject = BehaviorSubject<LoadingItem>();
   final _individualSchoolEnabledSubject = BehaviorSubject.seeded(false);
 
@@ -76,7 +77,8 @@ class DownloadDataDialogViewModel extends ViewModel {
           await _globalSettings.currentEmis,
         );
 
-        final needToLoadIndividualSchools = _individualSchoolEnabledSubject.value;
+        final needToLoadIndividualSchools =
+            _individualSchoolEnabledSubject.value;
         if (!needToLoadIndividualSchools) {
           sectionsToLoad.remove(Section.individualSchools);
         }
@@ -97,6 +99,7 @@ class DownloadDataDialogViewModel extends ViewModel {
   void onCancelPressed() {
     _downloadOp?.cancel();
     navigator.pop();
+    Screen.keepOn(false);
   }
 
   Future<void> _loadSection(Section section) {
@@ -147,86 +150,112 @@ class DownloadDataDialogViewModel extends ViewModel {
     }
   }
 
-  Future<void> _downloadSchoolsEnrollmentData() async {
-    try {
-      await _repository.fetchAllSchools().toList();
-    } catch (t) {
+  Future<void> _downloadSchoolsEnrollmentData() {
+    return _downloadHandled(_repository.fetchAllSchools(), () {
       _onSectionLoadingError(Section.schools);
-    }
+    });
+  }
+
+  Future<void> _downloadHandled(
+    Stream<RepositoryResponse> stream,
+    void Function() onError,
+  ) {
+    final completer = Completer<void>();
+    stream.listen(
+      (response) {
+        if (response is FailureRepositoryResponse &&
+            response.type == RepositoryType.remote &&
+            response.throwable is! NoDataException) {
+          onError();
+        }
+      },
+      onError: (e) {
+        onError();
+      },
+      onDone: () {
+        completer.complete();
+      },
+      cancelOnError: true,
+    ).disposeWith(disposeBag);
+    return completer.future;
   }
 
   Future<void> _downloadTeachersEnrollmentData() async {
-    try {
-      await _repository.fetchAllTeachers().toList();
-    } catch (t) {
+    return _downloadHandled(_repository.fetchAllTeachers(), () {
       _onSectionLoadingError(Section.teachers);
-    }
+    });
   }
 
   Future<void> _downloadExamsData() async {
-    try {
-      await _repository.fetchAllExams().toList();
-    } catch (t) {
+    return _downloadHandled(_repository.fetchAllExams(), () {
       _onSectionLoadingError(Section.exams);
-    }
+    });
   }
 
   Future<void> _downloadAccreditationData() async {
-    try {
-      await _repository.fetchAllAccreditations().toList();
-    } catch (t) {
+    return _downloadHandled(_repository.fetchAllAccreditations(), () {
       _onSectionLoadingError(Section.schoolAccreditations);
-    }
+    });
   }
 
   Future<void> _downloadBudgetsData() async {
-    try {
-      await _repository.fetchAllBudgets().toList();
-    } catch (t) {
+    return _downloadHandled(_repository.fetchAllBudgets(), () {
       _onSectionLoadingError(Section.budgets);
-    }
+    });
   }
 
   Future<void> _downloadWashData() async {
-    try {
-      await _repository.fetchAllWashChunk().toList();
-    } catch (t) {
+    return _downloadHandled(_repository.fetchAllWashChunk(), () {
       _onSectionLoadingError(Section.wash);
-    }
+    });
   }
 
   Future<void> _downloadSpecialData() async {
-    try {
-      await _repository.fetchAllSpecialEducation().toList();
-    } catch (t) {
+    return _downloadHandled(_repository.fetchAllSpecialEducation(), () {
       _onSectionLoadingError(Section.specialEducation);
-    }
+    });
   }
 
   Future<void> _downloadIndividualSchoolData() async {
-    try {
-      final schools = (await _repository.fetchSchoolsList().toList()).last.data;
-      for (final school in schools) {
-        final id = school.id;
-        final item = IndividualSchoolsLoadingItem(id);
-        try {
-          _currentItemSubject.add(item);
-          await Future.wait([
-            _repository.fetchIndividualSchool(id).toList(),
-            _repository
-                .fetchIndividualSchoolEnroll(id, school.districtCode)
-                .toList(),
-            _repository.fetchIndividualSchoolExams(id).toList(),
-            _repository.fetchIndividualSchoolFlow(id).toList(),
-          ]);
-        } catch (t) {
-          _loadingErrorsSubject.add(
-            _loadingErrorsSubject.value..add(item),
-          );
-        }
-      }
-    } catch (t) {
+    final responses = await _repository.fetchSchoolsList().toList();
+    if (responses.length < 2) {
       _onSectionLoadingError(Section.individualSchools);
+      return;
+    }
+
+    List<ShortSchool> schools;
+    if (responses.last is FailureRepositoryResponse &&
+        responses.last.type == RepositoryType.remote) {
+      if (responses.first.data == null) {
+        _onSectionLoadingError(Section.individualSchools);
+        return;
+      } else {
+        schools = responses.first.data;
+      }
+    } else {
+      schools = responses.last.data;
+    }
+
+    for (final school in schools) {
+      final id = school.id;
+      final item = IndividualSchoolsLoadingItem(id);
+
+      _currentItemSubject.add(item);
+      void onError() {
+        _loadingErrorsSubject.add(
+          _loadingErrorsSubject.value..add(item),
+        );
+      }
+
+      await Future.wait([
+        _downloadHandled(_repository.fetchIndividualSchool(id), onError),
+        _downloadHandled(
+          _repository.fetchIndividualSchoolEnroll(id, school.districtCode),
+          onError,
+        ),
+        _downloadHandled(_repository.fetchIndividualSchoolExams(id), onError),
+        _downloadHandled(_repository.fetchIndividualSchoolFlow(id), onError),
+      ]);
     }
   }
 

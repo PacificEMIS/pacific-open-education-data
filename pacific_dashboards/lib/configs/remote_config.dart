@@ -20,7 +20,7 @@ class FirebaseRemoteConfig extends RemoteConfig {
 
   Future<void> init() async {
     _remoteConfig = await fireConfig.RemoteConfig.instance;
-    final defaultConfig = _defaultConfig.toJson();
+    final defaultConfig = json.encode(_defaultConfig.toJson());
     await _remoteConfig.setDefaults({_kConfigName: defaultConfig});
 
     try {
