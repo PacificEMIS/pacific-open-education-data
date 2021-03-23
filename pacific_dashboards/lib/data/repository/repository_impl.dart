@@ -240,6 +240,28 @@ class RepositoryImpl implements Repository {
   }
 
   @override
+  Future<void> refreshLookups() async {
+    // ignore: close_sinks
+    final currentLookupsSubject =
+        await _globalSettings.currentEmis.then((emis) {
+      switch (emis) {
+        case Emis.miemis:
+          return _miemisLookupsSubject;
+        case Emis.fedemis:
+          return _fedemisLookupsSubject;
+        case Emis.kemis:
+          return _kemisLookupsSubject;
+      }
+      throw FallThroughError();
+    });
+
+    final remoteData = await _remoteDataSource.fetchLookupsModel();
+    await _localDataSource.saveLookupsModel(remoteData);
+
+    currentLookupsSubject.add(remoteData);
+  }
+
+  @override
   Stream<RepositoryResponse<SchoolEnrollChunk>> fetchIndividualSchoolEnroll(
     String schoolId,
     String districtCode,

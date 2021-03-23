@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
+import 'package:pacific_dashboards/pages/download/download_view_model.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
-import 'package:pacific_dashboards/pages/home/components/download_data_dialog/download_data_dialog_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
@@ -167,10 +167,10 @@ class ViewModelFactory {
     );
   }
 
-  DownloadDataDialogViewModel createDownloadDataDialogViewModel(
+  DownloadViewModel createDownloadViewModel(
     BuildContext ctx,
   ) {
-    return DownloadDataDialogViewModel(
+    return DownloadViewModel(
       ctx,
       globalSettings: serviceLocator.globalSettings,
       remoteConfig: serviceLocator.remoteConfig,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pacific_dashboards/pages/budgets/budget_page.dart';
+import 'package:pacific_dashboards/pages/download/download_page.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
@@ -41,7 +42,8 @@ class App extends StatelessWidget {
         BudgetsPage.kRoute: (context) => BudgetsPage(),
         WashPage.kRoute: (context) => WashPage(),
         "/Indicators": (context) => _NotImplementedPage(),
-        SpecialEducationPage.kRoute: (context) => SpecialEducationPage()
+        SpecialEducationPage.kRoute: (context) => SpecialEducationPage(),
+        DownloadPage.kRoute: (context) => DownloadPage(),
       },
     );
   }

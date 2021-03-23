@@ -1,6 +1,5 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/pages/home/components/download_data_dialog/download_data_dialog.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -40,7 +39,12 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
           children: <Widget>[
             Container(
               alignment: Alignment.centerRight,
-              child: FlatButton(
+              child: IconButton(
+                icon: Icon(
+                  Icons.more_vert_rounded,
+                  size: 24,
+                  color: Colors.white,
+                ),
                 padding: EdgeInsets.all(8.0),
                 onPressed: () async {
                   await showDialog(
@@ -52,24 +56,11 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
                     },
                   );
                 },
-                child: Text(
-                  'homeChangeCountryButton'.localized(context),
-                  style: Theme.of(context).textTheme.button.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
               ),
             ),
             CurrentEmisWidget(
               viewModel: viewModel,
               useMobileLayout: useMobileLayout,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                showDownloadDataDialog(context);
-              },
-              child: Text('Download all'),
             ),
             const SizedBox(height: 16),
             StreamBuilder<List<Section>>(

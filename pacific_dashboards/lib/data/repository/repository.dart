@@ -29,6 +29,8 @@ abstract class Repository {
 
   Stream<Lookups> get lookups;
 
+  Future<void> refreshLookups();
+
   Stream<RepositoryResponse<List<ShortSchool>>> fetchSchoolsList();
 
   Stream<RepositoryResponse<SchoolEnrollChunk>> fetchIndividualSchoolEnroll(
