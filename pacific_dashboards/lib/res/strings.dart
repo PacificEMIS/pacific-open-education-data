@@ -289,7 +289,7 @@ class Strings {
       'downloadCurrentCountry': 'Download this country data for offline use',
       'downloadTitle': 'Download data',
       'downloadCancel': 'Cancel',
-      'downloadNote': 'There is a large amount of data to download. To make sure all data should be downloaded, press Download, keep your phone with screen on and stay at this page until download completes. This could take several minutes to complete even on a good Internet connection.',
+      'downloadNote': 'There is a large amount of data to download. To make sure that all data will be downloaded, press Download, keep your phone with screen on and stay at this page until download completes. This could take several minutes to complete even on a good Internet connection.',
       'downloadSubtitle1': 'Download',
       'downloadSubtitle2': 'data for offline use',
       'downloadIndSchools': 'Download Individual schools',

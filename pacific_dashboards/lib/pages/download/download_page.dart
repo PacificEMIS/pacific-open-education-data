@@ -35,37 +35,38 @@ class _DownloadPageState extends MvvmState<DownloadViewModel, DownloadPage> {
   Widget buildWidget(BuildContext context) {
     final DownloadPageArgs args = ModalRoute.of(context).settings.arguments;
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: StreamBuilder<DownloadPageState>(
+    return StreamBuilder<DownloadPageState>(
         initialData: PreparationDownloadPageState.initial(),
         stream: viewModel.stateStream,
         builder: (context, snapshot) {
           final state = snapshot.requireData;
-          return Scaffold(
-            appBar: _buildAppBar(context, state),
-            body: Builder(
-              builder: (context) {
-                if (state is PreparationDownloadPageState) {
-                  return _PreparingBody(
-                    viewModel: viewModel,
-                    state: state,
-                    emis: args.emis,
-                  );
-                } else if (state is ActiveDownloadPageState) {
-                  return _ActiveBody(
-                    viewModel: viewModel,
-                    state: state,
-                    emis: args.emis,
-                  );
-                }
-                throw FallThroughError();
-              },
+          return WillPopScope(
+            onWillPop: () async {
+              return state is PreparationDownloadPageState;
+            },
+            child: Scaffold(
+              appBar: _buildAppBar(context, state),
+              body: Builder(
+                builder: (context) {
+                  if (state is PreparationDownloadPageState) {
+                    return _PreparingBody(
+                      viewModel: viewModel,
+                      state: state,
+                      emis: args.emis,
+                    );
+                  } else if (state is ActiveDownloadPageState) {
+                    return _ActiveBody(
+                      viewModel: viewModel,
+                      state: state,
+                      emis: args.emis,
+                    );
+                  }
+                  throw FallThroughError();
+                },
+              ),
             ),
           );
-        },
-      ),
-    );
+        });
   }
 
   PreferredSizeWidget _buildAppBar(
