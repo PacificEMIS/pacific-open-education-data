@@ -292,7 +292,7 @@ class Strings {
       'downloadNote': 'There is a large amount of data to download. To make sure that all data will be downloaded, press Download, keep your phone with screen on and stay at this page until download completes. This could take several minutes to complete even on a good Internet connection.',
       'downloadSubtitle1': 'Download',
       'downloadSubtitle2': 'data for offline use',
-      'downloadIndSchools': 'Download Individual schools',
+      'downloadIndSchools': 'Including all individual schools',
       'downloadAction': 'DOWNLOAD',
       'downloadDone': 'DONE',
       'downloadFailedToLoad': 'Files did not load',
