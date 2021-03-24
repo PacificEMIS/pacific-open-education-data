@@ -41,6 +41,7 @@ class MainActivity : FlutterActivity() {
                 val buffer = Buffer()
                 response.body?.source()?.use { source ->
                     while (!source.exhausted()) {
+                        source.read(buffer, Long.MAX_VALUE)
                         val data = buffer.readString(Charsets.UTF_8)
                         stringBuilder.append(data)
                     }
