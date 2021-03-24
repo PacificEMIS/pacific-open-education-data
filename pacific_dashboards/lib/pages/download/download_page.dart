@@ -317,17 +317,15 @@ class _ActiveBody extends StatelessWidget {
                                     (states) => const EdgeInsets.fromLTRB(
                                         16, 10, 16, 10),
                                   ),
+                                  foregroundColor:
+                                      MaterialStateColor.resolveWith((states) =>
+                                          states.contains(
+                                                  MaterialState.disabled)
+                                              ? AppColors.kCoolGray
+                                              : AppColors.kLightGreen),
                                   textStyle: MaterialStateProperty.resolveWith(
                                     (states) {
-                                      return Theme.of(context)
-                                          .textTheme
-                                          .button
-                                          .copyWith(
-                                            color: states.contains(
-                                                    MaterialState.disabled)
-                                                ? AppColors.kCoolGray
-                                                : AppColors.kLightGreen,
-                                          );
+                                      return Theme.of(context).textTheme.button;
                                     },
                                   ),
                                 ),
