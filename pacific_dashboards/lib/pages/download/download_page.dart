@@ -213,9 +213,6 @@ class _PreparingBody extends StatelessWidget {
   }
 }
 
-const double _kBorderWidth = 1.0;
-const Color _kBorderColor = AppColors.kGeyser;
-
 class _ActiveBody extends StatelessWidget {
   const _ActiveBody({
     Key key,
@@ -271,94 +268,7 @@ class _ActiveBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   if (state.failedToLoadItems.isNotEmpty)
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(4),
-                        ),
-                        border: Border.all(
-                          width: _kBorderWidth,
-                          color: _kBorderColor,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(16, 8, 6, 8),
-                                child: Icon(
-                                  Icons.error_outline_outlined,
-                                  size: 24,
-                                  color: AppColors.kRed,
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Text(
-                                    'downloadFailedToLoad'.localized(context),
-                                    style:
-                                        Theme.of(context).textTheme.headline5,
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: state.isDownloading
-                                    ? null
-                                    : viewModel.onRestartPressed,
-                                style: ButtonStyle(
-                                  padding: MaterialStateProperty.resolveWith(
-                                    (states) => const EdgeInsets.fromLTRB(
-                                        16, 10, 16, 10),
-                                  ),
-                                  foregroundColor:
-                                      MaterialStateColor.resolveWith((states) =>
-                                          states.contains(
-                                                  MaterialState.disabled)
-                                              ? AppColors.kCoolGray
-                                              : AppColors.kLightGreen),
-                                  textStyle: MaterialStateProperty.resolveWith(
-                                    (states) {
-                                      return Theme.of(context).textTheme.button;
-                                    },
-                                  ),
-                                ),
-                                child:
-                                    Text('downloadReload'.localized(context)),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            height: _kBorderWidth,
-                            color: _kBorderColor,
-                          ),
-                          for (var i = 0;
-                              i < state.failedToLoadItems.length;
-                              i++)
-                            Container(
-                              color: i.isEven
-                                  ? Colors.transparent
-                                  : AppColors.kGrayLight,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 10,
-                                ),
-                                child: Text(
-                                  state.failedToLoadItems[i].getName(context),
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                    _LoadingErrors(state: state, viewModel: viewModel),
                 ],
               ),
             ),
@@ -396,6 +306,101 @@ class _ActiveBody extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _LoadingErrors extends StatelessWidget {
+  const _LoadingErrors({
+    Key key,
+    @required this.state,
+    @required this.viewModel,
+  }) : super(key: key);
+
+  static const double _kBorderWidth = 1.0;
+  static const Color _kBorderColor = AppColors.kGeyser;
+
+  final ActiveDownloadPageState state;
+  final DownloadViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(
+          const Radius.circular(4),
+        ),
+        border: Border.all(
+          width: _kBorderWidth,
+          color: _kBorderColor,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 6, 8),
+                child: Icon(
+                  Icons.error_outline_outlined,
+                  size: 24,
+                  color: AppColors.kRed,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    'downloadFailedToLoad'.localized(context),
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed:
+                    state.isDownloading ? null : viewModel.onRestartPressed,
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.resolveWith(
+                    (states) => const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                  ),
+                  foregroundColor: MaterialStateColor.resolveWith(
+                    (states) => states.contains(MaterialState.disabled)
+                        ? AppColors.kCoolGray
+                        : AppColors.kLightGreen,
+                  ),
+                  textStyle: MaterialStateProperty.resolveWith(
+                    (states) => Theme.of(context).textTheme.button,
+                  ),
+                ),
+                child: Text('downloadReload'.localized(context)),
+              ),
+            ],
+          ),
+          Container(
+            height: _kBorderWidth,
+            color: _kBorderColor,
+          ),
+          for (var i = 0; i < state.failedToLoadItems.length; i++)
+            Container(
+              color: i.isEven ? Colors.transparent : AppColors.kGrayLight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                child: Text(
+                  state.failedToLoadItems[i].getName(context),
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
