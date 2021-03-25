@@ -349,15 +349,13 @@ class DownloadViewModel extends ViewModel {
       return IndividualSchoolsLoadingItem(
         schoolId: id,
         districtCode: school.districtCode,
-        loadFn: (id, districtCode) {
-          return Future.wait([
-            _downloadHandled(_repository.fetchIndividualSchool(id)),
-            _downloadHandled(
-              _repository.fetchIndividualSchoolEnroll(id, school.districtCode),
-            ),
-            _downloadHandled(_repository.fetchIndividualSchoolExams(id)),
-            _downloadHandled(_repository.fetchIndividualSchoolFlow(id)),
-          ]);
+        loadFn: (id, districtCode) async {
+          await _downloadHandled(_repository.fetchIndividualSchool(id));
+          await _downloadHandled(
+            _repository.fetchIndividualSchoolEnroll(id, school.districtCode),
+          );
+          await _downloadHandled(_repository.fetchIndividualSchoolExams(id));
+          await _downloadHandled(_repository.fetchIndividualSchoolFlow(id));
         },
       );
     }).toList();
