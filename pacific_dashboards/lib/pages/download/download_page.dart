@@ -368,11 +368,6 @@ class _LoadingErrors extends StatelessWidget {
                   padding: MaterialStateProperty.resolveWith(
                     (states) => const EdgeInsets.fromLTRB(16, 10, 16, 10),
                   ),
-                  foregroundColor: MaterialStateColor.resolveWith(
-                    (states) => states.contains(MaterialState.disabled)
-                        ? AppColors.kCoolGray
-                        : AppColors.kLightGreen,
-                  ),
                   textStyle: MaterialStateProperty.resolveWith(
                     (states) => Theme.of(context).textTheme.button,
                   ),
