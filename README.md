@@ -1,29 +1,23 @@
-# README #
+Download all the education data from participating Pacific countries
+in the palm of your hand. The Pacific Open Education Data app pulls
+all publicly available data from an integrated open source Education
+Management Information System (EMIS) specifically tailored to Pacific
+Island nations. It is a work that will continuously improve and
+welcomes your feedback. Data is currently published in the form of
+analytics dashboards containing tables, charts, filters, etc. The
+dashboards are organized into modules which are listed below:
 
-This README would normally document whatever steps are necessary to get your application up and running.
+* Indicators: common education key indicators (e.g. NER, GER, NIR, GIR)
+* Schools: data about schools such as enrolments by gender, geographical location, managing authority, education level
+* Teachers: data about teachers (e.g. qualified teachers, certified teachers, teacher to pupil ratio)
+* School Accreditation: comprehensive data about schools based on a stringent accreditation framework
+* WASH: comprehensive data about water, sanitation and hygiene
+* Budget: data about how the country spends on its education system (e.g. public expenditure per pupil)
+* Exams: data about performance of students based on standard-based assessment framework
+* Special Education: aggregate data about special education
 
-### What is this repository for? ###
+Not all countries will have all the modules above.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+Contact details
 
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+info@nuzusys.com
