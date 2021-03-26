@@ -5,10 +5,10 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/emis.dart';
 
 class HiveAccreditationsDao extends AccreditationsDao {
-
   static const _kKey = 'accreditations';
 
-  static Future<T> _withBox<T>(Future<T> action(Box<HiveAccreditationChunk> box)) async {
+  static Future<T> _withBox<T>(
+      Future<T> action(Box<HiveAccreditationChunk> box)) async {
     final Box<HiveAccreditationChunk> box = await Hive.openBox(_kKey);
     final result = await action(box);
     await box.close();
@@ -28,5 +28,4 @@ class HiveAccreditationsDao extends AccreditationsDao {
 
     await _withBox((box) async => box.put(emis.id, hiveChunk));
   }
-
 }

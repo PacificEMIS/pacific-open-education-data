@@ -11,18 +11,14 @@ class HiveLookup {
   @HiveField(1)
   String name;
 
-  @HiveField(2)
-  String l;
-
-  Lookup toLookup() => Lookup((b) => b
-    ..name = name
-    ..code = code
-    ..l = l);
+  Lookup toLookup() => Lookup(
+        name: name,
+        code: code,
+      );
 
   static HiveLookup from(Lookup lookup) {
     return HiveLookup()
       ..code = lookup.code
-      ..name = lookup.name
-      ..l = lookup.l;
+      ..name = lookup.name;
   }
 }

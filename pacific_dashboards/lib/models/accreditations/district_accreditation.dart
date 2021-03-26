@@ -1,70 +1,60 @@
-import 'dart:convert';
-
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
 
 part 'district_accreditation.g.dart';
 
-abstract class DistrictAccreditation
-    implements
-        Built<DistrictAccreditation, DistrictAccreditationBuilder>,
-        Accreditation {
-  DistrictAccreditation._();
-
-  factory DistrictAccreditation([updates(DistrictAccreditationBuilder b)]) =
-      _$DistrictAccreditation;
-
+@JsonSerializable()
+class DistrictAccreditation implements Accreditation {
+  @JsonKey(name: 'SurveyYear')
   @override
-  @BuiltValueField(wireName: 'SurveyYear')
-  int get surveyYear;
+  final int surveyYear;
 
+  @JsonKey(name: 'DistrictCode')
   @override
-  @BuiltValueField(wireName: 'DistrictCode')
-  String get districtCode;
+  final String districtCode;
 
+  @JsonKey(name: 'AuthorityCode')
   @override
-  @BuiltValueField(wireName: 'AuthorityCode')
-  String get authorityCode;
+  final String authorityCode;
 
+  @JsonKey(name: 'AuthorityGovtCode')
   @override
-  @BuiltValueField(wireName: 'AuthorityGovtCode')
-  String get authorityGovtCode;
+  final String authorityGovtCode;
 
-  @BuiltValueField(wireName: 'SchoolTypeCode')
-  String get schoolTypeCode;
+  @JsonKey(name: 'SchoolTypeCode')
+  final String schoolTypeCode;
 
-  @nullable
-  @BuiltValueField(wireName: 'InspectionResult')
-  String get inspectionResult;
+  @JsonKey(name: 'InspectionResult')
+  final String inspectionResult;
 
+  @JsonKey(name: 'Num', defaultValue: 0)
   @override
-  @nullable
-  @BuiltValueField(wireName: 'Num')
-  int get num;
+  final int total;
 
+  @JsonKey(name: 'NumThisYear', defaultValue: 0)
   @override
-  @nullable
-  @BuiltValueField(wireName: 'NumThisYear')
-  int get numThisYear;
+  final int numThisYear;
+
+  const DistrictAccreditation({
+    @required this.surveyYear,
+    @required this.districtCode,
+    @required this.authorityCode,
+    @required this.authorityGovtCode,
+    @required this.schoolTypeCode,
+    @required this.inspectionResult,
+    @required this.total,
+    @required this.numThisYear,
+  });
+
+  factory DistrictAccreditation.fromJson(Map<String, dynamic> json) =>
+      _$DistrictAccreditationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DistrictAccreditationToJson(this);
 
   @override
   String get result => inspectionResult;
 
   @override
   Comparable get sortField => "";
-
-  String toJson() {
-    return json.encode(
-        serializers.serializeWith(DistrictAccreditation.serializer, this));
-  }
-
-  static DistrictAccreditation fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        DistrictAccreditation.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<DistrictAccreditation> get serializer =>
-      _$districtAccreditationSerializer;
 }

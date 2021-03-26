@@ -1,11 +1,4 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
-
-part 'filter.g.dart';
+import 'package:flutter/foundation.dart';
 
 class FilterItem {
   final String visibleName;
@@ -14,36 +7,21 @@ class FilterItem {
   const FilterItem(this.value, this.visibleName);
 }
 
-abstract class Filter implements Built<Filter, FilterBuilder> {
+class Filter {
+  final int id;
 
-  Filter._();
+  final String title;
 
-  factory Filter([updates(FilterBuilder b)]) = _$Filter;
+  final List<FilterItem> items;
 
-  @BuiltValueField(wireName: 'C')
-  int get id;
+  int selectedIndex;
 
-  @BuiltValueField(wireName: 'C')
-  String get title;
-
-  @BuiltValueField(wireName: 'C')
-  BuiltList<FilterItem> get items;
-
-  @BuiltValueField(wireName: 'C')
-  int get selectedIndex;
-
-  String toJson() {
-    return json
-        .encode(serializers.serializeWith(Filter.serializer, this));
-  }
-
-  static Filter fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        Filter.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<Filter> get serializer => _$filterSerializer;
-
+  Filter({
+    @required this.id,
+    @required this.title,
+    @required this.items,
+    @required this.selectedIndex,
+  });
 
   bool get isDefault => items[selectedIndex].value == null;
 

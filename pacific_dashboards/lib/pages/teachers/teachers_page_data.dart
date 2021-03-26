@@ -1,37 +1,74 @@
-import 'package:built_collection/built_collection.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 
-class TeachersPageData extends Equatable {
+class TeachersPageData {
   TeachersPageData({
     @required this.teachersByDistrict,
     @required this.teachersByAuthority,
     @required this.teachersByPrivacy,
-    @required this.teachersBySchoolLevelStateAndGender,
-    @required this.filters,
-    this.note,
+    @required this.enrollTeachersBySchoolLevelStateAndGender,
+    @required this.teachersByCertification,
   })  : assert(teachersByDistrict != null),
         assert(teachersByAuthority != null),
         assert(teachersByPrivacy != null),
-        assert(teachersBySchoolLevelStateAndGender != null),
-        assert(filters != null);
+        assert(teachersByCertification != null),
+        assert(enrollTeachersBySchoolLevelStateAndGender != null);
 
-  final BuiltMap<String, int> teachersByDistrict;
-  final BuiltMap<String, int> teachersByAuthority;
-  final BuiltMap<String, int> teachersByPrivacy;
-  final BuiltMap<String, BuiltMap<String, InfoTableData>>
-      teachersBySchoolLevelStateAndGender;
-  final BuiltList<Filter> filters;
-  final String note;
+  final List<ChartData> teachersByDistrict;
+  final List<ChartData> teachersByAuthority;
+  final List<ChartData> teachersByPrivacy;
 
-  @override
-  List<Object> get props => [
-        teachersByDistrict,
-        teachersByAuthority,
-        teachersByPrivacy,
-        teachersBySchoolLevelStateAndGender,
-        note,
-      ];
+  final EnrollTeachersBySchoolLevelStateAndGender
+      enrollTeachersBySchoolLevelStateAndGender;
+
+  final Map<String, TeachersByCertification> teachersByCertification;
+}
+
+class EnrollTeachersBySchoolLevelStateAndGender {
+  final List<TeachersBySchoolLevelStateAndGender> all;
+  final List<TeachersBySchoolLevelStateAndGender> qualified;
+  final List<TeachersBySchoolLevelStateAndGender> certified;
+  final List<TeachersBySchoolLevelStateAndGender> allQualifiedAndCertified;
+
+  EnrollTeachersBySchoolLevelStateAndGender({
+    @required this.all,
+    @required this.qualified,
+    @required this.certified,
+    @required this.allQualifiedAndCertified,
+  });
+}
+
+class TeachersBySchoolLevelStateAndGender {
+  final String state;
+  final Map<String, GenderTableData> total;
+
+  TeachersBySchoolLevelStateAndGender({
+    @required this.state,
+    @required this.total,
+  });
+}
+
+class TeachersByCertification {
+  int certifiedAndQualifiedFemale;
+  int qualifiedFemale;
+  int certifiedFemale;
+  int numberTeachersFemale;
+
+  int certifiedAndQualifiedMale;
+  int qualifiedMale;
+  int certifiedMale;
+  int numberTeachersMale;
+
+  TeachersByCertification({
+    @required this.certifiedAndQualifiedFemale,
+    @required this.qualifiedFemale,
+    @required this.certifiedFemale,
+    @required this.numberTeachersFemale,
+
+    @required this.certifiedAndQualifiedMale,
+    @required this.qualifiedMale,
+    @required this.certifiedMale,
+    @required this.numberTeachersMale,
+  });
 }

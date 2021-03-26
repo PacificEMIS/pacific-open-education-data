@@ -1,18 +1,9 @@
 abstract class Accreditation {
-// ignore: unused_field
-  static const _kYearFilterId = 0;
-  // ignore: unused_field
-  static const _kDistrictFilterId = 1;
-  // ignore: unused_field
-  static const _kAuthorityFilterId = 2;
-  // ignore: unused_field
-  static const _kGovtFilterId = 3;
-
   int get surveyYear;
   String get districtCode;
   String get authorityCode;
   String get authorityGovtCode;
-  int get num;
+  int get total;
   int get numThisYear;
   String get result;
   Comparable get sortField;

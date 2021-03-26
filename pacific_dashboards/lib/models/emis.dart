@@ -1,4 +1,5 @@
-import 'package:pacific_dashboards/res/strings/strings.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 
 enum Emis { miemis, fedemis, kemis }
 
@@ -6,15 +7,14 @@ Emis emisFromString(String string) =>
     Emis.values.firstWhere((it) => it.toString() == string, orElse: () => null);
 
 extension UI on Emis {
-
-  String get name {
+  String getName(BuildContext context) {
     switch (this) {
       case Emis.miemis:
-        return AppLocalizations.marshallIslands;
+        return 'miemisTitle'.localized(context);
       case Emis.fedemis:
-        return AppLocalizations.federatedStateOfMicronesia;
+        return 'fedemisTitle'.localized(context);
       case Emis.kemis:
-        return AppLocalizations.kiribati;
+        return 'kiemisTitle'.localized(context);
     }
     throw FallThroughError();
   }
@@ -22,15 +22,14 @@ extension UI on Emis {
   String get logo {
     switch (this) {
       case Emis.miemis:
-        return "images/miemis.png";
+        return "images/logo_miemis.png";
       case Emis.fedemis:
-        return "images/fedemis.png";
+        return "images/logo_fedemis.png";
       case Emis.kemis:
-        return "images/kiribati.png";
+        return "images/logo_kemis.png";
     }
     throw FallThroughError();
   }
-
 }
 
 extension Id on Emis {

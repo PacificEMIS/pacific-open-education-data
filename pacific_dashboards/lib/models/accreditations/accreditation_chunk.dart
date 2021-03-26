@@ -1,46 +1,51 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
+import 'package:arch/arch.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
-import 'package:pacific_dashboards/res/strings/strings.dart';
-import 'package:pacific_dashboards/utils/collections.dart';
+
+import 'national_accreditation.dart';
 
 part 'accreditation_chunk.g.dart';
 
 typedef FilterApplier<T> = T Function(T a);
 
-abstract class AccreditationChunk
-    implements Built<AccreditationChunk, AccreditationChunkBuilder> {
-  AccreditationChunk._();
+@JsonSerializable()
+class AccreditationChunk {
+  @JsonKey(name: 'byDistrict')
+  final List<DistrictAccreditation> byDistrict;
 
-  factory AccreditationChunk([updates(AccreditationChunkBuilder b)]) =
-      _$AccreditationChunk;
+  @JsonKey(name: 'byStandard')
+  final List<StandardAccreditation> byStandard;
 
-  @BuiltValueField(wireName: 'byDistrict')
-  BuiltList<DistrictAccreditation> get byDistrict;
+  @JsonKey(name: 'byNation')
+  final List<NationalAccreditation> byNational;
 
-  @BuiltValueField(wireName: 'byStandard')
-  BuiltList<StandardAccreditation> get byStandard;
+  const AccreditationChunk({
+    @required this.byDistrict,
+    @required this.byStandard,
+    @required this.byNational,
+  });
 
-  String toJson() {
-    return json
-        .encode(serializers.serializeWith(AccreditationChunk.serializer, this));
-  }
+  factory AccreditationChunk.fromJson(Map<String, dynamic> json) =>
+      _$AccreditationChunkFromJson(json);
 
-  static AccreditationChunk fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        AccreditationChunk.serializer, json.decode(jsonString));
-  }
+  Map<String, dynamic> toJson() => _$AccreditationChunkToJson(this);
+}
 
-  static Serializer<AccreditationChunk> get serializer =>
-      _$accreditationChunkSerializer;
+class AccreditationChunkJsonParts {
+  final List<dynamic> byDistrictJson;
+  final List<dynamic> byStandardJson;
+  final List<dynamic> byNationJson;
+
+  const AccreditationChunkJsonParts({
+    this.byDistrictJson,
+    this.byStandardJson,
+    this.byNationJson,
+  });
 }
 
 extension Filters on AccreditationChunk {
@@ -56,63 +61,57 @@ extension Filters on AccreditationChunk {
   // ignore: unused_field
   static const _kGovtFilterId = 3;
 
-  BuiltList<Filter> generateDefaultFilters(Lookups lookups) {
-    final allItems = (ListBuilder<Accreditation>(this.byDistrict)
-          ..addAll(this.byStandard))
-        .build();
-    return BuiltList.of([
+  List<Filter> generateDefaultFilters(Lookups lookups) {
+    final allItems = List<Accreditation>.of(this.byDistrict)
+      ..addAll(this.byStandard);
+    return List.of([
       Filter(
-        (b) => b
-          ..id = _kYearFilterId
-          ..title = AppLocalizations.filterByYear
-          ..items = ListBuilder<FilterItem>(
-            allItems
-                .uniques((it) => it.surveyYear)
-                .sort((lv, rv) => rv.compareTo(lv))
-                .map((it) => FilterItem(it, it.toString())),
-          )
-          ..selectedIndex = 0,
+        id: _kYearFilterId,
+        title: 'filtersByYear',
+        items: allItems
+            .uniques((it) => it.surveyYear)
+            .chainSort((lv, rv) => rv.compareTo(lv))
+            .map((it) => FilterItem(it, it.toString()))
+            .toList(),
+        selectedIndex: 0,
       ),
       Filter(
-        (b) => b
-          ..id = _kDistrictFilterId
-          ..title = AppLocalizations.filterByState
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllStates),
-            ...allItems
-                .uniques((it) => it.districtCode)
-                .map((it) => FilterItem(it, it.from(lookups.districts))),
-          ])
-          ..selectedIndex = 0,
+        id: _kDistrictFilterId,
+        title: 'filtersByState',
+        items: [
+          FilterItem(null, 'filtersDisplayAllStates'),
+          ...allItems
+              .uniques((it) => it.districtCode)
+              .map((it) => FilterItem(it, it.from(lookups.districts))),
+        ],
+        selectedIndex: 0,
       ),
       Filter(
-        (b) => b
-          ..id = _kAuthorityFilterId
-          ..title = AppLocalizations.filterByAuthority
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllAuthority),
-            ...allItems
-                .uniques((it) => it.authorityCode)
-                .map((it) => FilterItem(it, it.from(lookups.authorities))),
-          ])
-          ..selectedIndex = 0,
+        id: _kAuthorityFilterId,
+        title: 'filtersByAuthority',
+        items: [
+          FilterItem(null, 'filtersDisplayAllAuthority'),
+          ...allItems
+              .uniques((it) => it.authorityCode)
+              .map((it) => FilterItem(it, it.from(lookups.authorities))),
+        ],
+        selectedIndex: 0,
       ),
       Filter(
-        (b) => b
-          ..id = _kGovtFilterId
-          ..title = AppLocalizations.filterByGovernment
-          ..items = ListBuilder<FilterItem>([
-            FilterItem(null, AppLocalizations.displayAllGovernment),
-            ...allItems
-                .uniques((it) => it.authorityGovtCode)
-                .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
-          ])
-          ..selectedIndex = 0,
+        id: _kGovtFilterId,
+        title: 'filtersByGovernment',
+        items: [
+          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          ...allItems
+              .uniques((it) => it.authorityGovtCode)
+              .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
+        ],
+        selectedIndex: 0,
       ),
     ]);
   }
 
-  Future<AccreditationChunk> applyFilters(BuiltList<Filter> filters) {
+  Future<AccreditationChunk> applyFilters(List<Filter> filters) {
     return Future(() {
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
@@ -151,11 +150,11 @@ extension Filters on AccreditationChunk {
           });
       };
 
-      return this.rebuild((b) => b
-        ..byStandard =
-            ListBuilder<StandardAccreditation>(apply(this.byStandard))
-        ..byDistrict =
-            ListBuilder<DistrictAccreditation>(apply(this.byDistrict)));
+      return AccreditationChunk(
+        byDistrict: apply(this.byDistrict),
+        byStandard: apply(this.byStandard),
+        byNational: apply(this.byNational),
+      );
     });
   }
 }

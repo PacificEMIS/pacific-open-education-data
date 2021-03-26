@@ -24,21 +24,20 @@ class HiveDistrictAccreditation extends HiveObject {
   String inspectionResult;
 
   @HiveField(6)
-  int num;
+  int total;
 
   @HiveField(7)
   int numThisYear;
 
   DistrictAccreditation toAccreditation() => DistrictAccreditation(
-        (b) => b
-          ..surveyYear = surveyYear
-          ..districtCode = districtCode
-          ..authorityCode = authorityCode
-          ..authorityGovtCode = authorityGovtCode
-          ..schoolTypeCode = schoolTypeCode
-          ..inspectionResult = inspectionResult
-          ..num = num
-          ..numThisYear = numThisYear,
+        surveyYear: surveyYear,
+        districtCode: districtCode,
+        authorityCode: authorityCode,
+        authorityGovtCode: authorityGovtCode,
+        schoolTypeCode: schoolTypeCode,
+        inspectionResult: inspectionResult,
+        total: total,
+        numThisYear: numThisYear,
       );
 
   static HiveDistrictAccreditation from(DistrictAccreditation accreditation) =>
@@ -49,6 +48,6 @@ class HiveDistrictAccreditation extends HiveObject {
         ..authorityGovtCode = accreditation.authorityGovtCode
         ..schoolTypeCode = accreditation.schoolTypeCode
         ..inspectionResult = accreditation.inspectionResult
-        ..num = accreditation.num
+        ..total = accreditation.total
         ..numThisYear = accreditation.numThisYear;
 }

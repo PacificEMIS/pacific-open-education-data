@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 
@@ -26,14 +25,14 @@ class AccreditationTableData {
 class AccreditationTableWidget extends StatefulWidget {
   static const double _kBorderWidth = 1.0;
 
-  final BuiltMap<String, AccreditationTableData> data;
+  final Map<String, AccreditationTableData> data;
 
   final String title;
   final String firstColumnName;
 
   final Color _borderColor = AppColors.kGeyser;
   final Color _evenRowColor = Colors.white;
-  final Color _oddRowColor = AppColors.kAthensGray;
+  final Color _oddRowColor = AppColors.kGrayLight;
 
   AccreditationTableWidget({
     Key key,
@@ -58,7 +57,7 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: Theme.of(context).textTheme.body2,
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             ],
           ),
@@ -178,7 +177,7 @@ class _AccreditationTableWidgetState extends State<AccreditationTableWidget> {
   }
 
   List<TableRow> _generateTableBody(
-    BuiltMap<dynamic, AccreditationTableData> data,
+    Map<dynamic, AccreditationTableData> data,
     TableRow subTitle,
   ) {
     var rowsList = List<TableRow>();
@@ -297,7 +296,7 @@ class _SubTitle extends StatelessWidget {
     return Text(
       _name,
       overflow: TextOverflow.ellipsis,
-      style: Theme.of(context).textTheme.subtitle,
+      style: Theme.of(context).textTheme.subtitle2,
     );
   }
 }
@@ -329,10 +328,10 @@ class _Cell extends StatelessWidget {
                 _value.isEmpty ? '-' : _value,
                 overflow: TextOverflow.fade,
                 style: _customFontSize == null
-                    ? Theme.of(context).textTheme.subtitle
+                    ? Theme.of(context).textTheme.subtitle2
                     : Theme.of(context)
                         .textTheme
-                        .subtitle
+                        .subtitle2
                         .copyWith(fontSize: 9.0),
               ),
             ),

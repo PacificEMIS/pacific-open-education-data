@@ -3,6 +3,8 @@ import 'package:pacific_dashboards/models/emis.dart';
 
 class GlobalSettings {
   static const kDefaultEmis = Emis.fedemis;
+  static const _kApiUser = const String.fromEnvironment('envApiUser');
+  static const _kApiPassword = const String.fromEnvironment('envApiPassword');
   static const _kEmisKey = "emis";
   static const _kVersionSuffix = "_version";
 
@@ -23,4 +25,8 @@ class GlobalSettings {
 
   Future<void> setEtag(String path, String etag) =>
       _stringsDao.save(path + _kVersionSuffix, etag);
+
+  String getApiUserName() => _kApiUser;
+
+  String getApiPassword() => _kApiPassword;
 }

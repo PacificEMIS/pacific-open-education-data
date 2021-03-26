@@ -1,0 +1,4 @@
+[submodule "pacific_dashboards/.flutter"]
+	path = pacific_dashboards/.flutter
+	url = https://github.com/flutter/flutter.git
+	branch = stable

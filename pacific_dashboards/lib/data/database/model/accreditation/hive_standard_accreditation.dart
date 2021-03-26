@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:pacific_dashboards/models/accreditations/district_accreditation.dart';
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 
 part 'hive_standard_accreditation.g.dart';
@@ -28,22 +27,21 @@ class HiveStandardAccreditation extends HiveObject {
   String result;
 
   @HiveField(7)
-  int num;
+  int total;
 
   @HiveField(8)
   int numInYear;
 
   StandardAccreditation toAccreditation() => StandardAccreditation(
-        (b) => b
-          ..surveyYear = surveyYear
-          ..districtCode = districtCode
-          ..authorityCode = authorityCode
-          ..authorityGovtCode = authorityGovtCode
-          ..schoolTypeCode = schoolTypeCode
-          ..standard = standard
-          ..result = result
-          ..num = num
-          ..numInYear = numInYear,
+        surveyYear: surveyYear,
+        districtCode: districtCode,
+        authorityCode: authorityCode,
+        authorityGovtCode: authorityGovtCode,
+        schoolTypeCode: schoolTypeCode,
+        standard: standard,
+        result: result,
+        total: total,
+        numThisYear: numInYear,
       );
 
   static HiveStandardAccreditation from(StandardAccreditation accreditation) =>
@@ -55,6 +53,6 @@ class HiveStandardAccreditation extends HiveObject {
         ..schoolTypeCode = accreditation.schoolTypeCode
         ..standard = accreditation.standard
         ..result = accreditation.result
-        ..num = accreditation.num
-        ..numInYear = accreditation.numInYear;
+        ..total = accreditation.total
+        ..numInYear = accreditation.numThisYear;
 }

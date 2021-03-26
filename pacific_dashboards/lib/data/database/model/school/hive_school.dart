@@ -38,26 +38,25 @@ class HiveSchool extends HiveObject with Expirable {
   int timestamp;
 
   School toSchool() => School(
-        (b) => b
-          ..surveyYear = surveyYear
-          ..classLevel = classLevel
-          ..age = age
-          ..districtCode = districtCode
-          ..authorityCode = authorityCode
-          ..authorityGovt = authorityGovt
-          ..genderCode = genderCode
-          ..schoolTypeCode = schoolTypeCode
-          ..enrol = enrol,
+        surveyYear: surveyYear,
+        classLevel: classLevel,
+        age: age,
+        districtCode: districtCode,
+        authorityCode: authorityCode,
+        authorityGovt: authorityGovt,
+        genderCode: genderCode,
+        schoolTypeCode: schoolTypeCode,
+        enrol: enrol,
       );
 
   static HiveSchool from(School school) => HiveSchool()
-      ..surveyYear = school.surveyYear
-      ..classLevel = school.classLevel
-      ..age = school.age
-      ..districtCode = school.districtCode
-      ..authorityCode = school.authorityCode
-      ..authorityGovt = school.authorityGovt
-      ..genderCode = school.genderCode
-      ..schoolTypeCode = school.schoolTypeCode
-      ..enrol = school.enrol;
+    ..surveyYear = school.surveyYear
+    ..classLevel = school.classLevel
+    ..age = school.age
+    ..districtCode = school.districtCode
+    ..authorityCode = school.authorityCode
+    ..authorityGovt = school.authorityGovt
+    ..genderCode = school.genderCode
+    ..schoolTypeCode = school.schoolTypeCode
+    ..enrol = school.enrol;
 }

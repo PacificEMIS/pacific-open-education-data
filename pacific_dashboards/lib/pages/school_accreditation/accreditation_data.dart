@@ -1,58 +1,46 @@
-import 'package:built_collection/built_collection.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/accreditation_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 
-class AccreditationData extends Equatable {
+class AccreditationData {
   const AccreditationData({
     @required this.year,
     @required this.accreditationProgressData,
+    @required this.accreditationProgressCumulativeData,
     @required this.districtStatusData,
+    @required this.districtStatusCumulativeData,
+    @required this.accreditationNationalCumulativeData,
+    @required this.accreditationNationalEvaluatedData,
     @required this.accreditationStatusByState,
     @required this.performanceByStandard,
-    @required this.filters,
-    this.note,
-  })  : assert(accreditationProgressData != null),
+  })  : assert(year != null),
+        assert(accreditationProgressData != null),
+        assert(accreditationProgressCumulativeData != null),
         assert(districtStatusData != null),
-        assert(year != null),
+        assert(districtStatusCumulativeData != null),
+        assert(accreditationNationalEvaluatedData != null),
+        assert(accreditationNationalCumulativeData != null),
         assert(accreditationStatusByState != null),
-        assert(performanceByStandard != null),
-        assert(filters != null);
+        assert(performanceByStandard != null);
 
-  final BuiltMap<String, BuiltList<int>> accreditationProgressData;
-  final BuiltMap<String, BuiltList<int>> districtStatusData;
   final String year;
+  final Map<String, List<int>> accreditationProgressData;
+  final Map<String, List<int>> accreditationProgressCumulativeData;
+  final Map<String, List<int>> districtStatusData;
+  final Map<String, List<int>> districtStatusCumulativeData;
+  final List<ChartData> accreditationNationalCumulativeData;
+  final List<ChartData> accreditationNationalEvaluatedData;
   final MultitableData accreditationStatusByState;
   final MultitableData performanceByStandard;
-  final BuiltList<Filter> filters;
-  final String note;
-
-  @override
-  List<Object> get props => [
-        accreditationProgressData,
-        districtStatusData,
-        year,
-        accreditationStatusByState,
-        performanceByStandard,
-        filters,
-        note,
-      ];
 }
 
-class MultitableData extends Equatable {
+class MultitableData {
   const MultitableData({
     @required this.evaluatedData,
     @required this.cumulatedData,
   })  : assert(evaluatedData != null),
         assert(cumulatedData != null);
 
-  final BuiltMap<String, AccreditationTableData> evaluatedData;
-  final BuiltMap<String, AccreditationTableData> cumulatedData;
-
-  @override
-  List<Object> get props => [
-        evaluatedData,
-        cumulatedData,
-      ];
+  final Map<String, AccreditationTableData> evaluatedData;
+  final Map<String, AccreditationTableData> cumulatedData;
 }

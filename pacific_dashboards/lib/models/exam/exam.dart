@@ -1,118 +1,96 @@
-import 'dart:convert';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:pacific_dashboards/models/serialized/serializers.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'exam.g.dart';
 
-abstract class Exam implements Built<Exam, ExamBuilder> {
-  Exam._();
+@JsonSerializable()
+class Exam {
+  @JsonKey(name: 'Exam')
+  final String name;
 
-  factory Exam([updates(ExamBuilder b)]) = _$Exam;
+  @JsonKey(name: 'ExamYear')
+  final int year;
 
-  @BuiltValueField(wireName: 'Exam')
-  String get name;
+  @JsonKey(name: 'DistrictCode')
+  final String districtCode;
 
-  @BuiltValueField(wireName: 'ExamYear')
-  int get year;
+  @JsonKey(name: 'ExamStandard')
+  final String standard;
 
-  @BuiltValueField(wireName: 'DistrictCode')
-  String get districtCode;
+  @JsonKey(name: 'ExamBenchmark')
+  final String benchmark;
 
-  @BuiltValueField(wireName: 'ExamStandard')
-  String get standard;
+  @JsonKey(name: 'CandidatesM', defaultValue: 0)
+  final int candidatesM;
 
-  @BuiltValueField(wireName: 'ExamBenchmark')
-  String get benchmark;
+  @JsonKey(name: '1M', defaultValue: 0)
+  final int wellBelowCompetentM;
 
-  @nullable
-  @BuiltValueField(wireName: 'CandidatesM')
-  int get candidatesMOptional;
+  @JsonKey(name: 'ApproachingCompetenceM', defaultValue: 0)
+  final int approachingCompetenceM;
 
-  @nullable
-  @BuiltValueField(wireName: '1M')
-  int get wellBelowCompetentMOptional;
+  @JsonKey(name: 'MinimallyCompetentM', defaultValue: 0)
+  final int minimallyCompetentM;
 
-  @nullable
-  @BuiltValueField(wireName: 'ApproachingCompetenceM')
-  int get approachingCompetenceMOptional;
+  @JsonKey(name: 'CompetentM', defaultValue: 0)
+  final int competentM;
 
-  @nullable
-  @BuiltValueField(wireName: 'MinimallyCompetentM')
-  int get minimallyCompetentMOptional;
+  @JsonKey(name: 'CandidatesF', defaultValue: 0)
+  final int candidatesF;
 
-  @nullable
-  @BuiltValueField(wireName: 'CompetentM')
-  int get competentMOptional;
+  @JsonKey(name: 'WellBelowCompetentF', defaultValue: 0)
+  final int wellBelowCompetentF;
 
-  @nullable
-  @BuiltValueField(wireName: 'CandidatesF')
-  int get candidatesFOptional;
+  @JsonKey(name: 'ApproachingCompetenceF', defaultValue: 0)
+  final int approachingCompetenceF;
 
-  @nullable
-  @BuiltValueField(wireName: 'WellBelowCompetentF')
-  int get wellBelowCompetentFOptional;
+  @JsonKey(name: 'MinimallyCompetentF', defaultValue: 0)
+  final int minimallyCompetentF;
 
-  @nullable
-  @BuiltValueField(wireName: 'ApproachingCompetenceF')
-  int get approachingCompetenceFOptional;
+  @JsonKey(name: 'CompetentF', defaultValue: 0)
+  final int competentF;
 
-  @nullable
-  @BuiltValueField(wireName: 'MinimallyCompetentF')
-  int get minimallyCompetentFOptional;
+  const Exam({
+    @required this.name,
+    @required this.year,
+    @required this.districtCode,
+    @required this.standard,
+    @required this.benchmark,
+    @required this.candidatesM,
+    @required this.wellBelowCompetentM,
+    @required this.approachingCompetenceM,
+    @required this.minimallyCompetentM,
+    @required this.competentM,
+    @required this.candidatesF,
+    @required this.wellBelowCompetentF,
+    @required this.approachingCompetenceF,
+    @required this.minimallyCompetentF,
+    @required this.competentF,
+  });
 
-  @nullable
-  @BuiltValueField(wireName: 'CompetentF')
-  int get competentFOptional;
+  factory Exam.fromJson(Map<String, dynamic> json) => _$ExamFromJson(json);
 
-  int get candidatesM => candidatesMOptional ?? 0;
-
-  int get wellBelowCompetentM => wellBelowCompetentMOptional ?? 0;
-
-  int get approachingCompetenceM => approachingCompetenceMOptional ?? 0;
-
-  int get minimallyCompetentM => minimallyCompetentMOptional ?? 0;
-
-  int get competentM => competentMOptional ?? 0;
-
-  int get candidatesF => candidatesFOptional ?? 0;
-
-  int get wellBelowCompetentF => wellBelowCompetentFOptional ?? 0;
-
-  int get approachingCompetenceF => approachingCompetenceFOptional ?? 0;
-
-  int get minimallyCompetentF => minimallyCompetentFOptional ?? 0;
-
-  int get competentF => competentFOptional ?? 0;
+  Map<String, dynamic> toJson() => _$ExamToJson(this);
 
   Exam operator +(Exam other) {
-    return this.rebuild(
-      (b) => b
-        ..candidatesMOptional = candidatesM + other.candidatesM
-        ..wellBelowCompetentMOptional = wellBelowCompetentM + other.wellBelowCompetentM
-        ..approachingCompetenceMOptional =
-            approachingCompetenceM + other.approachingCompetenceM
-        ..minimallyCompetentMOptional = minimallyCompetentM + other.minimallyCompetentM
-        ..competentMOptional = competentM + other.competentM
-        ..candidatesFOptional = candidatesF + other.candidatesF
-        ..wellBelowCompetentFOptional = wellBelowCompetentF + other.wellBelowCompetentF
-        ..approachingCompetenceFOptional =
-            approachingCompetenceF + other.approachingCompetenceF
-        ..minimallyCompetentFOptional = minimallyCompetentF + other.minimallyCompetentF
-        ..competentFOptional = competentF + other.competentF,
+    return Exam(
+      name: name,
+      year: year,
+      districtCode: districtCode,
+      standard: standard,
+      benchmark: benchmark,
+      candidatesM: candidatesM + other.candidatesM,
+      wellBelowCompetentM: wellBelowCompetentM + other.wellBelowCompetentM,
+      approachingCompetenceM:
+          approachingCompetenceM + other.approachingCompetenceM,
+      minimallyCompetentM: minimallyCompetentM + other.minimallyCompetentM,
+      competentM: competentM + other.competentM,
+      candidatesF: candidatesF + other.candidatesF,
+      wellBelowCompetentF: wellBelowCompetentF + other.wellBelowCompetentF,
+      approachingCompetenceF:
+          approachingCompetenceF + other.approachingCompetenceF,
+      minimallyCompetentF: minimallyCompetentF + other.minimallyCompetentF,
+      competentF: competentF + other.competentF,
     );
   }
-
-  String toJson() {
-    return json.encode(serializers.serializeWith(Exam.serializer, this));
-  }
-
-  static Exam fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        Exam.serializer, json.decode(jsonString));
-  }
-
-  static Serializer<Exam> get serializer => _$examSerializer;
 }

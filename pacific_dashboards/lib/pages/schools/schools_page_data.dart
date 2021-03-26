@@ -1,43 +1,26 @@
-import 'package:built_collection/built_collection.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
-import 'package:pacific_dashboards/shared_ui/info_table_widget.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 
-class SchoolsPageData extends Equatable {
+class SchoolsPageData {
   SchoolsPageData({
+    @required this.year,
     @required this.enrolByDistrict,
     @required this.enrolByAuthority,
     @required this.enrolByPrivacy,
     @required this.enrolByAgeAndEducation,
     @required this.enrolBySchoolLevelAndDistrict,
-    @required this.filters,
-    this.note,
-  })  : assert(enrolByDistrict != null),
+  })  : assert(year != null),
+        assert(enrolByDistrict != null),
         assert(enrolByAuthority != null),
         assert(enrolByPrivacy != null),
         assert(enrolByAgeAndEducation != null),
-        assert(enrolBySchoolLevelAndDistrict != null),
-        assert(filters != null);
+        assert(enrolBySchoolLevelAndDistrict != null);
 
-  final BuiltMap<String, int> enrolByDistrict;
-  final BuiltMap<String, int> enrolByAuthority;
-  final BuiltMap<String, int> enrolByPrivacy;
-  final BuiltMap<String, BuiltMap<String, InfoTableData>>
-      enrolByAgeAndEducation;
-  final BuiltMap<String, BuiltMap<String, InfoTableData>>
-      enrolBySchoolLevelAndDistrict;
-  final BuiltList<Filter> filters;
-  final String note;
-
-  @override
-  List<Object> get props => [
-        enrolByDistrict,
-        enrolByAuthority,
-        enrolByPrivacy,
-        enrolByAgeAndEducation,
-        enrolBySchoolLevelAndDistrict,
-        filters,
-        note,
-      ];
+  final String year;
+  final List<ChartData> enrolByDistrict;
+  final List<ChartData> enrolByAuthority;
+  final List<ChartData> enrolByPrivacy;
+  final Map<String, Map<String, GenderTableData>> enrolByAgeAndEducation;
+  final Map<String, Map<String, GenderTableData>> enrolBySchoolLevelAndDistrict;
 }
