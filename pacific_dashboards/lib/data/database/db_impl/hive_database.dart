@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/db_impl/accreditations_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/district_enroll_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/exams_dao_impl.dart';
+import 'package:pacific_dashboards/data/database/db_impl/indicators_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/individual_school_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/lookups_dao_impl.dart';
 import 'package:pacific_dashboards/data/database/db_impl/nation_enroll_dao_impl.dart';
@@ -22,11 +23,14 @@ import 'package:pacific_dashboards/data/database/model/accreditation/hive_standa
 import 'package:pacific_dashboards/data/database/model/accreditation/hive_accreditation_chunk.dart';
 import 'package:pacific_dashboards/data/database/model/budget/hive_budget.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
+import 'package:pacific_dashboards/data/database/model/indicators/hive_enrolment_by_level.dart';
+import 'package:pacific_dashboards/data/database/model/indicators/hive_indicators_school_count.dart';
 import 'package:pacific_dashboards/data/database/model/individual_school/hive_individual_school.dart';
 import 'package:pacific_dashboards/data/database/model/individual_school/hive_individual_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_lookups.dart';
+import 'package:pacific_dashboards/data/database/model/lookup/hive_school_type_lookup.dart';
 import 'package:pacific_dashboards/data/database/model/school/hive_school.dart';
 import 'package:pacific_dashboards/data/database/model/school_enroll/hive_school_enroll.dart';
 import 'package:pacific_dashboards/data/database/model/school_exam_report/hive_school_exam_report.dart';
@@ -53,6 +57,7 @@ class HiveDatabase extends Database {
   SchoolsDao _schoolsDao;
   TeachersDao _teachersDao;
   ExamsDao _examsDao;
+  IndicatorsDao _indicatorsDao;
   AccreditationsDao _accreditationsDao;
   SchoolEnrollDao _schoolEnroll;
   DistrictEnrollDao _districtEnroll;
@@ -70,9 +75,12 @@ class HiveDatabase extends Database {
     Hive
       ..registerAdapter(HiveLookupsAdapter())
       ..registerAdapter(HiveLookupAdapter())
+      ..registerAdapter(HiveSchoolTypeLookupAdapter())
       ..registerAdapter(HiveSchoolAdapter())
       ..registerAdapter(HiveTeacherAdapter())
       ..registerAdapter(HiveExamAdapter())
+      ..registerAdapter(HiveEnrolmentByLevelAdapter())
+      ..registerAdapter(HiveIndicatorsSchoolCountAdapter())
       ..registerAdapter(HiveStandardAccreditationAdapter())
       ..registerAdapter(HiveDistrictAccreditationAdapter())
       ..registerAdapter(HiveAccreditationChunkAdapter())
@@ -101,6 +109,7 @@ class HiveDatabase extends Database {
     _schoolsDao = HiveSchoolsDao();
     _teachersDao = HiveTeachersDao();
     _examsDao = HiveExamsDao();
+    _indicatorsDao = HiveIndicatorsDao();
     _accreditationsDao = HiveAccreditationsDao();
     _schoolEnroll = HiveSchoolEnrollDao();
     _districtEnroll = HiveDistrictEnrollDao();
@@ -161,6 +170,9 @@ class HiveDatabase extends Database {
 
   @override
   IndividualSchoolDao get individualSchoolDao => _individualSchoolDao;
+
+  @override
+  IndicatorsDao get indicators => _indicatorsDao;
 
 
 }

@@ -15,6 +15,8 @@ import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
+import 'package:pacific_dashboards/models/indicators/indicators.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -26,6 +28,7 @@ import 'package:pacific_dashboards/models/special_education/special_education.da
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
+import 'package:pacific_dashboards/utils/xml_to_json.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
@@ -73,6 +76,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             } else {
               final eTag = response.eTag;
               _settings.setEtag(response.requestUrl, eTag);
+              if (response.headers[Headers.contentTypeHeader].contains("application/xml")) {
+                response.data =
+                    XmlToJson.decodeXmlResponseIntoJson(response.data);
+              }
               return response;
             }
           },
@@ -254,15 +261,23 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return _withHandlers(
       (client) => client.getExams(),
       fallbackHandlers: [
-        (e) => _fallbackToNative(
-            e,
-            'warehouse/examsdistrictresults',
-            (json) => compute<String, List<Exam>>(
-              _parseExamsList,
-              json,
-            ),
+            (e) => _fallbackToNative(
+          e,
+          'warehouse/examsdistrictresults',
+              (json) => compute<String, List<Exam>>(
+            _parseExamsList,
+            json,
           ),
+        ),
       ],
+    );
+  }
+
+  @override
+  Future<IndicatorsContainer> fetchIndicators(String districtCode) {
+    return _withHandlers(
+          (client) => client.getIndicators(districtCode),
+      fallbackHandlers: [],
     );
   }
 

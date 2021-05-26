@@ -6,6 +6,8 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/indicators/indicators.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -40,6 +42,10 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.exams.get(await _emis);
 
   @override
+  Future<Pair<bool, IndicatorsContainer>> fetchIndicators(String districtCode) async =>
+      await _database.indicators.get(districtCode, await _emis);
+
+  @override
   Future<AccreditationChunk> fetchSchoolAccreditationsChunk() async =>
       await _database.accreditations.get(await _emis);
 
@@ -69,6 +75,10 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<void> saveExams(List<Exam> exams) async =>
       await _database.exams.save(exams, await _emis);
+
+  @override
+  Future<void> saveIndicators(IndicatorsContainer indicators, String districtCode) async =>
+      await _database.indicators.save(indicators, districtCode, await _emis);
 
   @override
   Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk) async =>

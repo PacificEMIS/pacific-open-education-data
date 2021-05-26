@@ -253,7 +253,6 @@ class _GenderChart extends StatelessWidget {
               renderSpec: const charts.NoneRenderSpec(),
             ),
             defaultRenderer: charts.BarRendererConfig(
-              stackHorizontalSeparator: 0,
               groupingType: charts.BarGroupingType.stacked,
               strokeWidthPx: 1,
             ),

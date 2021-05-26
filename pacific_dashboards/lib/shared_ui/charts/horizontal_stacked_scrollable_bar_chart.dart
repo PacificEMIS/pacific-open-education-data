@@ -81,7 +81,6 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
                             ),
                           ),
                           defaultRenderer: charts.BarRendererConfig(
-                            stackHorizontalSeparator: 0,
                             minBarLengthPx: 30,
                             groupingType: charts.BarGroupingType.stacked,
                           ),
