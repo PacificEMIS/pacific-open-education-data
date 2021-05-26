@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arch/arch.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
 import 'package:flutter/foundation.dart';
@@ -13,9 +15,9 @@ import 'package:pacific_dashboards/data/data_source/remote/rest_client.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
+import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
-import 'package:pacific_dashboards/models/indicators/indicators.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
@@ -42,13 +44,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   static const platform = const MethodChannel('com.pacific_emis.opendata/api');
 
   final GlobalSettings _settings;
-
+  final EmisesConfig _emises;
   Dio _dio;
   RestClient _fedemisClient;
   RestClient _miemisClient;
   RestClient _kemisClient;
 
-  RemoteDataSourceImpl(GlobalSettings settings) : _settings = settings {
+  RemoteDataSourceImpl(GlobalSettings settings, EmisesConfig emises)
+      : _settings = settings,
+        _emises = emises {
     _dio = Dio(BaseOptions(
       connectTimeout: Duration(seconds: 10).inMilliseconds,
       receiveTimeout: Duration(minutes: 5).inMilliseconds,
@@ -76,7 +80,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             } else {
               final eTag = response.eTag;
               _settings.setEtag(response.requestUrl, eTag);
-              if (response.headers[Headers.contentTypeHeader].contains("application/xml")) {
+              if (response.headers[Headers.contentTypeHeader]
+                  .contains("application/xml")) {
                 response.data =
                     XmlToJson.decodeXmlResponseIntoJson(response.data);
               }
@@ -101,9 +106,19 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       ])
       ..transformer = FlutterTransformer();
 
-    _fedemisClient = RestClient(_dio, baseUrl: _kFederalStatesOfMicronesiaUrl);
-    _miemisClient = RestClient(_dio, baseUrl: _kMarshalIslandsUrl);
-    _kemisClient = RestClient(_dio, baseUrl: _kKiribatiUrl);
+    _fedemisClient = RestClient(_dio,
+        baseUrl: emises.getEmisConfigFor(Emis.fedemis).emisUrl);
+    _miemisClient =
+        RestClient(_dio, baseUrl: emises.getEmisConfigFor(Emis.miemis).emisUrl);
+    _kemisClient =
+        RestClient(_dio, baseUrl: emises.getEmisConfigFor(Emis.kemis).emisUrl);
+
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
   }
 
   Future<void> _handleErrors(DioError error) async {
@@ -249,8 +264,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     final response = await _withHandlers(
       (client) => client.getToken(
         'password',
-        _settings.getApiUserName(),
-        _settings.getApiPassword(),
+        _emises.getEmisConfigFor(Emis.fedemis).emisUser,
+        _emises.getEmisConfigFor(Emis.fedemis).emisPassword,
       ),
     );
     return response.accessToken;
@@ -261,14 +276,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return _withHandlers(
       (client) => client.getExams(),
       fallbackHandlers: [
-            (e) => _fallbackToNative(
-          e,
-          'warehouse/examsdistrictresults',
+        (e) => _fallbackToNative(
+              e,
+              'warehouse/examsdistrictresults',
               (json) => compute<String, List<Exam>>(
-            _parseExamsList,
-            json,
-          ),
-        ),
+                _parseExamsList,
+                json,
+              ),
+            ),
       ],
     );
   }
@@ -276,8 +291,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<IndicatorsContainer> fetchIndicators(String districtCode) {
     return _withHandlers(
-          (client) => client.getIndicators(districtCode),
-      fallbackHandlers: [],
+      (client) => client.getIndicators(districtCode),
     );
   }
 
@@ -469,9 +483,7 @@ List<Teacher> _parseTeachersList(String json) {
 
 List<Exam> _parseExamsList(String json) {
   final List<dynamic> data = jsonDecode(json);
-  return data
-      .map((it) => Exam.fromJson(it as Map<String, dynamic>))
-      .toList();
+  return data.map((it) => Exam.fromJson(it as Map<String, dynamic>)).toList();
 }
 
 Lookups _parseLookups(String json) {

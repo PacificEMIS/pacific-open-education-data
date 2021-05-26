@@ -8,9 +8,9 @@ import 'package:pacific_dashboards/pages/school_accreditation/accreditation_tabl
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
+import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
-import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
@@ -125,8 +125,8 @@ class _ContentBody extends StatelessWidget {
           style: Theme.of(context).textTheme.headline4,
         ),
         _buildMiniTabLayoutAccreditationProgress(context, [
-          _data.accreditationProgressData,
-          _data.accreditationProgressCumulativeData,
+          _data.accreditationProgressByYearData,
+          _data.accreditationProgressByYearCumulativeData,
         ]),
         Text(
           'schoolsAccreditationDashboardsProgressByStateTitle'
@@ -310,4 +310,3 @@ class _PerformanceTable extends StatelessWidget {
 }
 
 enum _Tab { cumulative, evaluated }
-// enum _Tab { accreditationProgres, districtStatus }

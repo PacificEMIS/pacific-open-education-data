@@ -124,18 +124,25 @@ class _AccreditationChunkModel {
 Future<AccreditationData> _calculateData(_AccreditationChunkModel model) async {
   final chunk = model.chunk;
   final filters = model.filters;
-  final filteredChunk = await chunk.applyFilters(filters);
+  final filteredChunk = await chunk.applyFilters(filters, false);
+  final filteredChunkWithoutYear = await chunk.applyFilters(filters, true);
   final lookups = model.lookups;
   return AccreditationData(
     year: _selectedYear(filters).toString(),
-    accreditationProgressData:
-        _collectAccreditationProgressData(chunk: chunk, isCumulative: true),
-    accreditationProgressCumulativeData:
-        _collectAccreditationProgressData(chunk: chunk, isCumulative: false),
-    districtStatusData: _collectDistrictStatusData(chunk, filters, true).map(
-        (districtCode, v) => MapEntry(districtCode.from(lookups.districts), v)),
+    accreditationProgressByYearData: _collectAccreditationProgressData(
+        chunk: filteredChunkWithoutYear, isCumulative: true),
+    accreditationProgressByYearCumulativeData:
+        _collectAccreditationProgressData(
+            chunk: filteredChunkWithoutYear, isCumulative: true),
+    accreditationProgressData: _collectAccreditationProgressData(
+        chunk: filteredChunk, isCumulative: true),
+    accreditationProgressCumulativeData: _collectAccreditationProgressData(
+        chunk: filteredChunk, isCumulative: false),
+    districtStatusData: _collectDistrictStatusData(filteredChunk, filters, true)
+        .map((districtCode, v) =>
+            MapEntry(districtCode.from(lookups.districts), v)),
     districtStatusCumulativeData:
-        _collectDistrictStatusData(chunk, filters, false).map(
+        _collectDistrictStatusData(filteredChunk, filters, false).map(
       (districtCode, v) => MapEntry(districtCode.from(lookups.districts), v),
     ),
     accreditationNationalCumulativeData: _collectAccreditationNationalData(
@@ -154,7 +161,7 @@ Future<AccreditationData> _calculateData(_AccreditationChunkModel model) async {
       filters,
     ),
     performanceByStandard: _collectPerformanceByStandard(
-      chunk,
+      filteredChunk,
       lookups,
       filters,
     ),

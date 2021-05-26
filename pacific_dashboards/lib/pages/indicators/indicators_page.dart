@@ -1,8 +1,8 @@
 import 'dart:ui';
-
 import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/models/indicators/indicator.dart';
@@ -18,7 +18,7 @@ import 'package:pacific_dashboards/view_model_factory.dart';
 import 'indicators_filter_data.dart';
 import 'indicators_view_model.dart';
 
-enum _GenderTab { all, male, female, femalePercent }
+enum _GenderTab { all, female, male, femalePercent }
 
 class IndicatorsPage extends MvvmStatefulWidget {
   static const String kRoute = "/Indicators";
@@ -124,19 +124,25 @@ class IndicatorsPageState extends MvvmState<IndicatorsViewModel, IndicatorsPage>
   }
 
   void _openFilters() {
-    Navigator.push<Pair<String, String>>(
+    Navigator.push<List<String>>(
       context,
       MaterialPageRoute(builder: (context) {
         return IndicatorsFiltersPage(
           filtersData: viewModel.filterData,
           canSelectYears: viewModel.years,
+          regionName: viewModel.regionName,
+          regions: viewModel.regions
         );
       }),
-    ).then((years) => _applyFilters(context, years));
+    ).then((years) => _applyFilters(context, new Pair(years[0], years[1]), years[2]));
   }
 
-  void _applyFilters(BuildContext context, Pair<String, String> years) {
+  void _applyFilters(BuildContext context, Pair<String, String> years, String regionName) {
     if (years != null) viewModel.onYearFiltersChanged(years);
+    if (regionName != null) {
+      viewModel.regionName = regionName;
+      viewModel.loadData();
+    }
   }
 }
 
@@ -281,26 +287,45 @@ class _PopulatedContent extends StatelessWidget {
                     _indicators.second.schoolCount.count),
                 'indicatorsDemographic': null,
                 'indicatorsPopulation': Pair(
-                    _indicators.first.enrolment.populationFemale / _indicators.first.enrolment.population,
-                    _indicators.second.enrolment.populationFemale / _indicators.second.enrolment.population),
+                    _Percent(_indicators.first.enrolment.populationFemale,
+                        _indicators.first.enrolment.population),
+                    _Percent(_indicators.second.enrolment.populationFemale,
+                        _indicators.second.enrolment.population)),
                 'indicatorsTotalEnrolment': Pair(
-                    _indicators.first.enrolment.enrolFemale / _indicators.first.enrolment.enrol,
-                    _indicators.second.enrolment.enrolFemale / _indicators.second.enrolment.enrol),
+                    _Percent(_indicators.first.enrolment.enrolFemale,
+                        _indicators.first.enrolment.enrol),
+                    _Percent(_indicators.second.enrolment.enrolFemale,
+                        _indicators.second.enrolment.enrol)),
                 'indicatorsOfficialAgeEnrolment': Pair(
-                    _indicators.first.enrolment.enrolOfficialAgeFemale / _indicators.first.enrolment.enrolOfficialAge,
-                    _indicators.second.enrolment.enrolOfficialAgeFemale / _indicators.second.enrolment.enrolOfficialAge),
+                    _Percent(_indicators.first.enrolment.enrolOfficialAgeFemale,
+                        _indicators.first.enrolment.enrolOfficialAge),
+                    _Percent(
+                        _indicators.second.enrolment.enrolOfficialAgeFemale,
+                        _indicators.second.enrolment.enrolOfficialAge)),
                 'indicatorsGrossEnrolment': Pair(
-                    _indicators.first.enrolment.grossEnrolmentRatioFemale / _indicators.first.enrolment.grossEnrolmentRatio,
-                    _indicators.second.enrolment.grossEnrolmentRatioFemale / _indicators.second.enrolment.grossEnrolmentRatio),
+                    _Percent(
+                        _indicators.first.enrolment.grossEnrolmentRatioFemale,
+                        _indicators.first.enrolment.grossEnrolmentRatio),
+                    _Percent(
+                        _indicators.second.enrolment.grossEnrolmentRatioFemale,
+                        _indicators.second.enrolment.grossEnrolmentRatio)),
                 'indicatorsNetEnrolment': Pair(
-                    _indicators.first.enrolment.netEnrolmentRatioFemale / _indicators.first.enrolment.netEnrolmentRatio,
-                    _indicators.second.enrolment.netEnrolmentRatioFemale / _indicators.second.enrolment.netEnrolmentRatio),
+                    _Percent(
+                        _indicators.first.enrolment.netEnrolmentRatioFemale,
+                        _indicators.first.enrolment.netEnrolmentRatio),
+                    _Percent(
+                        _indicators.second.enrolment.netEnrolmentRatioFemale,
+                        _indicators.second.enrolment.netEnrolmentRatio)),
               },
             );
         }
         throw FallThroughError();
       },
     );
+  }
+
+  num _Percent(num first, num second){
+    return first != null && second != null ? first / second : null;
   }
 }
 
@@ -323,11 +348,10 @@ class _IndicatorsTable extends StatelessWidget {
         '',
         _indicators.first.enrolment.year,
         _indicators.second.enrolment.year,
-        'Difference'
+        'indicatorsDifference'.localized(context)
       ],
       columnFlex: [55, 30, 30, 45],
       data: _data,
-      //keySortFunc: _compareEnrollmentByAgeAndEducation,
       domainValueBuilder: (index, data) {
         num result;
         String imagePath;

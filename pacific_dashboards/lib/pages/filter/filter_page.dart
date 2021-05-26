@@ -48,7 +48,7 @@ class _FilterPageState extends State<FilterPage> {
               Icons.done,
               color: Colors.white,
             ),
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).primaryColor,
             onPressed: () => _apply(context),
           ),
         ),

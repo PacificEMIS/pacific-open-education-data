@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/data/database/database.dart';
 import 'package:pacific_dashboards/data/database/db_impl/hive_database.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/data/repository/repository_impl.dart';
+import 'package:pacific_dashboards/models/emis_config/emises_config.dart';
 
 final ServiceLocator serviceLocator = GetItServiceLocator();
 
@@ -35,12 +36,14 @@ class GetItServiceLocator extends ServiceLocator {
     final globalSettings = GlobalSettings(database.strings);
     _getIt.registerSingleton<GlobalSettings>(globalSettings);
 
-    final repository = RepositoryImpl(
-      RemoteDataSourceImpl(globalSettings),
-      LocalDataSourceImpl(database, globalSettings),
-      globalSettings,
-    );
-    _getIt.registerSingleton<Repository>(repository);
+    fireRemoteConfig.emises.then((EmisesConfig emises) {
+      final repository = RepositoryImpl(
+        RemoteDataSourceImpl(globalSettings, emises),
+        LocalDataSourceImpl(database, globalSettings),
+        globalSettings,
+      );
+      _getIt.registerSingleton<Repository>(repository);
+    });
   }
 
   @override

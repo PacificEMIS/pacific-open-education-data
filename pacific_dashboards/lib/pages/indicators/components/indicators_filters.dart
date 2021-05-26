@@ -31,21 +31,16 @@ class IndicatorsFiltersWidget extends StatelessWidget {
         } else {
           return _BottomMenu(
             alwaysVisibleHeight: 96,
-            totalHeight: 176,
+            totalHeight: 96,
             bottomInset: _bottomInset,
             canShowMore: _viewModel.canSelectState,
             children: <Widget>[
               _BottomMenuRow(
-                rowName: 'indicatorsDashboardsFilterEducationLevel'.localized(context),
+                rowName: 'indicatorsDashboardsFilterEducationLevel'.localized(
+                    context),
                 name: snapshot.data.educationLevel,
                 onPrevTap: _viewModel.onPrevEducationLevelPressed,
                 onNextTap: _viewModel.onNextEducationLevelPressed,
-              ),
-              _BottomMenuRow(
-                rowName: 'indicatorsDashboardsFilterRegion'.localized(context),
-                name: snapshot.data.region,
-                onPrevTap: _viewModel.onPrevRegionPressed,
-                onNextTap: _viewModel.onNextRegionPressed,
               ),
             ],
           );
@@ -162,20 +157,20 @@ class _BottomMenuState extends State<_BottomMenu>
         overflow: Overflow.clip,
         alignment: AlignmentDirectional.topCenter,
         children: <Widget>[
-          widget._canShowMore ? Container(
-            width: buttonSize,
-            height: buttonSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: blurRadius,
-                ),
-              ],
-              color: Colors.white,
-            ),
-          ) : Container(),
+          // Container(
+          //   width: buttonSize,
+          //   height: buttonSize,
+          //   decoration: BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: Colors.grey,
+          //         blurRadius: blurRadius,
+          //       ),
+          //     ],
+          //     color: Colors.white,
+          //   ),
+          // ),
           Container(
             margin: const EdgeInsets.only(top: 18),
             decoration: BoxDecoration(
@@ -217,71 +212,9 @@ class _BottomMenuState extends State<_BottomMenu>
               ),
             ),
           ),
-          AnimatedBuilder(
-            animation: _iconRotationAnimation,
-            builder: (context, child) {
-              return Transform.rotate(
-                angle: _iconRotationAnimation.value,
-                child: child,
-              );
-            },
-            child: widget._canShowMore ? Container(
-              width: buttonSize,
-              height: buttonSize,
-              child: RawMaterialButton(
-                fillColor: Colors.white,
-                shape: const CircleBorder(),
-                elevation: 0.0,
-                highlightElevation: 0.0,
-                onPressed: _triggerCollapsing,
-                child: Stack(
-                  children: <Widget>[
-                    AnimatedBuilder(
-                      animation: _iconOpacityAnimation,
-                      builder: (context, child) {
-                        return Opacity(
-                          opacity: _iconOpacityAnimation.value,
-                          child: child,
-                        );
-                      },
-                      child: const Icon(
-                        Icons.check,
-                        color: AppColors.kTextMinor,
-                        size: 27.0,
-                      ),
-                    ),
-                    AnimatedBuilder(
-                      animation: _iconOpacityAnimation,
-                      builder: (context, child) {
-                        return Opacity(
-                          opacity: 1 - _iconOpacityAnimation.value,
-                          child: child,
-                        );
-                      },
-                      child: const Icon(
-                        Icons.filter_list,
-                        color: AppColors.kTextMinor,
-                        size: 27.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ) : Container(),
-          ),
         ],
       ),
     );
-  }
-
-  void _triggerCollapsing() {
-    if (!_animationController.isAnimating) {
-      if (_isCollapsed) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
-    }
   }
 }
 

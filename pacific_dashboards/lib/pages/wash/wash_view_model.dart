@@ -217,50 +217,69 @@ Future<WashToiletViewData> _calculateToiletsData(
 
   for (var it in toiletsData) {
     final school = it.schNo;
-    totalToilets.add(SchoolDataByToiletType(
-      school: school,
-      boys: it.totalM,
-      girls: it.totalF,
-      common: it.totalC,
-    ));
-    usableToilets.add(SchoolDataByToiletType(
-      school: school,
-      boys: it.usableM,
-      girls: it.usableF,
-      common: it.usableC,
-    ));
-    usablePercent.add(SchoolDataByPercent(
-      school: school,
-      percent: it.total > 0 ? (it.usable / it.total * 100).round() : 0,
-    ));
-    usablePercentByGender.add(SchoolDataByGenderPercent(
-      school: school,
-      percentMale: it.totalM > 0 ? (it.usableM / it.totalM * 100).round() : 0,
-      percentFemale: it.totalF > 0 ? (it.usableF / it.totalF * 100).round() : 0,
-    ));
-    pupilsByToilet.add(SchoolDataByPupils(
-      school: school,
-      pupils: it.total > 0 ? (it.enrol / it.total * 100).round() : 0,
-    ));
-    pupilsByToiletByGender.add(SchoolDataByGender(
-      school: school,
-      male: it.totalM > 0 ? (it.enrolM / it.totalM * 100).round() : 0,
-      female: it.totalF > 0 ? (it.enrolF / it.totalF * 100).round() : 0,
-    ));
-    pupilsByUsableToilet.add(SchoolDataByPupils(
-      school: school,
-      pupils: it.usable > 0 ? (it.enrol / it.usable * 100).round() : 0,
-    ));
-    pupilsByUsableToiletByGender.add(SchoolDataByGender(
-      school: school,
-      male: it.usableM > 0 ? (it.enrolM / it.usableM * 100).round() : 0,
-      female: it.usableF > 0 ? (it.enrolF / it.usableF * 100).round() : 0,
-    ));
-    pupils.add(SchoolDataByGender(
-      school: school,
-      male: it.enrolM,
-      female: it.enrolF,
-    ));
+    if (it.totalM != 0 || it.totalF != 0 || it.totalC != 0) {
+      totalToilets.add(SchoolDataByToiletType(
+        school: school,
+        boys: it.totalM,
+        girls: it.totalF,
+        common: it.totalC,
+      ));
+    }
+    if (it.usableM != 0 || it.usableF != 0 || it.usableC != 0) {
+      usableToilets.add(SchoolDataByToiletType(
+        school: school,
+        boys: it.usableM,
+        girls: it.usableF,
+        common: it.usableC,
+      ));
+    }
+    if (it.total > 0 && it.usable > 0) {
+      usablePercent.add(SchoolDataByPercent(
+        school: school,
+        percent: (it.usable / it.total * 100).round(),
+      ));
+    }
+    if (it.usableM > 0 && it.totalM > 0|| it.usableF > 0 && it.totalF > 0) {
+      usablePercentByGender.add(SchoolDataByGenderPercent(
+        school: school,
+        percentMale: it.totalM > 0 ? (it.usableM / it.totalM * 100).round() : 0,
+        percentFemale:
+            it.totalF > 0 ? (it.usableF / it.totalF * 100).round() : 0,
+      ));
+    }
+    if (it.total > 0 && it.enrol > 0) {
+      pupilsByToilet.add(SchoolDataByPupils(
+        school: school,
+        pupils: it.total > 0 ? (it.enrol / it.total * 100).round() : 0,
+      ));
+    }
+    if (it.totalF > 0 || it.totalM > 0) {
+      pupilsByToiletByGender.add(SchoolDataByGender(
+        school: school,
+        male: it.totalM > 0 ? (it.enrolM / it.totalM * 100).round() : 0,
+        female: it.totalF > 0 ? (it.enrolF / it.totalF * 100).round() : 0,
+      ));
+    }
+    if (it.usable > 0) {
+      pupilsByUsableToilet.add(SchoolDataByPupils(
+        school: school,
+        pupils: (it.enrol / it.usable * 100).round(),
+      ));
+    }
+    if (it.usableM > 0 || it.usableF > 0) {
+      pupilsByUsableToiletByGender.add(SchoolDataByGender(
+        school: school,
+        male: it.usableM > 0 ? (it.enrolM / it.usableM * 100).round() : 0,
+        female: it.usableF > 0 ? (it.enrolF / it.usableF * 100).round() : 0,
+      ));
+    }
+    if (it.enrolM > 0 || it.enrolF > 0) {
+      pupils.add(SchoolDataByGender(
+        school: school,
+        male: it.enrolM,
+        female: it.enrolF,
+      ));
+    }
   }
 
   return WashToiletViewData(

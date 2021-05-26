@@ -47,6 +47,9 @@ EmisesConfig _defaultConfig = EmisesConfig(
   [
     EmisConfig(
       id: 'miemis',
+      emisUrl: 'http://data.pss.edu.mh/miemis/api/',
+      emisUser: 'opendata@pacific-emis.org',
+      emisPassword: 'iecNp62@7Zkxj2L',
       modules: [
         ModuleConfig(id: 'schools'),
         ModuleConfig(id: 'teachers'),
@@ -58,6 +61,9 @@ EmisesConfig _defaultConfig = EmisesConfig(
     ),
     EmisConfig(
       id: 'fedemis',
+      emisUrl: 'http://data.pss.edu.mh/miemis/api/',
+      emisUser: 'opendata@pacific-emis.org',
+      emisPassword: 'iecNp62@7Zkxj2L',
       modules: [
         ModuleConfig(id: 'schools'),
         ModuleConfig(id: 'teachers'),
@@ -69,6 +75,9 @@ EmisesConfig _defaultConfig = EmisesConfig(
     ),
     EmisConfig(
       id: 'kemis',
+      emisUrl: 'http://data.pss.edu.mh/miemis/api/',
+      emisUser: 'opendata@pacific-emis.org',
+      emisPassword: 'iecNp62@7Zkxj2L',
       modules: [
         ModuleConfig(id: 'schools'),
         ModuleConfig(id: 'teachers'),
@@ -78,4 +87,5 @@ EmisesConfig _defaultConfig = EmisesConfig(
       ],
     ),
   ],
+  ""
 );

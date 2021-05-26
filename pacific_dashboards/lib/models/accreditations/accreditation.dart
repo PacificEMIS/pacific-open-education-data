@@ -3,6 +3,8 @@ abstract class Accreditation {
   String get districtCode;
   String get authorityCode;
   String get authorityGovtCode;
+  String get schoolTypeCode;
+  String get schoolType;
   int get total;
   int get numThisYear;
   String get result;
