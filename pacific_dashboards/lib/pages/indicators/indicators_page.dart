@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -323,11 +322,10 @@ class _IndicatorsTable extends StatelessWidget {
         '',
         _indicators.first.enrolment.year,
         _indicators.second.enrolment.year,
-        'Difference'
+        'indicatorsDifference'.localized(context)
       ],
       columnFlex: [55, 30, 30, 45],
       data: _data,
-      //keySortFunc: _compareEnrollmentByAgeAndEducation,
       domainValueBuilder: (index, data) {
         num result;
         String imagePath;

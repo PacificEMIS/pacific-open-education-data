@@ -277,7 +277,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<IndicatorsContainer> fetchIndicators(String districtCode) {
     return _withHandlers(
           (client) => client.getIndicators(districtCode),
-      fallbackHandlers: [],
     );
   }
 

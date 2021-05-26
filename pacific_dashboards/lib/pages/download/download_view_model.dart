@@ -312,7 +312,16 @@ class DownloadViewModel extends ViewModel {
   }
 
   Future<void> _downloadIndicatorsData() async {
-    return _downloadHandled(_repository.fetchAllIndicators(""));
+    var emis = await _globalSettings.currentEmis;
+    List<String> districts = [""];
+    if (emis == Emis.fedemis) {
+      var lookups = await _repository.lookups.first;
+      lookups.districts.forEach((element) {
+        districts.add(element.code);
+      });
+    }
+    return Future.wait(districts.map((district) =>
+        _downloadHandled(_repository.fetchAllIndicators(district))));
   }
 
   Future<void> _downloadAccreditationData() async {
