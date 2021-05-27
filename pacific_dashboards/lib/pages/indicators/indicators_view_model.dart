@@ -123,14 +123,11 @@ class IndicatorsViewModel extends BaseViewModel {
     _updatePageData();
   }
 
-  void onPrevRegionPressed() {
-    _navigator.prevRegion();
-    _loadNewRegion();
-    _updatePageData();
-  }
-
-  void onNextRegionPressed() {
-    _navigator.nextRegion();
+  void onChangeRegionPressed(bool reverse) {
+    if (reverse)
+      _navigator.prevRegion();
+    else
+      _navigator.nextRegion();
     _loadNewRegion();
     _updatePageData();
   }

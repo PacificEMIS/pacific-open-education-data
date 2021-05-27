@@ -36,7 +36,8 @@ class IndicatorsFiltersWidget extends StatelessWidget {
             canShowMore: _viewModel.canSelectState,
             children: <Widget>[
               _BottomMenuRow(
-                rowName: 'indicatorsDashboardsFilterEducationLevel'.localized(context),
+                rowName: 'indicatorsDashboardsFilterEducationLevel'.localized(
+                    context),
                 name: snapshot.data.educationLevel,
                 onPrevTap: _viewModel.onPrevEducationLevelPressed,
                 onNextTap: _viewModel.onNextEducationLevelPressed,
@@ -44,8 +45,8 @@ class IndicatorsFiltersWidget extends StatelessWidget {
               _BottomMenuRow(
                 rowName: 'indicatorsDashboardsFilterRegion'.localized(context),
                 name: snapshot.data.region,
-                onPrevTap: _viewModel.onPrevRegionPressed,
-                onNextTap: _viewModel.onNextRegionPressed,
+                onPrevTap: () => _viewModel.onChangeRegionPressed(true),
+                onNextTap: () => _viewModel.onChangeRegionPressed(false),
               ),
             ],
           );
