@@ -280,26 +280,45 @@ class _PopulatedContent extends StatelessWidget {
                     _indicators.second.schoolCount.count),
                 'indicatorsDemographic': null,
                 'indicatorsPopulation': Pair(
-                    _indicators.first.enrolment.populationFemale / _indicators.first.enrolment.population,
-                    _indicators.second.enrolment.populationFemale / _indicators.second.enrolment.population),
+                    _Percent(_indicators.first.enrolment.populationFemale,
+                        _indicators.first.enrolment.population),
+                    _Percent(_indicators.second.enrolment.populationFemale,
+                        _indicators.second.enrolment.population)),
                 'indicatorsTotalEnrolment': Pair(
-                    _indicators.first.enrolment.enrolFemale / _indicators.first.enrolment.enrol,
-                    _indicators.second.enrolment.enrolFemale / _indicators.second.enrolment.enrol),
+                    _Percent(_indicators.first.enrolment.enrolFemale,
+                        _indicators.first.enrolment.enrol),
+                    _Percent(_indicators.second.enrolment.enrolFemale,
+                        _indicators.second.enrolment.enrol)),
                 'indicatorsOfficialAgeEnrolment': Pair(
-                    _indicators.first.enrolment.enrolOfficialAgeFemale / _indicators.first.enrolment.enrolOfficialAge,
-                    _indicators.second.enrolment.enrolOfficialAgeFemale / _indicators.second.enrolment.enrolOfficialAge),
+                    _Percent(_indicators.first.enrolment.enrolOfficialAgeFemale,
+                        _indicators.first.enrolment.enrolOfficialAge),
+                    _Percent(
+                        _indicators.second.enrolment.enrolOfficialAgeFemale,
+                        _indicators.second.enrolment.enrolOfficialAge)),
                 'indicatorsGrossEnrolment': Pair(
-                    _indicators.first.enrolment.grossEnrolmentRatioFemale / _indicators.first.enrolment.grossEnrolmentRatio,
-                    _indicators.second.enrolment.grossEnrolmentRatioFemale / _indicators.second.enrolment.grossEnrolmentRatio),
+                    _Percent(
+                        _indicators.first.enrolment.grossEnrolmentRatioFemale,
+                        _indicators.first.enrolment.grossEnrolmentRatio),
+                    _Percent(
+                        _indicators.second.enrolment.grossEnrolmentRatioFemale,
+                        _indicators.second.enrolment.grossEnrolmentRatio)),
                 'indicatorsNetEnrolment': Pair(
-                    _indicators.first.enrolment.netEnrolmentRatioFemale / _indicators.first.enrolment.netEnrolmentRatio,
-                    _indicators.second.enrolment.netEnrolmentRatioFemale / _indicators.second.enrolment.netEnrolmentRatio),
+                    _Percent(
+                        _indicators.first.enrolment.netEnrolmentRatioFemale,
+                        _indicators.first.enrolment.netEnrolmentRatio),
+                    _Percent(
+                        _indicators.second.enrolment.netEnrolmentRatioFemale,
+                        _indicators.second.enrolment.netEnrolmentRatio)),
               },
             );
         }
         throw FallThroughError();
       },
     );
+  }
+
+  num _Percent(num first, num second){
+    return first != null && second != null ? first / second : null;
   }
 }
 

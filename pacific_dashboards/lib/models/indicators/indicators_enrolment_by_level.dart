@@ -272,11 +272,11 @@ class IndicatorsEnrolmentByLevel {
   Map<String, dynamic> toJson() => _$IndicatorsEnrolmentByLevelToJson(this);
 
   int get yearsOfSchooling {
-    return int.tryParse(numYears);
+    return numYears != null ? int.tryParse(numYears) : null;
   }
 
   int get officialStartAge {
-    return int.tryParse(startAge);
+    return startAge != null ? int.tryParse(startAge) : null;
   }
 
   bool isSchoolOfLevel(int educationYear) {

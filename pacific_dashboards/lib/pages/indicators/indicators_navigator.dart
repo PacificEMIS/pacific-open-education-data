@@ -172,6 +172,11 @@ class IndicatorsNavigator {
   Pair<Indicator, Indicator> getIndicatorResults(Lookups lookups) {
     return new Pair(
         getIndicatorForYear(_firstYear, lookups),
-        getIndicatorForYear(_secondYear, lookups));
+        _firstYear != _secondYear
+            ? getIndicatorForYear(_secondYear, lookups)
+            : new Indicator(enrolment: new IndicatorsEnrolmentByLevel(
+            year: "", educationLevelCode: selectedEducationCode),
+            schoolCount: new IndicatorsSchoolCount(
+                year: "", count: null)));
   }
 }
