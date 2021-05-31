@@ -100,7 +100,7 @@ class IndicatorsViewModel extends BaseViewModel {
 
   Stream<IndicatorsFilterData> get filtersStream => _filtersSubject.stream;
 
-  List<String> get years => _navigator.getYears();
+  List<int> get years => _navigator.getYears().map((e) => int.parse(e)).toList();
 
   String get pageName => _navigator != null ? _navigator.pageName : "";
 

@@ -1,7 +1,6 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 
@@ -10,9 +9,9 @@ import 'indicators_filter_data.dart';
 class IndicatorsFiltersPage extends StatefulWidget {
   static const String kRoute = "/Indicators/Filters";
   final IndicatorsFilterData filtersData;
-  String selectFirstYear;
-  String selectSecondYear;
-  List<String> canSelectYears;
+  int selectFirstYear;
+  int selectSecondYear;
+  List<int> canSelectYears;
 
   IndicatorsFiltersPage({Key key, this.filtersData, this.canSelectYears})
       : super(
@@ -21,8 +20,8 @@ class IndicatorsFiltersPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    selectFirstYear = filtersData.firstYear;
-    selectSecondYear = filtersData.secondYear;
+    selectFirstYear = int.parse(filtersData.firstYear);
+    selectSecondYear = int.parse(filtersData.secondYear);
     return IndicatorsFiltersPageState();
   }
 }
@@ -56,7 +55,7 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
             ),
             color: Theme
                 .of(context)
-                .accentColor,
+                .primaryColor,
             onPressed: () => _apply(context),
           ),
         ),
@@ -74,14 +73,14 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
                     fontSize: 20),
                 textAlign: TextAlign.left,
               ),
-              DropdownButton<String>(
+              DropdownButton<int>(
                 value: widget.selectFirstYear,
                 items: widget.canSelectYears.map((
-                    String value) {
-                  return new DropdownMenuItem<String>(
+                    int value) {
+                  return new DropdownMenuItem<int>(
                     value: value,
                     child: new Text(
-                      value,
+                      value.toString(),
                       style: TextStyle(
                           fontStyle: FontStyle.normal,
                           fontSize: 18),),
@@ -91,6 +90,13 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
                 onChanged: (newValue) {
                   setState(() {
                     widget.selectFirstYear = newValue;
+                    if (widget.selectSecondYear <= widget.selectFirstYear) {
+                      widget.selectSecondYear = widget.selectFirstYear + 1;
+                      if (!widget.canSelectYears.contains(
+                          widget.selectSecondYear)) {
+                        widget.selectSecondYear = widget.selectFirstYear;
+                      }
+                    }
                   });
                 },
               ),
@@ -103,14 +109,14 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
                 textAlign: TextAlign.left,
                 strutStyle: StrutStyle(height: 3),
               ),
-              DropdownButton<String>(
+              DropdownButton<int>(
                 value: widget.selectSecondYear,
                 items: widget.canSelectYears.map((
-                    String value) {
-                  return new DropdownMenuItem<String>(
+                    int value) {
+                  return new DropdownMenuItem<int>(
                     value: value,
                     child: new Text(
-                      value,
+                      value.toString(),
                       style: TextStyle(
                           fontStyle: FontStyle.normal,
                           fontSize: 18),),
@@ -120,6 +126,13 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
                 onChanged: (newValue) {
                   setState(() {
                     widget.selectSecondYear = newValue;
+                    if (widget.selectSecondYear <= widget.selectFirstYear) {
+                      widget.selectFirstYear = widget.selectSecondYear - 1;
+                      if (!widget.canSelectYears.contains(
+                          widget.selectFirstYear)) {
+                        widget.selectFirstYear = widget.selectSecondYear;
+                      }
+                    }
                   });
                 },
               ),
@@ -130,7 +143,8 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
   }
 
   void _apply(BuildContext context) {
-    var result = new Pair(widget.selectFirstYear, widget.selectSecondYear);
+    var result = new Pair(
+        widget.selectFirstYear.toString(), widget.selectSecondYear.toString());
     Navigator.pop(context, result);
   }
 }

@@ -17,7 +17,7 @@ import 'package:pacific_dashboards/view_model_factory.dart';
 import 'indicators_filter_data.dart';
 import 'indicators_view_model.dart';
 
-enum _GenderTab { all, male, female, femalePercent }
+enum _GenderTab { all, female, male, femalePercent }
 
 class IndicatorsPage extends MvvmStatefulWidget {
   static const String kRoute = "/Indicators";

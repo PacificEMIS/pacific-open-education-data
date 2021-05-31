@@ -310,7 +310,7 @@ class Strings {
       'downloadSubjectIndividualSchoolsDetailed': 'Individual Schools info for school',
       'downloadSubjectIndicators': 'Indicators section',
       'indicatorsDashboardsTitle': 'Indicators',
-      'indicatorsDashboardsFilterEducationLevel': 'Education level',
+      'indicatorsDashboardsFilterEducationLevel': 'Education Level',
       'indicatorsDashboardsFilterRegion': 'State',
       'indicatorsFirstYear': 'Filter by start year',
       'indicatorsContext': 'Context indicators',
