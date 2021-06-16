@@ -16,9 +16,9 @@ class IndicatorsNavigator {
 
 
   final List<String> _educationLevelIds;
-  final List<String> _educationLevelNames;
+  final List<String> educationLevelNames;
   final List<String> _regions;
-  final List<String> _regionsNames;
+  final List<String> regionsNames;
   final Indicators _indicators;
 
   IndicatorsNavigator(
@@ -27,12 +27,12 @@ class IndicatorsNavigator {
       {IndicatorsNavigator oldNavigator})
       : _educationLevelIds = indicators.indicators.enrolments.enrolments
       .uniques((it) => it.educationLevelCode),
-        _educationLevelNames = indicators.indicators.enrolments.enrolments
+        educationLevelNames = indicators.indicators.enrolments.enrolments
             .uniques((it) =>
             it.educationLevelCode.from(lookups.educationLevels)),
         _indicators = indicators.indicators,
         _regions = lookups.districts.map((it) => it.code).toList(),
-        _regionsNames = lookups.districts.map((it) => it.name).toList() {
+        regionsNames = lookups.districts.map((it) => it.name).toList() {
     if (oldNavigator != null) {
       _firstYear = oldNavigator._firstYear;
       _secondYear = oldNavigator._secondYear;
@@ -40,7 +40,7 @@ class IndicatorsNavigator {
       _selectedRegionId = oldNavigator._selectedRegionId;
     }
     _regions.insert(0, "");
-    _regionsNames.insert(0, "ALL");
+    regionsNames.insert(0, "ALL");
     _changeEducationLevelPage();
   }
 
@@ -63,31 +63,12 @@ class IndicatorsNavigator {
     }
   }
 
-  void nextRegion() {
-    _selectedRegionId++;
-    _changeRegion();
-  }
-
-  void prevRegion() {
-    _selectedRegionId--;
-    _changeRegion();
-  }
-
-  void _changeRegion() {
-    if (_selectedRegionId < 0) {
-      _selectedRegionId = _regions.length - 1;
-    }
-    if (_selectedRegionId > _regions.length - 1) {
-      _selectedRegionId = 0;
-    }
-  }
-
   String get educationLevelName {
-    if (_educationLevelNames == null ||
-        _selectedEducationLevelId >= _educationLevelNames.length) {
+    if (educationLevelNames == null ||
+        _selectedEducationLevelId >= educationLevelNames.length) {
       return "";
     }
-    return _educationLevelNames[_selectedEducationLevelId];
+    return educationLevelNames[_selectedEducationLevelId];
   }
 
   String get pageName {
@@ -103,8 +84,8 @@ class IndicatorsNavigator {
   }
 
   String get selectedEducationCode {
-    if (_educationLevelNames == null ||
-        _selectedEducationLevelId >= _educationLevelNames.length) {
+    if (educationLevelNames == null ||
+        _selectedEducationLevelId >= educationLevelNames.length) {
       return "";
     }
     return _educationLevelIds[_selectedEducationLevelId];
@@ -121,7 +102,7 @@ class IndicatorsNavigator {
     if (_regions == null || _selectedRegionId >= _regions.length) {
       return "";
     }
-    return _regionsNames[_selectedRegionId];
+    return regionsNames[_selectedRegionId];
   }
 
   List<String> getYears() {
@@ -167,6 +148,11 @@ class IndicatorsNavigator {
   void onYearFiltersChanged(Pair<String, String> years) {
     _firstYear = years.first;
     _secondYear = years.second;
+  }
+
+
+  void onRegionChanged(int regionId) {
+    _selectedRegionId = regionId;
   }
 
   Pair<Indicator, Indicator> getIndicatorResults(Lookups lookups) {

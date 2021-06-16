@@ -1,6 +1,7 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 
@@ -12,8 +13,11 @@ class IndicatorsFiltersPage extends StatefulWidget {
   int selectFirstYear;
   int selectSecondYear;
   List<int> canSelectYears;
+  List<String> regions;
+  String regionName;
 
-  IndicatorsFiltersPage({Key key, this.filtersData, this.canSelectYears})
+
+  IndicatorsFiltersPage({Key key, this.filtersData, this.canSelectYears,this.regions, this.regionName})
       : super(
     key: key,
   );
@@ -22,6 +26,7 @@ class IndicatorsFiltersPage extends StatefulWidget {
   State<StatefulWidget> createState() {
     selectFirstYear = int.parse(filtersData.firstYear);
     selectSecondYear = int.parse(filtersData.secondYear);
+    regionName = filtersData.region;
     return IndicatorsFiltersPageState();
   }
 }
@@ -136,6 +141,35 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
                   });
                 },
               ),
+              //Temp fix
+              Strings.emis == Emis.fedemis ? Text(
+                'filtersByState'.localized(context),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 20),
+                textAlign: TextAlign.left,
+              ) : Container(),
+              Strings.emis == Emis.fedemis ?  DropdownButton<String>(
+                value: widget.regionName,
+                items: widget.regions.map((
+                    String value) {
+                  return new DropdownMenuItem<String>(
+                    value: value,
+                    child: new Text(
+                      value,
+                      style: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          fontSize: 18),),
+                  );
+                }).toList(),
+                isExpanded: true,
+                onChanged: (newValue) {
+                  setState(() {
+                    widget.regionName = newValue;
+                  });
+                },
+              ) : Container(),
             ]
         ),
       ),
@@ -143,8 +177,7 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
   }
 
   void _apply(BuildContext context) {
-    var result = new Pair(
-        widget.selectFirstYear.toString(), widget.selectSecondYear.toString());
+    var result = [widget.selectFirstYear.toString(), widget.selectSecondYear.toString(), widget.regionName];
     Navigator.pop(context, result);
   }
 }

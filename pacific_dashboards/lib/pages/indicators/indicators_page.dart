@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/models/indicators/indicator.dart';
@@ -123,19 +124,25 @@ class IndicatorsPageState extends MvvmState<IndicatorsViewModel, IndicatorsPage>
   }
 
   void _openFilters() {
-    Navigator.push<Pair<String, String>>(
+    Navigator.push<List<String>>(
       context,
       MaterialPageRoute(builder: (context) {
         return IndicatorsFiltersPage(
           filtersData: viewModel.filterData,
           canSelectYears: viewModel.years,
+          regionName: viewModel.regionName,
+          regions: viewModel.regions
         );
       }),
-    ).then((years) => _applyFilters(context, years));
+    ).then((years) => _applyFilters(context, new Pair(years[0], years[1]), years[2]));
   }
 
-  void _applyFilters(BuildContext context, Pair<String, String> years) {
+  void _applyFilters(BuildContext context, Pair<String, String> years, String regionName) {
     if (years != null) viewModel.onYearFiltersChanged(years);
+    if (regionName != null) {
+      viewModel.regionName = regionName;
+      viewModel.loadData();
+    }
   }
 }
 

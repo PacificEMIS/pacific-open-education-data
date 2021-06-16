@@ -5,16 +5,10 @@ import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/exam/exam.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/indicators/indicator.dart';
-import 'package:pacific_dashboards/models/indicators/indicators.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
-import 'package:pacific_dashboards/pages/exams/exams_filter_data.dart';
-import 'package:pacific_dashboards/pages/exams/exams_navigator.dart';
-import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/indicators/indicators_filter_data.dart';
 import 'package:pacific_dashboards/pages/indicators/indicators_navigator.dart';
 import 'package:rxdart/rxdart.dart';
@@ -51,7 +45,7 @@ class IndicatorsViewModel extends BaseViewModel {
     _dataSubject.disposeWith(disposeBag);
     _filtersSubject.disposeWith(disposeBag);
     _loadCurrentEmis();
-    _loadData();
+    loadData();
   }
 
   void _loadCurrentEmis() {
@@ -61,9 +55,12 @@ class IndicatorsViewModel extends BaseViewModel {
     });
   }
 
-  void _loadData({String region = ""}) {
+  void loadData({String region = ''}) {
+    var selectedRegionId =  _navigator == null ? '' : _navigator.regionsNames.indexWhere((element) => element == regionName);
+    if (selectedRegionId != '') _navigator.onRegionChanged(selectedRegionId);
+    if (_navigator != null) selectedRegionId = _navigator.regionId;
     listenHandled(
-      handleRepositoryFetch(fetch: () => _repository.fetchAllIndicators(region)),
+      handleRepositoryFetch(fetch: () => _repository.fetchAllIndicators(selectedRegionId)),
       _onDataLoaded,
       notifyProgress: true,
     );
@@ -104,13 +101,17 @@ class IndicatorsViewModel extends BaseViewModel {
 
   String get pageName => _navigator != null ? _navigator.pageName : "";
 
+  String regionName;
+
+  List<String> get regions => _navigator.regionsNames;
+
   void onYearFiltersChanged(Pair<String, String> years) {
     _navigator.onYearFiltersChanged(years);
     _updatePageData();
   }
 
   void _loadNewRegion() {
-    _loadData(region: _navigator.regionId);
+    loadData(region: _navigator.regionId);
   }
 
   void onPrevEducationLevelPressed() {
@@ -123,11 +124,7 @@ class IndicatorsViewModel extends BaseViewModel {
     _updatePageData();
   }
 
-  void onChangeRegionPressed(bool reverse) {
-    if (reverse)
-      _navigator.prevRegion();
-    else
-      _navigator.nextRegion();
+  void onRegionChanged() {
     _loadNewRegion();
     _updatePageData();
   }
