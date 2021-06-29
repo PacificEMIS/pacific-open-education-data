@@ -69,6 +69,10 @@ class StackedHorizontalBarChartWidgetExtendedState
                 ),
               ),
               defaultRenderer: charts.BarRendererConfig(
+<<<<<<< HEAD
+=======
+                stackHorizontalSeparator: 0,
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
                 groupingType: charts.BarGroupingType.stacked,
                 strokeWidthPx: 1,
               ),

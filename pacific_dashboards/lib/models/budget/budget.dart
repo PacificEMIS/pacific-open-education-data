@@ -133,7 +133,10 @@ extension Filters on List<Budget> {
           FilterItem(null, 'filtersDisplayAllStates'),
           ...this
               .uniques((it) => it.districtCode)
+<<<<<<< HEAD
               .where((it) => (it != null && it.isNotEmpty &&  it != "" && it.length > 0))
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,

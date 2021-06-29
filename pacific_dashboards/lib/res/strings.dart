@@ -29,7 +29,10 @@ class Strings {
       'labelTotal': 'Total',
       'labelMale': 'Male',
       'labelFemale': 'Female',
+<<<<<<< HEAD
       'labelFemalePercent': 'F% or GPI',
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
       'labelNational': 'National',
       'labelNoData': 'No data',
       'labelNoDataWithFilters': 'No data',
@@ -306,6 +309,7 @@ class Strings {
       'downloadSubjectBudgets': 'Budgets section',
       'downloadSubjectSpecialEducation': 'Special Education section',
       'downloadSubjectWASH': 'WASH section',
+<<<<<<< HEAD
       'downloadSubjectIndividualSchoolsList': 'Individual Schools list',
       'downloadSubjectIndividualSchoolsDetailed': 'Individual Schools info for school',
       'downloadSubjectIndicators': 'Indicators section',
@@ -326,6 +330,11 @@ class Strings {
       'indicatorsSecondYear': 'Selected End year',
       'indicatorsDateGrid': 'Date Grid',
       'indicatorsDifference': 'Difference',
+=======
+      'downloadSubjectIndicators': 'Indicators section',
+      'downloadSubjectIndividualSchoolsList': 'Individual Schools list',
+      'downloadSubjectIndividualSchoolsDetailed': 'Individual Schools info for school',
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
     },
   };
 

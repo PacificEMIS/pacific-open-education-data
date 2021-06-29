@@ -124,8 +124,12 @@ class _GnpMultiTable extends StatelessWidget {
   const _GnpMultiTable({
     Key key,
     @required Map<String, DataByGnpAndGovernmentSpending> data,
+<<<<<<< HEAD
   })
       : assert(data != null),
+=======
+  })  : assert(data != null),
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
         _data = data,
         super(key: key);
 
@@ -143,6 +147,7 @@ class _GnpMultiTable extends StatelessWidget {
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
+<<<<<<< HEAD
             return CellData(value: data.domain.toString());
           case 1:
             return CellData(value: _sLongNumberFormat.format(data.measure.gNP));
@@ -152,6 +157,15 @@ class _GnpMultiTable extends StatelessWidget {
           case 3:
             return CellData(
                 value: data.measure.percentageEdGnp.toInt().toString());
+=======
+            return data.domain.toString();
+          case 1:
+            return _sLongNumberFormat.format(data.measure.gNP);
+          case 2:
+            return _sLongNumberFormat.format(data.measure.edExpense);
+          case 3:
+            return data.measure.percentageEdGnp.toInt().toString();
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
         }
         throw FallThroughError();
       },
@@ -165,8 +179,12 @@ class _GovernmentMultiTable extends StatelessWidget {
   const _GovernmentMultiTable({
     Key key,
     @required Map<String, DataByGnpAndGovernmentSpending> data,
+<<<<<<< HEAD
   })
       : assert(data != null),
+=======
+  })  : assert(data != null),
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
         _data = data,
         super(key: key);
 
@@ -184,6 +202,7 @@ class _GovernmentMultiTable extends StatelessWidget {
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
+<<<<<<< HEAD
             return CellData(value: data.domain.toString());
           case 1:
             return CellData(
@@ -194,6 +213,15 @@ class _GovernmentMultiTable extends StatelessWidget {
           case 3:
             return CellData(
                 value: data.measure.percentageEdGovt.toInt().toString());
+=======
+            return data.domain.toString();
+          case 1:
+            return _sLongNumberFormat.format(data.measure.govtExpense);
+          case 2:
+            return _sLongNumberFormat.format(data.measure.edExpense);
+          case 3:
+            return data.measure.percentageEdGovt.toInt().toString();
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
         }
         throw FallThroughError();
       },
@@ -232,6 +260,7 @@ class _SectorMultiTable extends StatelessWidget {
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
+<<<<<<< HEAD
             return CellData(value: data.domain.toString());
           case 1:
             return CellData(value: _sLongNumberFormat.format(
@@ -239,6 +268,13 @@ class _SectorMultiTable extends StatelessWidget {
           case 2:
             return CellData(value: _sLongNumberFormat.format(
                 _budgetedExtractor(data.measure)));
+=======
+            return data.domain.toString();
+          case 1:
+            return _sLongNumberFormat.format(_actualExtractor(data.measure));
+          case 2:
+            return _sLongNumberFormat.format(_budgetedExtractor(data.measure));
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
         }
         throw FallThroughError();
       },

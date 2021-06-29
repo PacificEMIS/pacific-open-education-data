@@ -113,7 +113,10 @@ extension Filters on List<Teacher> {
         title: 'filtersByYear',
         items: this
             .uniques((it) => it.surveyYear)
+<<<<<<< HEAD
             .where((it) => it != null)
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
             .chainSort((lv, rv) => rv.compareTo(lv))
             .map((it) => FilterItem(it, it.toString()))
             .toList(),
@@ -126,7 +129,10 @@ extension Filters on List<Teacher> {
           FilterItem(null, 'filtersDisplayAllStates'),
           ...this
               .uniques((it) => it.districtCode)
+<<<<<<< HEAD
               .where((it) => it != null)
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
               .map((it) => FilterItem(it, it.from(lookups.districts))),
         ],
         selectedIndex: 0,
@@ -138,7 +144,10 @@ extension Filters on List<Teacher> {
           FilterItem(null, 'filtersDisplayAllAuthority'),
           ...this
               .uniques((it) => it.authorityCode)
+<<<<<<< HEAD
               .where((it) => it != null)
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
         ],
         selectedIndex: 0,
@@ -150,7 +159,10 @@ extension Filters on List<Teacher> {
           FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
           ...this
               .uniques((it) => it.authorityGovt)
+<<<<<<< HEAD
               .where((it) => (it != null && it.isNotEmpty &&  it != "" && it.length > 0))
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
               .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
         ],
         selectedIndex: 0,

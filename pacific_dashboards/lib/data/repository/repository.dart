@@ -1,8 +1,11 @@
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+<<<<<<< HEAD
 import 'package:pacific_dashboards/models/indicators/indicators.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -20,8 +23,11 @@ abstract class Repository {
   Stream<RepositoryResponse<List<School>>> fetchAllSchools();
 
   Stream<RepositoryResponse<List<Exam>>> fetchAllExams();
+<<<<<<< HEAD
 
   Stream<RepositoryResponse<IndicatorsContainer>> fetchAllIndicators(String districtCode);
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
 
   Stream<RepositoryResponse<AccreditationChunk>> fetchAllAccreditations();
 

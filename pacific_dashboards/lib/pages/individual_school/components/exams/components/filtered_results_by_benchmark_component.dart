@@ -228,6 +228,10 @@ class _StandardChart extends StatelessWidget {
               renderSpec: const charts.NoneRenderSpec(),
             ),
             defaultRenderer: charts.BarRendererConfig(
+<<<<<<< HEAD
+=======
+              stackHorizontalSeparator: 0,
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
               groupingType: charts.BarGroupingType.stacked,
               strokeWidthPx: 1,
             ),

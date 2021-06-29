@@ -1,7 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/lookups/class_level_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
+<<<<<<< HEAD
 import 'package:pacific_dashboards/models/lookups/school_type_lookup.dart';
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
 
 part 'lookups.g.dart';
 
@@ -34,6 +37,7 @@ class Lookups {
   @JsonKey(name: 'question', defaultValue: [])
   final List<Lookup> question;
 
+<<<<<<< HEAD
   @JsonKey(name: 'schoolTypeLevels', defaultValue: [])
   final List<SchoolTypeLookup> schoolTypeLevels;
 
@@ -53,6 +57,23 @@ class Lookups {
   factory Lookups.fromJson(Map<String, dynamic> json) =>
       _$LookupsFromJson(json);
 
+=======
+  const Lookups({
+    this.authorityGovt,
+    this.schoolTypes,
+    this.districts,
+    this.authorities,
+    this.levels,
+    this.accreditationTerms,
+    this.educationLevels,
+    this.schoolCodes,
+    this.question,
+  });
+
+  factory Lookups.fromJson(Map<String, dynamic> json) =>
+      _$LookupsFromJson(json);
+
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
   Map<String, dynamic> toJson() => _$LookupsToJson(this);
 
   bool isEmpty() =>
