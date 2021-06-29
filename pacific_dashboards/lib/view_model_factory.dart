@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/download/download_view_model.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
+import 'package:pacific_dashboards/pages/indicators/indicators_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/rates/rates_view_model.dart';
@@ -70,6 +71,15 @@ class ViewModelFactory {
 
   ExamsViewModel createExamsViewModel(BuildContext ctx) {
     return ExamsViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      remoteConfig: serviceLocator.remoteConfig,
+      globalSettings: serviceLocator.globalSettings,
+    );
+  }
+
+  IndicatorsViewModel createIndicatorsViewModel(BuildContext ctx) {
+    return IndicatorsViewModel(
       ctx,
       repository: serviceLocator.repository,
       remoteConfig: serviceLocator.remoteConfig,

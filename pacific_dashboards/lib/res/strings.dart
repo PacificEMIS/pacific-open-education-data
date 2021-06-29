@@ -29,6 +29,10 @@ class Strings {
       'labelTotal': 'Total',
       'labelMale': 'Male',
       'labelFemale': 'Female',
+<<<<<<< HEAD
+      'labelFemalePercent': 'F% or GPI',
+=======
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
       'labelNational': 'National',
       'labelNoData': 'No data',
       'labelNoDataWithFilters': 'No data',
@@ -305,9 +309,32 @@ class Strings {
       'downloadSubjectBudgets': 'Budgets section',
       'downloadSubjectSpecialEducation': 'Special Education section',
       'downloadSubjectWASH': 'WASH section',
+<<<<<<< HEAD
+      'downloadSubjectIndividualSchoolsList': 'Individual Schools list',
+      'downloadSubjectIndividualSchoolsDetailed': 'Individual Schools info for school',
+      'downloadSubjectIndicators': 'Indicators section',
+      'indicatorsDashboardsTitle': 'Indicators',
+      'indicatorsDashboardsFilterEducationLevel': 'Education Level',
+      'indicatorsDashboardsFilterRegion': 'State',
+      'indicatorsFirstYear': 'Selected Start year',
+      'indicatorsContext': 'Context indicators',
+      'indicatorsYearsOfSchooling': 'Years of\nschooling',
+      'indicatorsStartAge': 'Official Start Age',
+      'indicatorsNumberOfSchools': 'Number of \nSchools',
+      'indicatorsDemographic': 'Demographic Indicators',
+      'indicatorsPopulation': 'Population \n(estimated)',
+      'indicatorsTotalEnrolment': 'Total Enrolment',
+      'indicatorsOfficialAgeEnrolment': 'Official Age\nEnrolment',
+      'indicatorsGrossEnrolment': 'Gross Enrolment\nRatio',
+      'indicatorsNetEnrolment': 'Net Enrolment\nRatio',
+      'indicatorsSecondYear': 'Selected End year',
+      'indicatorsDateGrid': 'Date Grid',
+      'indicatorsDifference': 'Difference',
+=======
       'downloadSubjectIndicators': 'Indicators section',
       'downloadSubjectIndividualSchoolsList': 'Individual Schools list',
       'downloadSubjectIndividualSchoolsDetailed': 'Individual Schools info for school',
+>>>>>>> 940dc6816f5e75fedab3718834bd5fcd15e843e6
     },
   };
 

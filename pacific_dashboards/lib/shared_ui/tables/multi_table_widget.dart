@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:arch/arch.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 
 typedef int KeySortFunc(String lv, String rv);
-typedef String DomainValueBuilder<T>(int index, _CellData<T> data);
+typedef CellData DomainValueBuilder<T>(int index, _CellData<T> data);
 
 const Color _kBorderColor = AppColors.kGeyser;
 const double _kBorderWidth = 1.0;
@@ -151,36 +155,70 @@ class MultiTableWidget<T> extends StatelessWidget {
   }
 }
 
+class CellData{
+  final String value;
+  final String svgImagePath;
+  final double imageX;
+  final double imageY;
+  final bool isLabel;
+
+  const CellData({
+    @required this.value,
+    this.svgImagePath,
+    this.imageX = 0,
+    this.imageY = 0,
+    this.isLabel = false,
+  });
+}
+
 class _Cell extends StatelessWidget {
   const _Cell({
     Key key,
-    @required String value,
+    @required CellData value,
     int flex,
     FontWeight fontWeight,
-  })  : _value = value,
+  })
+      : _value = value,
         _flex = flex,
         _fontWeight = fontWeight,
         super(key: key);
 
-  final String _value;
+  final CellData _value;
   final int _flex;
   final FontWeight _fontWeight;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: _flex,
+      flex: _value.isLabel ? 1000000 : _flex,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              _value.localized(context),
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .copyWith(fontWeight: _fontWeight),
+            Expanded(
+                child: Text(
+                  _value.value.localized(context),
+                  textAlign: _value.isLabel ? TextAlign.center : TextAlign
+                      .start,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .subtitle2
+                      .copyWith(
+                      fontWeight: _value.isLabel
+                          ? FontWeight.bold
+                          : _fontWeight),
+                )
             ),
+            _value.svgImagePath != null ? Container(
+                alignment: Alignment.centerLeft,
+                width: _value.imageX,
+                height: _value.imageY,
+                child: SvgPicture.asset(
+                  _value.svgImagePath,
+                )
+            ) : Container(),
           ],
         ),
       ),
@@ -223,13 +261,13 @@ class GenderTableData {
   static DomainValueBuilder sDomainValueBuilder = (index, data) {
     switch (index) {
       case 0:
-        return data.domain;
+        return CellData(value: data.domain);
       case 1:
-        return data.measure.maleAmount.toString();
+        return CellData(value: data.measure.maleAmount.toString());
       case 2:
-        return data.measure.femaleAmount.toString();
+        return CellData(value: data.measure.femaleAmount.toString());
       case 3:
-        return data.measure.total.toString();
+        return CellData(value: data.measure.total.toString());
     }
     throw FallThroughError();
   };

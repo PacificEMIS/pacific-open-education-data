@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/pages/budgets/budget_page.dart';
 import 'package:pacific_dashboards/pages/download/download_page.dart';
 import 'package:pacific_dashboards/pages/exams/exams_page.dart';
 import 'package:pacific_dashboards/pages/home/home_page.dart';
+import 'package:pacific_dashboards/pages/indicators/indicators_page.dart';
 import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
 import 'package:pacific_dashboards/pages/school_accreditation/school_accreditation_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page.dart';
@@ -41,7 +42,7 @@ class App extends StatelessWidget {
         IndividualSchoolPage.kRoute: (context) => IndividualSchoolPage(),
         BudgetsPage.kRoute: (context) => BudgetsPage(),
         WashPage.kRoute: (context) => WashPage(),
-        "/Indicators": (context) => _NotImplementedPage(),
+        IndicatorsPage.kRoute: (context) => IndicatorsPage(),
         SpecialEducationPage.kRoute: (context) => SpecialEducationPage(),
         DownloadPage.kRoute: (context) => DownloadPage(),
       },
