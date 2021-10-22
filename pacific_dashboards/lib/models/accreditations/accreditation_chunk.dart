@@ -111,7 +111,8 @@ extension Filters on AccreditationChunk {
     ]);
   }
 
-  Future<AccreditationChunk> applyFilters(List<Filter> filters) {
+  Future<AccreditationChunk> applyFilters(
+      List<Filter> filters, bool enableYearFilter) {
     return Future(() {
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
@@ -125,29 +126,29 @@ extension Filters on AccreditationChunk {
       final govtFilter = filters.firstWhere((it) => it.id == _kGovtFilterId);
 
       FilterApplier<Iterable<Accreditation>> apply = (input) {
-        return input
-          ..where((it) {
-            if (it.surveyYear != selectedYear) {
-              return false;
-            }
+        var sorted = input.where((it) {
+          if (it.surveyYear != selectedYear && !enableYearFilter) {
+            return false;
+          }
 
-            if (!districtFilter.isDefault &&
-                it.districtCode != districtFilter.stringValue) {
-              return false;
-            }
+          if (!districtFilter.isDefault &&
+              it.districtCode != districtFilter.stringValue) {
+            return false;
+          }
 
-            if (!authorityFilter.isDefault &&
-                it.authorityCode != authorityFilter.stringValue) {
-              return false;
-            }
+          if (!authorityFilter.isDefault &&
+              it.authorityCode != authorityFilter.stringValue) {
+            return false;
+          }
 
-            if (!govtFilter.isDefault &&
-                it.authorityGovtCode != govtFilter.stringValue) {
-              return false;
-            }
+          if (!govtFilter.isDefault &&
+              it.authorityGovtCode != govtFilter.stringValue) {
+            return false;
+          }
 
-            return true;
-          });
+          return true;
+        }).toList();
+        return sorted;
       };
 
       return AccreditationChunk(

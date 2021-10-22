@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'lookup.dart';
+
 part 'school_type_lookup.g.dart';
 
 @JsonSerializable()
-class SchoolTypeLookup {
+class SchoolTypeLookup extends Lookup {
   @JsonKey(name: 'ST')
   final String schoolCode;
 
