@@ -2,7 +2,7 @@ name: pacific_dashboards
 description: Pacific Dashboards app
 publish_to: none
 
-version: 1.1.4+36
+version: 1.1.4+37
 
 environment:
   sdk: ">=2.10.0 <3.0.0"

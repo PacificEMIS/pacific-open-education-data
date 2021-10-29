@@ -255,8 +255,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     final response = await _withHandlers(
       (client) => client.getToken(
         'password',
-        _settings.getApiUserName(),
-        _settings.getApiPassword(),
+        _emises.getEmisConfigFor(Emis.fedemis).emisUser,
+        _emises.getEmisConfigFor(Emis.fedemis).emisPassword,
       ),
     );
     return response.accessToken;

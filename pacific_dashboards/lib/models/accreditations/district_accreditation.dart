@@ -25,6 +25,9 @@ class DistrictAccreditation implements Accreditation {
   @JsonKey(name: 'SchoolTypeCode')
   final String schoolTypeCode;
 
+  @JsonKey(name: 'SchoolType')
+  final String schoolType;
+
   @JsonKey(name: 'InspectionResult')
   final String inspectionResult;
 
@@ -42,6 +45,7 @@ class DistrictAccreditation implements Accreditation {
     @required this.authorityCode,
     @required this.authorityGovtCode,
     @required this.schoolTypeCode,
+    @required this.schoolType,
     @required this.inspectionResult,
     @required this.total,
     @required this.numThisYear,

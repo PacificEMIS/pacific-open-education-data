@@ -25,6 +25,9 @@ class StandardAccreditation implements Accreditation {
   @JsonKey(name: 'SchoolTypeCode')
   final String schoolTypeCode;
 
+  @JsonKey(name: 'SchoolType')
+  final String schoolType;
+
   @JsonKey(name: 'Standard')
   final String standard;
 
@@ -46,6 +49,7 @@ class StandardAccreditation implements Accreditation {
     @required this.authorityCode,
     @required this.authorityGovtCode,
     @required this.schoolTypeCode,
+    @required this.schoolType,
     @required this.standard,
     @required this.result,
     @required this.total,

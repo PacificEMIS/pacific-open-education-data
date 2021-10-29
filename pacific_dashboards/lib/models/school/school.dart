@@ -179,7 +179,7 @@ extension Filters on List<School> {
         }
 
         if (!classLevelFilter.isDefault &&
-            it.classLevel != classLevelFilter.stringValue) {
+            it.schoolTypeCode != classLevelFilter.stringValue) {
           return false;
         }
 

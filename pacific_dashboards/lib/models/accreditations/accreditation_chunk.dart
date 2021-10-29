@@ -55,11 +55,15 @@ extension Filters on AccreditationChunk {
   // ignore: unused_field
   static const _kDistrictFilterId = 1;
 
-  // ignore: unused_field
-  static const _kAuthorityFilterId = 2;
+  static const _kGovtFilterId = 2;
 
   // ignore: unused_field
-  static const _kGovtFilterId = 3;
+  static const _kAuthorityFilterId = 3;
+
+  // ignore: unused_field
+
+  // ignore: unused_field
+  static const _kClassLevelFilterId = 4;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
     final allItems = List<Accreditation>.of(this.byDistrict)
@@ -87,6 +91,17 @@ extension Filters on AccreditationChunk {
         selectedIndex: 0,
       ),
       Filter(
+        id: _kGovtFilterId,
+        title: 'filtersByGovernment',
+        items: [
+          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          ...allItems
+              .uniques((it) => it.authorityGovtCode)
+              .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
+        ],
+        selectedIndex: 0,
+      ),
+      Filter(
         id: _kAuthorityFilterId,
         title: 'filtersByAuthority',
         items: [
@@ -98,14 +113,14 @@ extension Filters on AccreditationChunk {
         selectedIndex: 0,
       ),
       Filter(
-        id: _kGovtFilterId,
-        title: 'filtersByGovernment',
+        id: _kClassLevelFilterId,
+        title: 'filtersByClassLevel',
         items: [
-          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          FilterItem(null, 'filtersByClassLevel'),
           ...allItems
-              .uniques((it) => it.authorityGovtCode)
-              .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
-        ],
+              .uniques((it) => it.schoolTypeCode)
+              .map((it) => FilterItem(it, it.from(lookups.schoolTypes))),
+        ].chainSort((lv, rv) => rv.visibleName.compareTo(lv.visibleName)),
         selectedIndex: 0,
       ),
     ]);
@@ -125,6 +140,9 @@ extension Filters on AccreditationChunk {
 
       final govtFilter = filters.firstWhere((it) => it.id == _kGovtFilterId);
 
+      final classLevelFilter =
+          filters.firstWhere((it) => it.id == _kClassLevelFilterId);
+
       FilterApplier<Iterable<Accreditation>> apply = (input) {
         var sorted = input.where((it) {
           if (it.surveyYear != selectedYear && !enableYearFilter) {
@@ -143,6 +161,11 @@ extension Filters on AccreditationChunk {
 
           if (!govtFilter.isDefault &&
               it.authorityGovtCode != govtFilter.stringValue) {
+            return false;
+          }
+
+          if (!classLevelFilter.isDefault &&
+              it.schoolTypeCode != classLevelFilter.stringValue) {
             return false;
           }
 
