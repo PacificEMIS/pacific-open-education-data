@@ -73,7 +73,11 @@ class _Chart extends HorizontalStackedScrollableBarChart {
     @required List<WaterViewDataBySchool> data,
   })  : assert(data != null),
         _data = data,
+
         super(key: key);
+
+  double get columnWidth => 6;
+  bool get showScrollbar => true;
 
   @override
   List<ChartData> get chartData => _data

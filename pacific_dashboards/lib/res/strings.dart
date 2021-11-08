@@ -326,6 +326,7 @@ class Strings {
       'indicatorsSecondYear': 'Selected End year',
       'indicatorsDateGrid': 'Date Grid',
       'indicatorsDifference': 'Difference',
+      'appIsOutdated': 'The version you are using is outdated. Please, update the app',
     },
   };
 

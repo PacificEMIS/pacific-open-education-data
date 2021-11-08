@@ -29,7 +29,7 @@ dependencies:
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
   get_it: ^5.0.1
-  intl: ^0.17.0
+  intl: ^0.16.0
   xml2json: ^4.1.0
   arch:
     git:
@@ -37,6 +37,8 @@ dependencies:
       ref: v0.0.8
   screen: ^0.0.5
   async: ^2.5.0-nullsafety.1
+  get_version: ^0.2.2
+  url_launcher: ^5.0.12
 
 dev_dependencies:
   flutter_test:

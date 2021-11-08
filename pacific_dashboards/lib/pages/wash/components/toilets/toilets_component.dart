@@ -124,6 +124,8 @@ class _SchoolDataByToiletTypeChart
         _data = data,
         super(key: key);
 
+  bool get showScrollbar => true;
+
   @override
   List<ChartData> get chartData {
     final chartData = <ChartData>[];
@@ -167,6 +169,8 @@ class _SchoolDataByPercentChart extends HorizontalStackedScrollableBarChart {
   })  : assert(data != null),
         _data = data,
         super(key: key);
+
+  bool get showScrollbar => true;
 
   @override
   List<ChartData> get chartData {

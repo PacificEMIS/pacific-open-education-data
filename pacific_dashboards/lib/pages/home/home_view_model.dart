@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_version/get_version.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/models/emis.dart';
@@ -15,10 +19,13 @@ class HomeViewModel extends ViewModel {
 
   final Subject<Emis> _selectedEmisSubject = BehaviorSubject();
   final Subject<List<Section>> _sectionsSubject = BehaviorSubject();
+  final Subject<bool> _showUpdateNotice = BehaviorSubject();
 
   Stream<Emis> get selectedEmisStream => _selectedEmisSubject.stream;
 
   Stream<List<Section>> get sectionStream => _sectionsSubject.stream;
+
+  Stream<bool> get showUpdateNoticeStream => _showUpdateNotice.stream;
 
   HomeViewModel(
     BuildContext ctx, {
@@ -41,6 +48,7 @@ class HomeViewModel extends ViewModel {
   void _loadCurrentEmis() {
     launchHandled(() async {
       final currentEmis = await _globalSettings.currentEmis;
+      _checkUpdate();
       onEmisChanged(currentEmis);
     });
   }
@@ -60,7 +68,6 @@ class HomeViewModel extends ViewModel {
 
   Future<List<Section>> _getSectionsForEmis(Emis emis) async {
     final emisesConfig = await _remoteConfig.emises;
-
     EmisConfig emisConfig = emisesConfig.getEmisConfigFor(emis);
     if (emisConfig == null) {
       return [];
@@ -70,5 +77,18 @@ class HomeViewModel extends ViewModel {
         .map((config) => config.asSection())
         .where((it) => it != null)
         .toList();
+  }
+
+  Future<void> _checkUpdate() async {
+    final emisesConfig = await _remoteConfig.emises;
+    String projectVersion;
+    try {
+      projectVersion = await GetVersion.projectVersion;
+    } on Exception {
+      projectVersion = '';
+    }
+    log(emisesConfig.appVersion);
+    log(projectVersion);
+    _showUpdateNotice.add(emisesConfig.appVersion != projectVersion);
   }
 }
