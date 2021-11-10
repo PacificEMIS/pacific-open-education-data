@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/models/requireUpdate.dart';
+import 'package:pacific_dashboards/pages/home/components/update_dialog_widget.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
@@ -47,32 +49,40 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  StreamBuilder<bool>(
-                    stream: viewModel.showUpdateNoticeStream,
+                  StreamBuilder<RequireUpdate>(
+                    stream: viewModel.requireUpdateStream,
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData || !snapshot.data) {
+                      if (!snapshot.hasData || snapshot.data != RequireUpdate.showMessage) {
                         return Container();
                       }
                       return InkWell(child: Container(
-                        color: Colors.red,
-                        margin: EdgeInsets.only(top: 32),
+                        margin: EdgeInsets.only(
+                            top: 44, bottom: 1, left: 8, right: 8),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          boxShadow:  [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(8, 8), // Shadow position
+                            ),
+                          ],
+                        ),
                         child: Text(
-                          'appIsOutdated'.localized(context),
+                          'appIsOutdatedMessage'.localized(context),
                           textAlign: TextAlign.center,
                           softWrap: true,
                           style: Theme
                               .of(context)
                               .textTheme
-                              .headline4,
+                              .button,
                         ),
                       ),
-                          onTap: () =>
-                              launch(
-                                  Platform.isIOS
-                                      ?
-                                  'https://apps.apple.com/us/app/pacific-open-education-data/id1487072947?app=itunes&ign-mpt=uo%3D4'
-                                      :
-                                  'https://play.google.com/store/apps/details?id=org.pacific_emis.opendata&hl=en_US&gl=US')
+                          onTap: () => viewModel.openStorePage()
                       );
                     },
                   ),
@@ -130,5 +140,29 @@ class _HomePageState extends MvvmState<HomeViewModel, HomePage> {
             )
         )
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      viewModel.requireUpdateStream.listen((value) {
+        print('Value from controller: $value');
+        if (value == RequireUpdate.showPopup) showUpdateDialog();
+      });
+    });
+  }
+
+  void showUpdateDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return UpdateDialog(
+          viewModel: viewModel,
+        );
+      },
+    ).then((val) {
+      viewModel.showUpdate(RequireUpdate.showMessage);
+    });
   }
 }

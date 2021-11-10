@@ -326,7 +326,11 @@ class Strings {
       'indicatorsSecondYear': 'Selected End year',
       'indicatorsDateGrid': 'Date Grid',
       'indicatorsDifference': 'Difference',
-      'appIsOutdated': 'The version you are using is outdated. Please, update the app',
+      'appIsOutdatedPopup': 'There is a newer version of this app. Please update to get the latest features.',
+      'appIsOutdatedMessage': 'You are using an outdated version of this app.\nClick to update.',
+      'updateApp': 'Update app',
+      'updateCancel': 'CANCEL',
+      'update': 'UPDATE',
     },
   };
 
