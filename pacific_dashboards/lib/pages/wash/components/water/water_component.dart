@@ -76,7 +76,6 @@ class _Chart extends HorizontalStackedScrollableBarChart {
 
         super(key: key);
 
-  double get columnWidth => 6;
   bool get showScrollbar => true;
 
   @override
@@ -128,7 +127,7 @@ class _Chart extends HorizontalStackedScrollableBarChart {
       .toList();
 
   @override
-  int get domainLength => _data.length;
+  int get domainLength => chartData.length;
 
   @override
   List<Pair<String, Color>> get legend => [
