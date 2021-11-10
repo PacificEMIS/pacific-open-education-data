@@ -92,7 +92,7 @@ class HomeViewModel extends ViewModel {
     }
     log(emisesConfig.appVersion);
     log(projectVersion);
-    showUpdate(_versionFromString(emisesConfig.appVersion) <
+    showUpdate(_versionFromString(emisesConfig.appVersion) >
         _versionFromString(projectVersion)
         ? RequireUpdate.showPopup
         : RequireUpdate.no);
