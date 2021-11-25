@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arch/arch.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
 import 'package:flutter/foundation.dart';
@@ -110,6 +112,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         RestClient(_dio, baseUrl: emises.getEmisConfigFor(Emis.miemis).emisUrl);
     _kemisClient =
         RestClient(_dio, baseUrl: emises.getEmisConfigFor(Emis.kemis).emisUrl);
+
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
   }
 
   Future<void> _handleErrors(DioError error) async {
