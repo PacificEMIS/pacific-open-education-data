@@ -7,6 +7,8 @@ class AccreditationData {
     @required this.year,
     @required this.accreditationProgressData,
     @required this.accreditationProgressCumulativeData,
+    @required this.accreditationProgressByYearData,
+    @required this.accreditationProgressByYearCumulativeData,
     @required this.districtStatusData,
     @required this.districtStatusCumulativeData,
     @required this.accreditationNationalCumulativeData,
@@ -24,6 +26,8 @@ class AccreditationData {
         assert(performanceByStandard != null);
 
   final String year;
+  final Map<String, List<int>> accreditationProgressByYearData;
+  final Map<String, List<int>> accreditationProgressByYearCumulativeData;
   final Map<String, List<int>> accreditationProgressData;
   final Map<String, List<int>> accreditationProgressCumulativeData;
   final Map<String, List<int>> districtStatusData;

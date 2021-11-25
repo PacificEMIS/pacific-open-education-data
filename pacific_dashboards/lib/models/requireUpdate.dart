@@ -1,0 +1,1 @@
+enum RequireUpdate { no, showPopup, showMessage }

@@ -11,6 +11,8 @@ import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dar
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/indicators/indicators.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
@@ -156,6 +158,16 @@ class RepositoryImpl implements Repository {
       getLocal: _localDataSource.fetchExams,
       getRemote: _remoteDataSource.fetchExams,
       updateLocal: _localDataSource.saveExams,
+    );
+  }
+
+  @override
+  Stream<RepositoryResponse<IndicatorsContainer>> fetchAllIndicators(String districtCode) async* {
+    yield* _fetchWithoutEtag(
+      getLocal: () => _localDataSource.fetchIndicators(districtCode),
+      getRemote: () => _remoteDataSource.fetchIndicators(districtCode),
+      updateLocal: (indicators) =>
+          _localDataSource.saveIndicators(indicators, districtCode),
     );
   }
 

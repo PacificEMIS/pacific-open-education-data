@@ -26,8 +26,16 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
   @protected
   double get bottomPadding => 32;
 
+  @protected
+  double get columnWidth => 32;
+
+  @protected
+  bool get showScrollbar => true;
+
   @override
   Widget build(BuildContext context) {
+    final ScrollController controller = ScrollController(initialScrollOffset: 0.0);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,10 +51,13 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
 
               return LayoutBuilder(
                 builder: (context, constraints) {
-                  final minimalChartWidth = domainLength * 32.0;
+                  final minimalChartWidth = domainLength * columnWidth;
                   final availableScreenWidth = constraints.maxWidth;
                   return Scrollbar(
+                    controller: controller,
+                    isAlwaysShown: showScrollbar,
                     child: SingleChildScrollView(
+                      controller: controller,
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.only(bottom: bottomPadding),
                       child: Container(
@@ -81,7 +92,6 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
                             ),
                           ),
                           defaultRenderer: charts.BarRendererConfig(
-                            stackHorizontalSeparator: 0,
                             minBarLengthPx: 30,
                             groupingType: charts.BarGroupingType.stacked,
                           ),

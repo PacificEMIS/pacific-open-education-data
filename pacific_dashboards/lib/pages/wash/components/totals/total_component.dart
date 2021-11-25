@@ -148,6 +148,8 @@ class _Chart extends HorizontalStackedScrollableBarChart {
         _colorPalette = colorPalette,
         super(key: key);
 
+  bool get showScrollbar => true;
+
   @override
   List<ChartData> get chartData => _data
       .expand(

@@ -10,11 +10,23 @@ class EmisConfig {
   @JsonKey(name: 'id')
   final String id;
 
+  @JsonKey(name: 'emis_url')
+  final String emisUrl;
+
+  @JsonKey(name: 'emis_user')
+  final String emisUser;
+
+  @JsonKey(name: 'emis_password')
+  final String emisPassword;
+
   @JsonKey(name: 'modules')
   final List<ModuleConfig> modules;
 
   const EmisConfig({
     @required this.id,
+    @required this.emisUrl,
+    @required this.emisUser,
+    @required this.emisPassword,
     @required this.modules,
   });
 

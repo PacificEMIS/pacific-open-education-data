@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pacific_dashboards/models/lookups/class_level_lookup.dart';
 import 'package:pacific_dashboards/models/lookups/lookup.dart';
+import 'package:pacific_dashboards/models/lookups/school_type_lookup.dart';
 
 part 'lookups.g.dart';
 
@@ -33,6 +34,9 @@ class Lookups {
   @JsonKey(name: 'question', defaultValue: [])
   final List<Lookup> question;
 
+  @JsonKey(name: 'schoolTypeLevels', defaultValue: [])
+  final List<SchoolTypeLookup> schoolTypeLevels;
+
   const Lookups({
     this.authorityGovt,
     this.schoolTypes,
@@ -43,6 +47,7 @@ class Lookups {
     this.educationLevels,
     this.schoolCodes,
     this.question,
+    this.schoolTypeLevels,
   });
 
   factory Lookups.fromJson(Map<String, dynamic> json) =>

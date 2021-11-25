@@ -1,9 +1,9 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
 
 part 'school.g.dart';
 
@@ -134,8 +134,8 @@ extension Filters on List<School> {
         items: [
           FilterItem(null, 'filtersDisplayAllLevelFilters'),
           ...this
-              .uniques((it) => it.classLevel)
-              .map((it) => FilterItem(it, it.from(lookups.levels))),
+              .uniques((it) => it.schoolTypeCode)
+              .map((it) => FilterItem(it, it.from(lookups.schoolTypes))),
         ],
         selectedIndex: 0,
       ),
@@ -158,7 +158,7 @@ extension Filters on List<School> {
       final classLevelFilter =
           filters.firstWhere((it) => it.id == _kClassLevelFilterId);
 
-      return this.where((it) {
+      var sorted = this.where((it) {
         if (it.surveyYear != selectedYear) {
           return false;
         }
@@ -179,12 +179,13 @@ extension Filters on List<School> {
         }
 
         if (!classLevelFilter.isDefault &&
-            it.classLevel != classLevelFilter.stringValue) {
+            it.schoolTypeCode != classLevelFilter.stringValue) {
           return false;
         }
 
         return true;
       }).toList();
+      return sorted;
     });
   }
 }

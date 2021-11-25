@@ -1,10 +1,10 @@
 import 'package:arch/arch.dart' show Pair;
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
+import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/charts/horizontal_stacked_scrollable_bar_chart.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/res/strings.dart';
 
 import 'water_data.dart';
 
@@ -73,49 +73,61 @@ class _Chart extends HorizontalStackedScrollableBarChart {
     @required List<WaterViewDataBySchool> data,
   })  : assert(data != null),
         _data = data,
+
         super(key: key);
 
-  @override
-  List<ChartData> get chartData => _data.expand((schoolData) => [
-        ChartData(
-          schoolData.school,
-          schoolData.pipedWaterSupply,
-          AppColors.kDynamicPalette[0],
-        ),
-        ChartData(
-          schoolData.school,
-          schoolData.protectedWell,
-          AppColors.kDynamicPalette[1],
-        ),
-        ChartData(
-          schoolData.school,
-          schoolData.unprotectedWellSpring,
-          AppColors.kDynamicPalette[2],
-        ),
-        ChartData(
-          schoolData.school,
-          schoolData.rainwater,
-          AppColors.kDynamicPalette[3],
-        ),
-        ChartData(
-          schoolData.school,
-          schoolData.bottled,
-          AppColors.kDynamicPalette[4],
-        ),
-        ChartData(
-          schoolData.school,
-          schoolData.tanker,
-          AppColors.kDynamicPalette[5],
-        ),
-        ChartData(
-          schoolData.school,
-          schoolData.surfaced,
-          AppColors.kDynamicPalette[6],
-        ),
-      ]).toList();
+  bool get showScrollbar => true;
 
   @override
-  int get domainLength => _data.length;
+  List<ChartData> get chartData => _data
+      .expand((schoolData) => [
+            if (schoolData.pipedWaterSupply > 0)
+              ChartData(
+                schoolData.school,
+                schoolData.pipedWaterSupply,
+                AppColors.kDynamicPalette[0],
+              ),
+            if (schoolData.protectedWell > 0)
+              ChartData(
+                schoolData.school,
+                schoolData.protectedWell,
+                AppColors.kDynamicPalette[1],
+              ),
+            if (schoolData.unprotectedWellSpring > 0)
+              ChartData(
+                schoolData.school,
+                schoolData.unprotectedWellSpring,
+                AppColors.kDynamicPalette[2],
+              ),
+            if (schoolData.rainwater > 0)
+              ChartData(
+                schoolData.school,
+                schoolData.rainwater,
+                AppColors.kDynamicPalette[3],
+              ),
+            if (schoolData.bottled > 0)
+              ChartData(
+                schoolData.school,
+                schoolData.bottled,
+                AppColors.kDynamicPalette[4],
+              ),
+            if (schoolData.tanker > 0)
+              ChartData(
+                schoolData.school,
+                schoolData.tanker,
+                AppColors.kDynamicPalette[5],
+              ),
+            if (schoolData.surfaced > 0)
+              ChartData(
+                schoolData.school,
+                schoolData.surfaced,
+                AppColors.kDynamicPalette[6],
+              ),
+          ])
+      .toList();
+
+  @override
+  int get domainLength => chartData.length;
 
   @override
   List<Pair<String, Color>> get legend => [

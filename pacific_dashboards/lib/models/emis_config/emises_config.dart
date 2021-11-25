@@ -9,7 +9,10 @@ class EmisesConfig {
   @JsonKey(name: 'emises')
   final List<EmisConfig> emises;
 
-  const EmisesConfig(this.emises);
+  @JsonKey(name: 'app_version')
+  final String appVersion;
+
+  const EmisesConfig(this.emises, this.appVersion);
 
   factory EmisesConfig.fromJson(Map<String, dynamic> json) =>
       _$EmisesConfigFromJson(json);

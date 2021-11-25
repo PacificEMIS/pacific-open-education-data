@@ -124,7 +124,8 @@ class _GnpMultiTable extends StatelessWidget {
   const _GnpMultiTable({
     Key key,
     @required Map<String, DataByGnpAndGovernmentSpending> data,
-  })  : assert(data != null),
+  })
+      : assert(data != null),
         _data = data,
         super(key: key);
 
@@ -142,13 +143,15 @@ class _GnpMultiTable extends StatelessWidget {
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
-            return data.domain.toString();
+            return CellData(value: data.domain.toString());
           case 1:
-            return _sLongNumberFormat.format(data.measure.gNP);
+            return CellData(value: _sLongNumberFormat.format(data.measure.gNP));
           case 2:
-            return _sLongNumberFormat.format(data.measure.edExpense);
+            return CellData(
+                value: _sLongNumberFormat.format(data.measure.edExpense));
           case 3:
-            return data.measure.percentageEdGnp.toInt().toString();
+            return CellData(
+                value: data.measure.percentageEdGnp.toInt().toString());
         }
         throw FallThroughError();
       },
@@ -162,7 +165,8 @@ class _GovernmentMultiTable extends StatelessWidget {
   const _GovernmentMultiTable({
     Key key,
     @required Map<String, DataByGnpAndGovernmentSpending> data,
-  })  : assert(data != null),
+  })
+      : assert(data != null),
         _data = data,
         super(key: key);
 
@@ -180,13 +184,16 @@ class _GovernmentMultiTable extends StatelessWidget {
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
-            return data.domain.toString();
+            return CellData(value: data.domain.toString());
           case 1:
-            return _sLongNumberFormat.format(data.measure.govtExpense);
+            return CellData(
+                value: _sLongNumberFormat.format(data.measure.govtExpense));
           case 2:
-            return _sLongNumberFormat.format(data.measure.edExpense);
+            return CellData(
+                value: _sLongNumberFormat.format(data.measure.edExpense));
           case 3:
-            return data.measure.percentageEdGovt.toInt().toString();
+            return CellData(
+                value: data.measure.percentageEdGovt.toInt().toString());
         }
         throw FallThroughError();
       },
@@ -225,11 +232,13 @@ class _SectorMultiTable extends StatelessWidget {
       domainValueBuilder: (index, data) {
         switch (index) {
           case 0:
-            return data.domain.toString();
+            return CellData(value: data.domain.toString());
           case 1:
-            return _sLongNumberFormat.format(_actualExtractor(data.measure));
+            return CellData(value: _sLongNumberFormat.format(
+                _actualExtractor(data.measure)));
           case 2:
-            return _sLongNumberFormat.format(_budgetedExtractor(data.measure));
+            return CellData(value: _sLongNumberFormat.format(
+                _budgetedExtractor(data.measure)));
         }
         throw FallThroughError();
       },

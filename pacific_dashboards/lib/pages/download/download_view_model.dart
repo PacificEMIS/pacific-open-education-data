@@ -112,6 +112,8 @@ class DownloadViewModel extends ViewModel {
         return LoadingItem(subject: e, loadFn: _downloadTeachersEnrollmentData);
       case LoadingSubject.exams:
         return LoadingItem(subject: e, loadFn: _downloadExamsData);
+      case LoadingSubject.indicators:
+        return LoadingItem(subject: e, loadFn: _downloadIndicatorsData);
       case LoadingSubject.schoolAccreditations:
         return LoadingItem(subject: e, loadFn: _downloadAccreditationData);
       case LoadingSubject.budgets:
@@ -307,6 +309,19 @@ class DownloadViewModel extends ViewModel {
 
   Future<void> _downloadExamsData() async {
     return _downloadHandled(_repository.fetchAllExams());
+  }
+
+  Future<void> _downloadIndicatorsData() async {
+    var emis = await _globalSettings.currentEmis;
+    List<String> districts = [""];
+    if (emis == Emis.fedemis) {
+      var lookups = await _repository.lookups.first;
+      lookups.districts.forEach((element) {
+        districts.add(element.code);
+      });
+    }
+    return Future.wait(districts.map((district) =>
+        _downloadHandled(_repository.fetchAllIndicators(district))));
   }
 
   Future<void> _downloadAccreditationData() async {
