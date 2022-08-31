@@ -29,6 +29,5 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   final hideOnboarding = prefs.getBool('hideOnboarding') ?? false;
-
   runApp(App(hideOnboarding: hideOnboarding));
 }

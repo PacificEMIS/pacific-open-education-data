@@ -7,6 +7,7 @@ class GlobalSettings {
   static const _kApiPassword = const String.fromEnvironment('envApiPassword');
   static const _kEmisKey = "emis";
   static const _kVersionSuffix = "_version";
+  static const _kAppVersion = "1.1.6";
 
   final StringsDao _stringsDao;
 
@@ -29,4 +30,6 @@ class GlobalSettings {
   String getApiUserName() => _kApiUser;
 
   String getApiPassword() => _kApiPassword;
+
+  String getAppVersion() => _kAppVersion;
 }

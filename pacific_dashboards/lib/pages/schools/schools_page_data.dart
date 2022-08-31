@@ -10,6 +10,7 @@ class SchoolsPageData {
     @required this.enrolByPrivacy,
     @required this.enrolByAgeAndEducation,
     @required this.enrolBySchoolLevelAndDistrict,
+    @required this.enrolByEduationLevelAndGender,
   })  : assert(year != null),
         assert(enrolByDistrict != null),
         assert(enrolByAuthority != null),
@@ -23,4 +24,5 @@ class SchoolsPageData {
   final List<ChartData> enrolByPrivacy;
   final Map<String, Map<String, GenderTableData>> enrolByAgeAndEducation;
   final Map<String, Map<String, GenderTableData>> enrolBySchoolLevelAndDistrict;
+  final Map<String, Map<String, GenderTableData>> enrolByEduationLevelAndGender;
 }

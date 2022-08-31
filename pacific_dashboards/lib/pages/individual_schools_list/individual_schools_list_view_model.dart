@@ -38,7 +38,11 @@ class IndividualSchoolsListViewModel extends BaseViewModel {
 
     _individualSchoolsSubject.disposeWith(disposeBag);
     if (_individualSchools == null || _individualSchools.length == 0) _loadData();
-    else _applyFilters();
+    else if (_isSelectAll) {
+      _selectedSchools = [];
+      _selectedSchools.addAll(_individualSchools);
+    }
+     _applyFilters();
   }
 
   void _loadData() {

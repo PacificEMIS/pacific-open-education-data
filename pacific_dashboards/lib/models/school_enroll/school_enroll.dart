@@ -4,10 +4,10 @@ part 'school_enroll.g.dart';
 
 @JsonSerializable()
 class SchoolEnroll {
-  @JsonKey(name: 'SurveyYear')
+  @JsonKey(name: 'SurveyYear', defaultValue: 0)
   int year;
 
-  @JsonKey(name: 'ClassLevel')
+  @JsonKey(name: 'ClassLevel', defaultValue: '')
   String classLevel;
 
   @JsonKey(name: 'EnrolF', defaultValue: 0)

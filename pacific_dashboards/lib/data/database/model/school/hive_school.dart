@@ -113,6 +113,14 @@ class HiveSchool extends HiveObject with Expirable {
   @HiveField(28)
   int certifiedM;
 
+  @override
+  @HiveField(29)
+  int enrolF;
+
+  @override
+  @HiveField(30)
+  int enrolM;
+
   School toSchool() => School(
         iscedSubClass,
         numSupportStaff,
@@ -140,7 +148,8 @@ class HiveSchool extends HiveObject with Expirable {
         authorityGovt,
         genderCode,
         schoolTypeCode,
-        enrol,
+        enrolF,
+        enrolM,
         sector,
       );
 
@@ -172,5 +181,7 @@ class HiveSchool extends HiveObject with Expirable {
     ..support = school.support
     ..age = school.age
     ..genderCode = school.genderCode
-    ..enrol = school.enrol;
+    ..enrol = school.enrol + school.enrolF + school.enrolM
+    ..enrolF = school.enrolF
+    ..enrolM = school.enrolM;
 }

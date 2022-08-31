@@ -13,6 +13,7 @@ class ChartWithTable extends StatelessWidget {
     @required ChartType chartType,
     @required String tableKeyName,
     @required String tableValueName,
+    bool showColors,
   })  : assert(title != null),
         assert(data != null),
         assert(chartType != null),
@@ -23,6 +24,7 @@ class ChartWithTable extends StatelessWidget {
         _chartType = chartType,
         _tableKeyName = tableKeyName,
         _tableValueName = tableValueName,
+        _showColors = showColors ?? true,
         super(key: key);
 
   final String _title;
@@ -30,7 +32,7 @@ class ChartWithTable extends StatelessWidget {
   final ChartType _chartType;
   final String _tableKeyName;
   final String _tableValueName;
-
+  final bool _showColors;
   @override
   Widget build(BuildContext context) {
     if (_title.isEmpty)
@@ -39,6 +41,7 @@ class ChartWithTable extends StatelessWidget {
         data: _data,
         tableKeyName: _tableKeyName,
         tableValueName: _tableValueName,
+        showColors: _showColors,
       );
 
     return TileWidget(
@@ -51,6 +54,7 @@ class ChartWithTable extends StatelessWidget {
         data: _data,
         tableKeyName: _tableKeyName,
         tableValueName: _tableValueName,
+        showColors: _showColors,
       ),
     );
   }
@@ -63,16 +67,19 @@ class ChartColumn extends StatelessWidget {
     @required List<ChartData> data,
     @required String tableKeyName,
     @required String tableValueName,
+    @required bool showColors,
   })  : _chartType = chartType,
         _data = data,
         _tableKeyName = tableKeyName,
         _tableValueName = tableValueName,
+        _showColors = showColors,
         super(key: key);
 
   final ChartType _chartType;
   final List<ChartData> _data;
   final String _tableKeyName;
   final String _tableValueName;
+  final bool _showColors;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +91,7 @@ class ChartColumn extends StatelessWidget {
           _data,
           _tableKeyName,
           _tableValueName,
+          _showColors
         ),
       ],
     );

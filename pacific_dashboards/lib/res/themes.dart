@@ -100,6 +100,12 @@ const charts.TextStyleSpec largeChartsDomain = const charts.TextStyleSpec(
   fontSize: 14,
 );
 
+const charts.TextStyleSpec smallChartsDomain = const charts.TextStyleSpec(
+  fontFamily: 'NotoSans',
+  color: charts.Color(a: 255, r: 99, g: 105, b: 109),
+  fontSize: 0,
+);
+
 final chartAxisTextStyle = charts.TextStyleSpec(
   fontSize: 10,
   color: AppColors.kTextMinor.chartsColor,

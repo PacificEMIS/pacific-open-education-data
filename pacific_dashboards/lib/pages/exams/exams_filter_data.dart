@@ -1,21 +1,21 @@
+import '../../models/filter/filter.dart';
+
 class ExamsFilterData {
-  final String examName;
-  final String viewName;
   final int showModeId;
   final String recordTypeName;
   final String showMode;
-  final String govType;
-  final String authority;
-  final String year;
+  final List<Filter> filters;
 
   ExamsFilterData(
-      this.examName,
-      this.viewName,
       this.showModeId,
       this.recordTypeName,
       this.showMode,
-      this.govType,
-      this.authority,
-      this.year
+      this.filters
       );
+
+  Filter get yearFilter => filters[0];
+  Filter get examFilter => filters[1];
+  Filter get stateFilter => filters[2];
+  Filter get govFilter => filters[3];
+  Filter get authorityFilter => filters[4];
 }

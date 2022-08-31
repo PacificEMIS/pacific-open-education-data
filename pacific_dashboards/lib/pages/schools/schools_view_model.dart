@@ -27,7 +27,6 @@ class SchoolsViewModel extends BaseViewModel {
   final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
   List<School> _schools;
-  List<School> _schoolsAuthority;
   List<Filter> _filters;
   Lookups _lookups;
 
@@ -76,7 +75,6 @@ class SchoolsViewModel extends BaseViewModel {
         () async {
           _lookups = await _repository.lookups.first;
           _schools = schools.byState;
-          _schoolsAuthority = schools.byAuthority;
           if (_schools != null)
           _filters = await _initFilters();
           _filtersSubject.add(_filters);
@@ -91,7 +89,6 @@ class SchoolsViewModel extends BaseViewModel {
         _transformSchoolsModel,
         _SchoolsModel(
           _schools,
-          _schoolsAuthority,
           _lookups,
           _filters,
         ),
@@ -103,7 +100,7 @@ class SchoolsViewModel extends BaseViewModel {
     if (_schools == null || _lookups == null) {
       return [];
     }
-    List<Filter> schoolFilters = await _schools.generateDefaultFilters(_lookups, _schoolsAuthority);
+    List<Filter> schoolFilters = await _schools.generateDefaultFilters(_lookups);
     return schoolFilters;
   }
 
@@ -124,11 +121,10 @@ class SchoolsViewModel extends BaseViewModel {
 
 class _SchoolsModel {
   final List<School> schools;
-  final List<School> autority;
   final Lookups lookups;
   final List<Filter> filters;
 
-  const _SchoolsModel(this.schools, this.autority, this.lookups, this.filters);
+  const _SchoolsModel(this.schools, this.lookups, this.filters);
 }
 
 Future<SchoolsPageData> _transformSchoolsModel(
@@ -136,12 +132,12 @@ Future<SchoolsPageData> _transformSchoolsModel(
 ) async {
   final filteredSchools =
       await _schoolsModel.schools.applyFilters(_schoolsModel.filters);
-  final filteredAuthority =
-      await _schoolsModel.autority.applyFilters(_schoolsModel.filters);
+  // final filteredAuthority =
+  //     await _schoolsModel.autority.applyFilters(_schoolsModel.filters);
 
   final schoolsByDistrict = filteredSchools.groupBy((it) => it.districtCode);
-  final schoolsByAuthority = filteredAuthority.groupBy((it) => it.authorityCode);
-  final schoolsByGovt = filteredAuthority.groupBy((it) => it.authorityGovt);
+  final schoolsByAuthority = filteredSchools.groupBy((it) => it.authorityCode);
+  final schoolsByGovt = filteredSchools.groupBy((it) => it.authorityGovt);
   final translates = _schoolsModel.lookups;
 
   final enrollByDistrictRaw = _calculatePeopleCount(schoolsByDistrict).map(
@@ -190,10 +186,14 @@ Future<SchoolsPageData> _transformSchoolsModel(
       );
     }),
     enrolByAgeAndEducation: _calculateEnrollmentByAgeAndEducation(
-      schools: filteredAuthority,
+      schools: filteredSchools,
       lookups: translates,
     ),
     enrolBySchoolLevelAndDistrict: _calculateEnrolBySchoolLevelAndDistrict(
+      schools: filteredSchools,
+      lookups: translates,
+    ),
+    enrolByEduationLevelAndGender: _calculateEnrolBySchoolLevelAndGender(
       schools: filteredSchools,
       lookups: translates,
     ),
@@ -230,6 +230,7 @@ Map<String, Map<String, GenderTableData>>
         _generateInfoTableData(schools.groupBy((it) => it.ageGroup));
     return MapEntry(level, groupedByAge);
   });
+
 }
 
 Map<String, Map<String, GenderTableData>>
@@ -241,15 +242,35 @@ Map<String, Map<String, GenderTableData>>
     'labelTotal': schools,
   };
   groupedByDistrictWithTotal.addEntries(
-    schools.groupBy((it) => it.classLevel).entries,
+    schools.groupBy((it) => it.districtCode).entries,
   );
 
   return groupedByDistrictWithTotal.map((classLevel, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    return MapEntry(classLevel.from(lookups.levels),
+    final groupedBySchoolType = schools.groupBy((it) => it.classLevel);
+    return MapEntry(classLevel.from(lookups.districts),
         _generateInfoTableData(groupedBySchoolType));
   });
 }
+
+Map<String, Map<String, GenderTableData>>
+    _calculateEnrolBySchoolLevelAndGender({
+  List<School> schools,
+  Lookups lookups,
+}) {
+  final groupedByDistrictWithTotal = {
+    'labelTotal': schools,
+  };
+  groupedByDistrictWithTotal.addEntries(
+    schools.groupBy((it) => it.classLevel.educationLevelFrom(lookups)).entries,
+  );
+
+  return groupedByDistrictWithTotal.map((districtCode, schools) {
+    final groupedBySchoolType = schools.groupBy((it) => it.districtCode.from(lookups.districts));
+    return MapEntry(districtCode.from(lookups.districts),
+        _generateInfoTableData(groupedBySchoolType));
+  });
+}
+
 
 Map<String, GenderTableData> _generateInfoTableData(
     Map<String, List<School>> groupedData,
@@ -266,14 +287,8 @@ Map<String, GenderTableData> _generateInfoTableData(
         .where((school) =>
             districtCode == null || school.districtCode == districtCode)
         .forEach((school) {
-      switch (school.gender) {
-        case Gender.male:
-          maleCount += school.enrol ?? 0;
-          break;
-        case Gender.female:
-          femaleCount += school.enrol ?? 0;
-          break;
-      }
+          maleCount += school.enrolM ?? 0;
+          femaleCount += school.enrolF ?? 0;
     });
 
     convertedData[group] = GenderTableData(maleCount, femaleCount);

@@ -32,8 +32,10 @@ class AccreditationData {
   final Map<String, List<int>> accreditationProgressCumulativeData;
   final Map<String, List<int>> districtStatusData;
   final Map<String, List<int>> districtStatusCumulativeData;
+
   final List<ChartData> accreditationNationalCumulativeData;
   final List<ChartData> accreditationNationalEvaluatedData;
+
   final MultitableData accreditationStatusByState;
   final MultitableData performanceByStandard;
 }

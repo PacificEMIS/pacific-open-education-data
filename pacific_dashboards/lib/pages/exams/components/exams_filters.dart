@@ -24,7 +24,7 @@ class ExamsFiltersWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final _numerOfRows = 6;
     final _baseHeight = 100.0;
-    final _totalHeight = _baseHeight * _numerOfRows;
+    final _totalHeight = _baseHeight * 1.8;
 
     return StreamBuilder<ExamsFilterData>(
       stream: _viewModel.filtersStream,
@@ -38,18 +38,6 @@ class ExamsFiltersWidget extends StatelessWidget {
             bottomInset: _bottomInset,
             children: <Widget>[
               _BottomMenuRow(
-                rowName: 'examsDashboardsFilterExam'.localized(context),
-                name: snapshot.data.examName,
-                onPrevTap: _viewModel.onPrevExamPressed,
-                onNextTap: _viewModel.onNextExamPressed,
-              ),
-              _BottomMenuRow(
-                rowName: 'examsDashboardsFilterView'.localized(context),
-                name: snapshot.data.viewName,
-                onPrevTap: _viewModel.onPrevViewPressed,
-                onNextTap: _viewModel.onNextViewPressed,
-              ),
-              _BottomMenuRow(
                 rowName: 'recordType'.localized(context),
                 name: snapshot.data.recordTypeName.localized(context),
                 onPrevTap: _viewModel.onPrevRecordTypePressed,
@@ -60,24 +48,6 @@ class ExamsFiltersWidget extends StatelessWidget {
                 name: snapshot.data.showMode,
                 onPrevTap: _viewModel.onPrevShowModePressed,
                 onNextTap: _viewModel.onNextShowModePressed,
-              ),
-              _BottomMenuRow(
-                rowName: 'govtNonGovt'.localized(context),
-                name: snapshot.data.govType.localized(context),
-                onPrevTap: _viewModel.onPrevGovTypePressed,
-                onNextTap: _viewModel.onNextGovTypePressed,
-              ),
-              _BottomMenuRow(
-                rowName: 'specialEducationAuthorityDomain'.localized(context),
-                name: snapshot.data.authority,
-                onPrevTap: _viewModel.onPrevAuthorityPressed,
-                onNextTap: _viewModel.onNextAuthorityPressed,
-              ),
-              _BottomMenuRow(
-                rowName: 'individualSchoolExamsFilterYear'.localized(context),
-                name: snapshot.data.year,
-                onPrevTap: _viewModel.onNextYearPressed,
-                onNextTap: _viewModel.onPrevYearPressed,
               ),
             ],
           );

@@ -38,7 +38,7 @@ class IndicatorsFiltersWidget extends StatelessWidget {
               _BottomMenuRow(
                 rowName: 'indicatorsDashboardsFilterEducationLevel'.localized(
                     context),
-                name: snapshot.data.educationLevel,
+                name: snapshot.data.educationLevel.localized(context),
                 onPrevTap: _viewModel.onPrevEducationLevelPressed,
                 onNextTap: _viewModel.onNextEducationLevelPressed,
               ),

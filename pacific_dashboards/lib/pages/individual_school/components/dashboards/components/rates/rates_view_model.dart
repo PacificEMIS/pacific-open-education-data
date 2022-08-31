@@ -99,7 +99,7 @@ LastYearRatesData _generateLastYearData(
     year: lastYear,
     data: dataOnLastYear.map((it) {
       return ClassLevelRatesData(
-        classLevel: it.yearOfEducation.educationLevelCodeFrom(
+        classLevel: it.yearOfEducation.toInt().educationLevelCodeFrom(
           flowsLookuped.lookups,
         ),
         dropoutRate: it.dropoutRate,
@@ -128,7 +128,7 @@ List<YearByClassLevelRateData> _generateHistoricalData(
   final List<YearByClassLevelRateData> result = [];
   for (var yearOfEducation in sortedYearOfEducationList) {
     result.add(YearByClassLevelRateData(
-      classLevel: yearOfEducation.educationLevelCodeFrom(
+      classLevel: yearOfEducation.toInt().educationLevelCodeFrom(
         flowsLookuped.lookups,
       ),
       data: flowsByYearOfEducation[yearOfEducation]

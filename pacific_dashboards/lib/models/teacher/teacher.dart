@@ -15,16 +15,16 @@ class Teacher {
   @JsonKey(name: 'AgeGroup')
   final String ageGroup;
 
-  @JsonKey(name: 'DistrictCode', defaultValue: '')
+  @JsonKey(name: 'DistrictCode', defaultValue: r'n\a')
   final String districtCode;
 
-  @JsonKey(name: 'AuthorityCode', defaultValue: '')
+  @JsonKey(name: 'AuthorityCode', defaultValue: r'n\a')
   final String authorityCode;
 
-  @JsonKey(name: 'AuthorityGroupCode', defaultValue: '')
+  @JsonKey(name: 'AuthorityGroupCode', defaultValue: r'n\a')
   final String authorityGovt;
 
-  @JsonKey(name: 'SchoolTypeCode', defaultValue: '')
+  @JsonKey(name: 'SchoolTypeCode', defaultValue: r'n\a')
   final String schoolTypeCode;
 
   @JsonKey(name: 'Sector')

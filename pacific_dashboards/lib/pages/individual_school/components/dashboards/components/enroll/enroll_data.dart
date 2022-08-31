@@ -41,10 +41,10 @@ class EnrollDataByGradeHistory {
 }
 
 class EnrollDataByYear {
-  final int year;
-  final int female;
-  final int male;
-  final int total;
+  final num year;
+  final num female;
+  final num male;
+  final num total;
 
   EnrollDataByYear({
     @required this.year,

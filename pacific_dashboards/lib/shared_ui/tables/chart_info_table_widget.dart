@@ -10,8 +10,9 @@ class ChartInfoTableWidget extends StatefulWidget {
   final List<ChartData> _data;
   final String _titleName;
   final String _titleValue;
+  final bool _showColor;
 
-  ChartInfoTableWidget(this._data, this._titleName, this._titleValue);
+  ChartInfoTableWidget(this._data, this._titleName, this._titleValue, this._showColor);
 
   @override
   _ChartInfoTableWidgetState createState() => _ChartInfoTableWidgetState();
@@ -56,7 +57,7 @@ class _ChartInfoTableWidgetState<T> extends State<ChartInfoTableWidget> {
             )
           ],
         ),
-        _ColumnFutureBuilder(sortedRowDatas: _sortedRowDatas),
+        _ColumnFutureBuilder(sortedRowDatas: _sortedRowDatas, showColors: widget._showColor),
       ],
     );
   }
@@ -146,10 +147,12 @@ class _ColumnFutureBuilder extends StatelessWidget {
   const _ColumnFutureBuilder({
     Key key,
     @required Future<List<_RowData>> sortedRowDatas,
-  })  : _sortedRowDatas = sortedRowDatas,
+    @required bool showColors,
+  })  : _sortedRowDatas = sortedRowDatas, _showColors = showColors,
         super(key: key);
 
   final Future<List<_RowData>> _sortedRowDatas;
+  final bool _showColors;
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +171,7 @@ class _ColumnFutureBuilder extends StatelessWidget {
               height: _kBorderWidth,
               color: _kBorderColor,
             ),
-            ...snapshot.data.map((it) => _Row(rowData: it)).toList(),
+            ...snapshot.data.map((it) => _Row(rowData: it, showColors: _showColors,)).toList(),
           ],
         );
       },
@@ -256,10 +259,12 @@ class _SortingDomain extends StatelessWidget {
 
 class _Row extends StatelessWidget {
   final _RowData _rowData;
+  final bool _showColors;
 
-  const _Row({Key key, @required _RowData rowData})
+  const _Row({Key key, @required _RowData rowData, @required bool showColors})
       : assert(rowData != null),
         _rowData = rowData,
+        _showColors = showColors,
         super(key: key);
 
   @override
@@ -279,7 +284,7 @@ class _Row extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Padding(
+                  _showColors  ? Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Container(
                       decoration: BoxDecoration(
@@ -290,7 +295,7 @@ class _Row extends StatelessWidget {
                       height: 8.0,
                       width: 8.0,
                     ),
-                  ),
+                  ) : Container(),
                   Expanded(
                     child: Text(
                       _rowData.domain,

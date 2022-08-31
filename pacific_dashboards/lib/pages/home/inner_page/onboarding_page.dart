@@ -1,7 +1,9 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
+import 'package:link_text/link_text.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/pages/home/inner_page/onboarding_view_model.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/emis.dart';
@@ -9,6 +11,7 @@ import '../home_page.dart';
 import '../inner_page/components/country_dialog.dart';
 import '../../../view_model_factory.dart';
 import 'onboarding_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OnboardingPage extends MvvmStatefulWidget {
   static const String kRoute = "/Onboarding";
@@ -77,13 +80,14 @@ class _OnboardingPageState extends MvvmState<OnboardingViewModel, OnboardingPage
 }
 
 class _DefaultPageItem extends StatelessWidget {
+  final String launchUrl = 'https://docs.pacific-emis.org/doku.php?id=poed_user_manual';
+
   const _DefaultPageItem({
     this.item,
     Key key,
   }) : super(key: key);
 
   final OnboardingItem item;
-
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
@@ -97,8 +101,8 @@ class _DefaultPageItem extends StatelessWidget {
             const SizedBox(height: 8),
             Center(
               child: SizedBox(
-                width: 328,
-                height: 288,
+                width: 300,
+                height: 280,
                 child: Image.asset(item.imagePath),
               ),
             ),
@@ -106,7 +110,7 @@ class _DefaultPageItem extends StatelessWidget {
             Text(
               item.text,
               style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white, fontSize: 16),
-            ),
+            )
           ],
         ),
       );
@@ -140,16 +144,27 @@ class _FinalPageItemState extends State<_FinalPageItem> {
           ),
         ),
         const SizedBox(height: 8),
-        Image.asset(widget.item.imagePath),
-        const SizedBox(height: 8),
-        Text(
-          widget.item.text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
+        Center(
+          child: SizedBox(
+            width: 250,
+            height: 170,
+            child: Image.asset(widget.item.imagePath),
           ),
         ),
+        const SizedBox(height: 8),
+        LinkText(
+            text: widget.item.text,
+            textStyle: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white, fontSize: 16),
+            linkStyle: Theme.of(context).textTheme.subtitle1.copyWith(color: AppColors.kCoolGray, fontSize: 16),
+            onLinkTap: (launchUrl) async {
+              if (await canLaunch(launchUrl)) {
+                await launch(
+                  launchUrl,
+                );
+              } else {
+                throw 'Could not launch $launchUrl';
+              }
+            }),
         const SizedBox(height: 24),
         StreamBuilder<Emis>(
             stream: widget.viewModel.selectedEmisStream,
@@ -174,8 +189,7 @@ class _FinalPageItemState extends State<_FinalPageItem> {
             builder: (context, snapshot) {
               return ElevatedButton(
                   onPressed: () {
-                    snapshot.data == null ? null :
-                    widget.viewModel.onContinuePressed(context);
+                    snapshot.data == null ? null : widget.viewModel.onContinuePressed(context);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: snapshot.data == null ? Colors.white70 : Colors.white,

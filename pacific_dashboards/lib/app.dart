@@ -20,10 +20,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class App extends StatelessWidget {
   const App({Key key,
     @required this.hideOnboarding,
-    @required this.sharedPreferences}) : super(key: key);
+  }) : super(key: key);
 
   final bool hideOnboarding;
-  final SharedPreferences sharedPreferences;
 
   @override
   Widget build(BuildContext context) {

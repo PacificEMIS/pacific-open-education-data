@@ -11,9 +11,13 @@ class IndicatorsNavigator {
   int _selectedEducationLevelId = 0;
   int _selectedRegionId = 0;
 
-  String _firstYear = "2014";
-  String _secondYear = "2015";
+  String _firstYear = "";
+  String _secondYear = "";
 
+  List<int> get years => getYears()
+      .map((e) => int.parse(e))
+      .toList()
+      .chainSort((lv, rv) => rv.compareTo(lv));
 
   final List<String> _educationLevelIds;
   final List<String> educationLevelNames;
@@ -21,15 +25,15 @@ class IndicatorsNavigator {
   final List<String> regionsNames;
   final Indicators _indicators;
 
-  IndicatorsNavigator(
-      IndicatorsContainer indicators,
-      Lookups lookups,
+  List<String> _filteredEducationLevelIds = [];
+
+  IndicatorsNavigator(IndicatorsContainer indicators, Lookups lookups,
       {IndicatorsNavigator oldNavigator})
       : _educationLevelIds = indicators.indicators.enrolments.enrolments
-      .uniques((it) => it.educationLevelCode),
+            .uniques((it) => it.educationLevelCode),
         educationLevelNames = indicators.indicators.enrolments.enrolments
-            .uniques((it) =>
-            it.educationLevelCode.from(lookups.educationLevels)),
+            .uniques(
+                (it) => it.educationLevelCode.from(lookups.educationLevels)),
         _indicators = indicators.indicators,
         _regions = lookups.districts.map((it) => it.code).toList(),
         regionsNames = lookups.districts.map((it) => it.name).toList() {
@@ -39,6 +43,11 @@ class IndicatorsNavigator {
       _selectedEducationLevelId = oldNavigator._selectedEducationLevelId;
       _selectedRegionId = oldNavigator._selectedRegionId;
     }
+    _educationLevelIds.forEach((it) {
+      if (it == 'ECE' || it == 'PRI' || it == 'SEC')
+        _filteredEducationLevelIds.add(it);
+    });
+
     _regions.insert(0, "");
     regionsNames.insert(0, "ALL");
     _changeEducationLevelPage();
@@ -56,9 +65,9 @@ class IndicatorsNavigator {
 
   void _changeEducationLevelPage() {
     if (_selectedEducationLevelId < 0) {
-      _selectedEducationLevelId = _educationLevelIds.length - 1;
+      _selectedEducationLevelId = _filteredEducationLevelIds.length - 1;
     }
-    if (_selectedEducationLevelId > _educationLevelIds.length - 1) {
+    if (_selectedEducationLevelId > _filteredEducationLevelIds.length - 1) {
       _selectedEducationLevelId = 0;
     }
   }
@@ -68,7 +77,7 @@ class IndicatorsNavigator {
         _selectedEducationLevelId >= educationLevelNames.length) {
       return "";
     }
-    return educationLevelNames[_selectedEducationLevelId];
+    return _filteredEducationLevelIds[_selectedEducationLevelId];
   }
 
   String get pageName {
@@ -88,7 +97,7 @@ class IndicatorsNavigator {
         _selectedEducationLevelId >= educationLevelNames.length) {
       return "";
     }
-    return _educationLevelIds[_selectedEducationLevelId];
+    return _filteredEducationLevelIds[_selectedEducationLevelId];
   }
 
   String get regionId {
@@ -110,39 +119,44 @@ class IndicatorsNavigator {
   }
 
   Indicator getIndicatorForYear(String year, Lookups lookups) {
-    IndicatorsEnrolmentByLevel indicatorsEnrolmentByLevel;
-    var foundEnrolments = false;
-    _indicators.enrolments.enrolments.forEach((element) {
-      if (element.year == year &&
-          element.educationLevelCode == selectedEducationCode) {
-        foundEnrolments = true;
-        indicatorsEnrolmentByLevel = element;
-      }
-    });
-    if (!foundEnrolments)
-      indicatorsEnrolmentByLevel = new IndicatorsEnrolmentByLevel(
-          year: year, educationLevelCode: selectedEducationCode);
+    final indicatorsEnrolmentByLevel =
+        _indicators.getEnrolment(year, selectedEducationCode);
+    final indicatorsEnrolmentYear =
+        _indicators.getEnrolmentLastYear(year, indicatorsEnrolmentByLevel);
+    final indicatorsSchoolCount =
+        _indicators.getSchoolCount(year, indicatorsEnrolmentByLevel, lookups);
 
-    var schoolTypesOfLevel = lookups.schoolTypeLevels.expand((e) =>
-    [
-      if (indicatorsEnrolmentByLevel.isSchoolOfLevel(e.yearOfEducation)) e
-          .schoolCode
-    ]).uniques((it) => it);
+    return new Indicator(
+        enrolment: indicatorsEnrolmentByLevel,
+        schoolCount: indicatorsSchoolCount,
+        enrolmentLastGrade: indicatorsEnrolmentYear,
+        previous: years.last >= int.tryParse(year)
+            ? null
+            : getIndicatorForYear((int.tryParse(year) - 1).toString(), lookups),
+        sector: _indicators.getSector(indicatorsEnrolmentByLevel));
+  }
 
-    var schoolCount = 0;
-    _indicators.schoolCounts.schoolCounts.forEach((element) {
-      if (element.year == year &&
-          schoolTypesOfLevel.contains(element.schoolType)) {
-        schoolCount += element.count;
-      }
-    });
+  List<Indicator> getAllIndicatorsData(Lookups lookups, int year, int endYear) {
+    List<Indicator> indicators = [];
 
-    IndicatorsSchoolCount indicatorsSchoolCount = new IndicatorsSchoolCount(
-        year: year, count: schoolCount);
+    for (year; year <= endYear; year++) {
+      final indicatorsEnrolmentByLevel =
+          _indicators.getEnrolment(year.toString(), selectedEducationCode);
+      final indicatorsEnrolmentYear = _indicators.getEnrolmentLastYear(
+          year.toString(), indicatorsEnrolmentByLevel);
+      final indicatorsSchoolCount = _indicators.getSchoolCount(
+          year.toString(), indicatorsEnrolmentByLevel, lookups);
 
-    var indicator = new Indicator(enrolment: indicatorsEnrolmentByLevel,
-        schoolCount: indicatorsSchoolCount);
-    return indicator;
+      var indicator = new Indicator(
+          enrolment: indicatorsEnrolmentByLevel,
+          schoolCount: indicatorsSchoolCount,
+          enrolmentLastGrade: indicatorsEnrolmentYear,
+          previous:
+              indicators.length > 0 ? indicators[indicators.length - 1] : null,
+          sector: _indicators.getSector(indicatorsEnrolmentByLevel));
+      indicators.add(indicator);
+    }
+    return indicators;
   }
 
   void onYearFiltersChanged(Pair<String, String> years) {
@@ -150,19 +164,27 @@ class IndicatorsNavigator {
     _secondYear = years.second;
   }
 
-
   void onRegionChanged(int regionId) {
     _selectedRegionId = regionId;
   }
 
   Pair<Indicator, Indicator> getIndicatorResults(Lookups lookups) {
+    print('getIndicatorResults');
     return new Pair(
         getIndicatorForYear(_firstYear, lookups),
         _firstYear != _secondYear
             ? getIndicatorForYear(_secondYear, lookups)
-            : new Indicator(enrolment: new IndicatorsEnrolmentByLevel(
-            year: "", educationLevelCode: selectedEducationCode),
-            schoolCount: new IndicatorsSchoolCount(
-                year: "", count: null)));
+            : new Indicator(
+                enrolment: new IndicatorsEnrolmentByLevel(
+                    year: "", educationLevelCode: selectedEducationCode),
+                schoolCount: new IndicatorsSchoolCount(year: "", count: null),
+                enrolmentLastGrade: null,
+                previous: null,
+                sector: null));
+  }
+
+  List<Indicator> getIndicatorsResults(
+      Lookups lookups, int firstYear, int secondYear) {
+    return getAllIndicatorsData(lookups, firstYear, secondYear);
   }
 }

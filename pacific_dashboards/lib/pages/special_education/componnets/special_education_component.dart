@@ -17,10 +17,12 @@ import '../special_education_data.dart';
 class SpecialEducationComponent extends StatefulWidget {
   final List<DataByGroup> data;
   final bool showTabs;
+  final String title;
   const SpecialEducationComponent({
     Key key,
     @required this.data,
     this.showTabs = true,
+    this.title = '',
   })  : assert(data != null),
         super(key: key);
 
@@ -91,8 +93,10 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
                                       ))
                                   .toList(),
                               chartType: ChartType.bar,
-                              tableKeyName: 'specialEducationAuthorityDomain'.localized(context),
+                              tableKeyName:  widget.title == '' ? 'specialEducationAuthorityDomain'.localized(context)
+                                  : widget.title.localized(context),
                               tableValueName: 'specialEducationEnrollDomain'.localized(context),
+                              showColors: widget.showTabs,
                             );
                           case _Tab.diagram:
                             return ChartWithTable(
@@ -106,8 +110,10 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
                                       ))
                                   .toList(),
                               chartType: ChartType.pie,
-                              tableKeyName: 'specialEducationAuthorityDomain'.localized(context),
+                              tableKeyName: widget.title == '' ? 'specialEducationAuthorityDomain'.localized(context)
+                                  : widget.title.localized(context),
                               tableValueName: 'specialEducationEnrollDomain'.localized(context),
+                              showColors: widget.showTabs,
                             );
                         }
                         throw FallThroughError();
@@ -130,8 +136,10 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
                                   ))
                               .toList(),
                           chartType: ChartType.none,
-                            tableKeyName: 'specialEducationAuthorityDomain'.localized(context),
+                            tableKeyName: widget.title == '' ? 'specialEducationAuthorityDomain'.localized(context)
+                                : widget.title.localized(context),
                           tableValueName: 'specialEducationEnrollDomain'.localized(context),
+                          showColors: widget.showTabs,
                         )
                       ],
 

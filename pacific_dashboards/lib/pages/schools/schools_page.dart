@@ -174,6 +174,24 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           domainValueBuilder:
                           GenderTableData.sDomainValueBuilder,
                         ),
+                        MultiTable(
+                          key: ValueKey(
+                              snapshot.data.enrolByEduationLevelAndGender),
+                          title:
+                          'schoolsDashboardsEnrollByEducationStateGenderTitle'
+                              .localized(context),
+                          columnNames: [
+                            'schoolsDashboardsSchoolLevelDomain',
+                            'labelMale',
+                            'labelFemale',
+                            'labelTotal'
+                          ],
+                          columnFlex: [3, 3, 3, 3],
+                          data: snapshot.data.enrolByEduationLevelAndGender,
+                          keySortFunc: _compareEnrollmentBySchoolLevelAndState,
+                          domainValueBuilder:
+                          GenderTableData.sDomainValueBuilder,
+                        ),
                       ],
                     );
                   }
@@ -191,7 +209,6 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
   }
 
   int _compareEnrollmentByAgeAndEducation(String lv, String rv) {
-    // formats like 1-12
     final lvParts = lv.split('-');
     if (lvParts.length < 1) {
       return -1;

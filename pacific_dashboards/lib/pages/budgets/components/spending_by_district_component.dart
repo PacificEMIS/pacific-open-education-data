@@ -245,6 +245,7 @@ class _Chart extends StatelessWidget {
       chartData,
       domain.localized(context),
       _tab.getLocalizedName(context),
+      true
     );
   }
 

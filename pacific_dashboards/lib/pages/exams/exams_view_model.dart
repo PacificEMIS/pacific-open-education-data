@@ -12,6 +12,7 @@ import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/exam/exam_separated.dart';
+import '../../models/filter/filter.dart';
 
 class ExamsViewModel extends BaseViewModel {
   final Repository _repository;
@@ -20,10 +21,11 @@ class ExamsViewModel extends BaseViewModel {
 
   final Subject<String> _pageNoteSubject = BehaviorSubject();
   final Subject<ExamsFilterData> _filtersSubject = BehaviorSubject();
-  final Subject<Map<String, Map<String, List<ExamSeparated>>>> _dataSubject =
+  final Subject<Map<String, Map<String, Map<String, List<ExamSeparated>>>>> _dataSubject =
       BehaviorSubject();
 
   ExamsNavigator _navigator;
+  List<Filter> _filters;
   Lookups _lookups;
 
   ExamsViewModel(
@@ -71,6 +73,55 @@ class ExamsViewModel extends BaseViewModel {
         () async {
           _lookups = await _repository.lookups.first;
           _navigator = ExamsNavigator(exams);
+          _filters = [
+            Filter(
+              id: 0,
+              title: 'filtersByYear',
+              items: exams
+                  .uniques((it) => it.year)
+                  .chainSort((lv, rv) => rv.compareTo(lv))
+                  .map((it) => FilterItem(it, it.toString()))
+                  .toList(),
+              selectedIndex: 0,
+            ),
+            Filter(
+                id: 0,
+                title: 'Exams',
+                items: exams.uniques((it) => it.name)
+                    .map((e) => FilterItem(e, e.toString())).toList(),
+                selectedIndex: 0
+            ),
+            Filter(
+              id: 0,
+              title: 'filtersByState',
+              items: [
+                FilterItem(null, 'filtersDisplayAllStates'),
+                ..._lookups.districts.where((e) => e.name != '').map((e) =>
+                    FilterItem(e.code, e.name)).toList(),
+              ],
+              selectedIndex: 0,
+            ),
+            Filter(
+                id: 0,
+                title: 'filtersByGovernment',
+                items: [
+                  FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+                  ..._lookups.authorityGovt.map((e) =>
+                      FilterItem(e.code, e.name)).toList()
+                ],
+                selectedIndex: 0
+            ),
+            Filter(
+                id: 0,
+                title: 'filtersByAuthority',
+                items: [
+                  FilterItem(null, 'filtersDisplayAllAuthority'),
+                  ..._lookups.authorities.map((e) =>
+                      FilterItem(e.code, e.name)).toList(),
+                ],
+                selectedIndex: 0
+            ),
+          ];
           _updatePageData();
         },
       );
@@ -83,52 +134,30 @@ class ExamsViewModel extends BaseViewModel {
   }
 
   ExamsFilterData get _filterData {
-    final authorities = _lookups.authorities.where((e) => e
-        .code == _navigator.authorityName);
     return ExamsFilterData(
-        _navigator.pageName,
-        _navigator.viewName,
         _navigator.showModeId,
         _navigator.recordTypeName,
         _navigator.showModeName,
-        _navigator.govType,
-        authorities.isNotEmpty
-            ? authorities.first.name
-            : _navigator.authorityName,
-        _navigator.year.toString()
+        _filters
     );
   }
 
-  Map<String, Map<String, List<ExamSeparated>>> _convertExams() {
-    return _navigator.getExamResults(_lookups);
+  void onFiltersChanged(List<Filter> filters) {
+    launchHandled(() async {
+      _filters = filters;
+      _updatePageData();
+    });
+  }
+
+  Map<String, Map<String, Map<String, List<ExamSeparated>>>> _convertExams() {
+    return _navigator.getExamResults(_filterData, _lookups);
   }
 
   Stream<String> get noteStream => _pageNoteSubject.stream;
 
-  Stream<Map<String, Map<String, List<ExamSeparated>>>> get dataStream => _dataSubject.stream;
+  Stream<Map<String, Map<String, Map<String, List<ExamSeparated>>>>> get dataStream => _dataSubject.stream;
 
   Stream<ExamsFilterData> get filtersStream => _filtersSubject.stream;
-
-  ///TODO WTF Rewrite this ***!!!
-  void onPrevExamPressed() {
-    _navigator.prevExamPage();
-    _updatePageData();
-  }
-
-  void onNextExamPressed() {
-    _navigator.nextExamPage();
-    _updatePageData();
-  }
-
-  void onPrevViewPressed() {
-    _navigator.prevExamView();
-    _updatePageData();
-  }
-
-  void onNextViewPressed() {
-    _navigator.nextExamView();
-    _updatePageData();
-  }
 
   void onPrevRecordTypePressed() {
     _navigator.prevExamRecordType();
@@ -147,36 +176,6 @@ class ExamsViewModel extends BaseViewModel {
 
   void onNextShowModePressed() {
     _navigator.nextExamCountMode();
-    _updatePageData();
-  }
-
-  void onPrevGovTypePressed() {
-    _navigator.prevExamGovType();
-    _updatePageData();
-  }
-
-  void onNextGovTypePressed() {
-    _navigator.nextExamGovType();
-    _updatePageData();
-  }
-
-  void onPrevAuthorityPressed() {
-    _navigator.prevExamAuthority();
-    _updatePageData();
-  }
-
-  void onNextAuthorityPressed() {
-    _navigator.nextExamAuthority();
-    _updatePageData();
-  }
-
-  void onPrevYearPressed() {
-    _navigator.prevExamYear();
-    _updatePageData();
-  }
-
-  void onNextYearPressed() {
-    _navigator.nextExamYear();
     _updatePageData();
   }
 }

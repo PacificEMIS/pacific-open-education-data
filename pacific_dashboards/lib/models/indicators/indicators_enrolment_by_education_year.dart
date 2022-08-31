@@ -4,27 +4,21 @@ import 'package:pacific_dashboards/models/json_converters/double_json.dart';
 import 'package:pacific_dashboards/models/json_converters/int_json.dart';
 import 'package:pacific_dashboards/models/json_converters/string_json.dart';
 
-part 'indicators_enrolment_by_level.g.dart';
+part 'indicators_enrolment_by_education_year.g.dart';
 
 @JsonSerializable()
-class IndicatorsEnrolmentByLevel {
+class IndicatorsEnrolmentByEducationYear {
   @JsonKey(name: 'year')
   final String year;
 
-  @JsonKey(name: 'edLevelCode')
-  final String educationLevelCode;
+  @JsonKey(name: 'officialAge')
+  final String officialAge;
 
-  @JsonKey(name: 'firstYear')
-  final String firstYear;
+  @JsonKey(name: 'yearOfEd')
+  final String yearOfEducation;
 
-  @JsonKey(name: 'lastYear')
-  final String lastYear;
-
-  @JsonKey(name: 'numYears')
-  final String numYears;
-
-  @JsonKey(name: 'startAge')
-  final String startAge;
+  @JsonKey(name: 'levelCode')
+  final String levelCode;
 
   @JsonKey(name: 'popM',
       toJson: IntJson.intToJson,
@@ -233,13 +227,11 @@ class IndicatorsEnrolmentByLevel {
       includeIfNull: false)
   final double netIntakeRatio;
 
-  const IndicatorsEnrolmentByLevel({
+  const IndicatorsEnrolmentByEducationYear({
     @required this.year,
-    @required this.educationLevelCode,
-    this.firstYear,
-    this.lastYear,
-    this.numYears,
-    this.startAge,
+    this.officialAge,
+    this.yearOfEducation,
+    this.levelCode,
     this.populationMale,
     this.populationFemale,
     this.population,
@@ -275,27 +267,8 @@ class IndicatorsEnrolmentByLevel {
     this.netIntakeRatio,
   });
 
-  factory IndicatorsEnrolmentByLevel.fromJson(Map<String, dynamic> json) =>
-      _$IndicatorsEnrolmentByLevelFromJson(json);
+  factory IndicatorsEnrolmentByEducationYear.fromJson(Map<String, dynamic> json) =>
+      _$IndicatorsEnrolmentByEducationYearFromJson(json);
 
-  Map<String, dynamic> toJson() => _$IndicatorsEnrolmentByLevelToJson(this);
-
-  int get yearsOfSchooling {
-    return numYears != null ? int.tryParse(numYears) : null;
-  }
-
-  int get officialStartAge {
-    return startAge != null ? int.tryParse(startAge) : null;
-  }
-
-  bool isSchoolOfLevel(int educationYear) {
-    int start = int.tryParse(firstYear);
-    int end = int.tryParse(lastYear);
-    if (start == null || end == null) return false;
-    return educationYear >= start && educationYear <= end;
-  }
-
-  bool isLastYear(int educationYear) {
-    return educationYear.toString() == lastYear;
-  }
+  Map<String, dynamic> toJson() => _$IndicatorsEnrolmentByEducationYearToJson(this);
 }

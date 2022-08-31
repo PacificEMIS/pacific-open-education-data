@@ -31,7 +31,7 @@ part 'rest_client.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET('warehouse/enrol/district')
+  @GET('warehouse/tableEnrol/r')
   Future<List<School>> getSchools();
 
   @GET('warehouse/enrol/authority')

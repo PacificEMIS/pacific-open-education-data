@@ -116,6 +116,7 @@ class MultiTableWidget<T> extends StatelessWidget {
                     height: _kBorderWidth,
                     color: _kBorderColor,
                   ),
+
                   ...snapshot.data
                       .map(
                         (it) => Container(
@@ -136,7 +137,6 @@ class MultiTableWidget<T> extends StatelessWidget {
                                 );
                               },
                             ).toList(),
-                            //_generateColumnCells(_columnNames, it),
                           ),
                         ),
                       )

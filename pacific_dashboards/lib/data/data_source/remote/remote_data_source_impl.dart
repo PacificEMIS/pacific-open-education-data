@@ -386,19 +386,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<SchoolsChunk> fetchSchools() async {
-    // return _withHandlers(
-    //   (client) => client.getSchools(),
-    //   fallbackHandlers: [
-    //     (e) => _fallbackToNative(
-    //           e,
-    //           'warehouse/tableenrol',
-    //           (json) => compute<String, List<School>>(
-    //             _parseSchoolList,
-    //             json,
-    //           ),
-    //         ),
-    //   ],
-    // );
     final byState = await _withHandlers(
         (client) => client.getSchools(),
         fallbackHandlers: [
@@ -412,22 +399,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
               ),
         ],
       );
-
-    final byAuthority = await _withHandlers(
-          (client) => client.getSchoolsAuthority(),
-      fallbackHandlers: [
-            (e) => _fallbackToNative(
-          e,
-          'warehouse/tableenrol',
-              (json) => compute<String, List<School>>(
-            _parseSchoolList,
-            json,
-          ),
-        ),
-      ],
-    );
-    //await _withHandlers((client) => client.getSchools());
-    return SchoolsChunk(byState: byState, byAuthority: byAuthority);
+    return SchoolsChunk(byState: byState, byAuthority: byState);
   }
 
   @override

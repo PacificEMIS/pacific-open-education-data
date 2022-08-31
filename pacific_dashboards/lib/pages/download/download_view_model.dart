@@ -67,6 +67,15 @@ class DownloadViewModel extends ViewModel {
   void onUpdateSchoolsList(List<ShortSchool> selectedSchools, List<ShortSchool> individualSchools) {
     this.selectedSchools = selectedSchools;
     this.individualSchools = individualSchools;
+
+    if (selectedSchools.length < individualSchools.length) {
+      final currentState = _stateSubject.value as PreparationDownloadPageState;
+      if (currentState.sections.contains(Section.individualSchools)) {
+        _stateSubject.add(
+          (currentState as PreparationDownloadPageState).copyWith(section: Section.individualSchools),
+        );
+      }
+    }
     _stateSubject.add(
         (_stateSubject.value as PreparationDownloadPageState));
   }
@@ -82,6 +91,7 @@ class DownloadViewModel extends ViewModel {
       throw StateError('cannot change selected item enabled '
           'outside from PreparationDownloadPageState');
     }
+
     if (currentState.sections.contains(Section.individualSchools) && section == Section.individualSchools)
       selectedSchools = [];
     _stateSubject.add(
@@ -193,7 +203,7 @@ class DownloadViewModel extends ViewModel {
 
     final sections = currentState.sections;
     final loadingSubjects = <LoadingSubject>[];
-    if (selectedSchools.length > 0) {
+    if (selectedSchools != null && selectedSchools.length > 0) {
       loadingSubjects.add(LoadingSubject.individualSchools);
     }
     for (final subject in LoadingSubject.values) {

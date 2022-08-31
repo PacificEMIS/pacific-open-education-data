@@ -86,30 +86,21 @@ class HomeViewModel extends ViewModel {
   Future<void> _checkUpdate() async {
     final emisesConfig = await _remoteConfig.emises;
     String projectVersion;
-    try {
-      //TODO GET VERSION!!!!!!!!!!!!!!!!!!
-      // projectVersion = await GetVersion.projectVersion;
-    } on Exception {
-      projectVersion = '';
-    }
-    // log(emisesConfig.appVersion);
-    // log(projectVersion);
-    //TODO SHOW UPDATE
-    // showUpdate(_versionFromString(emisesConfig.appVersion) >
-    //     _versionFromString(projectVersion)
-    //     ? RequireUpdate.showPopup
-    //     : RequireUpdate.no);
+    showUpdate(_versionFromString(emisesConfig.appVersion) >
+        _versionFromString(_globalSettings.getAppVersion())
+        ? RequireUpdate.showPopup
+        : RequireUpdate.no);
   }
   
-  // int _versionFromString(String versionString) {
-  //   var versionNumbers = versionString.split(".");
-  //   int result = 0;
-  //   versionNumbers.forEach((String number) {
-  //     result *= 100;
-  //     result += int.parse(number);
-  //   });
-  //   return result;
-  // }
+  int _versionFromString(String versionString) {
+    var versionNumbers = versionString.split(".");
+    int result = 0;
+    versionNumbers.forEach((String number) {
+      result *= 100;
+      result += int.parse(number);
+    });
+    return result;
+  }
 
   void showUpdate(RequireUpdate requireUpdate) async {
     _requireUpdateSubject.add(requireUpdate);

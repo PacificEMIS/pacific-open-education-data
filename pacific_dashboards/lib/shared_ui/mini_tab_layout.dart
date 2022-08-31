@@ -29,7 +29,7 @@ class MiniTabLayout<T> extends StatefulWidget {
 
 class _MiniTabLayoutState<T> extends State<MiniTabLayout> {
 
-  int _selectedIndex;
+  int _selectedIndex = 0;
 
   @override
   void initState() {

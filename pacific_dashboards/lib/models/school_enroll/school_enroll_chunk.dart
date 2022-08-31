@@ -1,4 +1,4 @@
-import 'package:arch/arch.dart';
+ import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 

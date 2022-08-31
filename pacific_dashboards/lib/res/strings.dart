@@ -71,9 +71,14 @@ class Strings {
       'schoolsDashboardsMeasureEnroll': 'Total',
       'schoolsDashboardsEnrollByStateTitle': 'Enrollment by State',
       'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
-      'schoolsDashboardsEnrollByGovernmentTitle': 'Enrollment Govt / \nNon-govt',
-      'schoolsDashboardsEnrollByAgeLevelGenderTitle': 'Enrollment by Age, Education \nLevel and Gender',
-      'schoolsDashboardsEnrollByLevelStateGenderTitle': 'Enrollment by School Levels, \nState and Gender',
+      'schoolsDashboardsEnrollByGovernmentTitle':
+          'Enrollment Govt / \nNon-govt',
+      'schoolsDashboardsEnrollByAgeLevelGenderTitle':
+          'Enrollment by Age, Education \nLevel and Gender',
+      'schoolsDashboardsEnrollByLevelStateGenderTitle':
+          'Enrollment by School Levels, \nState and Gender',
+      'schoolsDashboardsEnrollByEducationStateGenderTitle':
+          'Enrollment by State, Education \nLevel and Gender',
       'schoolsDashboardsPrivacyDomain': 'Public/Private',
       'schoolsDashboardsStateDomain': 'State',
       'schoolsDashboardsAuthorityDomain': 'Authority',
@@ -83,8 +88,10 @@ class Strings {
       'teachersDashboardsChartTitle': 'Teachers (Number of)',
       'teachersDashboardsEnrollByAuthorityTitle': 'Teachers by Authority',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by State',
-      'teachersDashboardsEnrollByLevelStateGenderTitle': 'Teachers by School Levels, \nState and Gender',
-      'teachersDashboardsEnrollByGovernmentTitle': 'Teachers by Govt / \nNon-govt',
+      'teachersDashboardsEnrollByLevelStateGenderTitle':
+          'Teachers by School Levels, \nState and Gender',
+      'teachersDashboardsEnrollByGovernmentTitle':
+          'Teachers by Govt / \nNon-govt',
       'teachersDashboardsEnrollDomain': 'Teachers',
       'teachersDashboardsPrivacyDomain': 'Public/Private',
       'teachersDashboardsStateDomain': 'State',
@@ -98,12 +105,17 @@ class Strings {
       'examsDashboardsViewByStandardAndGender': 'By Gender for Last 3 Years',
       'examsDashboardsViewByStandardAndState': 'By State',
       'schoolsAccreditationDashboardsTitle': 'School Accreditations',
-      'schoolsAccreditationDashboardsProgressTitle': 'Accreditation Progress by Year',
-      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by State',
-      'schoolsAccreditationDashboardsProgressNationalTitle': 'Accreditation Progress National',
+      'schoolsAccreditationDashboardsProgressTitle':
+          'Accreditation Progress by Year',
+      'schoolsAccreditationDashboardsProgressByStateTitle':
+          'Accreditation Progress by State',
+      'schoolsAccreditationDashboardsProgressNationalTitle':
+          'Accreditation Progress National',
       'schoolsAccreditationDashboardsDistrictTitle': 'State Status',
-      'schoolsAccreditationDashboardsStatusByStateTitle': 'Accreditation Status by State',
-      'schoolsAccreditationDashboardsPerformanceByStandardTitle': 'Performance by Standard',
+      'schoolsAccreditationDashboardsStatusByStateTitle':
+          'Accreditation Status by State',
+      'schoolsAccreditationDashboardsPerformanceByStandardTitle':
+          'Performance by Standard',
       'schoolsAccreditationDashboardsStateDomain': 'State',
       'schoolsAccreditationDashboardsStandardDomain': 'Standard',
       'schoolsListTitle': 'Individual Schools',
@@ -114,15 +126,20 @@ class Strings {
       'individualSchoolAccreditationTitle': 'ACCREDITATION',
       'individualSchoolDashboardEnrollTitle': 'Enrollment',
       'individualSchoolDashboardRatesTitle': 'Rates',
-      'individualSchoolDashboardEnrollByGradeLevelGenderTitle': 'By Grade Level and Gender',
-      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle': 'By Grade Level and Gender History',
-      'individualSchoolDashboardEnrollByGenderHistoryTitle': 'Enrollment by Gender History',
+      'individualSchoolDashboardEnrollByGradeLevelGenderTitle':
+          'By Grade Level and Gender',
+      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryTitle':
+          'By Grade Level and Gender History',
+      'individualSchoolDashboardEnrollByGenderHistoryTitle':
+          'Enrollment by Gender History',
       'individualSchoolDashboardEnrollFemalePartTitle': 'Female Part',
       'individualSchoolDashboardEnrollByGradeLevelGenderChart': 'Chart',
       'individualSchoolDashboardEnrollByGradeLevelGenderTable': 'Table',
       'individualSchoolDashboardEnrollByGradeLevelGenderGrade': 'Grade',
-      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryStacked': 'Stacked',
-      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryUnstacked': 'Unstacked',
+      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryStacked':
+          'Stacked',
+      'individualSchoolDashboardEnrollByGradeLevelGenderHistoryUnstacked':
+          'Unstacked',
       'individualSchoolDashboardEnrollFemalePartDetailed': ' in details',
       'individualSchoolDashboardEnrollFemalePartHistory': 'Full History',
       'individualSchoolDashboardRatesDropoutTitle': 'Dropout Rate',
@@ -133,7 +150,8 @@ class Strings {
       'individualSchoolDashboardRatesHistoryChart': 'History (chart)',
       'individualSchoolDashboardRatesHistoryTable': 'History (table)',
       'individualSchoolDashboardRatesHistoryTableDomain': 'GR',
-      'individualSchoolExamsByBenchmarkTitle': 'Achievement Results by Benchmark',
+      'individualSchoolExamsByBenchmarkTitle':
+          'Achievement Results by Benchmark',
       'individualSchoolExamsByBenchmarkWellBelowLevel': 'Well below',
       'individualSchoolExamsByBenchmarkApproachingLevel': 'Approaching',
       'individualSchoolExamsByBenchmarkMinimallyLevel': 'Minimally',
@@ -170,9 +188,12 @@ class Strings {
           ' you must contact the National Data Management Office.',
       'budgetsDashboardsTitle': 'Budgets',
       'budgetsEducationFinancing': 'Education Financing : Dashboard',
-      'budgetsGnpAndGovernmentSpendingActualExpense': 'GNI (aka. GNP) and Government Spending Actual Expense',
-      'budgetsGnpAndGovernmentSpendingBudgetedExpense': 'GNI (aka. GNP) and Government Spending Budgeted Expense',
-      'budgetsGnpAndGovernmentSpending': 'GNI (aka. GNP) and Government Spending',
+      'budgetsGnpAndGovernmentSpendingActualExpense':
+          'GNI (aka. GNP) and Government Spending Actual Expense',
+      'budgetsGnpAndGovernmentSpendingBudgetedExpense':
+          'GNI (aka. GNP) and Government Spending Budgeted Expense',
+      'budgetsGnpAndGovernmentSpending':
+          'GNI (aka. GNP) and Government Spending',
       'budgetsSpendingBySector': 'Spending By Sector',
       'budgetsSpendingByDistrict': 'Spending By States',
       'budgetsDashboardComponent': 'Dashboard Component',
@@ -189,7 +210,8 @@ class Strings {
       'budgetsActualExpenditureTab': 'Actual Expenditure',
       'budgetsBudgetTab': 'Budget',
       'budgetsActualRecurrentExpenditureTab': 'Actual Recurrent Expenditure',
-      'budgetsBudgetedRecurrentExpenditureTab': 'Budgeted Recurrent Expenditure',
+      'budgetsBudgetedRecurrentExpenditureTab':
+          'Budgeted Recurrent Expenditure',
       'budgetsActualExpPerHeadTab': 'Actual Exp per Head',
       'budgetsEnrollmentTab': 'Enrollment',
       'budgetsBudgetExpPerHeadTab': 'Budget Exp per Head',
@@ -228,7 +250,8 @@ class Strings {
       'washToiletsPupilsByToiletTab': 'Pupils / toilet',
       'washToiletsPupilsByToiletByGenderTab': 'Pupils / toilet (gender)',
       'washToiletsPupilsByUsableToiletTab': 'Pupils / usable toilet',
-      'washToiletsPupilsByUsableToiletByGenderTab': 'Pupils / usable toilet (gender)',
+      'washToiletsPupilsByUsableToiletByGenderTab':
+          'Pupils / usable toilet (gender)',
       'washToiletsPupilsTab': 'Pupils',
       'washToiletsPupilsMirroredTab': 'Pupils (mirror format)',
       'washToiletsCommonLabel': 'Common',
@@ -290,7 +313,8 @@ class Strings {
       'downloadSubjectSpecialEducation': 'Special Education section',
       'downloadSubjectWASH': 'WASH section',
       'downloadSubjectIndividualSchoolsList': 'Individual Schools list',
-      'downloadSubjectIndividualSchoolsDetailed': 'Individual Schools info for school',
+      'downloadSubjectIndividualSchoolsDetailed':
+          'Individual Schools info for school',
       'downloadSubjectIndicators': 'Indicators section',
       'indicatorsDashboardsTitle': 'Indicators',
       'indicatorsDashboardsFilterEducationLevel': 'Education Level',
@@ -301,16 +325,27 @@ class Strings {
       'indicatorsStartAge': 'Official Start Age',
       'indicatorsNumberOfSchools': 'Number of \nSchools',
       'indicatorsDemographic': 'Demographic Indicators',
+      'indicatorsQuality': 'Quality Indicators',
+      'indicatorsProcess': 'Process Indicators',
+      'indicatorsOutcome': 'Outcome Indicators',
       'indicatorsPopulation': 'Population \n(estimated)',
+      'population': 'Population',
+      'enrolment': 'Enrolment',
+      'netEnrolment': 'Net Enrolment',
+      'netEnrolmentRatio': 'Net Enrolment Ratio',
+      'grossEnrolmentRatio': 'Gross Enrolment Ratio',
       'indicatorsTotalEnrolment': 'Total Enrolment',
       'indicatorsOfficialAgeEnrolment': 'Official Age\nEnrolment',
       'indicatorsGrossEnrolment': 'Gross Enrolment\nRatio',
       'indicatorsNetEnrolment': 'Net Enrolment\nRatio',
       'indicatorsSecondYear': 'Selected End year',
-      'indicatorsDateGrid': 'Date Grid',
+      'indicatorsDateGrid': 'DATA GRID',
+      'indicatorsHistoricalCharts': 'HISTORICAL CHARTS',
       'indicatorsDifference': 'Difference',
-      'appIsOutdatedPopup': 'There is a newer version of this app. Please update to get the latest features.',
-      'appIsOutdatedMessage': 'You are using an outdated version of this app.\nClick to update.',
+      'appIsOutdatedPopup':
+          'There is a newer version of this app. Please update to get the latest features.',
+      'appIsOutdatedMessage':
+          'You are using an outdated version of this app.\nClick to update.',
       'updateApp': 'Update app',
       'updateCancel': 'CANCEL',
       'update': 'UPDATE',
@@ -337,6 +372,29 @@ class Strings {
       'wash': 'Wash',
       'indicators': 'Indicators',
       'individualSchools': 'Individual Schools',
+      'numberOfTeachers': 'Number of Teachers',
+      'certifiedPercentage': 'Certified %',
+      'qualifiedPercentage': 'Qualified %',
+      'pupilTeachersRation': 'Pupil/Teacher Ratio',
+      'pupilCertifiedTeachersRation': 'Pupil/Certified Teacher Ratio',
+      'pupilQualifiedTeachersRation': 'Pupil/Qualified Teacher Ratio',
+      'repeaters': 'Repeaters',
+      'repeatersNumber': 'No of Repeaters',
+      'repetitionRate': 'Repetition Rate',
+      'survivalRate': 'Survival Rate (to Year 8)',
+      'intake': 'Intake',
+      'grossIntakeRatio': 'Gross Intake Ratio',
+      'netIntake': 'Net Intake',
+      'netIntakeRatio': 'Net Intake Ratio',
+      'grossIRLG': 'Gross Intake Ratio',
+      'results': 'Results',
+      'resultsByState': 'Results By State',
+      'resultsByYear': 'Results By Year',
+      'resultsByGovtNonGovt': 'Govt / Non-govt',
+      'resultByGender': 'Result By Gender',
+      'ECE': 'Early Child Education',
+      'PRI': 'Elementary',
+      'SEC': 'Secondary',
     },
   };
 
@@ -348,15 +406,19 @@ class Strings {
   static Map<String, Map<String, String>> _localizedValuesMiEmis = {
     'en': {
       'schoolsDashboardsEnrollByStateTitle': 'Enrollment by Atolls and Islands',
-      'schoolsDashboardsEnrollByLevelStateGenderTitle': 'Enrollment by School Levels, \nAtolls and Islands and Gender',
+      'schoolsDashboardsEnrollByLevelStateGenderTitle':
+          'Enrollment by School Levels, \nAtolls and Islands and Gender',
       'schoolsDashboardsStateDomain': 'Atolls and Islands',
       'filtersDisplayAllStates': 'Display All Atolls and Islands',
       'filtersByQualification': 'Selected Qualification',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by Atolls and Islands',
       'teachersDashboardsStateDomain': 'Atolls and Islands',
-      'teachersDashboardsEnrollByLevelStateGenderTitle': 'Teachers by School Levels, \nAtolls and Islands and Gender',
-      'examsDashboardsViewByStandardAndState': 'By Standards and Atolls and Islands',
-      'schoolsAccreditationDashboardsStatusByStateTitle': 'Accreditation Status by Atolls and Islands',
+      'teachersDashboardsEnrollByLevelStateGenderTitle':
+          'Teachers by School Levels, \nAtolls and Islands and Gender',
+      'examsDashboardsViewByStandardAndState':
+          'By Standards and Atolls and Islands',
+      'schoolsAccreditationDashboardsStatusByStateTitle':
+          'Accreditation Status by Atolls and Islands',
       'schoolsAccreditationDashboardsStateDomain': 'Atolls and Islands',
       'schoolsByState': 'By Atoll / Islands',
       'schoolsByAuthority': 'By Authority',
@@ -373,13 +435,16 @@ class Strings {
       'filtersDisplayAllAuthority': 'Display All Authority',
       'filtersDisplayAllGovernmentFilters': 'Display all Government filters',
       'filtersDisplayAllLevelFilters': 'Display all Level filters',
-      'schoolsAccreditationDashboardsProgressByStateTitle': 'Accreditation Progress by Atoll / Island ',
+      'schoolsAccreditationDashboardsProgressByStateTitle':
+          'Accreditation Progress by Atoll / Island ',
       'schoolsAccreditationDashboardsDistrictTitle': 'Atoll / Island Status',
       'budgetsSpendingByDistrict': 'Spending by Atolls and Islands',
       'budgetsStatesDomain': 'Atolls and Islands',
       'budgetsDistrictColumn': 'Atoll / Island',
       'washDistrictTotalsTitle': 'Question Totals by Atolls and Islands',
       'specialEducationTitleByState': 'By Atoll / Islands',
+      'resultsByState': 'Results By Atoll / Islands',
+      'resultsByGovtNonGovt': 'Results By School Type',
     },
   };
 
@@ -388,10 +453,12 @@ class Strings {
       'homeSectionExamsDashboards': 'National Tests',
       'filtersDisplayAllStates': 'Display All Districts',
       'filtersByState': 'Selected District',
-      'schoolsDashboardsEnrollByLevelStateGenderTitle': 'Enrollment by Age, \nEducation Level and Gender',
+      'schoolsDashboardsEnrollByLevelStateGenderTitle':
+          'Enrollment by Age, \nEducation Level and Gender',
       'schoolsDashboardsEnrollByStateTitle': 'Enrollment by District ',
       'schoolsDashboardsStateDomain': 'District',
-      'teachersDashboardsEnrollByLevelStateGenderTitle': 'Teachers by School Levels, \nDistrict and Gender',
+      'teachersDashboardsEnrollByLevelStateGenderTitle':
+          'Teachers by School Levels, \nDistrict and Gender',
       'teachersDashboardsStateDomain': 'District',
       'teachersDashboardsEnrollByStateTitle': 'Teachers by District',
       'examsDashboardsTitle': 'National Tests',
@@ -399,14 +466,17 @@ class Strings {
       'examsDashboardsViewByStandardAndGender': 'By Gender for Last 3 Years',
       'examsDashboardsViewByStandardAndState': 'By State',
       'examsDashboardsFilterStandard': 'Selected Test',
-      'schoolsAccreditationDashboardsStatusByStateTitle': 'Accreditation Status by District',
-      'schoolsAccreditationDashboardsPerformanceByStandardTitle': 'Performance by Test',
+      'schoolsAccreditationDashboardsStatusByStateTitle':
+          'Accreditation Status by District',
+      'schoolsAccreditationDashboardsPerformanceByStandardTitle':
+          'Performance by Test',
       'schoolsAccreditationDashboardsStateDomain': 'District',
       'schoolsAccreditationDashboardsStandardDomain': 'Test',
       'schoolsAccreditationDashboardsDistrictTitle': 'District Status',
       'schoolsDashboardsEnrollByAuthorityTitle': 'Enrollment by Authority',
       'schoolsDashboardsEnrollByGovernmentTitle': 'Enrollment by School Type',
-      'schoolsDashboardsEnrollByAgeLevelGenderTitle': 'Enrollment by Age, Education \nLevel and Gender',
+      'schoolsDashboardsEnrollByAgeLevelGenderTitle':
+          'Enrollment by Age, Education \nLevel and Gender',
       'budgetsStatesDomain': 'Districts',
       'budgetsDistrictColumn': 'District',
       'washDistrictTotalsTitle': 'Question Totals by District',

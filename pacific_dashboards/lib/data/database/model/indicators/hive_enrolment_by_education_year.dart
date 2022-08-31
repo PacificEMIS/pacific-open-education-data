@@ -1,29 +1,24 @@
 import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_enrolment_by_education_year.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_enrolment_by_level.dart';
 
-part 'hive_enrolment_by_level.g.dart';
+part 'hive_enrolment_by_education_year.g.dart';
 
-@HiveType(typeId: 23)
-class HiveEnrolmentByLevel extends HiveObject with Expirable {
+@HiveType(typeId: 28)
+class HiveEnrolmentByEducationYear extends HiveObject with Expirable {
   @HiveField(0)
   String year;
 
   @HiveField(1)
-  String educationLevelCode;
+  String officialAge;
 
   @HiveField(2)
-  String firstYear;
+  String yearOfEducation;
 
   @HiveField(3)
-  String lastYear;
-
-  @HiveField(4)
-  String numYears;
-
-  @HiveField(5)
-  String startAge;
+  String levelCode;
 
   @HiveField(6)
   int populationMale;
@@ -124,13 +119,11 @@ class HiveEnrolmentByLevel extends HiveObject with Expirable {
   @HiveField(38)
   double netIntakeRatio;
 
-  IndicatorsEnrolmentByLevel toIndicatorsEnrolmentByLevel() => IndicatorsEnrolmentByLevel(
+  IndicatorsEnrolmentByEducationYear toIndicatorsEnrolmentByEducationYear() => IndicatorsEnrolmentByEducationYear(
     year: year,
-    educationLevelCode: educationLevelCode,
-    firstYear: firstYear,
-    lastYear: lastYear,
-    numYears: numYears,
-    startAge: startAge,
+    officialAge: officialAge,
+    yearOfEducation: yearOfEducation,
+    levelCode: levelCode,
     populationMale: populationMale,
     populationFemale: populationFemale,
     population: population,
@@ -166,13 +159,11 @@ class HiveEnrolmentByLevel extends HiveObject with Expirable {
     netIntakeRatio: netIntakeRatio,
   );
 
-  static HiveEnrolmentByLevel from(IndicatorsEnrolmentByLevel enrolmentByLevel) => HiveEnrolmentByLevel()
+  static HiveEnrolmentByEducationYear from(IndicatorsEnrolmentByEducationYear enrolmentByLevel) => HiveEnrolmentByEducationYear()
     ..year = enrolmentByLevel.year
-    ..educationLevelCode = enrolmentByLevel.educationLevelCode
-    ..firstYear = enrolmentByLevel.firstYear
-    ..lastYear = enrolmentByLevel.lastYear
-    ..numYears = enrolmentByLevel.numYears
-    ..startAge = enrolmentByLevel.startAge
+    ..officialAge = enrolmentByLevel.officialAge
+    ..yearOfEducation = enrolmentByLevel.yearOfEducation
+    ..levelCode = enrolmentByLevel.levelCode
     ..populationMale = enrolmentByLevel.populationMale
     ..populationFemale = enrolmentByLevel.populationFemale
     ..population = enrolmentByLevel.population

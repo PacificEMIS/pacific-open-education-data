@@ -132,7 +132,7 @@ Future<TeachersPageData> _transformTeachersModel(
 
   final teachersByDistrict = filteredTeachers.groupBy((it) => it.districtCode);
   final teachersByAuthority = SplayTreeMap<String, List<Teacher>>.from(
-      filteredTeachers.groupBy((it) => it.authorityCode), (a, b) => b.compareTo(a));
+      filteredTeachers.groupBy((it) => it.authorityCode), (a, b) => a.compareTo(b));
   final teachersByGovt = filteredTeachers.groupBy((it) => it.authorityGovt);
 
   final translates = _teachersModel.lookups;

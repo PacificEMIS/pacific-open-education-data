@@ -24,7 +24,7 @@ class School {
   @JsonKey(name: 'AuthorityCode', defaultValue: '')
   final String authorityCode;
 
-  @JsonKey(name: 'AuthorityGroupCode', defaultValue: '')
+  @JsonKey(name: 'AuthorityGovt', defaultValue: '')
   final String authorityGovt;
 
   @JsonKey(name: 'SchoolTypeCode', defaultValue: '')
@@ -84,14 +84,18 @@ class School {
   @JsonKey(name: 'Support', defaultValue: 0)
   final int support;
 
-  @JsonKey(name: 'AgeGroup', defaultValue: 0)
+  @JsonKey(name: 'Age', defaultValue: 0)
   final int age;
 
   @JsonKey(name: 'GenderCode', defaultValue: '')
   final String genderCode;
 
-  @JsonKey(name: 'Enrol', defaultValue: 0)
-  final int enrol;
+  @JsonKey(name: 'EnrolF', defaultValue: 0)
+  final int enrolF;
+
+  @JsonKey(name: 'EnrolM', defaultValue: 0)
+  final int enrolM;
+
 
   const School(
     @required this.iscedSubClass,
@@ -120,13 +124,18 @@ class School {
     @required this.authorityGovt,
     @required this.genderCode,
     @required this.schoolTypeCode,
-    @required this.enrol,
+    @required this.enrolF,
+    @required this.enrolM,
     @required this.sector,
   );
 
   factory School.fromJson(Map<String, dynamic> json) => _$SchoolFromJson(json);
 
   Map<String, dynamic> toJson() => _$SchoolToJson(this);
+
+  int get enrol {
+     return enrolF + enrolM;
+  }
 
   Gender get gender {
     switch (genderCode) {
@@ -159,7 +168,7 @@ extension Filters on List<School> {
   // ignore: unused_field
   static const _kClassLevelFilterId = 4;
 
-  List<Filter> generateDefaultFilters(Lookups lookups, List<School> second) {
+  List<Filter> generateDefaultFilters(Lookups lookups) {
     return [
       Filter(
         id: _kYearFilterId,
@@ -185,7 +194,7 @@ extension Filters on List<School> {
         title: 'filtersByGovernment',
         items: [
           FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
-          ...second.uniques((it) => it.authorityGovt).map((it) =>
+          ...this.uniques((it) => it.authorityGovt).map((it) =>
               FilterItem(it, it.from(lookups.authorityGovt))),
         ],
         selectedIndex: 0,
@@ -195,7 +204,7 @@ extension Filters on List<School> {
         title: 'filtersByAuthority',
         items: [
           FilterItem(null, 'filtersDisplayAllAuthority'),
-          ...second.uniques((it) => it.authorityCode).map((it) =>
+          ...this.uniques((it) => it.authorityCode).map((it) =>
               FilterItem(it, it.from(lookups.authorities))),
         ],
         selectedIndex: 0,
@@ -206,8 +215,8 @@ extension Filters on List<School> {
         items: [
           FilterItem(null, 'filtersByClassLevel'),
           ...this
-              .uniques((it) => it.classLevel)
-              .map((it) => FilterItem(it, it.from(lookups.levels))),
+              .uniques((it) => it.schoolTypeCode)
+              .map((it) => FilterItem(it, it.from(lookups.schoolTypes))),
         ].chainSort((lv, rv) => rv.visibleName.compareTo(lv.visibleName)),
         selectedIndex: 0,
       ),

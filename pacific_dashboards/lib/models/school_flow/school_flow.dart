@@ -4,10 +4,10 @@ part 'school_flow.g.dart';
 
 @JsonSerializable()
 class SchoolFlow {
-  @JsonKey(name: 'SurveyYear')
+  @JsonKey(name: 'SurveyYear', defaultValue: 0)
   int year;
 
-  @JsonKey(name: 'YearOfEd')
+  @JsonKey(name: 'YearOfEd', defaultValue: 0)
   int yearOfEducation;
 
   @JsonKey(name: 'RepeatRate', defaultValue: 0.0)

@@ -25,8 +25,7 @@ class SchoolAccreditationsPage extends MvvmStatefulWidget {
     Key key,
   }) : super(
           key: key,
-          viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.createSchoolAccreditationViewModel(ctx),
+          viewModelBuilder: (ctx) => ViewModelFactory.instance.createSchoolAccreditationViewModel(ctx),
         );
 
   @override
@@ -35,8 +34,7 @@ class SchoolAccreditationsPage extends MvvmStatefulWidget {
   }
 }
 
-class SchoolsPageState
-    extends MvvmState<SchoolAccreditationViewModel, SchoolAccreditationsPage> {
+class SchoolsPageState extends MvvmState<SchoolAccreditationViewModel, SchoolAccreditationsPage> {
   @override
   Widget buildWidget(BuildContext context) {
     return Scaffold(
@@ -127,19 +125,17 @@ class _ContentBody extends StatelessWidget {
         _buildMiniTabLayoutAccreditationProgress(context, [
           _data.accreditationProgressByYearData,
           _data.accreditationProgressByYearCumulativeData,
-        ]),
+        ], _data.year),
         Text(
-          'schoolsAccreditationDashboardsProgressByStateTitle'
-              .localized(context),
+          'schoolsAccreditationDashboardsProgressByStateTitle'.localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
         _buildMiniTabLayoutAccreditationProgress(context, [
           _data.districtStatusData,
           _data.districtStatusCumulativeData,
-        ]),
+        ], _data.districtStatusData.keys.first), // TODO Update
         Text(
-          'schoolsAccreditationDashboardsProgressNationalTitle'
-              .localized(context),
+          'schoolsAccreditationDashboardsProgressNationalTitle'.localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
         _buildMiniTabLayoutAccreditationProgressPieChart(
@@ -149,18 +145,14 @@ class _ContentBody extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _PerformanceTable(
-          title: 'schoolsAccreditationDashboardsStatusByStateTitle'
-              .localized(context),
-          firstColumnName:
-              'schoolsAccreditationDashboardsStateDomain'.localized(context),
+          title: 'schoolsAccreditationDashboardsStatusByStateTitle'.localized(context),
+          firstColumnName: 'schoolsAccreditationDashboardsStateDomain'.localized(context),
           year: _data.year,
           data: _data.accreditationStatusByState,
         ),
         _PerformanceTable(
-          title: 'schoolsAccreditationDashboardsPerformanceByStandardTitle'
-              .localized(context),
-          firstColumnName:
-              'schoolsAccreditationDashboardsStandardDomain'.localized(context),
+          title: 'schoolsAccreditationDashboardsPerformanceByStandardTitle'.localized(context),
+          firstColumnName: 'schoolsAccreditationDashboardsStandardDomain'.localized(context),
           year: _data.year,
           data: _data.performanceByStandard,
         ),
@@ -171,6 +163,7 @@ class _ContentBody extends StatelessWidget {
   Widget _buildMiniTabLayoutAccreditationProgress(
     BuildContext context,
     List<Map<String, List<int>>> chartData,
+    String selectedItem,
   ) {
     return MiniTabLayout(
       tabs: _Tab.values,
@@ -188,14 +181,10 @@ class _ContentBody extends StatelessWidget {
         switch (tab) {
           case _Tab.cumulative:
             return ChartFactory.createStackedHorizontalBarChartViewByData(
-              chartData: chartData[0],
-              colorFunc: _levelIndexToColor,
-            );
+                chartData: chartData[0], colorFunc: _levelIndexToColor);
           case _Tab.evaluated:
             return ChartFactory.createStackedHorizontalBarChartViewByData(
-              chartData: chartData[1],
-              colorFunc: _levelIndexToColor,
-            );
+                chartData: chartData[1], colorFunc: _levelIndexToColor);
         }
         throw FallThroughError();
       },

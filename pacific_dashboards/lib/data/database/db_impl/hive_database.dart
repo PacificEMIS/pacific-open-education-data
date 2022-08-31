@@ -46,13 +46,15 @@ import 'package:pacific_dashboards/data/database/model/wash/hive_wash_chunk.dart
 import 'package:pacific_dashboards/data/database/model/wash/hive_wash_total.dart';
 import 'package:pacific_dashboards/data/database/model/wash/hive_water.dart';
 
+import '../model/indicators/hive_enrolment_by_education_year.dart';
+import '../model/indicators/hive_sector_by_level.dart';
 import 'budgets_dao_impl.dart';
 
 ///
 ///                         <<<release 1>>>
 ///                               ▿
 /// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-/// 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}
+/// 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
 ///
 class HiveDatabase extends Database {
   LookupsDao _lookupsDao;
@@ -103,7 +105,9 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveIndividualSchoolAdapter())
       ..registerAdapter(HiveIndividualAccreditationAdapter())
       ..registerAdapter(HiveQuestionAdapter())
-      ..registerAdapter(HiveSchoolAutorityAdapter());
+      ..registerAdapter(HiveSchoolAutorityAdapter())
+      ..registerAdapter(HiveSectorByLevelAdapter())
+      ..registerAdapter(HiveEnrolmentByEducationYearAdapter());
 
     _lookupsDao = HiveLookupsDao();
 

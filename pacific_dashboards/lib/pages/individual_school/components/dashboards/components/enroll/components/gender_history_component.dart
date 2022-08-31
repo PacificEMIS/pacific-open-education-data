@@ -57,7 +57,7 @@ class _GenderHistoryComponentState extends State<GenderHistoryComponent> {
               case _Tab.stacked:
                 return _StackedChart(data: widget.data);
               case _Tab.unstacked:
-                return _UnstackedChart(data: widget.data);
+                return UnstackedChart(data: widget.data, includePoints: false,);
             }
             throw FallThroughError();
           },
@@ -184,14 +184,16 @@ class _StackedChart extends StatelessWidget {
   }
 }
 
-class _UnstackedChart extends StatelessWidget {
+class UnstackedChart extends StatelessWidget {
   final List<EnrollDataByYear> _data;
+  final bool _includePoints;
 
-  const _UnstackedChart({
+  const UnstackedChart({
     Key key,
-    @required List<EnrollDataByYear> data,
+    @required List<EnrollDataByYear> data, @required bool includePoints
   })  : assert(data != null),
         _data = data,
+        _includePoints = includePoints,
         super(key: key);
 
   @override
@@ -212,9 +214,10 @@ class _UnstackedChart extends StatelessWidget {
               return charts.OrdinalComboChart(
                 snapshot.data,
                 animate: false,
-                defaultRenderer: charts.LineRendererConfig(),
+                defaultRenderer: charts.LineRendererConfig(includePoints: _includePoints),
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickProviderSpec: charts.BasicNumericTickProviderSpec(
+                    dataIsInWholeNumbers: false,
                     desiredMinTickCount: 7,
                     desiredMaxTickCount: 13,
                   ),
@@ -261,6 +264,7 @@ class _UnstackedChart extends StatelessWidget {
       ],
     );
   }
+
 
   Future<List<charts.Series<ChartData, String>>> get _series {
     return Future.microtask(() {

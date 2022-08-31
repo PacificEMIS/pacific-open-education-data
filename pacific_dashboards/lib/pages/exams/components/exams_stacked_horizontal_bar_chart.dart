@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
 
 import '../../../models/exam/exam_separated.dart';
+import '../../../shared_ui/mini_tab_layout.dart';
 
 class ExamsStackedHorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -34,7 +35,7 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
       child: Stack(
         children: [
           IgnorePointer(
-            child: charts.BarChart(
+            child:  charts.BarChart(
               seriesList,
               animate: false,
               barGroupingType: charts.BarGroupingType.stacked,
@@ -67,51 +68,63 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            widthFactor: 320,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(width: 30),
-                ...List.generate(9, (index) => -80 + 20 * index).map((it) {
-                  final text = it.abs().toString();
-                  if (text != "0") {
-                    return Container(
-                      width: 25,
-                      child: Text(
-                        text != "0" ? text : "",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .overline
-                            .copyWith(
-                          color: AppColors.kTextMinor.withOpacity(0.5),
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      width: 25,
-                      child: Center(
-                        child: Container(
-                          color: AppColors.kTextMinor,
-                          width: 1,
-                          height: 120,
-                        ),
-                      ),
-                    );
-                  }
-                }).toList(),
-                Container(width: 30),
-              ],
-            ),
-          ),
+          buildExamMeasureAxis(context),
         ],
       ),
     );
   }
+
+  Center buildExamMeasureAxis(BuildContext context) {
+    return Center(
+          widthFactor: 320,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(width: 30),
+              ..._generateExamsMeasureAxis(start: -80, step: 20, num: 9).map((it) {
+                final text = it.abs().toString();
+                if (text != "0") {
+                  return Container(
+                    width: 25,
+                    child: Text(
+                      text != "0" ? text : "",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .overline
+                          .copyWith(
+                        color: AppColors.kTextMinor.withOpacity(0.5),
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                    ),
+                  );
+                } else {
+                  return Container(
+                    width: 25,
+                    child: Center(
+                      child: Container(
+                        color: AppColors.kTextMinor,
+                        width: 1,
+                        height: 120,
+                      ),
+                    ),
+                  );
+                }
+              }).toList(),
+              Container(width: 30),
+            ],
+          ),
+        );
+  }
+
+  /**
+   * Generate mesure axis for Exams dashboard section from -80 to 80(step 20)
+   */
+  List<int> _generateExamsMeasureAxis({@required int start, @required int num, @required int step}) => List.generate
+  (num,
+          (index) => start +
+      step * index);
 
   static num _numberForMode(List<ExamSeparated> exams, int mode) {
     if (exams.isEmpty) return 0;

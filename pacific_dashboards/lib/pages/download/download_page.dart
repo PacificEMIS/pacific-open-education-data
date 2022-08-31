@@ -271,10 +271,11 @@ class _PreparingBody extends StatelessWidget {
                                   scrollDirection: Axis.vertical,
                                   itemBuilder: (BuildContext context, int index) {
                                     return DownloadItem(
+                                        emis: emis,
                                         section: snapshot.data[index],
                                         viewModel: viewModel,
                                         state: state,
-                                        sections: snapshot.data);
+                                        sections: snapshot.data, context: context);
                                   })
                             ]);
                           }

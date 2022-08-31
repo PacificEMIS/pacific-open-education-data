@@ -111,13 +111,13 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                               case _DashboardsTab.byGovtNonGovt:
                                 return Column(children: [
                                   SpecialEducationComponent(
-                                      data:   snapshot.data.teachersByPrivacy, showTabs: false
+                                      data:   snapshot.data.teachersByPrivacy, showTabs: false, title: 'teachersDashboardsPrivacyDomain',
                                   ),
                                 ]);
                               case _DashboardsTab.byState:
                                 return Column(children: [
                                   SpecialEducationComponent(
-                                      data:   snapshot.data.teachersByDistrict, showTabs: false
+                                      data:   snapshot.data.teachersByDistrict, showTabs: false, title: 'schoolsAccreditationDashboardsStateDomain',
                                   ),
                                 ]);
                             }
@@ -143,7 +143,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                         ),
                         (snapshot.data.teachersByCertification.length == 0)
                             ? Container()
-                            : StackedHorizontalBarChartWidgetExtended(
+                            : Column(children: [StackedHorizontalBarChartWidgetExtended(
                                 data: snapshot.data.teachersByCertification,
                                 legend: [
                                   'schoolsCertifiedQualified',
@@ -152,7 +152,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                   'other'
                                 ],
                                 colorFunc: _levelIndexToColor,
-                              ),
+                              ),]),
                         SizedBox(height: 10.0),
                         Text(
                           'teachersDashboardsEnrollByLevelStateGenderTitle'
