@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 
+import '../special_education/special_education_data.dart';
+
 class TeachersPageData {
   TeachersPageData({
     @required this.teachersByDistrict,
@@ -15,9 +17,9 @@ class TeachersPageData {
         assert(teachersByCertification != null),
         assert(enrollTeachersBySchoolLevelStateAndGender != null);
 
-  final List<ChartData> teachersByDistrict;
-  final List<ChartData> teachersByAuthority;
-  final List<ChartData> teachersByPrivacy;
+  final List<DataByGroup> teachersByDistrict;
+  final List<DataByGroup> teachersByAuthority;
+  final List<DataByGroup> teachersByPrivacy;
 
   final EnrollTeachersBySchoolLevelStateAndGender
       enrollTeachersBySchoolLevelStateAndGender;

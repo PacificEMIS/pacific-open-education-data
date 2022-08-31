@@ -5,7 +5,7 @@ import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_version/get_version.dart';
+// import 'package:get_version/get_version.dart';
 import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/configs/remote_config.dart';
 import 'package:pacific_dashboards/models/emis.dart';
@@ -45,6 +45,7 @@ class HomeViewModel extends ViewModel {
     super.onInit();
     _selectedEmisSubject.disposeWith(disposeBag);
     _sectionsSubject.disposeWith(disposeBag);
+
     _loadCurrentEmis();
   }
 
@@ -86,27 +87,29 @@ class HomeViewModel extends ViewModel {
     final emisesConfig = await _remoteConfig.emises;
     String projectVersion;
     try {
-      projectVersion = await GetVersion.projectVersion;
+      //TODO GET VERSION!!!!!!!!!!!!!!!!!!
+      // projectVersion = await GetVersion.projectVersion;
     } on Exception {
       projectVersion = '';
     }
-    log(emisesConfig.appVersion);
-    log(projectVersion);
-    showUpdate(_versionFromString(emisesConfig.appVersion) >
-        _versionFromString(projectVersion)
-        ? RequireUpdate.showPopup
-        : RequireUpdate.no);
+    // log(emisesConfig.appVersion);
+    // log(projectVersion);
+    //TODO SHOW UPDATE
+    // showUpdate(_versionFromString(emisesConfig.appVersion) >
+    //     _versionFromString(projectVersion)
+    //     ? RequireUpdate.showPopup
+    //     : RequireUpdate.no);
   }
   
-  int _versionFromString(String versionString) {
-    var versionNumbers = versionString.split(".");
-    int result = 0;
-    versionNumbers.forEach((String number) {
-      result *= 100;
-      result += int.parse(number);
-    });
-    return result;
-  }
+  // int _versionFromString(String versionString) {
+  //   var versionNumbers = versionString.split(".");
+  //   int result = 0;
+  //   versionNumbers.forEach((String number) {
+  //     result *= 100;
+  //     result += int.parse(number);
+  //   });
+  //   return result;
+  // }
 
   void showUpdate(RequireUpdate requireUpdate) async {
     _requireUpdateSubject.add(requireUpdate);

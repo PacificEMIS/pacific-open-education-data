@@ -14,12 +14,15 @@ import 'package:pacific_dashboards/models/special_education/special_education.da
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
+import '../../models/exam/exam_separated.dart';
+import '../../models/school/schools_chunk.dart';
+
 abstract class Repository {
   Stream<RepositoryResponse<List<Teacher>>> fetchAllTeachers();
 
-  Stream<RepositoryResponse<List<School>>> fetchAllSchools();
+  Stream<RepositoryResponse<SchoolsChunk>> fetchAllSchools();
 
-  Stream<RepositoryResponse<List<Exam>>> fetchAllExams();
+  Stream<RepositoryResponse<List<ExamSeparated>>> fetchAllExams();
 
   Stream<RepositoryResponse<IndicatorsContainer>> fetchAllIndicators(String districtCode);
 

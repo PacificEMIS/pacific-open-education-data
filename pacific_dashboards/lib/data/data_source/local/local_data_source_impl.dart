@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school/schools_chunk.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
@@ -18,6 +19,8 @@ import 'package:pacific_dashboards/models/short_school/short_school.dart';
 import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
+
+import '../../../models/exam/exam_separated.dart';
 
 const _kAccessTokenKey = '_kAccessTokenKey';
 
@@ -30,15 +33,22 @@ class LocalDataSourceImpl extends LocalDataSource {
   Future<Emis> get _emis => _globalSettings.currentEmis;
 
   @override
-  Future<List<School>> fetchSchools() async =>
-      await _database.schools.get(await _emis);
+  Future<SchoolsChunk> fetchSchools() async {
+    final byState = await _database.schools.get(await _emis);
+    final byAuthority = await _database.schoolsAutority.get(await _emis);
+    return SchoolsChunk(byState: byState, byAuthority: byAuthority);
+  }
+
+  @override
+  Future<List<School>> fetchSchoolsAuthority() async =>
+      await _database.schoolsAutority.get(await _emis);
 
   @override
   Future<Pair<bool, List<Teacher>>> fetchTeachers() async =>
       await _database.teachers.get(await _emis);
 
   @override
-  Future<Pair<bool, List<Exam>>> fetchExams() async =>
+  Future<Pair<bool, List<ExamSeparated>>> fetchExams() async =>
       await _database.exams.get(await _emis);
 
   @override
@@ -65,15 +75,21 @@ class LocalDataSourceImpl extends LocalDataSource {
       await _database.specialEducation.get(await _emis);
 
   @override
-  Future<void> saveSchools(List<School> schools) async =>
-      await _database.schools.save(schools, await _emis);
+  Future<void> saveSchools(SchoolsChunk schools) async {
+    await _database.schools.save(schools.byState, await _emis);
+    await _database.schoolsAutority.save(schools.byAuthority, await _emis);
+  }
+
+  @override
+  Future<void> saveSchoolsAuthority(List<School> schoolsAutority) async =>
+      await _database.schoolsAutority.save(schoolsAutority, await _emis);
 
   @override
   Future<void> saveTeachers(List<Teacher> teachers) async =>
       await _database.teachers.save(teachers, await _emis);
 
   @override
-  Future<void> saveExams(List<Exam> exams) async =>
+  Future<void> saveExams(List<ExamSeparated> exams) async =>
       await _database.exams.save(exams, await _emis);
 
   @override

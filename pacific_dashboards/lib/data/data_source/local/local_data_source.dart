@@ -7,6 +7,7 @@ import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school/schools_chunk.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
@@ -15,16 +16,20 @@ import 'package:pacific_dashboards/models/special_education/special_education.da
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
+import '../../../models/exam/exam_separated.dart';
+
 abstract class LocalDataSource {
   Future<Pair<bool, List<Teacher>>> fetchTeachers();
 
-  Future<List<School>> fetchSchools();
+  Future<SchoolsChunk> fetchSchools();
+
+  Future<List<School>> fetchSchoolsAuthority();
 
   Future<List<Budget>> fetchBudgets();
 
   Future<List<SpecialEducation>> fetchSpecialEducation();
 
-  Future<Pair<bool, List<Exam>>> fetchExams();
+  Future<Pair<bool, List<ExamSeparated>>> fetchExams();
 
   Future<Pair<bool, IndicatorsContainer>> fetchIndicators(String districtCode);
 
@@ -34,13 +39,15 @@ abstract class LocalDataSource {
 
   Future<Pair<bool, Lookups>> fetchLookupsModel();
 
-  Future<void> saveExams(List<Exam> exams);
+  Future<void> saveExams(List<ExamSeparated> exams);
 
   Future<void> saveIndicators(IndicatorsContainer indicators, String districtCode);
 
   Future<void> saveTeachers(List<Teacher> teachers);
 
-  Future<void> saveSchools(List<School> schools);
+  Future<void> saveSchools(SchoolsChunk schools);
+
+  Future<void> saveSchoolsAuthority(List<School> schools);
 
   Future<void> saveSchoolAccreditationsChunk(AccreditationChunk chunk);
 

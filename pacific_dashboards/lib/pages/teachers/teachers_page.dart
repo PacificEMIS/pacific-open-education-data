@@ -7,8 +7,6 @@ import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
-import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/charts/stacked_horizontal_bar_chart_widget_extended.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
@@ -17,6 +15,7 @@ import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
+import '../special_education/componnets/special_education_component.dart';
 import 'components/teachers_multi_table.dart';
 
 class TeachersPage extends MvvmStatefulWidget {
@@ -104,48 +103,23 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                           builder: (ctx, tab) {
                             switch (tab) {
                               case _DashboardsTab.byAuthority:
-                                return ChartWithTable(
-                                  key: ObjectKey(
-                                    snapshot.data.teachersByAuthority,
+                                return Column(children: [
+                                  SpecialEducationComponent(
+                                    data:   snapshot.data.teachersByAuthority, showTabs: false
                                   ),
-                                  title: '',
-                                  data: snapshot.data.teachersByAuthority,
-                                  chartType: ChartType.pie,
-                                  tableKeyName: 'schoolsDashboardsStateDomain'
-                                      .localized(context),
-                                  tableValueName:
-                                      'schoolsDashboardsMeasureEnroll'
-                                          .localized(context),
-                                );
+                                ]);
                               case _DashboardsTab.byGovtNonGovt:
-                                return ChartWithTable(
-                                  key: ObjectKey(
-                                    snapshot.data.teachersByPrivacy,
+                                return Column(children: [
+                                  SpecialEducationComponent(
+                                      data:   snapshot.data.teachersByPrivacy, showTabs: false
                                   ),
-                                  title: '',
-                                  data: snapshot.data.teachersByPrivacy,
-                                  chartType: ChartType.pie,
-                                  tableKeyName:
-                                      'schoolsDashboardsAuthorityDomain'
-                                          .localized(context),
-                                  tableValueName:
-                                      'schoolsDashboardsMeasureEnroll'
-                                          .localized(context),
-                                );
+                                ]);
                               case _DashboardsTab.byState:
-                                return ChartWithTable(
-                                  key: ObjectKey(
-                                    snapshot.data.teachersByDistrict,
+                                return Column(children: [
+                                  SpecialEducationComponent(
+                                      data:   snapshot.data.teachersByDistrict, showTabs: false
                                   ),
-                                  title: '',
-                                  data: snapshot.data.teachersByDistrict,
-                                  chartType: ChartType.pie,
-                                  tableKeyName: 'schoolsDashboardsPrivacyDomain'
-                                      .localized(context),
-                                  tableValueName:
-                                      'schoolsDashboardsMeasureEnroll'
-                                          .localized(context),
-                                );
+                                ]);
                             }
                             throw FallThroughError();
                           },
@@ -174,7 +148,8 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 legend: [
                                   'schoolsCertifiedQualified',
                                   'qualifiedNotCertified',
-                                  'certified'
+                                  'certifiedNotQualified',
+                                  'other'
                                 ],
                                 colorFunc: _levelIndexToColor,
                               ),
@@ -188,60 +163,13 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                                 fontSize: 16,
                               ),
                         ),
-                        MiniTabLayout(
-                          tabs: _TeachersTab.values,
-                          padding: 0,
-                          tabNameBuilder: (tab) {
-                            return tab
-                                .toString()
-                                .substring(13)
-                                .localized(context);
-                          },
-                          builder: (ctx, tab) {
-                            switch (tab) {
-                              case _TeachersTab.all:
-                                return TeachersMultiTableWidget(
+                    TeachersMultiTableWidget(
                                     objectKey: ObjectKey(snapshot.data
                                         .enrollTeachersBySchoolLevelStateAndGender),
                                     selectedTabData: snapshot
                                         .data
                                         .enrollTeachersBySchoolLevelStateAndGender
-                                        .all);
-                              case _TeachersTab.qualified:
-                                return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
-                                        .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .qualified);
-                              case _TeachersTab.certified:
-                                return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
-                                        .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .certified);
-                              case _TeachersTab.qualifiedAndCertified:
-                                return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
-                                        .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .allQualifiedAndCertified);
-                              default:
-                                return TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
-                                        .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .all);
-                            }
-                          },
-                        ),
+                                        .all)
                       ],
                     );
                   }
@@ -306,9 +234,3 @@ class TeachersMultiTableWidget extends StatelessWidget {
 }
 
 enum _DashboardsTab { byAuthority, byGovtNonGovt, byState }
-enum _TeachersTab {
-  all,
-  qualified,
-  certified,
-  qualifiedAndCertified,
-}

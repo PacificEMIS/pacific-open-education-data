@@ -90,7 +90,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                             data: snapshot
                                 .data.dataByGnpAndGovernmentSpendingBudgeted,
                           ),
-                          //-- Spending By Sector
+                          //-- Spending By States
                           _TitleWidget(
                             text:
                                 '${'budgetsSpendingByDistrict'.localized(context)} ${snapshot.data.year}',
@@ -151,7 +151,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
   }
 }
 
-enum _GovtTab { govtExpenditure, gnp }
+enum _GovtTab { gnp, govtExpenditure }
 enum _SpendingTab { ece, primary, secondary, total }
 
 class _TitleWidget extends StatelessWidget {

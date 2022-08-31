@@ -109,6 +109,7 @@ class SchoolAccreditationViewModel extends BaseViewModel {
     launchHandled(() async {
       _filters = filters;
       await _updatePageData();
+      _filtersSubject.add(_filters);
     });
   }
 }
@@ -133,7 +134,7 @@ Future<AccreditationData> _calculateData(_AccreditationChunkModel model) async {
         chunk: filteredChunkWithoutYear, isCumulative: true),
     accreditationProgressByYearCumulativeData:
         _collectAccreditationProgressData(
-            chunk: filteredChunkWithoutYear, isCumulative: true),
+            chunk: filteredChunkWithoutYear, isCumulative: false),
     accreditationProgressData: _collectAccreditationProgressData(
         chunk: filteredChunk, isCumulative: true),
     accreditationProgressCumulativeData: _collectAccreditationProgressData(

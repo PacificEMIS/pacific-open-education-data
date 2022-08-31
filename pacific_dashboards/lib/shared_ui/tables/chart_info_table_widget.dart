@@ -193,7 +193,7 @@ class _SortingTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: _onTap,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -229,7 +229,7 @@ class _SortingDomain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: _onTap,
       child: Row(
         textDirection: TextDirection.rtl,

@@ -15,8 +15,8 @@ extension UI on Emis {
         return 'fedemisTitle'.localized(context);
       case Emis.kemis:
         return 'kiemisTitle'.localized(context);
+      default: return 'fedemisTitle'.localized(context);
     }
-    throw FallThroughError();
   }
 
   String get logo {
@@ -27,8 +27,8 @@ extension UI on Emis {
         return "images/logo_fedemis.png";
       case Emis.kemis:
         return "images/logo_kemis.png";
+      default: return "images/logo_fedemis.png";
     }
-    throw FallThroughError();
   }
 }
 
@@ -41,7 +41,7 @@ extension Id on Emis {
         return 1;
       case Emis.kemis:
         return 2;
+      default: return 1;
     }
-    throw FallThroughError();
   }
 }

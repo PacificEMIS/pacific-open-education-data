@@ -124,6 +124,7 @@ class _DetailedChart extends StatelessWidget {
           return charts.BarChart(
             snapshot.data,
             animate: false,
+            defaultInteractions: false,
             barGroupingType: charts.BarGroupingType.stacked,
             primaryMeasureAxis: charts.NumericAxisSpec(
               tickProviderSpec: charts.BasicNumericTickProviderSpec(

@@ -7,13 +7,13 @@ part 'hive_school.g.dart';
 @HiveType(typeId: 2)
 class HiveSchool extends HiveObject with Expirable {
   @HiveField(0)
-  int surveyYear;
+  String schNo;
 
   @HiveField(1)
-  String classLevel;
+  int surveyYear;
 
   @HiveField(2)
-  int age;
+  String classLevel;
 
   @HiveField(3)
   String districtCode;
@@ -22,41 +22,155 @@ class HiveSchool extends HiveObject with Expirable {
   String authorityCode;
 
   @HiveField(5)
-  String authorityGovt;
-
-  @HiveField(6)
-  String genderCode;
-
-  @HiveField(7)
   String schoolTypeCode;
 
+  @HiveField(6)
+  String sector;
+
+  @HiveField(7)
+  String iscedSubClass;
+
   @HiveField(8)
-  int enrol;
+  int numSupportStaff;
 
   @override
   @HiveField(9)
-  int timestamp;
+  int numTeachers;
+
+  @override
+  @HiveField(10)
+  int certified;
+
+  @override
+  @HiveField(11)
+  int qualified;
+
+  @override
+  @HiveField(12)
+  int certQual;
+
+  @override
+  @HiveField(13)
+  int numSupportStaffM;
+
+  @override
+  @HiveField(14)
+  int numTeachersM;
+
+  @override
+  @HiveField(15)
+  int CertifiedM;
+
+  @override
+  @HiveField(16)
+  int qualifiedM;
+
+  @override
+  @HiveField(17)
+  int certQualM;
+
+  @override
+  @HiveField(18)
+  int numSupportStaffF;
+
+  @override
+  @HiveField(19)
+  int numTeachersF;
+
+  @override
+  @HiveField(20)
+  int certifiedF;
+
+  @override
+  @HiveField(21)
+  int qualifiedF;
+
+  @override
+  @HiveField(22)
+  int certQualF;
+
+  @override
+  @HiveField(23)
+  int support;
+
+  @override
+  @HiveField(24)
+  int age;
+
+  @override
+  @HiveField(25)
+  String genderCode;
+
+  @override
+  @HiveField(26)
+  int enrol;
+
+  @override
+  @HiveField(27)
+  String authorityGovt;
+
+  @override
+  @HiveField(28)
+  int certifiedM;
 
   School toSchool() => School(
-        surveyYear: surveyYear,
-        classLevel: classLevel,
-        age: age,
-        districtCode: districtCode,
-        authorityCode: authorityCode,
-        authorityGovt: authorityGovt,
-        genderCode: genderCode,
-        schoolTypeCode: schoolTypeCode,
-        enrol: enrol,
+        iscedSubClass,
+        numSupportStaff,
+        numTeachers,
+        certified,
+        qualified,
+        certQual,
+        numSupportStaffM,
+        numTeachersM,
+        certifiedM,
+        qualifiedM,
+        certQualM,
+        numSupportStaffF,
+        numTeachersF,
+        certifiedF,
+        qualifiedF,
+        certQualF,
+        support,
+        classLevel,
+        schNo,
+        surveyYear,
+        age,
+        districtCode,
+        authorityCode,
+        authorityGovt,
+        genderCode,
+        schoolTypeCode,
+        enrol,
+        sector,
       );
 
   static HiveSchool from(School school) => HiveSchool()
+    ..schNo = school.schNo
     ..surveyYear = school.surveyYear
     ..classLevel = school.classLevel
-    ..age = school.age
     ..districtCode = school.districtCode
     ..authorityCode = school.authorityCode
     ..authorityGovt = school.authorityGovt
-    ..genderCode = school.genderCode
     ..schoolTypeCode = school.schoolTypeCode
+    ..sector = school.sector
+    ..iscedSubClass = school.iscedSubClass
+    ..numSupportStaff = school.numSupportStaff
+    ..numTeachers = school.numTeachers
+    ..certified = school.certified
+    ..qualified = school.qualified
+    ..certQual = school.certQual
+    ..numSupportStaffM = school.numSupportStaffM
+    ..numTeachersM = school.numTeachersM
+    ..certifiedM = school.certifiedM
+    ..qualifiedM = school.qualifiedM
+    ..certQualM = school.certQualM
+    ..numSupportStaffF = school.numSupportStaffF
+    ..numTeachersF = school.numTeachersF
+    ..certifiedF = school.certifiedF
+    ..qualifiedF = school.qualifiedF
+    ..certQualF = school.certQualF
+    ..support = school.support
+    ..age = school.age
+    ..genderCode = school.genderCode
     ..enrol = school.enrol;
 }

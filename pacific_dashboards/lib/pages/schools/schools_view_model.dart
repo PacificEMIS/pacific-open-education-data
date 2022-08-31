@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/gender.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school/schools_chunk.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
@@ -26,6 +27,7 @@ class SchoolsViewModel extends BaseViewModel {
   final Subject<List<Filter>> _filtersSubject = BehaviorSubject();
 
   List<School> _schools;
+  List<School> _schoolsAuthority;
   List<Filter> _filters;
   Lookups _lookups;
 
@@ -70,12 +72,15 @@ class SchoolsViewModel extends BaseViewModel {
     );
   }
 
-  Future<void> _onDataLoaded(List<School> schools) => launchHandled(
+  Future<void> _onDataLoaded(SchoolsChunk schools) => launchHandled(
         () async {
           _lookups = await _repository.lookups.first;
-          _schools = schools;
+          _schools = schools.byState;
+          _schoolsAuthority = schools.byAuthority;
+          if (_schools != null)
           _filters = await _initFilters();
           _filtersSubject.add(_filters);
+          if (_filters != null)
           await _updatePageData();
         },
       );
@@ -86,6 +91,7 @@ class SchoolsViewModel extends BaseViewModel {
         _transformSchoolsModel,
         _SchoolsModel(
           _schools,
+          _schoolsAuthority,
           _lookups,
           _filters,
         ),
@@ -97,7 +103,8 @@ class SchoolsViewModel extends BaseViewModel {
     if (_schools == null || _lookups == null) {
       return [];
     }
-    return _schools.generateDefaultFilters(_lookups);
+    List<Filter> schoolFilters = await _schools.generateDefaultFilters(_lookups, _schoolsAuthority);
+    return schoolFilters;
   }
 
   Stream<String> get noteStream => _pageNoteSubject.stream;
@@ -110,16 +117,18 @@ class SchoolsViewModel extends BaseViewModel {
     launchHandled(() async {
       _filters = filters;
       await _updatePageData();
+      _filtersSubject.add(_filters);
     });
   }
 }
 
 class _SchoolsModel {
   final List<School> schools;
+  final List<School> autority;
   final Lookups lookups;
   final List<Filter> filters;
 
-  const _SchoolsModel(this.schools, this.lookups, this.filters);
+  const _SchoolsModel(this.schools, this.autority, this.lookups, this.filters);
 }
 
 Future<SchoolsPageData> _transformSchoolsModel(
@@ -127,10 +136,12 @@ Future<SchoolsPageData> _transformSchoolsModel(
 ) async {
   final filteredSchools =
       await _schoolsModel.schools.applyFilters(_schoolsModel.filters);
+  final filteredAuthority =
+      await _schoolsModel.autority.applyFilters(_schoolsModel.filters);
 
   final schoolsByDistrict = filteredSchools.groupBy((it) => it.districtCode);
-  final schoolsByAuthority = filteredSchools.groupBy((it) => it.authorityCode);
-  final schoolsByGovt = filteredSchools.groupBy((it) => it.authorityGovt);
+  final schoolsByAuthority = filteredAuthority.groupBy((it) => it.authorityCode);
+  final schoolsByGovt = filteredAuthority.groupBy((it) => it.authorityGovt);
   final translates = _schoolsModel.lookups;
 
   final enrollByDistrictRaw = _calculatePeopleCount(schoolsByDistrict).map(
@@ -172,13 +183,14 @@ Future<SchoolsPageData> _transformSchoolsModel(
       return ChartData(
         domain,
         measure,
-        domain.toLowerCase().contains('non') || domain.toLowerCase().contains('public')
+          domain != null && domain.toLowerCase().contains('non') ||
+              domain != null && domain.toLowerCase().contains('public')
             ? AppColors.kNonGovernmentChartColor
             : AppColors.kGovernmentChartColor,
       );
     }),
     enrolByAgeAndEducation: _calculateEnrollmentByAgeAndEducation(
-      schools: filteredSchools,
+      schools: filteredAuthority,
       lookups: translates,
     ),
     enrolBySchoolLevelAndDistrict: _calculateEnrolBySchoolLevelAndDistrict(
@@ -229,12 +241,12 @@ Map<String, Map<String, GenderTableData>>
     'labelTotal': schools,
   };
   groupedByDistrictWithTotal.addEntries(
-    schools.groupBy((it) => it.districtCode).entries,
+    schools.groupBy((it) => it.classLevel).entries,
   );
 
-  return groupedByDistrictWithTotal.map((districtCode, schools) {
+  return groupedByDistrictWithTotal.map((classLevel, schools) {
     final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    return MapEntry(districtCode.from(lookups.districts),
+    return MapEntry(classLevel.from(lookups.levels),
         _generateInfoTableData(groupedBySchoolType));
   });
 }

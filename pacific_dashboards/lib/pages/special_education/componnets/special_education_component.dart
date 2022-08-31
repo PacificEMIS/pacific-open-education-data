@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -9,20 +11,21 @@ import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
+import '../../../shared_ui/tables/chart_info_table_widget.dart';
 import '../special_education_data.dart';
 
 class SpecialEducationComponent extends StatefulWidget {
   final List<DataByGroup> data;
-
+  final bool showTabs;
   const SpecialEducationComponent({
     Key key,
     @required this.data,
+    this.showTabs = true,
   })  : assert(data != null),
         super(key: key);
 
   @override
-  _SpecialEducationComponentState createState() =>
-      _SpecialEducationComponentState();
+  _SpecialEducationComponentState createState() => _SpecialEducationComponentState();
 }
 
 class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
@@ -31,9 +34,8 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
       final colorScheme = Map<String, Color>();
       final domains = widget.data.map((e) => e.title).toList();
       domains.forEachIndexed((index, item) {
-        colorScheme[item] = index < AppColors.kDynamicPalette.length
-            ? AppColors.kDynamicPalette[index]
-            : HexColor.fromStringHash(item);
+        colorScheme[item] =
+            index < AppColors.kDynamicPalette.length ? AppColors.kDynamicPalette[index] : HexColor.fromStringHash(item);
       });
       return colorScheme;
     });
@@ -60,52 +62,81 @@ class _SpecialEducationComponentState extends State<SpecialEducationComponent> {
         }
         final colorScheme = snapshot.data;
         return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            MiniTabLayout(
-              tabs: _Tab.values,
-              tabNameBuilder: (tab) {
-                switch (tab) {
-                  case _Tab.schedule:
-                    return 'specialEducationTabNameSchedule'.localized(context);
-                  case _Tab.diagram:
-                    return 'specialEducationTabNameDiagram'.localized(context);
-                }
-                throw FallThroughError();
-              },
-              builder: (ctx, tab) {
-                switch (tab) {
-                  case _Tab.schedule:
-                    return _Chart(
-                      data: widget.data,
-                      colorScheme: colorScheme,
-                    );
-                  case _Tab.diagram:
-                    return ChartWithTable(
-                      key: ObjectKey(widget.data),
-                      title: '',
-                      data: widget.data
-                          .map(
-                            (it) => ChartData(
-                              it.title.localized(context),
-                              it.total,
-                              colorScheme[it.title],
-                            )
-                          )
-                          .toList(),
-                      chartType: ChartType.pie,
-                      tableKeyName:
-                          'specialEducationAuthorityDomain'.localized(context),
-                      tableValueName:
-                          'specialEducationEnrollDomain'.localized(context),
-                    );
-                }
-                throw FallThroughError();
-              },
-            ),
-          ],
-        );
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              widget.showTabs
+                  ? MiniTabLayout(
+                      tabs: _Tab.values,
+                      tabNameBuilder: (tab) {
+                        switch (tab) {
+                          case _Tab.schedule:
+                            return 'specialEducationTabNameSchedule'.localized(context);
+                          case _Tab.diagram:
+                            return 'specialEducationTabNameDiagram'.localized(context);
+                        }
+                        throw FallThroughError();
+                      },
+                      builder: (ctx, tab) {
+                        switch (tab) {
+                          case _Tab.schedule:
+                            return ChartWithTable(
+                              key: ObjectKey(widget.data),
+                              title: '',
+                              data: widget.data
+                                  .map((it) => ChartData(
+                                        it.title.localized(context),
+                                        it.total,
+                                        colorScheme[it.title],
+                                      ))
+                                  .toList(),
+                              chartType: ChartType.bar,
+                              tableKeyName: 'specialEducationAuthorityDomain'.localized(context),
+                              tableValueName: 'specialEducationEnrollDomain'.localized(context),
+                            );
+                          case _Tab.diagram:
+                            return ChartWithTable(
+                              key: ObjectKey(widget.data),
+                              title: '',
+                              data: widget.data
+                                  .map((it) => ChartData(
+                                        it.title.localized(context),
+                                        it.total,
+                                        colorScheme[it.title],
+                                      ))
+                                  .toList(),
+                              chartType: ChartType.pie,
+                              tableKeyName: 'specialEducationAuthorityDomain'.localized(context),
+                              tableValueName: 'specialEducationEnrollDomain'.localized(context),
+                            );
+                        }
+                        throw FallThroughError();
+                      },
+                    )
+                  : Column(
+                      children: [
+                        _Chart(
+                          data: widget.data,
+                          colorScheme: colorScheme,
+                        ),
+                        ChartWithTable(
+                          key: ObjectKey(widget.data),
+                          title: '',
+                          data: widget.data
+                              .map((it) => ChartData(
+                                    it.title.localized(context),
+                                    it.total,
+                                    colorScheme[it.title],
+                                  ))
+                              .toList(),
+                          chartType: ChartType.none,
+                            tableKeyName: 'specialEducationAuthorityDomain'.localized(context),
+                          tableValueName: 'specialEducationEnrollDomain'.localized(context),
+                        )
+                      ],
+
+                    )
+            ]);
       },
     );
   }
@@ -118,16 +149,20 @@ enum _Tab {
 
 class _Chart extends StatelessWidget {
   final List<DataByGroup> _data;
+  final List<ChartData> _chartData;
+
   final Map<String, Color> _colorScheme;
 
   const _Chart({
     Key key,
     @required List<DataByGroup> data,
+    @required List<ChartData> chartData,
     @required Map<String, Color> colorScheme,
   })  : assert(data != null),
         assert(colorScheme != null),
         _colorScheme = colorScheme,
         _data = data,
+        _chartData = chartData,
         super(key: key);
 
   @override
@@ -144,8 +179,7 @@ class _Chart extends StatelessWidget {
             }
             final uniqueDomainsLenght = _data.uniques((it) => it.title).length;
             return SizedBox(
-              height:
-                  uniqueDomainsLenght * (uniqueDomainsLenght > 5 ? 40.5 : 80.5),
+              height: uniqueDomainsLenght * (uniqueDomainsLenght > 5 ? 40.5 : 80.5),
               child: charts.BarChart(
                 snapshot.data,
                 animate: false,
@@ -178,16 +212,16 @@ class _Chart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             ChartLegendItem(
-              color: AppColors.kMale,
-              value: 'labelMale'.localized(context),
+              color: AppColors.kFemale,
+              value: 'labelFemale'.localized(context),
             ),
             SizedBox(
               width: 16,
             ),
             ChartLegendItem(
-              color: AppColors.kFemale,
-              value: 'labelFemale'.localized(context),
-            )
+              color: AppColors.kMale,
+              value: 'labelMale'.localized(context),
+            ),
           ],
         ),
       ],
@@ -228,6 +262,5 @@ class _Chart extends StatelessWidget {
 }
 
 extension _StringOverflowExt on String {
-  String addNewLineIfLong() =>
-      length > 15 ? replaceFirst(RegExp(r'\s'), '\n', 15) : this;
+  String addNewLineIfLong() => length > 15 ? replaceFirst(RegExp(r'\s'), '\n', 15) : this;
 }

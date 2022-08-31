@@ -19,6 +19,7 @@ class AppColors {
   static const Color kOrange = const Color.fromARGB(255, 255, 149, 26);
   static const Color kYellow = const Color.fromARGB(255, 252, 204, 36);
   static const Color kLightGreen = const Color.fromARGB(255, 148, 220, 57);
+  static const Color kLightGray = const Color.fromRGBO(250, 250, 250, 1);
 
   static const List<Color> kLevels = [
     const Color.fromRGBO(248, 84, 84, 1),

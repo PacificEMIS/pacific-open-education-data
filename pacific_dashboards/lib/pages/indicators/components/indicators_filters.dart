@@ -154,7 +154,7 @@ class _BottomMenuState extends State<_BottomMenu>
         );
       },
       child: Stack(
-        overflow: Overflow.clip,
+        clipBehavior: Clip.none,
         alignment: AlignmentDirectional.topCenter,
         children: <Widget>[
           // Container(
@@ -261,9 +261,9 @@ class _BottomMenuRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: _onPrevTap,
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            style: TextButton.styleFrom(padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),),
                 child: const Icon(
                   Icons.chevron_left,
                   color: AppColors.kTextMinor,
@@ -282,9 +282,9 @@ class _BottomMenuRow extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: _onNextTap,
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                style: TextButton.styleFrom( padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),),
                 child: const Icon(
                   Icons.chevron_right,
                   color: AppColors.kTextMinor,

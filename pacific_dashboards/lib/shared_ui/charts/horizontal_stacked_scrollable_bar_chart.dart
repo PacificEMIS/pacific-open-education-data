@@ -65,6 +65,7 @@ abstract class HorizontalStackedScrollableBarChart extends StatelessWidget {
                         child: charts.BarChart(
                           snapshot.data,
                           animate: false,
+                          defaultInteractions: false,
                           barGroupingType: charts.BarGroupingType.stacked,
                           primaryMeasureAxis: charts.NumericAxisSpec(
                             tickProviderSpec:

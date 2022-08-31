@@ -8,6 +8,7 @@ import 'package:pacific_dashboards/models/accreditations/national_accreditation.
 import 'package:pacific_dashboards/models/accreditations/standard_accreditation.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
+import 'package:pacific_dashboards/models/exam/exam_separated.dart';
 import 'package:pacific_dashboards/models/financial_lookups/financial_lookups.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
@@ -30,14 +31,17 @@ part 'rest_client.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET('warehouse/tableenrol')
+  @GET('warehouse/enrol/district')
   Future<List<School>> getSchools();
+
+  @GET('warehouse/enrol/authority')
+  Future<List<School>> getSchoolsAuthority();
 
   @GET('warehouse/teachers?report')
   Future<List<Teacher>> getTeachers();
 
-  @GET('warehouse/examsdistrictresults')
-  Future<List<Exam>> getExams();
+  @GET('warehouse/exams/table')
+  Future<List<ExamSeparated>> getExamsSeparated();
 
   @GET('indicators/{districtCode}?format=xml')
   Future<IndicatorsContainer> getIndicators(

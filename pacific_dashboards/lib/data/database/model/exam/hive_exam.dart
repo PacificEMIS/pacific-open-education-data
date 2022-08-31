@@ -2,6 +2,8 @@ import 'package:hive/hive.dart';
 import 'package:pacific_dashboards/data/database/model/expirable.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 
+import '../../../../models/exam/exam_separated.dart';
+
 part 'hive_exam.g.dart';
 
 @HiveType(typeId: 4)
@@ -13,80 +15,75 @@ class HiveExam extends HiveObject with Expirable {
   int year;
 
   @HiveField(2)
-  String districtCode;
+  String gender;
 
   @HiveField(3)
-  String standard;
+  String districtCode;
 
   @HiveField(4)
-  String benchmark;
+  String schoolTypeCode;
 
   @HiveField(5)
-  int candidatesM;
+  String authorityCode;
 
   @HiveField(6)
-  int wellBelowCompetentM;
+  String authorityGovtCode;
 
   @HiveField(7)
-  int approachingCompetenceM;
+  String recordType;
 
   @HiveField(8)
-  int minimallyCompetentM;
+  String key;
 
   @HiveField(9)
-  int competentM;
+  String description;
 
   @HiveField(10)
-  int candidatesF;
+  int achievementLevel;
 
   @HiveField(11)
-  int wellBelowCompetentF;
+  int candidateCount;
 
   @HiveField(12)
-  int approachingCompetenceF;
+  int indicatorCount;
 
   @HiveField(13)
-  int minimallyCompetentF;
+  double weight;
 
-  @HiveField(14)
-  int competentF;
 
-  @override
-  @HiveField(15)
-  int timestamp;
-
-  Exam toExam() => Exam(
+  ExamSeparated toExam() =>
+      ExamSeparated(
         name: name,
         year: year,
+        gender: gender,
         districtCode: districtCode,
-        standard: standard,
-        benchmark: benchmark,
-        candidatesM: candidatesM,
-        wellBelowCompetentM: wellBelowCompetentM,
-        approachingCompetenceM: approachingCompetenceM,
-        minimallyCompetentM: minimallyCompetentM,
-        competentM: competentM,
-        candidatesF: candidatesF,
-        wellBelowCompetentF: wellBelowCompetentF,
-        approachingCompetenceF: approachingCompetenceF,
-        minimallyCompetentF: minimallyCompetentF,
-        competentF: competentF,
+        schoolTypeCode: schoolTypeCode,
+        authorityCode: authorityCode,
+        authorityGovtCode: authorityGovtCode,
+        recordType: recordType,
+        key: key,
+        description: description,
+        achievementLevel: achievementLevel,
+        candidateCount: candidateCount,
+        indicatorCount: indicatorCount,
+        weight: weight,
+
       );
 
-  static HiveExam from(Exam exam) => HiveExam()
-    ..name = exam.name
-    ..year = exam.year
-    ..districtCode = exam.districtCode
-    ..standard = exam.standard
-    ..benchmark = exam.benchmark
-    ..candidatesM = exam.candidatesM
-    ..wellBelowCompetentM = exam.wellBelowCompetentM
-    ..approachingCompetenceM = exam.approachingCompetenceM
-    ..minimallyCompetentM = exam.minimallyCompetentM
-    ..competentM = exam.competentM
-    ..candidatesF = exam.candidatesF
-    ..wellBelowCompetentF = exam.wellBelowCompetentF
-    ..approachingCompetenceF = exam.approachingCompetenceF
-    ..minimallyCompetentF = exam.minimallyCompetentF
-    ..competentF = exam.competentF;
+  static HiveExam from(ExamSeparated exam) =>
+      HiveExam()
+        ..name = exam.name
+        ..year = exam.year
+        ..gender = exam.gender
+        ..districtCode = exam.districtCode
+        ..schoolTypeCode = exam.schoolTypeCode
+        ..authorityCode = exam.authorityCode
+        ..authorityGovtCode = exam.authorityGovtCode
+        ..recordType = exam.recordType
+        ..key = exam.key
+        ..description = exam.description
+        ..achievementLevel = exam.achievementLevel
+        ..candidateCount = exam.candidateCount
+        ..indicatorCount = exam.indicatorCount
+        ..weight = exam.weight;
 }

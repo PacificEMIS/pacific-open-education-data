@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,9 @@ import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/pages/base/base_view_model.dart';
 import 'package:pacific_dashboards/pages/home/components/section.dart';
+import 'package:pacific_dashboards/pages/special_education/special_education_data.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_page_data.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -110,6 +112,7 @@ class TeachersViewModel extends BaseViewModel {
     launchHandled(() async {
       _filters = filters;
       await _updatePageData();
+      _filtersSubject.add(_filters);
     });
   }
 }
@@ -125,78 +128,114 @@ class _TeachersModel {
 Future<TeachersPageData> _transformTeachersModel(
   _TeachersModel _teachersModel,
 ) async {
-  final filteredTeachers =
-      await _teachersModel.teachers.applyFilters(_teachersModel.filters);
+  final filteredTeachers = await _teachersModel.teachers.applyFilters(_teachersModel.filters);
+
   final teachersByDistrict = filteredTeachers.groupBy((it) => it.districtCode);
-  final teachersByAuthority =
-      filteredTeachers.groupBy((it) => it.authorityCode);
+  final teachersByAuthority = SplayTreeMap<String, List<Teacher>>.from(
+      filteredTeachers.groupBy((it) => it.authorityCode), (a, b) => b.compareTo(a));
   final teachersByGovt = filteredTeachers.groupBy((it) => it.authorityGovt);
 
   final translates = _teachersModel.lookups;
 
-  final teachersByDistrictRaw = _calculatePeopleCount(teachersByDistrict).map(
+  final teachersByDistrictRawF = _calculatePeopleCount(teachersByDistrict, _teachersModel)[0].map(
     (key, v) => MapEntry(key.from(translates.districts), v),
   );
-  final teachersByAuthorityRaw = _calculatePeopleCount(teachersByAuthority).map(
+  final teachersByDistrictRawM = _calculatePeopleCount(teachersByDistrict, _teachersModel)[1].map(
+    (key, v) => MapEntry(key.from(translates.districts), v),
+  );
+
+  final teachersByAuthorityRawM = _calculatePeopleCount(teachersByAuthority, _teachersModel)[0].map(
     (key, v) => MapEntry(key.from(translates.authorities), v),
   );
-  final teachersByPrivacyRaw = _calculatePeopleCount(teachersByGovt).map(
+
+  final teachersByAuthorityRawF = _calculatePeopleCount(teachersByAuthority, _teachersModel)[1]
+      .map((key, v) => MapEntry(key.from(translates.authorities), v));
+
+  final teachersByPrivacyRaw = _calculatePeopleCount(teachersByGovt, _teachersModel)[0].map(
     (key, v) => MapEntry(key.from(translates.authorityGovt), v),
   );
   return TeachersPageData(
-      teachersByDistrict: teachersByDistrictRaw.mapToList((domain, measure) {
-        final domains = teachersByDistrictRaw.keys.toList();
+      teachersByDistrict: teachersByDistrictRawM.mapToList((domain, measure) {
+        final domains = teachersByDistrictRawF.keys.toList();
+        final domainsF = teachersByDistrictRawF.values.toList();
+        final domainsM = teachersByDistrictRawM.values.toList();
         final index = domains.indexOf(domain);
         final color = index < AppColors.kDynamicPalette.length
             ? AppColors.kDynamicPalette[index]
             : HexColor.fromStringHash(domain);
-        return ChartData(
-          domain,
-          measure,
-          color,
+        return DataByGroup(
+          title: domain,
+          firstValue: domainsF[index],
+          secondValue: domainsM[index],
         );
       }),
-      teachersByAuthority: teachersByAuthorityRaw.mapToList((domain, measure) {
-        final domains = teachersByAuthorityRaw.keys.toList();
+      teachersByAuthority: teachersByAuthorityRawF.mapToList((domain, measure) {
+        final domains = teachersByAuthorityRawF.keys.toList();
+        final domainsF = teachersByAuthorityRawF.values.toList();
+        final domainsM = teachersByAuthorityRawM.values.toList();
         final index = domains.indexOf(domain);
-        final color = index < AppColors.kDynamicPalette.length
-            ? AppColors.kDynamicPalette[index]
-            : HexColor.fromStringHash(domain);
-        return ChartData(
-          domain,
-          measure,
-          color,
+        return DataByGroup(
+          title: domain,
+          firstValue: domainsM[index],
+          secondValue: domainsF[index],
         );
       }),
       teachersByPrivacy: teachersByPrivacyRaw.mapToList((domain, measure) {
-        return ChartData(
-          domain,
-          measure,
-          domain.toLowerCase().contains('non')
-              ? AppColors.kNonGovernmentChartColor
-              : AppColors.kGovernmentChartColor,
+        return DataByGroup(
+          title: domain,
+          firstValue: measure,
+          secondValue: measure,
         );
       }),
-      enrollTeachersBySchoolLevelStateAndGender:
-          _calculateEnrolBySchoolLevelAndDistrict(
-        teachers: filteredTeachers,
-        lookups: translates,
-      ),
-      teachersByCertification: _generateCertificationData(
-          filteredTeachers.groupBy((it) => it.ageGroup)));
+      enrollTeachersBySchoolLevelStateAndGender: _calculateEnrolBySchoolLevelAndDistrict(
+          teachers: filteredTeachers, lookups: translates, filters: _teachersModel.filters),
+      teachersByCertification: SplayTreeMap<String, TeachersByCertification>.from(
+          _generateCertificationData(filteredTeachers.groupBy((it) => it.ageGroup), _teachersModel.filters),
+          (a, b) => b.compareTo(a)));
 }
 
-Map<String, int> _calculatePeopleCount(
-        Map<String, List<Teacher>> groupedTeachers) =>
-    groupedTeachers.map(
-      (key, value) => MapEntry(key,
-          value.map((it) => it.totalTeachersCount).reduce((lv, rv) => lv + rv)),
-    );
+List<Map<String, int>> _calculatePeopleCount(Map<String, List<Teacher>> groupedTeachers, _TeachersModel _viewModel) {
+  return [
+    //All
+    if (_viewModel.filters.first.selectedIndex == 0)
+      groupedTeachers.map(
+        (key, value) => MapEntry(key, value.map((it) => (it.numTeachersM)).reduce((lv, rv) => lv + rv)),
+      ),
+    if (_viewModel.filters.first.selectedIndex == 0)
+      groupedTeachers
+          .map((key, value) => MapEntry(key, value.map((it) => it.numTeachersF).reduce((lv, rv) => lv + rv))),
+    //Certified
+    if (_viewModel.filters.first.selectedIndex == 1)
+      groupedTeachers.map(
+        (key, value) => MapEntry(key, value.map((it) => (it.certifiedM)).reduce((lv, rv) => lv + rv)),
+      ),
+    if (_viewModel.filters.first.selectedIndex == 1)
+      groupedTeachers.map(
+        (key, value) => MapEntry(key, value.map((it) => it.certifiedF).reduce((lv, rv) => lv + rv)),
+      ),
+    //Qualified
+    if (_viewModel.filters.first.selectedIndex == 2)
+      groupedTeachers.map(
+        (key, value) => MapEntry(key, value.map((it) => (it.qualifiedM)).reduce((lv, rv) => lv + rv)),
+      ),
+    if (_viewModel.filters.first.selectedIndex == 2)
+      groupedTeachers.map((key, value) => MapEntry(key, value.map((it) => it.qualifiedF).reduce((lv, rv) => lv + rv))),
+    //Certified and Qualified
+    if (_viewModel.filters.first.selectedIndex == 3)
+      groupedTeachers.map(
+        (key, value) => MapEntry(key, value.map((it) => (it.certQualM)).reduce((lv, rv) => lv + rv)),
+      ),
+    if (_viewModel.filters.first.selectedIndex == 3)
+      groupedTeachers.map(
+        (key, value) => MapEntry(key, value.map((it) => it.certQualF).reduce((lv, rv) => lv + rv)),
+      )
+  ];
+}
 
-EnrollTeachersBySchoolLevelStateAndGender
-    _calculateEnrolBySchoolLevelAndDistrict({
+EnrollTeachersBySchoolLevelStateAndGender _calculateEnrolBySchoolLevelAndDistrict({
   List<Teacher> teachers,
   Lookups lookups,
+  List<Filter> filters,
 }) {
   final groupedByDistrictWithTotal = {
     'labelTotal': teachers,
@@ -205,48 +244,43 @@ EnrollTeachersBySchoolLevelStateAndGender
   groupedByDistrictWithTotal.addEntries(
     teachers.groupBy((it) => it.districtCode).entries,
   );
-
-  final all = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    all.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(groupedBySchoolType, 'all')));
-  });
-
-  final qualified = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    qualified.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(groupedBySchoolType, 'qualified')));
-  });
-
-  final qualifiedAndCertified = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    qualifiedAndCertified.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(groupedBySchoolType, 'certified')));
-  });
-
-  final certified = List<TeachersBySchoolLevelStateAndGender>();
-  groupedByDistrictWithTotal.forEach((districtCode, schools) {
-    final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
-    certified.add(TeachersBySchoolLevelStateAndGender(
-        state: districtCode.from(lookups.districts),
-        total: _generateInfoTableData(
-            groupedBySchoolType, 'qualifiedAndCertified')));
-  });
+  var teachersBySchoolAndGender = List<TeachersBySchoolLevelStateAndGender>();
+  if (filters.first.selectedIndex == 0) {
+    groupedByDistrictWithTotal.forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      teachersBySchoolAndGender.add(TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts), total: _generateInfoTableData(groupedBySchoolType, 'all')));
+    });
+  } else if (filters.first.selectedIndex == 1) {
+    groupedByDistrictWithTotal.forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      teachersBySchoolAndGender.add(TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts),
+          total: _generateInfoTableData(groupedBySchoolType, 'qualified')));
+    });
+  } else if (filters.first.selectedIndex == 2) {
+    groupedByDistrictWithTotal.forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      teachersBySchoolAndGender.add(TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts),
+          total: _generateInfoTableData(groupedBySchoolType, 'certified')));
+    });
+  } else if (filters.first.selectedIndex == 3) {
+    groupedByDistrictWithTotal.forEach((districtCode, schools) {
+      final groupedBySchoolType = schools.groupBy((it) => it.schoolTypeCode);
+      teachersBySchoolAndGender.add(TeachersBySchoolLevelStateAndGender(
+          state: districtCode.from(lookups.districts),
+          total: _generateInfoTableData(groupedBySchoolType, 'qualifiedAndCertified')));
+    });
+  }
   return EnrollTeachersBySchoolLevelStateAndGender(
-      all: all,
-      qualified: qualified,
-      certified: certified,
-      allQualifiedAndCertified: qualifiedAndCertified);
+      all: teachersBySchoolAndGender,
+      qualified: teachersBySchoolAndGender,
+      certified: teachersBySchoolAndGender,
+      allQualifiedAndCertified: teachersBySchoolAndGender);
 }
 
-Map<String, GenderTableData> _generateInfoTableData(
-    Map<String, List<Teacher>> groupedData, String category,
+Map<String, GenderTableData> _generateInfoTableData(Map<String, List<Teacher>> groupedData, String category,
     {String districtCode}) {
   Map<String, GenderTableData> allData = new Map();
   Map<String, GenderTableData> certifiedData = new Map();
@@ -278,10 +312,7 @@ Map<String, GenderTableData> _generateInfoTableData(
     var maleCertifiedQualifiedCount = 0;
     var femaleCertifiedQualifiedCount = 0;
 
-    teachers
-        .where((teacher) =>
-            districtCode == null || teacher.districtCode == districtCode)
-        .forEach((teacher) {
+    teachers.where((teacher) => districtCode == null || teacher.districtCode == districtCode).forEach((teacher) {
       maleCount += teacher.getTeachersCount(Gender.male);
       femaleCount += teacher.getTeachersCount(Gender.female);
 
@@ -296,14 +327,14 @@ Map<String, GenderTableData> _generateInfoTableData(
     });
 
     allData[group] = GenderTableData(maleCount, femaleCount);
+
     certifiedData[group] = GenderTableData(
-        maleCertifiedCount - maleCertifiedQualifiedCount,
-        femaleCertifiedCount - femaleCertifiedQualifiedCount);
+        maleCertifiedCount - maleCertifiedQualifiedCount, femaleCertifiedCount - femaleCertifiedQualifiedCount);
+
     qualifiedData[group] = GenderTableData(
-        maleQualifiedCount - maleCertifiedQualifiedCount,
-        femaleQualifiedCount - femaleCertifiedQualifiedCount);
-    certifiedQualifiedData[group] = GenderTableData(
-        maleCertifiedQualifiedCount, femaleCertifiedQualifiedCount);
+        maleQualifiedCount - maleCertifiedQualifiedCount, femaleQualifiedCount - femaleCertifiedQualifiedCount);
+
+    certifiedQualifiedData[group] = GenderTableData(maleCertifiedQualifiedCount, femaleCertifiedQualifiedCount);
 
     totalMaleCount += maleCount;
     totalFemaleCount += femaleCount;
@@ -319,12 +350,10 @@ Map<String, GenderTableData> _generateInfoTableData(
   });
 
   allData['labelTotal'] = GenderTableData(totalMaleCount, totalFemaleCount);
-  certifiedData['labelTotal'] =
-      GenderTableData(totalMaleCertifiedCount, totalFemaleCertifiedCount);
-  qualifiedData['labelTotal'] =
-      GenderTableData(totalMaleQualifiedCount, totalFemaleQualifiedCount);
-  certifiedQualifiedData['labelTotal'] = GenderTableData(
-      totalMaleCertifiedQualifiedCount, totalFemaleCertifiedQualifiedCount);
+  certifiedData['labelTotal'] = GenderTableData(totalMaleCertifiedCount, totalFemaleCertifiedCount);
+  qualifiedData['labelTotal'] = GenderTableData(totalMaleQualifiedCount, totalFemaleQualifiedCount);
+  certifiedQualifiedData['labelTotal'] =
+      GenderTableData(totalMaleCertifiedQualifiedCount, totalFemaleCertifiedQualifiedCount);
 
   switch (category) {
     case 'all':
@@ -339,9 +368,7 @@ Map<String, GenderTableData> _generateInfoTableData(
   throw FallThroughError();
 }
 
-Map<String, TeachersByCertification> _generateCertificationData(
-  Map<String, List<Teacher>> data,
-) {
+Map<String, TeachersByCertification> _generateCertificationData(Map<String, List<Teacher>> data, List<Filter> filters) {
   final result = Map<String, TeachersByCertification>();
   data.forEach((key, value) {
     TeachersByCertification certification = TeachersByCertification(
@@ -355,24 +382,27 @@ Map<String, TeachersByCertification> _generateCertificationData(
         numberTeachersMale: 0);
 
     value.forEach((it) {
-      certification.certifiedAndQualifiedFemale -= it.certQualF;
-      certification.qualifiedFemale -= (it.qualifiedF - it.certQualF);
-      certification.certifiedFemale -= (it.certifiedF - it.certQualF);
-      certification.numberTeachersFemale -= it.numTeachersF;
+      if (filters.first.selectedIndex == 0 || filters.first.selectedIndex == 3) {
+        certification.certifiedAndQualifiedFemale -= it.certQualF;
+        certification.certifiedAndQualifiedMale += it.certQualM;
+      }
 
-      certification.certifiedAndQualifiedMale += it.certQualM;
-      certification.qualifiedMale += (it.qualifiedM - it.certQualM);
-      certification.certifiedMale += (it.certifiedM - it.certQualM);
+      if (filters.first.selectedIndex == 0 || filters.first.selectedIndex == 2) {
+        certification.qualifiedFemale -= (it.qualifiedF - it.certQualF);
+        certification.qualifiedMale += (it.qualifiedM - it.certQualM);
+      }
+      if (filters.first.selectedIndex == 0 || filters.first.selectedIndex == 1) {
+        certification.certifiedFemale -= (it.certifiedF - it.certQualF);
+        certification.certifiedMale += (it.certifiedM - it.certQualM);
+      }
+
+      certification.numberTeachersFemale -= it.numTeachersF;
       certification.numberTeachersMale += it.numTeachersM;
     });
     certification.numberTeachersFemale -=
-        (certification.certifiedAndQualifiedFemale +
-            certification.qualifiedFemale +
-            certification.certifiedFemale);
+        (certification.certifiedAndQualifiedFemale + certification.qualifiedFemale + certification.certifiedFemale);
     certification.numberTeachersMale -=
-        (certification.certifiedAndQualifiedMale +
-            certification.qualifiedMale +
-            certification.certifiedMale);
+        (certification.certifiedAndQualifiedMale + certification.qualifiedMale + certification.certifiedMale);
     if (key != null) result[key] = certification;
   });
 

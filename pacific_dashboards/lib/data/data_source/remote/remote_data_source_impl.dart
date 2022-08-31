@@ -22,6 +22,7 @@ import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school/schools_chunk.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
 import 'package:pacific_dashboards/models/school_flow/school_flow.dart';
@@ -32,6 +33,8 @@ import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:pacific_dashboards/utils/xml_to_json.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+import '../../../models/exam/exam_separated.dart';
 
 const _kFederalStatesOfMicronesiaUrl = "https://fedemis.doe.fm/api/";
 const _kMarshalIslandsUrl = "http://data.pss.edu.mh/miemis/api/";
@@ -54,8 +57,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       : _settings = settings,
         _emises = emises {
     _dio = Dio(BaseOptions(
-      connectTimeout: Duration(seconds: 10).inMilliseconds,
-      receiveTimeout: Duration(minutes: 5).inMilliseconds,
+        validateStatus: (int status) {
+          return status >= 200 && status < 300 || status == 304;
+        },
+      connectTimeout: Duration(seconds: 150).inMilliseconds,
+      receiveTimeout: Duration(minutes: 300).inMilliseconds,
       headers: {
         'Accept-Encoding': 'gzip, deflate',
       },
@@ -93,16 +99,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             return error;
           },
         ),
-        if (kDebugMode)
-          PrettyDioLogger(
-            requestHeader: true,
-            requestBody: true,
-            responseBody: true,
-            responseHeader: true,
-            error: true,
-            compact: true,
-            maxWidth: 100,
-          ),
+        // if (kDebugMode)
+        //   PrettyDioLogger(
+        //     requestHeader: true,
+        //     requestBody: true,
+        //     responseBody: true,
+        //     responseHeader: true,
+        //     error: true,
+        //     compact: true,
+        //     maxWidth: 100,
+        //   ),
       ])
       ..transformer = FlutterTransformer();
 
@@ -272,18 +278,18 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<List<Exam>> fetchExams() {
+  Future<List<ExamSeparated>> fetchExamsSeparated() {
     return _withHandlers(
-      (client) => client.getExams(),
+          (client) => client.getExamsSeparated(), //client.getExamsSeparated(),
       fallbackHandlers: [
-        (e) => _fallbackToNative(
-              e,
-              'warehouse/examsdistrictresults',
-              (json) => compute<String, List<Exam>>(
-                _parseExamsList,
+            (e) => _fallbackToNative(
+          e,
+          'warehouse/exams/table',
+              (json) => compute<String, List<ExamSeparated>>(
+                _parseExamsSeparatedList,
                 json,
-              ),
-            ),
+          ),
+        ),
       ],
     );
   }
@@ -379,18 +385,64 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<List<School>> fetchSchools() {
-    return _withHandlers(
-      (client) => client.getSchools(),
-      fallbackHandlers: [
-        (e) => _fallbackToNative(
-              e,
-              'warehouse/tableenrol',
-              (json) => compute<String, List<School>>(
-                _parseSchoolList,
-                json,
+  Future<SchoolsChunk> fetchSchools() async {
+    // return _withHandlers(
+    //   (client) => client.getSchools(),
+    //   fallbackHandlers: [
+    //     (e) => _fallbackToNative(
+    //           e,
+    //           'warehouse/tableenrol',
+    //           (json) => compute<String, List<School>>(
+    //             _parseSchoolList,
+    //             json,
+    //           ),
+    //         ),
+    //   ],
+    // );
+    final byState = await _withHandlers(
+        (client) => client.getSchools(),
+        fallbackHandlers: [
+          (e) => _fallbackToNative(
+                e,
+                'warehouse/tableenrol',
+                (json) => compute<String, List<School>>(
+                  _parseSchoolList,
+                  json,
+                ),
               ),
-            ),
+        ],
+      );
+
+    final byAuthority = await _withHandlers(
+          (client) => client.getSchoolsAuthority(),
+      fallbackHandlers: [
+            (e) => _fallbackToNative(
+          e,
+          'warehouse/tableenrol',
+              (json) => compute<String, List<School>>(
+            _parseSchoolList,
+            json,
+          ),
+        ),
+      ],
+    );
+    //await _withHandlers((client) => client.getSchools());
+    return SchoolsChunk(byState: byState, byAuthority: byAuthority);
+  }
+
+  @override
+  Future<List<School>> fetchSchoolsAuthority() {
+    return _withHandlers(
+          (client) => client.getSchoolsAuthority(),
+      fallbackHandlers: [
+            (e) => _fallbackToNative(
+          e,
+          'warehouse/tableenrol',
+              (json) => compute<String, List<School>>(
+            _parseSchoolList,
+            json,
+          ),
+        ),
       ],
     );
   }
@@ -481,9 +533,10 @@ List<Teacher> _parseTeachersList(String json) {
       .toList();
 }
 
-List<Exam> _parseExamsList(String json) {
+List<ExamSeparated> _parseExamsSeparatedList(String json) {
   final List<dynamic> data = jsonDecode(json);
-  return data.map((it) => Exam.fromJson(it as Map<String, dynamic>)).toList();
+  return data.map((it) =>
+      ExamSeparated.fromJson(it as Map<String, dynamic>)).toList();
 }
 
 Lookups _parseLookups(String json) {

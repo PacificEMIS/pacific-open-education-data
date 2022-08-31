@@ -38,7 +38,7 @@ class SchoolsListPageState
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          _SearchBar(viewModel: viewModel),
+          SearchBar(viewModel: viewModel),
           Container(
             height: 1,
             color: AppColors.kCoolGray,
@@ -63,7 +63,7 @@ class SchoolsListPageState
                           itemCount: data.length,
                           itemBuilder: (ctx, index) {
                             final school = data[index];
-                            return _SchoolRow(
+                            return SchoolRow(
                               viewModel: viewModel,
                               school: school,
                               isEven: index.isEven,
@@ -85,19 +85,19 @@ class SchoolsListPageState
   }
 }
 
-class _SearchBar extends StatefulWidget {
+class SearchBar extends StatefulWidget {
   final SchoolsListViewModel _viewModel;
 
-  const _SearchBar({Key key, SchoolsListViewModel viewModel})
+  const SearchBar({Key key, SchoolsListViewModel viewModel})
       : assert(viewModel != null),
         _viewModel = viewModel,
         super(key: key);
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  SearchBarState createState() => SearchBarState();
 }
 
-class _SearchBarState extends State<_SearchBar> {
+class SearchBarState extends State<SearchBar> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
 
@@ -195,12 +195,12 @@ class _SearchBarState extends State<_SearchBar> {
   }
 }
 
-class _SchoolRow extends StatelessWidget {
+class SchoolRow extends StatelessWidget {
   final bool _isEven;
   final ShortSchool _school;
   final SchoolsListViewModel _viewModel;
 
-  const _SchoolRow({
+  const SchoolRow({
     Key key,
     @required SchoolsListViewModel viewModel,
     @required ShortSchool school,

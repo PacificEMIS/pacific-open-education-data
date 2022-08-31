@@ -16,6 +16,8 @@ import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
 
+import '../indicators/components/indicators_filters.dart';
+
 class SchoolsPage extends MvvmStatefulWidget {
   static const String kRoute = '/Schools';
 
@@ -152,14 +154,14 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           data: snapshot.data.enrolByAgeAndEducation,
                           keySortFunc: _compareEnrollmentByAgeAndEducation,
                           domainValueBuilder:
-                              GenderTableData.sDomainValueBuilder,
+                          GenderTableData.sDomainValueBuilder,
                         ),
                         MultiTable(
                           key: ValueKey(
                               snapshot.data.enrolBySchoolLevelAndDistrict),
                           title:
-                              'schoolsDashboardsEnrollByLevelStateGenderTitle'
-                                  .localized(context),
+                          'schoolsDashboardsEnrollByLevelStateGenderTitle'
+                              .localized(context),
                           columnNames: [
                             'schoolsDashboardsSchoolLevelDomain',
                             'labelMale',
@@ -170,7 +172,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           data: snapshot.data.enrolBySchoolLevelAndDistrict,
                           keySortFunc: _compareEnrollmentBySchoolLevelAndState,
                           domainValueBuilder:
-                              GenderTableData.sDomainValueBuilder,
+                          GenderTableData.sDomainValueBuilder,
                         ),
                       ],
                     );

@@ -37,6 +37,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
         return charts.BarChart(
           snapshot.data,
           animate: false,
+          defaultInteractions: false,
           barGroupingType: widget.type,
           primaryMeasureAxis: charts.NumericAxisSpec(
             renderSpec: charts.GridlineRendererSpec(

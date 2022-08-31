@@ -22,6 +22,10 @@ class ExamsFiltersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _numerOfRows = 6;
+    final _baseHeight = 100.0;
+    final _totalHeight = _baseHeight * _numerOfRows;
+
     return StreamBuilder<ExamsFilterData>(
       stream: _viewModel.filtersStream,
       builder: (ctx, snapshot) {
@@ -29,8 +33,8 @@ class ExamsFiltersWidget extends StatelessWidget {
           return Container();
         } else {
           return _BottomMenu(
-            alwaysVisibleHeight: 96,
-            totalHeight: 256,
+            alwaysVisibleHeight: _baseHeight,
+            totalHeight: _totalHeight,
             bottomInset: _bottomInset,
             children: <Widget>[
               _BottomMenuRow(
@@ -46,10 +50,34 @@ class ExamsFiltersWidget extends StatelessWidget {
                 onNextTap: _viewModel.onNextViewPressed,
               ),
               _BottomMenuRow(
-                rowName: 'examsDashboardsFilterStandard'.localized(context),
-                name: snapshot.data.standardName,
-                onPrevTap: _viewModel.onPrevStandardPressed,
-                onNextTap: _viewModel.onNextStandardPressed,
+                rowName: 'recordType'.localized(context),
+                name: snapshot.data.recordTypeName.localized(context),
+                onPrevTap: _viewModel.onPrevRecordTypePressed,
+                onNextTap: _viewModel.onNextRecordTypePressed,
+              ),
+              _BottomMenuRow(
+                rowName: 'examShowMode'.localized(context),
+                name: snapshot.data.showMode,
+                onPrevTap: _viewModel.onPrevShowModePressed,
+                onNextTap: _viewModel.onNextShowModePressed,
+              ),
+              _BottomMenuRow(
+                rowName: 'govtNonGovt'.localized(context),
+                name: snapshot.data.govType.localized(context),
+                onPrevTap: _viewModel.onPrevGovTypePressed,
+                onNextTap: _viewModel.onNextGovTypePressed,
+              ),
+              _BottomMenuRow(
+                rowName: 'specialEducationAuthorityDomain'.localized(context),
+                name: snapshot.data.authority,
+                onPrevTap: _viewModel.onPrevAuthorityPressed,
+                onNextTap: _viewModel.onNextAuthorityPressed,
+              ),
+              _BottomMenuRow(
+                rowName: 'individualSchoolExamsFilterYear'.localized(context),
+                name: snapshot.data.year,
+                onPrevTap: _viewModel.onNextYearPressed,
+                onNextTap: _viewModel.onPrevYearPressed,
               ),
             ],
           );
@@ -160,7 +188,7 @@ class _BottomMenuState extends State<_BottomMenu>
         );
       },
       child: Stack(
-        overflow: Overflow.clip,
+        clipBehavior: Clip.none,
         alignment: AlignmentDirectional.topCenter,
         children: <Widget>[
           Container(
@@ -329,9 +357,9 @@ class _BottomMenuRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: _onPrevTap,
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            style: TextButton.styleFrom(padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),),
                 child: const Icon(
                   Icons.chevron_left,
                   color: AppColors.kTextMinor,
@@ -350,9 +378,9 @@ class _BottomMenuRow extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: _onNextTap,
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                style: TextButton.styleFrom(padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),),
                 child: const Icon(
                   Icons.chevron_right,
                   color: AppColors.kTextMinor,

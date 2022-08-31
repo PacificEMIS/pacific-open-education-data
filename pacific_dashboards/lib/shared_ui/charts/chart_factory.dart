@@ -40,12 +40,13 @@ class ChartFactory {
         return createBarChartViewByData(data);
       case ChartType.pie:
         return createPieChartViewByData(data);
+      case ChartType.none:
+        return Container();
     }
     throw FallThroughError();
   }
 
-  static Widget createStackedHorizontalBarChartViewByData(
-      {Map<String, List<int>> chartData, ColorFunc colorFunc}) {
+  static Widget createStackedHorizontalBarChartViewByData({Map<String, List<int>> chartData, ColorFunc colorFunc}) {
     return (chartData.length == 0)
         ? Container()
         : Container(
@@ -58,4 +59,4 @@ class ChartFactory {
   }
 }
 
-enum ChartType { bar, pie }
+enum ChartType { bar, pie, none }

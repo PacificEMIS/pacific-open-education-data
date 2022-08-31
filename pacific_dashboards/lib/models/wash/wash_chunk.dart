@@ -2,6 +2,7 @@ import 'package:arch/arch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+import 'package:pacific_dashboards/models/special_education/special_education.dart';
 import 'package:pacific_dashboards/models/wash/base_wash.dart';
 import 'package:pacific_dashboards/models/wash/question.dart';
 import 'package:pacific_dashboards/models/wash/toilets.dart';
@@ -28,9 +29,8 @@ extension Filters on WashChunk {
   static const _kYearFilterId = 0;
   static const _kDistrictFilterId = 1;
   static const _kAuthorityFilterId = 2;
-
-  // ignore: unused_field
   static const _kGovtFilterId = 3;
+  static const _kSchoolLevelFilterId = 4;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
     final allItems = List<BaseWash>.of(this.total)
@@ -59,6 +59,17 @@ extension Filters on WashChunk {
         selectedIndex: 0,
       ),
       Filter(
+        id: _kGovtFilterId,
+        title: 'filtersByGovernment',
+        items: [
+          FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
+          ...allItems
+              .uniques((it) => it.authorityCode) //TODO replace to GovtCode
+              .map((it) => FilterItem(it, it.from(lookups.authorityGovt))),
+        ],
+        selectedIndex: 0,
+      ),
+      Filter(
         id: _kAuthorityFilterId,
         title: 'filtersByAuthority',
         items: [
@@ -67,6 +78,17 @@ extension Filters on WashChunk {
               .uniques((it) => it.authorityCode)
               .map((it) => FilterItem(it, it.from(lookups.authorities))),
         ],
+        selectedIndex: 0,
+      ),
+      Filter(
+        id: _kSchoolLevelFilterId,
+        title: 'filtersByClassLevel',
+        items: [
+          FilterItem(null, 'filtersByClassLevel'),
+          ...allItems
+              .uniques((it) => it.schoolTypeCode)
+              .map((it) => FilterItem(it, it.from(lookups.schoolTypes))),
+        ].chainSort((lv, rv) => rv.visibleName.compareTo(lv.visibleName)),
         selectedIndex: 0,
       ),
     ]);
@@ -83,6 +105,12 @@ extension Filters on WashChunk {
       final authorityFilter =
           filters.firstWhere((it) => it.id == _kAuthorityFilterId);
 
+      final govtFilter =
+          filters.firstWhere((it) => it.id == _kGovtFilterId);
+
+      final schoolLevelFilter =
+          filters.firstWhere((it) => it.id == _kSchoolLevelFilterId);
+
       FilterApplier<Iterable<BaseWash>> apply = (input) {
         var sorted = input.where((it) {
           if (it.surveyYear != selectedYear) {
@@ -96,6 +124,16 @@ extension Filters on WashChunk {
 
           if (!authorityFilter.isDefault &&
               it.authorityCode != authorityFilter.stringValue) {
+            return false;
+          }
+
+          if (!govtFilter.isDefault &&
+              it.authorityCode != govtFilter.stringValue) {
+            return false;
+          }
+
+          if (!schoolLevelFilter.isDefault &&
+              it.authorityCode != schoolLevelFilter.stringValue) {
             return false;
           }
 

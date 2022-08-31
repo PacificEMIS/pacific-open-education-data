@@ -6,9 +6,9 @@ import 'package:pacific_dashboards/res/strings.dart';
 class FilterPage extends StatefulWidget {
   final List<Filter> _filters;
 
-  const FilterPage({Key key, @required List<Filter> filters})
+  FilterPage({Key key, @required List<Filter> filters})
       : assert(filters != null),
-        _filters = filters,
+        _filters = filters.map((e) => e.clone()).toList(),
         super(key: key);
 
   @override
@@ -40,15 +40,15 @@ class _FilterPageState extends State<FilterPage> {
         child: SizedBox(
           height: 56,
           width: 56,
-          child: FlatButton(
-            shape: RoundedRectangleBorder(
+          child: TextButton(
+    style: TextButton.styleFrom(shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(22.0),
             ),
+      backgroundColor: Theme.of(context).primaryColor,),
             child: const Icon(
               Icons.done,
               color: Colors.white,
             ),
-            color: Theme.of(context).primaryColor,
             onPressed: () => _apply(context),
           ),
         ),

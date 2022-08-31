@@ -152,6 +152,7 @@ class _Chart extends StatelessWidget {
                     snapshot.data,
                     animate: false,
                     barGroupingType: _groupingType,
+                    defaultInteractions: false,
                     vertical: false,
                     primaryMeasureAxis: charts.NumericAxisSpec(
                       tickProviderSpec: charts.BasicNumericTickProviderSpec(
@@ -239,6 +240,7 @@ class _Chart extends StatelessWidget {
         colorScheme[domain],
       );
     });
+
     return ChartInfoTableWidget(
       chartData,
       domain.localized(context),
@@ -270,7 +272,7 @@ class _Chart extends StatelessWidget {
         }
         throw FallThroughError();
       };
-      _data.sort((rv, lv) => rv.district.compareTo(lv.district));
+      _data.sort((rv, lv) => rv.year.compareTo(lv.year));
       final data = _data.map((it) {
         return ChartData(
           it.year,

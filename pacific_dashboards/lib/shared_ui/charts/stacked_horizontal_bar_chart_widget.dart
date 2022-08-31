@@ -28,6 +28,7 @@ class StackedHorizontalBarChartWidgetState
       animate: false,
       barGroupingType: charts.BarGroupingType.stacked,
       vertical: false,
+      defaultInteractions: false,
       primaryMeasureAxis: charts.NumericAxisSpec(
         renderSpec: charts.GridlineRendererSpec(
           labelStyle: charts.TextStyleSpec(

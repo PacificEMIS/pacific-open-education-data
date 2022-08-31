@@ -90,6 +90,8 @@ final ThemeData appTheme = ThemeData(
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
   ),
+  unselectedWidgetColor: AppColors.kBlue,
+  toggleableActiveColor: AppColors.kBlue,
 );
 
 const charts.TextStyleSpec largeChartsDomain = const charts.TextStyleSpec(

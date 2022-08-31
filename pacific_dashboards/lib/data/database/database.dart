@@ -17,10 +17,13 @@ import 'package:pacific_dashboards/models/special_education/special_education.da
 import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 
+import '../../models/exam/exam_separated.dart';
+
 abstract class Database {
   LookupsDao get lookups;
   StringsDao get strings;
   SchoolsDao get schools;
+  SchoolsAuthorityDao get schoolsAutority;
   TeachersDao get teachers;
   ExamsDao get exams;
   IndicatorsDao get indicators;
@@ -57,14 +60,19 @@ abstract class SchoolsDao {
   Future<List<School>> get(Emis emis);
 }
 
+abstract class SchoolsAuthorityDao {
+  Future<void> save(List<School> schoolsAuthority, Emis emis);
+  Future<List<School>> get(Emis emis);
+}
+
 abstract class TeachersDao {
   Future<void> save(List<Teacher> teachers, Emis emis);
   Future<Pair<bool, List<Teacher>>> get(Emis emis);
 }
 
 abstract class ExamsDao {
-  Future<void> save(List<Exam> exams, Emis emis);
-  Future<Pair<bool, List<Exam>>> get(Emis emis);
+  Future<void> save(List<ExamSeparated> exams, Emis emis);
+  Future<Pair<bool, List<ExamSeparated>>> get(Emis emis);
 }
 
 abstract class IndicatorsDao {

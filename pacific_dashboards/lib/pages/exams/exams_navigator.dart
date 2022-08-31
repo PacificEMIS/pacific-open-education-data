@@ -1,25 +1,51 @@
 import 'package:arch/arch.dart';
-import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
+
+import '../../models/exam/exam_separated.dart';
 
 class ExamsNavigator {
   static const String kNoTitleKey = "";
   int _selectedExamPageId = 0;
   int _selectedExamViewId = 0;
-  int _selectedExamStandardId = 0;
+  int _selectedExamRecordTypeId = 0;
+  int _selectedExamCountModeId = 0;
+  int _selectedExamGovTypeId = 0;
+  int _selectedAuthorityId = -1;
+  int _selectedYearId = 0;
 
   final List<String> _examPageNames;
+  final List<String> _authorityNames;
   final List<String> _examViews = [
     'examsDashboardsViewByBenchmarkAndGender',
     'examsDashboardsViewByStandardAndGender',
     'examsDashboardsViewByStandardAndState',
   ];
-  final List<Exam> _exams;
+  final List<String> _examRecordType = [
+    'Exam',
+    'Standard',
+    'Benchmark',
+    'Indicator',
+  ];
+  final List<String> _examCountMode = [
+    'examShowMode1',
+    'examShowMode2',
+    'examShowMode3',
+  ];
+  final List<String> _examGovType = [
+    'All',
+    'govt',
+    'nonGovt',
+  ];
+  final List<ExamSeparated> _exams;
 
-  List<String> _examStandards;
+  final List<int> _years;
 
-  ExamsNavigator(List<Exam> exams)
+  ExamsNavigator(List<ExamSeparated> exams)
       : _examPageNames = exams.uniques((it) => it.name),
+        _authorityNames = exams.where((e) => e.authorityCode != '')
+            .uniques((it) => it.authorityCode),
+        _years = exams.where((e) => e.year != '')
+            .uniques((it) => it.year).toList().chainSort((lv, rv) => rv.compareTo(lv)),
         _exams = exams {
     _changeExamPage();
   }
@@ -41,10 +67,8 @@ class ExamsNavigator {
     if (_selectedExamPageId > _examPageNames.length - 1) {
       _selectedExamPageId = 0;
     }
-
-    _changeExamStandard();
   }
-
+//TODO Refactoring
   void nextExamView() {
     _selectedExamViewId++;
     _changeExamView();
@@ -55,6 +79,63 @@ class ExamsNavigator {
     _changeExamView();
   }
 
+  void nextExamRecordType() {
+    _selectedExamRecordTypeId++;
+    _changeExamRecordType();
+  }
+
+  void prevExamRecordType() {
+    _selectedExamRecordTypeId--;
+    _changeExamRecordType();
+  }
+
+  void nextExamCountMode() {
+    _selectedExamCountModeId++;
+    _changeExamCountMode();
+  }
+
+  void prevExamCountMode() {
+    _selectedExamCountModeId--;
+    _changeExamCountMode();
+  }
+
+  void nextExamGovType() {
+    _selectedExamGovTypeId++;
+    _changeExamGovType();
+  }
+
+  void prevExamGovType() {
+    _selectedExamGovTypeId--;
+    _changeExamGovType();
+  }
+
+  void nextExamAuthority() {
+    _selectedAuthorityId++;
+    _changeAuthority();
+  }
+
+  void prevExamAuthority() {
+    _selectedAuthorityId--;
+    _changeAuthority();
+  }
+
+
+  void nextExamYear() {
+    _selectedYearId++;
+    if (_selectedYearId >= _years.length)
+      _selectedYearId = _years.length - 1;
+
+    _changeAuthority();
+  }
+
+  void prevExamYear() {
+    _selectedYearId--;
+    if (_selectedYearId < 0)
+      _selectedYearId = 0;
+
+    _changeAuthority();
+  }
+
   void _changeExamView() {
     if (_selectedExamViewId < 0) {
       _selectedExamViewId = _examViews.length - 1;
@@ -62,27 +143,41 @@ class ExamsNavigator {
     if (_selectedExamViewId > _examViews.length - 1) {
       _selectedExamViewId = 0;
     }
-
-    _changeExamStandard();
   }
 
-  void nextExamStandard() {
-    _selectedExamStandardId++;
-    _changeExamStandard();
-  }
-
-  void prevExamStandard() {
-    _selectedExamStandardId--;
-    _changeExamStandard();
-  }
-
-  void _changeExamStandard() {
-    _examStandards = _getStandardsNames();
-    if (_selectedExamStandardId < 0) {
-      _selectedExamStandardId = _examStandards.length - 1;
+  void _changeExamRecordType() {
+    if (_selectedExamRecordTypeId < 0) {
+      _selectedExamRecordTypeId = _examRecordType.length - 1;
     }
-    if (_selectedExamStandardId > _examStandards.length - 1) {
-      _selectedExamStandardId = 0;
+    if (_selectedExamRecordTypeId > _examRecordType.length - 1) {
+      _selectedExamRecordTypeId = 0;
+    }
+  }
+
+  void _changeExamCountMode() {
+    if (_selectedExamCountModeId < 0) {
+      _selectedExamCountModeId = _examCountMode.length - 1;
+    }
+    if (_selectedExamCountModeId > _examCountMode.length - 1) {
+      _selectedExamCountModeId = 0;
+    }
+  }
+
+  void _changeExamGovType() {
+    if (_selectedExamGovTypeId < 0) {
+      _selectedExamGovTypeId = _examGovType.length - 1;
+    }
+    if (_selectedExamGovTypeId > _examGovType.length - 1) {
+      _selectedExamGovTypeId = 0;
+    }
+  }
+
+  void _changeAuthority() {
+    if (_selectedAuthorityId < -1) {
+      _selectedAuthorityId = _authorityNames.length - 1;
+    }
+    if (_selectedAuthorityId > _authorityNames.length - 1) {
+      _selectedAuthorityId = -1;
     }
   }
 
@@ -94,6 +189,14 @@ class ExamsNavigator {
     return _examPageNames[_selectedExamPageId];
   }
 
+  String get authorityName {
+    if (_authorityNames == null || _selectedAuthorityId < 0 ||
+        _selectedAuthorityId >= _authorityNames.length) {
+      return "All";
+    }
+    return _authorityNames[_selectedAuthorityId];
+  }
+
   String get viewName {
     if (_examViews == null || _selectedExamViewId >= _examViews.length) {
       return "";
@@ -101,77 +204,117 @@ class ExamsNavigator {
     return _examViews[_selectedExamViewId];
   }
 
-  String get standardName {
-    if (_examStandards == null ||
-        _selectedExamStandardId >= _examStandards.length) {
+  int get showModeId => _selectedExamCountModeId;
+
+  String get recordTypeName {
+    if (_examRecordType == null ||
+        _selectedExamRecordTypeId >= _examRecordType.length) {
       return "";
     }
-    return _examStandards[_selectedExamStandardId];
+    return _examRecordType[_selectedExamRecordTypeId];
   }
 
-  List<Exam> _getExamPage(String examPageName) {
+  String get showModeName {
+    if (_examCountMode == null ||
+        _selectedExamCountModeId >= _examCountMode.length) {
+      return "";
+    }
+    return _examCountMode[_selectedExamCountModeId];
+  }
+
+  String get govType {
+    if (_examGovType == null ||
+        _selectedExamGovTypeId >= _examGovType.length) {
+      return "";
+    }
+    return _examGovType[_selectedExamGovTypeId];
+  }
+
+  int get year {
+    if (_years == null ||
+        _selectedYearId >= _years.length) {
+      return _years[_years.length - 1];
+    }
+    return _years[_selectedYearId];
+  }
+
+  List<ExamSeparated> _getExamPage(String examPageName) {
     return _exams.where((i) => i.name == examPageName).toList();
   }
 
-  List<String> _getStandardsNames() {
-    return _getExamPage(pageName).uniques((it) => it.standard);
-  }
-
-  Map<String, List<Exam>> _getGroupedResults() {
+  Map<String, List<ExamSeparated>> _getGroupedResults() {
     final page = _getExamPage(pageName);
-    return page
-        .where((i) => i.standard == standardName)
+    var filtered = page;
+
+    switch (_selectedExamGovTypeId) {
+      case 1:
+        filtered = page.where((i) => i.authorityGovtCode == 'G').toList();
+        break;
+      case 2:
+        filtered = page.where((i) => i.authorityGovtCode == 'N').toList();
+        break;
+    }
+
+    if (_selectedAuthorityId >= 0) {
+      filtered = filtered.where((i) => i.authorityCode == authorityName).toList();
+    }
+
+    if (_selectedYearId >= 0) {
+      filtered = filtered.where((i) => i.year == year).toList();
+    }
+    return filtered
+        .where((i) => i.recordType == recordTypeName)
         .toList()
-        .groupBy((it) => it.benchmark);
+        .groupBy((it) => it.key);
   }
 
-  Map<String, Map<String, Exam>> _getExamResultsByBenchmark() {
+  Map<String, Map<String, List<ExamSeparated>>> _getExamResultsByBenchmark() {
     return _getGroupedResults().map((benchmark, exams) {
-      final groupedByBenchmarkData = Map<String, Exam>();
+      final groupedByBenchmarkData = Map<String, List<ExamSeparated>>();
       exams.forEach((exam) {
         if (groupedByBenchmarkData.containsKey(kNoTitleKey)) {
-          groupedByBenchmarkData[kNoTitleKey] =
-              groupedByBenchmarkData[kNoTitleKey] + exam;
+          groupedByBenchmarkData[kNoTitleKey].add(exam);
         } else {
-          groupedByBenchmarkData[kNoTitleKey] = exam;
+          groupedByBenchmarkData[kNoTitleKey] = [exam];
         }
       });
       return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
-  Map<String, Map<String, Exam>> _getExamResultsByYear() {
+  Map<String, Map<String, List<ExamSeparated>>> _getExamResultsByYear() {
     return _getGroupedResults().map((benchmark, exams) {
-      final groupedByBenchmarkData = Map<String, Exam>();
+      final groupedByBenchmarkData = Map<String, List<ExamSeparated>>();
       exams.forEach((exam) {
         final year = exam.year.toString();
         if (groupedByBenchmarkData.containsKey(year)) {
-          groupedByBenchmarkData[year] = groupedByBenchmarkData[year] + exam;
+          groupedByBenchmarkData[year].add(exam);
         } else {
-          groupedByBenchmarkData[year] = exam;
+          groupedByBenchmarkData[year] = [exam];
         }
       });
       return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
-  Map<String, Map<String, Exam>> _getExamResultsByState(Lookups lookups) {
+  Map<String, Map<String, List<ExamSeparated>>> _getExamResultsByState(Lookups lookups) {
     return _getGroupedResults().map((benchmark, exams) {
-      final groupedByBenchmarkData = Map<String, Exam>();
+      final groupedByBenchmarkData = Map<String, List<ExamSeparated>>();
       exams.forEach((exam) {
         final district = exam.districtCode.from(lookups.districts);
-        if (groupedByBenchmarkData.containsKey(district)) {
-          groupedByBenchmarkData[district] =
-              groupedByBenchmarkData[district] + exam;
-        } else {
-          groupedByBenchmarkData[district] = exam;
+        if (district != '') {
+          if (groupedByBenchmarkData.containsKey(district)) {
+            groupedByBenchmarkData[district].add(exam);
+          } else {
+            groupedByBenchmarkData[district] = [exam];
+          }
         }
       });
       return MapEntry(benchmark, groupedByBenchmarkData);
     });
   }
 
-  Map<String, Map<String, Exam>> getExamResults(Lookups lookups) {
+  Map<String, Map<String, List<ExamSeparated>>> getExamResults(Lookups lookups) {
     switch (_selectedExamViewId) {
       case 1:
         return _getExamResultsByYear();

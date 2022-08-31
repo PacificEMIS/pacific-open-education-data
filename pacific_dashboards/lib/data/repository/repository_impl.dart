@@ -16,6 +16,7 @@ import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
 import 'package:pacific_dashboards/models/school/school.dart';
+import 'package:pacific_dashboards/models/school/schools_chunk.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll.dart';
 import 'package:pacific_dashboards/models/school_enroll/school_enroll_chunk.dart';
 import 'package:pacific_dashboards/models/school_exam_report/school_exam_report.dart';
@@ -26,6 +27,8 @@ import 'package:pacific_dashboards/models/teacher/teacher.dart';
 import 'package:pacific_dashboards/models/wash/wash_chunk.dart';
 import 'package:pacific_dashboards/utils/exceptions.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../models/exam/exam_separated.dart';
 
 typedef _AuthorizedCallable<T> = FutureOr<T> Function(String);
 
@@ -144,7 +147,7 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<List<School>>> fetchAllSchools() async* {
+  Stream<RepositoryResponse<SchoolsChunk>> fetchAllSchools() async* {
     yield* _fetchWithEtag(
       getLocal: _localDataSource.fetchSchools,
       getRemote: _remoteDataSource.fetchSchools,
@@ -153,10 +156,19 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<List<Exam>>> fetchAllExams() async* {
+  Stream<RepositoryResponse<List<School>>> fetchAllSchoolsAuthority() async* {
+    yield* _fetchWithEtag(
+      getLocal: _localDataSource.fetchSchoolsAuthority,
+      getRemote: _remoteDataSource.fetchSchoolsAuthority,
+      updateLocal: _localDataSource.saveSchoolsAuthority,
+    );
+  }
+
+  @override
+  Stream<RepositoryResponse<List<ExamSeparated>>> fetchAllExams() async* {
     yield* _fetchWithoutEtag(
       getLocal: _localDataSource.fetchExams,
-      getRemote: _remoteDataSource.fetchExams,
+      getRemote: _remoteDataSource.fetchExamsSeparated,
       updateLocal: _localDataSource.saveExams,
     );
   }

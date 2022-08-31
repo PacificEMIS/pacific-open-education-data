@@ -28,4 +28,12 @@ class Filter {
   int get intValue => items[selectedIndex].value as int;
 
   String get stringValue => items[selectedIndex].value as String;
+
+  Filter clone() =>
+      Filter(
+          title: title,
+          selectedIndex: selectedIndex,
+          id: id,
+          items: items
+      );
 }

@@ -200,6 +200,7 @@ class _StandardChart extends StatelessWidget {
           return charts.BarChart(
             snapshot.data,
             animate: false,
+            defaultInteractions: false,
             barGroupingType: charts.BarGroupingType.stacked,
             vertical: false,
             layoutConfig: charts.LayoutConfig(

@@ -32,13 +32,13 @@ class TotalsComponent extends StatelessWidget {
           padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: 52),
-            child: FlatButton(
+            child: TextButton(
               onPressed: _onQuestionSelectorPressed,
-              color: AppColors.kGrayLight,
+              style: TextButton.styleFrom(backgroundColor : AppColors.kGrayLight,
               padding: const EdgeInsets.symmetric(
                 vertical: 8,
                 horizontal: 16,
-              ),
+              ),),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,

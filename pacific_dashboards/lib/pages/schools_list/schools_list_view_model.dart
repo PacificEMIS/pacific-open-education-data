@@ -52,7 +52,7 @@ class SchoolsListViewModel extends BaseViewModel {
   void _applyFilters() {
     launchHandled(() {
       if (_schools == null) return;
-      final lowercaseQuery = _searchQuery.toLowerCase();
+      final lowercaseQuery = _searchQuery != null ? _searchQuery.toLowerCase() : '';
       final filteredSchools = _schools
           .where(
             (it) =>

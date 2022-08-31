@@ -50,17 +50,16 @@ class IndicatorsFiltersPageState extends State<IndicatorsFiltersPage> {
         child: SizedBox(
           height: 56,
           width: 56,
-          child: FlatButton(
-            shape: RoundedRectangleBorder(
+          child: TextButton(
+    style: TextButton.styleFrom(shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(22.0),
-            ),
+            ),            backgroundColor: Theme
+        .of(context)
+        .primaryColor,),
             child: const Icon(
               Icons.done,
               color: Colors.white,
             ),
-            color: Theme
-                .of(context)
-                .primaryColor,
             onPressed: () => _apply(context),
           ),
         ),

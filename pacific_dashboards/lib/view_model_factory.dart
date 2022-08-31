@@ -4,6 +4,7 @@ import 'package:pacific_dashboards/pages/budgets/budget_view_model.dart';
 import 'package:pacific_dashboards/pages/download/download_view_model.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/pages/home/home_view_model.dart';
+import 'package:pacific_dashboards/pages/home/inner_page/onboarding_view_model.dart';
 import 'package:pacific_dashboards/pages/indicators/indicators_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/accreditation/individual_accreditation_view_model.dart';
 import 'package:pacific_dashboards/pages/individual_school/components/dashboards/components/enroll/enroll_view_model.dart';
@@ -16,8 +17,10 @@ import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
 import 'package:pacific_dashboards/pages/schools_list/schools_list_view_model.dart';
 import 'package:pacific_dashboards/pages/special_education/special_education_view_model.dart';
 import 'package:pacific_dashboards/pages/teachers/teachers_view_model.dart';
+import 'package:pacific_dashboards/pages/individual_schools_list/individual_schools_list_view_model.dart';
 import 'package:pacific_dashboards/pages/wash/wash_view_model.dart';
 import 'package:pacific_dashboards/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/short_school/short_school.dart';
 
@@ -32,6 +35,13 @@ class ViewModelFactory {
   }
 
   ViewModelFactory._();
+
+  OnboardingViewModel createonboardingViewModel(BuildContext ctx) {
+    return OnboardingViewModel(
+      ctx,
+      globalSettings: serviceLocator.globalSettings,
+    );
+  }
 
   HomeViewModel createHomeViewModel(BuildContext ctx) {
     return HomeViewModel(
@@ -59,8 +69,7 @@ class ViewModelFactory {
     );
   }
 
-  SchoolAccreditationViewModel createSchoolAccreditationViewModel(
-      BuildContext ctx) {
+  SchoolAccreditationViewModel createSchoolAccreditationViewModel(BuildContext ctx) {
     return SchoolAccreditationViewModel(
       ctx,
       repository: serviceLocator.repository,
@@ -91,6 +100,17 @@ class ViewModelFactory {
     return SchoolsListViewModel(
       ctx,
       repository: serviceLocator.repository,
+    );
+  }
+
+  IndividualSchoolsListViewModel createIndividualSchoolsDownloadList(BuildContext ctx,
+      List<ShortSchool> selectedSchools, List<ShortSchool> individualSchools, bool isSelectAll) {
+    return IndividualSchoolsListViewModel(
+      ctx,
+      repository: serviceLocator.repository,
+      selectedSchools: selectedSchools,
+        individualSchools: individualSchools,
+        isSelectAll: isSelectAll
     );
   }
 

@@ -21,7 +21,7 @@ class Teacher {
   @JsonKey(name: 'AuthorityCode', defaultValue: '')
   final String authorityCode;
 
-  @JsonKey(name: 'AuthorityGovt', defaultValue: '')
+  @JsonKey(name: 'AuthorityGroupCode', defaultValue: '')
   final String authorityGovt;
 
   @JsonKey(name: 'SchoolTypeCode', defaultValue: '')
@@ -98,16 +98,29 @@ class Teacher {
 
 extension Filters on List<Teacher> {
   // ignore: unused_field
-  static const _kYearFilterId = 0;
+  static const _kQualifiedFilterId = 0;
   // ignore: unused_field
-  static const _kDistrictFilterId = 1;
+  static const _kYearFilterId = 1;
   // ignore: unused_field
-  static const _kAuthorityFilterId = 2;
+  static const _kDistrictFilterId = 2;
   // ignore: unused_field
-  static const _kGovtFilterId = 3;
+  static const _kAuthorityFilterId = 3;
+  // ignore: unused_field
+  static const _kGovtFilterId = 4;
+
+  static const _kSchoolLevelFilterId = 5;
 
   List<Filter> generateDefaultFilters(Lookups lookups) {
     return [
+      Filter(
+        id: _kQualifiedFilterId,
+        title: 'Selected Qualification',
+        items: [FilterItem(0, 'Total'),
+          FilterItem(1, 'Certified'),
+          FilterItem(2, 'Qualified'),
+          FilterItem(3, 'Certified and Qualified')],
+        selectedIndex: 0,
+      ),
       Filter(
         id: _kYearFilterId,
         title: 'filtersByYear',
@@ -155,11 +168,23 @@ extension Filters on List<Teacher> {
         ],
         selectedIndex: 0,
       ),
+      Filter(
+        id: _kSchoolLevelFilterId,
+        title: 'filtersBySchoolLevels',
+        items: [
+          FilterItem(null, 'filtersDisplayAllLevelFilters'),
+          ...this
+              .uniques((it) => it.schoolTypeCode)
+              .map((it) => FilterItem(it, it.from(lookups.schoolTypes))),
+        ],
+        selectedIndex: 0,
+      ),
     ];
   }
 
   Future<List<Teacher>> applyFilters(List<Filter> filters) {
     return Future(() {
+      final qualifeid =  filters.firstWhere((it) => it.id == _kQualifiedFilterId).intValue;
       final selectedYear =
           filters.firstWhere((it) => it.id == _kYearFilterId).intValue;
 
@@ -170,6 +195,8 @@ extension Filters on List<Teacher> {
           filters.firstWhere((it) => it.id == _kAuthorityFilterId);
 
       final govtFilter = filters.firstWhere((it) => it.id == _kGovtFilterId);
+
+      final schoolFilter = filters.firstWhere((it) => it.id == _kSchoolLevelFilterId);
 
       return this.where((it) {
         if (it.surveyYear != selectedYear) {
@@ -188,6 +215,11 @@ extension Filters on List<Teacher> {
 
         if (!govtFilter.isDefault &&
             it.authorityGovt != govtFilter.stringValue) {
+          return false;
+        }
+
+        if (!schoolFilter.isDefault &&
+            it.authorityGovt != schoolFilter.stringValue) {
           return false;
         }
 

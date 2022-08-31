@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/pages/download/error_item.dart';
 import 'package:pacific_dashboards/pages/download/loading_item.dart';
+
+import '../home/components/section.dart';
 
 abstract class DownloadPageState {}
 
 class PreparationDownloadPageState extends DownloadPageState {
   PreparationDownloadPageState({
-    @required this.areIndividualSchoolsEnabled,
+    @required this.sections,
   });
 
   factory PreparationDownloadPageState.initial() {
-    return PreparationDownloadPageState(areIndividualSchoolsEnabled: false);
+    return PreparationDownloadPageState(sections: []);
   }
 
-  final bool areIndividualSchoolsEnabled;
+  final List<Section> sections;
 
-  PreparationDownloadPageState copyWith({bool areIndividualSchoolsEnabled}) {
+  PreparationDownloadPageState copyWith({Section section}) {
+    sections.contains(section) ?
+    sections.remove(section) :
+    sections.add(section);
     return PreparationDownloadPageState(
-      areIndividualSchoolsEnabled: areIndividualSchoolsEnabled,
+      sections: sections,
+    );
+  }
+
+  PreparationDownloadPageState copyWithSections({List<Section> sections}) {
+    return PreparationDownloadPageState(
+      sections: sections,
     );
   }
 
@@ -24,11 +36,10 @@ class PreparationDownloadPageState extends DownloadPageState {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PreparationDownloadPageState &&
-          runtimeType == other.runtimeType &&
-          areIndividualSchoolsEnabled == other.areIndividualSchoolsEnabled;
+          runtimeType == other.runtimeType;
 
   @override
-  int get hashCode => areIndividualSchoolsEnabled.hashCode;
+  int get hashCode => sections.hashCode;
 }
 
 class ActiveDownloadPageState extends DownloadPageState {
@@ -51,7 +62,7 @@ class ActiveDownloadPageState extends DownloadPageState {
   final bool isDownloading;
   final int currentIndex;
   final int total;
-  final List<LoadingItem> failedToLoadItems;
+  final List<ErrorItem> failedToLoadItems;
 
   double get progress => currentIndex / total;
 
@@ -59,7 +70,7 @@ class ActiveDownloadPageState extends DownloadPageState {
     bool isDownloading,
     int currentIndex,
     int total,
-    List<LoadingItem> failedToLoadItems,
+    List<ErrorItem> failedToLoadItems,
   }) {
     return ActiveDownloadPageState(
       isDownloading: isDownloading ?? this.isDownloading,

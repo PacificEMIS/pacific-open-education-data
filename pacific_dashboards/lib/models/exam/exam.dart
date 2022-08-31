@@ -50,6 +50,21 @@ class Exam {
   @JsonKey(name: 'CompetentF', defaultValue: 0)
   final int competentF;
 
+  @JsonKey(name: 'CandidatesAll', defaultValue: 0)
+  final int candidatesAll;
+
+  @JsonKey(name: 'WellBelowCompetentAll', defaultValue: 0)
+  final int wellBelowCompetentAll;
+
+  @JsonKey(name: 'ApproachingCompetenceAll', defaultValue: 0)
+  final int approachingCompetenceAll;
+
+  @JsonKey(name: 'MinimallyCompetentAll', defaultValue: 0)
+  final int minimallyCompetentAll;
+
+  @JsonKey(name: 'CompetentAll', defaultValue: 0)
+  final int competentAll;
+
   const Exam({
     @required this.name,
     @required this.year,
@@ -66,6 +81,11 @@ class Exam {
     @required this.approachingCompetenceF,
     @required this.minimallyCompetentF,
     @required this.competentF,
+    @required this.candidatesAll,
+    @required this.wellBelowCompetentAll,
+    @required this.approachingCompetenceAll,
+    @required this.minimallyCompetentAll,
+    @required this.competentAll,
   });
 
   factory Exam.fromJson(Map<String, dynamic> json) => _$ExamFromJson(json);
@@ -82,15 +102,23 @@ class Exam {
       candidatesM: candidatesM + other.candidatesM,
       wellBelowCompetentM: wellBelowCompetentM + other.wellBelowCompetentM,
       approachingCompetenceM:
-          approachingCompetenceM + other.approachingCompetenceM,
+      approachingCompetenceM + other.approachingCompetenceM,
       minimallyCompetentM: minimallyCompetentM + other.minimallyCompetentM,
       competentM: competentM + other.competentM,
       candidatesF: candidatesF + other.candidatesF,
       wellBelowCompetentF: wellBelowCompetentF + other.wellBelowCompetentF,
       approachingCompetenceF:
-          approachingCompetenceF + other.approachingCompetenceF,
+      approachingCompetenceF + other.approachingCompetenceF,
       minimallyCompetentF: minimallyCompetentF + other.minimallyCompetentF,
       competentF: competentF + other.competentF,
+      candidatesAll: candidatesAll + other.candidatesAll,
+      wellBelowCompetentAll: wellBelowCompetentAll +
+          other.wellBelowCompetentAll,
+      approachingCompetenceAll: approachingCompetenceAll +
+          other.approachingCompetenceAll,
+      minimallyCompetentAll: minimallyCompetentAll +
+          other.minimallyCompetentAll,
+      competentAll: competentAll + other.competentAll,
     );
   }
 }

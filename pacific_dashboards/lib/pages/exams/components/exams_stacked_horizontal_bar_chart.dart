@@ -1,18 +1,21 @@
+import 'dart:math';
+
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/themes.dart';
+
+import '../../../models/exam/exam_separated.dart';
 
 class ExamsStackedHorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
 
   ExamsStackedHorizontalBarChart(this.seriesList);
 
-  static Widget fromModel(Exam exam) {
+  static Widget fromModel(List<ExamSeparated> exams, int mode) {
     return FutureBuilder(
-      future: Future.microtask(() => _createData(exam)),
+      future: Future.microtask(() => _createData(exams, mode)),
       builder: (context, AsyncSnapshot<List<charts.Series>> snapshot) {
         if (!snapshot.hasData) {
           return PlatformProgressIndicator();
@@ -77,9 +80,13 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
                       width: 25,
                       child: Text(
                         text != "0" ? text : "",
-                        style: Theme.of(context).textTheme.overline.copyWith(
-                              color: AppColors.kTextMinor.withOpacity(0.5),
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .overline
+                            .copyWith(
+                          color: AppColors.kTextMinor.withOpacity(0.5),
+                        ),
                         textAlign: TextAlign.center,
                         maxLines: 1,
                       ),
@@ -106,91 +113,76 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
     );
   }
 
-  static List<charts.Series<ExamResultPercent, String>> _createData(Exam exam) {
-    bool isIncorrectFData = exam.candidatesF == 0;
-    bool isIncorrectMData = exam.candidatesM == 0;
+  static num _numberForMode(List<ExamSeparated> exams, int mode) {
+    if (exams.isEmpty) return 0;
+    return (exams.reduce((value, element) => value + element))
+        .modeParameter(mode);
+  }
 
-    final percentFail1 = [
-      ExamResultPercent(
-        gender: 'F',
-        percent: isIncorrectFData
-            ? 0
-            : (-exam.wellBelowCompetentF * 100 / exam.candidatesF).round(),
-      ),
-      ExamResultPercent(
-        gender: 'M',
-        percent: isIncorrectMData
-            ? 0
-            : (-exam.wellBelowCompetentM * 100 / exam.candidatesM).round(),
-      ),
-    ];
+  static List<charts.Series<ExamResultPercent, String>> _createData(
+      List<ExamSeparated> exams, int mode) {
+    final examsMale = exams.where((element) => element.gender == 'M').toList();
+    final examsFemale = exams.where((element) => element.gender == 'F')
+        .toList();
+    var maleTotal = max(1.0, _numberForMode(examsMale, mode));
+    var femaleTotal = max(1.0, _numberForMode(examsFemale, mode));
+    var allTotal = max(1.0, _numberForMode(exams, mode));
 
-    final percentFail2 = [
-      ExamResultPercent(
-        gender: 'F',
-        percent: isIncorrectFData
-            ? 0
-            : (-exam.approachingCompetenceF * 100 / exam.candidatesF).round(),
-      ),
-      ExamResultPercent(
-        gender: 'M',
-        percent: isIncorrectMData
-            ? 0
-            : (-exam.approachingCompetenceM * 100 / exam.candidatesM).round(),
-      ),
-    ];
-
-    final percentCompetent1 = [
-      ExamResultPercent(
-        gender: 'F',
-        percent: isIncorrectFData
-            ? 0
-            : (exam.minimallyCompetentF * 100 / exam.candidatesF).round(),
-      ),
-      ExamResultPercent(
-        gender: 'M',
-        percent: isIncorrectMData
-            ? 0
-            : (exam.minimallyCompetentM * 100 / exam.candidatesM).round(),
-      ),
-    ];
-
-    final percentCompetent2 = [
-      ExamResultPercent(
-        gender: 'F',
-        percent: isIncorrectFData
-            ? 0
-            : (exam.competentF * 100 / exam.candidatesF).round(),
-      ),
-      ExamResultPercent(
-        gender: 'M',
-        percent: isIncorrectMData
-            ? 0
-            : (exam.competentM * 100 / exam.candidatesM).round(),
-      ),
-    ];
+    final percentages = <List<ExamResultPercent>>[];
+    for (int i = 1; i < 5; i++) {
+      percentages.add([
+        ExamResultPercent(
+          gender: 'M',
+          percent: (_numberForMode(
+              examsMale.where((e) => e.achievementLevel == i).toList(),
+              mode) *
+              100 / maleTotal).round() * (i < 3 ? -1 : 1),
+        ),
+        ExamResultPercent(
+          gender: 'All',
+          percent: (_numberForMode(
+              exams.where((e) => e.achievementLevel == i).toList(), mode) *
+              100 / allTotal).round() * (i < 3 ? -1 : 1),
+        ),
+        ExamResultPercent(
+          gender: 'F',
+          percent: (_numberForMode(
+              examsFemale.where((e) => e.achievementLevel == i).toList(),
+              mode) * 100 / femaleTotal).round() * (i < 3 ? -1 : 1),
+        ),
+      ]);
+    }
 
     final percentFiller1 = [
       ExamResultPercent(
-        gender: 'F',
-        percent: -100 - percentFail1[0].percent - percentFail2[0].percent,
+        gender: 'M',
+        percent: -100 - percentages[0][0].percent - percentages[1][0].percent,
       ),
       ExamResultPercent(
-        gender: 'M',
-        percent: -100 - percentFail1[1].percent - percentFail2[1].percent,
+        gender: 'All',
+        percent: -100 - percentages[0][1].percent - percentages[1][1].percent,
+      ),
+      ExamResultPercent(
+        gender: 'F',
+        percent: -100 - percentages[0][2].percent - percentages[1][2].percent,
       ),
     ];
 
     final percentFiller2 = [
       ExamResultPercent(
-        gender: 'F',
-        percent:
-            100 - percentCompetent1[0].percent - percentCompetent2[0].percent,
-      ),
-      ExamResultPercent(
         gender: 'M',
         percent:
-            100 - percentCompetent1[1].percent - percentCompetent2[1].percent,
+        100 - percentages[2][0].percent - percentages[3][0].percent,
+      ),
+      ExamResultPercent(
+        gender: 'All',
+        percent:
+        100 - percentages[2][1].percent - percentages[3][1].percent,
+      ),
+      ExamResultPercent(
+        gender: 'F',
+        percent:
+        100 - percentages[2][2].percent - percentages[3][2].percent,
       ),
     ];
 
@@ -200,14 +192,14 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
         colorFn: (_, __) => charts.Color(r: 255, g: 186, b: 10),
         domainFn: (ExamResultPercent sales, _) => sales.gender,
         measureFn: (ExamResultPercent sales, _) => sales.percent,
-        data: percentFail2,
+        data: percentages[1],
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'Result1',
         colorFn: (_, __) => const charts.Color(r: 248, g: 84, b: 84),
         domainFn: (ExamResultPercent sales, _) => sales.gender,
         measureFn: (ExamResultPercent sales, _) => sales.percent,
-        data: percentFail1,
+        data: percentages[0],
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'ResultFiller1',
@@ -221,14 +213,14 @@ class ExamsStackedHorizontalBarChart extends StatelessWidget {
         colorFn: (_, __) => const charts.Color(r: 148, g: 220, b: 57),
         domainFn: (ExamResultPercent sales, _) => sales.gender,
         measureFn: (ExamResultPercent sales, _) => sales.percent,
-        data: percentCompetent1,
+        data: percentages[2],
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'Result4',
         colorFn: (_, __) => const charts.Color(r: 13, g: 211, b: 92),
         domainFn: (ExamResultPercent sales, _) => sales.gender,
         measureFn: (ExamResultPercent sales, _) => sales.percent,
-        data: percentCompetent2,
+        data: percentages[3],
       ),
       charts.Series<ExamResultPercent, String>(
         id: 'ResultFiller2',

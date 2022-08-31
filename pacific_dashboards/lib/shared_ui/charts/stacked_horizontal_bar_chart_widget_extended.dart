@@ -40,7 +40,7 @@ class StackedHorizontalBarChartWidgetExtendedState
             child: charts.BarChart(
               _createSeries(widget.data),
               animate: false,
-              barGroupingType: charts.BarGroupingType.stacked,
+              barGroupingType: charts.BarGroupingType.groupedStacked,
               vertical: false,
               defaultInteractions: false,
               primaryMeasureAxis: charts.NumericAxisSpec(
@@ -70,7 +70,7 @@ class StackedHorizontalBarChartWidgetExtendedState
               ),
               defaultRenderer: charts.BarRendererConfig(
                 groupingType: charts.BarGroupingType.stacked,
-                strokeWidthPx: 1,
+                strokeWidthPx: 5,
               ),
             ),
           ),

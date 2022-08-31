@@ -1,6 +1,7 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pacific_dashboards/res/colors.dart';
 
 class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
     implements PreferredSizeWidget {
@@ -30,7 +31,7 @@ class PlatformAppBar extends PlatformWidget<AppBar, AppBar>
       leading: leading,
       title: title,
       iconTheme: iconTheme,
-      backgroundColor: backgroundColor,
+      backgroundColor: AppColors.kBlue,
       brightness: Brightness.dark,
       actions: actions,
     );

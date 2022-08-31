@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:pacific_dashboards/app.dart';
 import 'package:pacific_dashboards/service_locator.dart';
 import 'package:pacific_dashboards/shared_ui/error_listener.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,5 +27,8 @@ void main() async {
 
   defaultErrorListener = ErrorListener();
 
-  runApp(App());
+  final prefs = await SharedPreferences.getInstance();
+  final hideOnboarding = prefs.getBool('hideOnboarding') ?? false;
+
+  runApp(App(hideOnboarding: hideOnboarding));
 }

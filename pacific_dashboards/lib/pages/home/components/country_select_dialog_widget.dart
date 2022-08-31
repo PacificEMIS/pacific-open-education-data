@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/pages/download/download_page.dart';
 import 'package:pacific_dashboards/res/colors.dart';
@@ -18,28 +19,30 @@ class CountrySelectDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 244,
-      child: AlertDialog(
+    return AlertDialog(
         shape: const RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
         ),
-        contentPadding: const EdgeInsets.only(top: 10.0, right: 0),
-        title: Text(
-          'homeChangeCountryTitle'.localized(context),
-          style: Theme.of(context)
-              .textTheme
-              .headline3
-              .copyWith(color: AppColors.kTextMain),
-        ),
+        insetPadding: EdgeInsets.symmetric(horizontal: 10),
+        contentPadding: const EdgeInsets.only(top: 10.0),
+        title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            'homeChangeCountryTitle'.localized(context),
+            textAlign: TextAlign.start,
+            style: Theme.of(context).textTheme.headline3.copyWith(color: AppColors.kTextMain),
+          ),
+          Text('downloadCountryData'.localized(context),
+              style: Theme.of(context).textTheme.headline5.copyWith(fontWeight: FontWeight.w400)
+              // .copyWith(color: AppColors.kTextMain),
+              ),
+        ]),
         content: StreamBuilder<Emis>(
           stream: _viewModel.selectedEmisStream,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Container();
             }
-            return Container(
-              width: 280,
+            return Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -54,29 +57,11 @@ class CountrySelectDialog extends StatelessWidget {
                       );
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 80, 24, 20),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          DownloadPage.kRoute,
-                          arguments: DownloadPageArgs(emis: snapshot.data),
-                        );
-                      },
-                      child: Text(
-                        'downloadCurrentCountry'.localized(context),
-                        style: Theme.of(context).textTheme.button.copyWith(
-                              color: AppColors.kBlue,
-                            ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             );
           },
         ),
-      ),
     );
   }
 }
@@ -102,33 +87,72 @@ class _Country extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      splashColor: Theme.of(context).accentColor.withAlpha(30),
+      splashColor: Theme.of(context).colorScheme.secondary.withAlpha(30),
       onTap: () {
         Navigator.of(context).pop();
         _viewModel.onEmisChanged(_emis);
       },
       child: Container(
-        color:
-            _isSelected ? Color.fromRGBO(242, 246, 249, 1) : Colors.transparent,
+        color: _isSelected ? Color.fromRGBO(242, 246, 249, 1) : Colors.transparent,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.only(
-                left: 30.0,
-                top: 8,
-                bottom: 8,
-              ),
-              child: Image.asset(_emis.logo, width: 40, height: 40),
+            Expanded(
+              flex: 20,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(
+                    left: 30.0,
+                    top: 8,
+                    bottom: 8,
+                    right: 8
+                  ),
+                  child: (_isSelected)
+                      ? Stack(alignment: Alignment.bottomLeft, children: [
+                          Image.asset(_emis.logo, width: 40, height: 40),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            child: SvgPicture.asset(
+                              'images/rounded_check.svg',
+                            ),
+                            width: 12,
+                            height: 12,
+                          ),
+                        ])
+                      : Image.asset(_emis.logo, width: 40, height: 40)),
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Text(
+              flex: 40,
+              child:Text(
                   _emis.getName(context),
-                  style: Theme.of(context).textTheme.button,
-                ),
+                  style: Theme.of(context).textTheme.button.copyWith(fontSize: 18),
               ),
             ),
+         Expanded(
+              flex: 25,
+              child: _isSelected ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                    color:  Colors.black87,
+                   onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        DownloadPage.kRoute,
+                        arguments: DownloadPageArgs(emis: _emis),
+                      );
+                    },
+                    child: Text('Download', style: Theme.of(context).
+                    textTheme.button.copyWith(color: Colors.white)),
+                  ),
+                ),
+              ) : Container(),
+            ),
+            Container(width: 10),
           ],
         ),
       ),

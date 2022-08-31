@@ -69,15 +69,15 @@ class _TotalsQuestionSelectorPageState
         child: SizedBox(
           height: 56,
           width: 56,
-          child: FlatButton(
-            shape: RoundedRectangleBorder(
+          child: TextButton(
+    style: TextButton.styleFrom(shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(22.0),
             ),
+      backgroundColor: Theme.of(context).accentColor,),
             child: const Icon(
               Icons.done,
               color: Colors.white,
             ),
-            color: Theme.of(context).accentColor,
             onPressed: () => _apply(context),
           ),
         ),

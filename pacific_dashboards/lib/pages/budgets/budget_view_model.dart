@@ -111,6 +111,7 @@ class BudgetViewModel extends BaseViewModel {
     launchHandled(() async {
       _filters = filters;
       await _updatePageData();
+      _filtersSubject.add(_filters);
     });
   }
 }
