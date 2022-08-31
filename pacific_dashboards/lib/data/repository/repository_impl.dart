@@ -10,8 +10,6 @@ import 'package:pacific_dashboards/data/repository/repository.dart';
 import 'package:pacific_dashboards/models/accreditations/accreditation_chunk.dart';
 import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/models/emis.dart';
-import 'package:pacific_dashboards/models/exam/exam.dart';
-import 'package:pacific_dashboards/models/indicators/indicators.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_container.dart';
 import 'package:pacific_dashboards/models/individual_school/individual_school.dart';
 import 'package:pacific_dashboards/models/lookups/lookups.dart';
@@ -174,7 +172,8 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Stream<RepositoryResponse<IndicatorsContainer>> fetchAllIndicators(String districtCode) async* {
+  Stream<RepositoryResponse<IndicatorsContainer>> fetchAllIndicators(
+      String districtCode) async* {
     yield* _fetchWithoutEtag(
       getLocal: () => _localDataSource.fetchIndicators(districtCode),
       getRemote: () => _remoteDataSource.fetchIndicators(districtCode),
@@ -367,7 +366,7 @@ class RepositoryImpl implements Repository {
     try {
       remoteEnroll = await getRemote();
       await updateLocal(remoteEnroll);
-    } on NoNewDataRemoteException catch (_) {
+    } catch (_) {
       haveData = false;
       if (local.isNotEmpty) {
         remoteEnroll = local;

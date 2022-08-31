@@ -47,7 +47,7 @@ class EnrollViewModel extends BaseViewModel {
     );
   }
 
-  Future<void>  _onEnrollLoaded(SchoolEnrollChunk chunk) {
+  Future<void> _onEnrollLoaded(SchoolEnrollChunk chunk) {
     _chunk = chunk;
     return _parseData();
   }
