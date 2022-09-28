@@ -20,48 +20,54 @@ class CountrySelectDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
+      shape: const RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(const Radius.circular(8.0)),
+      ),
+      insetPadding: EdgeInsets.symmetric(horizontal: 10),
+      contentPadding: const EdgeInsets.only(top: 10.0),
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          'homeChangeCountryTitle'.localized(context),
+          textAlign: TextAlign.start,
+          style: Theme.of(context)
+              .textTheme
+              .headline3
+              .copyWith(color: AppColors.kTextMain),
         ),
-        insetPadding: EdgeInsets.symmetric(horizontal: 10),
-        contentPadding: const EdgeInsets.only(top: 10.0),
-        title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'homeChangeCountryTitle'.localized(context),
-            textAlign: TextAlign.start,
-            style: Theme.of(context).textTheme.headline3.copyWith(color: AppColors.kTextMain),
-          ),
-          Text('downloadCountryData'.localized(context),
-              style: Theme.of(context).textTheme.headline5.copyWith(fontWeight: FontWeight.w400)
-              // .copyWith(color: AppColors.kTextMain),
-              ),
-        ]),
-        content: StreamBuilder<Emis>(
-          stream: _viewModel.selectedEmisStream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Container();
-            }
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  ...Emis.values.map(
-                    (emis) {
-                      return _Country(
-                        emis: emis,
-                        viewModel: _viewModel,
-                        isSelected: emis == snapshot.data,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+        Text('downloadCountryData'.localized(context),
+            style: Theme.of(context)
+                .textTheme
+                .headline5
+                .copyWith(fontWeight: FontWeight.w400)
+            // .copyWith(color: AppColors.kTextMain),
+            ),
+      ]),
+      content: StreamBuilder<Emis>(
+        stream: _viewModel.selectedEmisStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container();
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ...Emis.values.map(
+                  (emis) {
+                    return _Country(
+                      emis: emis,
+                      viewModel: _viewModel,
+                      isSelected: emis == snapshot.data,
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -93,7 +99,8 @@ class _Country extends StatelessWidget {
         _viewModel.onEmisChanged(_emis);
       },
       child: Container(
-        color: _isSelected ? Color.fromRGBO(242, 246, 249, 1) : Colors.transparent,
+        color:
+            _isSelected ? Color.fromRGBO(242, 246, 249, 1) : Colors.transparent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,13 +108,9 @@ class _Country extends StatelessWidget {
             Expanded(
               flex: 20,
               child: Container(
-                alignment: Alignment.centerLeft,
+                  alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(
-                    left: 30.0,
-                    top: 8,
-                    bottom: 8,
-                    right: 8
-                  ),
+                      left: 30.0, top: 8, bottom: 8, right: 8),
                   child: (_isSelected)
                       ? Stack(alignment: Alignment.bottomLeft, children: [
                           Image.asset(_emis.logo, width: 40, height: 40),
@@ -124,33 +127,41 @@ class _Country extends StatelessWidget {
             ),
             Expanded(
               flex: 40,
-              child:Text(
-                  _emis.getName(context),
-                  style: Theme.of(context).textTheme.button.copyWith(fontSize: 18),
+              child: Text(
+                _emis.getName(context),
+                style:
+                    Theme.of(context).textTheme.button.copyWith(fontSize: 18),
               ),
             ),
-         Expanded(
+            Expanded(
               flex: 25,
-              child: _isSelected ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+              child: _isSelected
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 24),
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.black87,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              )),
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              DownloadPage.kRoute,
+                              arguments: DownloadPageArgs(emis: _emis),
+                            );
+                          },
+                          child: Text('Download',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(color: Colors.white)),
                         ),
-                    color:  Colors.black87,
-                   onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        DownloadPage.kRoute,
-                        arguments: DownloadPageArgs(emis: _emis),
-                      );
-                    },
-                    child: Text('Download', style: Theme.of(context).
-                    textTheme.button.copyWith(color: Colors.white)),
-                  ),
-                ),
-              ) : Container(),
+                      ),
+                    )
+                  : Container(),
             ),
             Container(width: 10),
           ],

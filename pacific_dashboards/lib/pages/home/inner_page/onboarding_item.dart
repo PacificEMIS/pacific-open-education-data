@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-
 class OnboardingItem {
   OnboardingItem({
-    this.title, this.text, this.imagePath,
+    this.title,
+    this.text,
+    this.imagePath,
     // required this.title,
     // required this.text,
     // required this.imagePath,

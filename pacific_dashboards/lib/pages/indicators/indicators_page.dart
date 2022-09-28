@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:arch/arch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,7 @@ class IndicatorsPageState extends MvvmState<IndicatorsViewModel, IndicatorsPage>
         ],
       ),
       body: LoadingStack(
+        errorStateStream: viewModel.errorMessagesStream,
         loadingStateStream: viewModel.activityIndicatorStream,
         child: SingleChildScrollView(
           child: Column(
@@ -85,7 +87,10 @@ class IndicatorsPageState extends MvvmState<IndicatorsViewModel, IndicatorsPage>
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                         child: Text(
                           viewModel != null ? viewModel.pageName : "",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, fontSize: 18),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 18),
                         ),
                         alignment: Alignment.centerLeft,
                       ),
@@ -143,8 +148,7 @@ class _PopulatedContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_indicators.first.sector.teachers);
-    print(_indicators.first.sector.toJson());
+    var shouldShowSchoolCount = _viewModel.shouldShowSchoolCount;
     return MiniTabLayout(
         padding: 0,
         tabs: _MainTab.values,
@@ -180,171 +184,428 @@ class _PopulatedContent extends StatelessWidget {
                     case _GenderTab.all:
                       return _IndicatorsTable(
                         indicators: _indicators,
-                        data: <String, Pair<num, num>>{
+                        data: <String, TypedPair<num, num>>{
                           'indicatorsContext': null,
-                          'indicatorsYearsOfSchooling': Pair(_indicators.first.enrolment.yearsOfSchooling,
+                          'indicatorsYearsOfSchooling': TypedPair(
+                              _indicators.first.enrolment.yearsOfSchooling,
                               _indicators.second.enrolment.yearsOfSchooling),
-                          'indicatorsStartAge': Pair(_indicators.first.enrolment.officialStartAge,
+                          'indicatorsStartAge': TypedPair(
+                              _indicators.first.enrolment.officialStartAge,
                               _indicators.second.enrolment.officialStartAge),
-                          // 'indicatorsNumberOfSchools': Pair(
-                          //     _indicators.first.schoolCount.count,
-                          //     _indicators.second.schoolCount.count),
+                          if (shouldShowSchoolCount)
+                            'indicatorsNumberOfSchools': TypedPair(
+                                _indicators.first.schoolCount.count,
+                                _indicators.second.schoolCount.count),
                           'indicatorsDemographic': null,
-                          'indicatorsPopulation':
-                              Pair(_indicators.first.enrolment.population, _indicators.second.enrolment.population),
-                          'indicatorsTotalEnrolment':
-                              Pair(_indicators.first.enrolment.enrol, _indicators.second.enrolment.enrol),
-                          'indicatorsOfficialAgeEnrolment': Pair(_indicators.first.enrolment.enrolOfficialAge,
+                          'indicatorsPopulation': TypedPair(_indicators.first.enrolment.population,
+                              _indicators.second.enrolment.population),
+                          'indicatorsTotalEnrolment': TypedPair(_indicators.first.enrolment.enrol,
+                              _indicators.second.enrolment.enrol),
+                          'indicatorsOfficialAgeEnrolment': TypedPair(
+                              _indicators.first.enrolment.enrolOfficialAge,
                               _indicators.second.enrolment.enrolOfficialAge),
-                          'indicatorsGrossEnrolment': Pair(_indicators.first.enrolment.grossEnrolmentRatio,
+                          'indicatorsGrossEnrolment': TypedPair(
+                              _indicators.first.enrolment.grossEnrolmentRatio,
                               _indicators.second.enrolment.grossEnrolmentRatio),
-                          'indicatorsNetEnrolment': Pair(_indicators.first.enrolment.netEnrolmentRatio,
+                          'indicatorsNetEnrolment': TypedPair(
+                              _indicators.first.enrolment.netEnrolmentRatio,
                               _indicators.second.enrolment.netEnrolmentRatio),
-
                           'indicatorsQuality': null,
-                          'numberOfTeachers':
-                              Pair(_indicators.first.sector.teachers, _indicators.second.sector.teachers),
-                          'certified': Pair(_indicators.first.sector.certified, _indicators.second.sector.certified),
-                          'certifiedPercentage': Pair(_indicators.first.sector.certifiedPercent,
-                              _indicators.second.sector.certifiedPercent),
-                          'qualified': Pair(_indicators.first.sector.qualified, _indicators.second.sector.qualified),
-                          'qualifiedPercentage': Pair(_indicators.first.sector.qualifiedPercent,
-                              _indicators.second.sector.qualifiedPercent),
-                          'pupilTeachersRation': Pair(_indicators.first.sector.pupilTeacherRatio,
-                              _indicators.second.sector.pupilTeacherRatio),
-                          'pupilCertifiedTeachersRation': Pair(_indicators.first.sector.pupilTeacherRatioCertified,
-                              _indicators.second.sector.pupilTeacherRatioCertified),
-                          'pupilQualifiedTeachersRation': Pair(_indicators.first.sector.pupilTeacherRatioCertQual,
-                              _indicators.second.sector.pupilTeacherRatioCertQual),
-
+                          'numberOfTeachers': TypedPair(_indicators.first.teacherELevel.teachers,
+                              _indicators.second.teacherELevel.teachers),
+                          'certified': TypedPair(_indicators.first.teacherELevel.certified,
+                              _indicators.second.teacherELevel.certified),
+                          'certifiedPercentage': TypedPair(
+                              _indicators.first.teacherELevel.certifiedPercent,
+                              _indicators.second.teacherELevel.certifiedPercent),
+                          'qualified': TypedPair(_indicators.first.teacherELevel.qualified,
+                              _indicators.second.teacherELevel.qualified),
+                          'qualifiedPercentage': TypedPair(
+                              _indicators.first.teacherELevel.qualifiedPercent,
+                              _indicators.second.teacherELevel.qualifiedPercent),
+                          'pupilTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatio,
+                              _indicators.second.teacherELevel.pupilTeacherRatio,
+                              isRatio: true),
+                          'pupilCertifiedTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatioCertified,
+                              _indicators.second.teacherELevel.pupilTeacherRatioCertified,
+                              isRatio: true),
+                          'pupilQualifiedTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatioQualified,
+                              _indicators.second.teacherELevel.pupilTeacherRatioQualified,
+                              isRatio: true),
                           'indicatorsProcess': null,
-                          'repeatersNumber':
-                              Pair(_indicators.first.enrolment.repeaters, _indicators.second.enrolment.repeaters),
-                          'repetitionRate': Pair(
-                              _indicators.first.enrolment.repeaters == 0
-                                  || _indicators.first.previous == null
-                                  || _indicators.first.previous.enrolment.enrol == 0
+                          'repeatersNumber': TypedPair(_indicators.first.enrolment.repeaters,
+                              _indicators.second.enrolment.repeaters),
+                          'repetitionRate': TypedPair(
+                              _indicators.first.enrolment.repeaters == 0 ||
+                                      _indicators.first.previous == null ||
+                                      _indicators.first.previous.enrolment.enrol == 0
                                   ? null
-                                  : _indicators.first.enrolment.repeaters / _indicators.first.previous.enrolment.enrol,
-                              _indicators.first.enrolment.repeaters == 0
-                                  || _indicators.first.previous == null
-                                  || _indicators.first.previous.enrolment.enrol == 0
+                                  : _indicators.first.enrolment.repeaters /
+                                      _indicators.first.previous.enrolment.enrol,
+                              _indicators.second.enrolment.repeaters == 0 ||
+                                      _indicators.second.previous == null ||
+                                      _indicators.second.previous.enrolment.enrol == 0
                                   ? null
-                                  : _indicators.second.enrolment.repeaters / _indicators.second.previous.enrolment.enrol
-                          ),
-
+                                  : _indicators.second.enrolment.repeaters /
+                                      _indicators.second.previous.enrolment.enrol),
                           'indicatorsOutcome': null,
-                          'indicatorsPopulation':
-                              Pair(_indicators.first.enrolment.population, _indicators.second.enrolment.population),
-                          'indicatorsTotalEnrolment':
-                              Pair(_indicators.first.enrolment.enrol, _indicators.second.enrolment.enrol),
-                          'indicatorsOfficialAgeEnrolment': Pair(_indicators.first.enrolment.enrolOfficialAge,
-                              _indicators.second.enrolment.enrolOfficialAge),
-                          'indicatorsGrossEnrolment': Pair(_indicators.first.enrolment.grossEnrolmentRatio,
-                              _indicators.second.enrolment.grossEnrolmentRatio),
-                          'indicatorsNetEnrolment': Pair(_indicators.first.enrolment.netEnrolmentRatio,
-                              _indicators.second.enrolment.netEnrolmentRatio),
-
-                          // 'indicatorsPopulation': null,
-                          'survivalRate':
-                              Pair(_indicators.first.enrolment.population, _indicators.second.enrolment.population),
-                          'intake': Pair(_indicators.first.enrolment.intake, _indicators.second.enrolment.intake),
-                          'grossIntakeRatio': Pair(_indicators.first.enrolment.grossIntakeRatio,
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'survivalRate': TypedPair(
+                              _indicators.first.survivalFromFirstYear,
+                              _indicators.second.survivalFromFirstYear,
+                              nameReplace: _indicators.first.survivalFromFirstYearString,
+                            ),
+                          'intake': TypedPair(_indicators.first.enrolment.intake,
+                              _indicators.second.enrolment.intake),
+                          'grossIntakeRatio': TypedPair(
+                              _indicators.first.enrolment.grossIntakeRatio,
                               _indicators.second.enrolment.grossIntakeRatio),
-                          'netIntake':
-                              Pair(_indicators.first.enrolment.netIntake, _indicators.second.enrolment.netIntake),
-                          'netIntakeRatio': Pair(
-                              _indicators.first.enrolment.netIntakeRatio, _indicators.second.enrolment.netIntakeRatio),
-                          'grossIRLG': Pair(_indicators.first.enrolmentLastGrade.grossIntakeRatio,
-                              _indicators.second.enrolmentLastGrade.grossIntakeRatio),
+                          'netIntake': TypedPair(_indicators.first.enrolment.netIntake,
+                              _indicators.second.enrolment.netIntake),
+                          'netIntakeRatio': TypedPair(_indicators.first.enrolment.netIntakeRatio,
+                              _indicators.second.enrolment.netIntakeRatio),
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'grossIRLG': TypedPair(
+                                _indicators.first.enrolmentLastGrade.grossIntakeRatio,
+                                _indicators.second.enrolmentLastGrade.grossIntakeRatio),
                         },
                       );
                     case _GenderTab.male:
                       return _IndicatorsTable(
                         indicators: _indicators,
-                        data: <String, Pair<num, num>>{
+                        data: <String, TypedPair<num, num>>{
                           'indicatorsContext': null,
-                          'indicatorsYearsOfSchooling': Pair(_indicators.first.enrolment.yearsOfSchooling,
+                          'indicatorsYearsOfSchooling': TypedPair(
+                              _indicators.first.enrolment.yearsOfSchooling,
                               _indicators.second.enrolment.yearsOfSchooling),
-                          'indicatorsStartAge': Pair(_indicators.first.enrolment.officialStartAge,
+                          'indicatorsStartAge': TypedPair(
+                              _indicators.first.enrolment.officialStartAge,
                               _indicators.second.enrolment.officialStartAge),
-                          //'indicatorsNumberOfSchools': Pair(
-                          //    _indicators.first.schoolCount.count,
-                          //    _indicators.second.schoolCount.count),
+                          if (shouldShowSchoolCount)
+                            'indicatorsNumberOfSchools': TypedPair(
+                                _indicators.first.schoolCount.count,
+                                _indicators.second.schoolCount.count),
                           'indicatorsDemographic': null,
-                          'indicatorsPopulation': Pair(
-                              _indicators.first.enrolment.populationMale, _indicators.second.enrolment.populationMale),
-                          'indicatorsTotalEnrolment':
-                              Pair(_indicators.first.enrolment.enrolMale, _indicators.second.enrolment.enrolMale),
-                          'indicatorsOfficialAgeEnrolment': Pair(_indicators.first.enrolment.enrolOfficialAgeMale,
+                          'indicatorsPopulation': TypedPair(
+                              _indicators.first.enrolment.populationMale,
+                              _indicators.second.enrolment.populationMale),
+                          'indicatorsTotalEnrolment': TypedPair(
+                              _indicators.first.enrolment.enrolMale,
+                              _indicators.second.enrolment.enrolMale),
+                          'indicatorsOfficialAgeEnrolment': TypedPair(
+                              _indicators.first.enrolment.enrolOfficialAgeMale,
                               _indicators.second.enrolment.enrolOfficialAgeMale),
-                          'indicatorsGrossEnrolment': Pair(_indicators.first.enrolment.grossEnrolmentRatioMale,
+                          'indicatorsGrossEnrolment': TypedPair(
+                              _indicators.first.enrolment.grossEnrolmentRatioMale,
                               _indicators.second.enrolment.grossEnrolmentRatioMale),
-                          'indicatorsNetEnrolment': Pair(_indicators.first.enrolment.netEnrolmentRatioMale,
+                          'indicatorsNetEnrolment': TypedPair(
+                              _indicators.first.enrolment.netEnrolmentRatioMale,
                               _indicators.second.enrolment.netEnrolmentRatioMale),
+                          'indicatorsQuality': null,
+                          'numberOfTeachers': TypedPair(
+                              _indicators.first.teacherELevel.teachersMale,
+                              _indicators.second.teacherELevel.teachersMale),
+                          'certified': TypedPair(_indicators.first.teacherELevel.certifiedMale,
+                              _indicators.second.teacherELevel.certifiedMale),
+                          'certifiedPercentage': TypedPair(
+                              _indicators.first.teacherELevel.certifiedPercentMale,
+                              _indicators.second.teacherELevel.certifiedPercentMale),
+                          'qualified': TypedPair(_indicators.first.teacherELevel.qualifiedMale,
+                              _indicators.second.teacherELevel.qualifiedMale),
+                          'qualifiedPercentage': TypedPair(
+                              _indicators.first.teacherELevel.qualifiedPercentMale,
+                              _indicators.second.teacherELevel.qualifiedPercentMale),
+                          'pupilTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatio,
+                              _indicators.second.teacherELevel.pupilTeacherRatio,
+                              isRatio: true),
+                          'pupilCertifiedTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatioCertified,
+                              _indicators.second.teacherELevel.pupilTeacherRatioCertified,
+                              isRatio: true),
+                          'pupilQualifiedTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatioQualified,
+                              _indicators.second.teacherELevel.pupilTeacherRatioQualified,
+                              isRatio: true),
+                          'indicatorsProcess': null,
+                          'repeatersNumber': TypedPair(_indicators.first.enrolment.repeatersMale,
+                              _indicators.second.enrolment.repeatersMale),
+                          'repetitionRate': TypedPair(
+                              _indicators.first.enrolment.repeatersMale == 0 ||
+                                      _indicators.first.previous == null ||
+                                      _indicators.first.previous.enrolment.enrolMale == 0
+                                  ? null
+                                  : _indicators.first.enrolment.repeatersMale /
+                                      _indicators.first.previous.enrolment.enrolMale,
+                              _indicators.second.enrolment.repeatersMale == 0 ||
+                                      _indicators.second.previous == null ||
+                                      _indicators.second.previous.enrolment.enrolMale == 0
+                                  ? null
+                                  : _indicators.second.enrolment.repeatersMale /
+                                      _indicators.second.previous.enrolment.enrolMale),
+                          'indicatorsOutcome': null,
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'survivalRate': TypedPair(
+                              _indicators.first.survivalFromFirstYearMale,
+                              _indicators.second.survivalFromFirstYearMale,
+                              nameReplace: _indicators.first.survivalFromFirstYearString,
+                            ),
+                          'intake': TypedPair(_indicators.first.enrolment.intakeMale,
+                              _indicators.second.enrolment.intakeMale),
+                          'grossIntakeRatio': TypedPair(
+                              _indicators.first.enrolment.grossIntakeRatioMale,
+                              _indicators.second.enrolment.grossIntakeRatioMale),
+                          'netIntake': TypedPair(_indicators.first.enrolment.netIntakeMale,
+                              _indicators.second.enrolment.netIntakeMale),
+                          'netIntakeRatio': TypedPair(
+                              _indicators.first.enrolment.netIntakeRatioMale,
+                              _indicators.second.enrolment.netIntakeRatioMale),
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'grossIRLG': TypedPair(
+                                _indicators.first.enrolmentLastGrade.grossIntakeRatioMale,
+                                _indicators.second.enrolmentLastGrade.grossIntakeRatioMale),
                         },
                       );
                     case _GenderTab.female:
                       return _IndicatorsTable(
                         indicators: _indicators,
-                        data: <String, Pair<num, num>>{
+                        data: <String, TypedPair<num, num>>{
                           'indicatorsContext': null,
-                          'indicatorsYearsOfSchooling': Pair(_indicators.first.enrolment.yearsOfSchooling,
+                          'indicatorsYearsOfSchooling': TypedPair(
+                              _indicators.first.enrolment.yearsOfSchooling,
                               _indicators.second.enrolment.yearsOfSchooling),
-                          'indicatorsStartAge': Pair(_indicators.first.enrolment.officialStartAge,
+                          'indicatorsStartAge': TypedPair(
+                              _indicators.first.enrolment.officialStartAge,
                               _indicators.second.enrolment.officialStartAge),
-                          //'indicatorsNumberOfSchools': Pair(
-                          //    _indicators.first.schoolCount.count,
-                          //    _indicators.second.schoolCount.count),
+                          if (shouldShowSchoolCount)
+                            'indicatorsNumberOfSchools': TypedPair(
+                                _indicators.first.schoolCount.count,
+                                _indicators.second.schoolCount.count),
                           'indicatorsDemographic': null,
-                          'indicatorsPopulation': Pair(_indicators.first.enrolment.populationFemale,
+                          'indicatorsPopulation': TypedPair(
+                              _indicators.first.enrolment.populationFemale,
                               _indicators.second.enrolment.populationFemale),
-                          'indicatorsTotalEnrolment':
-                              Pair(_indicators.first.enrolment.enrolFemale, _indicators.second.enrolment.enrolFemale),
-                          'indicatorsOfficialAgeEnrolment': Pair(_indicators.first.enrolment.enrolOfficialAgeFemale,
+                          'indicatorsTotalEnrolment': TypedPair(
+                              _indicators.first.enrolment.enrolFemale,
+                              _indicators.second.enrolment.enrolFemale),
+                          'indicatorsOfficialAgeEnrolment': TypedPair(
+                              _indicators.first.enrolment.enrolOfficialAgeFemale,
                               _indicators.second.enrolment.enrolOfficialAgeFemale),
-                          'indicatorsGrossEnrolment': Pair(_indicators.first.enrolment.grossEnrolmentRatioFemale,
+                          'indicatorsGrossEnrolment': TypedPair(
+                              _indicators.first.enrolment.grossEnrolmentRatioFemale,
                               _indicators.second.enrolment.grossEnrolmentRatioFemale),
-                          'indicatorsNetEnrolment': Pair(_indicators.first.enrolment.netEnrolmentRatioFemale,
+                          'indicatorsNetEnrolment': TypedPair(
+                              _indicators.first.enrolment.netEnrolmentRatioFemale,
                               _indicators.second.enrolment.netEnrolmentRatioFemale),
+                          'indicatorsQuality': null,
+                          'numberOfTeachers': TypedPair(
+                              _indicators.first.teacherELevel.teachersFemale,
+                              _indicators.second.teacherELevel.teachersFemale),
+                          'certified': TypedPair(_indicators.first.teacherELevel.certifiedFemale,
+                              _indicators.second.teacherELevel.certifiedFemale),
+                          'certifiedPercentage': TypedPair(
+                              _indicators.first.teacherELevel.certifiedPercentFemale,
+                              _indicators.second.teacherELevel.certifiedPercentFemale),
+                          'qualified': TypedPair(_indicators.first.teacherELevel.qualifiedFemale,
+                              _indicators.second.teacherELevel.qualifiedFemale),
+                          'qualifiedPercentage': TypedPair(
+                              _indicators.first.teacherELevel.qualifiedPercentFemale,
+                              _indicators.second.teacherELevel.qualifiedPercentFemale),
+                          'pupilTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatio,
+                              _indicators.second.teacherELevel.pupilTeacherRatio,
+                              isRatio: true),
+                          'pupilCertifiedTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatioCertified,
+                              _indicators.second.teacherELevel.pupilTeacherRatioCertified,
+                              isRatio: true),
+                          'pupilQualifiedTeachersRation': TypedPair(
+                              _indicators.first.teacherELevel.pupilTeacherRatioQualified,
+                              _indicators.second.teacherELevel.pupilTeacherRatioQualified,
+                              isRatio: true),
+                          'indicatorsProcess': null,
+                          'repeatersNumber': TypedPair(_indicators.first.enrolment.repeatersFemale,
+                              _indicators.second.enrolment.repeatersFemale),
+                          'repetitionRate': TypedPair(
+                              _indicators.first.enrolment.repeatersFemale == 0 ||
+                                      _indicators.first.previous == null ||
+                                      _indicators.first.previous.enrolment.enrolFemale == 0
+                                  ? null
+                                  : _indicators.first.enrolment.repeatersFemale /
+                                      _indicators.first.previous.enrolment.enrolFemale,
+                              _indicators.second.enrolment.repeatersFemale == 0 ||
+                                      _indicators.second.previous == null ||
+                                      _indicators.second.previous.enrolment.enrolFemale == 0
+                                  ? null
+                                  : _indicators.second.enrolment.repeatersFemale /
+                                      _indicators.second.previous.enrolment.enrolFemale),
+                          'indicatorsOutcome': null,
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'survivalRate': TypedPair(
+                              _indicators.first.survivalFromFirstYearFemale,
+                              _indicators.second.survivalFromFirstYearFemale,
+                              nameReplace: _indicators.first.survivalFromFirstYearString,
+                            ),
+                          'intake': TypedPair(_indicators.first.enrolment.intakeFemale,
+                              _indicators.second.enrolment.intakeFemale),
+                          'grossIntakeRatio': TypedPair(
+                              _indicators.first.enrolment.grossIntakeRatioFemale,
+                              _indicators.second.enrolment.grossIntakeRatioFemale),
+                          'netIntake': TypedPair(_indicators.first.enrolment.netIntakeFemale,
+                              _indicators.second.enrolment.netIntakeFemale),
+                          'netIntakeRatio': TypedPair(
+                              _indicators.first.enrolment.netIntakeRatioFemale,
+                              _indicators.second.enrolment.netIntakeRatioFemale),
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'grossIRLG': TypedPair(
+                                _indicators.first.enrolmentLastGrade.grossIntakeRatioFemale,
+                                _indicators.second.enrolmentLastGrade.grossIntakeRatioFemale),
                         },
                       );
                     case _GenderTab.femalePercent:
                       return _IndicatorsTable(
                         indicators: _indicators,
-                        data: <String, Pair<num, num>>{
+                        data: <String, TypedPair<num, num>>{
                           'indicatorsContext': null,
-                          'indicatorsYearsOfSchooling': Pair(_indicators.first.enrolment.yearsOfSchooling,
+                          'indicatorsYearsOfSchooling': TypedPair(
+                              _indicators.first.enrolment.yearsOfSchooling,
                               _indicators.second.enrolment.yearsOfSchooling),
-                          'indicatorsStartAge': Pair(_indicators.first.enrolment.officialStartAge,
+                          'indicatorsStartAge': TypedPair(
+                              _indicators.first.enrolment.officialStartAge,
                               _indicators.second.enrolment.officialStartAge),
-                          //'indicatorsNumberOfSchools': Pair(
-                          //    _indicators.first.schoolCount.count,
-                          //    _indicators.second.schoolCount.count),
+                          if (shouldShowSchoolCount)
+                            'indicatorsNumberOfSchools': TypedPair(
+                                _indicators.first.schoolCount.count,
+                                _indicators.second.schoolCount.count),
                           'indicatorsDemographic': null,
-                          'indicatorsPopulation': Pair(
-                              _Percent(
-                                  _indicators.first.enrolment.populationFemale, _indicators.first.enrolment.population),
+                          'indicatorsPopulation': TypedPair(
+                              _Percent(_indicators.first.enrolment.populationFemale,
+                                  _indicators.first.enrolment.population),
                               _Percent(_indicators.second.enrolment.populationFemale,
                                   _indicators.second.enrolment.population)),
-                          'indicatorsTotalEnrolment': Pair(
-                              _Percent(_indicators.first.enrolment.enrolFemale, _indicators.first.enrolment.enrol),
-                              _Percent(_indicators.second.enrolment.enrolFemale, _indicators.second.enrolment.enrol)),
-                          'indicatorsOfficialAgeEnrolment': Pair(
+                          'indicatorsTotalEnrolment': TypedPair(
+                              _Percent(_indicators.first.enrolment.enrolFemale,
+                                  _indicators.first.enrolment.enrol),
+                              _Percent(_indicators.second.enrolment.enrolFemale,
+                                  _indicators.second.enrolment.enrol)),
+                          'indicatorsOfficialAgeEnrolment': TypedPair(
                               _Percent(_indicators.first.enrolment.enrolOfficialAgeFemale,
                                   _indicators.first.enrolment.enrolOfficialAge),
                               _Percent(_indicators.second.enrolment.enrolOfficialAgeFemale,
                                   _indicators.second.enrolment.enrolOfficialAge)),
-                          'indicatorsGrossEnrolment': Pair(
+                          'indicatorsGrossEnrolment': TypedPair(
                               _Percent(_indicators.first.enrolment.grossEnrolmentRatioFemale,
-                                  _indicators.first.enrolment.grossEnrolmentRatio),
+                                  _indicators.first.enrolment.grossEnrolmentRatioMale),
                               _Percent(_indicators.second.enrolment.grossEnrolmentRatioFemale,
-                                  _indicators.second.enrolment.grossEnrolmentRatio)),
-                          'indicatorsNetEnrolment': Pair(
+                                  _indicators.second.enrolment.grossEnrolmentRatioMale),
+                              isRatio: true),
+                          'indicatorsNetEnrolment': TypedPair(
                               _Percent(_indicators.first.enrolment.netEnrolmentRatioFemale,
-                                  _indicators.first.enrolment.netEnrolmentRatio),
+                                  _indicators.first.enrolment.netEnrolmentRatioMale),
                               _Percent(_indicators.second.enrolment.netEnrolmentRatioFemale,
-                                  _indicators.second.enrolment.netEnrolmentRatio)),
+                                  _indicators.second.enrolment.netEnrolmentRatioMale),
+                              isRatio: true),
+                          'indicatorsQuality': null,
+                          'numberOfTeachers': TypedPair(
+                              _Percent(_indicators.first.teacherELevel.teachersFemale,
+                                  _indicators.first.teacherELevel.teachers),
+                              _Percent(_indicators.second.teacherELevel.teachersFemale,
+                                  _indicators.second.teacherELevel.teachers)),
+                          'certified': TypedPair(
+                              _Percent(_indicators.first.teacherELevel.certifiedFemale,
+                                  _indicators.first.teacherELevel.certified),
+                              _Percent(_indicators.second.teacherELevel.certifiedFemale,
+                                  _indicators.second.teacherELevel.certified)),
+                          'certifiedPercentage': TypedPair(
+                              _Percent(_indicators.first.teacherELevel.certifiedPercentFemale,
+                                  _indicators.first.teacherELevel.certifiedPercentMale),
+                              _Percent(_indicators.second.teacherELevel.certifiedPercentFemale,
+                                  _indicators.second.teacherELevel.certifiedPercentMale),
+                              isRatio: true),
+                          'qualified': TypedPair(
+                              _Percent(_indicators.first.teacherELevel.qualifiedFemale,
+                                  _indicators.first.teacherELevel.qualified),
+                              _Percent(_indicators.second.teacherELevel.qualifiedFemale,
+                                  _indicators.second.teacherELevel.qualified)),
+                          'qualifiedPercentage': TypedPair(
+                              _Percent(_indicators.first.teacherELevel.qualifiedPercentFemale,
+                                  _indicators.first.teacherELevel.qualifiedPercentMale),
+                              _Percent(_indicators.second.teacherELevel.qualifiedPercentFemale,
+                                  _indicators.second.teacherELevel.qualifiedPercentMale),
+                              isRatio: true),
+                          'indicatorsProcess': null,
+                          'repeatersNumber': TypedPair(
+                              _Percent(_indicators.first.enrolment.repeatersFemale,
+                                  _indicators.first.enrolment.repeaters),
+                              _Percent(_indicators.second.enrolment.repeatersFemale,
+                                  _indicators.second.enrolment.repeaters)),
+                          'repetitionRate': TypedPair(
+                              _indicators.first.enrolment.repeatersFemale == 0 ||
+                                      _indicators.first.enrolment.repeatersMale == 0 ||
+                                      _indicators.first.previous == null ||
+                                      _indicators.first.previous.enrolment.enrolFemale == 0 ||
+                                      _indicators.first.previous.enrolment.enrolMale == 0
+                                  ? null
+                                  : _Percent(
+                                      _indicators.first.enrolment.repeatersFemale /
+                                          _indicators.first.previous.enrolment.enrolFemale,
+                                      _indicators.first.enrolment.repeatersMale /
+                                          _indicators.first.previous.enrolment.enrolMale),
+                              _indicators.second.enrolment.repeatersFemale == 0 ||
+                                      _indicators.second.enrolment.repeatersMale == 0 ||
+                                      _indicators.second.previous == null ||
+                                      _indicators.second.previous.enrolment.enrolFemale == 0 ||
+                                      _indicators.second.previous.enrolment.enrolMale == 0
+                                  ? null
+                                  : _Percent(
+                                      _indicators.second.enrolment.repeatersFemale /
+                                          _indicators.second.previous.enrolment.enrolFemale,
+                                      _indicators.second.enrolment.repeatersMale /
+                                          _indicators.second.previous.enrolment.enrolMale),
+                              isRatio: true),
+                          'indicatorsOutcome': null,
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'survivalRate': TypedPair(
+                                _Percent(_indicators.first.survivalFromFirstYearFemale,
+                                    _indicators.first.survivalFromFirstYearMale),
+                                _Percent(_indicators.second.survivalFromFirstYearFemale,
+                                    _indicators.second.survivalFromFirstYearMale),
+                                nameReplace: _indicators.first.survivalFromFirstYearString,
+                                isRatio: true),
+                          'intake': TypedPair(
+                              _Percent(_indicators.first.enrolment.intakeFemale,
+                                  _indicators.first.enrolment.intake),
+                              _Percent(_indicators.second.enrolment.intakeFemale,
+                                  _indicators.second.enrolment.intake)),
+                          'grossIntakeRatio': TypedPair(
+                              _Percent(_indicators.first.enrolment.grossIntakeRatioFemale,
+                                  _indicators.first.enrolment.grossIntakeRatioMale),
+                              _Percent(_indicators.second.enrolment.grossIntakeRatioFemale,
+                                  _indicators.second.enrolment.grossIntakeRatioMale),
+                              isRatio: true),
+                          'netIntake': TypedPair(
+                              _Percent(_indicators.first.enrolment.netIntakeFemale,
+                                  _indicators.first.enrolment.netIntake),
+                              _Percent(_indicators.second.enrolment.netIntakeFemale,
+                                  _indicators.second.enrolment.netIntake)),
+                          'netIntakeRatio': TypedPair(
+                              _Percent(_indicators.first.enrolment.netIntakeRatioFemale,
+                                  _indicators.first.enrolment.netIntakeRatioMale),
+                              _Percent(_indicators.second.enrolment.netIntakeRatioFemale,
+                                  _indicators.second.enrolment.netIntakeRatioMale),
+                              isRatio: true),
+                          if (_indicators.first.enrolment.lastYear != '0')
+                            'grossIRLG': TypedPair(
+                                _Percent(
+                                    _indicators.first.enrolmentLastGrade.grossIntakeRatioFemale,
+                                    _indicators.first.enrolmentLastGrade.grossIntakeRatioMale),
+                                _Percent(
+                                    _indicators.second.enrolmentLastGrade.grossIntakeRatioFemale,
+                                    _indicators.second.enrolmentLastGrade.grossIntakeRatioMale),
+                                isRatio: true),
                         },
                       );
                   }
@@ -353,7 +614,7 @@ class _PopulatedContent extends StatelessWidget {
               );
             case _MainTab.charts:
               {
-                 return StreamBuilder<List<Indicator>>(
+                return StreamBuilder<List<Indicator>>(
                     stream: _viewModel.allDataStream,
                     builder: (ctx, snapshot) {
                       if (!snapshot.hasData) {
@@ -376,13 +637,15 @@ class _PopulatedContent extends StatelessWidget {
 
 class _IndicatorsTable extends StatelessWidget {
   const _IndicatorsTable(
-      {Key key, @required Pair<Indicator, Indicator> indicators, @required Map<String, Pair<num, num>> data})
+      {Key key,
+      @required Pair<Indicator, Indicator> indicators,
+      @required Map<String, TypedPair<num, num>> data})
       : _indicators = indicators,
         _data = data,
         super(key: key);
 
   final Pair<Indicator, Indicator> _indicators;
-  final Map<String, Pair<num, num>> _data;
+  final Map<String, TypedPair<num, num>> _data;
 
   @override
   Widget build(BuildContext context) {
@@ -400,7 +663,10 @@ class _IndicatorsTable extends StatelessWidget {
         String imagePath;
         switch (index) {
           case 0:
-            return CellData(value: data.domain, isLabel: data.measure == null);
+            var nameReplace = data.measure?.nameReplace ?? "";
+            return CellData(
+                value: nameReplace != "" ? nameReplace : data.domain,
+                isLabel: data.measure == null);
             break;
           case 1:
             if (data.measure != null) result = data.measure.first;
@@ -419,15 +685,52 @@ class _IndicatorsTable extends StatelessWidget {
         }
 
         if (result != null) {
-          return CellData(
-              value: result is int ? result.toString() : (result * 100).toStringAsFixed(2) + "%",
-              svgImagePath: imagePath,
-              imageX: 26,
-              imageY: 16);
+          String value;
+          if (result is int) {
+            value = result.toString();
+          } else {
+            if (data.measure.isRatio) {
+              value = result.toStringAsFixed(2);
+            } else {
+              value = (result * 100).toStringAsFixed(2) + "%";
+            }
+          }
+
+          return CellData(value: value, svgImagePath: imagePath, imageX: 26, imageY: 16);
         } else {
           return CellData(value: "");
         }
       },
     );
   }
+}
+
+class TypedPair<F, S> {
+  final F first;
+  final S second;
+  final bool isRatio;
+  final String nameReplace;
+
+  const TypedPair(
+    this.first,
+    this.second, {
+    this.isRatio = false,
+    this.nameReplace = '',
+  });
+
+  @override
+  String toString() {
+    return 'TypedPair{first: $first, second: $second, isRatio: $isRatio}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Pair &&
+          runtimeType == other.runtimeType &&
+          first == other.first &&
+          second == other.second;
+
+  @override
+  int get hashCode => first.hashCode ^ second.hashCode;
 }

@@ -26,6 +26,7 @@ import 'package:pacific_dashboards/data/database/model/budget/hive_budget.dart';
 import 'package:pacific_dashboards/data/database/model/exam/hive_exam.dart';
 import 'package:pacific_dashboards/data/database/model/indicators/hive_enrolment_by_level.dart';
 import 'package:pacific_dashboards/data/database/model/indicators/hive_indicators_school_count.dart';
+import 'package:pacific_dashboards/data/database/model/indicators/hive_survival_by_level.dart';
 import 'package:pacific_dashboards/data/database/model/individual_school/hive_individual_school.dart';
 import 'package:pacific_dashboards/data/database/model/individual_school/hive_individual_accreditation.dart';
 import 'package:pacific_dashboards/data/database/model/lookup/hive_class_level_lookup.dart';
@@ -48,13 +49,14 @@ import 'package:pacific_dashboards/data/database/model/wash/hive_water.dart';
 
 import '../model/indicators/hive_enrolment_by_education_year.dart';
 import '../model/indicators/hive_sector_by_level.dart';
+import '../model/indicators/hive_teachers_by_level.dart';
 import 'budgets_dao_impl.dart';
 
 ///
 ///                         <<<release 1>>>
 ///                               ▿
 /// typeIds {0, 1, 2, 3, 4, 5 ,6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-/// 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+/// 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30}
 ///
 class HiveDatabase extends Database {
   LookupsDao _lookupsDao;
@@ -107,6 +109,8 @@ class HiveDatabase extends Database {
       ..registerAdapter(HiveQuestionAdapter())
       ..registerAdapter(HiveSchoolAutorityAdapter())
       ..registerAdapter(HiveSectorByLevelAdapter())
+      ..registerAdapter(HiveTeachersByLevelAdapter())
+      ..registerAdapter(HiveSurvivalByLevelAdapter())
       ..registerAdapter(HiveEnrolmentByEducationYearAdapter());
 
     _lookupsDao = HiveLookupsDao();

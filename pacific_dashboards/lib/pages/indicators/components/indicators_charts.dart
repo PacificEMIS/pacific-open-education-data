@@ -30,7 +30,7 @@ class IndicatorsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final byPopulation = _indicators.where((e) => e.enrolment.population != 0)
+    final byPopulation = _indicators.where((e) => e.enrolment.population != 0 && e.enrolment.population != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.population,
@@ -38,7 +38,7 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.populationMale,
             ))
         .toList();
-    final byEnrol = _indicators.where((e) => e.enrolment.enrol != 0)
+    final byEnrol = _indicators.where((e) => e.enrolment.enrol != 0 && e.enrolment.enrol != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.enrol,
@@ -46,7 +46,7 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.enrolMale,
             ))
         .toList();
-    final byNetEnrol = _indicators.where((e) => e.enrolment.enrolOfficialAge != 0)
+    final byNetEnrol = _indicators.where((e) => e.enrolment.enrolOfficialAge != 0 && e.enrolment.enrolOfficialAge != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.enrolOfficialAge,
@@ -54,7 +54,7 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.enrolOfficialAgeMale,
             ))
         .toList();
-    final byNER = _indicators.where((e) => e.enrolment.netEnrolmentRatio != 0)
+    final byNER = _indicators.where((e) => e.enrolment.netEnrolmentRatio != 0 && e.enrolment.netEnrolmentRatio != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.netEnrolmentRatio,
@@ -62,7 +62,7 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.netEnrolmentRatioMale,
             ))
         .toList();
-    final byGER = _indicators.where((e) => e.enrolment.grossEnrolmentRatio != 0)
+    final byGER = _indicators.where((e) => e.enrolment.grossEnrolmentRatio != 0 && e.enrolment.grossEnrolmentRatio != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.grossEnrolmentRatio,
@@ -71,33 +71,32 @@ class IndicatorsChart extends StatelessWidget {
             ))
         .toList();
 
-    //TODO correct teachers numbers
-    final byTeachers = _indicators.where((e) => e.enrolment.population != 0)
+    final byTeachers = _indicators.where((e) => e.teacherELevel.teachers != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
-              total: e.enrolment.population,
-              female: e.enrolment.populationFemale,
-              male: e.enrolment.populationMale,
+              total: e.teacherELevel.teachers,
+              female: e.teacherELevel.teachersFemale,
+              male: e.teacherELevel.teachersMale,
             ))
         .toList();
-    final byTeachersC = _indicators.where((e) => e.enrolment.population != 0)
+    final byTeachersC = _indicators.where((e) => e.teacherELevel.certified != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
-              total: e.enrolment.population,
-              female: e.enrolment.populationFemale,
-              male: e.enrolment.populationMale,
+              total: e.teacherELevel.certified,
+              female: e.teacherELevel.certifiedFemale,
+              male: e.teacherELevel.certifiedMale,
             ))
         .toList();
-    final byTeachersQ = _indicators.where((e) => e.enrolment.population != 0)
+    final byTeachersQ = _indicators.where((e) => e.teacherELevel.qualified != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
-              total: e.enrolment.population,
-              female: e.enrolment.populationFemale,
-              male: e.enrolment.populationMale,
+              total: e.teacherELevel.qualified,
+              female: e.teacherELevel.qualifiedFemale,
+              male: e.teacherELevel.qualifiedMale,
             ))
         .toList();
 
-    final byRepeaters = _indicators.where((e) => e.enrolment.repeaters != 0)
+    final byRepeaters = _indicators.where((e) => e.enrolment.repeaters != 0 && e.enrolment.repeaters != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.repeaters,
@@ -117,7 +116,7 @@ class IndicatorsChart extends StatelessWidget {
         : null)
         .toList().where((e) => e != null).toList();
 
-    final byIntake = _indicators.where((e) => e.enrolment.intake != 0)
+    final byIntake = _indicators.where((e) => e.enrolment.intake != 0 && e.enrolment.intake != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.intake,
@@ -125,7 +124,7 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.intakeMale,
             ))
         .toList();
-    final byGir = _indicators.where((e) => e.enrolment.grossIntakeRatio != 0)
+    final byGir = _indicators.where((e) => e.enrolment.grossIntakeRatio != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.grossIntakeRatio,
@@ -133,7 +132,7 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.grossIntakeRatioMale,
             ))
         .toList();
-    final byNetIntake = _indicators.where((e) => e.enrolment.netIntake != 0)
+    final byNetIntake = _indicators.where((e) => e.enrolment.netIntake != 0 && e.enrolment.netIntake != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.netIntake,
@@ -141,7 +140,7 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.netIntakeMale,
             ))
         .toList();
-    final byNIR = _indicators.where((e) => e.enrolment.netIntakeRatio != 0)
+    final byNIR = _indicators.where((e) => e.enrolment.netIntakeRatio != null)
         .map((e) => EnrollDataByYear(
               year: int.parse(e.enrolment.year),
               total: e.enrolment.netIntakeRatio,
@@ -149,6 +148,35 @@ class IndicatorsChart extends StatelessWidget {
               male: e.enrolment.netIntakeRatioMale,
             ))
         .toList();
+    final bySurvive = _indicators.where((e) => e.survivalFromFirstYear != 0 && e.survivalFromFirstYear != null)
+        .map((e) => EnrollDataByYear(
+      year: int.parse(e.enrolment.year),
+      total: e.survivalFromFirstYear,
+      female: e.survivalFromFirstYearFemale,
+      male: e.survivalFromFirstYearMale,
+    ))
+        .toList();
+    final byGirLast = _indicators.where((e) => e.enrolmentLastGrade.grossIntakeRatio != null)
+        .map((e) => EnrollDataByYear(
+      year: int.parse(e.enrolmentLastGrade.year),
+      total: e.enrolmentLastGrade.grossIntakeRatio,
+      female: e.enrolmentLastGrade.grossIntakeRatioFemale,
+      male: e.enrolmentLastGrade.grossIntakeRatioMale,
+    ))
+        .toList();
+
+    var tabsOutcome = ['intake', 'grossIntakeRatio', 'netIntake', 'netIntakeRatio'];
+    var tabsDemographics = ['population', 'enrolment', 'netEnrolmentRatio', 'grossEnrolmentRatio'];
+    var tabsQuality = ['certified'];
+    if (_indicators.first.enrolment.educationLevelCode != 'PRI') {
+      tabsDemographics.add('netEnrolment');
+      tabsQuality.add('teachers');
+      tabsQuality.add('qualified');
+    }
+    if (_indicators.first.enrolment.educationLevelCode != 'ECE') {
+      tabsOutcome.add('survivalRate');
+      tabsOutcome.add('grossIRLG');
+    }
 
     return Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 0, 0),
@@ -160,7 +188,7 @@ class IndicatorsChart extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, fontSize: 18),
             ),
             MiniTabLayout(
-                tabs: ['population', 'enrolment', 'netEnrolment', 'netEnrolmentRatio', 'grossEnrolmentRatio'],
+                tabs: tabsDemographics,
                 padding: 0.0,
                 tabNameBuilder: (tab) {
                   switch (tab) {
@@ -208,7 +236,7 @@ class IndicatorsChart extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, fontSize: 18),
             ),
             MiniTabLayout(
-                tabs: ['teachers', 'certified', 'qualified'],
+                tabs: tabsQuality,
                 padding: 0.0,
                 tabNameBuilder: (tab) {
                   switch (tab) {
@@ -271,8 +299,9 @@ class IndicatorsChart extends StatelessWidget {
               'indicatorsOutcome'.localized(context),
               style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, fontSize: 18),
             ),
+
             MiniTabLayout(
-                tabs: ['intake', 'grossIntakeRatio', 'netIntake', 'netIntakeRatio'],
+                tabs: tabsOutcome,
                 padding: 0.0,
                 tabNameBuilder: (tab) {
                   switch (tab) {
@@ -288,22 +317,40 @@ class IndicatorsChart extends StatelessWidget {
                     case 'netIntakeRatio':
                       return 'netIntakeRatio'.localized(context);
                       break;
+                    case 'survivalRate':
+                      return _indicators.first.survivalFromFirstYearString;
+                      break;
+                    case 'grossIRLG':
+                      return 'grossIRLG'.localized(context);
+                      break;
                   }
                   throw FallThroughError();
                 },
                 builder: (ctx, tab) {
                   switch (tab) {
                     case 'intake':
-                      return _chartWithNameAndData('intake'.localized(context), byIntake);
+                      return _chartWithNameAndData(
+                          'intake'.localized(context), byIntake);
                       break;
                     case 'grossIntakeRatio':
-                      return _chartWithNameAndData('grossIntakeRatio'.localized(context), byGir);
+                      return _chartWithNameAndData(
+                          'grossIntakeRatio'.localized(context), byGir);
                       break;
                     case 'netIntake':
-                      return _chartWithNameAndData('netIntake'.localized(context), byNetIntake);
+                      return _chartWithNameAndData(
+                          'netIntake'.localized(context), byNetIntake);
                       break;
                     case 'netIntakeRatio':
-                      return _chartWithNameAndData('netIntakeRatio'.localized(context), byNIR);
+                      return _chartWithNameAndData(
+                          'netIntakeRatio'.localized(context), byNIR);
+                      break;
+                    case 'survivalRate':
+                      return _chartWithNameAndData(
+                          'survivalRate'.localized(context), bySurvive);
+                      break;
+                    case 'grossIRLG':
+                      return _chartWithNameAndData(
+                          'grossIRLG'.localized(context), byGirLast);
                       break;
                   }
                   throw FallThroughError();

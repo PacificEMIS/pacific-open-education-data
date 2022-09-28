@@ -87,17 +87,26 @@ class ExamsViewModel extends BaseViewModel {
             Filter(
                 id: 0,
                 title: 'Exams',
-                items: exams.uniques((it) => it.name)
-                    .map((e) => FilterItem(e, e.toString())).toList(),
-                selectedIndex: 0
-            ),
+                items: exams
+                    .where((element) => element.recordType == 'Exam')
+                    .uniques((it) => it.key)
+                    .map((e) => FilterItem(
+                        e,
+                        exams
+                            .firstWhere(
+                                (element) => element.key == e && element.recordType == 'Exam')
+                            .description))
+                    .toList(),
+                selectedIndex: 0),
             Filter(
               id: 0,
               title: 'filtersByState',
               items: [
                 FilterItem(null, 'filtersDisplayAllStates'),
-                ..._lookups.districts.where((e) => e.name != '').map((e) =>
-                    FilterItem(e.code, e.name)).toList(),
+                ..._lookups.districts
+                    .where((e) => e.name != '')
+                    .map((e) => FilterItem(e.code, e.name))
+                    .toList(),
               ],
               selectedIndex: 0,
             ),
@@ -106,21 +115,17 @@ class ExamsViewModel extends BaseViewModel {
                 title: 'filtersByGovernment',
                 items: [
                   FilterItem(null, 'filtersDisplayAllGovernmentFilters'),
-                  ..._lookups.authorityGovt.map((e) =>
-                      FilterItem(e.code, e.name)).toList()
+                  ..._lookups.authorityGovt.map((e) => FilterItem(e.code, e.name)).toList()
                 ],
-                selectedIndex: 0
-            ),
+                selectedIndex: 0),
             Filter(
                 id: 0,
                 title: 'filtersByAuthority',
                 items: [
                   FilterItem(null, 'filtersDisplayAllAuthority'),
-                  ..._lookups.authorities.map((e) =>
-                      FilterItem(e.code, e.name)).toList(),
+                  ..._lookups.authorities.map((e) => FilterItem(e.code, e.name)).toList(),
                 ],
-                selectedIndex: 0
-            ),
+                selectedIndex: 0),
           ];
           _updatePageData();
         },
@@ -135,11 +140,7 @@ class ExamsViewModel extends BaseViewModel {
 
   ExamsFilterData get _filterData {
     return ExamsFilterData(
-        _navigator.showModeId,
-        _navigator.recordTypeName,
-        _navigator.showModeName,
-        _filters
-    );
+        _navigator.showModeId, _navigator.recordTypeName, _navigator.showModeName, _filters);
   }
 
   void onFiltersChanged(List<Filter> filters) {
@@ -155,7 +156,8 @@ class ExamsViewModel extends BaseViewModel {
 
   Stream<String> get noteStream => _pageNoteSubject.stream;
 
-  Stream<Map<String, Map<String, Map<String, List<ExamSeparated>>>>> get dataStream => _dataSubject.stream;
+  Stream<Map<String, Map<String, Map<String, List<ExamSeparated>>>>> get dataStream =>
+      _dataSubject.stream;
 
   Stream<ExamsFilterData> get filtersStream => _filtersSubject.stream;
 

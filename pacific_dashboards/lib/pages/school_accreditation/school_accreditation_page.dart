@@ -25,7 +25,8 @@ class SchoolAccreditationsPage extends MvvmStatefulWidget {
     Key key,
   }) : super(
           key: key,
-          viewModelBuilder: (ctx) => ViewModelFactory.instance.createSchoolAccreditationViewModel(ctx),
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createSchoolAccreditationViewModel(ctx),
         );
 
   @override
@@ -59,6 +60,7 @@ class SchoolsPageState extends MvvmState<SchoolAccreditationViewModel, SchoolAcc
       ),
       body: LoadingStack(
         loadingStateStream: viewModel.activityIndicatorStream,
+        errorStateStream: viewModel.errorMessagesStream,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           physics: const AlwaysScrollableScrollPhysics(),
@@ -71,7 +73,7 @@ class SchoolsPageState extends MvvmState<SchoolAccreditationViewModel, SchoolAcc
                 stream: viewModel.dataStream,
                 builder: (ctx, snapshot) {
                   if (!snapshot.hasData) {
-                    return Container();
+                    return SizedBox();
                   } else {
                     return _ContentBody(data: snapshot.data);
                   }
@@ -122,18 +124,24 @@ class _ContentBody extends StatelessWidget {
           'schoolsAccreditationDashboardsProgressTitle'.localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
-        _buildMiniTabLayoutAccreditationProgress(context, [
-          _data.accreditationProgressByYearData,
-          _data.accreditationProgressByYearCumulativeData,
-        ], _data.year),
+        _buildMiniTabLayoutAccreditationProgress(
+            context,
+            [
+              _data.accreditationProgressByYearData,
+              _data.accreditationProgressByYearCumulativeData,
+            ],
+            _data.year),
         Text(
           'schoolsAccreditationDashboardsProgressByStateTitle'.localized(context),
           style: Theme.of(context).textTheme.headline4,
         ),
-        _buildMiniTabLayoutAccreditationProgress(context, [
-          _data.districtStatusData,
-          _data.districtStatusCumulativeData,
-        ], _data.districtStatusData.keys.first), // TODO Update
+        _buildMiniTabLayoutAccreditationProgress(
+            context,
+            [
+              _data.districtStatusData,
+              _data.districtStatusCumulativeData,
+            ],
+            _data.districtStatusData.keys.first), // TODO Update
         Text(
           'schoolsAccreditationDashboardsProgressNationalTitle'.localized(context),
           style: Theme.of(context).textTheme.headline4,

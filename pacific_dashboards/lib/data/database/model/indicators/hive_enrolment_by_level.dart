@@ -188,7 +188,7 @@ class HiveEnrolmentByLevel extends HiveObject with Expirable {
     ..netRepeatersMale = enrolmentByLevel.netRepeatersMale
     ..netRepeatersFemale = enrolmentByLevel.netRepeatersFemale
     ..netRepeaters = enrolmentByLevel.netRepeaters
-    ..intakeMale = enrolmentByLevel.intakeFemale
+    ..intakeMale = enrolmentByLevel.intakeMale
     ..intakeFemale = enrolmentByLevel.intakeFemale
     ..intake = enrolmentByLevel.intake
     ..netIntakeMale = enrolmentByLevel.netIntakeMale

@@ -1,6 +1,4 @@
-import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
-import 'package:pacific_dashboards/models/budget/budget.dart';
 import 'package:pacific_dashboards/shared_ui/charts/bar_chart_widget.dart';
 import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
 import 'package:pacific_dashboards/shared_ui/charts/pie_chart_widget.dart';
@@ -51,13 +49,16 @@ class ChartFactory {
     throw FallThroughError();
   }
 
-  static Widget createStackedHorizontalBarChartViewByData({Map<String, List<int>> chartData, ColorFunc colorFunc}) {
+  static Widget createStackedHorizontalBarChartViewByData(
+      {Map<String, List<int>> chartData, ColorFunc colorFunc}) {
+    // final tableData = chartData != null && true
+    //     ? chartData[selectedItem]
+    //         .map((e) => ChartData('Level ${id}', e, colorFunc(id++)))
+    //         .toList()
+    //     : [];
+    int ids = 0;
 
-    // final tableData = chartData != null && true ? chartData[selectedItem].map((e) => ChartData('Level ${id}', e,
-    //     colorFunc(id++)))
-    //     .toList() : [];
-
-    return (chartData.length == 0)
+    return chartData.length == 0
         ? Container()
         : Column(children: [
             Container(
@@ -74,17 +75,15 @@ class ChartFactory {
                   return tab;
                 },
                 builder: (ctx, tab) {
-                  print(tab.toString());
-                  var id = 0;
-                  print (id);
-                  SizedBox(width: 10, height:  10,);
-                  ChartInfoTableWidget(
-                      chartData[tab.toString()].map((e) {
-                        ChartData('Level ${tab}', e, colorFunc(id++));
-                      }).toList(),
-                      'Level',
-                      'Amount',
-                      true);
+                  int id = 0;
+                  List<ChartData> chartDataList = [];
+                  chartData.values.elementAt(ids).map((e) {
+                    chartDataList
+                        .add(ChartData('Level ${id}', e, colorFunc(id++)));
+                  }).toList();
+                  ids++;
+                  return ChartInfoTableWidget(
+                      chartDataList, 'Level', 'Amount', true);
                 })
           ]);
   }

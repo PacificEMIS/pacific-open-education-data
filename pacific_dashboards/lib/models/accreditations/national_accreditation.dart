@@ -5,37 +5,37 @@ part 'national_accreditation.g.dart';
 
 @JsonSerializable()
 class NationalAccreditation implements Accreditation {
-  @JsonKey(name: 'SurveyYear')
+  @JsonKey(name: 'SurveyYear', defaultValue: 0)
   @override
   final int surveyYear;
 
-  @JsonKey(name: 'DistrictCode')
+  @JsonKey(name: 'DistrictCode', defaultValue: '')
   @override
   final String districtCode;
 
-  @JsonKey(name: 'District')
+  @JsonKey(name: 'District', defaultValue: '')
   final String district;
 
-  @JsonKey(name: 'AuthorityCode')
+  @JsonKey(name: 'AuthorityCode', defaultValue: '')
   @override
   final String authorityCode;
 
-  @JsonKey(name: 'Authority')
+  @JsonKey(name: 'Authority', defaultValue: '')
   final String authority;
 
-  @JsonKey(name: 'AuthorityGovtCode')
+  @JsonKey(name: 'AuthorityGovtCode', defaultValue: '')
   final String authorityGovtCode;
 
-  @JsonKey(name: 'AuthorityGovt')
+  @JsonKey(name: 'AuthorityGovt', defaultValue: '')
   final String authorityGovt;
 
-  @JsonKey(name: 'SchoolTypeCode')
+  @JsonKey(name: 'SchoolTypeCode', defaultValue: '')
   final String schoolTypeCode;
 
-  @JsonKey(name: 'SchoolType')
+  @JsonKey(name: 'SchoolType', defaultValue: '')
   final String schoolType;
 
-  @JsonKey(name: 'InspectionResult')
+  @JsonKey(name: 'InspectionResult', defaultValue: '')
   final String inspectionResult;
 
   @JsonKey(name: 'Num', defaultValue: 0)

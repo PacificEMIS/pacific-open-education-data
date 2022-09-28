@@ -2,8 +2,8 @@ import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/pages/exams/components/exams_filters.dart';
-import 'package:pacific_dashboards/pages/exams/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/components/exams_stacked_horizontal_bar_chart.dart';
+import 'package:pacific_dashboards/pages/exams/exams_navigator.dart';
 import 'package:pacific_dashboards/pages/exams/exams_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
@@ -60,6 +60,7 @@ class ExamsPageState extends MvvmState<ExamsViewModel, ExamsPage> {
         ],
       ),
       body: LoadingStack(
+        errorStateStream: viewModel.errorMessagesStream,
         loadingStateStream: viewModel.activityIndicatorStream,
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
@@ -137,11 +138,11 @@ class _PopulatedContent extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              ..._examResults
-                  .mapToList((key, value) => key != 'resultByGender' ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[
-                    Text(
+              ..._examResults.mapToList((key, value) => key != 'resultByGender'
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
                           key.localized(context),
                           style: Theme.of(context).textTheme.headline3.copyWith(
                                 color: Colors.black,
@@ -152,7 +153,9 @@ class _PopulatedContent extends StatelessWidget {
                           maxLines: 5,
                         ),
                         ...tables(key, value, context, snapshot)
-                      ],) : Container()),
+                      ],
+                    )
+                  : Container()),
               SizedBox(height: 12),
               Text(
                 'achievementByGenderLabel'.localized(context),
@@ -163,7 +166,8 @@ class _PopulatedContent extends StatelessWidget {
                     ),
                 textAlign: TextAlign.left,
               ),
-              ExamsStackedHorizontalBarGenderChart.fromModel(allUngrouped, context, snapshot.data.showModeId),
+              ExamsStackedHorizontalBarGenderChart.fromModel(
+                  allUngrouped, context, snapshot.data.showModeId),
             ],
           );
         }
@@ -171,12 +175,11 @@ class _PopulatedContent extends StatelessWidget {
     );
   }
 
-  Iterable<Widget> tables(String name, Map<String, Map<String, List<ExamSeparated>>> result, BuildContext context,
-      AsyncSnapshot<ExamsFilterData> snapshot) {
+  Iterable<Widget> tables(String name, Map<String, Map<String, List<ExamSeparated>>> result,
+      BuildContext context, AsyncSnapshot<ExamsFilterData> snapshot) {
     return result.keys.map((it) {
       var results = result[it];
-      if (results.length > 1)
-      results.removeWhere((key, value) => key == '');
+      if (results.length > 1) results.removeWhere((key, value) => key == '');
       return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -184,7 +187,7 @@ class _PopulatedContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              it,
+              results.values.first.first.description,
               style: Theme.of(context).textTheme.subtitle2,
               textAlign: TextAlign.left,
               maxLines: 5,
@@ -210,11 +213,14 @@ class _PopulatedContent extends StatelessWidget {
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        ExamsStackedHorizontalBarChart.fromModel(results[results.keys.firstWhere((element) => element == tab)], snapshot.data.showModeId),
+                        ExamsStackedHorizontalBarChart.fromModel(
+                            results[results.keys.firstWhere((element) => element == tab)],
+                            snapshot.data.showModeId),
                       ],
                     );
                   }
-                  return ExamsStackedHorizontalBarChart.fromModel(results[it], snapshot.data.showModeId);
+                  return ExamsStackedHorizontalBarChart.fromModel(
+                      results[it], snapshot.data.showModeId);
                 }),
           ],
         ),

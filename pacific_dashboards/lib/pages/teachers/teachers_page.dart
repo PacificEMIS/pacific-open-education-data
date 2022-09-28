@@ -25,8 +25,7 @@ class TeachersPage extends MvvmStatefulWidget {
     Key key,
   }) : super(
           key: key,
-          viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.createTeachersViewModel(ctx),
+          viewModelBuilder: (ctx) => ViewModelFactory.instance.createTeachersViewModel(ctx),
         );
 
   @override
@@ -59,6 +58,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
         ],
       ),
       body: LoadingStack(
+        errorStateStream: viewModel.errorMessagesStream,
         loadingStateStream: viewModel.activityIndicatorStream,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -95,8 +95,7 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                               case _DashboardsTab.byState:
                                 return 'schoolsByState'.localized(context);
                               case _DashboardsTab.byGovtNonGovt:
-                                return 'schoolsByGovtNonGovt'
-                                    .localized(context);
+                                return 'schoolsByGovtNonGovt'.localized(context);
                             }
                             throw FallThroughError();
                           },
@@ -105,19 +104,22 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                               case _DashboardsTab.byAuthority:
                                 return Column(children: [
                                   SpecialEducationComponent(
-                                    data:   snapshot.data.teachersByAuthority, showTabs: false
-                                  ),
+                                      data: snapshot.data.teachersByAuthority, showTabs: false),
                                 ]);
                               case _DashboardsTab.byGovtNonGovt:
                                 return Column(children: [
                                   SpecialEducationComponent(
-                                      data:   snapshot.data.teachersByPrivacy, showTabs: false, title: 'teachersDashboardsPrivacyDomain',
+                                    data: snapshot.data.teachersByPrivacy,
+                                    showTabs: false,
+                                    title: 'teachersDashboardsPrivacyDomain',
                                   ),
                                 ]);
                               case _DashboardsTab.byState:
                                 return Column(children: [
                                   SpecialEducationComponent(
-                                      data:   snapshot.data.teachersByDistrict, showTabs: false, title: 'schoolsAccreditationDashboardsStateDomain',
+                                    data: snapshot.data.teachersByDistrict,
+                                    showTabs: false,
+                                    title: 'schoolsAccreditationDashboardsStateDomain',
                                   ),
                                 ]);
                             }
@@ -125,16 +127,10 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                           },
                         ),
                         Text('certifiedAndQualified'.localized(context),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3
-                                .copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
+                            style: Theme.of(context).textTheme.headline3.copyWith(
+                                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16)),
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
                           child: Text(
                             'Female  Male',
                             textAlign: TextAlign.center,
@@ -143,33 +139,32 @@ class TeachersPageState extends MvvmState<TeachersViewModel, TeachersPage> {
                         ),
                         (snapshot.data.teachersByCertification.length == 0)
                             ? Container()
-                            : Column(children: [StackedHorizontalBarChartWidgetExtended(
-                                data: snapshot.data.teachersByCertification,
-                                legend: [
-                                  'schoolsCertifiedQualified',
-                                  'qualifiedNotCertified',
-                                  'certifiedNotQualified',
-                                  'other'
-                                ],
-                                colorFunc: _levelIndexToColor,
-                              ),]),
+                            : Column(children: [
+                                StackedHorizontalBarChartWidgetExtended(
+                                  data: snapshot.data.teachersByCertification,
+                                  legend: [
+                                    'schoolsCertifiedQualified',
+                                    'qualifiedNotCertified',
+                                    'certifiedNotQualified',
+                                    'other'
+                                  ],
+                                  colorFunc: _levelIndexToColor,
+                                ),
+                              ]),
                         SizedBox(height: 10.0),
                         Text(
-                          'teachersDashboardsEnrollByLevelStateGenderTitle'
-                              .localized(context),
+                          'teachersDashboardsEnrollByLevelStateGenderTitle'.localized(context),
                           style: Theme.of(context).textTheme.headline3.copyWith(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                         ),
-                    TeachersMultiTableWidget(
-                                    objectKey: ObjectKey(snapshot.data
-                                        .enrollTeachersBySchoolLevelStateAndGender),
-                                    selectedTabData: snapshot
-                                        .data
-                                        .enrollTeachersBySchoolLevelStateAndGender
-                                        .all)
+                        TeachersMultiTableWidget(
+                            objectKey:
+                                ObjectKey(snapshot.data.enrollTeachersBySchoolLevelStateAndGender),
+                            selectedTabData:
+                                snapshot.data.enrollTeachersBySchoolLevelStateAndGender.all)
                       ],
                     );
                   }

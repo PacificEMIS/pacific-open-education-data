@@ -11,6 +11,7 @@ import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
+
 import 'components/enroll_data_by_gnp_government_component.dart';
 import 'components/spending_by_district_component.dart';
 
@@ -21,8 +22,7 @@ class BudgetsPage extends MvvmStatefulWidget {
     Key key,
   }) : super(
           key: key,
-          viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.createBudgetsViewModel(ctx),
+          viewModelBuilder: (ctx) => ViewModelFactory.instance.createBudgetsViewModel(ctx),
         );
 
   @override
@@ -53,6 +53,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
         ],
       ),
       body: LoadingStack(
+        errorStateStream: viewModel.errorMessagesStream,
         loadingStateStream: viewModel.activityIndicatorStream,
         child: SingleChildScrollView(
           child: SafeArea(
@@ -78,8 +79,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                                 '${'budgetsGnpAndGovernmentSpendingActualExpense'.localized(context)} ${snapshot.data.year}',
                           ),
                           _GnpAndGovernmentSpendingActualExpense(
-                            data: snapshot
-                                .data.dataByGnpAndGovernmentSpendingActual,
+                            data: snapshot.data.dataByGnpAndGovernmentSpendingActual,
                           ),
                           //-- GNP and Government Spending Budgeted
                           _TitleWidget(
@@ -87,8 +87,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                                 '${'budgetsGnpAndGovernmentSpendingBudgetedExpense'.localized(context)} ${snapshot.data.year}',
                           ),
                           _GnpAndGovernmentSpendingActualExpense(
-                            data: snapshot
-                                .data.dataByGnpAndGovernmentSpendingBudgeted,
+                            data: snapshot.data.dataByGnpAndGovernmentSpendingBudgeted,
                           ),
                           //-- Spending By States
                           _TitleWidget(
@@ -105,8 +104,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           ),
                           SpendingByDistrictComponent(
                             data: snapshot.data.dataSpendingBySectorAndYear,
-                            dataFiltered: snapshot
-                                .data.dataSpendingBySectorAndYearFiltered,
+                            dataFiltered: snapshot.data.dataSpendingBySectorAndYearFiltered,
                             domain: 'budgetsSectorsDomain',
                           ),
                           _TitleWidget(
@@ -115,8 +113,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
                           ),
                           SpendingByDistrictComponent(
                             data: snapshot.data.dataSpendingByDistrict,
-                            dataFiltered:
-                                snapshot.data.dataSpendingByDistrictFiltered,
+                            dataFiltered: snapshot.data.dataSpendingByDistrictFiltered,
                             domain: 'budgetsStatesDomain',
                           ),
                         ],
@@ -152,6 +149,7 @@ class _BudgetPageState extends MvvmState<BudgetViewModel, BudgetsPage> {
 }
 
 enum _GovtTab { gnp, govtExpenditure }
+
 enum _SpendingTab { ece, primary, secondary, total }
 
 class _TitleWidget extends StatelessWidget {

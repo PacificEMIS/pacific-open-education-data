@@ -271,4 +271,12 @@ class IndicatorsEnrolmentByEducationYear {
       _$IndicatorsEnrolmentByEducationYearFromJson(json);
 
   Map<String, dynamic> toJson() => _$IndicatorsEnrolmentByEducationYearToJson(this);
+
+  int get studyYear {
+    try {
+      return int.tryParse(yearOfEducation);
+    } catch (e) {
+      return -1;
+    }
+  }
 }

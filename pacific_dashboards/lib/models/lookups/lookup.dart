@@ -5,10 +5,10 @@ part 'lookup.g.dart';
 
 @JsonSerializable()
 class Lookup {
-  @JsonKey(name: 'C')
+  @JsonKey(name: 'C', defaultValue: '')
   final String code;
 
-  @JsonKey(name: 'N')
+  @JsonKey(name: 'N', defaultValue: '')
   final String name;
 
   const Lookup({

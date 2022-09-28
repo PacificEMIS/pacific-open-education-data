@@ -1,22 +1,20 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pacific_dashboards/models/filter/filter.dart';
 import 'package:pacific_dashboards/pages/filter/filter_page.dart';
 import 'package:pacific_dashboards/pages/schools/schools_page_data.dart';
 import 'package:pacific_dashboards/pages/schools/schools_view_model.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
-import 'package:pacific_dashboards/models/filter/filter.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
 import 'package:pacific_dashboards/shared_ui/loading_stack.dart';
 import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/page_note_widget.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
+import 'package:pacific_dashboards/shared_ui/tables/multi_table.dart';
 import 'package:pacific_dashboards/shared_ui/tables/multi_table_widget.dart';
 import 'package:pacific_dashboards/view_model_factory.dart';
-
-import '../indicators/components/indicators_filters.dart';
 
 class SchoolsPage extends MvvmStatefulWidget {
   static const String kRoute = '/Schools';
@@ -24,8 +22,7 @@ class SchoolsPage extends MvvmStatefulWidget {
   SchoolsPage({Key key})
       : super(
           key: key,
-          viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.createSchoolsViewModel(ctx),
+          viewModelBuilder: (ctx) => ViewModelFactory.instance.createSchoolsViewModel(ctx),
         );
 
   @override
@@ -56,6 +53,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
         ],
       ),
       body: LoadingStack(
+        errorStateStream: viewModel.errorMessagesStream,
         loadingStateStream: viewModel.activityIndicatorStream,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -78,9 +76,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                         Text(
                           'schoolsEnrollment'.localized(context),
                           style: Theme.of(context).textTheme.headline3.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         MiniTabLayout(
                           tabs: _DashboardsTab.values,
@@ -104,25 +100,20 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                                   title: '',
                                   data: snapshot.data.enrolByDistrict,
                                   chartType: ChartType.pie,
-                                  tableKeyName: 'schoolsDashboardsStateDomain'
-                                      .localized(context),
+                                  tableKeyName: 'schoolsDashboardsStateDomain'.localized(context),
                                   tableValueName:
-                                      'schoolsDashboardsMeasureEnroll'
-                                          .localized(context),
+                                      'schoolsDashboardsMeasureEnroll'.localized(context),
                                 );
                               case _DashboardsTab.byAuthority:
                                 return ChartWithTable(
-                                  key:
-                                      ObjectKey(snapshot.data.enrolByAuthority),
+                                  key: ObjectKey(snapshot.data.enrolByAuthority),
                                   title: '',
                                   data: snapshot.data.enrolByAuthority,
                                   chartType: ChartType.pie,
                                   tableKeyName:
-                                      'schoolsDashboardsAuthorityDomain'
-                                          .localized(context),
+                                      'schoolsDashboardsAuthorityDomain'.localized(context),
                                   tableValueName:
-                                      'schoolsDashboardsMeasureEnroll'
-                                          .localized(context),
+                                      'schoolsDashboardsMeasureEnroll'.localized(context),
                                 );
                               case _DashboardsTab.byGovtNonGovt:
                                 return ChartWithTable(
@@ -130,11 +121,9 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                                   title: '',
                                   data: snapshot.data.enrolByPrivacy,
                                   chartType: ChartType.pie,
-                                  tableKeyName: 'schoolsDashboardsPrivacyDomain'
-                                      .localized(context),
+                                  tableKeyName: 'schoolsDashboardsPrivacyDomain'.localized(context),
                                   tableValueName:
-                                      'schoolsDashboardsMeasureEnroll'
-                                          .localized(context),
+                                      'schoolsDashboardsMeasureEnroll'.localized(context),
                                 );
                             }
                             throw FallThroughError();
@@ -142,8 +131,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                         ),
                         MultiTable(
                           key: ValueKey(snapshot.data.enrolByAgeAndEducation),
-                          title: 'schoolsDashboardsEnrollByAgeLevelGenderTitle'
-                              .localized(context),
+                          title: 'schoolsDashboardsEnrollByAgeLevelGenderTitle'.localized(context),
                           columnNames: [
                             'schoolsDashboardsAgeDomain',
                             'labelMale',
@@ -153,15 +141,12 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           columnFlex: [3, 3, 3, 3],
                           data: snapshot.data.enrolByAgeAndEducation,
                           keySortFunc: _compareEnrollmentByAgeAndEducation,
-                          domainValueBuilder:
-                          GenderTableData.sDomainValueBuilder,
+                          domainValueBuilder: GenderTableData.sDomainValueBuilder,
                         ),
                         MultiTable(
-                          key: ValueKey(
-                              snapshot.data.enrolBySchoolLevelAndDistrict),
+                          key: ValueKey(snapshot.data.enrolBySchoolLevelAndDistrict),
                           title:
-                          'schoolsDashboardsEnrollByLevelStateGenderTitle'
-                              .localized(context),
+                              'schoolsDashboardsEnrollByLevelStateGenderTitle'.localized(context),
                           columnNames: [
                             'schoolsDashboardsSchoolLevelDomain',
                             'labelMale',
@@ -171,14 +156,11 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           columnFlex: [3, 3, 3, 3],
                           data: snapshot.data.enrolBySchoolLevelAndDistrict,
                           keySortFunc: _compareEnrollmentBySchoolLevelAndState,
-                          domainValueBuilder:
-                          GenderTableData.sDomainValueBuilder,
+                          domainValueBuilder: GenderTableData.sDomainValueBuilder,
                         ),
                         MultiTable(
-                          key: ValueKey(
-                              snapshot.data.enrolByEduationLevelAndGender),
-                          title:
-                          'schoolsDashboardsEnrollByEducationStateGenderTitle'
+                          key: ValueKey(snapshot.data.enrolByEduationLevelAndGender),
+                          title: 'schoolsDashboardsEnrollByEducationStateGenderTitle'
                               .localized(context),
                           columnNames: [
                             'schoolsDashboardsSchoolLevelDomain',
@@ -189,8 +171,7 @@ class SchoolsPageState extends MvvmState<SchoolsViewModel, SchoolsPage> {
                           columnFlex: [3, 3, 3, 3],
                           data: snapshot.data.enrolByEduationLevelAndGender,
                           keySortFunc: _compareEnrollmentBySchoolLevelAndState,
-                          domainValueBuilder:
-                          GenderTableData.sDomainValueBuilder,
+                          domainValueBuilder: GenderTableData.sDomainValueBuilder,
                         ),
                       ],
                     );

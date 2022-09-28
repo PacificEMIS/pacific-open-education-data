@@ -30,8 +30,8 @@ class DownloadViewModel extends ViewModel {
   );
 
   Stream<DownloadPageState> get stateStream => _stateSubject.stream;
-  List<ShortSchool>  selectedSchools;
-  List<ShortSchool>  individualSchools;
+  List<ShortSchool> selectedSchools;
+  List<ShortSchool> individualSchools;
   CancelableOperation _downloadOp;
 
   DownloadViewModel(
@@ -72,13 +72,14 @@ class DownloadViewModel extends ViewModel {
       final currentState = _stateSubject.value as PreparationDownloadPageState;
       if (currentState.sections.contains(Section.individualSchools)) {
         _stateSubject.add(
-          (currentState as PreparationDownloadPageState).copyWith(section: Section.individualSchools),
+          (currentState as PreparationDownloadPageState)
+              .copyWith(section: Section.individualSchools),
         );
       }
     }
-    _stateSubject.add(
-        (_stateSubject.value as PreparationDownloadPageState));
+    _stateSubject.add((_stateSubject.value as PreparationDownloadPageState));
   }
+
   void _applyFilters() {
     launchHandled(() {
       return;
@@ -92,8 +93,8 @@ class DownloadViewModel extends ViewModel {
           'outside from PreparationDownloadPageState');
     }
 
-    if (currentState.sections.contains(Section.individualSchools) && section == Section.individualSchools)
-      selectedSchools = [];
+    if (currentState.sections.contains(Section.individualSchools) &&
+        section == Section.individualSchools) selectedSchools = [];
     _stateSubject.add(
       (currentState as PreparationDownloadPageState).copyWith(section: section),
     );
@@ -157,8 +158,9 @@ class DownloadViewModel extends ViewModel {
       case LoadingSubject.individualSchools:
         return LoadingItem(
             subject: e,
-            loadFn: selectedSchools == null || selectedSchools.length == 0 ? _downloadIndividualSchools :
-            _downloadSelectedIndividualSchools);
+            loadFn: selectedSchools == null || selectedSchools.length == 0
+                ? _downloadIndividualSchools
+                : _downloadSelectedIndividualSchools);
       case LoadingSubject.schools:
         return LoadingItem(subject: e, loadFn: _downloadSchoolsEnrollmentData);
       case LoadingSubject.teachers:
@@ -196,7 +198,6 @@ class DownloadViewModel extends ViewModel {
     if (currentState.sections == null) return false;
     return currentState.sections.length > 0;
   }
-
 
   Future<List<LoadingSubject>> _createLoadingSubjects() async {
     final currentState = _stateSubject.value as PreparationDownloadPageState;
@@ -274,7 +275,8 @@ class DownloadViewModel extends ViewModel {
       final item = items.removeFirst();
       final state = _stateSubject.value as ActiveDownloadPageState;
       try {
-        if (item.subject == LoadingSubject.individualSchools && item is! IndividualSchoolsLoadingItem) {
+        if (item.subject == LoadingSubject.individualSchools &&
+            item is! IndividualSchoolsLoadingItem) {
           // this is a root of individual schools,
           // which will expand the total number of items
           final individualSchoolItems = (await item.loadFn()) as List<IndividualSchoolsLoadingItem>;
@@ -287,8 +289,8 @@ class DownloadViewModel extends ViewModel {
         }
       } catch (ex) {
         final errors = state.failedToLoadItems;
-        _stateSubject.add(state.copyWith(failedToLoadItems: errors..add(ErrorItem(item: item, status: ex.toString())
-        )));
+        _stateSubject.add(state.copyWith(
+            failedToLoadItems: errors..add(ErrorItem(item: item, status: ex.toString()))));
       }
       final total = originalItemCount + appendedItemCount;
       _stateSubject.add(state.copyWith(
@@ -320,7 +322,10 @@ class DownloadViewModel extends ViewModel {
       return [];
     }
 
-    return emisConfig.modules.map((config) => config.asSection()).where((it) => it != null).toList();
+    return emisConfig.modules
+        .map((config) => config.asSection())
+        .where((it) => it != null)
+        .toList();
   }
 
   Future<void> _downloadLookups() async {
@@ -345,7 +350,7 @@ class DownloadViewModel extends ViewModel {
             response.type == RepositoryType.remote &&
             response.throwable is! NoDataException) {
           if (!completer.isCompleted) {
-            completer.completeError(Exception('Data already loaded'));
+            completer.completeError(Warning('Data already loaded'));
           }
         }
       },
@@ -355,6 +360,7 @@ class DownloadViewModel extends ViewModel {
         }
       },
       onDone: () {
+        completer.completeError(Warning('Data already loaded'));
         if (!completer.isCompleted) {
           completer.complete();
         }
@@ -381,7 +387,8 @@ class DownloadViewModel extends ViewModel {
         districts.add(element.code);
       });
     }
-    return Future.wait(districts.map((district) => _downloadHandled(_repository.fetchAllIndicators(district))));
+    return Future.wait(
+        districts.map((district) => _downloadHandled(_repository.fetchAllIndicators(district))));
   }
 
   Future<void> _downloadAccreditationData() async {
@@ -407,7 +414,8 @@ class DownloadViewModel extends ViewModel {
     }
 
     List<ShortSchool> schools;
-    if (responses.last is FailureRepositoryResponse && responses.last.type == RepositoryType.remote) {
+    if (responses.last is FailureRepositoryResponse &&
+        responses.last.type == RepositoryType.remote) {
       if (responses.first.data == null) {
         throw Exception('Null data');
       } else {
@@ -452,4 +460,3 @@ class DownloadViewModel extends ViewModel {
     }).toList();
   }
 }
-

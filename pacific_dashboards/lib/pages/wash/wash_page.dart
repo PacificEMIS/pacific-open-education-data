@@ -25,8 +25,7 @@ class WashPage extends MvvmStatefulWidget {
     Key key,
   }) : super(
           key: key,
-          viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.createWashViewModel(ctx),
+          viewModelBuilder: (ctx) => ViewModelFactory.instance.createWashViewModel(ctx),
         );
 
   @override
@@ -57,6 +56,7 @@ class _WashPageState extends MvvmState<WashViewModel, WashPage> {
         ],
       ),
       body: LoadingStack(
+        errorStateStream: viewModel.errorMessagesStream,
         loadingStateStream: viewModel.activityIndicatorStream,
         child: SingleChildScrollView(
           child: SafeArea(

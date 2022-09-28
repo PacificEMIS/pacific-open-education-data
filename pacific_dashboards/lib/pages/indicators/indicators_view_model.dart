@@ -26,6 +26,7 @@ class IndicatorsViewModel extends BaseViewModel {
   IndicatorsNavigator _navigator;
   Lookups _lookups;
   bool canSelectState = false;
+  bool shouldShowSchoolCount = false;
 
   IndicatorsViewModel(
     BuildContext ctx, {
@@ -54,6 +55,7 @@ class IndicatorsViewModel extends BaseViewModel {
     launchHandled(() async {
       final currentEmis = await _globalSettings.currentEmis;
       canSelectState = currentEmis == Emis.fedemis;
+      shouldShowSchoolCount = currentEmis == Emis.miemis;
     });
   }
 

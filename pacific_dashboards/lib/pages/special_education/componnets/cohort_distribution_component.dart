@@ -1,12 +1,14 @@
 import 'package:arch/arch.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
-import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
-import 'package:pacific_dashboards/shared_ui/charts/chart_legend_item.dart';
-import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:pacific_dashboards/res/themes.dart';
+import 'package:pacific_dashboards/shared_ui/chart_with_table.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_data.dart';
+import 'package:pacific_dashboards/shared_ui/charts/chart_factory.dart';
+import 'package:pacific_dashboards/shared_ui/mini_tab_layout.dart';
+
 import '../special_education_data.dart';
 
 class CohortDistributionComponent extends StatefulWidget {
@@ -19,12 +21,10 @@ class CohortDistributionComponent extends StatefulWidget {
         super(key: key);
 
   @override
-  _CohortDistributionComponentState createState() =>
-      _CohortDistributionComponentState();
+  _CohortDistributionComponentState createState() => _CohortDistributionComponentState();
 }
 
-class _CohortDistributionComponentState
-    extends State<CohortDistributionComponent> {
+class _CohortDistributionComponentState extends State<CohortDistributionComponent> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -42,8 +42,7 @@ class _CohortDistributionComponentState
               case _Tab.ethnicity:
                 return 'specialEducationTabNameEthnicity'.localized(context);
               case _Tab.englishLearner:
-                return 'specialEducationTabNameEnglishLearner'
-                    .localized(context);
+                return 'specialEducationTabNameEnglishLearner'.localized(context);
             }
             throw FallThroughError();
           },
@@ -52,18 +51,22 @@ class _CohortDistributionComponentState
               case _Tab.environment:
                 return _Chart(
                   data: widget.data.environment,
+                  tableName: 'specialEducationTabNameEnvironment',
                 );
               case _Tab.disability:
                 return _Chart(
                   data: widget.data.disability,
+                  tableName: 'specialEducationTabNameDisability',
                 );
               case _Tab.ethnicity:
                 return _Chart(
                   data: widget.data.etnicity,
+                  tableName: 'specialEducationTabNameEthnicity',
                 );
               case _Tab.englishLearner:
                 return _Chart(
                   data: widget.data.englishLearner,
+                  tableName: 'specialEducationTabNameEnglishLearner',
                 );
             }
             throw FallThroughError();
@@ -78,12 +81,15 @@ enum _Tab { environment, disability, ethnicity, englishLearner }
 
 class _Chart extends StatelessWidget {
   final List<DataByCohort> _data;
+  final String _tableName;
 
   const _Chart({
     Key key,
     @required List<DataByCohort> data,
+    @required tableName,
   })  : assert(data != null),
         _data = data,
+        _tableName = tableName,
         super(key: key);
 
   Future<Map<String, Color>> get _colorScheme {
@@ -108,17 +114,14 @@ class _Chart extends StatelessWidget {
           return Container();
         }
         final colorScheme = snapshot.data;
-        final uniqueDomainsCount = _data
-            .expand((e) => e.groupDataList)
-            .uniques((it) => it.title)
-            .length;
+        final uniqueDomainsCount =
+            _data.expand((e) => e.groupDataList).uniques((it) => it.title).length;
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             SizedBox(
-              height:
-                  uniqueDomainsCount * (uniqueDomainsCount > 5 ? 40.5 : 80.5),
+              height: uniqueDomainsCount * (uniqueDomainsCount > 5 ? 40.5 : 80.5),
               child: FutureBuilder(
                 future: _createSeries(context, colorScheme),
                 builder: (context, snapshot) {
@@ -152,17 +155,21 @@ class _Chart extends StatelessWidget {
                 },
               ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: colorScheme.mapToList((legendItem, color) {
-                return ChartLegendItem(
-                  color: color,
-                  value: legendItem.localized(context),
-                );
-              }),
-            )
+            ChartWithTable(
+              key: ObjectKey(_data),
+              title: '',
+              data: _data
+                  .map((it) => ChartData(
+                        it.cohortName.localized(context),
+                        it.groupDataList.length,
+                        colorScheme[it.cohortName],
+                      ))
+                  .toList(),
+              chartType: ChartType.none,
+              tableKeyName: _tableName.localized(context),
+              tableValueName: 'specialEducationEnrollDomain'.localized(context),
+              showColors: true,
+            ),
           ],
         );
       },

@@ -21,8 +21,7 @@ class SpecialEducationPage extends MvvmStatefulWidget {
     Key key,
   }) : super(
           key: key,
-          viewModelBuilder: (ctx) =>
-              ViewModelFactory.instance.createSpecialEducationViewModel(ctx),
+          viewModelBuilder: (ctx) => ViewModelFactory.instance.createSpecialEducationViewModel(ctx),
         );
 
   @override
@@ -54,6 +53,7 @@ class _SpecialEducationPageState
         ],
       ),
       body: LoadingStack(
+        errorStateStream: viewModel.errorMessagesStream,
         loadingStateStream: viewModel.activityIndicatorStream,
         child: SingleChildScrollView(
           child: SafeArea(
@@ -80,28 +80,29 @@ class _SpecialEducationPageState
                           ),
                           SpecialEducationComponent(
                             data: snapshot.data.dataByGender,
+                            title: 'Disability',
                           ),
                           _Title(
                             text: 'specialEducationTitleEthnicity',
                             year: year,
                           ),
                           SpecialEducationComponent(
-                            data: snapshot.data.dataByEthnicity,
-                          ),
+                              data: snapshot.data.dataByEthnicity,
+                              title: 'Ethnicity'),
                           _Title(
                             text: 'specialEducationTitleEnvironment',
                             year: year,
                           ),
                           SpecialEducationComponent(
-                            data: snapshot.data.dataBySpecialEdEnvironment,
-                          ),
+                              data: snapshot.data.dataBySpecialEdEnvironment,
+                              title: 'Environment'),
                           _Title(
                             text: 'specialEducationTitleEnglishLearnerStatus',
                             year: year,
                           ),
                           SpecialEducationComponent(
-                            data: snapshot.data.dataByEnglishLearner,
-                          ),
+                              data: snapshot.data.dataByEnglishLearner,
+                              title: 'Status'),
                           _Title(
                             text: 'specialEducationTitleCohortDistribution',
                           ),
@@ -117,7 +118,8 @@ class _SpecialEducationPageState
                             year: year,
                           ),
                           CohortDistributionComponent(
-                            data: snapshot.data.dataByCohortDistributionByDistrict,
+                            data: snapshot
+                                .data.dataByCohortDistributionByDistrict,
                           ),
                         ],
                       );

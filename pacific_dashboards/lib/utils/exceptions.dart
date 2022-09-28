@@ -13,3 +13,18 @@ class NoNewDataRemoteException extends RemoteException {
 class NoDataException extends AppException {
   const NoDataException() : super(message: 'labelNoData');
 }
+
+abstract class IWarning implements Exception {
+  const IWarning([this.message]);
+
+  final String message;
+
+  @override
+  String toString() {
+    return message;
+  }
+}
+
+class Warning extends IWarning {
+  const Warning([String message]) : super(message);
+}

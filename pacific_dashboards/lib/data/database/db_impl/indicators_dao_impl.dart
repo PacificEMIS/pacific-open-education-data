@@ -6,6 +6,7 @@ import 'package:pacific_dashboards/data/database/model/indicators/hive_enrolment
 import 'package:pacific_dashboards/data/database/model/indicators/hive_enrolment_by_level.dart';
 import 'package:pacific_dashboards/data/database/model/indicators/hive_indicators_school_count.dart';
 import 'package:pacific_dashboards/data/database/model/indicators/hive_sector_by_level.dart';
+import 'package:pacific_dashboards/data/database/model/indicators/hive_survival_by_level.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/models/exam/exam.dart';
 import 'package:pacific_dashboards/models/indicators/indicators.dart';
@@ -16,15 +17,22 @@ import 'package:pacific_dashboards/models/indicators/indicators_enrolments_by_ed
 import 'package:pacific_dashboards/models/indicators/indicators_enrolments_by_level.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_school_count.dart';
 import 'package:pacific_dashboards/models/indicators/indicators_school_counts.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_survival_by_level.dart';
+import 'package:pacific_dashboards/models/indicators/indicators_survivals_by_level.dart';
 
 import '../../../models/indicators/indicators_sector_by_level.dart';
 import '../../../models/indicators/indicators_sectors_by_level.dart';
+import '../../../models/indicators/indicators_teacher_by_level.dart';
+import '../../../models/indicators/indicators_teachers_by_level.dart';
+import '../model/indicators/hive_teachers_by_level.dart';
 
 class HiveIndicatorsDao extends IndicatorsDao {
   static const _kKey = 'indicators';
   static const _enrolmentsKey = 'enrolments';
   static const _enrolmentsByYearKey = 'enrolmentsByYear';
   static const _sectorsKey = 'sectors';
+  static const _teachersKey = 'sectors';
+  static const _survivalsKey = 'survivals';
   static const _schoolCountsKey = 'schools';
 
   static Future<T> _withBox<T>(String typeKey,
@@ -64,7 +72,33 @@ class HiveIndicatorsDao extends IndicatorsDao {
           hiveIndicatorsEnrolment.toIndicatorsEnrolmentByEducationYear());
     }
 
-    final storedSectors = await _withBox(
+    final storedTeachers = await _withBox(
+        _teachersKey + districtCode, (box) async => box.get(emis.id));
+    if (storedTeachers == null) {
+      return Pair(false, null);
+    }
+    List<IndicatorsTeacherByLevel> storedTeachersItems = [];
+    for (var value in storedTeachers) {
+      final hiveIndicatorsTeachersByLevel = value as HiveTeachersByLevel;
+      expired |= hiveIndicatorsTeachersByLevel.isExpired();
+      storedTeachersItems.add(
+          hiveIndicatorsTeachersByLevel.toIndicatorsTeacherByLevel());
+    }
+
+    final storedSurvivals = await _withBox(
+        _survivalsKey + districtCode, (box) async => box.get(emis.id));
+    if (storedSurvivals == null) {
+      return Pair(false, null);
+    }
+    List<IndicatorsSurvivalByLevel> storedSurvivalsItems = [];
+    for (var value in storedSurvivals) {
+      final hiveIndicatorsSurvivalsByLevel = value as HiveSurvivalByLevel;
+      expired |= hiveIndicatorsSurvivalsByLevel.isExpired();
+      storedSurvivalsItems.add(
+          hiveIndicatorsSurvivalsByLevel.toIndicatorsSurvivalByLevel());
+    }
+
+    /*final storedSectors = await _withBox(
         _sectorsKey + districtCode, (box) async => box.get(emis.id));
     if (storedSectors == null) {
       return Pair(false, null);
@@ -75,7 +109,7 @@ class HiveIndicatorsDao extends IndicatorsDao {
       expired |= hiveIndicatorsSectorByLevel.isExpired();
       storedSectorsItems.add(
           hiveIndicatorsSectorByLevel.toIndicatorsSectorByLevel());
-    }
+    }*/
 
     final storedSchoolCounts = await _withBox(
         _schoolCountsKey + districtCode, (box) async => box.get(emis.id));
@@ -90,7 +124,7 @@ class HiveIndicatorsDao extends IndicatorsDao {
           hiveIndicatorsEnrolmentByLevel.toIndicatorsSchoolCount());
     }
 
-    print(IndicatorsSectorsByLevel(sectors: storedSectorsItems).toJson());
+    //print(IndicatorsSectorsByLevel(sectors: storedSectorsItems).toJson());
     final indicatorsContainer = new IndicatorsContainer(
         indicators: new Indicators(
             schoolCounts: new IndicatorsSchoolCounts(
@@ -99,7 +133,9 @@ class HiveIndicatorsDao extends IndicatorsDao {
                 enrolments: storedEnrolmentsItems),
             enrolmentsByEducationYear: new IndicatorsEnrolmentsByEducationYear(
                 enrolments: storedEnrolmentsByYearItems),
-            sectors: new IndicatorsSectorsByLevel(sectors: storedSectorsItems),
+            teachers: new IndicatorsTeachersByLevel(levels: storedTeachersItems),
+            survivals: new IndicatorsSurvivalsByLevel(survivals: storedSurvivalsItems),
+            //sectors: new IndicatorsSectorsByLevel(sectors: storedSectorsItems),
         )
     );
     return Pair(expired, indicatorsContainer);
@@ -117,9 +153,21 @@ class HiveIndicatorsDao extends IndicatorsDao {
         .map((it) => HiveEnrolmentByEducationYear.from(it))
         .toList();
 
-    final hiveSectors = indicators.indicators.sectors != null
+    /*final hiveSectors = indicators.indicators.sectors != null
         ? indicators.indicators.sectors.sectors
         .map((it) => HiveSectorByLevel.from(it))
+        .toList()
+        : [];*/
+
+    final hiveTeachers = indicators.indicators.teachers != null
+        ? indicators.indicators.teachers.levels
+        .map((it) => HiveTeachersByLevel.from(it))
+        .toList()
+        : [];
+
+    final hiveSurvivals = indicators.indicators.survivals != null
+        ? indicators.indicators.survivals.survivals
+        .map((it) => HiveSurvivalByLevel.from(it))
         .toList()
         : [];
 
@@ -137,7 +185,13 @@ class HiveIndicatorsDao extends IndicatorsDao {
         _schoolCountsKey + districtCode, (box) async =>
         box.put(emis.id, hiveSchoolCounts));
     await _withBox(
+        _teachersKey + districtCode, (box) async =>
+        box.put(emis.id, hiveTeachers));
+    await _withBox(
+        _survivalsKey + districtCode, (box) async =>
+        box.put(emis.id, hiveSurvivals));
+    /*await _withBox(
         _sectorsKey + districtCode, (box) async =>
-        box.put(emis.id, hiveSectors));
+        box.put(emis.id, hiveSectors));*/
   }
 }

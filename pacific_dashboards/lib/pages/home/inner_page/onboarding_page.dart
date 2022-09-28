@@ -1,17 +1,14 @@
 import 'package:arch/arch.dart';
 import 'package:flutter/material.dart';
 import 'package:link_text/link_text.dart';
-import 'package:pacific_dashboards/configs/global_settings.dart';
 import 'package:pacific_dashboards/pages/home/inner_page/onboarding_view_model.dart';
 import 'package:pacific_dashboards/res/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/emis.dart';
-import '../home_page.dart';
-import '../inner_page/components/country_dialog.dart';
 import '../../../view_model_factory.dart';
+import '../inner_page/components/country_dialog.dart';
 import 'onboarding_item.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class OnboardingPage extends MvvmStatefulWidget {
   static const String kRoute = "/Onboarding";
@@ -22,11 +19,13 @@ class OnboardingPage extends MvvmStatefulWidget {
   OnboardingPage({Key key})
       : super(
           key: key,
-          viewModelBuilder: (ctx) => ViewModelFactory.instance.createonboardingViewModel(ctx),
+          viewModelBuilder: (ctx) =>
+              ViewModelFactory.instance.createonboardingViewModel(ctx),
         );
 }
 
-class _OnboardingPageState extends MvvmState<OnboardingViewModel, OnboardingPage> {
+class _OnboardingPageState
+    extends MvvmState<OnboardingViewModel, OnboardingPage> {
   int _currentPage = 0;
   PageController _pageController = PageController(initialPage: 0);
 
@@ -72,7 +71,9 @@ class _OnboardingPageState extends MvvmState<OnboardingViewModel, OnboardingPage
     final list = <Widget>[];
     for (var i = 0; i < OnboardingItem.values.length; i++) {
       list.add(
-        i == _currentPage ? const _PageIndicator(isSelected: true) : const _PageIndicator(isSelected: false),
+        i == _currentPage
+            ? const _PageIndicator(isSelected: true)
+            : const _PageIndicator(isSelected: false),
       );
     }
     return list;
@@ -80,7 +81,8 @@ class _OnboardingPageState extends MvvmState<OnboardingViewModel, OnboardingPage
 }
 
 class _DefaultPageItem extends StatelessWidget {
-  final String launchUrl = 'https://docs.pacific-emis.org/doku.php?id=poed_user_manual';
+  final String launchUrl =
+      'https://docs.pacific-emis.org/doku.php?id=poed_user_manual';
 
   const _DefaultPageItem({
     this.item,
@@ -96,7 +98,10 @@ class _DefaultPageItem extends StatelessWidget {
           children: [
             Text(
               item.title,
-              style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white, fontSize: 24),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.white, fontSize: 24),
             ),
             const SizedBox(height: 8),
             Center(
@@ -109,7 +114,10 @@ class _DefaultPageItem extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               item.text,
-              style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white, fontSize: 16),
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1
+                  .copyWith(color: Colors.white, fontSize: 16),
             )
           ],
         ),
@@ -154,16 +162,23 @@ class _FinalPageItemState extends State<_FinalPageItem> {
         const SizedBox(height: 8),
         LinkText(
             text: widget.item.text,
-            textStyle: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white, fontSize: 16),
-            linkStyle: Theme.of(context).textTheme.subtitle1.copyWith(color: AppColors.kCoolGray, fontSize: 16),
+            textStyle: Theme.of(context)
+                .textTheme
+                .subtitle1
+                .copyWith(color: Colors.white, fontSize: 16),
+            linkStyle: Theme.of(context).textTheme.subtitle1.copyWith(
+                color: AppColors.kYellow,
+                fontSize: 16,
+                decoration: TextDecoration.underline),
             onLinkTap: (launchUrl) async {
-              if (await canLaunch(launchUrl)) {
-                await launch(
-                  launchUrl,
-                );
-              } else {
-                throw 'Could not launch $launchUrl';
-              }
+              // if (await canLaunch(
+              //     'https://docs.pacific-emis.org/doku.php?id=poed_user_manual')) {
+              await launch(
+                'https://docs.pacific-emis.org/doku.php?id=poed_user_manual',
+              );
+              // } else {
+              //   throw 'Could not launch $launchUrl';
+              // }
             }),
         const SizedBox(height: 24),
         StreamBuilder<Emis>(
@@ -189,10 +204,13 @@ class _FinalPageItemState extends State<_FinalPageItem> {
             builder: (context, snapshot) {
               return ElevatedButton(
                   onPressed: () {
-                    snapshot.data == null ? null : widget.viewModel.onContinuePressed(context);
+                    snapshot.data == null
+                        ? null
+                        : widget.viewModel.onContinuePressed(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: snapshot.data == null ? Colors.white70 : Colors.white,
+                    primary:
+                        snapshot.data == null ? Colors.white70 : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -246,13 +264,13 @@ class _ChooseCountryButton extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 12.0, top: 0, bottom: 0, right: 0),
+                    padding: const EdgeInsets.only(
+                        left: 12.0, top: 0, bottom: 0, right: 0),
                     child: Text(
                       (emis == null) ? 'Choose country' : emis.getName(context),
-                      style: Theme.of(context)
-                          .textTheme
-                          .button
-                          .copyWith(color: (emis == null) ? Colors.black12 : Colors.black, height: 1.1),
+                      style: Theme.of(context).textTheme.button.copyWith(
+                          color: (emis == null) ? Colors.black12 : Colors.black,
+                          height: 1.1),
                     ),
                   ),
                 ),

@@ -34,6 +34,17 @@ class DoubleJson{
     }
   }
 
+  static int intFromDoubleJson(Map<String, dynamic> doubleJson) {
+    if (doubleJson == null){
+      return null;
+    }
+    else {
+      return double.parse(DoubleJson
+          .fromJson(doubleJson)
+          .value).round();
+    }
+  }
+
   static Map<String, dynamic> doubleToJson(double d) {
     if (d == null){
       return null;

@@ -4,8 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pacific_dashboards/models/emis.dart';
 import 'package:pacific_dashboards/pages/download/download_view_model.dart';
 import 'package:pacific_dashboards/pages/download/state.dart';
-import 'package:pacific_dashboards/pages/individual_school/individual_school_page.dart';
-import 'package:pacific_dashboards/pages/schools_list/schools_list_page.dart';
 import 'package:pacific_dashboards/res/colors.dart';
 import 'package:pacific_dashboards/res/strings.dart';
 import 'package:pacific_dashboards/shared_ui/platform_app_bar.dart';
@@ -85,7 +83,6 @@ class _DownloadPageState extends MvvmState<DownloadViewModel, DownloadPage> {
           )
         : PlatformAppBar(
             title: Text('downloadTitle'.localized(context)),
-
             leading: null,
             automaticallyImplyLeading: false,
             actions: [
@@ -112,7 +109,7 @@ class CancelDialog extends StatelessWidget {
             context: context,
             barrierDismissible: false, // user must tap button!
             builder: (BuildContext context) {
-              return  Container(
+              return Container(
                 height: 240,
                 child: AlertDialog(
                     shape: const RoundedRectangleBorder(
@@ -121,12 +118,10 @@ class CancelDialog extends StatelessWidget {
                     contentPadding: const EdgeInsets.only(top: 10.0, right: 0),
                     title: Text(
                       'Cancel'.localized(context),
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .headline3
-                          .copyWith(
-                          color: AppColors.kTextMain, fontWeight: FontWeight.normal),
+                          .copyWith(color: AppColors.kTextMain, fontWeight: FontWeight.normal),
                     ),
                     content: Container(
                       width: 280,
@@ -139,66 +134,53 @@ class CancelDialog extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
                             child: Text(
                               'Are you sure you want to cancel the download'.localized(context),
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .button
                                   .copyWith(color: Colors.black54),
                             ),
                           ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:
-                              [
-                                Container(
-                                  padding: const EdgeInsets.fromLTRB(24, 4, 0, 4),
-                                  height: 50,
-                                  width: 135,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      viewModel.onCancelPressed();
-                                    },
-                                    child: Text(
-                                      'Yes'.localized(context),
-                                      style: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .button
-                                          .copyWith(
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(24, 4, 0, 4),
+                              height: 50,
+                              width: 135,
+                              child: TextButton(
+                                onPressed: () {
+                                  viewModel.onCancelPressed();
+                                },
+                                child: Text(
+                                  'Yes'.localized(context),
+                                  style: Theme.of(context).textTheme.button.copyWith(
                                         color: AppColors.kBlue,
                                       ),
-                                    ),
-                                  ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.fromLTRB(0, 4, 24, 4),
-                                  height: 50,
-                                  width: 135,
-                                  child: ElevatedButton(
-                                    onPressed: () {Navigator.of(context).pop();},
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(
-                                              8))),
-                                    ),
-                                    child: Text(
-                                      'No'.localized(context),
-                                      style: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .button
-                                          .copyWith(
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(0, 4, 24, 4),
+                              height: 50,
+                              width: 135,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                                ),
+                                child: Text(
+                                  'No'.localized(context),
+                                  style: Theme.of(context).textTheme.button.copyWith(
                                         color: Colors.white,
                                       ),
-                                    ),
-                                  ),
-                                )
-                              ]
-                          )
+                                ),
+                              ),
+                            )
+                          ])
                         ],
                       ),
-                    )
-                ),
+                    )),
               );
             });
       },
@@ -275,7 +257,8 @@ class _PreparingBody extends StatelessWidget {
                                         section: snapshot.data[index],
                                         viewModel: viewModel,
                                         state: state,
-                                        sections: snapshot.data, context: context);
+                                        sections: snapshot.data,
+                                        context: context);
                                   })
                             ]);
                           }
@@ -298,10 +281,11 @@ class _PreparingBody extends StatelessWidget {
               24 + MediaQuery.of(context).padding.bottom,
             ),
             child: ElevatedButton(
-              onPressed: viewModel.selectedSchools != null && viewModel.selectedSchools.length > 0 ||
-                      viewModel.isSectionsSelected()
-                  ? viewModel.onDownloadPressed
-                  : null,
+              onPressed:
+                  viewModel.selectedSchools != null && viewModel.selectedSchools.length > 0 ||
+                          viewModel.isSectionsSelected()
+                      ? viewModel.onDownloadPressed
+                      : null,
               style: ElevatedButton.styleFrom(
                 shadowColor: AppColors.kBlue,
                 padding: const EdgeInsets.all(16),
@@ -310,8 +294,11 @@ class _PreparingBody extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ).copyWith(
-                backgroundColor: MaterialStateColor.resolveWith((states) => viewModel.selectedSchools != null && viewModel.selectedSchools.length > 0 ||
-                    viewModel.isSectionsSelected() ? AppColors.kBlue : AppColors.kCoolGray),
+                backgroundColor: MaterialStateColor.resolveWith((states) =>
+                    viewModel.selectedSchools != null && viewModel.selectedSchools.length > 0 ||
+                            viewModel.isSectionsSelected()
+                        ? AppColors.kBlue
+                        : AppColors.kCoolGray),
               ),
               child: Text(
                 'downloadAction'.localized(context),
@@ -362,14 +349,18 @@ class DownloadItem extends StatelessWidget {
                     viewModel.selectedSchools != null &&
                         section == Section.individualSchools &&
                         viewModel.selectedSchools.length > 0 &&
-                        viewModel.selectedSchools.length != viewModel.individualSchools.length && !state.sections
-                        .contains(Section.individualSchools) ||
-                        state.sections.length > 0 && state.sections.length < sections.length && section == null ||
-                         state.sections.length < sections.length && viewModel.selectedSchools != null && viewModel
-                .selectedSchools.length > 0 && section == null
+                        viewModel.selectedSchools.length != viewModel.individualSchools.length &&
+                        !state.sections.contains(Section.individualSchools) ||
+                    state.sections.length > 0 &&
+                        state.sections.length < sections.length &&
+                        section == null ||
+                    state.sections.length < sections.length &&
+                        viewModel.selectedSchools != null &&
+                        viewModel.selectedSchools.length > 0 &&
+                        section == null
                 ? InkResponse(
-                    onTap:
-                      section == Section.individualSchools ? () => viewModel.onSelectedRegionValueChanged(section)
+                    onTap: section == Section.individualSchools
+                        ? () => viewModel.onSelectedRegionValueChanged(section)
                         : () => viewModel.onSelectAllSectionsPressed(sections),
                     child: Padding(
                       padding: EdgeInsets.all(12),
@@ -385,7 +376,8 @@ class DownloadItem extends StatelessWidget {
                         ? state.sections.length == sections.length
                         : section == Section.individualSchools &&
                                 viewModel.individualSchools != null &&
-                                viewModel.individualSchools.length == viewModel.selectedSchools.length &&
+                                viewModel.individualSchools.length ==
+                                    viewModel.selectedSchools.length &&
                                 viewModel.individualSchools.length != 0 ||
                             state.sections.contains(section),
                     onChanged: (value) {
@@ -397,7 +389,9 @@ class DownloadItem extends StatelessWidget {
             Expanded(
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text(
-                  section == null ? 'selectAll'.localized(context) : section.name.localized(context),
+                  section == null
+                      ? 'selectAll'.localized(context)
+                      : section.name.localized(context),
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 section == null || section != Section.individualSchools
@@ -411,12 +405,16 @@ class DownloadItem extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                                 onPrimary: Colors.black87,
                                 primary: Colors.black87,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20))),
                             onPressed: () {
                               _openIndividualSchools(context, viewModel);
                             },
                             child: Text('Choose any',
-                                style: Theme.of(context).textTheme.button.copyWith(color: Colors.white, fontSize: 12)),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .button
+                                    .copyWith(color: Colors.white, fontSize: 12)),
                           ),
                         ),
                       ),
@@ -477,7 +475,8 @@ class _ActiveBody extends StatelessWidget {
                   const SizedBox(height: 16),
                   Theme(
                     data: Theme.of(context).copyWith(
-                      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: AppColors.kLightGreen),
+                      colorScheme:
+                          ColorScheme.fromSwatch().copyWith(secondary: AppColors.kLightGreen),
                     ),
                     child: Container(
                       decoration: BoxDecoration(
@@ -497,7 +496,8 @@ class _ActiveBody extends StatelessWidget {
                     textDirection: TextDirection.rtl,
                   ),
                   const SizedBox(height: 16),
-                  if (state.failedToLoadItems.isNotEmpty) _LoadingErrors(state: state, viewModel: viewModel),
+                  if (state.failedToLoadItems.isNotEmpty)
+                    _LoadingErrors(state: state, viewModel: viewModel),
                 ],
               ),
             ),
@@ -576,9 +576,9 @@ class _LoadingErrors extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 6, 8),
                 child: Icon(
-                  Icons.error_outline_outlined,
+                  Icons.info_outline,
                   size: 24,
-                  color: AppColors.kRed,
+                  color: AppColors.kBlue,
                 ),
               ),
               Expanded(
@@ -610,10 +610,8 @@ class _LoadingErrors extends StatelessWidget {
           ),
           for (var i = 0; i < state.failedToLoadItems.length; i++)
             Container(
-
               color: i.isEven ? Colors.transparent : AppColors.kGrayLight,
               child: Padding(
-
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 10,
@@ -621,14 +619,16 @@ class _LoadingErrors extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(
-                  state.failedToLoadItems[i].item.getName(context),
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                  Text(
-                    state.failedToLoadItems[i].status,
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),
-                  ),]),
+                    children: [
+                      Text(
+                        state.failedToLoadItems[i].item.getName(context),
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                      Text(
+                        state.failedToLoadItems[i].status,
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),
+                      ),
+                    ]),
               ),
             ),
         ],
