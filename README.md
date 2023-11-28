@@ -20,4 +20,4 @@ Not all countries will have all the modules above.
 
 Contact details
 
-info@nuzusys.com
+info@purltek.com
